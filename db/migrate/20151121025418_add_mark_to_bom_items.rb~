@@ -1,0 +1,4 @@
+class AddMarkToBomItems < ActiveRecord::Migration
+  def change
+  end
+end

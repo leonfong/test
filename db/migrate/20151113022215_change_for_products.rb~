@@ -1,0 +1,4 @@
+class ChangeForProducts < ActiveRecord::Migration
+  def change
+  end
+end

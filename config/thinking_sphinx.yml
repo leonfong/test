@@ -1,0 +1,14 @@
+development:                                                  
+  mysql41: 9312
+  enable_star: 1
+  min_infix_len: 1
+  quiet_deltas: true
+test:
+  enable_star: 1
+  min_infix_len: 1
+  mysql41: 9313
+production:
+  enable_star: 1
+  min_infix_len: 1
+  mysql41: 9312
+  quiet_deltas: true

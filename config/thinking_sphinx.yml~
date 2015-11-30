@@ -1,0 +1,16 @@
+development:
+  bin_path: /usr/bin/                                                              
+  mysql41: 9312
+  enable_star: 1
+  min_infix_len: 1
+  quiet_deltas: true
+test:
+  enable_star: 1
+  min_infix_len: 1
+  mysql41: 9313
+production:
+  bin_path: /usr/bin/
+  enable_star: 1
+  min_infix_len: 1
+  mysql41: 9312
+  quiet_deltas: true

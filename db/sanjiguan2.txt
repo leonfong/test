@@ -1,0 +1,1937 @@
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0001-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0002-SOT23";       
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0003-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT323", package2="SMD" where name="A.Q.0004-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0005-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0006-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0007-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0008-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="default" where name="A.Q.0009-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0010-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT323", package2="default" where name="A.Q.0012-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="default" where name="A.Q.0013-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0014-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0015-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="default" where name="A.Q.0016-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="default" where name="A.Q.0017-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="default" where name="A.Q.0018-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0019-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0020-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0021-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="default" where name="A.Q.0022-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0023-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="default" where name="A.Q.0024-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package1="SOT23", package2="SMD" where name="A.Q.0025-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package3="SOT23", package2="default" where name="A.Q.0026-SOT23";
+ERROR 1054 (42S22): Unknown column 'package3' in 'field list'
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0027-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0028-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0029-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0030-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="default" where name="A.Q.0031-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0032-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0033-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0034-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0035-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0036-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0037-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0038-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0039-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0040-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0042-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0043-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0044-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0046-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0047-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0048-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0049-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0050-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0051-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0052-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="default" where name="A.Q.0053-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0055-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0056-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0057-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0058-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0059-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0060-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0061-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0062-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0063-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0064-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0065-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0067-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0068-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="default" where name="A.Q.0069-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0070-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0071-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0072-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0073-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23-3", package1="default" where name="A.Q.0074-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0075-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0076-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0077-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0078-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0079-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0080-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0081-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0082-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0083-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0084-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0085-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0086-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0087-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0088-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0089-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0090-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0091-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0092-SMD";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0093-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SI2302", package1="SOT23" where name="A.Q.0094-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SI2303", package1="SOT23" where name="A.Q.0095-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0096-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0097-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0098-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0099-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0100-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0101-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0102-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0103-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0104-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0105-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0106-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0107-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0108-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0109-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0110-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0111-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0112-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0113-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0114-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0115-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0116-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0117-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0118-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0119-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0120-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0121-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0122-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0123-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0124-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0125-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0126-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0127-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0128-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0129-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="default" where name="A.Q.0130-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0131-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SC89", package1="default" where name="A.Q.0132-SC89";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0133-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0134-SOT323";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0135-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0136-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0137-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0138-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0139-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0140-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0141-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0142-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0143-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0144-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0145-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0146-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0147-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23-3", package1="SMD" where name="A.Q.0148-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0149-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0151-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT323", package1="SMD" where name="A.Q.0152-SOT323";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23-3", package1="SMD" where name="A.Q.0154-SOT23-3";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0155-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23-3", package1="default" where name="A.Q.0156-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT523", package1="SMD" where name="A.Q.0157-SOT523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DO214AA", package1="default" where name="A.Q.0158-SMB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0159-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23-3", package1="SMD" where name="A.Q.0160-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0161-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="TO92-3", package1="DIP" where name="A.Q.0162-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0163-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0164-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0165-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0166-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0167-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23-3", package1="SMD" where name="A.Q.0168-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0170-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0172-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="SMD" where name="A.Q.0173-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="TO92-3", package1="DIP" where name="A.Q.0174-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="TO92-3", package1="DIP" where name="A.Q.0175-TO92";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="TO92-3", package1="DIP" where name="A.Q.0178-TO92-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Plug-in Transistors", package2="default", package1="DIP" where name="A.Q.0179-DIP";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="TO92-3", package1="DIP" where name="A.Q.0180-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Plug-in Transistors", package2="default", package1="DIP" where name="A.Q.0181-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Plug-in Transistors", package2="default", package1="DIP" where name="A.Q.0182-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Plug-in Transistors", package2="default", package1="DIP" where name="A.Q.0183-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Plug-in Transistors", package2="default", package1="DIP" where name="A.Q.0184-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT-23", package1="default" where name="A.Q.0185-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="PSOT23", package1="default" where name="A.Q.0186-PSOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0187-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0188-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0189-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SOT23", package1="default" where name="A.Q.0190-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Plug-in Transistors", package2="TO92-3", package1="default" where name="A.Q.0191-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="default", package1="TO-92" where name="A.Q.0192-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="default", package1="SOT23" where name="A.Q.0193-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0194-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0195-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="default", package1="SOT23" where name="A.Q.0196-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO-220-3" where name="A.Q.0197-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0198-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0199-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0200-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0201-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO-18" where name="A.Q.0202-TO18";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SC70" where name="A.Q.0203-SC70";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0204-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0205-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0206-TO92";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SC75" where name="A.Q.0207-SC75";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0208-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0209-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0210-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0211-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0212-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0213-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0214-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0215-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0216-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0217-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0218-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0219-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0220-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0221-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0222-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.02236-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0223-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0224-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0225-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0226-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0227-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0228-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.02297-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0229-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0230-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP-3", package1="TO92-3" where name="A.Q.0231-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0232-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0233-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO90-3" where name="A.Q.0234-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO90-3" where name="A.Q.0235-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0236-SOT23-3";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0237-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0238-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0239-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0240-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0241-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0242-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0243-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0244-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0245-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0246-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0247-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0248-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0249-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0250-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0251-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0252-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0253-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0254-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0256-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0257-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0258-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0259-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0260-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0261-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT143" where name="A.Q.0262-SOT143";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0263-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92" where name="A.Q.0264-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0265-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO220-3" where name="A.Q.0266-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0267-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0268-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0269-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0270-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO18" where name="A.Q.0271-TO18";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO220" where name="A.Q.0272-TO220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0273-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0274-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0275-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0276-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0277-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0278-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0279-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0280-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0281-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0282-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0283-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0284-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0285-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0286-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0287-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0288-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0289-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0290-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0291-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0292-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0293-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0294-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0295-SOT23-3";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0296-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0297-TO92";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0298-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0299-TO92-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0300-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0301-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0302-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0303-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0304-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0305-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0306-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0307-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0308-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0309-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0310-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0311-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0312-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0313-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0314-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0315-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0316-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0317-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0318-TO92-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0319-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0320-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0321-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0322-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92" where name="A.Q.0323-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92" where name="A.Q.0324-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0325-TO92-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0326-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0327-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0328-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0329-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0330-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0331-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0332-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0333-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0334-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0335-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0336-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT663" where name="A.Q.0337-SOT663";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SC75" where name="A.Q.0338-SC75";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SC70" where name="A.Q.0339-SC70";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SSOT3" where name="A.Q.0340-SSOT3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0341-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0342-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0343-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0344-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO247-3" where name="A.Q.0345-TO247";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0346-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0347-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0348-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0349-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0350-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0351-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0352-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO3P" where name="A.Q.0353-TO3P";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0355-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0355-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0356-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0357-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0358-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0359-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0360-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0361-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0362-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0363-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0364-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0365-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0366-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0367-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0368-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0369-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0370-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0371-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0372-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0373-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0374-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0375-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23F" where name="A.Q.0376-SOT23F";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0377-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0378-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0379-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0380-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0381-TO92";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0382-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0383-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0384-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0385-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0386-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0387-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0388-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0389-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0390-SOT23";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0391-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0392-TO92-3";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO18" where name="A.Q.0393-TO18";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0394-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0395-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0396-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0397-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0398-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0399-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0401-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0402-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0403-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0404-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0405-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SC70" where name="A.Q.0406-SC70";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0407-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0408-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0409-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT523" where name="A.Q.0410-SOT523";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0411-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0412-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0413-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0414-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT223" where name="A.Q.0415-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0416-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0417-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0418-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0419-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0420-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0421-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0423-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0424-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92" where name="A.Q.0425-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0426-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO18-3" where name="A.Q.0427-TO18";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO18-3" where name="A.Q.0428-TO18";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0429-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0430-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0431-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0432-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0433-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0434-TO92";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0435-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0436-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0437-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0438-SOT323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0664-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0665-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0666-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0667-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO220" where name="A.Q.0668-TO220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92" where name="A.Q.0669-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0670-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0671-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0672-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0673-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0674-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO3P" where name="A.Q.0675-TO3P";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO220" where name="A.Q.0676-TO220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO220" where name="A.Q.0677-TO220";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92" where name="A.Q.0678-TO92";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT89" where name="A.Q.0679-SOT89";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0680-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0681-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0682-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0683-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0684-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0685-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0686-TO92-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0687-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0688-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0689-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0690-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0691-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0692-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0693-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0694-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23-3" where name="A.Q.0695-SOT23-3";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0696-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="default", package1="SOT23" where name="A.Q.0697-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="default", package1="SOT23" where name="A.Q.0698-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0700-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO220" where name="A.Q.0701-TO220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0702-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0703-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT723" where name="A.Q.0704-SOT723";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0705-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0706-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0707-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0708-SOT23";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0709-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0710-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0711-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0713-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0714-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0715-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0716-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0717-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0718-SOT323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT89" where name="A.Q.0719-SOT89";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="DIP", package1="TO92-3" where name="A.Q.0720-TO92-3";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0721-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT323" where name="A.Q.0722-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="Transistors", package2="SMD", package1="SOT23" where name="A.Q.0723-SOT23";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> notee;

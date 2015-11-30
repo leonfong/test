@@ -1,0 +1,29 @@
+<%= form_for search_path, :method => 'get' do %>
+  <p>
+    <%= text_field_tag :q, params[:q] %>
+    <%= text_field_tag :p, params[:p] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
+<% if @results %>
+  <table class="table table-bordered table-striped">
+    <tr>
+      <td>ID</td>
+      <td>Name</td>
+      <td>Description</td>
+      <td>Price</td>
+    </tr>
+  <% @results.each do |result| %>
+      <tr>
+        <td><%= result.id %></td>
+        <td><%= result.name %></td>
+        <td><%= result.description %></td>
+        <td><%= result.price %></td>
+      </tr>
+  <% end %>
+  </table>
+<% end %>
+<div class="well">
+  <%= @query_str %>
+</div>

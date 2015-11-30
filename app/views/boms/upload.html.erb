@@ -1,0 +1,16 @@
+<div class="row">
+
+	<div class="col-md-4"></div>
+
+	<div class=" col-md-4 form-group">
+		<%= form_for @bom, html: { multipart: true } do |f| %>
+			<label><h2>上传Excel文件</h2></label>
+		    <%= f.file_field :excel_file, class: "btn btn-default" %>
+		    <br/>
+		    <%= f.submit "上传", class: "btn btn-primary" %>
+		<% end %>
+
+	</div>
+
+	<div class="col-md-4"></div>
+</div>

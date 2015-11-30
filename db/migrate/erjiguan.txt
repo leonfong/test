@@ -1,0 +1,2809 @@
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0001-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0003-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0004-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0005-SOD80C";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0006-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0007-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0008-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SC-80" where name="A.D.0009-SC80";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0010-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123F" where name="A.D.0011-SOD123F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD80C" where name="A.D.0012-SOD80C";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO-35" where name="A.D.0013-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0014-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-201AD" where name="A.D.0015-DO201AD";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-201AD" where name="A.D.0016-DO201AD";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0017-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0805玻璃" where name="A.D.0018-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0019-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0020-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0021-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0022-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0023-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0024-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0025-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0026-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0027-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0028-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0029-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0030-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0031-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0032-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0033-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0034-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0035-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0036-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0037-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0038-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0039-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323F" where name="A.D.0040-SOD323F";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0041-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0042-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0043-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0044-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0045-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0046-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0047-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0048-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0049-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0050-SOD523";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0051-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0052-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0053-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB(SMC)" where name="A.D.0054-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AB" where name="A.D.0055-DO214AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0056-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0057-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0058-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0059-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0060-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0061-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0062-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0063-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0064-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0065-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD523" where name="A.D.0066-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD523" where name="A.D.0067-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123F" where name="A.D.0068-SOD123F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0069-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0070-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0071-DO214";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214" where name="A.D.0072-DO214";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0073-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0074-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0075-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0076-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0077-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0078-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AA" where name="A.D.0079-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0080-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0081-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0082-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0083-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AA" where name="A.D.0084-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0085-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214" where name="A.D.0086-DO214";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0087-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0088-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0089-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0090-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AB" where name="A.D.0091-DO214AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0092-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0093-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0094-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AA" where name="A.D.0095-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0096-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DO214AA", package2="±5%" where name="A.D.0097-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0098-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO213AB" where name="A.D.0099-DO213AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="default" where name="A.D.0100-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD80" where name="A.D.0101-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80" where name="A.D.0102-SOD80";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIODES", package2="DO213AC" where name="A.D.0103-DO213AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIODES", package2="DO213AC" where name="A.D.0104-DO213AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80" where name="A.D.0105-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80" where name="A.D.0106-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD80" where name="A.D.0107-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO213AB" where name="A.D.0108-DO213AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO213AB" where name="A.D.0109-DO213AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0110-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123F" where name="A.D.0111-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="MINIMELF" where name="A.D.0112-MINIMELF";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214" where name="A.D.0113-DO214";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0115-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0116-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0117-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0118-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0120-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0121-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0122-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO216AA" where name="A.D.0123-DO216AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL-41 圆柱形" where name="A.D.0124-LL41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0125-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0126-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DL41 圆柱形" where name="A.D.0127-DL41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0128-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0129-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0130-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0131-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0132-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0133-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41 玻璃" where name="A.D.0135-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0136-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-204AL" where name="A.D.0137-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0138-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0139-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="R-6" where name="A.D.0140-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0141-DO41";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="插件二极管", package1="DIP", package2="1W" where name="A.D.0142-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="插件二极管", package1="default", package2="DIP" where name="A.D.0143-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DIP" where name="A.D.0144-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0145-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SMC" where name="A.D.0146-SMC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="TO-227A", package2="10A" where name="A.D.0147-TO277A";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SMB" where name="A.D.0148-SMB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SMC" where name="A.D.0149-SMC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0150-SMB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD-523" where name="A.D.0151-SOD523";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0152-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="NXP", package2="SOD323" where name="A.D.0153-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0154-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO216AA" where name="A.D.0155-DO216AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AB" where name="A.D.0156-DO214AB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0157-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0158-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-15" where name="A.D.0159-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO-41" where name="A.D.0160-DIP";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0161-SMA";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO201AD" where name="A.D.0162-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AA" where name="A.D.0163-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0164-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO201AD" where name="A.D.0165-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0166-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0167-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323F" where name="A.D.0168-SOD323F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SMA" where name="A.D.0169-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0170-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AA" where name="A.D.0171-DO214AA";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0172-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AA" where name="A.D.0173-SMB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0174-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0175-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0176-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0177-SMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0180-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0181-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0182-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0183-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD923F/0402" where name="A.D.0184-SOD923";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD923F/0402" where name="A.D.0185-SOD923";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DIP" where name="A.D.0186-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0187-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0188-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0189-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0190-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0191-D0214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0192-D0214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0193-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="光敏二极管", package1="(门铃板订单用)", package2="DIP-2" where name="A.D.0194-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0195-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0196-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0197-SOD523";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0198-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0199-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0200-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD80" where name="A.D.02016-SOD80C";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0201-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0202-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL-34" where name="A.D.0203-LL34";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0205-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO-35" where name="A.D.0207-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0208-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0209-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0210-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0211-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO-214AC" where name="A.D.0212-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0213-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="Micro", package2="DO214AC" where name="A.D.0214-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0215-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="LL34" where name="A.D.0216-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="稳压二极管", package1="default", package2="5V1 玻璃形" where name="A.D.0217-DO2114AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0218-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0219-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0220-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123W" where name="A.D.0221-SOD123W";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0222-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0223-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0224-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0225-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO220AA" where name="A.D.0226-DO220AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0227-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0228-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="2W", package2="RD12" where name="A.D.0229-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0230-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0231-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0232-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0233-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0234-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0236-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0237-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0238-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0239-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0240-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0241-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0242-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL34 黑色圆柱形" where name="A.D.0243-LL34";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL34 黑色圆柱形" where name="A.D.0244-LL34";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0245-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0246-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0247-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AB" where name="A.D.0248-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO-214AB" where name="A.D.0249-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0250-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123W" where name="A.D.0251-SOD123W";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0252-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0253-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0254-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0255-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="国产ST", package2="SOD80C" where name="A.D.0256-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0257-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0258-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0259-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0260-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0261-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0262-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0263-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB(SMC)" where name="A.D.0264-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0265-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80" where name="A.D.0266-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0267-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0268-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0269-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80" where name="A.D.0270-SOD80";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0271-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0272-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0273-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0274-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0275-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD882" where name="A.D.0276-SOD882";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0277-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0278-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOT23" where name="A.D.0279-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0280-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="MicroSMP" where name="A.D.0281-MICROSMP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="黑色圆柱形LL41" where name="A.D.0282-LL41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0283-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SMF" where name="A.D.0284-SMF";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管(TVS)", package1="SMD", package2="0603" where name="A.D.0285-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="DO214AC" where name="A.D.0286-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0805(黑色)" where name="A.D.0287-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0288-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80" where name="A.D.0289-SOD80";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0290-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="1206" where name="A.D.0291-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0292-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0293-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0294-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0295-DO35";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0296-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0297-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0201" where name="A.D.0298-0201";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0299-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0300-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0301-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0302-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0303-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0304-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0305-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0306-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0307-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0308-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="1206" where name="A.D.0309-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0310-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0311-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0312-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0313-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="P600" where name="A.D.0314-P600";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0315-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD128" where name="A.D.0316-SOD128";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123F" where name="A.D.0317-SOD123F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0318-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0319-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0321-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0322-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0323-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0324-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0325-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0326-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0327-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0328-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0329-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0330-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD923" where name="A.D.0331-SOD923";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0332-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0333-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0334-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0335-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323F" where name="A.D.0336-SOD323F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0337-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201AD" where name="A.D.0338-DO201AD";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0339-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="ESD二极管", package1="SMD", package2="0603" where name="A.D.0340-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0340-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0341-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0342-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0343-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0344-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0345-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DFN1006-2" where name="A.D.0346-DFN1006-2";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0347-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0348-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="T-18" where name="A.D.0349-T18";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0350-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323F" where name="A.D.0351-SOD323F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0352-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0353-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0354-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0355-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0356-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD123" where name="A.D.0357-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0358-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0359-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0361-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0362-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0363-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0364-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0365-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0366-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0367-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201" where name="A.D.0368-DO201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0369-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0370-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523F" where name="A.D.0371-SOD523F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="PowerDI5" where name="A.D.0372-POWERDI5";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123W" where name="A.D.0373-SOD123W";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0374-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0375-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0376-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0377-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO-214AC" where name="A.D.0378-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0379-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0380-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0381-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0382-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0383-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0384-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0385-DO35";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0386-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523F" where name="A.D.0387-SOD523F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0388-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0389-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0390-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123L" where name="A.D.0391-SOD123L";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123L" where name="A.D.0392-SOD123L";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0393-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DO35", package2="0.5W" where name="A.D.0394-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0395-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41(玻璃)" where name="A.D.0396-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0397-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0398-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD128" where name="A.D.0399-SOD128";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO-214AC" where name="A.D.0400-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0401-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="1206(黑色)" where name="A.D.0402-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0403-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0404-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0405-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0406-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0407-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0408-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0409-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0805" where name="A.D.0410-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0411-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0412-DO214AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0413-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0414-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0415-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201AD" where name="A.D.0416-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-15" where name="A.D.0417-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201AD" where name="A.D.0418-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="R-6" where name="A.D.0419-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0420-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0421-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0422-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0423-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0424-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0425-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO35" where name="A.D.0426-DO35";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0427-DO214AB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0428-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0429-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0430-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0431-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0432-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="MICROSMA" where name="A.D.0433-MICROSMA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SMF" where name="A.D.0434-SMF";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0435-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="PowerDI5" where name="A.D.0436-POWERDI5";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0437-DO41";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0438-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD-3", package2="DO214AA" where name="A.D.0439-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0440-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0441-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0442-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0443-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0444-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO15" where name="A.D.0445-DO15";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD923F/0402" where name="A.D.0446-SOD923F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0447-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO15" where name="A.D.0448-DO15";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0449-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0805" where name="A.D.0450-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0451-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0452-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0453-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0454-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-15" where name="A.D.0455-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0402" where name="A.D.0457-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0458-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0459-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0460-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0462-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0463-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0464-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0465-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0466-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0467-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0469-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0470-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0471-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0472-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0473-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0474-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0475-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0476-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="TO220AC" where name="A.D.0479-TO220AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL41" where name="A.D.0480-LL41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL41" where name="A.D.0481-LL41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL41" where name="A.D.0483-LL41";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0485-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0486-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0488-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0489-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0490-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0491-SOD80C";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0492-SOD80C";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0493-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0494-SOD80C";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0495-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0496-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0497-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0498-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0499-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO-214AC" where name="A.D.0500-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL-34" where name="A.D.0501-LL34";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOT23" where name="A.D.0502-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0503-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="SOD64" where name="A.D.0504-SOD64";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL41" where name="A.D.0505-LL41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="SOD57" where name="A.D.0506-SOD57";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0507-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0508-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0509-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0510-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0511-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0512-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201AD" where name="A.D.0513-DO201AD";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201AA" where name="A.D.0514-DO201AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0515-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO216AA" where name="A.D.0516-DO216AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0517-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0518-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0520-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0521-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD128" where name="A.D.0522-SOD128";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD923" where name="A.D.0523-SOD923";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0524-DO214AB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0525-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0526-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOT23" where name="A.D.0527-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO219AB" where name="A.D.0528-DO219AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0529-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0530-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0531-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0532-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0533-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0535-DO35";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0536-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0537-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0538-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0539-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0540-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0541-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0542-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0543-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0544-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0545-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL-34" where name="A.D.0546-LL34";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO216AA" where name="A.D.0547-DO216AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0548-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO7 玻璃管" where name="A.D.0549-DO7";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0550-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0551-DO214AA";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0552-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0553-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0554-SOD323";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0555-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0556-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0557-SOD523";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="Bourns", package2="0603" where name="A.D.0558-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0559-DO214AB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0805" where name="A.D.0560-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0561-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0562-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0563-DO214AA";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0564-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0565-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0566-DO35";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD882" where name="A.D.0567-SOD882";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO221AC" where name="A.D.0568-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0569-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="Vishay", package2="SOD323" where name="A.D.0570-SOD323";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0571-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123F" where name="A.D.0572-SOD123F";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123W" where name="A.D.0573-SOD123W";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123W" where name="A.D.0574-SOD123W";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0575-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0576-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO213AB" where name="A.D.0577-DO213AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323F" where name="A.D.0578-SOD323F";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0579-SOD323";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0580-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0581-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0582-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0583-SOD80C";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="default", package2="SOD323" where name="A.D.0584-SOD323";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0585-DO214AA";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-15" where name="A.D.0586-DO15";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0587-SOD323";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123F" where name="A.D.0588-SOD123F";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0589-DO41";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201" where name="A.D.0590-DO201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO216AA" where name="A.D.0592-DO216AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0593-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0594-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0596-DO214AB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0597-DO214AB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0598-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0599-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="POWERDI123" where name="A.D.0601-POWERDI123";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0602-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOT23" where name="A.D.0603-SOT23";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="2X2SON" where name="A.D.0604-2X2SON";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0605-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0606-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0607-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SMP2" where name="A.D.0608-SMP2";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0609-SOD323";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0610-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0611-SOD123";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0612-DIP";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0613-DO214AB";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0614-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0615-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0616-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0617-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0618-DO214AC";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0619-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0620-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0621-SOD123";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0622-DO214AB";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0623-DO214AC";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0623-DO41";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0624-DO214AB";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0625-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0626-DIP";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201AD" where name="A.D.0627-DIP";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0628-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0629-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0630-DO214AA";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0631-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0632-DIP";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0633-DIP";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0634-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0636-DO214AA";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0637-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO201AD" where name="A.D.0638-DIP";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0639-DO214AB";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-15" where name="A.D.0640-DO15";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0641-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0642-DO214AB";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0643-DO214AA";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0644-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0645-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0603" where name="A.D.0646-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0647-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0649-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0650-SOD80C";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO35" where name="A.D.0651-DO35";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO35" where name="A.D.0652-DO35";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123W" where name="A.D.0653-SOD123W";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0654-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0655-SOD523";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0656-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0657-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0658-DO214AA";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0659-SOD80C";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0660-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0661-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0662-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0663-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0664-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0665-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0666-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0667-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0668-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0669-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0670-SOD80C";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0671-DO214AB";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0672-DO214AA";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0673-DO214AB";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0674-DO214AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123H" where name="A.D.0675-SOD123H";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0676-DO214AA";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0678-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0679-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0680-SOD123";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0681-DO214AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0682-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0805玻璃" where name="A.D.0683-0805";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0684-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0685-SOD80C";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0686-SOD80C";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0687-DO214AA";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0688-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0689-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0690-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0691-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0692-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0693-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-34" where name="A.D.0694-DO34";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-41" where name="A.D.0695-DIP";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0696-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0697-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="LL41 黑色圆柱" where name="A.D.0698-LL41";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="R-1" where name="A.D.0699-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-201AD" where name="A.D.0700-DO201AD";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="0402" where name="A.D.0701-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0702-DO214AC";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0703-SOD80C";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0704-SOD80C";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0705-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD80C" where name="A.D.0706-SOD80";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0707-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0708-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD523" where name="A.D.0709-SOD523";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0710-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0711-SOD323";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0712-SOD123";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD323" where name="A.D.0713-SOD323";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0714-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="SOD123" where name="A.D.0715-SOD123";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0716-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0717-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0718-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AC" where name="A.D.0719-DO214AC";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AB" where name="A.D.0720-DO214AB";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0721-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0722-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO-35" where name="A.D.0723-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="DIP", package2="DO41" where name="A.D.0724-DIP";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0725-DO214AA";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="二极管", package1="SMD", package2="DO214AA" where name="A.D.0726-DO214AA";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> notee;

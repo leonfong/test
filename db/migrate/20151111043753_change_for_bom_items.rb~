@@ -1,0 +1,4 @@
+class ChangeForBomItems < ActiveRecord::Migration
+  def change
+  end
+end

@@ -1,0 +1,5 @@
+mysql> update products set ptype="IC", package1="SMD", package2="SOIC8" where name="A.U.0001-SOIC8";
+Query OK, 0 rows affected (0.02 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> notee;

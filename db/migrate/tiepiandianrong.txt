@@ -1,0 +1,2574 @@
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0001-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0002-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0003-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0004-0402";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0005-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0006-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0007-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0009-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0010-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0011-0402";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0012-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0013-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0014-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0015-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0017-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0018-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0019-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0020-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0021-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0022-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0023-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0024-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0025-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0026-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0027-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0028-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0029-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0030-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0031-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0032-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0033-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0034-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0036-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0037-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0038-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0039-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0040-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0043-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0044-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0045-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0046-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0047-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0048-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0049-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0050-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0051-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0052-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0053-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0054-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0055-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0056-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0057-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0059-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0060-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0062-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0063-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0065-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0066-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0067-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0068-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0069-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0070-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0071-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0072-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0073-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0074-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0075-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0076-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0077-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0078-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0079-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0080-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0081-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0083-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0084-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0085-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0086-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0087-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0088-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0089-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0090-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0091-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0093-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0094-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0095-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0096-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0098-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0099-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0100-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0101-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0102-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0103-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0104-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0105-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0107-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0108-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0109-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0111-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0112-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0113-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0114-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0115-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0116-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0117-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0118-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0119-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0120-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0121-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0122-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0123-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0124-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0125-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0126-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0127-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0128-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0129-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0130-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0131-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0132-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0133-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0134-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0135-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0136-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0137-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0138-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0139-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0140-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0141-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0142-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0143-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0144-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0145-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0146-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0147-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0148-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0149-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0150-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0151-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0152-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0153-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0154-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0155-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0156-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0157-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0158-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0159-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0160-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0161-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0162-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0163-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0164-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0165-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0166-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0167-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0168-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0169-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0170-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0171-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0172-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0173-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0174-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0176-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0177-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0178-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0179-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0180-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0181-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0182-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0183-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0184-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0185-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0186-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0187-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0188-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0189-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0190-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0191-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0192-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0193-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0194-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0195-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0196-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0197-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0198-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0199-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0200-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0201-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0202-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0203-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0204-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0205-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0206-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0207-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0208-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0209-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0210-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0214-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0215-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0216-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0217-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0218-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0219-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0220-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0221-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0222-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0223-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0224-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0226-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0227-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0228-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0229-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0230-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0231-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0232-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0233-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0234-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0235-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0236-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0238-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0239-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0240-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0243-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0244-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0245-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0246-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0247-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0248-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0249-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0250-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0251-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0252-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0253-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0254-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0255-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0256-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0257-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0258-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0259-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0260-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0261-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0262-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0263-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0264-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0265-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0266-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0267-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0268-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0269-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0270-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0271-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0272-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0273-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0274-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0275-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0276-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0277-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0278-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0279-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0280-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0281-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0282-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0283-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0284-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0285-1206";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0286-0402";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0287-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0288-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0289-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0290-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0291-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0292-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0293-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0294-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0296-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0297-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0298-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0299-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0300-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0302-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0303-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0305-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0307-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0309-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0310-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0311-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0312-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0313-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0314-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0315-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0316-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0317-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0318-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0319-0805";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0320-0805";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0321-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0322-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0323-0805";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0324-0402";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0325-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0326-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0329-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0330-1206";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0331-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0332-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0333-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0334-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0335-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0336-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0337-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0338-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0339-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0340-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0341-1206";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0342-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0343-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0344-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0345-0603";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0346-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0347-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0348-1210";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0349-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0350-0402";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0351-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0353-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0354-1206";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0355-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0356-0402";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0357-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0358-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0359-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0360-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0361-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0362-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0363-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0364-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0365-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="贴片排容", package2="0603*4" where name="A.2.C.0366-0603*4";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0367-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0368-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0369-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0370-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0371-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0372-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0373-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0374-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0375-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="可调电容", package2="default" where name="A.2.C.0376-SMD";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0377-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="2220" where name="A.2.C.0378-2220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0379-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0380-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0381-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0382-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0383-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0384-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0385-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0386-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0387-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0387-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0388-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0389-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0390-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0391-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0393-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0394-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0395-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0396-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0397-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0398-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0399-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0400-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0401-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0402-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0403-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0404-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="贴片排容", package2="0603*4" where name="A.2.C.0405-0603*4";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="贴片排容", package2="0603*4" where name="A.2.C.0406-0603*4";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="贴片排容", package2="0603*4" where name="A.2.C.0407-0603*4";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0408-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0409-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0410-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0411-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0412-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0413-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0414-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0415-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0416-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0417-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0418-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0419-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0420-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0421-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0422-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0423-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0424-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0425-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0426-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0427-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0428-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0429-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0430-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0431-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0432-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0433-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0434-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0435-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0436-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0437-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0437-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0438-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0439-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0440-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0441-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0442-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0443-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0444-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0445-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0446-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0447-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0448-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0449-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0450-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="2220" where name="A.2.C.0451-2220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0452-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0453-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0454-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0455-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0456-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0457-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0458-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0459-0402";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0460-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0461-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0462-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0463-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0464-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0465-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0466-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0467-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0468-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0469-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0470-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0471-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0472-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0473-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0474-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0475-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0476-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0477-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0478-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0479-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0480-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0481-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0482-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0483-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0484-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0485-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0486-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0487-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0489-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="2220" where name="A.2.C.0490-2220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0491-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0492-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0493-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="2225" where name="A.2.C.0494-2225";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0495-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="高压电容", package2="1206" where name="A.2.C.0496-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0497-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0498-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0499-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0500-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0501-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0502-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0503-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0504-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0505-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0506-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0507-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0508-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0509-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0510-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0511-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0512-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0513-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0514-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0515-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0516-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0517-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0518-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0519-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0520-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0521-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0522-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0524-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0525-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0526-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0527-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0528-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0529-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0530-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0531-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0532-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0533-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0534-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0535-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0536-1206";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0537-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0538-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1808" where name="A.2.C.0539-1808";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0540-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0541-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0542-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0543-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0544-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0545-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0546-1210";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0546-1812";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="2220" where name="A.2.C.0547-2220";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0548-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0549-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0550-1812";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0551-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0552-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0553-0402";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0554-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0555-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0556-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0557-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0558-1210";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0559-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0560-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0561-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0562-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0563-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0564-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0565-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0566-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0567-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0568-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0569-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0570-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0571-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0572-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0573-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="滤波电容", package2="SMD-3" where name="A.2.C.0574-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0575-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1808" where name="A.2.C.0576-1808";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0577-0201";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0578-0201";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0579-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0580-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0581-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0582-1206";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0583-0201";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0584-0402";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0585-0402";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0586-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0587-0402";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0588-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0589-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0590-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0591-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0592-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0593-0402";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0594-0805";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0595-1210";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0596-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0597-1210";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0598-1206";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0599-1812";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0600-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0601-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0602-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0603-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0604-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0605-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0606-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0607-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0608-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0609-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0610-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0611-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0612-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0613-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0614-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0615-0603";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0616-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0617-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0618-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0619-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0620-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0621-0805";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0622-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0623-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0624-1210";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0625-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0626-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0627-1206";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0628-0603";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0629-1206";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0630-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0631-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0632-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0633-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0634-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0635-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="超级电容", package2="SMD-2" where name="A.2.C.0636-SMD";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0637-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0638-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0639-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0640-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0641-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0642-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0643-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0644-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0645-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0646-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0647-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0648-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="贴片排容", package2="0603*4" where name="A.2.C.0649-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0650-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0651-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0652-1210";
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0653-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0654-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0655-0201";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0201" where name="A.2.C.0656-0201";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0657-1812";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0402" where name="A.2.C.0658-0402";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0659-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0660-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0661-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1812" where name="A.2.C.0662-1812";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="贴片排容", package2="0504" where name="A.2.C.0663-0504";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0664-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1206" where name="A.2.C.0665-1206";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="1210" where name="A.2.C.0666-1210";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0667-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0668-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0669-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0670-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0603" where name="A.2.C.0671-0603";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update products set ptype="电容", package2="0805" where name="A.2.C.0672-0805";
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> 
+mysql> notee;

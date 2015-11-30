@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-md-12">
+    <ol class="breadcrumb">
+      <li><%= link_to "所有BOM",boms_path %></li>
+      <li class="active"><%= @bom.excel_file_identifier %></li>
+    </ol>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item">BOM文件：<%= @bom.excel_file_identifier %></li>
+        <li class="list-group-item">已匹配：<%= @match_str %></li>
+        <li class="list-group-item">总价格：<%= number_with_precision(@total_price,strip_insignificant_zeros: true) %></li>
+      </ul>
+    </div>
+
+    <div class ="col-md-6">
+      <%= link_to "导出Excel", bom_path(format: "xls") %>
+    </div>
+
+</div>
+
+<div class="row">
+
+  <div class="col-md-12">
+      <table class="table table-bordered table-striped table-condensed table-hover">
+        <thead>
+          <tr class="text-nowrap">            
+            <th>序号</th>
+            <th>意向产品</th>
+            
+            <th>匹配产品</th>
+            
+            <th>单价</th>
+            <th>数量</th>
+            
+            <th>状态</th>
+            <th>操作</th>
+            <th>标记</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @bom.bom_items.each_with_index do |item,index| %>
+            <% if item.mark %>
+              <tr class="info" >
+            <% elsif item.danger %> 
+              <tr class="danger">
+            <% elsif item.manual %> 
+              <tr class="success">
+            <% else %>
+              <tr>
+            <% end %>
+           
+              
+              <td class="vert-align"><%= index+1 %><% if item.id.to_i == params[:bomitem].to_i-2 %><a name="Comment"></a><% end %></td>
+              <td class="vert-align"><%= item.description %></td>
+              
+              <% unless item.product_id.nil?%>
+                
+                <td class="vert-align"><%= Product.find(item.product_id).description %></td>
+                
+
+                <td class="vert-align"><%= number_with_precision(Product.find(item.product_id).price/100000.0,strip_insignificant_zeros: true)%></td>
+
+                <td class="vert-align"><%= item.quantity %></td>
+                
+                <td class="vert-align">已匹配</td>
+                <td class="vert-align"><%= link_to "选择其他",  edit_bom_item_path(item), class: "btn btn-success" %></td>
+                <td class="vert-align"><%= button_to "标记",  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
+
+              <% else %>
+                
+                <td class="vert-align"></td>
+                <td class="vert-align"></td><td class="vert-align"><%= item.quantity %></td>
+                
+                <td class="vert-align">未匹配</td>
+                <td class="vert-align"><%= link_to " 手工选择",  edit_bom_item_path(item), class: "btn btn-danger" %></td>
+                <td class="vert-align"><%= button_to "标记",  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
+                
+              <% end %>
+              
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+</div>
+

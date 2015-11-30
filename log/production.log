@@ -1,0 +1,350 @@
+I, [2015-11-11T14:58:04.959496 #9313]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 14:58:04 +0800
+I, [2015-11-11T14:58:04.974788 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T14:58:04.996119 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (3.1ms)
+I, [2015-11-11T14:58:04.998421 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.3ms)
+I, [2015-11-11T14:58:05.004304 #9313]  INFO -- :   Rendered layouts/_header.html.erb (5.4ms)
+I, [2015-11-11T14:58:05.005411 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.6ms)
+I, [2015-11-11T14:58:05.006739 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.7ms)
+I, [2015-11-11T14:58:05.007944 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.4ms)
+I, [2015-11-11T14:58:05.008293 #9313]  INFO -- : Completed 200 OK in 33ms (Views: 17.7ms | ActiveRecord: 1.2ms)
+I, [2015-11-11T14:58:08.726471 #9313]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 14:58:08 +0800
+I, [2015-11-11T14:58:08.727625 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T14:58:08.730316 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (1.2ms)
+I, [2015-11-11T14:58:08.731766 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.3ms)
+I, [2015-11-11T14:58:08.733626 #9313]  INFO -- :   Rendered layouts/_header.html.erb (1.3ms)
+I, [2015-11-11T14:58:08.734782 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.5ms)
+I, [2015-11-11T14:58:08.735574 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.3ms)
+I, [2015-11-11T14:58:08.736361 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.3ms)
+I, [2015-11-11T14:58:08.736626 #9313]  INFO -- : Completed 200 OK in 9ms (Views: 8.2ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:10.254763 #9313]  INFO -- : Started GET "/boms" for 10.42.0.47 at 2015-11-11 14:58:10 +0800
+I, [2015-11-11T14:58:10.255945 #9313]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T14:58:10.256723 #9313]  INFO -- : Completed 401 Unauthorized in 1ms (ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:10.277552 #9313]  INFO -- : Started GET "/users/sign_in" for 10.42.0.47 at 2015-11-11 14:58:10 +0800
+I, [2015-11-11T14:58:10.279609 #9313]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T14:58:10.300432 #9313]  INFO -- :   Rendered devise/shared/_links.html.erb (1.3ms)
+I, [2015-11-11T14:58:10.300556 #9313]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (5.3ms)
+I, [2015-11-11T14:58:10.301174 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:10.301929 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.6ms)
+I, [2015-11-11T14:58:10.302166 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:10.302325 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:10.302473 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:10.302744 #9313]  INFO -- : Completed 200 OK in 23ms (Views: 9.6ms | ActiveRecord: 1.0ms)
+I, [2015-11-11T14:58:28.080969 #9313]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 14:58:28 +0800
+I, [2015-11-11T14:58:28.082037 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T14:58:28.084005 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (0.8ms)
+I, [2015-11-11T14:58:28.084683 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:28.085516 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T14:58:28.085781 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:28.085967 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:28.086136 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:28.086405 #9313]  INFO -- : Completed 200 OK in 4ms (Views: 3.5ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:32.696555 #9313]  INFO -- : Started GET "/boms" for 127.0.0.1 at 2015-11-11 14:58:32 +0800
+I, [2015-11-11T14:58:32.697432 #9313]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T14:58:32.698141 #9313]  INFO -- : Completed 401 Unauthorized in 1ms (ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:32.707497 #9313]  INFO -- : Started GET "/users/sign_in" for 127.0.0.1 at 2015-11-11 14:58:32 +0800
+I, [2015-11-11T14:58:32.708447 #9313]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T14:58:32.712225 #9313]  INFO -- :   Rendered devise/shared/_links.html.erb (0.3ms)
+I, [2015-11-11T14:58:32.712349 #9313]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (2.5ms)
+I, [2015-11-11T14:58:32.712890 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:32.713586 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.6ms)
+I, [2015-11-11T14:58:32.713822 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:32.713983 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:32.714124 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:32.714361 #9313]  INFO -- : Completed 200 OK in 6ms (Views: 4.8ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:34.832724 #9313]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 14:58:34 +0800
+I, [2015-11-11T14:58:34.833728 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T14:58:34.835589 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (0.7ms)
+I, [2015-11-11T14:58:34.836245 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:34.837141 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T14:58:34.837454 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:34.837650 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:34.837852 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:34.838128 #9313]  INFO -- : Completed 200 OK in 4ms (Views: 3.5ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:38.430013 #9313]  INFO -- : Started GET "/boms" for 127.0.0.1 at 2015-11-11 14:58:38 +0800
+I, [2015-11-11T14:58:38.431878 #9313]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T14:58:38.432723 #9313]  INFO -- : Completed 401 Unauthorized in 1ms (ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:38.441136 #9313]  INFO -- : Started GET "/users/sign_in" for 127.0.0.1 at 2015-11-11 14:58:38 +0800
+I, [2015-11-11T14:58:38.442162 #9313]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T14:58:38.445841 #9313]  INFO -- :   Rendered devise/shared/_links.html.erb (0.3ms)
+I, [2015-11-11T14:58:38.445964 #9313]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (2.5ms)
+I, [2015-11-11T14:58:38.446514 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:38.447198 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.6ms)
+I, [2015-11-11T14:58:38.447428 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:38.447583 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:38.447730 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:38.447967 #9313]  INFO -- : Completed 200 OK in 6ms (Views: 4.7ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:39.923249 #9313]  INFO -- : Started GET "/about" for 127.0.0.1 at 2015-11-11 14:58:39 +0800
+I, [2015-11-11T14:58:39.925133 #9313]  INFO -- : Processing by StaticPagesController#about as HTML
+I, [2015-11-11T14:58:39.927898 #9313]  INFO -- :   Rendered static_pages/about.html.erb within layouts/application (0.5ms)
+I, [2015-11-11T14:58:39.928650 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:39.929590 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.8ms)
+I, [2015-11-11T14:58:39.929869 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:39.930028 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:39.930183 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:39.930439 #9313]  INFO -- : Completed 200 OK in 5ms (Views: 4.7ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:41.387353 #9313]  INFO -- : Started GET "/contact" for 127.0.0.1 at 2015-11-11 14:58:41 +0800
+I, [2015-11-11T14:58:41.390452 #9313]  INFO -- : Processing by StaticPagesController#contact as HTML
+I, [2015-11-11T14:58:41.392020 #9313]  INFO -- :   Rendered static_pages/contact.html.erb within layouts/application (0.3ms)
+I, [2015-11-11T14:58:41.392700 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:41.393499 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T14:58:41.393714 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:41.393868 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:41.394015 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:41.394223 #9313]  INFO -- : Completed 200 OK in 4ms (Views: 3.2ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:44.686495 #9313]  INFO -- : Started GET "/about" for 127.0.0.1 at 2015-11-11 14:58:44 +0800
+I, [2015-11-11T14:58:44.687406 #9313]  INFO -- : Processing by StaticPagesController#about as HTML
+I, [2015-11-11T14:58:44.688456 #9313]  INFO -- :   Rendered static_pages/about.html.erb within layouts/application (0.1ms)
+I, [2015-11-11T14:58:44.689190 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:44.690064 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T14:58:44.690271 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:44.690418 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:44.690569 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:44.690802 #9313]  INFO -- : Completed 200 OK in 3ms (Views: 2.7ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:46.096493 #9313]  INFO -- : Started GET "/boms" for 127.0.0.1 at 2015-11-11 14:58:46 +0800
+I, [2015-11-11T14:58:46.097538 #9313]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T14:58:46.098314 #9313]  INFO -- : Completed 401 Unauthorized in 1ms (ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:46.106719 #9313]  INFO -- : Started GET "/users/sign_in" for 127.0.0.1 at 2015-11-11 14:58:46 +0800
+I, [2015-11-11T14:58:46.107620 #9313]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T14:58:46.111451 #9313]  INFO -- :   Rendered devise/shared/_links.html.erb (0.3ms)
+I, [2015-11-11T14:58:46.111574 #9313]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (2.6ms)
+I, [2015-11-11T14:58:46.112128 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T14:58:46.112830 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.6ms)
+I, [2015-11-11T14:58:46.113055 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:46.113214 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T14:58:46.113358 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:46.113594 #9313]  INFO -- : Completed 200 OK in 6ms (Views: 4.9ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T14:58:52.448584 #9313]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 14:58:52 +0800
+I, [2015-11-11T14:58:52.449555 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T14:58:52.451455 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (0.8ms)
+I, [2015-11-11T14:58:52.463807 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T14:58:52.465090 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.9ms)
+I, [2015-11-11T14:58:52.465438 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T14:58:52.465716 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.1ms)
+I, [2015-11-11T14:58:52.465885 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T14:58:52.466164 #9313]  INFO -- : Completed 200 OK in 16ms (Views: 15.7ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:02:12.059066 #9313]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 15:02:12 +0800
+I, [2015-11-11T15:02:12.060148 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:02:12.062037 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (0.7ms)
+I, [2015-11-11T15:02:12.062930 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T15:02:12.064087 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.8ms)
+I, [2015-11-11T15:02:12.064398 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:02:12.064579 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:02:12.064746 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:02:12.065086 #9313]  INFO -- : Completed 200 OK in 5ms (Views: 4.1ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:02:13.190832 #9313]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 15:02:13 +0800
+I, [2015-11-11T15:02:13.191977 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:02:13.194106 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (1.1ms)
+I, [2015-11-11T15:02:13.195103 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:02:13.196305 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.9ms)
+I, [2015-11-11T15:02:13.196734 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:02:13.196965 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:02:13.197144 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:02:13.197409 #9313]  INFO -- : Completed 200 OK in 5ms (Views: 4.6ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:02:14.679355 #9313]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 15:02:14 +0800
+I, [2015-11-11T15:02:14.680300 #9313]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:02:14.681978 #9313]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (0.7ms)
+I, [2015-11-11T15:02:14.682725 #9313]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:02:14.683629 #9313]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T15:02:14.683903 #9313]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:02:14.684064 #9313]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:02:14.684208 #9313]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:02:14.684457 #9313]  INFO -- : Completed 200 OK in 4ms (Views: 3.4ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:02:24.563583 #9546]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 15:02:24 +0800
+I, [2015-11-11T15:02:24.580113 #9546]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:02:24.602808 #9546]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (3.4ms)
+I, [2015-11-11T15:02:24.606273 #9546]  INFO -- :   Rendered layouts/_shim.html.erb (0.9ms)
+I, [2015-11-11T15:02:24.611813 #9546]  INFO -- :   Rendered layouts/_header.html.erb (5.0ms)
+I, [2015-11-11T15:02:24.612830 #9546]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.5ms)
+I, [2015-11-11T15:02:24.613601 #9546]  INFO -- :   Rendered layouts/_footer.html.erb (0.3ms)
+I, [2015-11-11T15:02:24.614394 #9546]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.3ms)
+I, [2015-11-11T15:02:24.614745 #9546]  INFO -- : Completed 200 OK in 34ms (Views: 17.2ms | ActiveRecord: 1.8ms)
+I, [2015-11-11T15:02:25.614465 #9546]  INFO -- : Started GET "/" for 127.0.0.1 at 2015-11-11 15:02:25 +0800
+I, [2015-11-11T15:02:25.615577 #9546]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:02:25.617560 #9546]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (0.8ms)
+I, [2015-11-11T15:02:25.618382 #9546]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:02:25.619315 #9546]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T15:02:25.619580 #9546]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:02:25.619883 #9546]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:02:25.620041 #9546]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:02:25.620296 #9546]  INFO -- : Completed 200 OK in 5ms (Views: 3.8ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:03:02.286551 #9546]  INFO -- : Started GET "/boms" for 10.42.0.47 at 2015-11-11 15:03:02 +0800
+I, [2015-11-11T15:03:02.288404 #9546]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T15:03:02.289235 #9546]  INFO -- : Completed 401 Unauthorized in 1ms (ActiveRecord: 0.0ms)
+I, [2015-11-11T15:03:02.327619 #9546]  INFO -- : Started GET "/users/sign_in" for 10.42.0.47 at 2015-11-11 15:03:02 +0800
+I, [2015-11-11T15:03:02.329662 #9546]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T15:03:02.349517 #9546]  INFO -- :   Rendered devise/shared/_links.html.erb (1.4ms)
+I, [2015-11-11T15:03:02.349705 #9546]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (5.5ms)
+I, [2015-11-11T15:03:02.350413 #9546]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:03:02.351190 #9546]  INFO -- :   Rendered layouts/_header.html.erb (0.6ms)
+I, [2015-11-11T15:03:02.351451 #9546]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:03:02.351611 #9546]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:03:02.351760 #9546]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:03:02.352065 #9546]  INFO -- : Completed 200 OK in 22ms (Views: 10.1ms | ActiveRecord: 1.0ms)
+I, [2015-11-11T15:03:05.570613 #9546]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:03:05 +0800
+I, [2015-11-11T15:03:05.571730 #9546]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:03:05.574437 #9546]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (1.2ms)
+I, [2015-11-11T15:03:05.575674 #9546]  INFO -- :   Rendered layouts/_shim.html.erb (0.3ms)
+I, [2015-11-11T15:03:05.577381 #9546]  INFO -- :   Rendered layouts/_header.html.erb (1.2ms)
+I, [2015-11-11T15:03:05.578370 #9546]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.4ms)
+I, [2015-11-11T15:03:05.579115 #9546]  INFO -- :   Rendered layouts/_footer.html.erb (0.2ms)
+I, [2015-11-11T15:03:05.579878 #9546]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.3ms)
+I, [2015-11-11T15:03:05.580137 #9546]  INFO -- : Completed 200 OK in 8ms (Views: 7.6ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:06:55.009734 #9718]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:06:55 +0800
+I, [2015-11-11T15:06:55.024913 #9718]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:06:55.044973 #9718]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (3.0ms)
+I, [2015-11-11T15:06:55.047317 #9718]  INFO -- :   Rendered layouts/_shim.html.erb (0.3ms)
+I, [2015-11-11T15:06:55.053034 #9718]  INFO -- :   Rendered layouts/_header.html.erb (5.2ms)
+I, [2015-11-11T15:06:55.054158 #9718]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.5ms)
+I, [2015-11-11T15:06:55.055144 #9718]  INFO -- :   Rendered layouts/_footer.html.erb (0.4ms)
+I, [2015-11-11T15:06:55.055964 #9718]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.3ms)
+I, [2015-11-11T15:06:55.056352 #9718]  INFO -- : Completed 200 OK in 31ms (Views: 16.2ms | ActiveRecord: 1.3ms)
+I, [2015-11-11T15:12:07.496919 #9962]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:12:07 +0800
+I, [2015-11-11T15:12:07.515783 #9962]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:12:07.541771 #9962]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (3.5ms)
+I, [2015-11-11T15:12:07.544221 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.3ms)
+I, [2015-11-11T15:12:07.550365 #9962]  INFO -- :   Rendered layouts/_header.html.erb (5.7ms)
+I, [2015-11-11T15:12:07.551506 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.5ms)
+I, [2015-11-11T15:12:07.552315 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.3ms)
+I, [2015-11-11T15:12:07.553095 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.3ms)
+I, [2015-11-11T15:12:07.553479 #9962]  INFO -- : Completed 200 OK in 38ms (Views: 17.4ms | ActiveRecord: 1.5ms)
+I, [2015-11-11T15:12:21.371030 #9962]  INFO -- : Started GET "/boms" for 10.42.0.47 at 2015-11-11 15:12:21 +0800
+I, [2015-11-11T15:12:21.372792 #9962]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T15:12:21.373887 #9962]  INFO -- : Completed 401 Unauthorized in 1ms (ActiveRecord: 0.0ms)
+I, [2015-11-11T15:12:21.398851 #9962]  INFO -- : Started GET "/users/sign_in" for 10.42.0.47 at 2015-11-11 15:12:21 +0800
+I, [2015-11-11T15:12:21.401502 #9962]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T15:12:21.427787 #9962]  INFO -- :   Rendered devise/shared/_links.html.erb (1.6ms)
+I, [2015-11-11T15:12:21.427934 #9962]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (6.9ms)
+I, [2015-11-11T15:12:21.428690 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:12:21.429560 #9962]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T15:12:21.429866 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:12:21.430068 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:12:21.430254 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:12:21.430553 #9962]  INFO -- : Completed 200 OK in 29ms (Views: 12.3ms | ActiveRecord: 1.2ms)
+I, [2015-11-11T15:12:24.569129 #9962]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:12:24 +0800
+I, [2015-11-11T15:12:24.570632 #9962]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:12:24.574998 #9962]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (2.1ms)
+I, [2015-11-11T15:12:24.576804 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.4ms)
+I, [2015-11-11T15:12:24.579674 #9962]  INFO -- :   Rendered layouts/_header.html.erb (2.1ms)
+I, [2015-11-11T15:12:24.581136 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.7ms)
+I, [2015-11-11T15:12:24.582275 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.4ms)
+I, [2015-11-11T15:12:24.583418 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.4ms)
+I, [2015-11-11T15:12:24.583810 #9962]  INFO -- : Completed 200 OK in 13ms (Views: 12.0ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:12:27.312692 #9962]  INFO -- : Started GET "/users/sign_in" for 10.42.0.47 at 2015-11-11 15:12:27 +0800
+I, [2015-11-11T15:12:27.314133 #9962]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T15:12:27.319537 #9962]  INFO -- :   Rendered devise/shared/_links.html.erb (0.5ms)
+I, [2015-11-11T15:12:27.319705 #9962]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (3.6ms)
+I, [2015-11-11T15:12:27.320502 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T15:12:27.321508 #9962]  INFO -- :   Rendered layouts/_header.html.erb (0.8ms)
+I, [2015-11-11T15:12:27.321813 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:12:27.322066 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:12:27.322285 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.1ms)
+I, [2015-11-11T15:12:27.322648 #9962]  INFO -- : Completed 200 OK in 8ms (Views: 6.9ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:12:43.190090 #9962]  INFO -- : Started POST "/users/sign_in" for 10.42.0.47 at 2015-11-11 15:12:43 +0800
+I, [2015-11-11T15:12:43.191754 #9962]  INFO -- : Processing by Devise::SessionsController#create as HTML
+I, [2015-11-11T15:12:43.191880 #9962]  INFO -- :   Parameters: {"utf8"=>"✓", "authenticity_token"=>"CJVfoe7u4J6a/BmQuy/z5pFTgU+gAWLgE5tDROlBvSSi7pQVLl91626KctpjJiXArQka4X/U4eqVW8zCe5NlWA==", "user"=>{"email"=>"88554938@qq.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+I, [2015-11-11T15:12:43.298868 #9962]  INFO -- : Completed 401 Unauthorized in 107ms (ActiveRecord: 0.6ms)
+I, [2015-11-11T15:12:43.299875 #9962]  INFO -- : Processing by Devise::SessionsController#new as HTML
+I, [2015-11-11T15:12:43.299955 #9962]  INFO -- :   Parameters: {"utf8"=>"✓", "authenticity_token"=>"CJVfoe7u4J6a/BmQuy/z5pFTgU+gAWLgE5tDROlBvSSi7pQVLl91626KctpjJiXArQka4X/U4eqVW8zCe5NlWA==", "user"=>{"email"=>"88554938@qq.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+I, [2015-11-11T15:12:43.383464 #9962]  INFO -- :   Rendered devise/shared/_links.html.erb (0.3ms)
+I, [2015-11-11T15:12:43.383595 #9962]  INFO -- :   Rendered devise/sessions/new.html.erb within layouts/application (2.6ms)
+I, [2015-11-11T15:12:43.384120 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:12:43.384668 #9962]  INFO -- :   Rendered layouts/_header.html.erb (0.4ms)
+I, [2015-11-11T15:12:43.384834 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.0ms)
+I, [2015-11-11T15:12:43.384978 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:12:43.385141 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:12:43.385385 #9962]  INFO -- : Completed 200 OK in 85ms (Views: 4.7ms | ActiveRecord: 0.0ms)
+I, [2015-11-11T15:12:47.289632 #9962]  INFO -- : Started POST "/users/sign_in" for 10.42.0.47 at 2015-11-11 15:12:47 +0800
+I, [2015-11-11T15:12:47.291058 #9962]  INFO -- : Processing by Devise::SessionsController#create as HTML
+I, [2015-11-11T15:12:47.291182 #9962]  INFO -- :   Parameters: {"utf8"=>"✓", "authenticity_token"=>"SEMK74+mG1WoiRH+8TNJRH75BblF44nbMtsCxuEUwu7iOMFbTxeOIFz/erQpOp9iQqOeF5o2CtG0G41Ac8Yakg==", "user"=>{"email"=>"88554938@qq.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+I, [2015-11-11T15:12:47.433822 #9962]  INFO -- : Redirected to http://192.168.1.114:3000/boms
+I, [2015-11-11T15:12:47.434073 #9962]  INFO -- : Completed 302 Found in 143ms (ActiveRecord: 33.5ms)
+I, [2015-11-11T15:12:47.441465 #9962]  INFO -- : Started GET "/boms" for 10.42.0.47 at 2015-11-11 15:12:47 +0800
+I, [2015-11-11T15:12:47.442669 #9962]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T15:12:47.445269 #9962]  INFO -- : qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+I, [2015-11-11T15:12:47.446867 #9962]  INFO -- : #<ActiveRecord::Relation [#<Bom id: 331, name: nil, description: nil, excel_file: "template1111.xls", created_at: "2015-11-11 04:52:33", updated_at: "2015-11-11 04:52:33", user_id: 1>, #<Bom id: 332, name: nil, description: nil, excel_file: "template1111.xls", created_at: "2015-11-11 05:08:11", updated_at: "2015-11-11 05:08:11", user_id: 1>]>
+I, [2015-11-11T15:12:47.446943 #9962]  INFO -- : qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+I, [2015-11-11T15:12:47.450987 #9962]  INFO -- :   Rendered boms/index.html.erb within layouts/application (2.9ms)
+I, [2015-11-11T15:12:47.454232 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T15:12:47.455339 #9962]  INFO -- :   Rendered layouts/_header.html.erb (0.8ms)
+I, [2015-11-11T15:12:47.455785 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.2ms)
+I, [2015-11-11T15:12:47.456030 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:12:47.456250 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.1ms)
+I, [2015-11-11T15:12:47.456583 #9962]  INFO -- : Completed 200 OK in 14ms (Views: 9.3ms | ActiveRecord: 1.0ms)
+I, [2015-11-11T15:13:31.889124 #9962]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:13:31 +0800
+I, [2015-11-11T15:13:31.890383 #9962]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:13:31.892746 #9962]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (1.0ms)
+I, [2015-11-11T15:13:31.893597 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:13:31.895959 #9962]  INFO -- :   Rendered layouts/_header.html.erb (2.1ms)
+I, [2015-11-11T15:13:31.896337 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:13:31.896572 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:13:31.896794 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:13:31.897126 #9962]  INFO -- : Completed 200 OK in 7ms (Views: 5.4ms | ActiveRecord: 0.3ms)
+I, [2015-11-11T15:13:35.592503 #9962]  INFO -- : Started GET "/boms" for 10.42.0.47 at 2015-11-11 15:13:35 +0800
+I, [2015-11-11T15:13:35.593898 #9962]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T15:13:35.596264 #9962]  INFO -- : qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+I, [2015-11-11T15:13:35.597718 #9962]  INFO -- : #<ActiveRecord::Relation [#<Bom id: 331, name: nil, description: nil, excel_file: "template1111.xls", created_at: "2015-11-11 04:52:33", updated_at: "2015-11-11 04:52:33", user_id: 1>, #<Bom id: 332, name: nil, description: nil, excel_file: "template1111.xls", created_at: "2015-11-11 05:08:11", updated_at: "2015-11-11 05:08:11", user_id: 1>]>
+I, [2015-11-11T15:13:35.597792 #9962]  INFO -- : qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+I, [2015-11-11T15:13:35.601592 #9962]  INFO -- :   Rendered boms/index.html.erb within layouts/application (2.6ms)
+I, [2015-11-11T15:13:35.602568 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T15:13:35.603365 #9962]  INFO -- :   Rendered layouts/_header.html.erb (0.6ms)
+I, [2015-11-11T15:13:35.603643 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:13:35.603870 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:13:35.604081 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:13:35.604436 #9962]  INFO -- : Completed 200 OK in 10ms (Views: 6.3ms | ActiveRecord: 0.6ms)
+I, [2015-11-11T15:13:39.128479 #9962]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:13:39 +0800
+I, [2015-11-11T15:13:39.129809 #9962]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:13:39.132236 #9962]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (1.0ms)
+I, [2015-11-11T15:13:39.133217 #9962]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T15:13:39.135666 #9962]  INFO -- :   Rendered layouts/_header.html.erb (2.2ms)
+I, [2015-11-11T15:13:39.135996 #9962]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:13:39.136244 #9962]  INFO -- :   Rendered layouts/_footer.html.erb (0.1ms)
+I, [2015-11-11T15:13:39.136497 #9962]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.1ms)
+I, [2015-11-11T15:13:39.136841 #9962]  INFO -- : Completed 200 OK in 7ms (Views: 5.7ms | ActiveRecord: 0.3ms)
+I, [2015-11-11T15:47:42.881348 #12889]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:47:42 +0800
+I, [2015-11-11T15:47:42.902385 #12889]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:47:42.930033 #12889]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (4.1ms)
+I, [2015-11-11T15:47:42.932702 #12889]  INFO -- :   Rendered layouts/_shim.html.erb (0.4ms)
+I, [2015-11-11T15:47:42.950273 #12889]  INFO -- :   Rendered layouts/_header.html.erb (17.0ms)
+I, [2015-11-11T15:47:42.951504 #12889]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.5ms)
+I, [2015-11-11T15:47:42.952449 #12889]  INFO -- :   Rendered layouts/_footer.html.erb (0.3ms)
+I, [2015-11-11T15:47:42.953359 #12889]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.3ms)
+I, [2015-11-11T15:47:42.953844 #12889]  INFO -- : Completed 200 OK in 51ms (Views: 28.6ms | ActiveRecord: 3.3ms)
+I, [2015-11-11T15:47:44.982619 #12889]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:47:44 +0800
+I, [2015-11-11T15:47:44.984127 #12889]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:47:44.988137 #12889]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (1.9ms)
+I, [2015-11-11T15:47:44.990199 #12889]  INFO -- :   Rendered layouts/_shim.html.erb (0.4ms)
+I, [2015-11-11T15:47:44.994211 #12889]  INFO -- :   Rendered layouts/_header.html.erb (3.2ms)
+I, [2015-11-11T15:47:44.995769 #12889]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.7ms)
+I, [2015-11-11T15:47:44.997001 #12889]  INFO -- :   Rendered layouts/_footer.html.erb (0.4ms)
+I, [2015-11-11T15:47:44.998249 #12889]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.4ms)
+I, [2015-11-11T15:47:44.998624 #12889]  INFO -- : Completed 200 OK in 14ms (Views: 13.1ms | ActiveRecord: 0.3ms)
+I, [2015-11-11T15:47:46.143636 #12889]  INFO -- : Started GET "/boms" for 10.42.0.47 at 2015-11-11 15:47:46 +0800
+I, [2015-11-11T15:47:46.145223 #12889]  INFO -- : Processing by BomsController#index as HTML
+I, [2015-11-11T15:47:46.147628 #12889]  INFO -- : qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+I, [2015-11-11T15:47:46.149029 #12889]  INFO -- : #<ActiveRecord::Relation [#<Bom id: 331, name: nil, description: nil, excel_file: "template1111.xls", created_at: "2015-11-11 04:52:33", updated_at: "2015-11-11 04:52:33", user_id: 1>, #<Bom id: 332, name: nil, description: nil, excel_file: "template1111.xls", created_at: "2015-11-11 05:08:11", updated_at: "2015-11-11 05:08:11", user_id: 1>]>
+I, [2015-11-11T15:47:46.149106 #12889]  INFO -- : qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+I, [2015-11-11T15:47:46.153400 #12889]  INFO -- :   Rendered boms/index.html.erb within layouts/application (3.0ms)
+I, [2015-11-11T15:47:46.154605 #12889]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T15:47:46.155564 #12889]  INFO -- :   Rendered layouts/_header.html.erb (0.7ms)
+I, [2015-11-11T15:47:46.155906 #12889]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:47:46.156133 #12889]  INFO -- :   Rendered layouts/_footer.html.erb (0.0ms)
+I, [2015-11-11T15:47:46.156354 #12889]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.1ms)
+I, [2015-11-11T15:47:46.156706 #12889]  INFO -- : Completed 200 OK in 11ms (Views: 7.3ms | ActiveRecord: 0.5ms)
+I, [2015-11-11T15:47:46.916347 #12889]  INFO -- : Started GET "/about" for 10.42.0.47 at 2015-11-11 15:47:46 +0800
+I, [2015-11-11T15:47:46.919183 #12889]  INFO -- : Processing by StaticPagesController#about as HTML
+I, [2015-11-11T15:47:46.922862 #12889]  INFO -- :   Rendered static_pages/about.html.erb within layouts/application (0.7ms)
+I, [2015-11-11T15:47:46.923904 #12889]  INFO -- :   Rendered layouts/_shim.html.erb (0.1ms)
+I, [2015-11-11T15:47:46.926729 #12889]  INFO -- :   Rendered layouts/_header.html.erb (2.6ms)
+I, [2015-11-11T15:47:46.927120 #12889]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:47:46.927353 #12889]  INFO -- :   Rendered layouts/_footer.html.erb (0.1ms)
+I, [2015-11-11T15:47:46.927581 #12889]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:47:46.927919 #12889]  INFO -- : Completed 200 OK in 9ms (Views: 7.4ms | ActiveRecord: 0.5ms)
+I, [2015-11-11T15:47:47.811729 #12889]  INFO -- : Started GET "/" for 10.42.0.47 at 2015-11-11 15:47:47 +0800
+I, [2015-11-11T15:47:47.813075 #12889]  INFO -- : Processing by BomsController#upload as HTML
+I, [2015-11-11T15:47:47.815621 #12889]  INFO -- :   Rendered boms/upload.html.erb within layouts/application (1.1ms)
+I, [2015-11-11T15:47:47.816619 #12889]  INFO -- :   Rendered layouts/_shim.html.erb (0.0ms)
+I, [2015-11-11T15:47:47.818968 #12889]  INFO -- :   Rendered layouts/_header.html.erb (2.1ms)
+I, [2015-11-11T15:47:47.819341 #12889]  INFO -- :   Rendered layouts/_flash_messages.html.erb (0.1ms)
+I, [2015-11-11T15:47:47.819620 #12889]  INFO -- :   Rendered layouts/_footer.html.erb (0.1ms)
+I, [2015-11-11T15:47:47.819875 #12889]  INFO -- :   Rendered layouts/_google_analytics.html.erb (0.0ms)
+I, [2015-11-11T15:47:47.820305 #12889]  INFO -- : Completed 200 OK in 7ms (Views: 5.8ms | ActiveRecord: 0.3ms)

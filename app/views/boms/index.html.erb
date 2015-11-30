@@ -1,0 +1,21 @@
+<%= link_to "新建BOM", root_path, class: "btn btn-primary" %>
+<br />
+<br />
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>Excel文件</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @boms.each do |bom| %>
+      <tr>
+        <td><%= bom.name %></td>
+        <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
+        <td><div class="btn-group"><%= link_to "查看",  bom, class: "btn btn-primary" %></div> <div class="btn-group"><%= button_to "删除",  bom, method: :delete, class: "btn btn-danger", confirm: "确定要删除 #{bom.name}?" %></div></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

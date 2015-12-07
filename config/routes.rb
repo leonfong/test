@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-
+  
+  get '/change_locale/:locale', to: 'settings#change_locale', as: :change_locale
   devise_for :users
   devise_for :admins, :skip => [:sessions]
   as :admin do
@@ -7,7 +8,7 @@ Rails.application.routes.draw do
     post 'signin' => 'devise/sessions#create', :as => :admin_session
     delete 'signout' => 'devise/sessions#destroy', :as => :destroy_admin_session
   end
-  mount RailsAdmin::Engine => '/moko', as: 'rails_admin'
+  #mount RailsAdmin::Engine => '/moko', as: 'rails_admin'
   match '/help', to: 'static_pages#help', via: 'get'
   match '/about', to: 'static_pages#about', via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
@@ -19,7 +20,8 @@ Rails.application.routes.draw do
   resources :bom_item
   match '/search', to: 'boms#search', via: 'get'
   match '/mark', to: 'boms#mark', via: 'post'
- 
+  match '/bom_item/add', to: 'bom_item#add', via: 'post'
+  match '/bom_item/select_with_ajax', to: 'bom_item#select_with_ajax', via: 'post'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

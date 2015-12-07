@@ -1,23 +1,67 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
+---
 en:
-  hello: "Hello world"
+  upload: Upload
+  menu:
+    new_article: "Add an article"
+    languages:
+      lang: "Language"
+      zh: "Chinese"
+      en: "English"
+  all_boms: ALL BOM
+  category: The category
+  packaging: Packaging
+  describe: Describe
+  description: Product description
+  new_material: New material
+  match_good: The match is successful
+  unit_price: The unit price
+  quantity: Quantity
+  match_bad: Matching product failure
+  query_if: If you want to specify the matching products, please change the query conditions
+  search: Search
+  current_search: Filter in the current search results
+  product_name: Product name
+  price: Price
+  operate: Operate
+  ok: OK
+  new_bom: New BOM
+  name: Name
+  excel_file: Excel file
+  view: View
+  delete: Delete
+  sure_delete: Sure you want to delete
+  up_excel: Upload the Excel file
+  bom_file: BOM file
+  matched: The matched
+  total_price: The total price
+  export_excel: Export Excel
+  no: "No."
+  intention_product: Intention of the product
+  matching_products: Matching products
+  mark: Mark&Clear up
+  choose_other: Choose other
+  manually_select: Manually select
+  bom_parser: BOM Parser
+  about: About
+  contact: Contact
+  welcome: "Welcome "
+  sign_out: Sign out
+  c_password: Change the password
+  sign_up: Sign up
+  login: Login
+  error_a: The parameters of the error, please check whether the query keyword is wrong!
+  error_b: Can not find a matching unit, please check whether the query keyword is wrong!
+  error_c: Can not find the products you want, please revise the keywords to try again.
+  success_a: Products have complete matching.
+  error_d: Please choose a component.
+  excel_all: No Intention_product Location_code Matching_products Material_code unit_price quantity total_price
+  file: file
+  success_b: has been uploaded.
+  error_e: upload fails, please try again.
+  success_c: has been deleted.
+  step_b: "EXCEL file editor, note: the field must contain"
+  step_bb: ", must be XLS file suffix."
+  step_c: "Upload the excel file."
+  step_d: "Check the result."
+  c_us: "If you want to contact us, please send an email to "
+  thanks: "Thank you!"

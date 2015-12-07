@@ -2,8 +2,49 @@
 
 class BomItemController < ApplicationController
     #respond_to :json, :html
-    def edit
+    def add
+        Rails.logger.info("add-------------------------------------add")
+        Rails.logger.info(params.inspect)
+        Rails.logger.info("add-------------------------------------add")
+        if params[:part_a] == "" or params[:part_b] == "" or params[:part_c] == "" or params[:abc] == ""
+            flash[:error] = "物料信息不能为空！！！"
+            redirect_to :back
+        else
+            name_a = "A." + params[:part_a].upcase + "." + params[:part_b].upcase + ".F."
+            part_name_find = Product.find_by_sql("SELECT LPAD((MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(products.`name`, '.' ,-1) , '-' ,1))+1 ) ,4,'0') AS part_n   FROM products WHERE `name` LIKE '%"+ name_a +"%'")
+            if part_name_find.first.part_n.blank?
+               part_name_find = "0001"
+            else
+               part_name_find = part_name_find.first.part_n.to_s
+            end
+            new_part = Product.new do |part|
+                part.name = name_a + part_name_find.to_s + "-" + params[:package2][:package2]
+                part.description = params[:part_c]
+                part.part_name = params[:part_c].split[0]
+                part.ptype = params[:abc]
+                part.package1 = params[:part_b].upcase
+                part.package2 = params[:package2][:package2]
+                part.value1 = params[:part_c].split[0]
+                part.value2 = params[:part_c].split[1]
+                part.value3 = params[:part_c].split[2]
+                part.value4 = params[:part_c].split[3]
+            end
+            if new_part.save
+                flash[:success] = "新增物料成功"
+                redirect_to :back
+            end
+        end
         
+        
+    end
+
+    def select_with_ajax        
+        @fengzhuang = Product.find_by_sql("SELECT products.part_name, products.package2 FROM products GROUP BY products.package2 HAVING products.part_name = '"+ params[:abc] + "'").collect { |product| [product.package2, product.package2] } 
+        render(:layout => false)    
+    end
+
+    def edit
+        #@fengzhuang = Product.find_by_sql("SELECT products.ptype, products.package2 FROM products GROUP BY products.package2 HAVING products.ptype = "+ params[:parent_id])
         @bom_item = BomItem.find(params[:id])
         Rails.logger.info("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(params[:q].inspect)
@@ -161,14 +202,14 @@ class BomItemController < ApplicationController
                             Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2")
                             Rails.logger.info(ary_unit)
                             Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2")
-  	  		    flash[:error] = "重复参数单位，请检查查询关键字是否有误！"
+  	  		    flash[:error] = t('error_a')
   	  		      
   	  		else
   	  		    #从unit表查找对应的目标单位字符串
   	  		    ary_unit = ary_unit.join("")
   	  		    unit = Unit.find_by(unit: ary_unit)
   	  		    unless unit
-  	  		        flash[:error] = "找不到匹配的单位，请检查查询关键字是否有误！"     	  		        
+  	  		        flash[:error] = t('error_b')     	  		        
   	  		    else
   	  		        #用查询得到的标准单位替换关键字串中的单位
   	  		        str.sub!(/[a-zA-Z]+/, unit.targetunit)
@@ -177,7 +218,7 @@ class BomItemController < ApplicationController
   	                            #全局匹配
   			            @match_products = Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary                                   
      		                    if @match_products.length == 0
-	  		                flash[:error] = "经过层层努力，最后也找不到你要的产品，请修改一下关键字再试试。"
+	  		                flash[:error] = t('error_c')
 	  		            end
   	  		        end
   	  		    end
@@ -198,20 +239,20 @@ class BomItemController < ApplicationController
   	  	    ary_unit = str.scan(/([a-zA-Z]+)/)
   	  	    #如果匹配出多个，则提示错误
                     if ary_unit.length > 1
-  	                flash[:error] = "重复参数单位，请检查查询关键字是否有误！"
+  	                flash[:error] = t('error_a')
   	  	    else
    		        #从unit表查找对应的目标单位字符串
  	  	        ary_unit = ary_unit.join("")
   	                unit = Unit.find_by(unit: ary_unit)
   		        unless unit
-  	  	            flash[:error] = "找不到匹配的单位，请检查查询关键字是否有误！"
+  	  	            flash[:error] = t('error_b')
   	  	        else
   	  		    #用查询得到的标准单位替换关键字串中的单位
   	  		    str.sub!(/[a-zA-Z]+/, unit.targetunit)
   	  		    @match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
                             #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true).to_ary
   	  		    if @match_products.length == 0
-  	  		        flash[:error] = "经过层层努力，最后也找不到你要的产品，请修改一下关键字再试试。"
+  	  		        flash[:error] = t('error_c')
   	  		    end		
   	                end
   	            end	
@@ -245,11 +286,11 @@ class BomItemController < ApplicationController
                 prefer = (Product.find(@bom_item.product_id)).prefer + 1
                 Product.find(@bom_item.product_id).update(prefer: prefer) 
         
-                flash[:success] = "产品已经完成匹配"
+                flash[:success] = t('success_a')
 
                 redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
             else
-	        flash[:error] = "请选择一个元器件"
+	        flash[:error] = t('error_d')
 	  	redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
 	    end
         else
@@ -322,7 +363,7 @@ class BomItemController < ApplicationController
                 result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' "+find_bom+sql_b).to_ary
                 if result_w.blank?
                     Rails.logger.info("1")
-                    result = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"'"+sql_b).to_ary
+                    result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"'"+sql_b).to_ary
                 else
                     Rails.logger.info("2")
                     Rails.logger.info(result_w.inspect)
@@ -342,17 +383,17 @@ class BomItemController < ApplicationController
                             result_w = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' "+find_bom+sql_b).to_ary
                             if result_w.blank?
                                 Rails.logger.info("7")
-                                result = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"'"+sql_b).to_ary    
+                                result_w = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"'"+sql_b).to_ary    
                             else
                                 Rails.logger.info("8")
-                                result = result_w 
+                                result_w = result_w 
                             end
                         else
                             Rails.logger.info("9")
                             result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' "+find_bom+sql_b).to_ary
                             if result_w.blank?
                                 Rails.logger.info("11")
-                                result = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"'"+sql_b).to_ary
+                                result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"'"+sql_b).to_ary
                             else
                                 Rails.logger.info("111")
                                 result = result_w
@@ -367,18 +408,19 @@ class BomItemController < ApplicationController
                     result = result_w     
                 end
             end
-            if result.length == 0
+            if result_w.length == 0
                 Rails.logger.info("15") 
                 #result = Product.search(str,star: true,order: 'prefer DESC').to_ary
-                result = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
             end
 	else
             Rails.logger.info("12")
             #result =Product.search(str,star: true,order: 'prefer DESC').to_ary
-            result = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
+            result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
             
             #Rails.logger.info("A4A4A4")       
 	end
+        result = result_w 
     end
 
 	# private methods

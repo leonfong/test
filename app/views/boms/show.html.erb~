@@ -1,7 +1,8 @@
+<div class="container">
 <div class="row">
   <div class="col-md-12">
     <ol class="breadcrumb">
-      <li><%= link_to "所有BOM",boms_path %></li>
+      <li><%= link_to t(:all_bom),boms_path %></li>
       <li class="active"><%= @bom.excel_file_identifier %></li>
     </ol>
   </div>
@@ -10,14 +11,14 @@
 <div class="row">
     <div class="col-md-6">
       <ul class="list-group">
-        <li class="list-group-item">BOM文件：<%= @bom.excel_file_identifier %></li>
-        <li class="list-group-item">已匹配：<%= @match_str %></li>
-        <li class="list-group-item">总价格：<%= number_with_precision(@total_price,strip_insignificant_zeros: true) %></li>
+        <li class="list-group-item"><%= t(:bom_file) %>：<%= @bom.excel_file_identifier %></li>
+        <li class="list-group-item"><%= t(:matched) %>：<%= @match_str %></li>
+        <li class="list-group-item"><%= t(:total_price) %>：<%= number_with_precision(@total_price,strip_insignificant_zeros: true) %></li>
       </ul>
     </div>
 
     <div class ="col-md-6">
-      <%= link_to "导出Excel", bom_path(format: "xls") %>
+      <%= link_to t(:export_excel), bom_path(format: "xls") %>
     </div>
 
 </div>
@@ -28,17 +29,16 @@
       <table class="table table-bordered table-striped table-condensed table-hover">
         <thead>
           <tr class="text-nowrap">            
-            <th>序号</th>
-            <th>意向产品</th>
+            <th><%= t(:no) %></th>
+            <th><%= t(:intention_product) %></th>
             
-            <th>匹配产品</th>
+            <th><%= t(:matching_products) %></th>
             
-            <th>单价</th>
-            <th>数量</th>
+            <th><%= t(:unit_price) %></th>
+            <th><%= t(:quantity) %></th>
             
-            <th>状态</th>
-            <th>操作</th>
-            <th>标记</th>
+            <th><%= t(:operate) %></th>
+            <th><%= t(:mark) %></th>
           </tr>
         </thead>
         <tbody>
@@ -65,19 +65,18 @@
                 <td class="vert-align"><%= number_with_precision(Product.find(item.product_id).price/100000.0,strip_insignificant_zeros: true)%></td>
 
                 <td class="vert-align"><%= item.quantity %></td>
-                <td class="vert-align"><%= number_with_precision(Product.find(item.product_id).price/100000.0*item.quantity,strip_insignificant_zeros: true) %></td>
-                <td class="vert-align">已匹配</td>
-                <td class="vert-align"><%= link_to "选择其他",  edit_bom_item_path(item), class: "btn btn-success" %></td>
-                <td class="vert-align"><%= button_to "标记",  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
+                
+                <td class="vert-align"><%= link_to t(:choose_other),  edit_bom_item_path(item), class: "btn btn-success" %></td>
+                <td class="vert-align"><%= button_to t(:mark),  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
 
               <% else %>
                 
                 <td class="vert-align"></td>
                 <td class="vert-align"></td><td class="vert-align"><%= item.quantity %></td>
-                <td class="vert-align"></td>
-                <td class="vert-align">未匹配</td>
-                <td class="vert-align"><%= link_to " 手工选择",  edit_bom_item_path(item), class: "btn btn-danger" %></td>
-                <td class="vert-align"><%= button_to "标记",  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
+                
+
+                <td class="vert-align"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></td>
+                <td class="vert-align"><%= button_to t(:mark),  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
                 
               <% end %>
               
@@ -87,4 +86,4 @@
       </table>
   </div>
 </div>
-
+</div>

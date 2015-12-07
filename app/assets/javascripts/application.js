@@ -18,3 +18,4 @@
 //= require components
 //= require bootstrap/modal
 //= require_tree .
+//= require bootstrap

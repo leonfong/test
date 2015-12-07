@@ -1,7 +1,7 @@
 module ApplicationHelper
 
 	def full_title(page_title)
-		base_title = 'BOM Parser'
+		base_title = 'www.fastbom.com'
 
 		if page_title.empty?
 			base_title

@@ -5,7 +5,11 @@ class BomsController < ApplicationController
 before_filter :authenticate_user!, :except => [:upload]
     def index
         #@boms = Bom.all
-        @boms = Bom.where(user_id: current_user.id)
+        if current_user.email == "web@mokotechnology.com"
+            @boms = Bom.all
+        else
+            @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL")
+        end
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(@boms.inspect)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
@@ -153,7 +157,7 @@ before_filter :authenticate_user!, :except => [:upload]
 
 		sheet1 = ff.create_worksheet
 
-		sheet1.row(0).concat %w{序号 意向产品 位置编码 匹配产品 物料编码 单价 数量 总价}
+		sheet1.row(0).concat %w{No Intention_product Location_code Matching_products Material_code unit_price quantity total_price}
 
 		@bom.bom_items.each_with_index do |item,index|
 		    rowNum = index+1
@@ -196,7 +200,7 @@ before_filter :authenticate_user!, :except => [:upload]
 	    @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
 	    @sheet = @xls_file.sheet(0)
 
-	    @parse_result = @sheet.parse(header_search: [/Quantity/,/Description/,/RefDes/],clean:true)
+	    @parse_result = @sheet.parse(header_search: [/Qty/,/Des/,/Ref/],clean:true)
 
 	    #remove first row 
 	    @parse_result.shift
@@ -204,15 +208,15 @@ before_filter :authenticate_user!, :except => [:upload]
             #行号
             row_num = 0
 	    @parse_result.each do |item| #处理每一行的数据
-	        part_code = item["RefDes"]
-		desc = item["Description"]
+	        part_code = item["Ref"]
+		desc = item["Des"]
                 #if desc.include?".0uF"
                     #desc[".0uF"]="uF"
                     #Rails.logger.info("0000000000000000000000000000000000000")
                     #Rails.logger.info(desc)
                     #Rails.logger.info("0000000000000000000000000000000")
                 #end
-	        quantity = item["Quantity"]
+	        quantity = item["Qty"]
 
 		bom_item = @bom.bom_items.build() #创建bom_items对象
 		
@@ -266,16 +270,17 @@ before_filter :authenticate_user!, :except => [:upload]
 				
 	    end
 			
-	    redirect_to @bom, notice: "文件 #{@bom.name} 已上传。"
+	    redirect_to @bom, notice: t('file') + " #{@bom.name} " + t('success_b')
 	else
-	    redirect_to action: 'upload', notice: "文件 #{@bom.name} 上传失败，请重新上传。"
+	    redirect_to action: 'upload', notice: t('file') + " #{@bom.name} " + t('error_e')
 	end
     end
 
     def destroy
 	 @bom = Bom.find(params[:id])
-	 @bom.destroy
-	 redirect_to boms_path, notice:  "BOM #{@bom.name} 已经删除."
+	 @bom.name = "del"
+         @bom.save
+	 redirect_to boms_path, notice:  "BOM #{@bom.name} " + t('success_c')
     end
    
     def mark
@@ -423,13 +428,13 @@ before_filter :authenticate_user!, :except => [:upload]
   	  		    ary_unit = str.scan(/([a-zA-Z]+)/)
   	  		    #如果匹配出多个，则提示错误
                             if ary_unit.length > 1
-  	  		        flash[:error] = "重复参数单位，请检查查询关键字是否有误！"
+  	  		        flash[:error] = t('error_a')
   	  		    else
   	  		        #从unit表查找对应的目标单位字符串
   	  		        ary_unit = ary_unit.join("")
   	  		        unit = Unit.find_by(unit: ary_unit)
   	  		        unless unit
-  	  		            flash[:error] = "找不到匹配的单位，请检查查询关键字是否有误！"
+  	  		            flash[:error] = t('error_b')
   	  		        else
   	  		            #用查询得到的标准单位替换关键字串中的单位
   	  		            str.sub!(/[a-zA-Z]+/, unit.targetunit)
@@ -440,7 +445,7 @@ before_filter :authenticate_user!, :except => [:upload]
   			                result_w = Product.search(str,star: true,order: 'prefer DESC').to_ary
                                         #result = Product.search(str,star: true).to_ary
      		                        if result_w.length == 0
-	  		                    flash[:error] = "经过层层努力，最后也找不到你要的产品，请修改一下关键字再试试。"
+	  		                    flash[:error] = t('error_c')
 	  		                end
   	  		            end
   	  		        end

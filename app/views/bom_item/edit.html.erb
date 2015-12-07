@@ -1,7 +1,8 @@
+<div class="container">
 <div class="row">
   <div class="col-md-12">
     <ol class="breadcrumb">
-      <li><%= link_to "所有BOM",boms_path %></li>
+      <li><%= link_to t('all_boms'),boms_path %></li>
       <li><%= link_to @bom_item.bom.excel_file_identifier,bom_path(@bom_item.bom) %></li>
       <li class="active"><%= "BOM ##{@bom_item.id}" %></li>
     </ol>
@@ -15,18 +16,34 @@
 
     <ul class="list-group">
       <li class="list-group-item"><h4><%= @bom_item.description %><p><%= @bom_item.part_code %></p> </h4>
-
+      
+      </li>
+      <% if user_signed_in? %>
+      <% if current_user.email == "web@mokotechnology.com" %>       
+      <li class="list-group-item">
+      <%= form_tag ("/bom_item/add") do %>
+          <h4><lable for="类别">类别 : </lable><lable for="a">A.</lable><%= text_field_tag :part_a, params[:part_a], size:2 %>
+          <lable for="b">.</lable><%= text_field_tag :part_b, params[:part_b], size:2 %></h4>
+          <h4><lable for="封装">封装 : </lable><% members = Product.find_by_sql("select * from products GROUP BY products.part_name").collect { |c| [c.part_name,c.part_name] }%>
+                                              <%= select  '', :abc,members,{:include_blank => '--请选择--'}, { "onchange" => remote_function(:with => "'abc='+value",:update => 'next_select', :url => { :action => :select_with_ajax } ) } %>
+          <span id='next_select'></span></h4>
+          <h4><lable for="描述">产品描述 : </lable><%= text_field_tag :part_c, params[:part_c], size:45 %></h4>
+          <%= submit_tag "新增物料" %>
+      <% end %>
+      </li>
+      <% end %>
+      <% end %>
     <% unless @bom_item.product_id.nil?%>
 
+      
+
+      <li class="list-group-item"><h3><span class="label label-success"><%= t(:matched) %></span><h3>    
       </li>
 
-      <li class="list-group-item"><h3><span class="label label-success">匹配</span><h3>    
-      </li>
-
-      <li class="list-group-item"><h4><%= Product.find(@bom_item.product_id).description %><p></p><p>单价：  <%= number_with_precision(Product.find(@bom_item.product_id).price/100000.0,strip_insignificant_zeros: true) %></p><p>数量：  <%= @bom_item.quantity %></p></h4></li>
+      <li class="list-group-item"><h4><%= Product.find(@bom_item.product_id).description %><p></p><p><%= t(:unit_price) %>：  <%= number_with_precision(Product.find(@bom_item.product_id).price/100000.0,strip_insignificant_zeros: true) %></p><p><%= t(:quantity) %>：  <%= @bom_item.quantity %></p></h4></li>
     </ul>
     <% else %>
-      <li class="list-group-item"><h3><span class="label label-danger">未匹配产品</span></h3></li>
+      <li class="list-group-item"><h3><span class="label label-danger"><%= t(:match_bad) %></span></h3></li>
 
     <% end %>
 
@@ -37,12 +54,12 @@
 <div class="row">
   <div class="col-md-1"></div>
   <div class="col-md-10">
-      <p> 如果您希望指定匹配产品，请更改查询条件进行查询 </p>
+      <p> <%= t(:query_if) %> </p>
       <%= form_tag edit_bom_item_path(@bom_item),:method => 'get'  do %>
         <p>
           <%= text_field_tag :q, params[:q] %>
           <%= text_field_tag :p, params[:p] %>
-          <%= submit_tag "搜索", :name => nil %>
+          <%= submit_tag t(:search), :name => nil %>
         </p>
   </div>
 </div>
@@ -51,16 +68,16 @@
   <div class="col-md-1"></div>
   <div class="col-md-10">
     <table class="table table-bordered">
-    <thead><tr><td><strong>在当前搜索结果中过滤：</strong></td></tr></thead>
+    <thead><tr><td><strong><%= t(:current_search) %>：</strong></td></tr></thead>
     
     <tbody>
     
     <% unless @package2 and @ptype %>
-      <tr><td>类别： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
-      <tr><td>封装： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
+      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
+      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
     <% else %>
-      <tr><td>类别： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
-      <tr><td>封装： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
+      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
+      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
     <% end %>
       
     
@@ -77,14 +94,15 @@
       <table class="table table-bordered table-striped table-hover">
         <thead>
             <tr>
+              <% if user_signed_in? %>
               <% if current_user.email == "web@mokotechnology.com" %>
-              <td>产品名称</td>
+              <td><%= t(:product_name) %></td>
        
               <% end %>
-              
-              <td>产品描述</td>
-              <td>价格</td>
-              <td>操作</td>
+              <% end %>
+              <td><%= t(:description) %></td>
+              <td><%= t(:price) %></td>
+              <td><%= t(:operate) %></td>
             </tr>
         </thead>
 
@@ -98,7 +116,7 @@
                   
                   <td><%= item.description %></td>
                   <td> <%= number_with_precision(item.price/100000.0,strip_insignificant_zeros: true) %></td>
-                  <td><%= link_to "确定", bom_item_path(@bom_item, :product_id =>item.id), html_options={:method =>"patch"} %></td>
+                  <td><%= link_to t(:ok), bom_item_path(@bom_item, :product_id =>item.id), html_options={:method =>"patch"} %></td>
                 </tr>
             <% end %>
         </tbody>
@@ -115,4 +133,5 @@
     <%= @query_str %>
     <% end %>
   </div>
+</div>
 </div>

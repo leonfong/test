@@ -61,7 +61,8 @@ gem 'spreadsheet'
 #gem 'autoprefixer-rails', '~> 5.1.11'
 gem 'rails_admin'
 gem 'devise'
-
+gem 'devise-i18n'
+gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

@@ -12,7 +12,7 @@
 
     <%= stylesheet_link_tag "application", media: "all","data-turbolinks-track" => true %>
     <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-
+    <%= javascript_include_tag"prototype"%>
     <%= csrf_meta_tags %>
 
 
@@ -22,11 +22,13 @@
   </head>
 
   <body>
-
+    
     <%= render 'layouts/header' %>
-
-    <div class="container">
-
+   
+    <div class="container" >
+     <br>
+     <br>
+     <br>
       <%= render 'layouts/flash_messages' %>
 
         <%= yield %>
@@ -42,4 +44,7 @@
       <p class="notice"><%= notice %></p>
        <p class="alert"><%= alert %></p>
   </body>
+
+
+
 </html>

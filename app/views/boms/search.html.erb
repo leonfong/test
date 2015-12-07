@@ -1,3 +1,4 @@
+<div class="container">
 <%= form_for search_path, :method => 'get' do %>
   <p>
     <%= text_field_tag :q, params[:q] %>
@@ -26,4 +27,5 @@
 <% end %>
 <div class="well">
   <%= @query_str %>
+</div>
 </div>

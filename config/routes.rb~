@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-
+  
+  get '/change_locale/:locale', to: 'settings#change_locale', as: :change_locale
   devise_for :users
   devise_for :admins, :skip => [:sessions]
   as :admin do
@@ -18,8 +19,9 @@ Rails.application.routes.draw do
   resources :boms, only: [:index,:show, :new, :create, :destroy, :mark]
   resources :bom_item
   match '/search', to: 'boms#search', via: 'get'
-  #match '/mark', to: 'boms#mark', via: 'post'
- 
+  match '/mark', to: 'boms#mark', via: 'post'
+  match '/bom_item/add', to: 'bom_item#add', via: 'post'
+  match '/bom_item/select_with_ajax', to: 'bom_item#select_with_ajax', via: 'post'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

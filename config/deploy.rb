@@ -12,10 +12,10 @@ require 'mina/rvm'    # for rvm support. (http://rvm.io)
 
 set :term_mode, nil
 
-set :domain, '120.24.229.43'
-set :deploy_to, '/var/www/bom_parser'
-set :repository, 'https://h_lisen@bitbucket.org/long132/bom_parser.git'
-#set :repository, 'https://long132@bitbucket.org/long132/bom_parser.git'
+set :domain, '120.24.151.208'
+set :deploy_to, '/var/www'
+set :repository, 'https://github.com/leonfong/test.git'
+#set :repository, 'https://github.com/leonfong/test.git'
 set :branch, 'master'
 
 

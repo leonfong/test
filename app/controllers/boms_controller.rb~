@@ -208,15 +208,15 @@ before_filter :authenticate_user!, :except => [:upload]
             #行号
             row_num = 0
 	    @parse_result.each do |item| #处理每一行的数据
-	        part_code = item["RefDes"]
-		desc = item["Description"]
+	        part_code = item["Ref"]
+		desc = item["Des"]
                 #if desc.include?".0uF"
                     #desc[".0uF"]="uF"
                     #Rails.logger.info("0000000000000000000000000000000000000")
                     #Rails.logger.info(desc)
                     #Rails.logger.info("0000000000000000000000000000000")
                 #end
-	        quantity = item["Quantity"]
+	        quantity = item["Qty"]
 
 		bom_item = @bom.bom_items.build() #创建bom_items对象
 		

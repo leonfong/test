@@ -204,7 +204,7 @@ before_filter :authenticate_user!, :except => [:upload]
 
 	    #remove first row 
 	    @parse_result.shift
-	    @parse_result.select! {|item| !item["Description"].blank? } #选择非空行
+	    @parse_result.select! {|item| !item["Des"].blank? } #选择非空行
             #行号
             row_num = 0
 	    @parse_result.each do |item| #处理每一行的数据

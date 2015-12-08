@@ -65,7 +65,7 @@ gem 'devise-i18n'
 gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
+#gem 'byebug', '~> 5.0.0'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -82,5 +82,5 @@ group :development, :test do
 end
 
 group :production do
-  
+  #gem 'byebug', '~> 5.0'
 end

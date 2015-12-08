@@ -8,7 +8,7 @@ workers 4
 #项目名
 app_name = "fastbom"
 #项目路径
-application_path = "/home/leon/#{app_name}"
+application_path = "/var/www/#{app_name}"
 #这里一定要配置为项目路径下地current
 directory "#{application_path}/current"
 

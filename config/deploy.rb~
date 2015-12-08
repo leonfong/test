@@ -14,7 +14,7 @@ set :term_mode, nil
 
 set :domain, '120.24.151.208'
 set :deploy_to, '/var/www'
-set :repository, 'https://h_lisen@bitbucket.org/long132/bom_parser.git'
+set :repository, 'https://github.com/leonfong/test.git'
 #set :repository, 'https://github.com/leonfong/test.git'
 set :branch, 'master'
 

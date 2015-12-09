@@ -7,7 +7,7 @@ class BomItemController < ApplicationController
         Rails.logger.info(params.inspect)
         Rails.logger.info("add-------------------------------------add")
         if params[:part_a] == "" or params[:part_b] == "" or params[:part_c] == "" or params[:abc] == ""
-            flash[:error] = "物料信息不能为空！！！"
+            flash[:error] = "Part information can not be empty!!!"
             redirect_to :back
         else
             name_a = "A." + params[:part_a].upcase + "." + params[:part_b].upcase + ".F."
@@ -30,7 +30,7 @@ class BomItemController < ApplicationController
                 part.value4 = params[:part_c].split[3]
             end
             if new_part.save
-                flash[:success] = "新增物料成功"
+                flash[:success] = "New part success"
                 redirect_to :back
             end
         end

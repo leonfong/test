@@ -3,7 +3,7 @@
 #rails的运行环境
 environment 'production'
 threads 2, 64
-workers 4
+workers 1
 
 #项目名
 app_name = "www"

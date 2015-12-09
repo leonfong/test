@@ -5,14 +5,14 @@ require 'mina/git'
 require 'mina/rvm'    # for rvm support. (http://rvm.io)
 
 # Basic settings:
-#   domain       - The hostname to SSH to.
+#   domain       - The hostname to  to.
 #   deploy_to    - Path to deploy into.
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :term_mode, nil
 
-set :domain, '120.24.151.208'
+set :domain, '120.25.151.208'
 set :deploy_to, '/var/www'
 set :repository, 'https://github.com/leonfong/test.git'
 #set :repository, 'https://github.com/leonfong/test.git'
@@ -20,17 +20,17 @@ set :branch, 'master'
 
 
 # For system-wide RVM install.
-#set :rvm_path, '/usr/local/rvm/bin/rvm'
-set :rvm_path, '/home/deploy/.rvm/scripts/rvm'
+set :rvm_path, '/usr/local/rvm/bin/rvm'
+#set :rvm_path, '/home/leon/.rvm/scripts/rvm'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
 set :shared_paths, ['config/database.yml','log']
 
 # Optional settings:
-set :user, 'deploy'    # Username in the server to SSH to.
+set :user, 'fastbom'    # Username in the server to SSH to.
 #set :port, '30000'     # SSH port number.
-#set :forward_agent, true     # SSH forward_agent.
+set :forward_agent, true     # SSH forward_agent.
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
@@ -40,7 +40,7 @@ task :environment do
   # invoke :'rbenv:load'
 
   # For those using RVM, use this to load an RVM version@gemset.
-  invoke :'rvm:use[ruby-2.2.1]'
+  #invoke :'rvm:use[ruby-2.2.1]'
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.

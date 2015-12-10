@@ -35,7 +35,7 @@
     <div class="item active">
       
       
-      <%= image_tag "1.1.png",size: "67x67", class: "img-responsive" %>
+      <%= image_tag "1.1.png", class: "img-responsive" %>
       <div class="bg-success text-primary text-center">
         <br><p><h3><strong>Step 1</strong></h3></p>
         <p><h4><%= t('sign_up') %></h4></p><br><br><br> 

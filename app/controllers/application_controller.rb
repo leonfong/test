@@ -17,5 +17,5 @@ class ApplicationController < ActionController::Base
   end
 
   #protect_from_forgery with: :exception
-  protect_from_forgery with
+  protect_from_forgery
 end

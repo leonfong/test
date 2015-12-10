@@ -34,7 +34,8 @@
   <div class="carousel-inner" >
     <div class="item active">
       
-      <img src="/assets/1.1.png", class: "img-responsive">
+      
+      <%= image_tag "1.1.png",size: "67x67", class: "img-responsive" %>
       <div class="bg-success text-primary text-center">
         <br><p><h3><strong>Step 1</strong></h3></p>
         <p><h4><%= t('sign_up') %></h4></p><br><br><br> 
@@ -44,7 +45,7 @@
       <img src="/assets/2.1.png", class: "img-responsive">
       <div class="bg-success text-primary text-center">
         <br><p><h3><strong>Step 2</strong></h3></p>
-        <p><h4><%= t('step_b') %><code>Qty</code>, <code>Des</code> and <code>ref</code><%= t('step_bb') %></h4></p><br><br>
+        <p><h4><%= t('step_b') %><code>Qty</code>, <code>Des</code> and <code>Ref</code><%= t('step_bb') %></h4></p><br><br>
       </div>
     </div>
     <div class="item">

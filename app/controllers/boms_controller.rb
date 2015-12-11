@@ -143,10 +143,10 @@ before_filter :authenticate_user!, :except => [:upload]
                         #if item.quantity.blank?
                             #item.quantity = item.part_code.to_s.scan(/[A-Z]+/).size
                         #end
-		        @total_price += item.price/100000.0 * item.quantity
-                        Rails.logger.info("___________________________________________________________________")
+		        @total_price += item.price * item.quantity
+                        Rails.logger.info("total_pricetotal_pricetotal_price___________________________________________________________________")
                         Rails.logger.info(@total_price.inspect)
-                        Rails.logger.info("____________________________________________________________________")
+                        Rails.logger.info("total_pricetotal_pricetotal_price____________________________________________________________________")
 		    end
 		end
 		    }

@@ -60,7 +60,7 @@ class BomItemController < ApplicationController
             Rails.logger.info(params[:p])
             Rails.logger.info("333333333333333333333333333333333333333333333333333")
 	    @match_products = search(@bom_item.description,@bom_item.part_code)
-            Rails.logger.info(@match_products.inspect)
+            #Rails.logger.info(@match_products.inspect)
             Rails.logger.info("333333333333333333333333333333333333333333333333333")
 	    #计算相同类别和封装的个数
 	    @counted = Hash.new(0)

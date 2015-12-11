@@ -13,7 +13,7 @@
       <ul class="list-group">
         <li class="list-group-item"><%= t(:bom_file) %>：<%= @bom.excel_file_identifier %></li>
         <li class="list-group-item"><%= t(:matched) %>：<%= @match_str %></li>
-        <li class="list-group-item"><%= t(:total_price) %>：<%= @total_price %></li>
+        <li class="list-group-item"><%= t(:total_price) %>：<%=  number_with_precision(@total_price,strip_insignificant_zeros: true)%></li>
       </ul>
     </div>
 
@@ -66,7 +66,7 @@
                 <td class="vert-align"><%= Product.find(item.product_id).description %></td>
                 
 
-                <td class="vert-align"><%= Product.find(item.product_id).price %></td>
+                <td class="vert-align"><%= number_with_precision(Product.find(item.product_id).price,strip_insignificant_zeros: true)%></td>
 
                 <td class="vert-align"><%= item.quantity %></td>
                 

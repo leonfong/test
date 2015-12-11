@@ -179,9 +179,9 @@ before_filter :authenticate_user!, :except => [:upload]
 		    row.push(item.part_code)
 		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).description)
 		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).name)
-		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price/100000.0)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price)
 		    row.push(item.quantity)
-		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price/100000.0*item.quantity)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price*item.quantity)
                 end
 
                 file_contents = StringIO.new

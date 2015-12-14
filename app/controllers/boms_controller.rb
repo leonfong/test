@@ -31,14 +31,14 @@ before_filter :authenticate_user!, :except => [:upload]
             #result =Product.search(str,conditions: {part_name: part.part_name},star: true,order: 'prefer DESC').to_ary
                 if part.part_name == "SW"
                     sql_a = "SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%'"
-                    sql_b = " ORDER BY `price`, `prefer` DESC" 
+                    sql_b = " ORDER BY `prefer` DESC" 
                 else
                     if str.split(" ")[0] == "0R" or str.split(" ")[0] == "0r" or str.split(" ")[0] == "0o" or str.split(" ")[0] == "0O"
                         sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
                     else
                         sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'" 
                     end
-                    sql_b = " ORDER BY `price`, `prefer` DESC" 
+                    sql_b = " ORDER BY `prefer` DESC" 
                 end
                 if not str.split(" ")[2].blank?
                     find_bom = " AND `package2` = '"+str.split(" ")[2]+"' "
@@ -82,7 +82,7 @@ before_filter :authenticate_user!, :except => [:upload]
 	    else
             #result =Product.search(str,star: true,order: 'prefer DESC').to_ary
                 #result = Product.find_by_sql(sql_a+str.split(" ")[0]+"%'"+sql_b).to_ary
-                result = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                result = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
         	@query_str = str +" without part_name "
             end
         end
@@ -345,7 +345,7 @@ before_filter :authenticate_user!, :except => [:upload]
                     end
                     if str.split(" ")[-1] == "nothing"
                         sql_a = "SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%'"
-                        sql_b = " ORDER BY `price`, `prefer` DESC" 
+                        sql_b = " ORDER BY `prefer` DESC" 
                     else
                         if str.split(" ")[0] == "0R" or str.split(" ")[0] == "0r" or str.split(" ")[0] == "0o" or str.split(" ")[0] == "0O"
                             sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
@@ -353,7 +353,7 @@ before_filter :authenticate_user!, :except => [:upload]
                             sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'" 
                         end
                     end
-                    sql_b = " ORDER BY `price`, `prefer` DESC" 
+                    sql_b = " ORDER BY `prefer` DESC" 
                     if not  str.split(" ")[2].blank?
                         find_bom = " AND `package2` = '"+str.split(" ")[2]+"' "
                     else
@@ -421,7 +421,7 @@ before_filter :authenticate_user!, :except => [:upload]
   	  	    if result_w.length == 0
                         Rails.logger.info("15") 
                         #result = Product.search(str,star: true,order: 'prefer DESC').to_ary
-                        result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                        result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
   	  		#如果全局匹配不到，则需要检查关键字串中的单位，转换成标准的单位
   	  		if result_w.length == 0
   	  		    #匹配出单位的字符串
@@ -458,7 +458,7 @@ before_filter :authenticate_user!, :except => [:upload]
   	  	else
                     #result = Product.search(str,star: true,order: 'prefer DESC').to_ary
                     Rails.logger.info("1111")
-                    result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                    result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
                     #result = Product.search(str,star: true).to_ary
                     result = result_w
   	  	end

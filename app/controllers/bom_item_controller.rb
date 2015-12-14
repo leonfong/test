@@ -137,14 +137,14 @@ class BomItemController < ApplicationController
                 #if part.part_name == "SW"
                 if str.split(" ")[-1] == "nothing"
                     sql_a = "SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%'"
-                    sql_b = " ORDER BY `price`, `prefer` DESC" 
+                    sql_b = " ORDER BY `prefer` DESC" 
                 else
                     if str.split(" ")[0] == "0R" or str.split(" ")[0] == "0r" or str.split(" ")[0] == "0o" or str.split(" ")[0] == "0O"
                         sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
                     else
                         sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'" 
                     end
-                    sql_b = " ORDER BY `price`, `prefer` DESC" 
+                    sql_b = " ORDER BY `prefer` DESC" 
                 end
                 Rails.logger.info(part.part_name.inspect)
                 Rails.logger.info(@ptype.inspect)
@@ -156,20 +156,20 @@ class BomItemController < ApplicationController
                 if str.split(" ")[1] == "nothing"
                     #如果没有电压
                     Rails.logger.info("0")
-                    @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                    @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
                 else
                     #如果有电压 电压在value3
                     Rails.logger.info("1")
-                    match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                    match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
                     if match_products_w.blank?
                         #如果没查到 电压换成50V
                         Rails.logger.info("2")
                         if (part_code[0] =~ /[Cc]/ and str.split(" ")[0]=~ /[^uU]/)
-                            @match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                            @match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
                         else
                             #没查到去掉电压
                             Rails.logger.info("3")
-                            @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `price`, `prefer` DESC").to_ary 
+                            @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary 
                         end
                     else
                         Rails.logger.info("4")
@@ -182,7 +182,7 @@ class BomItemController < ApplicationController
   	  	if @match_products.length == 0
                     Rails.logger.info("5")
                     Rails.logger.info("t22222222222222222222222222222222222222222222222222222222222222222")
-                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
                     
   	  	    #@match_products = Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary	
   	  	    #如果全局匹配不到，则需要检查关键字串中的单位，转换成标准的单位
@@ -231,7 +231,7 @@ class BomItemController < ApplicationController
                 Rails.logger.info("7")
 	        #全局匹配产品
                 #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC')#.to_ary
-                @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
                 
 	        #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
 	        if @match_products.length == 0
@@ -344,7 +344,7 @@ class BomItemController < ApplicationController
             Rails.logger.info("gggggggggggggggggggggggggggggggggggggggggggg22222222222222222222")
             if str.split(" ")[-1] == "nothing"
                     sql_a = "SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%'"
-                    sql_b = " ORDER BY `price`, `prefer` DESC" 
+                    sql_b = " ORDER BY `prefer` DESC" 
             else
                 if str.split(" ")[0] == "0R" or str.split(" ")[0] == "0r" or str.split(" ")[0] == "0o" or str.split(" ")[0] == "0O"
                     sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
@@ -352,7 +352,7 @@ class BomItemController < ApplicationController
                     sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'" 
                 end
             end
-            sql_b = " ORDER BY `price`, `prefer` DESC" 
+            sql_b = " ORDER BY `prefer` DESC" 
             if not str.split(" ")[2].blank?
                 find_bom = " AND `package2` = '"+str.split(" ")[2]+"' "
             else
@@ -411,12 +411,12 @@ class BomItemController < ApplicationController
             if result_w.length == 0
                 Rails.logger.info("15") 
                 #result = Product.search(str,star: true,order: 'prefer DESC').to_ary
-                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
+                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
             end
 	else
             Rails.logger.info("12")
             #result =Product.search(str,star: true,order: 'prefer DESC').to_ary
-            result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `price`, `prefer` DESC").to_ary
+            result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
             
             #Rails.logger.info("A4A4A4")       
 	end

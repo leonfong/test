@@ -621,7 +621,7 @@ class BomItemController < ApplicationController
                 ########################################################
                 #获取容值
                 ary_q = []
-                value2_test = query_str.to_s.scan(/[0-9]*[uUnNpPmM][0-9]/)            
+                value2_test = query_str.to_s.scan(/[0-9]+[uUnNpPmM][0-9]/)            
                 value2_use = "nothing"
                 if value2_test != []
                     value2_use = value2_test[0].to_s.sub(/[uUnNpPmM]/, ".") + value2_test[0].to_s.scan(/[uUnNpPmM]/)[0]
@@ -688,7 +688,7 @@ class BomItemController < ApplicationController
                 ary_all = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 #获取阻值
                 ary_q = []
-                value2_test = query_str.to_s.scan(/[0-9]*[mMkKuUrRΩ][0-9]/)
+                value2_test = query_str.to_s.scan(/[0-9]+[mMkKuUrRΩ][0-9]/)
                 Rails.logger.info("value2_test!!!!!!!!!!!!!!!!!!!!!!!!!!!value2_test")
                 Rails.logger.info(query_str.inspect)
                 Rails.logger.info(value2_test.inspect)

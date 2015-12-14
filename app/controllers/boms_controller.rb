@@ -228,10 +228,19 @@ before_filter :authenticate_user!, :except => [:upload]
  
                 #标记part数量与购买数量不一致的行，提取partcode代码
   	  	#ary2 = part_code.to_s.scan(/[A-Z]+/)
-                ary2 = part_code.to_s.split(" ")
+                
+                ary2 = part_code.to_s.split(",")
+                Rails.logger.info("ary2ary2ary2ary2ary2ary2ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
+                Rails.logger.info(ary2.inspect)
+                Rails.logger.info("ary2ary2ary2ary2ary2ary2ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
+                if ary2.size < 2
+                    ary2 = part_code.to_s.split(" ")
+                end
   	  	ary3 = part_code.to_s.scan(/[a-zA-Z][0-9]+/)
   	  	part_code = part_code.to_s.scan(/[A-Z]+/)[0]
-  	  	
+  	  	Rails.logger.info("ary3ary3ary3ary3ary3ary3ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
+                Rails.logger.info(ary3.inspect)
+                Rails.logger.info("ary3ary3ary3ary3ary3ary3ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
                 #把没写位号的找出来
                 if quantity.blank?
                     quantity = ary2.size

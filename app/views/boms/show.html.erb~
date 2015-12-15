@@ -1,3 +1,8 @@
+<%
+meta title: @itemall,
+     description: @itemall,
+     keywords: @itemall
+%>
 <div class="container">
 <div class="row">
   <div class="col-md-12">
@@ -13,7 +18,7 @@
       <ul class="list-group">
         <li class="list-group-item"><%= t(:bom_file) %>：<%= @bom.excel_file_identifier %></li>
         <li class="list-group-item"><%= t(:matched) %>：<%= @match_str %></li>
-        <li class="list-group-item"><%= t(:total_price) %>：<%=  number_with_precision(@total_price,strip_insignificant_zeros: true)%></li>
+        <li class="list-group-item"><%= t(:total_price) %>：<%=  number_with_precision(@total_price, precision: 4)%></li>
       </ul>
     </div>
 
@@ -46,7 +51,11 @@
           </tr>
         </thead>
         <tbody>
+           <% @itemall = "" %>
           <% @bom.bom_items.each_with_index do |item,index| %>
+            
+            <% @itemall = @itemall + " " + item.description %>
+            
             <% if item.mark %>
               <tr class="info" >
             <% elsif item.danger %> 
@@ -66,7 +75,7 @@
                 <td class="vert-align"><%= Product.find(item.product_id).description %></td>
                 
 
-                <td class="vert-align"><%= number_with_precision(Product.find(item.product_id).price,strip_insignificant_zeros: true)%></td>
+                <td class="vert-align"><%= number_with_precision(Product.find(item.product_id).price, precision: 4)%></td>
 
                 <td class="vert-align"><%= item.quantity %></td>
                 
@@ -86,8 +95,11 @@
               
             </tr>
           <% end %>
+
         </tbody>
       </table>
   </div>
 </div>
 </div>
+
+

@@ -40,7 +40,7 @@
       <li class="list-group-item"><h3><span class="label label-success"><%= t(:matched) %></span><h3>    
       </li>
 
-      <li class="list-group-item"><h4><%= Product.find(@bom_item.product_id).description %><p></p><p><%= t(:unit_price) %>：  <%= number_with_precision(Product.find(@bom_item.product_id).price/100000.0,strip_insignificant_zeros: true) %></p><p><%= t(:quantity) %>：  <%= @bom_item.quantity %></p></h4></li>
+      <li class="list-group-item"><h4><%= Product.find(@bom_item.product_id).description %><p></p><p><%= t(:unit_price) %>：  <%= number_with_precision(Product.find(@bom_item.product_id).price, precision: 4) %></p><p><%= t(:quantity) %>：  <%= @bom_item.quantity %></p></h4></li>
     </ul>
     <% else %>
       <li class="list-group-item"><h3><span class="label label-danger"><%= t(:match_bad) %></span></h3></li>
@@ -107,7 +107,9 @@
         </thead>
 
         <tbody>
+            <% @itemall = "" %>
             <% @match_products.each do |item| %>
+            <% @itemall = @itemall + " " + item.description %>
                 <tr>
                   <% if current_user.email == "web@mokotechnology.com" %>
                   <td><%= item.name %></td>
@@ -135,3 +137,8 @@
   </div>
 </div>
 </div>
+<%
+meta title: @itemall,
+     description: @itemall,
+     keywords: @itemall
+%>

@@ -107,7 +107,9 @@
         </thead>
 
         <tbody>
+            <% @itemall = "" %>
             <% @match_products.each do |item| %>
+            <% @itemall = @itemall + " " + item.description %>
                 <tr>
                   <% if current_user.email == "web@mokotechnology.com" %>
                   <td><%= item.name %></td>
@@ -135,3 +137,8 @@
   </div>
 </div>
 </div>
+<%
+meta title: @bom_item.description,
+     description: @itemall,
+     keywords: @itemall
+%>

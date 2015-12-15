@@ -1,3 +1,4 @@
+
 <div class="container">
 <div class="row">
   <div class="col-md-12">
@@ -46,7 +47,11 @@
           </tr>
         </thead>
         <tbody>
+           <% @itemall = "" %>
           <% @bom.bom_items.each_with_index do |item,index| %>
+            
+            <% @itemall = @itemall + " " + item.description %>
+            
             <% if item.mark %>
               <tr class="info" >
             <% elsif item.danger %> 
@@ -86,8 +91,15 @@
               
             </tr>
           <% end %>
+
         </tbody>
       </table>
   </div>
 </div>
 </div>
+<%
+meta title: @itemall,
+     description: @itemall,
+     keywords: @itemall
+%>
+

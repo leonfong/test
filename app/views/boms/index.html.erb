@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th><%= t('name') %></th>
+      <th>Created Date</th>
       <th><%= t('excel_file') %></th>
       <th>&nbsp;</th>
     </tr>
@@ -14,7 +15,7 @@
     <% @boms.each do |bom| %>
       <tr>
         <td><%= bom.name %></td>
-        
+        <td><%= bom.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% if user_signed_in? %>
           <% if current_user.email == "web@mokotechnology.com" %>
             <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>

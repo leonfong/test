@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th><%= t('name') %></th>
+      <th>Created Date</th>
       <th><%= t('excel_file') %></th>
       <th>&nbsp;</th>
     </tr>
@@ -14,12 +15,12 @@
     <% @boms.each do |bom| %>
       <tr>
         <td><%= bom.name %></td>
-        
+        <td><%= bom.created_at %></td>
         <% if user_signed_in? %>
           <% if current_user.email == "web@mokotechnology.com" %>
             <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
           <% else %>
-            <td><p class="text_info"><%= bom.excel_file_identifier %></p></td>
+            <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
           <% end %>
         <% end %>
         <td><div class="btn-group"><%= link_to t('view'),  bom, class: "btn btn-primary" %></div> <div class="btn-group"><%= button_to t('delete'),  bom, method: :delete, class: "btn btn-danger", confirm: "确定要删除 #{bom.name}?" %></div></td>

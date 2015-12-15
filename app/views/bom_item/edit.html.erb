@@ -111,9 +111,10 @@
             <% @match_products.each do |item| %>
             <% @itemall = @itemall + " " + item.description %>
                 <tr>
+                  <% if user_signed_in? %>
                   <% if current_user.email == "web@mokotechnology.com" %>
                   <td><%= item.name %></td>
-       
+                  <% end %>
                   <% end %>
                   
                   <td><%= item.description %></td>

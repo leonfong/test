@@ -6,7 +6,7 @@ before_filter :authenticate_user!, :except => [:upload]
     def index
         #@boms = Bom.all
         if current_user.email == "web@mokotechnology.com"
-            @boms = Bom.all
+            @boms = Bom.find_by_sql("SELECT * FROM `boms` ORDER BY `id` DESC")
         else
             @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL")
         end

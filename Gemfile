@@ -44,7 +44,6 @@ gem 'react-rails', '~> 1.0'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
-
 gem 'puma'
 gem 'mina'
 gem 'thinking-sphinx'

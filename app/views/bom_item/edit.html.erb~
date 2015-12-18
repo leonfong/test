@@ -151,7 +151,7 @@
        
         <td class="text-info"><%= @bom_api[3] %></td>
         <td><p class="text-info">$<%= @bom_api[4] %></p></td>
-        <td><%= link_to t(:ok), bom_item_path(@bom_item, :mpn =>@bom_api[0]), html_options={:method =>"patch"} %></td>
+        <td><%= link_to t(:ok), bom_item_path(@bom_item, :mpn_id =>@bom_api[-1]), html_options={:method =>"patch"} %></td>
     </tr>
 
   </tbody>

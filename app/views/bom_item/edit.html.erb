@@ -73,11 +73,11 @@
     <tbody>
     
     <% unless @package2 and @ptype %>
-      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
-      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
+      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <span class="badge"> <%= value.to_s %> </span><% end %><% end %></td></tr>
+      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %> <span class="badge"> <%= value.to_s %> </span><% end %><% end %></td></tr>
     <% else %>
-      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
-      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}(#{value})",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %> <% end %><% end %></td></tr>
+      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> <span class="badge"> <%= value.to_s %> </span><% end %><% end %></td></tr>
+      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %><span class="badge"> <%= value.to_s %> </span> <% end %><% end %></td></tr>
     <% end %>
       
     
@@ -129,6 +129,34 @@
     
   </div>
   
+<% end %>
+
+<% if not @bom_api.blank? %>
+<div class="row">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Manufacturer</th>
+      
+      <th>Description</th>
+      <th>Price</th>
+      <th><%= t(:operate) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td><p class="text-info"><%= @bom_api[0] %></p></td>
+        <td><p class="text-info"><%= @bom_api[1] %></p></td>
+       
+        <td class="text-info"><%= @bom_api[3] %></td>
+        <td><p class="text-info">$<%= @bom_api[4] %></p></td>
+        <td><%= link_to t(:ok), bom_item_path(@bom_item, :mpn_id =>@bom_api[-1]), html_options={:method =>"patch"} %></td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
 <% end %>
 
 <div class="row">

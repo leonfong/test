@@ -8,7 +8,7 @@ before_filter :authenticate_user!, :except => [:upload]
         if current_user.email == "web@mokotechnology.com"
             @boms = Bom.find_by_sql("SELECT * FROM `boms` ORDER BY `id` DESC")
         else
-            @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL")
+            @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC")
         end
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(@boms.inspect)
@@ -109,7 +109,41 @@ before_filter :authenticate_user!, :except => [:upload]
                 Rails.logger.info("cccccccccccccccccccccccccccccccccccccccccccccccc1111111q")
                 #matched_items = @bom.bom_items.select { |item| item.product }
                 #matched_items = @bom.bom_items.select { |item| return Product.find(item.product_id) unless item.product_id.blank?}
-                matched_items = Product.find_by_sql("SELECT bom_items.*, products.price FROM bom_items , products WHERE bom_items.product_id = products.id AND bom_items.bom_id = "+params[:id])
+                @matched_items = Product.find_by_sql("
+SELECT
+	bom_items.id,
+	bom_items.quantity,
+	bom_items.description,
+	bom_items.part_code,
+	bom_items.bom_id,
+	bom_items.product_id,
+	bom_items.created_at,
+	bom_items.updated_at,
+	bom_items.warn,
+	bom_items.user_id,
+	bom_items.danger,
+	bom_items.manual,
+	bom_items.mark,
+	bom_items.mpn,
+	bom_items.mpn_id,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.price,
+	products.price
+) AS price,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.description,
+	products.description
+) AS description_p
+FROM
+	bom_items
+LEFT JOIN products ON bom_items.product_id = products.id
+LEFT JOIN mpn_items ON bom_items.mpn_id = mpn_items.id
+WHERE
+	bom_items.bom_id = "+params[:id])
                 #@bom.bom_items.each do |item|
                     #unless item.product_id.blank?
                         #matched_items << Product.find(item.product_id)
@@ -125,7 +159,7 @@ before_filter :authenticate_user!, :except => [:upload]
                 
                 Rails.logger.info("cccccccccccccccccccccccccccccccccccccccccccccccccccc22222")
                 Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-                Rails.logger.info(matched_items)
+                Rails.logger.info(@matched_items)
                 Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb22222222222222222222")
 		@match_str = "#{@bom.bom_items.count('product_id')} / #{@bom.bom_items.count}"
 		@total_price = 0.00
@@ -133,21 +167,23 @@ before_filter :authenticate_user!, :except => [:upload]
                 Rails.logger.info(@match_str.inspect)
                 Rails.logger.info(@total_price.inspect)
                 Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb22222222222222222")
-		unless matched_items.empty?
-		    matched_items.each do |item|
-		        #product = Product.find_by_id(item.product_id)
-                        Rails.logger.info("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                        Rails.logger.info(item.inspect)
-                        Rails.logger.info(@total_price.inspect)
-                        Rails.logger.info("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                        #if item.quantity.blank?
-                            #item.quantity = item.part_code.to_s.scan(/[A-Z]+/).size
-                        #end
-		        @total_price += item.price * item.quantity
-                        Rails.logger.info("total_pricetotal_pricetotal_price___________________________________________________________________")
-                        Rails.logger.info(@total_price.inspect)
-                        Rails.logger.info("total_pricetotal_pricetotal_price____________________________________________________________________")
+		unless @matched_items.empty?
+                    @bom_api_all = []
+		    @matched_items.each do |item|
+                        if not item.price.blank?
+                            @total_price += item.price * item.quantity  
+                        end
+                        if item.product_id.blank?
+                            if not item.mpn.blank?
+                                bom_api = search_in_api(item.mpn)
+                                bom_api << item.id
+                                @bom_api_all << bom_api
+                            end    
+                        end 
 		    end
+                    Rails.logger.info("@bom_api_all_________________________________________________________")
+                    Rails.logger.info(@bom_api_all.inspect)
+                    Rails.logger.info("@bom_api_all---------------------------------------------------------")
 		end
 		    }
 
@@ -200,7 +236,7 @@ before_filter :authenticate_user!, :except => [:upload]
 	    @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
 	    @sheet = @xls_file.sheet(0)
 
-	    @parse_result = @sheet.parse(header_search: [/Qty/,/Des/,/Ref/],clean:true)
+	    @parse_result = @sheet.parse(header_search: [/Qty/,/Des/,/Ref/,/Mpn/],clean:true)
 
 	    #remove first row 
 	    @parse_result.shift
@@ -217,7 +253,8 @@ before_filter :authenticate_user!, :except => [:upload]
                     #Rails.logger.info("0000000000000000000000000000000")
                 #end
 	        quantity = item["Qty"]
-
+    
+                mpn = item["Mpn"]
 		bom_item = @bom.bom_items.build() #创建bom_items对象
 		
                 bom_item.part_code = part_code
@@ -258,10 +295,12 @@ before_filter :authenticate_user!, :except => [:upload]
   	  	    bom_item.danger = false
   	  	end
                 bom_item.quantity = quantity
+                bom_item.mpn = mpn
 		Rails.logger.info("ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
                 Rails.logger.info(ary2.inspect)
                 Rails.logger.info(part_code)
                 match_product = search_bom(desc,part_code) #根据关键字和位号查询产品
+                
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
                 #Rails.logger.info(match_product.inspect)   
                 Rails.logger.info("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")     
@@ -295,6 +334,7 @@ before_filter :authenticate_user!, :except => [:upload]
     def mark
 	 @bom_item = BomItem.find(params[:id])
 	 @bom_item.product_id = nil
+         @bom_item.mpn_id = nil
          @bom_item.mark = true
          @bom_item.save
 	 #redirect_to :back
@@ -305,6 +345,122 @@ before_filter :authenticate_user!, :except => [:upload]
 
     def upload
         @bom = Bom.new
+    end
+
+    def update
+        if not params[:product_id].blank?
+            @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            if @bom_item.update_attribute("product_id", params[:product_id])
+                if @bom_item.product_id
+	            #@bom_item.product = Product.find(@bom_item.product_id)
+                    @bom_item.warn = false
+                    @bom_item.mark = false
+                    @bom_item.manual = true
+	            @bom_item.save!
+  
+
+                    #累加产品被选择的次数
+                    prefer = (Product.find(@bom_item.product_id)).prefer + 1
+                    Product.find(@bom_item.product_id).update(prefer: prefer) 
+        
+                    flash[:success] = t('success_a')
+
+                    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                else
+	            flash[:error] = t('error_d')
+	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	        end
+            else
+                render 'edit'
+            end
+        elsif not params[:mpn_id].blank?
+            @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            if @bom_item.update_attribute("mpn_id", params[:mpn_id])
+                if @bom_item.mpn_id
+	            #@bom_item.product = Product.find(@bom_item.product_id)
+                    @bom_item.warn = false
+                    @bom_item.mark = false
+                    @bom_item.manual = true
+	            @bom_item.save!
+ 
+                    flash[:success] = t('success_a')
+
+                    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                else
+	            flash[:error] = t('error_d')
+	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	        end
+            else
+                render 'edit'
+            end     
+        end
+    end
+
+    def search_in_api(mpn)
+        mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+mpn+"%'").first
+        if mpn_item.blank?
+            url = 'http://octopart.com/api/v3/parts/match?'
+            url += '&queries=' + URI.encode(JSON.generate([{:mpn => 'A000067'}]))
+            url += '&apikey=809ad885'
+            url += '&include[]=descriptions'
+     
+            resp = Net::HTTP.get_response(URI.parse(url))
+            server_response = JSON.parse(resp.body)
+
+            prices_all = []
+            naive_id_all = []
+            server_response['results'].each do |result|
+                result['items'].each do |part|
+                    for f in part['offers']      
+                        if f['prices'].has_key?"USD"
+                            for p in f['prices']['USD']
+                                prices_all << p[-1].to_f
+                                naive_id_all << f['_naive_id']
+                            end
+                        end
+                    end
+                end
+            end
+            naive_id= naive_id_all[(prices_all.index prices_all.min)]
+            api_result = []
+            mpn_new = MpnItem.new
+            server_response['results'].each do |result|
+                result['items'].each do |part|
+                    api_result << part['mpn']
+                    mpn_new.mpn = part['mpn']
+                    api_result << part['brand']['name'] 
+                    mpn_new.manufacturer = part['brand']['name'] 
+                    for f in part['offers']
+                        if f['_naive_id'] == naive_id
+                            api_result << f['seller']['name'] 
+                            mpn_new.authorized_distributor = f['seller']['name'] 
+                            d_value = ""
+                            for d in part['descriptions']     
+                                if d['attribution']['sources'][0]['name'] == f['seller']['name']
+                                    d_value = d['value'] 
+                                end
+                            end
+                            api_result << d_value
+                            api_result << f['prices']['USD'][-1][-1]
+                            mpn_new.description = d_value
+                            mpn_new.price = f['prices']['USD'][-1][-1]
+                        end
+                    end  
+                end
+            end
+            mpn_new.save
+            api_result << mpn_new.id
+            #result = api_result
+        else
+            api_result = []
+            api_result << mpn_item['mpn']
+            api_result << mpn_item['manufacturer'] 
+            api_result << mpn_item['authorized_distributor']
+            api_result << mpn_item['description']
+            api_result << mpn_item['price']
+            api_result << mpn_item['id']
+        end
+        result = api_result
     end
 
 
@@ -429,10 +585,12 @@ before_filter :authenticate_user!, :except => [:upload]
   	            #如果匹配不到产品，则只使用关键字串全局匹配，不需要匹配原件类型
   	  	    if result_w.length == 0
                         Rails.logger.info("15") 
+                        
                         #result = Product.search(str,star: true,order: 'prefer DESC').to_ary
                         result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
   	  		#如果全局匹配不到，则需要检查关键字串中的单位，转换成标准的单位
   	  		if result_w.length == 0
+                            
   	  		    #匹配出单位的字符串
   	  		    ary_unit = str.scan(/([a-zA-Z]+)/)
   	  		    #如果匹配出多个，则提示错误

@@ -1,8 +1,4 @@
-<%
-meta title: @itemall,
-     description: @itemall,
-     keywords: @itemall
-%>
+
 <div class="container">
 <div class="row">
   <div class="col-md-12">
@@ -32,74 +28,120 @@ meta title: @itemall,
     
 </div>
 
-<div class="row">
+<div class="row table table-hover">
+        <div class="col-md-1"><h5><strong><%= t(:mark) %></strong></h5></div>         
+        <div class="col-md-1"><h5><strong><%= t(:no) %></strong></h5></div>
+        <div class="col-md-3"><h5><strong><%= t(:intention_product) %></strong></h5></div>
+        <div class="col-md-3"><h5><strong><%= t(:matching_products) %></strong></h5></div>
+        <div class="col-md-1"><h5><strong><%= t(:unit_price) %></strong></h5></div>
+        <div class="col-md-1"><h5><strong><%= t(:quantity) %></strong></h5></div>
+        <div class="col-md-1"><h5><strong><%= t(:operate) %></strong></h5></div>
+        <div class="col-md-1"><h5><strong>Other</strong></h5></div>
+</div>
+  <% @itemall = "" %>
+  <% @matched_items.each_with_index do |item,index| %>
+      <% @itemall = @itemall + " " + item.description %>
+ 
+        <% if item.mark == 1 %>
+        <div class="bg-info row table table-hover" >
+      <% elsif item.danger == 1 %> 
+        <div class="bg-danger row table table-hover">
+      <% elsif item.manual == 1 %> 
+        <div class="bg-success row table table-hover">
+      <% else %>
+         <div class="row table table-hover">
+      <% end %>
 
-  <div class="col-md-12">
-      <table class="table table-bordered table-striped table-condensed table-hover">
-        <thead>
-          <tr class="text-nowrap">            
-            <th><%= t(:no) %></th>
-            <th><%= t(:intention_product) %></th>
-            
-            <th><%= t(:matching_products) %></th>
-            
-            <th><%= t(:unit_price) %></th>
-            <th><%= t(:quantity) %></th>
-            
-            <th><%= t(:operate) %></th>
-            <th><%= t(:mark) %></th>
-          </tr>
-        </thead>
-        <tbody>
-           <% @itemall = "" %>
-          <% @bom.bom_items.each_with_index do |item,index| %>
-            
-            <% @itemall = @itemall + " " + item.description %>
-            
-            <% if item.mark %>
-              <tr class="info" >
-            <% elsif item.danger %> 
-              <tr class="danger">
-            <% elsif item.manual %> 
-              <tr class="success">
-            <% else %>
-              <tr>
-            <% end %>
            
+              <div class="col-md-1"><%= button_to t(:mark),  {action: "mark", id: item.id}, class: "btn btn-info" %></div>
+              <div class="col-md-1"><%= index+1 %><% if item.id.to_i == params[:bomitem].to_i-2 %><a name="Comment"></a><% end %></div>
+              <div class="col-md-2"><%= item.description %></div>
               
-              <td class="vert-align"><%= index+1 %><% if item.id.to_i == params[:bomitem].to_i-2 %><a name="Comment"></a><% end %></td>
-              <td class="vert-align"><%= item.description %></td>
-              
-              <% unless item.product_id.nil?%>
+              <% unless item.product_id.nil? and item.mpn_id.nil?%>
                 
-                <td class="vert-align"><%= Product.find(item.product_id).description %></td>
-                
-
-                <td class="vert-align"><%= number_with_precision(Product.find(item.product_id).price, precision: 4)%></td>
-
-                <td class="vert-align"><%= item.quantity %></td>
-                
-                <td class="vert-align"><%= link_to t(:choose_other),  edit_bom_item_path(item), class: "btn btn-success" %></td>
-                <td class="vert-align"><%= button_to t(:mark),  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
+                <div class="col-md-4"><%= item.description_p %></div>
+                <div class="col-md-1"><%= number_with_precision(item.price, precision: 4)%></div>
+                <div class="col-md-1"><%= item.quantity %></div>
+                <div class="col-md-1"><%= link_to t(:choose_other),  edit_bom_item_path(item), class: "btn btn-success" %></div>
+                <div class="col-md-1">
+                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
+                      Other
+                    </a>    
+                </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
+                        <div class="well">
+                          No Data
+                        </div>
+                     </div>
+                  </div>
+                </div>
+                    
 
               <% else %>
                 
-                <td class="vert-align"></td>
-                <td class="vert-align"></td><td class="vert-align"><%= item.quantity %></td>
-                
+                <div class="col-md-4"></div>
+                <div class="col-md-1"></div>
+                <div class="col-md-1"><%= item.quantity %></div>
+                <div class="col-md-1"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></div>
+                <div class="col-md-1"><a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
+                      Other
+                    </a>    
+                </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
+                        <div class="well">
 
-                <td class="vert-align"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></td>
-                <td class="vert-align"><%= button_to t(:mark),  {action: "mark", id: item.id}, class: "btn btn-info" %></td>
+
+
+
+<div class="row">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Manufacturer</th>
+      
+      <th>Description</th>
+      <th>Price</th>
+      <th><%= t(:operate) %></th>
+    </tr>
+  </thead>
+  <tbody>
+ <% @bom_api_all.each do |api| %>
+     <% if api[-1] == item.id %>
+    <tr>
+        <td><p class="text-info"><%= api[0] %></p></td>
+        <td><p class="text-info"><%= api[1] %></p></td>
+       
+        <td class="text-info"><%= api[3] %></td>
+        <td><p class="text-info">$<%= api[4] %></p></td>
+        <td><%= link_to t(:ok), bom_item_path(item, :mpn_id =>api[-2]), html_options={:method =>"patch"} %></td>
+    </tr>
+      <% end %>
+ <% end %>
+  </tbody>
+</table>
+</div>
+
+
+
+
+                        </div>
+                     </div>
+                  </div>
+                </div>
                 
               <% end %>
               
-            </tr>
+            </div>
           <% end %>
-
-        </tbody>
-      </table>
-  </div>
 </div>
-</div>
-
+<%
+meta title: @itemall,
+     description: @itemall,
+     keywords: @itemall
+%>
 

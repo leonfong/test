@@ -12,10 +12,11 @@
     </tr>
   </thead>
   <tbody>
+    <% @itemall = "" %>
     <% @boms.each do |bom| %>
+    <% @itemall = @itemall + " " + bom.excel_file_identifier %>
       <tr>
         <td><%= bom.name %></td>
-        <td><%= bom.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% if user_signed_in? %>
           <% if current_user.email == "web@mokotechnology.com" %>
@@ -30,3 +31,8 @@
   </tbody>
 </table>
 </div>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: @itemall,
+     keywords: @itemall
+%>

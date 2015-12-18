@@ -12,7 +12,9 @@
     </tr>
   </thead>
   <tbody>
+    <% @itemall = "" %>
     <% @boms.each do |bom| %>
+    <% @itemall = @itemall + " " + bom.excel_file_identifier %>
       <tr>
         <td><%= bom.name %></td>
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
@@ -29,3 +31,8 @@
   </tbody>
 </table>
 </div>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

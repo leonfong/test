@@ -1,4 +1,6 @@
-
+require 'rubygems'
+require 'json'
+require 'net/http'
 
 class BomItemController < ApplicationController
     #respond_to :json, :html
@@ -188,6 +190,9 @@ class BomItemController < ApplicationController
   	  	    #如果全局匹配不到，则需要检查关键字串中的单位，转换成标准的单位
   	  	    if @match_products.length == 0
                         Rails.logger.info("6")
+                        if not @bom_item.mpn.blank?
+                            @bom_api = search_in_api(@bom_item.mpn)
+                        end
   	  		Rails.logger.info("t333333333333333333333333333333333333333333333333333333333333")
   	                #匹配出单位的字符串
   	  		ary_unit = str.scan(/([a-zA-Z]+)/)
@@ -235,27 +240,30 @@ class BomItemController < ApplicationController
                 
 	        #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
 	        if @match_products.length == 0
+                    if not @bom_item.mpn.blank?
+                        @bom_api = search_in_api(@bom_item.mpn)
+                    end
   	            #匹配出单位的字符串
-  	  	    ary_unit = str.scan(/([a-zA-Z]+)/)
+  	  	    #ary_unit = str.scan(/([a-zA-Z]+)/)
   	  	    #如果匹配出多个，则提示错误
-                    if ary_unit.length > 1
-  	                flash[:error] = t('error_a')
-  	  	    else
+                    #if ary_unit.length > 1
+  	                #flash[:error] = t('error_a')
+  	  	    #else
    		        #从unit表查找对应的目标单位字符串
- 	  	        ary_unit = ary_unit.join("")
-  	                unit = Unit.find_by(unit: ary_unit)
-  		        unless unit
-  	  	            flash[:error] = t('error_b')
-  	  	        else
+ 	  	        #ary_unit = ary_unit.join("")
+  	                #unit = Unit.find_by(unit: ary_unit)
+  		       # unless unit
+  	  	           # flash[:error] = t('error_b')
+  	  	       # else
   	  		    #用查询得到的标准单位替换关键字串中的单位
-  	  		    str.sub!(/[a-zA-Z]+/, unit.targetunit)
-  	  		    @match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
+  	  		    #str.sub!(/[a-zA-Z]+/, unit.targetunit)
+  	  		    #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
                             #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true).to_ary
-  	  		    if @match_products.length == 0
-  	  		        flash[:error] = t('error_c')
-  	  		    end		
-  	                end
-  	            end	
+  	  		    #if @match_products.length == 0
+  	  		        #flash[:error] = t('error_c')
+  	  		    #end		
+  	                #end
+  	            #end	
   	        end	  
                 @query_str = str +" without part type "
             end
@@ -271,33 +279,120 @@ class BomItemController < ApplicationController
     end
 
     def update
-        @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
-
-        if @bom_item.update_attribute("product_id", params[:product_id])
-            if @bom_item.product_id
-	        #@bom_item.product = Product.find(@bom_item.product_id)
-                @bom_item.warn = false
-                @bom_item.mark = false
-                @bom_item.manual = true
-	        @bom_item.save!
+        if not params[:product_id].blank?
+            @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            if @bom_item.update_attribute("product_id", params[:product_id])
+                if @bom_item.product_id
+	            #@bom_item.product = Product.find(@bom_item.product_id)
+                    @bom_item.warn = false
+                    @bom_item.mark = false
+                    @bom_item.manual = true
+	            @bom_item.save!
   
 
-                #累加产品被选择的次数
-                prefer = (Product.find(@bom_item.product_id)).prefer + 1
-                Product.find(@bom_item.product_id).update(prefer: prefer) 
+                    #累加产品被选择的次数
+                    prefer = (Product.find(@bom_item.product_id)).prefer + 1
+                    Product.find(@bom_item.product_id).update(prefer: prefer) 
         
-                flash[:success] = t('success_a')
+                    flash[:success] = t('success_a')
 
-                redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                else
+	            flash[:error] = t('error_d')
+	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	        end
             else
-	        flash[:error] = t('error_d')
-	  	redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
-	    end
-        else
-            render 'edit'
+                render 'edit'
+            end
+        elsif not params[:mpn_id].blank?
+            @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            if @bom_item.update_attribute("mpn_id", params[:mpn_id])
+                if @bom_item.mpn_id
+	            #@bom_item.product = Product.find(@bom_item.product_id)
+                    @bom_item.warn = false
+                    @bom_item.mark = false
+                    @bom_item.manual = true
+	            @bom_item.save!
+ 
+                    flash[:success] = t('success_a')
+
+                    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                else
+	            flash[:error] = t('error_d')
+	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	        end
+            else
+                render 'edit'
+            end     
         end
     end
 
+    def search_in_api(mpn)
+        mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+mpn+"%'").first
+        if mpn_item.blank?
+            url = 'http://octopart.com/api/v3/parts/match?'
+            url += '&queries=' + URI.encode(JSON.generate([{:mpn => 'A000067'}]))
+            url += '&apikey=809ad885'
+            url += '&include[]=descriptions'
+     
+            resp = Net::HTTP.get_response(URI.parse(url))
+            server_response = JSON.parse(resp.body)
+
+            prices_all = []
+            naive_id_all = []
+            server_response['results'].each do |result|
+                result['items'].each do |part|
+                    for f in part['offers']      
+                        if f['prices'].has_key?"USD"
+                            for p in f['prices']['USD']
+                                prices_all << p[-1].to_f
+                                naive_id_all << f['_naive_id']
+                            end
+                        end
+                    end
+                end
+            end
+            naive_id= naive_id_all[(prices_all.index prices_all.min)]
+            api_result = []
+            mpn_new = MpnItem.new
+            server_response['results'].each do |result|
+                result['items'].each do |part|
+                    api_result << part['mpn']
+                    mpn_new.mpn = part['mpn']
+                    api_result << part['brand']['name'] 
+                    mpn_new.manufacturer = part['brand']['name'] 
+                    for f in part['offers']
+                        if f['_naive_id'] == naive_id
+                            api_result << f['seller']['name'] 
+                            mpn_new.authorized_distributor = f['seller']['name'] 
+                            d_value = ""
+                            for d in part['descriptions']     
+                                if d['attribution']['sources'][0]['name'] == f['seller']['name']
+                                    d_value = d['value'] 
+                                end
+                            end
+                            api_result << d_value
+                            api_result << f['prices']['USD'][-1][-1]
+                            mpn_new.description = d_value
+                            mpn_new.price = f['prices']['USD'][-1][-1]
+                        end
+                    end  
+                end
+            end
+            mpn_new.save
+            api_result << mpn_new.id
+            #result = api_result
+        else
+            api_result = []
+            api_result << mpn_item['mpn']
+            api_result << mpn_item['manufacturer'] 
+            api_result << mpn_item['authorized_distributor']
+            api_result << mpn_item['description']
+            api_result << mpn_item['price']
+            api_result << mpn_item['id']
+        end
+        result = api_result
+    end
 
     def search(query_str,*part_code)
         #str = get_query_str(query_str)
@@ -410,6 +505,9 @@ class BomItemController < ApplicationController
             end
             if result_w.length == 0
                 Rails.logger.info("15") 
+                if not @bom_item.mpn.blank?
+                   @bom_api = search_in_api(@bom_item.mpn)
+                end
                 #result = Product.search(str,star: true,order: 'prefer DESC').to_ary
                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
             end

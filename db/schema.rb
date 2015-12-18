@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151121025418) do
+ActiveRecord::Schema.define(version: 20151218013345) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -34,16 +34,18 @@ ActiveRecord::Schema.define(version: 20151121025418) do
   create_table "bom_items", force: :cascade do |t|
     t.integer  "quantity",    limit: 4
     t.string   "description", limit: 255
-    t.string   "part_code",   limit: 255
+    t.text     "part_code",   limit: 65535
     t.integer  "bom_id",      limit: 4
     t.integer  "product_id",  limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.boolean  "warn",        limit: 1
     t.integer  "user_id",     limit: 4
     t.boolean  "danger",      limit: 1
     t.boolean  "manual",      limit: 1
     t.boolean  "mark",        limit: 1
+    t.string   "mpn",         limit: 255
+    t.integer  "mpn_id",      limit: 4
   end
 
   create_table "boms", force: :cascade do |t|
@@ -53,6 +55,20 @@ ActiveRecord::Schema.define(version: 20151121025418) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "user_id",     limit: 4
+  end
+
+  add_index "boms", ["name"], name: "name", using: :btree
+  add_index "boms", ["user_id"], name: "uid", using: :btree
+
+  create_table "mpn_items", force: :cascade do |t|
+    t.string   "mpn",                    limit: 255
+    t.string   "manufacturer",           limit: 255
+    t.string   "authorized_distributor", limit: 255
+    t.string   "description",            limit: 255
+    t.string   "price",                  limit: 255
+    t.string   "last_update",            limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "parts", force: :cascade do |t|
@@ -65,7 +81,7 @@ ActiveRecord::Schema.define(version: 20151121025418) do
   create_table "products", force: :cascade do |t|
     t.string   "name",              limit: 255
     t.string   "description",       limit: 255
-    t.integer  "price",             limit: 4,   default: 0
+    t.float    "price",             limit: 24,  default: 0.0
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
     t.string   "part_name",         limit: 255
@@ -86,8 +102,16 @@ ActiveRecord::Schema.define(version: 20151121025418) do
     t.string   "value8",            limit: 255
   end
 
+  add_index "products", ["name"], name: "name", using: :btree
   add_index "products", ["package2"], name: "package2", using: :btree
   add_index "products", ["product_able_id", "product_able_type"], name: "index_products_on_product_able_id_and_product_able_type", using: :btree
+
+  create_table "products_price", force: :cascade do |t|
+    t.string "name",  limit: 255
+    t.float  "price", limit: 24
+  end
+
+  add_index "products_price", ["name"], name: "name", using: :btree
 
   create_table "units", force: :cascade do |t|
     t.string   "unit",       limit: 255

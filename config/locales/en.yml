@@ -38,9 +38,9 @@ en:
   no: "No."
   intention_product: Intention of the product
   matching_products: Matching products
-  mark: Mark&Clear up
-  choose_other: Choose other
-  manually_select: Manually select
+  mark: Mark
+  choose_other: Other
+  manually_select: Manually
   bom_parser: BOM Parser
   about: About
   contact: Contact

@@ -235,7 +235,11 @@ WHERE
         @bom.user_id = current_user.id
         #如果上传成功
 	if @bom.save
-	    @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            if @bom.excel_file_identifier.split('.')[-1] == 'xls'
+	        @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            else
+                @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+            end
 	    @sheet = @xls_file.sheet(0)
 
 	    @parse_result = @sheet.parse(header_search: [/Qty/,/Des/,/Ref/,/Mpn/],clean:true)

@@ -30,7 +30,7 @@
                             <% d_value = d['value'] %>  
                         <% end %>
                     <% end %>  
-                    <td><p class="text-info"><%= d_value %></p></td>
+                    <td class="text-info"><%= d_value %></td>
                     <td><p class="text-info">$<%= f['prices']['USD'][-1][-1] %></p></td>
                     
                  <% end %>

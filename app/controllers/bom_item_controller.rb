@@ -331,7 +331,7 @@ class BomItemController < ApplicationController
         mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+mpn+"%'").first
         if mpn_item.blank?
             url = 'http://octopart.com/api/v3/parts/match?'
-            url += '&queries=' + URI.encode(JSON.generate([{:mpn => 'A000067'}]))
+            url += '&queries=' + URI.encode(JSON.generate([{:mpn => mpn}]))
             url += '&apikey=809ad885'
             url += '&include[]=descriptions'
      

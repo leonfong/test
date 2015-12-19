@@ -176,8 +176,10 @@ WHERE
                         if item.product_id.blank?
                             if not item.mpn.blank?
                                 bom_api = search_in_api(item.mpn)
-                                bom_api << item.id
-                                @bom_api_all << bom_api
+                                if not bom_api == []
+                                    bom_api << item.id
+                                    @bom_api_all << bom_api
+                                end
                             end    
                         end 
 		    end
@@ -240,7 +242,10 @@ WHERE
 
 	    #remove first row 
 	    @parse_result.shift
-	    @parse_result.select! {|item| !item["Des"].blank? } #选择非空行
+	    #@parse_result.select! {|item| !item["Des"].blank? } #选择非空行
+            Rails.logger.info("@parse_result------------------------------------------------------------")
+            Rails.logger.info(@parse_result.inspect)
+            Rails.logger.info("@parse_result-------------------------------------------------------------")
             #行号
             row_num = 0
 	    @parse_result.each do |item| #处理每一行的数据
@@ -300,11 +305,12 @@ WHERE
                 Rails.logger.info(ary2.inspect)
                 Rails.logger.info(part_code)
                 match_product = search_bom(desc,part_code) #根据关键字和位号查询产品
+                bom_item.product_id = match_product.first.id if match_product.count > 0
                 
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
                 #Rails.logger.info(match_product.inspect)   
                 Rails.logger.info("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")     
-		bom_item.product_id = match_product.first.id if match_product.count > 0
+		
 		#bom_item.match_product = match_product.first unless match_product.empty?
 		#bom_item.product = match_product.first unless match_product.empty?
                 bom_item.user_id = current_user.id
@@ -400,13 +406,15 @@ WHERE
         mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+mpn+"%'").first
         if mpn_item.blank?
             url = 'http://octopart.com/api/v3/parts/match?'
-            url += '&queries=' + URI.encode(JSON.generate([{:mpn => 'A000067'}]))
+            url += '&queries=' + URI.encode(JSON.generate([{:mpn => mpn}]))
             url += '&apikey=809ad885'
             url += '&include[]=descriptions'
      
             resp = Net::HTTP.get_response(URI.parse(url))
             server_response = JSON.parse(resp.body)
-
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")
+            Rails.logger.info(server_response['results'].inspect)   
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")     
             prices_all = []
             naive_id_all = []
             server_response['results'].each do |result|
@@ -421,36 +429,42 @@ WHERE
                     end
                 end
             end
-            naive_id= naive_id_all[(prices_all.index prices_all.min)]
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")
+            Rails.logger.info(prices_all.inspect)   
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")    
             api_result = []
-            mpn_new = MpnItem.new
-            server_response['results'].each do |result|
-                result['items'].each do |part|
-                    api_result << part['mpn']
-                    mpn_new.mpn = part['mpn']
-                    api_result << part['brand']['name'] 
-                    mpn_new.manufacturer = part['brand']['name'] 
-                    for f in part['offers']
-                        if f['_naive_id'] == naive_id
-                            api_result << f['seller']['name'] 
-                            mpn_new.authorized_distributor = f['seller']['name'] 
-                            d_value = ""
-                            for d in part['descriptions']     
-                                if d['attribution']['sources'][0]['name'] == f['seller']['name']
-                                    d_value = d['value'] 
+            if not prices_all == []
+                naive_id= naive_id_all[(prices_all.index prices_all.min)]
+                
+                mpn_new = MpnItem.new
+                server_response['results'].each do |result|
+                    result['items'].each do |part|
+                        api_result << part['mpn']
+                        mpn_new.mpn = part['mpn']
+                        api_result << part['brand']['name'] 
+                        mpn_new.manufacturer = part['brand']['name'] 
+                        for f in part['offers']
+                            if f['_naive_id'] == naive_id
+                                api_result << f['seller']['name'] 
+                                mpn_new.authorized_distributor = f['seller']['name'] 
+                                d_value = ""
+                                for d in part['descriptions']     
+                                    if d['attribution']['sources'][0]['name'] == f['seller']['name']
+                                        d_value = d['value'] 
+                                    end
                                 end
+                                api_result << d_value
+                                api_result << f['prices']['USD'][-1][-1]
+                                mpn_new.description = d_value
+                                mpn_new.price = f['prices']['USD'][-1][-1]
                             end
-                            api_result << d_value
-                            api_result << f['prices']['USD'][-1][-1]
-                            mpn_new.description = d_value
-                            mpn_new.price = f['prices']['USD'][-1][-1]
-                        end
-                    end  
+                        end  
+                    end
                 end
+                mpn_new.save
+                api_result << mpn_new.id
+                #result = api_result
             end
-            mpn_new.save
-            api_result << mpn_new.id
-            #result = api_result
         else
             api_result = []
             api_result << mpn_item['mpn']
@@ -472,16 +486,14 @@ WHERE
   	    params.require(:bom).permit(:name, :excel_file)
   	end
 
-        def search_bom (query_str,*part_code)
+        def search_bom (query_str,*part_code,mpn)
             #str = get_query_str(query_str)
-            str = get_query_str_new(query_str,part_code)
-            
-
-            
+            str = get_query_str_new(query_str,part_code)            
             Rails.logger.info("0000000000000000000000000000000000000aaa")
             Rails.logger.info(str)
             Rails.logger.info("0000000000000000000000000000000aaaaaaaaa")
-            return [] if str.blank?
+            
+            return [] if str.blank?     
                 part = Part.find_by(part_code: part_code)
                 if part
                     

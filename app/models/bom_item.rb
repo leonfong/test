@@ -5,5 +5,5 @@ class BomItem < ActiveRecord::Base
 	#has_one :product, as: :product_able
 
 
-	validates :description,:bom_id , presence: true
+	validates :bom_id , presence: true
 end

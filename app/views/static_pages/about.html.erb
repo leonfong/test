@@ -4,48 +4,4 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
      keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
 %>
 <h1>www.fastbom.com </h1>
-<!--
-<div class="container table-responsive">
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>Part</th>
-      <th>Manufacturer</th>
-      
-      <th>Authorized Distributor</th>
-      <th>Description</th>
-      <th>Price</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    <% @server_response['results'].each do |result| %>
-        <% result['items'].each do |part| %>
-          <tr>
-            <td><p class="text-info"><%= part['mpn'] %></p></td>
-            <td><p class="text-info"><%= part['brand']['name'] %></p></td>
-            <% for f in part['offers'] %>
-                <% if f['_naive_id'] == @naive_id %>
-                    
-                    <td><p class="text-info"><%= f['seller']['name'] %></p></td> 
-                    <% d_value = "" %> 
-                    <% for d in part['descriptions'] %>     
-                        <% if d['attribution']['sources'][0]['name'] == f['seller']['name'] %>
-                            <% d_value = d['value'] %>  
-                        <% end %>
-                    <% end %>  
-                    <td class="text-info"><%= d_value %></td>
-                    <td><p class="text-info">$<%= f['prices']['USD'][-1][-1] %></p></td>
-                    
-                 <% end %>
-            <% end %>  
-            
-          </tr>
-        <% end %>
-      <% end %>
-  </tbody>
-</table>
-</div>
--->
 

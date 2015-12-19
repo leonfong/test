@@ -1,6 +1,6 @@
-require 'rubygems'
-require 'json'
-require 'net/http'
+#require 'rubygems'
+#require 'json'
+#require 'net/http'
 
 class StaticPagesController < ApplicationController
   def home

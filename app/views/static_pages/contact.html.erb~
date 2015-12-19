@@ -1,2 +1,2 @@
-<h1>t('c_us')anne@mokotechnology.com</h1>
-<h1>谢谢！</h1>
+<h1><%= t('c_us') %>anne@mokotechnology.com</h1>
+<h1><%= t('thanks') %></h1>

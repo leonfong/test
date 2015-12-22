@@ -73,29 +73,9 @@
                     <div class="col-md-12">
                       <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
                         <div class="well">
-                          Has been matched successfully!
-                        </div>
-                     </div>
-                  </div>
-                </div>
-                    
-
-              <% else %>
-                
-                <div class="col-md-3"></div>
-                <div class="col-md-1"></div>
-                <div class="col-md-1"><%= item.quantity %></div>
-                <div class="col-md-1"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></div>
-                <div class="col-md-1"><a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
-                      Other
-                    </a>    
-                </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
-                        <div class="well">
-
-
+                          
+                       Has been matched successfully!
+<%= render partial: 'layouts/bom_edit', locals: {id: item.id, item: @bom} %>
 
 <% @bom_api_all.each do |api| %>
      <% if api[-1] == item.id %>
@@ -125,8 +105,61 @@
   </tbody>
 </table>
 </div>
-    <% else %>
-        No MPN or No Data
+    
+    <% end %>
+<% end %>
+                        </div>
+                     </div>
+                  </div>
+                </div>
+                    
+
+              <% else %>
+                
+                <div class="col-md-3"></div>
+                <div class="col-md-1"></div>
+                <div class="col-md-1"><%= item.quantity %></div>
+                <div class="col-md-1"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></div>
+                <div class="col-md-1"><a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
+                      Other
+                    </a>    
+                </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
+                        <div class="well">
+Need Confirm
+<%= render partial: 'layouts/bom_edit', locals: {id: item.id, item: @bom} %>
+
+<% @bom_api_all.each do |api| %>
+     <% if api[-1] == item.id %>
+<div class="row">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Manufacturer</th>
+      
+      <th>Description</th>
+      <th>Price</th>
+      <th><%= t(:operate) %></th>
+    </tr>
+  </thead>
+  <tbody>
+ 
+    <tr>
+        <td><p class="text-info"><%= api[0] %></p></td>
+        <td><p class="text-info"><%= api[1] %></p></td>
+       
+        <td class="text-info"><%= api[3] %></td>
+        <td><p class="text-info">$<%= api[4] %></p></td>
+        <td><%= link_to t(:ok), bom_item_path(item, :mpn_id =>api[-2]), html_options={:method =>"patch"} %></td>
+    </tr>
+      
+  </tbody>
+</table>
+</div>
+    
     <% end %>
 <% end %>
 

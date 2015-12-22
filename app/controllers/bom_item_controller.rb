@@ -357,26 +357,28 @@ class BomItemController < ApplicationController
             mpn_new = MpnItem.new
             server_response['results'].each do |result|
                 result['items'].each do |part|
-                    api_result << part['mpn']
-                    mpn_new.mpn = part['mpn']
-                    api_result << part['brand']['name'] 
-                    mpn_new.manufacturer = part['brand']['name'] 
-                    for f in part['offers']
-                        if f['_naive_id'] == naive_id
-                            api_result << f['seller']['name'] 
-                            mpn_new.authorized_distributor = f['seller']['name'] 
-                            d_value = ""
-                            for d in part['descriptions']     
-                                if d['attribution']['sources'][0]['name'] == f['seller']['name']
-                                    d_value = d['value'] 
+                    if part['mpn'].upcase == mpn.upcase
+                        api_result << part['mpn']
+                        mpn_new.mpn = part['mpn']
+                        api_result << part['brand']['name'] 
+                        mpn_new.manufacturer = part['brand']['name'] 
+                        for f in part['offers']
+                            if f['_naive_id'] == naive_id
+                                api_result << f['seller']['name'] 
+                                mpn_new.authorized_distributor = f['seller']['name'] 
+                                d_value = ""
+                                for d in part['descriptions']     
+                                    if d['attribution']['sources'][0]['name'] == f['seller']['name']
+                                        d_value = d['value'] 
+                                    end
                                 end
+                                api_result << d_value
+                                api_result << f['prices']['USD'][-1][-1]
+                                mpn_new.description = d_value
+                                mpn_new.price = f['prices']['USD'][-1][-1]
                             end
-                            api_result << d_value
-                            api_result << f['prices']['USD'][-1][-1]
-                            mpn_new.description = d_value
-                            mpn_new.price = f['prices']['USD'][-1][-1]
-                        end
-                    end  
+                        end 
+                    end 
                 end
             end
             mpn_new.save

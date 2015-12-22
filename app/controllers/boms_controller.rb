@@ -252,6 +252,7 @@ WHERE
             Rails.logger.info("@parse_result-------------------------------------------------------------")
             #行号
             row_num = 0
+            all_m_bom = []
 	    @parse_result.each do |item| #处理每一行的数据
 	        part_code = item["Ref"]
 		desc = item["Des"]
@@ -318,18 +319,34 @@ WHERE
 		#bom_item.match_product = match_product.first unless match_product.empty?
 		#bom_item.product = match_product.first unless match_product.empty?
                 bom_item.user_id = current_user.id
+                
+                
 		if bom_item.save
-                    match_product.collect! {|x| x.store("bomitemid",bom_item.id)}
-                    #Rails.logger.info(bom_item.part_code.inspect) 
-                    Rails.logger.info("bom item save -------------------------------------------------bom item save")
+                    #match_product.collect! {|x| x[bomitemid] = bom_item.id)}
+                    match_product.each do |x|
+                        one_m_bom = []
+                        one_m_bom << bom_item.id
+                        one_m_bom << x
+                        all_m_bom << one_m_bom
+                        #x[bomitemid] = bom_item.id
+                        #Rails.logger.info("match_product -------------------------------------------------xxxxxxxxxx")
+                        #Rails.logger.info(x) 
+                        #Rails.logger.info("match_product -------------------------------------------------xxxxxxxxx")
+                    end
+                    #Rails.logger.info("match_product -------------------------------------------------match_product")
+                    #Rails.logger.info(match_product.inspect) 
+                    #Rails.logger.info("match_product -------------------------------------------------match_product")
                 else
                     #Rails.logger.info(bom_item.part_code.inspect) 
                     Rails.logger.info("bom item bad -------------------------------------------------bom item bad")
                 end
 				
 	    end
-			
-	    redirect_to @bom, notice: t('file') + " #{@bom.name} " + t('success_b')
+            
+            Rails.logger.info("match_product -------------------------------------------------match_product")
+            Rails.logger.info(all_m_bom.inspect) 
+            Rails.logger.info("match_product -------------------------------------------------match_product")	
+	    redirect_to @bom, bom_data: all_m_bom, notice: t('file') + " #{@bom.name} " + t('success_b')
 	else
 	    redirect_to action: 'upload', notice: t('file') + " #{@bom.name} " + t('error_e')
 	end

@@ -403,10 +403,10 @@ WHERE
         
                     flash[:success] = t('success_a')
 
-                    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    redirect_to boms_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
                 else
 	            flash[:error] = t('error_d')
-	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	  	    redirect_to boms_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
 	        end
             else
                 render 'edit'

@@ -94,10 +94,12 @@ before_filter :authenticate_user!, :except => [:upload]
 
     def show
         if not params[:bom_data].blank?
-            @all_bom_data = params[:bom_data][1..-2][1..-2].split("],[")
-            Rails.logger.info("@all_bom_data-----------------------------------------------------@all_bom_data")
-            Rails.logger.info(@all_bom_data)
-            Rails.logger.info("@all_bom_data---------------------------------------------------@all_bom_data")           
+            if not params[:bom_data][1..-2][1..-2].blank?
+                @all_bom_data = params[:bom_data][1..-2][1..-2].split("],[")
+                Rails.logger.info("@all_bom_data-----------------------------------------------------@all_bom_data")
+                Rails.logger.info(@all_bom_data)
+                Rails.logger.info("@all_bom_data---------------------------------------------------@all_bom_data")           
+            end
         end
         @bom = Bom.find(params[:id])
         Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")

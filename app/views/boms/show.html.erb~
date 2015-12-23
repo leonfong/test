@@ -75,7 +75,60 @@
                         <div class="well">
                           
                        Has been matched successfully!
-<%= render partial: 'layouts/bom_edit', locals: {id: item.id, item: item} %>
+
+
+
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+              <% if user_signed_in? %>
+              <% if current_user.email == "web@mokotechnology.com" %>
+              <td><%= t(:product_name) %></td>
+       
+              <% end %>
+              <% end %>
+              <td><%= t(:description) %></td>
+              <td><%= t(:price) %></td>
+              <td><%= t(:operate) %></td>
+            </tr>
+        </thead>
+        <% if @all_bom_data.blank? %>
+        <tbody>
+            
+            <% @all_bom_data.each do |b| %>
+            <% if b.split(",")[0].to_s == item.id.to_s %>
+            
+                <tr>
+                  <% if user_signed_in? %>
+                  <% if current_user.email == "web@mokotechnology.com" %>
+                  <td><%= Product.find(b.split(",")[-1]).name %></td>
+                  <% end %>
+                  <% end %>
+                  
+                  <td><%= Product.find(b.split(",")[-1]).description %></td>
+                  <td> <%= number_with_precision(Product.find(b.split(",")[-1]).price, precision: 4) %></td>
+                  <td><%= link_to t(:ok), bom_item_path(item, :product_id =>b.split(",")[-1]), html_options={:method =>"patch"} %></td>
+                </tr>
+            <% end %>
+            <% end %>
+        </tbody>
+        <% end %>
+      </table>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
 
 <% @bom_api_all.each do |api| %>
      <% if api[-1] == item.id %>
@@ -129,7 +182,6 @@
                       <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
                         <div class="well">
 Need Confirm
-<%= render partial: 'layouts/bom_edit', locals: {id: item.id, item: item} %>
 
 <% @bom_api_all.each do |api| %>
      <% if api[-1] == item.id %>

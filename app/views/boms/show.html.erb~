@@ -60,7 +60,7 @@
               <div class="col-md-2"><%= item.description %></div>
               <div class="col-md-1"><%= item.mpn %></div>
               <% unless item.product_id.nil? and item.mpn_id.nil?%>
-                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
+                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
                 <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= number_with_precision(item.price, precision: 4)%></a></div>
                 <div class="col-md-1"><%= item.quantity %></div>
                 <div class="col-md-1"><%= link_to t(:choose_other),  edit_bom_item_path(item), class: "btn btn-success" %></div>
@@ -174,10 +174,9 @@
                     
 
               <% else %>
-                <!--
-                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"></a></div>
-                  -->
-                <div class="col-md-3"><%= text_field_tag(item.id.to_s + 'd') %></div>
+
+                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a></div>
+
                 <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"></a></div>
                 <div class="col-md-1"><%= item.quantity %></div>
                 <div class="col-md-1"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></div>

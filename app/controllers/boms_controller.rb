@@ -2,6 +2,7 @@ require 'roo'
 require 'spreadsheet'
 
 class BomsController < ApplicationController
+skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!, :except => [:upload]
     def index
         #@boms = Bom.all
@@ -253,7 +254,7 @@ WHERE
 
 	    #remove first row 
 	    @parse_result.shift
-	    #@parse_result.select! {|item| !item["Des"].blank? } #选择非空行
+	    @parse_result.select! {|item| !item["Des"].blank?||!item["Mpn"].blank? } #选择非空行
             Rails.logger.info("@parse_result------------------------------------------------------------")
             Rails.logger.info(@parse_result.inspect)
             Rails.logger.info("@parse_result-------------------------------------------------------------")
@@ -385,7 +386,7 @@ WHERE
         @bom = Bom.new
     end
 
-    def update
+    def choose
         if not params[:product_id].blank?
             @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
             if @bom_item.update_attribute("product_id", params[:product_id])
@@ -421,9 +422,17 @@ WHERE
                     @bom_item.manual = true
 	            @bom_item.save!
  
-                    flash[:success] = t('success_a')
+                    #flash[:success] = t('success_a')
 
-                    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    #redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    
+                    render "choose.js.erb"
+                    #render "choose.html.erb"
+                    #respond_to do |format|
+                        #format.html {render nothing: true}
+                        #format.js {render "choose.js.erb"}
+
+                    #end
                 else
 	            flash[:error] = t('error_d')
 	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );

@@ -1,0 +1,4 @@
+
+document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= MpnItem.find(@bom_item.mpn_id).description %>';
+
+

@@ -60,19 +60,19 @@
               <div class="col-md-2"><%= item.description %></div>
               <div class="col-md-1"><%= item.mpn %></div>
               <% unless item.product_id.nil? and item.mpn_id.nil?%>
-                
-                <div class="col-md-3"><%= item.description_p %></div>
-                <div class="col-md-1"><%= number_with_precision(item.price, precision: 4)%></div>
+                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
+                <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= number_with_precision(item.price, precision: 4)%></a></div>
                 <div class="col-md-1"><%= item.quantity %></div>
                 <div class="col-md-1"><%= link_to t(:choose_other),  edit_bom_item_path(item), class: "btn btn-success" %></div>
                 <div class="col-md-1">
+               
                     <a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
                       Other
                     </a>    
                 </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <% if item.id.to_i == params[:bomitem] %>
+                      <% if item.id.to_i == params[:bomitem].to_i %>
                           <div class="collapse in" id="<%= (index+1).to_s + 'bom' %>">
                       <% else %> 
                           <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
@@ -158,7 +158,7 @@
        
         <td class="text-info"><%= api[3] %></td>
         <td><p class="text-info">$<%= api[4] %></p></td>
-        <td><%= link_to t(:ok), bom_item_path(item, :mpn_id =>api[-2]), html_options={:method =>"patch"} %></td>
+        <td><%= link_to t(:ok), boms_choose_url(:id =>item, :mpn_id =>api[-2]), remote: true %></td>
     </tr>
       
   </tbody>
@@ -174,9 +174,11 @@
                     
 
               <% else %>
-                
-                <div class="col-md-3"></div>
-                <div class="col-md-1"></div>
+                <!--
+                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"></a></div>
+                  -->
+                <div class="col-md-3"><%= text_field_tag(item.id.to_s + 'd') %></div>
+                <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"></a></div>
                 <div class="col-md-1"><%= item.quantity %></div>
                 <div class="col-md-1"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></div>
                 <div class="col-md-1"><a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
@@ -185,7 +187,7 @@
                 </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <% if item.id.to_i == params[:bomitem] %>
+                      <% if item.id.to_i == params[:bomitem].to_i %>
                           <div class="collapse in" id="<%= (index+1).to_s + 'bom' %>">
                       <% else %> 
                           <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
@@ -215,7 +217,7 @@ Need Confirm
        
         <td class="text-info"><%= api[3] %></td>
         <td><p class="text-info">$<%= api[4] %></p></td>
-        <td><%= link_to t(:ok), bom_item_path(item, :mpn_id =>api[-2]), html_options={:method =>"patch"} %></td>
+        <td><%= link_to t(:ok), boms_choose_url(:id =>item, :mpn_id =>api[-2]), remote: true %></td>
     </tr>
       
   </tbody>

@@ -190,9 +190,9 @@ class BomItemController < ApplicationController
   	  	    #如果全局匹配不到，则需要检查关键字串中的单位，转换成标准的单位
   	  	    if @match_products.length == 0
                         Rails.logger.info("6")
-                        if not @bom_item.mpn.blank?
-                            @bom_api = search_in_api(@bom_item.mpn)
-                        end
+                        #if not @bom_item.mpn.blank?
+                            #@bom_api = search_in_api(@bom_item.mpn)
+                        #end
   	  		Rails.logger.info("t333333333333333333333333333333333333333333333333333333333333")
   	                #匹配出单位的字符串
   	  		ary_unit = str.scan(/([a-zA-Z]+)/)
@@ -240,9 +240,9 @@ class BomItemController < ApplicationController
                 
 	        #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
 	        if @match_products.length == 0
-                    if not @bom_item.mpn.blank?
-                        @bom_api = search_in_api(@bom_item.mpn)
-                    end
+                    #if not @bom_item.mpn.blank?
+                        #@bom_api = search_in_api(@bom_item.mpn)
+                    #end
   	            #匹配出单位的字符串
   	  	    #ary_unit = str.scan(/([a-zA-Z]+)/)
   	  	    #如果匹配出多个，则提示错误
@@ -275,6 +275,34 @@ class BomItemController < ApplicationController
 	    @counted1 = Hash.new(0)
             @match_products.each { |h| @counted1[h["package2"]] += 1 }
             @counted1 = Hash[@counted1.map {|k,v| [k,v.to_s] }]	
+        end
+        
+        #@bom_html = "<table class='table table-bordered table-striped table-hover'><thead><tr><td>产品描述</td><td>价格</td><td>操作</td></tr></thead><tbody>"
+        @bom_html = ""
+        unless @match_products.nil?
+            @match_products.each do |item|
+                @bom_html = @bom_html + "<tr>"
+                @bom_html = @bom_html + "<td>"
+                @bom_html = @bom_html + item.description.to_s
+                @bom_html = @bom_html + "</td>"
+                @bom_html = @bom_html + "<td>"
+                @bom_html = @bom_html + ActionController::Base.helpers.number_with_precision(item.price, precision: 4).to_s
+                @bom_html = @bom_html + "</td>"
+                @bom_html = @bom_html + "<td>"
+                @bom_html = @bom_html + "<a rel='nofollow' data-method='patch' data-remote='true' href='/bom_item/"+ params[:id].to_s + "?product_id=" + item.id.to_s + "&bomsuse=bomsuse'>OK</a>"
+                @bom_html = @bom_html + "</td>"
+                @bom_html = @bom_html + "</tr>"
+            end           
+        end
+        #@bom_html = @bom_html + "</tbody></table>"
+        #@bom_html = ActionController::Base.helpers.sanitize(@bom_html)
+        #@bom_html = raw(@bom_html)
+        Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
+        Rails.logger.info(@bom_html)
+        Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
+        if not params[:bomsuse].blank?
+            Rails.logger.info("----------------------------------------bomsuse")
+            render "boms/bom_find.js.erb"
         end	
     end
 
@@ -287,16 +315,20 @@ class BomItemController < ApplicationController
                     @bom_item.warn = false
                     @bom_item.mark = false
                     @bom_item.manual = true
+                    @bom_item.mpn_id = nil
+                    #@bom_item.mpn = nil
 	            @bom_item.save!
   
 
                     #累加产品被选择的次数
                     prefer = (Product.find(@bom_item.product_id)).prefer + 1
                     Product.find(@bom_item.product_id).update(prefer: prefer) 
-        
-                    flash[:success] = t('success_a')
-
-                    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    if params[:bomsuse].blank?
+                        flash[:success] = t('success_a')
+                        redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    else
+                        render "boms/choose_local.js.erb"
+                    end
                 else
 	            flash[:error] = t('error_d')
 	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
@@ -508,9 +540,9 @@ class BomItemController < ApplicationController
             end
             if result_w.length == 0
                 Rails.logger.info("15") 
-                if not @bom_item.mpn.blank?
-                   @bom_api = search_in_api(@bom_item.mpn)
-                end
+                #if not @bom_item.mpn.blank?
+                   #@bom_api = search_in_api(@bom_item.mpn)
+                #end
                 #result = Product.search(str,star: true,order: 'prefer DESC').to_ary
                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' ORDER BY `prefer` DESC").to_ary
             end

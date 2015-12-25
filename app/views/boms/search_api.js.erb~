@@ -1,0 +1,7 @@
+document.getElementById('<%= @item_id.to_s + 'man' %>').innerHTML='<%= @api_result[1] %>';
+document.getElementById('<%= @item_id.to_s + 'des' %>').innerHTML='<%= @api_result[3] %>';
+document.getElementById('<%= @item_id.to_s + 'pri' %>').innerHTML='<%= "$"+@api_result[4] %>';
+document.getElementById('<%= @item_id.to_s + 'pri' %>').innerHTML='<%= "$"+number_with_precision(@api_result[4], precision: 4) %>';
+document.getElementById('<%= @item_id.to_s + 'link' %>').href='';
+document.getElementById('<%= @item_id.to_s + 'link' %>').href='<%= "/boms/choose?id="+ @item_id.to_s + "&mpn_id=" + @api_result[-1].to_s %>';
+document.getElementById('<%= @item_id.to_s + 'link' %>').innerHTML='OK';

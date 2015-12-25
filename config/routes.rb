@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   root to: 'boms#upload'
   #root to: "boms#index"
   match '/boms/choose', to: 'boms#choose',via: 'get'
+  match '/boms/search_api', to: 'boms#search_api',via: 'post'
+  match '/bom_item/edit', to: 'bom_item#edit', via: 'post'
+
   resources :boms, only: [:index,:show, :new, :create, :destroy, :mark]
   #resources :boms
   resources :bom_item
@@ -24,6 +27,7 @@ Rails.application.routes.draw do
   #match 'choose'=> 'boms#choose'
   match '/mark', to: 'boms#mark', via: 'post'
   match '/bom_item/add', to: 'bom_item#add', via: 'post'
+  #
   match '/bom_item/select_with_ajax', to: 'bom_item#select_with_ajax', via: 'post'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

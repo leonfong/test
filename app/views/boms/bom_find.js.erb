@@ -1,0 +1,3 @@
+var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><th>Description</th><th>Price</th><th>Operate</th></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
+document.getElementById("<%= params[:id]+ 'tbody' %>").innerHTML = insertText; 
+

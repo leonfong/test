@@ -31,8 +31,8 @@
 <div class="row table table-hover">
         <div class="col-md-1"><h5><strong><%= t(:mark) %></strong></h5></div>         
         <div class="col-md-1"><h5><strong><%= t(:no) %></strong></h5></div>
-        <div class="col-md-3"><h5><strong><%= t(:intention_product) %></strong></h5></div>
-       
+        <div class="col-md-2"><h5><strong><%= t(:intention_product) %></strong></h5></div>
+        <div class="col-md-1"><h5><strong>Part</strong></h5></div>
         <div class="col-md-3"><h5><strong><%= t(:matching_products) %></strong></h5></div>
         <div class="col-md-1"><h5><strong><%= t(:unit_price) %></strong></h5></div>
         <div class="col-md-1"><h5><strong><%= t(:quantity) %></strong></h5></div>
@@ -57,9 +57,9 @@
               <div class="col-md-1"><%= button_to t(:mark),  {action: "mark", id: item.id}, class: "btn btn-info" %></div>
               <div class="col-md-1"><%= index+1 %><% if item.id.to_i == params[:bomitem].to_i-2 %><a name="Comment"></a><% end %></div>
 
-              <div class="col-md-3"><%= item.mpn.to_s + item.description.to_s %></div>
-          
-
+              <div class="col-md-2"><%= item.description %></div>
+              <div class="col-md-1"><%= item.mpn %></div>
+              <% unless item.product_id.nil? and item.mpn_id.nil?%>
                 <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
                 <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= number_with_precision(item.price, precision: 4)%></a></div>
                 <div class="col-md-1"><%= item.quantity %></div>
@@ -80,50 +80,62 @@
                       
                         <div class="well">
                           
-<div class="row">  
-<div class="col-md-12">                  
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Part</th>
-      <th>Manufacturer</th>
-      
-      <th>Description</th>
-      <th>Price</th>
-      <th><%= t(:operate) %></th>
-    </tr>
-  </thead>
+                       Has been matched successfully!
 
-          
-         
-  <tbody class="table table-hover">
- 
-    <tr class="active">
-        <td>
-            <%= form_tag('/boms/search_api', remote: true, class:"form-inline") do %>
-              <div class="form-group">
-              <lable for="mpn" , class="sr-only">Part : </lable>
-              <%= text_field_tag :mpn, params[:mpn], class:"form-control", size:2, placeholder:"Mpn"%>
-              <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2 , value: item.id.to_s %>
-             
-              <%= submit_tag "刷新", class:"btn btn-primary" %>
-              </div>
-          <% end %>
-        </td>
+
+
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+              <% if user_signed_in? %>
+              <% if current_user.email == "web@mokotechnology.com" %>
+              <td><%= t(:product_name) %></td>
        
-        <td><p class="text-info" id="<%= item.id.to_s + 'man' %>"></p></td>
-        <td><p class="text-info" id="<%= item.id.to_s + 'des' %>"></p></td>
-        <td><p class="text-info" id="<%= item.id.to_s + 'pri' %>"></p></td>
-        <td><%= link_to "", boms_choose_path(""), remote: true, id: item.id.to_s + 'link' %></td>
+              <% end %>
+              <% end %>
+              <td><%= t(:description) %></td>
+              <td><%= t(:price) %></td>
+              <td><%= t(:operate) %></td>
+            </tr>
+        </thead>
+        <% if not @all_bom_data.blank? %>
+        <tbody>
+            
+            <% @all_bom_data.each do |b| %>
+            <% if b.split(",")[0].to_s == item.id.to_s %>
+            
+                <tr>
+                  <% if user_signed_in? %>
+                  <% if current_user.email == "web@mokotechnology.com" %>
+                  <td><%= Product.find(b.split(",")[-1]).name %></td>
+                  <% end %>
+                  <% end %>
+                  
+                  <td><%= Product.find(b.split(",")[-1]).description %></td>
+                  <td> <%= number_with_precision(Product.find(b.split(",")[-1]).price, precision: 4) %></td>
+                  <td><%= link_to t(:ok), bom_item_path(item, :product_id =>b.split(",")[-1]), html_options={:method =>"patch"} %></td>
+                </tr>
+            <% end %>
+            <% end %>
+        </tbody>
+        <% end %>
+      </table>
+    </div>
+  </div>
 
-    </tr>
-      
-  </tbody>
-</table>
-</div>
-</div>
 
-<!--
+
+
+
+
+
+
+
+
+
 <% @bom_api_all.each do |api| %>
      <% if api[-1] == item.id %>
 <div class="row">
@@ -140,12 +152,10 @@
   </thead>
   <tbody>
  
-
     <tr>
         <td><p class="text-info"><%= api[0] %></p></td>
         <td><p class="text-info"><%= api[1] %></p></td>
        
-
         <td class="text-info"><%= api[3] %></td>
         <td><p class="text-info">$<%= api[4] %></p></td>
         <td><%= link_to t(:ok), boms_choose_url(:id =>item, :mpn_id =>api[-2]), remote: true %></td>
@@ -153,80 +163,68 @@
       
   </tbody>
 </table>
-</div>  
+</div>
+    
     <% end %>
 <% end %>
--->
+                        </div>
+                     </div>
+                  </div>
+                </div>
+                    
 
+              <% else %>
+
+                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a></div>
+
+                <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"></a></div>
+                <div class="col-md-1"><%= item.quantity %></div>
+                <div class="col-md-1"><%= link_to t(:manually_select),  edit_bom_item_path(item), class: "btn btn-danger" %></div>
+                <div class="col-md-1"><a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
+                      Other
+                    </a>    
+                </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <% if item.id.to_i == params[:bomitem].to_i %>
+                          <div class="collapse in" id="<%= (index+1).to_s + 'bom' %>">
+                      <% else %> 
+                          <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
+                      <% end %>
+                        <div class="well">
+Need Confirm
+
+<% @bom_api_all.each do |api| %>
+     <% if api[-1] == item.id %>
 <div class="row">
-  <div class="col-md-12">
-      <p> <%= t(:query_if) %> </p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Manufacturer</th>
       
+      <th>Description</th>
+      <th>Price</th>
+      <th><%= t(:operate) %></th>
+    </tr>
+  </thead>
+  <tbody>
+ 
+    <tr>
+        <td><p class="text-info"><%= api[0] %></p></td>
+        <td><p class="text-info"><%= api[1] %></p></td>
+       
+        <td class="text-info"><%= api[3] %></td>
+        <td><p class="text-info">$<%= api[4] %></p></td>
+        <td><%= link_to t(:ok), boms_choose_url(:id =>item, :mpn_id =>api[-2]), remote: true %></td>
+    </tr>
       
-      <%= form_tag(edit_bom_item_path(item), method:"get", remote: true, class:"form-inline") do %>
-       <div class="form-group">
-        <p>
-          <lable for="bomsuse", class="sr-only"></lable>
-          <%= text_field_tag :bomsuse, params[:bomsuse], class:"sr-only",value:"bomsuse" %>
-          <lable for="q" , class="sr-only">Des : </lable>
-          <%= text_field_tag :q, params[:q], class:"form-control", placeholder:"Description" %>
-          <lable for="p" , class="sr-only">Ref : </lable>
-          <%= text_field_tag :p, params[:p], class:"form-control", placeholder:"RefDes" %>
-          <%= submit_tag t(:search), :name => nil , class:"btn btn-primary"%>
-        </p>
-       </div>
-     <% end %>
-  </div>
+  </tbody>
+</table>
 </div>
-
-
-  <div class="row">
-    <div class="col-md-12">
-      <table class="table table-bordered table-striped table-hover">
-        <thead>
-            <tr>
-              <% if user_signed_in? %>
-              <% if current_user.email == "web@mokotechnology.com" %>
-              <td><%= t(:product_name) %></td>
-       
-              <% end %>
-              <% end %>
-              <td><%= t(:description) %></td>
-              <td><%= t(:price) %></td>
-              <td><%= t(:operate) %></td>
-            </tr>
-        </thead>
-       
-        <tbody>
-           <div id="<%= item.id.to_s + 'tbody' %>">
-            <!--
-                <tr>
-                  <% if user_signed_in? %>
-                  <% if current_user.email == "web@mokotechnology.com" %>
-                  <td><%= item.name %></td>
-                  <% end %>
-                  <% end %>
-                  
-                  <td></td>
-                  <td></td>
-                  <td><%= link_to "", bom_item_path(item, :product_id =>""), html_options={:method =>"patch"} %></td>
-                </tr>
-           -->
-           </div>
-        </tbody>
-        
-      </table>
-    </div>
     
-  </div>
-
-
-
-
-
-
-
-
+    <% end %>
+<% end %>
 
 
 
@@ -234,7 +232,8 @@
                      </div>
                   </div>
                 </div>
-
+                
+              <% end %>
               
             </div>
           <% end %>

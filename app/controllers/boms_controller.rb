@@ -377,9 +377,8 @@ WHERE
          @bom_item.mark = true
          @bom_item.save
 	 #redirect_to :back
-         redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
-         #redirect_to bom_path(@bom_item.bom, :anchor => "Comment");
-         
+         #redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+         render "mark_local.js.erb"
     end    
 
     def upload

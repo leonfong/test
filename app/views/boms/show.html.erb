@@ -54,7 +54,7 @@
       <% end %>
 
            
-              <div class="col-md-1"><%= button_to t(:mark),  {action: "mark", id: item.id}, class: "btn btn-info" %></div>
+              <div class="col-md-1"><%= button_to t(:mark),  {action: "mark", id: item.id}, remote: true, class: "btn btn-info" %></div>
               <div class="col-md-1"><%= index+1 %><% if item.id.to_i == params[:bomitem].to_i-2 %><a name="Comment"></a><% end %></div>
 
               <div class="col-md-3"><%= item.mpn.to_s + item.description.to_s %></div>

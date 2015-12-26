@@ -65,17 +65,24 @@
                 <div class="col-md-1"><%= item.quantity %></div>
                 <div class="col-md-1"><%= link_to t(:choose_other),  edit_bom_item_path(item), class: "btn btn-success" %></div>
                 <div class="col-md-1">
-               
-                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#<%= (index+1).to_s + 'bom' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>">
-                      Other
-                    </a>    
+<script>
+function change_p(id){
+if (document.getElementById(id+'dow').className=='collapse in')
+{document.getElementById(id+'but').className='glyphicon glyphicon-plus';}
+else
+{document.getElementById(id+'but').className='glyphicon glyphicon-minus';}
+}
+</script>
+                    <button  class="btn btn-primary" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>" onclick="change_p(<%= item.id.to_s %>)">
+                      <span id="<%= item.id.to_s + 'but' %>" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>    
                 </div>
                   <div class="row">
                     <div class="col-md-12">
                       <% if item.id.to_i == params[:bomitem].to_i %>
-                          <div class="collapse in" id="<%= (index+1).to_s + 'bom' %>">
+                          <div id="<%= item.id.to_s + 'dow' %>" class="collapse in" >
                       <% else %> 
-                          <div class="collapse" id="<%= (index+1).to_s + 'bom' %>">
+                          <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
                       <% end %>
                       
                         <div class="well">
@@ -87,7 +94,6 @@
     <tr>
       <th>Part</th>
       <th>Manufacturer</th>
-      
       <th>Description</th>
       <th>Price</th>
       <th><%= t(:operate) %></th>
@@ -103,7 +109,7 @@
             <%= form_tag('/boms/search_api', remote: true, class:"form-inline") do %>
               <div class="form-group">
               <lable for="mpn" , class="sr-only">Part : </lable>
-              <%= text_field_tag :mpn, params[:mpn], class:"form-control", size:2, placeholder:"Mpn"%>
+              <%= text_field_tag :mpn, params[:mpn], class:"form-control", size:15, value: item.mpn.to_s, placeholder:"Mpn"%>
               <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2 , value: item.id.to_s %>
              
               <%= submit_tag "刷新", class:"btn btn-primary" %>
@@ -169,9 +175,9 @@
           <lable for="bomsuse", class="sr-only"></lable>
           <%= text_field_tag :bomsuse, params[:bomsuse], class:"sr-only",value:"bomsuse" %>
           <lable for="q" , class="sr-only">Des : </lable>
-          <%= text_field_tag :q, params[:q], class:"form-control", placeholder:"Description" %>
+          <%= text_field_tag :q, params[:q], class:"form-control", value: item.description.to_s, placeholder:"Description" %>
           <lable for="p" , class="sr-only">Ref : </lable>
-          <%= text_field_tag :p, params[:p], class:"form-control", placeholder:"RefDes" %>
+          <%= text_field_tag :p, params[:p], class:"form-control", value: item.part_code.to_s, placeholder:"RefDes" %>
           <%= submit_tag t(:search), :name => nil , class:"btn btn-primary"%>
         </p>
        </div>
@@ -206,6 +212,7 @@
             </div>
           <% end %>
 </div>
+
 <%
 meta title: @itemall,
      description: @itemall,

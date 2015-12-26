@@ -61,7 +61,7 @@
           
 
                 <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
-                <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= number_with_precision(item.price, precision: 4)%></a></div>
+                <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "$" + number_with_precision(item.price, precision: 4).to_s %></a></div>
                 <div class="col-md-1"><%= item.quantity %></div>
                 <div class="col-md-1"><%= link_to t(:choose_other),  edit_bom_item_path(item), class: "btn btn-success" %></div>
                 <div class="col-md-1">

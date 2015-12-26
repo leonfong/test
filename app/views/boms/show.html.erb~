@@ -129,40 +129,7 @@ else
 </div>
 </div>
 
-<!--
-<% @bom_api_all.each do |api| %>
-     <% if api[-1] == item.id %>
-<div class="row">
-<table class="table">
-  <thead>
-    <tr>
-      <th>Part</th>
-      <th>Manufacturer</th>
-      
-      <th>Description</th>
-      <th>Price</th>
-      <th><%= t(:operate) %></th>
-    </tr>
-  </thead>
-  <tbody>
- 
 
-    <tr>
-        <td><p class="text-info"><%= api[0] %></p></td>
-        <td><p class="text-info"><%= api[1] %></p></td>
-       
-
-        <td class="text-info"><%= api[3] %></td>
-        <td><p class="text-info">$<%= api[4] %></p></td>
-        <td><%= link_to t(:ok), boms_choose_url(:id =>item, :mpn_id =>api[-2]), remote: true %></td>
-    </tr>
-      
-  </tbody>
-</table>
-</div>  
-    <% end %>
-<% end %>
--->
 
 <div class="row">
   <div class="col-md-12">
@@ -177,7 +144,7 @@ else
           <lable for="q" , class="sr-only">Des : </lable>
           <%= text_field_tag :q, params[:q], class:"form-control", value: item.description.to_s, placeholder:"Description" %>
           <lable for="p" , class="sr-only">Ref : </lable>
-          <%= text_field_tag :p, params[:p], class:"form-control", placeholder:"RefDes" %>
+          <%= text_field_tag :p, params[:p], class:"form-control", value: item.part_code.to_s, placeholder:"RefDes" %>
           <%= submit_tag t(:search), :name => nil , class:"btn btn-primary"%>
         </p>
        </div>

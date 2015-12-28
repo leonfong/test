@@ -121,7 +121,7 @@ else
               </div>
           <% end %>
         </td>
-        <td><a class="text-muted" id="<%= item.id.to_s + 'ds' %>"></a></td>
+        <td><a class="text-muted" id="<%= item.id.to_s + 'ds' %>" target="_black"></a></td>
         <td><a class="text-muted" id="<%= item.id.to_s + 'man' %>"></a></td>
         <td><a class="text-primary" id="<%= item.id.to_s + 'des' %>" target="_black"></a></td>
         <td><a class="text-muted" id="<%= item.id.to_s + 'pri' %>"></a></td>

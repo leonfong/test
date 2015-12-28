@@ -591,13 +591,13 @@ WHERE
                                             d_value = d['value'] 
                                         end
                                     end
-                                    if d_value = ""
+                                    if d_value == ""
                                         if d['attribution']['sources'][0]['name'] == f['seller']['name']
                                         #if d['attribution']['sources'][0]['name'] == "Digi-Key"
                                             d_value = d['value'] 
                                         end  
                                     end
-                                    if d_value = ""
+                                    if d_value == ""
                                         if d['value'] != ""
                                         #if d['attribution']['sources'][0]['name'] == "Digi-Key"
                                             d_value = d['value'] 

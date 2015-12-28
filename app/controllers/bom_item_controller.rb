@@ -3,6 +3,7 @@ require 'json'
 require 'net/http'
 
 class BomItemController < ApplicationController
+skip_before_action :verify_authenticity_token
     #respond_to :json, :html
     def add
         Rails.logger.info("add-------------------------------------add")
@@ -276,31 +277,79 @@ class BomItemController < ApplicationController
             @match_products.each { |h| @counted1[h["package2"]] += 1 }
             @counted1 = Hash[@counted1.map {|k,v| [k,v.to_s] }]	
         end
-        
-        #@bom_html = "<table class='table table-bordered table-striped table-hover'><thead><tr><td>产品描述</td><td>价格</td><td>操作</td></tr></thead><tbody>"
-        @bom_html = ""
-        unless @match_products.nil?
-            @match_products.each do |item|
-                @bom_html = @bom_html + "<tr>"
-                @bom_html = @bom_html + "<td>"
-                @bom_html = @bom_html + item.description.to_s
-                @bom_html = @bom_html + "</td>"
-                @bom_html = @bom_html + "<td>"
-                @bom_html = @bom_html + ActionController::Base.helpers.number_with_precision(item.price, precision: 4).to_s
-                @bom_html = @bom_html + "</td>"
-                @bom_html = @bom_html + "<td>"
-                @bom_html = @bom_html + "<a rel='nofollow' data-method='patch' data-remote='true' href='/bom_item/"+ params[:id].to_s + "?product_id=" + item.id.to_s + "&bomsuse=bomsuse'>OK</a>"
-                @bom_html = @bom_html + "</td>"
-                @bom_html = @bom_html + "</tr>"
-            end           
-        end
-        #@bom_html = @bom_html + "</tbody></table>"
-        #@bom_html = ActionController::Base.helpers.sanitize(@bom_html)
-        #@bom_html = raw(@bom_html)
-        Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
-        Rails.logger.info(@bom_html)
-        Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
         if not params[:bomsuse].blank?
+            #@bom_html = "<table class='table table-bordered table-striped table-hover'><thead><tr><td>产品描述</td><td>价格</td><td>操作</td></tr></thead><tbody>"
+            @bom_html = ""
+            unless @match_products.nil?
+                @match_products.each do |item|
+                    @bom_html = @bom_html + "<tr>"
+                    @bom_html = @bom_html + "<td>"
+                    @bom_html = @bom_html + item.description.to_s
+                    @bom_html = @bom_html + "</td>"
+                    @bom_html = @bom_html + "<td>"
+                    @bom_html = @bom_html + ActionController::Base.helpers.number_with_precision(item.price, precision: 4).to_s
+                    @bom_html = @bom_html + "</td>"
+                    @bom_html = @bom_html + "<td>"
+                    @bom_html = @bom_html + "<a rel='nofollow' data-method='patch' data-remote='true' href='/bom_item/"+ params[:id].to_s + "?product_id=" + item.id.to_s + "&bomsuse=bomsuse'>OK</a>"
+                    @bom_html = @bom_html + "</td>"
+                    @bom_html = @bom_html + "</tr>"
+                end           
+            end
+        
+
+
+            @bom_lab = '<table class="table table-bordered"><thead><tr><td><strong>' + t(:current_search) + '：</strong></td></tr></thead><tbody>'
+            unless @package2 and @ptype
+                @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "：" 
+                unless @counted.nil?
+                    @counted.each do |key, value|
+                        #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %>
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/bom_item/' + @bom_item.id.to_s + "/edit?p=" + params[:p].to_s + "&amp;part_name=" + key + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                        @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                    end
+                end 
+                @bom_lab = @bom_lab + "</td></tr>"
+
+                @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "： "
+                unless @counted1.nil?
+                    @counted1.each do |key, value| 
+                        #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %>
+                        #<a href="/bom_item/8315/edit?p=C6-1%2CC7-1%2CC67-1%2CC68-1&amp;package2=0402&amp;q=CAP+CER+10PF+16V+NP0+0402">0402</a>
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/bom_item/' + @bom_item.id.to_s + "/edit?p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                        @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                    end
+                end
+                @bom_lab = @bom_lab + "</td></tr>"
+            else
+                @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "： "
+                unless @counted.nil? 
+                    @counted.each do |key, value| 
+                        #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> 
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/bom_item/' + @bom_item.id.to_s + "/edit?p=" + params[:p].to_s + "&amp;part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>" 
+                        @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                    end
+                end
+                @bom_lab = @bom_lab + "</td></tr>"
+                @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "："
+                unless @counted1.nil?
+                    @counted1.each do |key, value|
+                        #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %>
+                         @bom_lab = @bom_lab + '<a data-remote="true" href="/bom_item/' + @bom_item.id.to_s + "/edit?p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                        @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                    end
+                end
+                @bom_lab = @bom_lab + "</td></tr>"
+            end
+            @bom_lab = @bom_lab + "</tbody></table>"
+
+
+            #@bom_html = @bom_html + "</tbody></table>"
+            #@bom_html = ActionController::Base.helpers.sanitize(@bom_html)
+            #@bom_html = raw(@bom_html)
+            Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
+            Rails.logger.info(@bom_html)
+            Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
+        
             Rails.logger.info("----------------------------------------bomsuse")
             render "boms/bom_find.js.erb"
         end	

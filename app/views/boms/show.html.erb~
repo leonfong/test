@@ -61,7 +61,7 @@
           
 
                 <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
-                <% if not price.blank? %>
+                <% if not item.price.blank? %>
                     <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "$" + number_with_precision(item.price, precision: 4).to_s %></a></div>
                 <% else %>
                     <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"></a></div>
@@ -116,7 +116,7 @@ else
               <%= text_field_tag :mpn, params[:mpn], class:"form-control", size:15, value: item.mpn.to_s, placeholder:"Mpn"%>
               <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2 , value: item.id.to_s %>
              
-              <%= submit_tag "刷新", class:"btn btn-primary" %>
+              <%= submit_tag t(:search), class:"btn btn-primary" %>
               </div>
           <% end %>
         </td>
@@ -157,12 +157,17 @@ else
 </div>
 
 
-  <div class="row">
-    <div class="col-md-12" id="<%= item.id.to_s + 'tbody' %>">
-     
-    </div>
-    
+
+<div class="row">
+  <div class="col-md-12" id="<%= item.id.to_s + 'lab' %>">
   </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12" id="<%= item.id.to_s + 'tbody' %>">  
+  </div>    
+</div>
 
 
 

@@ -1,3 +1,4 @@
-var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><td>Description</td><td>Price</td><td>Operate</td></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
+var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><th>Description</th><th>Price</th><th>Operate</th></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
 document.getElementById("<%= params[:id]+ 'tbody' %>").innerHTML = insertText; 
-
+var insertLab = "<%= raw @bom_lab %>";
+document.getElementById("<%= params[:id]+ 'lab' %>").innerHTML = insertLab; 

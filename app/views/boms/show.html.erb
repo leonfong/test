@@ -60,9 +60,9 @@
               <div class="col-md-3"><%= item.description.to_s %></div>
           
 
-                <div class="col-md-3"><a name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
+                <div class="col-md-3"><a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
                 <% if not item.price.blank? %>
-                    <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "$" + number_with_precision(item.price, precision: 4).to_s %></a></div>
+                    <div class="col-md-1"><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "$" + number_with_precision(item.price, precision: 4).to_s %></a></div>
                 <% else %>
                     <div class="col-md-1"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"></a></div>
                 <% end %>
@@ -97,6 +97,7 @@ else
   <thead>
     <tr>
       <th>Part</th>
+      <th>Datasheets</th>
       <th>Manufacturer</th>
       <th>Description</th>
       <th>Price</th>
@@ -120,10 +121,10 @@ else
               </div>
           <% end %>
         </td>
-       
-        <td><a class="text-info" id="<%= item.id.to_s + 'man' %>"></a></td>
-        <td><a class="text-info" id="<%= item.id.to_s + 'des' %>" target="_black"></a></td>
-        <td><a class="text-info" id="<%= item.id.to_s + 'pri' %>"></a></td>
+        <td><a class="text-muted" id="<%= item.id.to_s + 'ds' %>" target="_black"></a></td>
+        <td><a class="text-muted" id="<%= item.id.to_s + 'man' %>"></a></td>
+        <td><a class="text-primary" id="<%= item.id.to_s + 'des' %>" target="_black"></a></td>
+        <td><a class="text-muted" id="<%= item.id.to_s + 'pri' %>"></a></td>
         <td><%= link_to "", boms_choose_path(""), remote: true, id: item.id.to_s + 'link' %></td>
 
     </tr>

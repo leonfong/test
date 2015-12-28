@@ -537,7 +537,8 @@ WHERE
             url += '&queries=' + URI.encode(JSON.generate([{:mpn => mpn}]))
             url += '&apikey=809ad885'
             url += '&include[]=descriptions'
-     
+            url += '&include[]=datasheets'
+
             resp = Net::HTTP.get_response(URI.parse(url))
             server_response = JSON.parse(resp.body)
             Rails.logger.info("prices_all--------------------------------------------------------------------------")
@@ -569,11 +570,13 @@ WHERE
                     result['items'].each do |part|
                         if part['mpn'].upcase == mpn.upcase
                             Rails.logger.info("part['mpn']------------------------------------------------------------------part['mpn']")
-                            Rails.logger.info(part['mpn'].inspect)   
+                            Rails.logger.info(part['mpn'].inspect) 
+                            Rails.logger.info(part['datasheets'][0]['url'].inspect)   
                             Rails.logger.info("part['mpn']------------------------------------------------------------------part['mpn']") 
                             @api_result << part['mpn']
                             #mpn_new.mpn = part['mpn']
                             mpn_new.mpn = mpn
+                            mpn_new.datasheets = part['datasheets'][0]['url']
                             @api_result << part['brand']['name'] 
                             mpn_new.manufacturer = part['brand']['name'] 
                             for f in part['offers']
@@ -609,7 +612,9 @@ WHERE
                         end
                     end
                 end
+                
                 mpn_new.save
+                @api_result << mpn_new.datasheets
                 @api_result << mpn_new.id
                 #result = api_result
             end
@@ -620,6 +625,7 @@ WHERE
             @api_result << mpn_item['authorized_distributor']
             @api_result << mpn_item['description']
             @api_result << mpn_item['price']
+            @api_result << mpn_item['datasheets']
             @api_result << mpn_item['id']
         end
         #result = @api_result

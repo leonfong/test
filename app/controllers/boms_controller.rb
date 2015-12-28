@@ -571,12 +571,16 @@ WHERE
                         if part['mpn'].upcase == mpn.upcase
                             Rails.logger.info("part['mpn']------------------------------------------------------------------part['mpn']")
                             Rails.logger.info(part['mpn'].inspect) 
-                            Rails.logger.info(part['datasheets'][0]['url'].inspect)   
+                            #Rails.logger.info(part['datasheets'][0].inspect)   
                             Rails.logger.info("part['mpn']------------------------------------------------------------------part['mpn']") 
                             @api_result << part['mpn']
                             #mpn_new.mpn = part['mpn']
                             mpn_new.mpn = mpn
-                            mpn_new.datasheets = part['datasheets'][0]['url']
+                            if part['datasheets'] != []
+                                mpn_new.datasheets = part['datasheets'][0]['url']
+                            else
+                                mpn_new.datasheets = nil   
+                            end
                             @api_result << part['brand']['name'] 
                             mpn_new.manufacturer = part['brand']['name'] 
                             for f in part['offers']

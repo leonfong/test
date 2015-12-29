@@ -705,6 +705,12 @@ skip_before_action :verify_authenticity_token
                 if query_str.include?"Ω"
                     query_str = query_str.gsub("Ω","r")
                 end
+                if query_str.include?"e"
+                    query_str = query_str.gsub("e","r")
+                end
+                if query_str.include?"E"
+                    query_str = query_str.gsub("E","r")
+                end
                 #ary_all = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 
                 ary_all = query_str.to_s.scan(/[0-9]\.?[0-9]*[mMkKuUrRΩ][0-9]\.?[0-9]*/)
@@ -743,7 +749,8 @@ skip_before_action :verify_authenticity_token
                 
                     
                     if value2_all != []
-                        value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[mMkKuUrR]/.match(value2_all.join(" ").to_s)
+                        #value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[mMkKuUrR]/.match(value2_all.join(" ").to_s)
+                        value2 = /([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][0-9]+)?[mMkKuUrR]/.match(value2_all.join(" ").to_s)
                         if value2.blank?
                             value2_use = "nothing"
                         else
@@ -878,6 +885,12 @@ skip_before_action :verify_authenticity_token
                 if query_str.include?"Ω"
                     query_str = query_str.gsub("Ω","r")
                 end
+                if query_str.include?"e"
+                    query_str = query_str.gsub("e","r")
+                end
+                if query_str.include?"E"
+                    query_str = query_str.gsub("E","r")
+                end
                 #ary_all = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 
                 ary_all = query_str.to_s.scan(/[0-9]\.?[0-9]*[mMkKuUrRΩ][0-9]\.?[0-9]*/)
@@ -908,7 +921,8 @@ skip_before_action :verify_authenticity_token
                 
                     
                     if value2_all != []
-                        value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[mMkKuUrR]/.match(value2_all.join(" ").to_s)
+                        #value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[mMkKuUrR]/.match(value2_all.join(" ").to_s)
+                        value2 = /([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][0-9]+)?[mMkKuUrR]/.match(value2_all.join(" ").to_s)
                         if value2.blank?
                             value2_use = "nothing"
                         else

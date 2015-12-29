@@ -644,6 +644,8 @@ skip_before_action :verify_authenticity_token
                 query_str[".0uF"]="uF"
             elsif query_str.include?"0.1uF"
                 query_str["0.1uF"]="100nF"
+            elsif query_str.include?"0.1UF"
+                query_str["0.1UF"]="100nF"
             end
             if query_str.include?"Y5V"    
                 query_str["Y5V"]=""
@@ -767,6 +769,19 @@ skip_before_action :verify_authenticity_token
                     if value3_all != []
                         value3 = value3_all[0]
                     end
+                    Rails.logger.info("value2_use-------------------------------------------------------------value2_usevalue2_usevalue2_use")
+                    Rails.logger.info(value2_use.inspect)
+                    Rails.logger.info("value2_use-------------------------------------------------------------value2_usevalue2_usevalue2_use")
+                    if value2_use =~ /pf/i
+                        Rails.logger.info("value2_use-------------------------------------------------------------value2_usevalue2_usevalue2_use")
+                        if value2_use.gsub!(/\D/, "").to_i > 999
+                            Rails.logger.info("value2_use---------999999---------999-----value2_999")
+                            Rails.logger.info(value2_use.inspect)
+                            value2_use = (value2_use.to_i/1000).to_s + "nF"
+                            Rails.logger.info(value2_use.inspect)
+                            Rails.logger.info("value2_use---------999999---------999-----value2_999")
+                        end
+                    end
                     ary_q[0] = value2_use
                     ary_q[1] = value3
                     #获取封装
@@ -808,6 +823,8 @@ skip_before_action :verify_authenticity_token
                     query_str[".0uF"]="uF"
                 elsif query_str.include?"0.1uF"
                     query_str["0.1uF"]="100nF"
+                elsif query_str.include?"0.1UF"
+                    query_str["0.1UF"]="100nF"
                 end
                 if query_str.include?"Y5V"    
                     query_str["Y5V"]=""
@@ -849,6 +866,19 @@ skip_before_action :verify_authenticity_token
                 value3 = "nothing"
                 if value3_all != []
                     value3 = value3_all[0]
+                end
+                Rails.logger.info("value2_use-------------------------------------------------------------value2_usevalue2_usevalue2_use")
+                Rails.logger.info(value2_use.inspect)
+                Rails.logger.info("value2_use-------------------------------------------------------------value2_usevalue2_usevalue2_use")
+                if value2_use =~ /pf/i
+                    Rails.logger.info("value2_use-------------------------------------------------------------value2_usevalue2_usevalue2_use")
+                    if value2_use.gsub!(/\D/, "").to_i > 999
+                        Rails.logger.info("value2_use---------999999---------999-----value2_999")
+                        Rails.logger.info(value2_use.inspect)
+                        value2_use = (value2_use.to_i/1000).to_s + "nF"
+                        Rails.logger.info(value2_use.inspect)
+                        Rails.logger.info("value2_use---------999999---------999-----value2_999")
+                    end
                 end
                 ary_q[0] = value2_use
                 ary_q[1] = value3

@@ -677,7 +677,7 @@ skip_before_action :verify_authenticity_token
             #获取电压
             if value2_use != "nothing"
                 value3_all = ary_all.join(" ").split(" ").grep(/[vV]/)
-                value3 = "nothing"
+                value3 = "50v"
                 if value3_all != []
                     value3 = value3_all[0]
                 end

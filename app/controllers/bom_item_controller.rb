@@ -776,7 +776,7 @@ skip_before_action :verify_authenticity_token
                         value2_use = value2_use + "F"
                     end
                     if value2_use =~ /pf/i
-                        Rails.logger.info("value2_use-------------------------------------------------------------value2_usevalue2_usevalue2_use")
+                        Rails.logger.info("value2_use-------------------------------------------------------value2_usevalue2_usevalue2_use")
                         if value2_use.gsub(/\D/, "").to_i > 999
                             Rails.logger.info("value2_use---------999999---------999-----value2_999")
                             Rails.logger.info(value2_use.inspect)
@@ -866,7 +866,7 @@ skip_before_action :verify_authenticity_token
                 end
                 #获取电压
                 value3_all = ary_all.join(" ").split(" ").grep(/[vV]/)
-                value3 = "nothing"
+                value3 = "50v"
                 if value3_all != []
                     value3 = value3_all[0]
                 end

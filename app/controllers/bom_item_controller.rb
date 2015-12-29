@@ -346,9 +346,9 @@ skip_before_action :verify_authenticity_token
             #@bom_html = @bom_html + "</tbody></table>"
             #@bom_html = ActionController::Base.helpers.sanitize(@bom_html)
             #@bom_html = raw(@bom_html)
-            Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
-            Rails.logger.info(@bom_html)
-            Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
+            #Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
+            #Rails.logger.info(@bom_html)
+            #Rails.logger.info("bomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsusebomsuse")
         
             Rails.logger.info("----------------------------------------bomsuse")
             render "boms/bom_find.js.erb"
@@ -851,13 +851,13 @@ skip_before_action :verify_authenticity_token
             #elsif  ( part_code[0] =~ /[Rr]/ )
             elsif  ( part and part.part_name == "RES" )
                 if query_str.include?"o"
-                    query_str["o"]="r"
+                    query_str = query_str.gsub("o","r")
                 end
                 if query_str.include?"O"
-                    query_str["O"]="r"
+                    query_str = query_str.gsub("O","r")
                 end
                 if query_str.include?"Ω"
-                    query_str["Ω"]="r"
+                    query_str = query_str.gsub("Ω","r")
                 end
                 #ary_all = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 

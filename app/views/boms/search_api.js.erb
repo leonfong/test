@@ -1,4 +1,4 @@
-<% if params[:mpn] != "" %>
+<% unless params[:mpn] == "" or @api_result.blank? %>
     document.getElementById('<%= @item_id.to_s + 'ds' %>').href='<%= @api_result[-2].to_s %>';
     document.getElementById('<%= @item_id.to_s + 'ds' %>').innerHTML='<%= image_tag "datasheet.png" %>';
     document.getElementById('<%= @item_id.to_s + 'man' %>').innerHTML='<%= @api_result[1].to_s %>';

@@ -145,7 +145,8 @@ skip_before_action :verify_authenticity_token
                     if str.split(" ")[0] == "0R" or str.split(" ")[0] == "0r" or str.split(" ")[0] == "0o" or str.split(" ")[0] == "0O"
                         sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
                     else
-                        sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'" 
+                        #sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'" 
+                        sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'" 
                     end
                     sql_b = " ORDER BY `prefer` DESC" 
                 end
@@ -528,7 +529,8 @@ skip_before_action :verify_authenticity_token
                 if str.split(" ")[0] == "0R" or str.split(" ")[0] == "0r" or str.split(" ")[0] == "0o" or str.split(" ")[0] == "0O"
                     sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
                 else
-                    sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'" 
+                    #sql_a = "SELECT * FROM `products` WHERE `value2` LIKE '%"+str.split(" ")[0]+"%'"
+                    sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'" 
                 end
             end
             sql_b = " ORDER BY `prefer` DESC" 
@@ -681,13 +683,13 @@ skip_before_action :verify_authenticity_token
             else
                 #判断是否电阻
                 if query_str.include?"o"
-                    query_str["o"]="r"
+                    query_str = query_str.gsub("o","r")
                 end
                 if query_str.include?"O"
-                    query_str["O"]="r"
+                    query_str = query_str.gsub("O","r")
                 end
                 if query_str.include?"Ω"
-                    query_str["Ω"]="r"
+                    query_str = query_str.gsub("Ω","r")
                 end
                 #ary_all = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 

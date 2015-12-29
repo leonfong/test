@@ -850,7 +850,7 @@ WHERE
             else
                 value2_all = ary_all.join(" ").to_s.split(" ").grep(/[uUnNpPmM]/)                 
                 if value2_all != []
-                    value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[uUnNpPmM]/.match(value2_all.join(" ").to_s)
+                    value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[uUnNpPmM]+[F]?/.match(value2_all.join(" ").to_s)
                     if value2.blank?
                         value2_use = "nothing"
                     else
@@ -1007,7 +1007,7 @@ WHERE
                 else
                     value2_all = ary_all.join(" ").to_s.split(" ").grep(/[uUnNpPmM]/)                 
                     if value2_all != []
-                        value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[uUnNpPmM]/.match(value2_all.join(" ").to_s)
+                        value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[uUnNpPmM]+[F]?/.match(value2_all.join(" ").to_s)
                         if value2.blank?
                             value2_use = "nothing"
                         else

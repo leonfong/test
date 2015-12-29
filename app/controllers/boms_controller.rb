@@ -714,10 +714,10 @@ WHERE
                         end
                     else
                         Rails.logger.info("3")
-                        result_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[-1]+"' AND `ptype` = '"+part.part_name+"' "+find_bom+sql_b).to_ary
+                        result_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+part.part_name+"' "+find_bom+sql_b).to_ary
                         if result_w.blank?
                             Rails.logger.info("4")
-                            result_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[-1]+"' AND `ptype` = '"+part.part_name+"'"+  sql_b).to_ary
+                            result_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+part.part_name+"'"+  sql_b).to_ary
                             if result_w.blank?
                                 Rails.logger.info("5")
                                 if (part_code[0] =~ /[Cc]/ and str.split(" ")[0]=~ /[^uU]/)

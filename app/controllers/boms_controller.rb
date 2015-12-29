@@ -357,7 +357,7 @@ WHERE
             Rails.logger.info(all_m_bom.inspect) 
             Rails.logger.info("match_product -------------------------------------------------match_product")	
 	    #redirect_to @bom, bom_data: all_m_bom, notice: t('file') + " #{@bom.name} " + t('success_b')
-            redirect_to bom_path(@bom, bom_data: all_m_bom.to_json)
+            redirect_to bom_url(@bom, bom_data: all_m_bom.to_json)
 	else
 	    redirect_to action: 'upload', notice: t('file') + " #{@bom.name} " + t('error_e')
 	end

@@ -16,11 +16,12 @@ Rails.application.routes.draw do
   root to: 'boms#upload'
   #root to: "boms#index"
   match '/boms/choose', to: 'boms#choose',via: 'get'
+  match '/boms', to: 'boms#index',via: 'get'
   match '/boms/search_api', to: 'boms#search_api',via: 'post'
   match '/bom_item/edit', to: 'bom_item#edit', via: 'post'
 
-  resources :boms, only: [:index,:show, :new, :create, :destroy, :mark]
-  #resources :boms
+  #resources :boms, only: [:index,:show, :new, :create, :destroy, :mark]
+  resources :boms
   resources :bom_item
   match '/search', to: 'boms#search', via: 'get'
   

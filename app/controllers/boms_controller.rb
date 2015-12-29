@@ -649,8 +649,10 @@ WHERE
 
         def search_bom (query_str,part_code)
             #str = get_query_str(query_str)
-            ary2 = part_code.upcase.to_s.scan(/[A-Z]+/)
-	    part_code = ary2[0]
+            if not part_code.blank?
+                ary2 = part_code.upcase.to_s.scan(/[A-Z]+/)
+	        part_code = ary2[0]
+            end
             str = get_query_str_new(query_str,part_code)            
             Rails.logger.info("0000000000000000000000000000000000000aaa")
             Rails.logger.info(str)

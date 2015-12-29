@@ -77,7 +77,7 @@ skip_before_action :verify_authenticity_token
 	    #str = get_query_str(params[:q])
 	    #获取位号
 	    part_code = params[:p]
-	    ary2 = part_code.to_s.scan(/[A-Z]+/)
+	    ary2 = part_code.upcase.to_s.scan(/[A-Z]+/)
 	    part_code = ary2[0]
             str = get_query_str_new(params[:q].to_s,part_code)
             if str.split(" ")[0] == "nothing"
@@ -482,7 +482,7 @@ skip_before_action :verify_authenticity_token
     def search(query_str,*part_code)
         #str = get_query_str(query_str)
         #return [] if str.blank?
-        ary2 = part_code.to_s.scan(/[A-Z]+/)
+        ary2 = part_code.upcase.to_s.scan(/[A-Z]+/)
 	part_code = ary2[0]
         str = get_query_str_new(query_str.to_s,part_code)
         part = Part.find_by(part_code: part_code)

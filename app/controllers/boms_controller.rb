@@ -246,6 +246,7 @@ WHERE
         @bom.user_id = current_user.id
         #如果上传成功
 	if @bom.save
+           
             if @bom.excel_file_identifier.split('.')[-1] == 'xls'
 	        @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
             else
@@ -253,30 +254,35 @@ WHERE
             end
 	    @sheet = @xls_file.sheet(0)
 
-	    @parse_result = @sheet.parse(header_search: [/Qty/,/Des/,/Ref/,/Mpn/],clean:true)
-
+	    #@parse_result = @sheet.parse(header_search: [/(?im)qty/,/(?im)des/,/(?im)ref/,/(?im)mpn/],clean:true)
+            @parse_result = @sheet.parse(:qty => /(?im)qty/,:des => /(?im)des/,:ref => /(?im)ref/,:mpn => /(?im)mpn/,clean:true)
+            #@parse_result = @sheet.parse(header_search: [RegExReplace(/(?im)qty/,"qty"),/(?im)des/,/(?im)ref/,/(?im)mpn/],clean:true)
+            Rails.logger.info("@parse_result------------------------------------------------------------1111111")
+            Rails.logger.info(@parse_result.inspect)
+            #Rails.logger.info(@parse_result.upcase.inspect)
+            Rails.logger.info("@parse_result-------------------------------------------------------------1111111111")
 	    #remove first row 
 	    @parse_result.shift
-	    @parse_result.select! {|item| !item["Des"].blank?||!item["Mpn"].blank? } #选择非空行
-            Rails.logger.info("@parse_result------------------------------------------------------------")
+	    @parse_result.select! {|item| !item[:des].blank?||!item[:mpn].blank? } #选择非空行
+            Rails.logger.info("@parse_result------------------------------------------------------------22222222222")
             Rails.logger.info(@parse_result.inspect)
-            Rails.logger.info("@parse_result-------------------------------------------------------------")
+            Rails.logger.info("@parse_result-------------------------------------------------------------2222222222")
             #行号
             row_num = 0
            # all_m_bom = []
             #one_m_bom = []
-	    @parse_result.each do |item| #处理每一行的数据
-	        part_code = item["Ref"]
-		desc = item["Des"]
+	    @parse_result.each do |item| #处理每一行的数据 
+	        part_code = item[:ref]
+		desc = item[:des]
                 #if desc.include?".0uF"
                     #desc[".0uF"]="uF"
                     #Rails.logger.info("0000000000000000000000000000000000000")
                     #Rails.logger.info(desc)
                     #Rails.logger.info("0000000000000000000000000000000")
                 #end
-	        quantity = item["Qty"]
+	        quantity = item[:qty]
     
-                mpn = item["Mpn"]
+                mpn = item[:mpn]
 		bom_item = @bom.bom_items.build() #创建bom_items对象
 		
                 bom_item.part_code = part_code

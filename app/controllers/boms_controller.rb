@@ -1077,6 +1077,14 @@ WHERE
                         Rails.logger.info(value2_use.inspect)
                         Rails.logger.info("value2_use---------999999---------999-----value2_999")
                     end
+                elsif value2_use =~ /uf/i
+
+                    Rails.logger.info("uf--------------------------------uf--------------uf_uf_uf_uf")
+                    #Rails.logger.info(value2_use.gsub(/[a-zA-Z]/, ""))
+                    Rails.logger.info("uf--------------------------------uf--------------uf_uf_uf_uf")
+                    if value2_use.gsub(/[a-zA-Z]/, "").to_f < 1
+                        value2_use = (value2_use.gsub(/[a-zA-Z]/, "").to_f*1000).to_i.to_s + "nF"
+                    end
                 end
                 
                 ary_q[0] = value2_use

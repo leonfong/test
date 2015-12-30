@@ -825,6 +825,9 @@ skip_before_action :verify_authenticity_token
                 Rails.logger.info("part_name--------------------------------------part_name")
                 Rails.logger.info(part.part_name)
                 Rails.logger.info("part_name--------------------------------------part_name")
+                if query_str =~ /[Μμ]/
+                    query_str.gsub!(/[Μμ]/, "u")
+                end
                 if query_str.include?".0uF"
                     query_str[".0uF"]="uF"
                 elsif query_str.include?"0.1uF"

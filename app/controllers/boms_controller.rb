@@ -1009,6 +1009,9 @@ WHERE
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+                if query_str =~ /[Μμ]/
+                    query_str.gsub!(/[Μμ]/, "u")
+                end
                 if query_str.include?".0uF"
                     query_str[".0uF"]="uF"
                 elsif query_str.include?"0.1uF"

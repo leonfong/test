@@ -152,6 +152,9 @@ skip_before_action :verify_authenticity_token
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = "" 
                 end
+                if params[:q].to_s =~ /t491/i or params[:q].to_s =~ /tantalum/i
+                    sql_a = sql_a  + " AND `part_name` = '钽电容'"
+                end
                 Rails.logger.info(part.part_name.inspect)
                 Rails.logger.info(@ptype.inspect)
                 Rails.logger.info(@package2.inspect)

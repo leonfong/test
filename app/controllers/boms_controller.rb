@@ -697,6 +697,9 @@ WHERE
                             sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
                         end
                     end
+                    if query_str.to_s =~ /t491/i or query_str.to_s =~ /tantalum/i
+                        sql_a = sql_a  + " AND `part_name` = '钽电容'"
+                    end
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = ""
                     if not  str.split(" ")[2].blank?

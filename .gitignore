@@ -5,4 +5,6 @@
 /log/
 *.rb~
 *.yml~
+*.xls
+*.xlsx
 Gemfile~

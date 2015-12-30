@@ -152,8 +152,10 @@ skip_before_action :verify_authenticity_token
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = "" 
                 end
+                tan_tag = ""
                 if params[:q].to_s =~ /t491/i or params[:q].to_s =~ /tantalum/i
-                    sql_a = sql_a  + " AND `part_name` = '钽电容'"
+                    sql_a = sql_a  + " AND `part_name` = '钽电容'" 
+                    tan_tag = "tan"                   
                 end
                 Rails.logger.info(part.part_name.inspect)
                 Rails.logger.info(@ptype.inspect)
@@ -162,7 +164,7 @@ skip_before_action :verify_authenticity_token
                 Rails.logger.info("str--------------------------------------------------str")
                 Rails.logger.info(str.inspect)
                 Rails.logger.info("str--------------------------------------------------str")
-                if str.split(" ")[1] == "nothing"
+                if str.split(" ")[1] == "nothing" or tan_tag == "tan"
                     #如果没有电压
                     Rails.logger.info("0")
                     #@match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary

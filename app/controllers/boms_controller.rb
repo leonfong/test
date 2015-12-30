@@ -703,8 +703,10 @@ WHERE
                             sql_a = "SELECT * FROM `products` WHERE `value2` = '"+str.split(" ")[0]+"'"
                         end
                     end
+                    tan_tag = ""
                     if query_str.to_s =~ /t491/i or query_str.to_s =~ /tantalum/i
-                        sql_a = sql_a  + " AND `part_name` = '钽电容'"
+                        sql_a = sql_a  + " AND `part_name` = '钽电容'" 
+                        tan_tag = "tan"                   
                     end
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = ""
@@ -713,7 +715,7 @@ WHERE
                     else
                         find_bom = ""
                     end
-                    if str.split(" ")[1].blank? or str.split(" ")[1] == "nothing"
+                    if str.split(" ")[1].blank? or str.split(" ")[1] == "nothing" or tan_tag == "tan" 
                         Rails.logger.info("0")
                         result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' "+find_bom+sql_b).to_ary
                         if result_w.blank?

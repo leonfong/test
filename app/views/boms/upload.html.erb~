@@ -6,7 +6,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <div class="container" >
 <div class="row">
 
-	<div class="col-md-4"></div>
+	<div class="col-md-5"></div>
 
 	<div class=" col-md-4 form-group">
 		<%= form_for @bom, html: { multipart: true } do |f| %>
@@ -50,7 +50,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
       <%= image_tag "2.1.png", class: "img-responsive" %>
       <div class="bg-success text-primary text-center">
         <br><p><h3><strong>Step 2</strong></h3></p>
-        <p><h4><%= t('step_b') %><code>Qty</code>, <code>Des</code> and <code>Ref</code><%= t('step_bb') %></h4></p><br><br>
+        <p><h4><%= t('step_b') %><code>Qty</code>, <code>Des</code>, <code>Mpn</code>, <code>Ref</code><%= t('step_bb') %></h4></p><br><br>
       </div>
     </div>
     <div class="item">

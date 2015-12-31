@@ -713,7 +713,7 @@ WHERE
                     end
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = ""
-                    if not  str.split(" ")[2].blank?
+                    unless  str.split(" ")[2].blank? or str.split(" ")[2] == "nothing"
                         find_bom = " AND `package2` = '"+str.split(" ")[2]+"' "
                     else
                         find_bom = ""

@@ -155,6 +155,9 @@ skip_before_action :verify_authenticity_token
                 tan_tag = ""
                 if params[:q].to_s =~ /t491/i or params[:q].to_s =~ /tantalum/i
                     sql_a = sql_a  + " AND `part_name` = '钽电容'" 
+                    tan_tag = "tan" 
+                elsif params[:q].to_s =~ /radial/i   
+                    sql_a = sql_a  + " AND `part_name` = '电解电容'" 
                     tan_tag = "tan"                   
                 end
                 Rails.logger.info(part.part_name.inspect)
@@ -168,23 +171,23 @@ skip_before_action :verify_authenticity_token
                     #如果没有电压
                     Rails.logger.info("0")
                     #@match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                    @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary
+                    @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' ").to_ary
                 else
                     #如果有电压 电压在value3
                     Rails.logger.info("1")
                     #match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                    match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary
+                    match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' ").to_ary
                     if match_products_w.blank?
                         #如果没查到 电压换成50V
                         Rails.logger.info("2")
                         if (part_code[0] =~ /[Cc]/ and str.split(" ")[0]=~ /[^uU]/)
                             #@match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                            @match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary
+                            @match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' ").to_ary
                         else
                             #没查到去掉电压
                             Rails.logger.info("3")
                             #@match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary 
-                            @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary 
+                            @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' ").to_ary 
                         end
                     else
                         Rails.logger.info("4")
@@ -198,7 +201,12 @@ skip_before_action :verify_authenticity_token
                     Rails.logger.info("5")
                     Rails.logger.info("t22222222222222222222222222222222222222222222222222222222222222222")
                     #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary
+                    if params[:q].to_s =~ /res/i
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `ptype` = 'RES' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary
+                    else
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary              
+                    end 
+                    #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary
                     
   	  	    #@match_products = Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary	
   	  	    #如果全局匹配不到，则需要检查关键字串中的单位，转换成标准的单位
@@ -960,8 +968,22 @@ skip_before_action :verify_authenticity_token
 
 
                 ary_all = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
-                #获取阻值
+                #处理电阻
                 ary_q = []
+                #获取封装
+                package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'RES' GROUP BY products.package2")
+                value4_all = package2_all.select { |item| ary_all.join(" ").include?item.package2 }
+                if not value4_all.blank?
+                    Rails.logger.info("value4_all.first.package2__________0000000000000000000000000000000000000bbbbb_________")
+                    Rails.logger.info(value4_all.first.package2)
+                    Rails.logger.info("value4_all.first.package2_________0000000000000000000000000000000000000bbbbb______________________") 
+                    ary_q[2] = value4_all.first.package2
+                    value4 = value4_all.first.package2
+                    query_str = query_str.gsub(ary_q[2],"")
+                else
+                    ary_q[2] = "nothing"
+                end
+                #获取阻值
                 value2_test = query_str.to_s.scan(/[0-9]+[mMkKuUrRΩ][0-9]/)
                 Rails.logger.info("value2_test!!!!!!!!!!!!!!!!!!!!!!!!!!!value2_test")
                 Rails.logger.info(query_str.inspect)
@@ -1002,20 +1024,18 @@ skip_before_action :verify_authenticity_token
                 if value3_all != []
                     value3 = value3_all[0]
                 end
+                if value2_use == "nothing"
+                    query_str = query_str.gsub(/[±]?+[1-9]+[%]/," ") 
+                    query_str = query_str.gsub(/\D/, " ")
+                    value2_try = query_str.split(" ")[0]
+                    if value2_try != ""
+                        value2_use = value2_try.to_s + "R"
+                    end
+                end
+                
                 ary_q[0] = value2_use
                 ary_q[1] = value3
-                #获取封装
-                package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'RES' GROUP BY products.package2")
-                value4_all = package2_all.select { |item| ary_all.join(" ").include?item.package2 }
-                if not value4_all.blank?
-                    Rails.logger.info("__________0000000000000000000000000000000000000bbbbb___________________________")
-                    #Rails.logger.info(value4_all.first.package2)
-                    Rails.logger.info("_________0000000000000000000000000000000000000bbbbb_______________________________") 
-                    ary_q[2] = value4_all.first.package2
-                    value4 = value4_all.first.package2
-                else
-                    ary_q[2] = "nothing"
-                end
+                
                 Rails.logger.info("__________0000000000000000000000000000000000000bbbbb___________________________123")
                 Rails.logger.info(value2.inspect)
                 Rails.logger.info(value3.inspect)
@@ -1025,13 +1045,13 @@ skip_before_action :verify_authenticity_token
                     ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 end
                 #ary_q = value2 + " " + value3
-                Rails.logger.info("0000000000000000000000000000000000000bbbbb1111111111111111")
+                Rails.logger.info("all00000000000000000000000000000000bbbbb1111111111111111")
                 Rails.logger.info(ary_all.inspect)
                 Rails.logger.info(value2.inspect)
-                Rails.logger.info("0000000000000000000000000000000000000bbbbb1111111111111111")
+                Rails.logger.info("all10000000000000000000000000000000000bbbbb1111111111111111")
                 Rails.logger.info(value2_all.inspect)
                 Rails.logger.info(value3_all.inspect)
-                Rails.logger.info("0000000000000000000000000000000000000bbbbb111111111111111111")
+                Rails.logger.info("all20000000000000000000000000000000bbbbb111111111111111111")
                 ary_q[3] = "RES"
             elsif  ( part and part.part_name == "IC" )
                 Rails.logger.info("IC---------------------------------------------------------IC")

@@ -706,7 +706,10 @@ WHERE
                     tan_tag = ""
                     if query_str.to_s =~ /t491/i or query_str.to_s =~ /tantalum/i
                         sql_a = sql_a  + " AND `part_name` = '钽电容'" 
-                        tan_tag = "tan"                   
+                        tan_tag = "tan"
+                    elsif query_str.to_s =~ /radial/i   
+                        sql_a = sql_a  + " AND `part_name` = '电解电容'" 
+                        tan_tag = "tan"                
                     end
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = ""
@@ -1130,8 +1133,21 @@ WHERE
                 Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
                 #ary_all = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 ary_all = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
-                #获取阻值
+                #处理电阻
                 ary_q = []
+                #获取封装
+                package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'RES' GROUP BY products.package2")
+                value4_all = package2_all.select { |item| ary_all.join(" ").include?item.package2 }
+                if not value4_all.blank?
+
+                    Rails.logger.info("__________0000000000000000000000000000000000000bbbbb___________________________")
+                    #Rails.logger.info(value4_all.first.package2)
+                    Rails.logger.info("_________0000000000000000000000000000000000000bbbbb_______________________________") 
+                    ary_q[2] = value4_all.first.package2
+                else
+                    ary_q[2] = "nothing"
+                end
+                #获取阻值
                 value2_test = query_str.to_s.scan(/[0-9]+[mMkKuUrRΩ][0-9]/)
                 Rails.logger.info("value2_test!!!!!!!!!!!!!!!!!!!!!!!!!!!value2_test")
                 Rails.logger.info(query_str.inspect)
@@ -1172,18 +1188,18 @@ WHERE
                 if value3_all != []
                     value3 = value3_all[0]
                 end
+                if value2_use == "nothing"
+                    query_str = query_str.gsub(/[±]?+[1-9]+[%]/," ") 
+                    query_str = query_str.gsub(/\D/, " ")
+                    value2_try = query_str.split(" ")[0]
+                    if value2_try != ""
+                        value2_use = value2_try.to_s + "R"
+                    end
+                end
+
                 ary_q[0] = value2_use
                 ary_q[1] = value3
-                package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'RES' GROUP BY products.package2")
-                value4_all = package2_all.select { |item| ary_all.join(" ").include?item.package2 }
-                if not value4_all.blank?
-                    Rails.logger.info("__________0000000000000000000000000000000000000bbbbb___________________________")
-                    #Rails.logger.info(value4_all.first.package2)
-                    Rails.logger.info("_________0000000000000000000000000000000000000bbbbb_______________________________") 
-                    ary_q[2] = value4_all.first.package2
-                else
-                    ary_q[2] = "nothing"
-                end
+                
                 if value2 == "nothing" and value3 == "nothing" and ary_q[2] == "nothing"
                     ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 end

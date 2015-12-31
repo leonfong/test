@@ -44,7 +44,7 @@
       <% @itemall = @itemall + " " + item.description if not item.description.blank? %>
  
         <% if item.mark == 1 %>
-        <div id="<%= item.id.to_s %>" class="bg-primary row table table-hover" >
+        <div id="<%= item.id.to_s %>" class="bg-warning row table table-hover" >
       <% elsif item.danger == 1 %> 
         <div id="<%= item.id.to_s %>" class="bg-danger row table table-hover">
       <% elsif item.manual == 1 %> 

@@ -5,7 +5,7 @@
 
   <div class="row form-group">
     <div class="col-md-3">
-      <%= f.label :email  %>
+      <%= f.label :email  %><br />
       <%= f.email_field :email, class:"form-control", autofocus: true%>
     </div>
   </div>
@@ -15,14 +15,14 @@
       <%= f.label :password %>
       <% if @minimum_password_length %>
       <em>(<%= @minimum_password_length %> characters minimum)</em>
-      <% end %>
+      <% end %><br />
       <%= f.password_field :password, class:"form-control", autocomplete: "off" %>
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-3">
-      <%= f.label :password_confirmation %>
+      <%= f.label :password_confirmation %><br />
       <%= f.password_field :password_confirmation, class:"form-control", autocomplete: "off" %>
     </div>
   </div>

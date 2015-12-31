@@ -7,22 +7,22 @@ en:
       lang: "Language"
       zh: "Chinese"
       en: "English"
-  all_boms: ALL BOM
+  all_boms: My BOM
   category: The category
   packaging: Packaging
   describe: Describe
   description: Product description
   new_material: New material
   match_good: The match is successful
-  unit_price: The unit price
+  unit_price: Unit Price(USD)
   quantity: Quantity
-  match_bad: Matching product failure
+  match_bad: Matching failure
   query_if: If you want to specify the matching products, please change the query conditions
   search: Search
   current_search: Filter in the current search results
   product_name: Product name
   price: Price
-  operate: Operate
+  operate: Choose
   ok: OK
   new_bom: New BOM
   name: Name
@@ -30,23 +30,23 @@ en:
   view: View
   delete: Delete
   sure_delete: Sure you want to delete
-  up_excel: Upload the Excel file
+  up_excel: Upload Excel(.xls or .xlsx) file
   bom_file: BOM file
   matched: The matched
   total_price: The total price
   export_excel: Export Excel
   no: "No."
-  intention_product: Intention of the product
-  matching_products: Matching products
-  mark: Mark
+  intention_product: Your Components
+  matching_products: For Your Reference
+  mark: Delete
   choose_other: Other
   manually_select: Manually
-  bom_parser: BOM Parser
-  about: About
+  bom_parser: How to Use
+  about: About Us
   contact: Contact
   welcome: "Welcome "
   sign_out: Sign out
-  c_password: Change the password
+  c_password: Change Password
   sign_up: Sign up
   login: Login
   error_a: The parameters of the error, please check whether the query keyword is wrong!
@@ -59,9 +59,9 @@ en:
   success_b: has been uploaded.
   error_e: upload fails, please try again.
   success_c: has been deleted.
-  step_b: "EXCEL file editor, note: the field must contain"
-  step_bb: ", must be XLS file suffix."
+  step_b: "EXCEL(.xls or xlsx) file, including "
+  step_bb: ""
   step_c: "Upload the excel file."
-  step_d: "Check the result."
+  step_d: "Check Button."
   c_us: "If you want to contact us, please send an email to "
   thanks: "Thank you!"

@@ -6,7 +6,7 @@
   <div class="row form-group">
     <div class="col-md-3">
       <%= f.label :email,class:"sr-only" %>
-      <%= f.email_field :email, class:"form-control" , placeholder: :email%>
+      <%= f.email_field :email, class:"form-control", autofocus: true , placeholder: :email%>
     </div>
   </div>
 

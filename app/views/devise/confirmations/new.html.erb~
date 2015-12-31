@@ -6,7 +6,7 @@
   <div class="row form-group">
     <%= f.label :email %><br />
     <div class="col-md-3">
-      <%= f.email_field :email, autofocus: true, class:"form-control", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %> 
+      <%= f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %> 
     </div>
   </div>
 

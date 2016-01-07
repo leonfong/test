@@ -30,7 +30,7 @@
 <% if user_signed_in? %>
   <% if current_user.email == "web@mokotechnology.com" %>
     <div class ="col-md-6">
-    <%= link_to t(:export_excel), bom_path(format: "xls") %>
+    <%= link_to t(:export_excel), mpn_bom_path(format: "xls") %>
   </div>     
   <% end %>
 <% end %>
@@ -59,9 +59,9 @@
         <% if item.mark == 1 %>
         <div id="<%= item.id.to_s %>" class="bg-warning row table table-hover panel panel-warning " style="background-color: #fcf8e3;" >
       <% elsif item.danger == 1 %> 
-        <div id="<%= item.id.to_s %>" class="bg-danger row table table-hover  panel panel-info " style="background-color: #f2dede;">
+        <div id="<%= item.id.to_s %>" class="bg-danger row table table-hover  panel panel-danger " style="background-color: #f2dede;">
       <% elsif item.manual == 1 %> 
-        <div id="<%= item.id.to_s %>" class="bg-success row table table-hover  panel panel-info " style="background-color: #dff0d8;">
+        <div id="<%= item.id.to_s %>" class="bg-success row table table-hover  panel panel-success " style="background-color: #dff0d8;">
       <% else %>
         <div id="<%= item.id.to_s %>" class="bg-info row table table-hover   panel panel-info " style="background-color: #d9edf7;">
       <% end %>

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   match '/help', to: 'static_pages#help', via: 'get'
   match '/about', to: 'static_pages#about', via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
+  
 
   root to: 'boms#upload'
   #root to: "boms#index"
@@ -19,14 +20,16 @@ Rails.application.routes.draw do
   #match '/boms', to: 'boms#index',via: 'get'
   match '/boms/search_api', to: 'boms#search_api',via: 'post'
   match '/bom_item/edit', to: 'bom_item#edit', via: 'post'
-
-  resources :boms, only: [:index,:show, :new, :create, :destroy, :mark]
+  match '/boms/mpn/', to: 'boms#mpn#', via: 'get'
+ 
+  resources :boms, only: [:index,:show, :new, :create, :destroy, :mark, :mpn]
   #resources :boms
   resources :bom_item
   match '/search', to: 'boms#search', via: 'get'
   
   #match 'choose'=> 'boms#choose'
   match '/mark', to: 'boms#mark', via: 'post'
+  match '/s_mpn', to: 'boms#s_mpn', via: 'post'
   match '/bom_item/add', to: 'bom_item#add', via: 'post'
   #
   match '/bom_item/select_with_ajax', to: 'bom_item#select_with_ajax', via: 'post'

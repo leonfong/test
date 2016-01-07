@@ -1,0 +1,96 @@
+
+<div class="container">
+<div class="row">
+  <div class="col-md-12">
+    <ol class="breadcrumb">
+      <li><%= link_to t(:all_bom),boms_path %></li>
+      <li class="active"><%= @bom.excel_file_identifier %></li>
+
+  
+      <%= link_to "Only MPN",  {action: "mpn", id: @bom.id}, class: "btn btn-primary btn-xs navbar-right" %>
+      <a class="navbar-right">&nbsp;&nbsp;</a>
+      <%= link_to "Pro",  @bom, class: "btn btn-default btn-xs navbar-right" %>
+    </ol>
+    
+      
+      
+    
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item"><%= t(:bom_file) %>：<%= @bom.excel_file_identifier %></li>
+        <li class="list-group-item"><%= t(:matched) %>：<%= @match_str %></li>
+        <li class="list-group-item"><%= t(:total_price) %>：<%=  number_with_precision(@total_price, precision: 4)%></li>
+      </ul>
+    </div>
+
+<% if user_signed_in? %>
+  <% if current_user.email == "web@mokotechnology.com" %>
+    <div class ="col-md-6">
+    <%= link_to t(:export_excel), bom_path(format: "xls") %>
+  </div>     
+  <% end %>
+<% end %>
+    
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <%= button_to "GO! GO! GO!",  {action: "s_mpn", id: @bom.id}, remote: true, class: "btn btn-primary btn-lg navbar-btn" %>
+  </div>
+</div>
+
+<div class="row table table-hover panel panel-muted" style="background-color: #e0e0e0;">
+        <div class="col-md-1"><h5><strong><%= t(:mark) %></strong></h5></div>         
+        <div class="col-md-1"><h5><strong><%= t(:no) %></strong></h5></div>
+        <div class="col-md-3"><h5><strong><%= t(:intention_product) %></strong></h5></div>
+       
+        <div class="col-md-4"><h5><strong><%= t(:matching_products) %></strong></h5></div>
+        <div class="col-md-2"><h5><strong><%= t(:unit_price) %></strong></h5></div>
+        <div class="col-md-1"><h5><strong><%= t(:quantity) %></strong></h5></div>
+</div>
+  <% @itemall = "" %>
+  <% @matched_items.each_with_index do |item,index| %>
+      <% @itemall = @itemall + " " + item.description if not item.description.blank? %>
+ 
+        <% if item.mark == 1 %>
+        <div id="<%= item.id.to_s %>" class="bg-warning row table table-hover panel panel-warning " style="background-color: #fcf8e3;" >
+      <% elsif item.danger == 1 %> 
+        <div id="<%= item.id.to_s %>" class="bg-danger row table table-hover  panel panel-danger " style="background-color: #f2dede;">
+      <% elsif item.manual == 1 %> 
+        <div id="<%= item.id.to_s %>" class="bg-success row table table-hover  panel panel-success " style="background-color: #dff0d8;">
+      <% else %>
+        <div id="<%= item.id.to_s %>" class="bg-info row table table-hover   panel panel-info " style="background-color: #d9edf7;">
+      <% end %>
+
+           
+              <div class="col-md-1"><%= button_to t(:mark),  {action: "mark", id: item.id}, remote: true, class: "btn btn-info" %></div>
+              <div class="col-md-1"><%= index+1 %><% if item.id.to_i == params[:bomitem].to_i-2 %><a name="Comment"></a><% end %></div>
+
+              <div class="col-md-3"><%= item.mpn.to_s %></div>
+          
+
+                <div class="col-md-4"><a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"><%= item.description_p %></a></div>
+                <% if not item.price.blank? %>
+                    <div class="col-md-2"><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "$" + number_with_precision(item.price, precision: 4).to_s %></a></div>
+                <% else %>
+                    <div class="col-md-2"><a name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"></a></div>
+                <% end %>
+                <div class="col-md-1"><%= item.quantity %></div>
+                
+                
+                 
+              
+            </div>
+          <% end %>
+</div>
+
+<%
+meta title: @itemall,
+     description: @itemall,
+     keywords: @itemall
+%>
+

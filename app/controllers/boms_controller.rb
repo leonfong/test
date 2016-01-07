@@ -647,6 +647,186 @@ WHERE
 
   	### private methods
 
+    def mpn
+        if not params[:bom_data].blank?
+            if not params[:bom_data][1..-2][1..-2].blank?
+                @all_bom_data = params[:bom_data][1..-2][1..-2].split("],[")
+                Rails.logger.info("@all_bom_data-----------------------------------------------------@all_bom_data")
+                Rails.logger.info(@all_bom_data)
+                Rails.logger.info("@all_bom_data---------------------------------------------------@all_bom_data")           
+            end
+        end
+        @bom = Bom.find(params[:id])
+        Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        Rails.logger.info(@bom.inspect)
+        Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
+    
+
+        respond_to do |format|
+
+            format.html {
+                Rails.logger.info("cccccccccccccccccccccccccccccccccccccccccccccccccccc11111q")
+                #Rails.logger.info(Product.find(@bom.bom_items.first.product_id).inspect)
+                Rails.logger.info("cccccccccccccccccccccccccccccccccccccccccccccccc1111111q")
+                #matched_items = @bom.bom_items.select { |item| item.product }
+                #matched_items = @bom.bom_items.select { |item| return Product.find(item.product_id) unless item.product_id.blank?}
+                @matched_items = Product.find_by_sql("
+SELECT
+	bom_items.id,
+	bom_items.quantity,
+	bom_items.description,
+	bom_items.part_code,
+	bom_items.bom_id,
+	bom_items.product_id,
+	bom_items.created_at,
+	bom_items.updated_at,
+	bom_items.warn,
+	bom_items.user_id,
+	bom_items.danger,
+	bom_items.manual,
+	bom_items.mark,
+	bom_items.mpn,
+	bom_items.mpn_id,
+
+IF (
+
+	bom_items.mpn_id > 0,
+	mpn_items.price,
+	products.price
+) AS price,
+
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.description,
+	products.description
+) AS description_p
+FROM
+	bom_items
+LEFT JOIN products ON bom_items.product_id = products.id
+LEFT JOIN mpn_items ON bom_items.mpn_id = mpn_items.id
+
+WHERE
+	bom_items.bom_id = "+params[:id])
+                #@bom.bom_items.each do |item|
+                    #unless item.product_id.blank?
+                        #matched_items << Product.find(item.product_id)
+                    #end   
+                #end
+                #begin
+                #    matched_items = @bom.bom_items.select { |item| Product.find(item.product_id).blank? }
+                #rescue
+                   # matched_items = []
+                #end
+
+                Rails.logger.info("cccccccccccccccccccccccccccccccccccccccccccccccccccc111111")
+                
+                Rails.logger.info("cccccccccccccccccccccccccccccccccccccccccccccccccccc22222")
+                Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+                Rails.logger.info(@matched_items)
+                Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb22222222222222222222")
+		@match_str = "#{@bom.bom_items.count('product_id')} / #{@bom.bom_items.count}"
+		@total_price = 0.00
+                #Rails.logger.info(matched_items.inspect)
+                Rails.logger.info(@match_str.inspect)
+                Rails.logger.info(@total_price.inspect)
+                Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb22222222222222222")
+		unless @matched_items.empty?
+                    @bom_api_all = []
+		    @matched_items.each do |item|
+                        if not item.price.blank?
+                            @total_price += item.price * item.quantity  
+                        end
+                        #if item.product_id.blank?
+                            #if not item.mpn.blank?
+                                #bom_api = search_in_api(item.mpn)
+                                #if not bom_api == []
+                                    #bom_api << item.id
+                                    #@bom_api_all << bom_api
+                                #end
+                            #end    
+                        #end 
+		    end
+                    Rails.logger.info("@bom_api_all_________________________________________________________")
+                    Rails.logger.info(@bom_api_all.inspect)
+                    Rails.logger.info("@bom_api_all---------------------------------------------------------")
+		end
+		    }
+
+	    format.xls { 
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		sheet1.row(0).concat %w{No Intention_product Location_code Matching_products Material_code unit_price quantity total_price}
+
+		@bom.bom_items.each_with_index do |item,index|
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :weight           => :bold,
+                    :pattern_bg_color => :red,
+                    :size             => 10,
+                    :color => :red
+                    })
+		    row = sheet1.row(rowNum)
+                    if item.warn
+                        #[0,1,2,3,4,5,6,7].each{|col|
+                        row.set_format(2,title_format)
+                        #row.default_format = color
+                        #}
+                    end
+		    row.push(rowNum)
+		    row.push(item.description)
+		    row.push(item.part_code)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).description)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).name)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price)
+		    row.push(item.quantity)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price*item.quantity)
+                end
+
+                file_contents = StringIO.new
+	        ff.write (file_contents)
+	        send_data(file_contents.string.force_encoding('binary'), filename: file_name)
+            }
+        end
+        
+    end
+
+    def s_mpn
+        bom_items = BomItem.find_by_sql("SELECT * FROM bom_items WHERE bom_items.bom_id = "+params[:id].to_s)
+        bom_items.each do |bom|
+            find_mpn = search_in_api(bom.mpn)
+
+            if find_mpn != []
+                @bom_item = BomItem.find(bom.id) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+                if @bom_item.update_attribute("mpn_id", find_mpn[-1])
+                    if @bom_item.mpn_id
+	                #@bom_item.product = Product.find(@bom_item.product_id)
+                        @bom_item.warn = false
+                        @bom_item.mark = false
+                        @bom_item.manual = true
+	                @bom_item.save!
+ 
+                        #flash[:success] = t('success_a')                   
+                        #render "choose.js.erb"
+	            end
+                end     
+            end
+
+
+
+        end
+        #flash.now[:alert] = "MPN of query is done"
+        #redirect_to(:back)
+        #redirect_to action: "mpn", id: params[:id].to_s
+        redirect_to boms_mpn_path(id: params[:id].to_s, new: "yes" ), notice: "MPN of query is done"
+        #redirect_to action: "upload"
+        #render ()  
+    end
+
     private
 
         def bom_params

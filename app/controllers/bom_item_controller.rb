@@ -512,7 +512,7 @@ skip_before_action :verify_authenticity_token
         result = api_result
     end
 
-    def search(query_str,*part_code)
+    def search(query_str,part_code)
         #str = get_query_str(query_str)
         #return [] if str.blank?
         ary2 = part_code.upcase.to_s.scan(/[A-Z]+/)

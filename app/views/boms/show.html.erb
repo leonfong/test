@@ -5,7 +5,16 @@
     <ol class="breadcrumb">
       <li><%= link_to t(:all_bom),boms_path %></li>
       <li class="active"><%= @bom.excel_file_identifier %></li>
+
+  
+      <%= link_to "Only MPN",  {action: "mpn", id: @bom.id}, class: "btn btn-default btn-xs navbar-right" %>
+      <a class="navbar-right">&nbsp;&nbsp;</a>
+      <%= link_to "Pro",  @bom, class: "btn btn-primary btn-xs navbar-right" %>
     </ol>
+    
+      
+      
+    
   </div>
 </div>
 
@@ -28,7 +37,7 @@
     
 </div>
 
-<div class="row table table-hover">
+<div class="row table table-hover panel panel-muted" style="background-color: #e0e0e0;">
         <div class="col-md-1"><h5><strong><%= t(:mark) %></strong></h5></div>         
         <div class="col-md-1"><h5><strong><%= t(:no) %></strong></h5></div>
         <div class="col-md-3"><h5><strong><%= t(:intention_product) %></strong></h5></div>
@@ -44,13 +53,13 @@
       <% @itemall = @itemall + " " + item.description if not item.description.blank? %>
  
         <% if item.mark == 1 %>
-        <div id="<%= item.id.to_s %>" class="bg-warning row table table-hover" >
+        <div id="<%= item.id.to_s %>" class="bg-warning row table table-hover panel panel-warning " style="background-color: #fcf8e3;" >
       <% elsif item.danger == 1 %> 
-        <div id="<%= item.id.to_s %>" class="bg-danger row table table-hover">
+        <div id="<%= item.id.to_s %>" class="bg-danger row table table-hover  panel panel-danger " style="background-color: #f2dede;">
       <% elsif item.manual == 1 %> 
-        <div id="<%= item.id.to_s %>" class="bg-success row table table-hover">
+        <div id="<%= item.id.to_s %>" class="bg-success row table table-hover  panel panel-success " style="background-color: #dff0d8;">
       <% else %>
-        <div id="<%= item.id.to_s %>" class="bg-info row table table-hover">
+        <div id="<%= item.id.to_s %>" class="bg-info row table table-hover   panel panel-info " style="background-color: #d9edf7;">
       <% end %>
 
            
@@ -89,7 +98,7 @@ else
                           <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
                       <% end %>
                       
-                        <div class="well">
+                        <div class="well well-sm">
 
                           
 <div class="row">  

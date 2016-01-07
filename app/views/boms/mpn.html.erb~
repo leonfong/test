@@ -30,7 +30,7 @@
 <% if user_signed_in? %>
   <% if current_user.email == "web@mokotechnology.com" %>
     <div class ="col-md-6">
-    <%= link_to t(:export_excel), mpn_bom_path(format: "xls") %>
+    <%= link_to t(:export_excel), {action: "mpn", id: @bom.id, format: "xls"} %>
   </div>     
   <% end %>
 <% end %>

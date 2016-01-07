@@ -809,7 +809,7 @@ WHERE
                         @bom_item.mark = false
                         @bom_item.manual = true
 	                @bom_item.save!
- 
+                        
                         #flash[:success] = t('success_a')                   
                         #render "choose.js.erb"
 	            end
@@ -822,7 +822,7 @@ WHERE
         #flash.now[:alert] = "MPN of query is done"
         #redirect_to(:back)
         #redirect_to action: "mpn", id: params[:id].to_s
-        redirect_to boms_mpn_path(id: params[:id].to_s, new: "yes" ), notice: "MPN of query is done"
+        redirect_to boms_mpn_path(id: params[:id].to_s, new: "yes" ),  notice: "MPN of query is done!"
         #redirect_to action: "upload"
         #render ()  
     end

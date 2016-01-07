@@ -85,7 +85,7 @@ skip_before_action :verify_authenticity_token
             end
             Rails.logger.info("4444444444444444444444444444444444444444")
             Rails.logger.info(params[:q])
-            Rails.logger.info(str)
+            Rails.logger.info(str.split(" ")[0].inspect)
             Rails.logger.info("5555555555555555555555555555555555555")
             Rails.logger.info(params[:p])
             Rails.logger.info("666666666666666666666666666666")
@@ -263,6 +263,7 @@ skip_before_action :verify_authenticity_token
 		@query_str = str +" with part_name: "+ str.split(" ")[-1]
             else
                 Rails.logger.info("7")
+                find_bom = ""
                 if  @package2 != ""
                     find_bom = " AND `package2` = '"+@package2+"' "
                 else

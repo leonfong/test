@@ -392,6 +392,7 @@ WHERE
 
     def upload
         @bom = Bom.new
+        @mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
     end
 
     def choose
@@ -825,6 +826,10 @@ WHERE
         redirect_to boms_mpn_path(id: params[:id].to_s, new: "yes" ),  notice: "MPN of query is done!"
         #redirect_to action: "upload"
         #render ()  
+    end
+
+    def mpn_item
+        @mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` ='" + params[:mpn]+"'")  
     end
 
     private

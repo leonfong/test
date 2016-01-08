@@ -20,8 +20,9 @@ Rails.application.routes.draw do
   #match '/boms', to: 'boms#index',via: 'get'
   match '/boms/search_api', to: 'boms#search_api',via: 'post'
   match '/bom_item/edit', to: 'bom_item#edit', via: 'post'
-  match '/boms/mpn/', to: 'boms#mpn#', via: 'get'
- 
+  match '/boms/mpn', to: 'boms#mpn#', via: 'get'
+  match '/boms/mpn_item', to: 'boms#mpn_item', via: 'get'
+
   resources :boms, only: [:index,:show, :new, :create, :destroy, :mark, :mpn]
   #resources :boms
   resources :bom_item

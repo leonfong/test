@@ -1,23 +1,26 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: @mpn_item.description,
+     keywords: @mpn_item.mpn
+%>
   <div class="row">
     <div class="col-md-12">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>#</th>
             <th>MPN</th>
             <th>Description</th>
             <th>Price(USD)</th>
           </tr>
         </thead>
         <tbody>
-          <% @mpn_item.each_with_index do |item,index| %>
+
             <tr>
-              <th scope="row"><%= index+1 %></th>
-              <td><%= item.mpn %></td>
-              <td><%= item.description %></td>
-              <td><%= item.price %></td>
+              <td><%= @mpn_item.mpn %></td>
+              <td><%= @mpn_item.description %></td>
+              <td><%= @mpn_item.price %></td>
             </tr>
-          <% end %>
+
         </tbody>
       </table>
     </div>

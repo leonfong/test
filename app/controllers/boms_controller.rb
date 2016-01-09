@@ -829,7 +829,7 @@ WHERE
     end
 
     def mpn_item
-        @mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` ='" + params[:mpn]+"'")  
+        @mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` ='" + params[:mpn]+"'").first
     end
 
     private

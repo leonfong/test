@@ -4,11 +4,11 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
      keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
 %>
 <div class="container" >
-<div class="row">
+<div class="row ">
 
 	<div class="col-md-3"></div>
 
-	<div class=" col-md-6 form-group">
+	<div class=" col-md-6 form-group panel panel-info">
 		<%= form_for @bom, html: { multipart: true } do |f| %>
 			<label><h2><%= t(:up_excel) %></h2></label>
 		    <%= f.file_field :excel_file, class: "btn btn-default" %>
@@ -24,9 +24,9 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 
 
-<div class="row  panel panel-info">
+<div class="row ">
 <div class="col-md-2"></div>
-<div id="carousel-example-generic" class="carousel slide col-md-7" data-ride="carousel">
+<div id="carousel-example-generic" class="carousel slide col-md-8  panel panel-info" data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
@@ -79,7 +79,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     <span class="sr-only">Next</span>
   </a>
 </div>
-<div class="col-md-3"></div>
+<div class="col-md-2"></div>
 </div>
 <br><br>
 

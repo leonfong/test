@@ -158,7 +158,10 @@ skip_before_action :verify_authenticity_token
                     tan_tag = "tan" 
                 elsif params[:q].to_s =~ /radial/i   
                     sql_a = sql_a  + " AND `part_name` = '电解电容'" 
-                    tan_tag = "tan"                   
+                    tan_tag = "tan"   
+                elsif params[:q].to_s =~ /SMD/i   
+                    sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
+                    tan_tag = "tan"                 
                 end
                 if  @package2 != ""
                     find_bom = " AND `package2` = '"+@package2+"' "
@@ -888,6 +891,8 @@ skip_before_action :verify_authenticity_token
                             value2_use = "nothing"
                         else
                             value2_use = value2[0]
+                            #value2_use = value2_use.gsub!(/0+?$/, "")  
+                            #value2_use = value2_use.gsub!(/[.]$/, "") 
                         end                        
                     end
                 end
@@ -1020,6 +1025,8 @@ skip_before_action :verify_authenticity_token
                             value2_use = "nothing"
                         else
                             value2_use = value2[0]
+                            #value2_use = value2_use.gsub!(/0+?$/, "")  
+                            #value2_use = value2_use.gsub!(/[.]$/, "") 
                         end
                         #value2 = query_str.to_s.scan(/-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)*[mMkKuUrR]|-?[1-9]\d*[mMkKuUrR]/)
                         
@@ -1069,20 +1076,19 @@ skip_before_action :verify_authenticity_token
                 #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
                 ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 ary_q << "IC"
-            elsif  ( part and part.part_name == "Q" )
-                Rails.logger.info("QQQ---------------------------------------------------------QQQ")
-                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
+            #elsif  ( part and part.part_name == "Q" )
+                #Rails.logger.info("QQQ---------------------------------------------------------QQQ") 
                 ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
-                ary_q << "Q"
-            elsif  ( part and part.part_name == "D" )
-                Rails.logger.info("DDD---------------------------------------------------------DDD")
-                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
-                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+-|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
-                ary_q << "D"
+                #ary_q << "Q"
+           # elsif  ( part and part.part_name == "D" )
+                #Rails.logger.info("DDD---------------------------------------------------------DDD")
+                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+-|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
+                #ary_q << "D"
             else
                 Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 #ary_q = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/) 
-                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/) 
+                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/) 
+                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+-|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 ary_q << "nothing"
             end
             ary_q.join(" ")

@@ -894,7 +894,10 @@ WHERE
                         tan_tag = "tan"
                     elsif query_str.to_s =~ /radial/i   
                         sql_a = sql_a  + " AND `part_name` = '电解电容'" 
-                        tan_tag = "tan"                
+                        tan_tag = "tan"  
+                    elsif query_str.to_s =~ /SMD/i   
+                        sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
+                        tan_tag = "tan"               
                     end
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = ""
@@ -975,13 +978,13 @@ WHERE
   	  		    ary_unit = str.scan(/([a-zA-Z]+)/)
   	  		    #如果匹配出多个，则提示错误
                             if ary_unit.length > 1
-  	  		        flash[:error] = t('error_a')
+  	  		        Rails.logger.info(t('error_a'))
   	  		    else
   	  		        #从unit表查找对应的目标单位字符串
   	  		        ary_unit = ary_unit.join("")
   	  		        unit = Unit.find_by(unit: ary_unit)
   	  		        unless unit
-  	  		            flash[:error] = t('error_b')
+  	  		            Rails.logger.info(t('error_b'))
   	  		        else
   	  		            #用查询得到的标准单位替换关键字串中的单位
   	  		            str.sub!(/[a-zA-Z]+/, unit.targetunit)
@@ -994,7 +997,7 @@ WHERE
                                         result_w = Product.search(str,star: true).to_ary
                                         #result = Product.search(str,star: true).to_ary
      		                        if result_w.length == 0
-	  		                    flash[:error] = t('error_c')
+	  		                    Rails.logger.info(t('error_c'))
 	  		                end
   	  		            end
   	  		        end
@@ -1398,22 +1401,20 @@ WHERE
                 #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
                 ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 ary_q[3] = "IC"
-            elsif  ( part and part.part_name == "Q" )
-                Rails.logger.info("QQQ---------------------------------------------------------QQQ")
-                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
-                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
-                ary_q[3] = "Q"
-            elsif  ( part and part.part_name == "D" )
-                Rails.logger.info("DDD---------------------------------------------------------DDD")
-                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
-                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+-|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
-                ary_q[3] = "D"
+            #elsif  ( part and part.part_name == "Q" )
+                #Rails.logger.info("QQQ---------------------------------------------------------QQQ")              
+                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
+                #ary_q[3] = "Q"
+            #elsif  ( part and part.part_name == "D" )
+                #Rails.logger.info("DDD---------------------------------------------------------DDD")
+                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+-|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
+                #ary_q[3] = "D"
             else
                 Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 #ary_q = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/) 
-                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)    
+                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+-|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)   
                 ary_q << "nothing"
             end
             ary_q.join(" ")

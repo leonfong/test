@@ -895,9 +895,9 @@ WHERE
                     elsif query_str.to_s =~ /radial/i   
                         sql_a = sql_a  + " AND `part_name` = '电解电容'" 
                         tan_tag = "tan"  
-                    elsif query_str.to_s =~ /SMD/i   
-                        sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
-                        tan_tag = "tan"               
+                    #elsif query_str.to_s =~ /SMD/i   
+                        #sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
+                        #tan_tag = "tan"               
                     end
                     #sql_b = " ORDER BY `prefer` DESC" 
                     sql_b = ""

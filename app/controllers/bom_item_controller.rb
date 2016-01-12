@@ -159,9 +159,9 @@ skip_before_action :verify_authenticity_token
                 elsif params[:q].to_s =~ /radial/i   
                     sql_a = sql_a  + " AND `part_name` = '电解电容'" 
                     tan_tag = "tan"   
-                elsif params[:q].to_s =~ /SMD/i   
-                    sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
-                    tan_tag = "tan"                 
+                #elsif params[:q].to_s =~ /SMD/i   
+                    #sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
+                    #tan_tag = "tan"                 
                 end
                 if  @package2 != ""
                     find_bom = " AND `package2` = '"+@package2+"' "

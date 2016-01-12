@@ -317,22 +317,48 @@ skip_before_action :verify_authenticity_token
         end
         if not params[:bomsuse].blank?
             #@bom_html = "<table class='table table-bordered table-striped table-hover'><thead><tr><td>产品描述</td><td>价格</td><td>操作</td></tr></thead><tbody>"
-            @bom_html = ""
-            unless @match_products.nil?
-                @match_products.each do |item|
-                    @bom_html = @bom_html + "<tr>"
-                    @bom_html = @bom_html + "<td>"
-                    @bom_html = @bom_html + item.description.to_s
-                    @bom_html = @bom_html + "</td>"
-                    @bom_html = @bom_html + "<td>"
-                    @bom_html = @bom_html + ActionController::Base.helpers.number_with_precision(item.price, precision: 4).to_s
-                    @bom_html = @bom_html + "</td>"
-                    @bom_html = @bom_html + "<td>"
-                    @bom_html = @bom_html + "<a rel='nofollow' data-method='patch' data-remote='true' href='/bom_item/"+ params[:id].to_s + "?product_id=" + item.id.to_s + "&bomsuse=bomsuse'>OK</a>"
-                    @bom_html = @bom_html + "</td>"
-                    @bom_html = @bom_html + "</tr>"
-                end           
+            if user_signed_in?
+                if current_user.email == "web@mokotechnology.com"
+                    @bom_html = ""
+                    unless @match_products.nil?
+                        @match_products.each do |item|
+                            @bom_html = @bom_html + "<tr>"
+                            @bom_html = @bom_html + "<td>"
+                            @bom_html = @bom_html + item.name.to_s
+                            @bom_html = @bom_html + "</td>"
+                            @bom_html = @bom_html + "<td>"
+                            @bom_html = @bom_html + item.description.to_s
+                            @bom_html = @bom_html + "</td>"
+                            @bom_html = @bom_html + "<td>"
+                            @bom_html = @bom_html + ActionController::Base.helpers.number_with_precision(item.price, precision: 4).to_s
+                            @bom_html = @bom_html + "</td>"
+                            @bom_html = @bom_html + "<td>"
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='patch' data-remote='true' href='/bom_item/"+ params[:id].to_s + "?product_id=" + item.id.to_s + "&bomsuse=bomsuse'>OK</a>"
+                            @bom_html = @bom_html + "</td>"
+                            @bom_html = @bom_html + "</tr>"
+                        end           
+                    end
+                else
+                    @bom_html = ""
+                    unless @match_products.nil?
+                        @match_products.each do |item|
+                            @bom_html = @bom_html + "<tr>"
+                            
+                            @bom_html = @bom_html + "<td>"
+                            @bom_html = @bom_html + item.description.to_s
+                            @bom_html = @bom_html + "</td>"
+                            @bom_html = @bom_html + "<td>"
+                            @bom_html = @bom_html + ActionController::Base.helpers.number_with_precision(item.price, precision: 4).to_s
+                            @bom_html = @bom_html + "</td>"
+                            @bom_html = @bom_html + "<td>"
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='patch' data-remote='true' href='/bom_item/"+ params[:id].to_s + "?product_id=" + item.id.to_s + "&bomsuse=bomsuse'>OK</a>"
+                            @bom_html = @bom_html + "</td>"
+                            @bom_html = @bom_html + "</tr>"
+                        end           
+                    end
+                end
             end
+            
         
 
 

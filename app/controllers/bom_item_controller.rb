@@ -158,6 +158,9 @@ skip_before_action :verify_authenticity_token
                     tan_tag = "tan" 
                 elsif params[:q].to_s =~ /radial/i   
                     sql_a = sql_a  + " AND `part_name` = '电解电容'" 
+                    tan_tag = "tan"  
+                elsif params[:q].to_s =~ /led/i   
+                    sql_a = sql_a  + " AND `part_name` = 'LED'" 
                     tan_tag = "tan"   
                 #elsif params[:q].to_s =~ /SMD/i   
                     #sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
@@ -1100,7 +1103,8 @@ skip_before_action :verify_authenticity_token
             elsif  ( part and part.part_name == "IC" )
                 Rails.logger.info("IC---------------------------------------------------------IC")
                 #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
-                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
+                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
+                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+-|[0-9]\.?[0-9]*[a-zA-Z]+[0-9]*|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 ary_q << "IC"
             elsif  ( part and part.part_name == "Q" )
                 Rails.logger.info("QQQ---------------------------------------------------------QQQ") 

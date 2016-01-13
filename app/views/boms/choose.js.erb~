@@ -3,3 +3,4 @@ document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= MpnItem
 document.getElementById('<%= @bom_item.id.to_s + "p" %>').innerHTML='<%= "$"+number_with_precision(MpnItem.find(@bom_item.mpn_id).price, precision: 4) %>';
 document.getElementById('<%= @bom_item.id.to_s %>').className="bg-success row table table-hover"
 document.getElementById('<%= @bom_item.id.to_s + "dow" %>').className="collapse"
+document.getElementById('<%= @bom_item.id.to_s + "but" %>').className="glyphicon glyphicon-plus"

@@ -159,9 +159,9 @@ skip_before_action :verify_authenticity_token
                 elsif params[:q].to_s =~ /radial/i   
                     sql_a = sql_a  + " AND `part_name` = '电解电容'" 
                     tan_tag = "tan"  
-                elsif params[:q].to_s =~ /led/i   
-                    sql_a = sql_a  + " AND `part_name` = 'LED'" 
-                    tan_tag = "tan"   
+                #elsif params[:q].to_s =~ /led/i   
+                    #sql_a = sql_a  + " AND `part_name` = 'LED'" 
+                    #tan_tag = "tan"   
                 #elsif params[:q].to_s =~ /SMD/i   
                     #sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
                     #tan_tag = "tan"                 
@@ -180,7 +180,7 @@ skip_before_action :verify_authenticity_token
                 Rails.logger.info("str--------------------------------------------------str")
                 if str.split(" ")[1] == "nothing" or tan_tag == "tan"
                     #如果没有电压
-                    Rails.logger.info("0")
+                    Rails.logger.info("000000000000000000000000----------------------------------tan")
                     #@match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
                     @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
                 else
@@ -269,17 +269,33 @@ skip_before_action :verify_authenticity_token
 		@query_str = str +" with part_name: "+ str.split(" ")[-1]
             else
                 Rails.logger.info("7")
-                find_bom = ""
-                if  @package2 != ""
-                    find_bom = " AND `package2` = '"+@package2+"' "
+                if params[:q].to_s =~ /led/i 
+                    if params[:q].to_s =~ /green/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%绿%' AND `part_name` = 'LED'").to_ary
+                    elsif params[:q].to_s =~ /red/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%红%' AND `part_name` = 'LED'").to_ary       
+                    elsif params[:q].to_s =~ /blue/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%蓝%' AND `part_name` = 'LED'").to_ary      
+                    elsif params[:q].to_s =~ /yellow/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%黄%' AND `part_name` = 'LED'").to_ary
+                    elsif params[:q].to_s =~ /white/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%白%' AND `part_name` = 'LED'").to_ary
+                    else
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE  `part_name` = 'LED'").to_ary
+                    end
                 else
                     find_bom = ""
+                    if  @package2 != ""
+                        find_bom = " AND `package2` = '"+@package2+"' "
+                    else
+                        find_bom = ""
+                    end
+	            #全局匹配产品
+                    #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC')#.to_ary
+                    #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
+                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
                 end
-	        #全局匹配产品
-                #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC')#.to_ary
-                #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
-                
+  
 	        #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
 	        if @match_products.length == 0
                     #if not @bom_item.mpn.blank?

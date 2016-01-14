@@ -889,7 +889,7 @@ WHERE
                         end
                     end
                     tan_tag = ""
-                    if query_str.to_s =~ /t491/i or query_str.to_s =~ /tantalum/i
+                    if query_str.to_s =~ /t491/i or query_str.to_s =~ /tant/i
                         sql_a = sql_a  + " AND `part_name` = '钽电容'" 
                         tan_tag = "tan"
                     elsif query_str.to_s =~ /radial/i   
@@ -924,15 +924,15 @@ WHERE
                             end 
                             if query_str.to_s =~ /green/i 
                                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '绿灯' AND `part_name` = 'LED'"+find_led_p).to_ary
-                            elsif params[:q].to_s =~ /red/i 
+                            elsif query_str.to_s =~ /red/i 
                                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '红灯' AND `part_name` = 'LED'"+find_led_p).to_ary
-                            elsif params[:q].to_s =~ /blue/i 
+                            elsif query_str.to_s =~ /blue/i 
                                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '蓝灯' AND `part_name` = 'LED'"+find_led_p).to_ary
-                            elsif params[:q].to_s =~ /yellow/i 
+                            elsif query_str.to_s =~ /yellow/i 
                                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '黄灯' AND `part_name` = 'LED'"+find_led_p).to_ary
-                            elsif params[:q].to_s =~ /white/i 
+                            elsif query_str.to_s =~ /white/i 
                                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '白灯' AND `part_name` = 'LED'"+find_led_p).to_ary
-                            elsif params[:q].to_s =~ /orange/i 
+                            elsif query_str.to_s =~ /orange/i 
                                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '橙灯' AND `part_name` = 'LED'"+find_led_p).to_ary
                             else
                                 result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'"+find_led_p).to_ary

@@ -153,7 +153,7 @@ skip_before_action :verify_authenticity_token
                     sql_b = "" 
                 end
                 tan_tag = ""
-                if params[:q].to_s =~ /t491/i or params[:q].to_s =~ /tantalum/i
+                if params[:q].to_s =~ /t491/i or params[:q].to_s =~ /tant/i
                     sql_a = sql_a  + " AND `part_name` = '钽电容'" 
                     tan_tag = "tan" 
                 elsif params[:q].to_s =~ /radial/i   

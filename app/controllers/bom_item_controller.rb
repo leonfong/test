@@ -271,17 +271,19 @@ skip_before_action :verify_authenticity_token
                 Rails.logger.info("7")
                 if params[:q].to_s =~ /led/i 
                     if params[:q].to_s =~ /green/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%绿%' AND `part_name` = 'LED'").to_ary
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '绿灯' AND `part_name` = 'LED'").to_ary
                     elsif params[:q].to_s =~ /red/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%红%' AND `part_name` = 'LED'").to_ary       
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '红灯' AND `part_name` = 'LED'").to_ary
                     elsif params[:q].to_s =~ /blue/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%蓝%' AND `part_name` = 'LED'").to_ary      
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '蓝灯' AND `part_name` = 'LED'").to_ary
                     elsif params[:q].to_s =~ /yellow/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%黄%' AND `part_name` = 'LED'").to_ary
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '黄灯' AND `part_name` = 'LED'").to_ary
                     elsif params[:q].to_s =~ /white/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` LIKE '%白%' AND `part_name` = 'LED'").to_ary
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '白灯' AND `part_name` = 'LED'").to_ary
+                    elsif params[:q].to_s =~ /orange/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '橙灯' AND `part_name` = 'LED'").to_ary
                     else
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE  `part_name` = 'LED'").to_ary
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'").to_ary
                     end
                 else
                     find_bom = ""

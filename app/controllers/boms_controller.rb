@@ -894,6 +894,8 @@ WHERE
                         tan_tag = "tan"
                     elsif query_str.to_s =~ /radial/i   
                         sql_a = sql_a  + " AND `part_name` = '电解电容'" 
+                        tan_tag = "tan"
+                    elsif query_str.to_s =~ /led/i   
                         tan_tag = "tan"  
                     #elsif query_str.to_s =~ /SMD/i   
                         #sql_a = sql_a  + " AND `value1` LIKE '%贴片%'" 
@@ -908,7 +910,38 @@ WHERE
                     end
                     if str.split(" ")[1].blank? or str.split(" ")[1] == "nothing" or tan_tag == "tan" 
                         Rails.logger.info("0")
-                        result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' "+find_bom+sql_b).to_ary
+                        if query_str.to_s =~ /led/i 
+
+                            if query_str.to_s =~ /green/i 
+                                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '绿灯' AND `part_name` = 'LED'"+find_bom).to_ary
+                            elsif params[:q].to_s =~ /red/i 
+                                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '红灯' AND `part_name` = 'LED'"+find_bom).to_ary
+                            elsif params[:q].to_s =~ /blue/i 
+                                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '蓝灯' AND `part_name` = 'LED'"+find_bom).to_ary
+                            elsif params[:q].to_s =~ /yellow/i 
+                                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '黄灯' AND `part_name` = 'LED'"+find_bom).to_ary
+                            elsif params[:q].to_s =~ /white/i 
+                                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '白灯' AND `part_name` = 'LED'"+find_bom).to_ary
+                            elsif params[:q].to_s =~ /orange/i 
+                                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '橙灯' AND `part_name` = 'LED'"+find_bom).to_ary
+                            else
+                                result_w = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'"+find_bom).to_ary
+                            end
+                        else
+                            result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' "+find_bom+sql_b).to_ary
+                        end
+
+
+
+
+
+
+
+
+
+
+
+                        
                         if result_w.blank?
                             Rails.logger.info("1")
                             result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"'"+sql_b).to_ary

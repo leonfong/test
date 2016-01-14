@@ -296,6 +296,8 @@ skip_before_action :verify_authenticity_token
                     else
                         @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'"+find_led_p).to_ary
                     end
+                elsif params[:q].to_s =~ /螺丝端子/i or params[:q].to_s =~ /简牛/i or params[:q].to_s =~ /排针/i or params[:q].to_s =~ /排母/i or params[:q].to_s =~ /晶振/i or params[:q].to_s =~ /电感/i
+                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `part_name` LIKE '%"+params[:q].to_s.split(" ")[0]+"%' AND `value2`  = '%"+params[:q].to_s.split(" ")[1]+"%' AND `value3`  LIKE '%"+params[:q].to_s.split(" ")[2]+"%'").to_ary
                 else
                     find_bom = ""
                     if  @package2 != ""

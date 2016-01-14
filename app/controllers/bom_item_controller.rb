@@ -269,21 +269,32 @@ skip_before_action :verify_authenticity_token
 		@query_str = str +" with part_name: "+ str.split(" ")[-1]
             else
                 Rails.logger.info("7")
-                if params[:q].to_s =~ /led/i 
-                    if params[:q].to_s =~ /green/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '绿灯' AND `part_name` = 'LED'").to_ary
-                    elsif params[:q].to_s =~ /red/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '红灯' AND `part_name` = 'LED'").to_ary
-                    elsif params[:q].to_s =~ /blue/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '蓝灯' AND `part_name` = 'LED'").to_ary
-                    elsif params[:q].to_s =~ /yellow/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '黄灯' AND `part_name` = 'LED'").to_ary
-                    elsif params[:q].to_s =~ /white/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '白灯' AND `part_name` = 'LED'").to_ary
-                    elsif params[:q].to_s =~ /orange/i 
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '橙灯' AND `part_name` = 'LED'").to_ary
+                if params[:q].to_s =~ /led/i
+                    led_package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'LED' AND products.package2 <> '' GROUP BY products.package2")
+                    led_p_all = led_package2_all.select { |item| params[:q].to_s.include?item.package2.to_s }
+                    if not led_p_all.blank?
+                        Rails.logger.info("led_p_all.first.package2__________0000000000000000000000000000000000000bbbbb_________")
+                        Rails.logger.info(led_p_all.first.package2)
+                        Rails.logger.info("led_p_all.first.package2_________0000000000000000000000000000000000000bbbbb______________________") 
+                        led_package = led_p_all.first.package2
+                        find_led_p = " AND `package2` = '"+led_package.to_s+"'"                
                     else
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'").to_ary
+                        find_led_p = ""
+                    end 
+                    if params[:q].to_s =~ /green/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '绿灯' AND `part_name` = 'LED'"+find_led_p).to_ary
+                    elsif params[:q].to_s =~ /red/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '红灯' AND `part_name` = 'LED'"+find_led_p).to_ary
+                    elsif params[:q].to_s =~ /blue/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '蓝灯' AND `part_name` = 'LED'"+find_led_p).to_ary
+                    elsif params[:q].to_s =~ /yellow/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '黄灯' AND `part_name` = 'LED'"+find_led_p).to_ary
+                    elsif params[:q].to_s =~ /white/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '白灯' AND `part_name` = 'LED'"+find_led_p).to_ary
+                    elsif params[:q].to_s =~ /orange/i 
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `value1` = '橙灯' AND `part_name` = 'LED'"+find_led_p).to_ary
+                    else
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'"+find_led_p).to_ary
                     end
                 else
                     find_bom = ""

@@ -1442,7 +1442,30 @@ WHERE
                 Rails.logger.info("0000000000000000000000000000000000000bbbbb111111111111111111")
             elsif  ( part and part.part_name == "IC" )
                 #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[0-9]+(?!\W)|[%]+)/)
-                ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
+                query_str_all = ""
+                query_str.split(" ").each do |item_q|
+                    if item_q.to_s[-2..-1] =~ /e4/i or item_q.to_s[-2..-1] =~ /tr/i 
+                        item_q.to_s[-2..-1] = ""
+                    elsif item_q.to_s[-3..-1] =~ /pbf/i 
+                        item_q.to_s[-3..-1] = ""
+                    end
+                    query_str_all = query_str_all + " " + item_q
+                end
+                query_str = query_str_all
+                #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
+                ary_q = query_str.to_s.scan(/([a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*-?\d*\.*\d*)/)
+                use_ic = ""
+                ary_q.join(" ").split(" ").each do |i|
+	            if i.include?"-"
+		        use_ic = i
+		        #puts use_ic
+	            end
+                end
+                if use_ic != ""
+	            ary_q = [] 
+	            ary_q << use_ic
+	            puts ary_q
+                end	
                 ary_q[3] = "IC"
             elsif  ( part and part.part_name == "Q" )
                 Rails.logger.info("QQQ---------------------------------------------------------QQQ")              

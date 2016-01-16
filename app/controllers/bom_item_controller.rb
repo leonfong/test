@@ -240,14 +240,15 @@ skip_before_action :verify_authenticity_token
                             Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2")
                             Rails.logger.info(ary_unit)
                             Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2")
-  	  		    flash[:error] = t('error_a')
+  	  		    #flash[:error] = t('error_a')
   	  		      
   	  		else
   	  		    #从unit表查找对应的目标单位字符串
   	  		    ary_unit = ary_unit.join("")
   	  		    unit = Unit.find_by(unit: ary_unit)
   	  		    unless unit
-  	  		        flash[:error] = t('error_b')     	  		        
+  	  		        #flash[:error] = t('error_b') 
+                                Rails.logger.info(t('error_b'))    	  		        
   	  		    else
   	  		        #用查询得到的标准单位替换关键字串中的单位
   	  		        str.sub!(/[a-zA-Z]+/, unit.targetunit)
@@ -258,7 +259,8 @@ skip_before_action :verify_authenticity_token
   			            #@match_products = Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary               
                                     @match_products = Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true).to_ary                    
      		                    if @match_products.length == 0
-	  		                flash[:error] = t('error_c')
+	  		                #flash[:error] = t('error_c')
+                                        Rails.logger.info(t('error_c'))
 	  		            end
   	  		        end
   	  		    end

@@ -327,11 +327,14 @@ WHERE
 		Rails.logger.info("ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
                 Rails.logger.info(ary2.inspect)
                 Rails.logger.info(part_code)
-                match_product = search_bom(desc,part_code) #根据关键字和位号查询产品
+                match_product = search_bom_use(desc,mpn)
+                if match_product == []
+                    match_product = search_bom(desc,part_code) #根据关键字和位号查询产品
+                end
                 bom_item.product_id = match_product.first.id if match_product.count > 0
                 
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccc0000000000000000000000000000000000000000000000000000000000000")
-                #Rails.logger.info(match_product.inspect)   
+                Rails.logger.info(match_product.inspect)   
                 Rails.logger.info("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")     
 		
 		#bom_item.match_product = match_product.first unless match_product.empty?
@@ -837,9 +840,18 @@ WHERE
         def bom_params
   	    params.require(:bom).permit(:name, :excel_file)
   	end
+        
+        def search_bom_use (query_str,mpn)
+            if query_str != ""
+                result = MpnItem.find_by_sql("SELECT bom_items.*, products.* FROM products INNER JOIN bom_items ON bom_items.product_id = products.id WHERE bom_items.description = '" + query_str.to_s.strip + "' ORDER BY products.prefer DESC")
+            elsif query_str == "" and mpn != ""
+                result = MpnItem.find_by_sql("SELECT bom_items.*, mpn_items.* FROM mpn_items INNER JOIN bom_items ON bom_items.mpn = mpn_items.mpn WHERE bom_items.mpn_id IS NOT NULL AND bom_items.mpn = '" + mpn.to_s.strip + "' ")
+            end
+        end
 
         def search_bom (query_str,part_code)
             #str = get_query_str(query_str)
+
             if not part_code.blank?
                 ary2 = part_code.upcase.to_s.scan(/[A-Z]+/)
 	        part_code = ary2[0]
@@ -940,13 +952,6 @@ WHERE
                         else
                             result_w = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' "+find_bom+sql_b).to_ary
                         end
-
-
-
-
-
-
-
 
 
 

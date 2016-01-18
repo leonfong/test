@@ -14,11 +14,15 @@ class StaticPagesController < ApplicationController
 
   def about
       url = 'http://api.supplyframe.com/v1/t?d=ls1ki72&p=LM2937IMPX-10%2FNOPB&s=LM2937IMP&h=0-604xKA0Sys8NcPQeLRHw'
-      open('http://api.supplyframe.com/v1/t?d=ls1ki72&p=LM2937IMPX-10%2FNOPB&s=LM2937IMP&h=0-604xKA0Sys8NcPQeLRHw', :allow_redirections => :safe) {|f|
-          f.each_line {|line| p line}
-          url = f.base_uri         
-          Rails.logger.info(f.base_uri.inspect) 
-      }
+      #open(url, :allow_redirections => :safe) {|f|
+     #     f.each_line {|line| p line}
+      #    url = f.base_uri         
+      #    Rails.logger.info(f.base_uri.inspect) 
+     # }
+
+
+
+
       #url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part=LM2937IMP'
       
       #url += '&queries=' + URI.encode(JSON.generate([{:mpn => mpn}]))

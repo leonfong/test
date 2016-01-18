@@ -51,7 +51,7 @@ gem 'sphinx'
 gem 'will_paginate'
 gem 'mysql'
 gem 'mysql2'
-
+gem 'open_uri_redirections'
 gem 'carrierwave'
 
 gem 'roo', '~> 2.0.0'

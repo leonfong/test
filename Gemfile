@@ -54,6 +54,7 @@ gem 'mysql2'
 gem 'open_uri_redirections'
 gem 'carrierwave'
 
+#gem 'nokogiri'
 gem 'roo', '~> 2.0.0'
 gem 'roo-xls'
 gem 'spreadsheet'

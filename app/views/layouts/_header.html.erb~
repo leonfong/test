@@ -15,13 +15,14 @@
                  <span class="icon-bar"></span>
              </button>
              
-             <a class="navbar-brand" href="<%=root_path %>"><%= image_tag "logo.jpg",size: "67x67", class: " img-rounded" %></a>
+             <a class="navbar-brand" href="<%=root_path %>"><%= image_tag "logo.bmp",size: "67x67", class: " img-rounded" %></a>
          </div>
 
          <!-- Collect the nav links, forms, and other content for toggling -->
          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
              
              <ul class="nav navbar-nav">
+                 <li><%= link_to 'Search BOM',root_path %></li>
                  <li><%= link_to t('bom_parser'),root_path %></li>
                  <li><%= link_to t('all_boms'),boms_path %></li>
                  

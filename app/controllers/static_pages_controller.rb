@@ -8,6 +8,11 @@ class StaticPagesController < ApplicationController
   def home
   end
 
+  def how
+      @bom = Bom.new
+      @mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
+  end
+
   def help
 
   end

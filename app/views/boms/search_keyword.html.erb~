@@ -85,7 +85,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                     <br>
                   <% end %>
                 </td>
-                <td><a class="text-muted"  href="http://www.alldatasheet.com/view.jsp?Searchword="<%= i['part'] %> target="_black"><img alt="Datasheet" src="/assets/datasheet.png"></a></td>
+                <td><a class="text-muted"  href="http://www.alldatasheet.com/view.jsp?Searchword=<%= i['part'] %>" target="_black"><img alt="Datasheet" src="/assets/datasheet.png"></a></td>
               </tr>
             <% end %>
             </tbody>

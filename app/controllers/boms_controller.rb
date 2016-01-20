@@ -18,14 +18,38 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
     
     def search_keyword
         @bom = Bom.new
-        @mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
+        #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
         if not params[:mpn] == ""
-            @mpn_item = search_findchips(params[:mpn])
-            
-            
-            Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-            #Rails.logger.info(@mpn_item.inspect)
-            Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+            if params[:mpn].split(" ").length == 1
+                @mpn_item = search_findchips(params[:mpn])
+                Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                #Rails.logger.info(@mpn_item.inspect)
+                Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                if @mpn_item == []
+                    keywords = params[:mpn].split(" ")
+                    key_where = " products.description LIKE '%%'"
+                    keywords.each do |k|
+                    key_where = key_where + " AND products.description LIKE '%" + k.to_s + "%'"
+                    end
+                    @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where).to_ary
+                    if @key_item == []
+                        flash.now[:error] = "I'm sorry, not found your chip information query."
+                    end
+                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    #Rails.logger.info(@key_item.inspect)
+                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                end
+            else
+                keywords = params[:mpn].split(" ")
+                key_where = " products.description LIKE '%%'"
+                keywords.each do |k|
+                    key_where = key_where + " AND products.description LIKE '%" + k.to_s + "%'"
+                end
+                @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where).to_ary
+                if @key_item == []
+                    flash.now[:error] = "I'm sorry, not found your chip information query."
+                end
+            end
         else
             flash.now[:error] = "Please enter the Keywords/Part Number"
         end

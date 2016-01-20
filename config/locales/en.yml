@@ -30,7 +30,7 @@ en:
   view: View
   delete: Delete
   sure_delete: Sure you want to delete
-  up_excel: Upload Excel(.xls or .xlsx) file
+  up_excel: Upload the excel format of the BOM list (.xls or .xlsx), a quick and efficient to complete the optimization of product cost evaluation scheme.
   bom_file: BOM file
   matched: The matched
   total_price: The total price

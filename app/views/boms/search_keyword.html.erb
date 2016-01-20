@@ -1,0 +1,153 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+
+
+  <div class="row ">
+    <div class="col-md-6 ">
+      <br>
+      <%= form_tag('/search',method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class=" col-md-6 form-group panel panel-default">
+      <br>
+      <%= form_for @bom, html: { multipart: true } do |f| %>
+        <div class="input-group "> 	
+	  <%= f.file_field :excel_file, class: "form-control input-lg" %> 
+          <div class="input-group-btn">
+            <%= f.submit t(:upload), class: "btn btn-warning btn-lg" %>
+          </div>
+        </div>
+		    
+        <label><h4><p class="text-muted"><%= t(:up_excel) %><p></h4></label>
+      <% end %>
+    </div>
+  </div>
+<hr>
+
+
+
+
+
+
+
+
+<% if not @mpn_item.blank? %>
+<% @mpn_item.each do |item| %>
+  <div class="row">
+    <div class="col-md-12 panel panel-default">
+      
+        <div >
+          <div class="panel-body">
+            <img src="<%= item['distributor']['logoUrl'] %>" alt="<%= item['distributor']['name'] %>">
+
+            <strong><%= item['distributor']['name'] %></strong>              
+          </div>
+    
+          <table class="table table-bordered">
+            <thead>
+              <tr class="bg-primary">
+                <th>MPN</th>
+                <th>Manufacturer</th>
+                <th>Description</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Datasheets</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% item['parts'].each do |i| %>
+              <tr>
+                <td><%= i['part'] %></td>
+                <td><%= i['manufacturer'] %></td>
+                <td><%= i['description'] %></td>
+                <td><%= i['stock'] %></td>
+                <td>
+                  
+                  <% i['price'].each do |pp| %>
+                    <div >
+		      <div class="pull-left"><%= pp['quantity'] %>
+		      <%= pp['currency'] %>
+                      <%= pp['price'] %></div>
+                    </div>
+                    <br>
+                  <% end %>
+                </td>
+                <td><a class="text-muted"  href="http://www.alldatasheet.com/view.jsp?Searchword=<%= i['part'] %>" target="_black"><img alt="Datasheet" src="/assets/datasheet.png"></a></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      
+    </div>
+  </div>
+  <% end %>
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% if  @mpn_item=="999999999" %>
+
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>MPN</th>
+            <th>Manufacturer</th>
+            <th>Authorized distributor</th>
+            <th>Datasheets</th>
+            <th>Description</th>
+            <th>Price(USD)</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+              <td><%= @mpn_item[0] %></td>
+              <td><%= @mpn_item[1] %></td>
+              <td><%= @mpn_item[2] %></td>
+              <td><%= @mpn_item[2] %></td>
+              <td><%= @mpn_item[3] %></td>
+              <td><%= @mpn_item[4] %></td>
+            </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+
+
+    
+
+
+

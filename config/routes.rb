@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   match '/about', to: 'static_pages#about', via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
   match '/how_to_use', to: 'static_pages#how', via: 'get'
+  match '/search', to: 'boms#search_keyword', via: 'get'
 
   root to: 'boms#upload'
   #root to: "boms#index"

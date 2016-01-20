@@ -3,7 +3,7 @@ require 'spreadsheet'
 
 class BomsController < ApplicationController
 skip_before_action :verify_authenticity_token
-before_filter :authenticate_user!, :except => [:upload,:mpn_item]
+before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword]
     def index
         #@boms = Bom.all
         if current_user.email == "web@mokotechnology.com"
@@ -15,7 +15,24 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item]
         Rails.logger.info(@boms.inspect)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
     end
-   
+    
+    def search_keyword
+        @bom = Bom.new
+        @mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
+        if not params[:mpn] == ""
+            @mpn_item = search_findchips(params[:mpn])
+            
+            
+            Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+            #Rails.logger.info(@mpn_item.inspect)
+            Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        else
+            flash.now[:error] = "Please enter the Keywords/Part Number"
+        end
+    end
+
+    
+
     def search
         if !params[:q].nil? 
       	    str = params[:q]
@@ -836,6 +853,28 @@ WHERE
     end
 
     private
+
+        def search_findchips(mpn)
+            #mpn = "LM2937IMP"
+            url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
+            url += mpn
+            resp = Net::HTTP.get_response(URI.parse(url))
+            server_response = JSON.parse(resp.body)
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")
+            #Rails.logger.info(url.inspect) 
+            #Rails.logger.info(resp.code.inspect)                #"200"   
+            #Rails.logger.info(resp.content_length.inspect)      #8023   
+            #Rails.logger.info(resp.message.inspect)             #"OK"       
+            #Rails.logger.info(server_response.inspect)   
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")   
+            Rails.logger.info("prices_all222222222222222222222222222222222222222222222222222222222222222222222222222") 
+            #Rails.logger.info(server_response['response'].inspect)
+            Rails.logger.info("prices_all22222222222222222222222222222222222222222222222222222222222222222222") 
+            server_response['response'].each do |item|
+                Rails.logger.info("prices_44444444444444444444444444444444444")
+                Rails.logger.info(item.inspect)
+            end
+        end
 
         def bom_params
   	    params.require(:bom).permit(:name, :excel_file)

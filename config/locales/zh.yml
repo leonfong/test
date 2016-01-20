@@ -30,7 +30,7 @@ zh:
   view: 查看
   delete: 删除
   sure_delete: 确定要删除
-  up_excel: 上传Excel文件
+  up_excel: 上传excel格式的BOM清单(.xls or .xlsx)，快速、高效的完成最优化的产品成本估价方案.
   bom_file: BOM文件
   matched: 已匹配
   total_price: 总价格

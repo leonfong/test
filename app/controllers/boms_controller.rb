@@ -18,14 +18,25 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
     
     def down_excel
         path = params[:path]
-     
-        # ...
-        # 这里完成权限校验、下载统计等等
-        # ...
-     
-        # 重定向完成下载
-        response.headers['X-Accel-Redirect'] = "/public/" + path
-        render :nothing => true
+        filename = params[:filename]
+        #response.headers['X-Accel-Redirect'] = "/public/" + path
+        #render :nothing => true
+        begin
+            if Rails.env = 'production'
+                return head(
+                    'X-Accel-Redirect' => "/public/#{path}",
+                    'Content-Length' => filesize,
+                    
+                    'Content-Disposition' => "attachment; filename=\"#{filename}\""
+            )
+            else
+                send_file(path, filename: filename)
+            end
+        rescue Exception => e
+            not_found
+        ensure
+            logger.info response.headers
+        end
     end   
  
     def search_keyword

@@ -25,8 +25,6 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
             if Rails.env = 'production'
                 return head(
                     'X-Accel-Redirect' => "/public/#{path}",
-                    'Content-Length' => filesize,
-                    
                     'Content-Disposition' => "attachment; filename=\"#{filename}\""
             )
             else

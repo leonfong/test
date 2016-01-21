@@ -21,7 +21,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
         filename = params[:filename]
         #response.headers['X-Accel-Redirect'] = "/public/" + path
         #render :nothing => true
-        begin
+
             if Rails.env = 'production'
                 return head(
                     'X-Accel-Redirect' => "/public/#{path}",
@@ -32,11 +32,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
             else
                 send_file(path, filename: filename)
             end
-        rescue Exception => e
-            not_found
-        ensure
-            logger.info response.headers
-        end
+
     end   
  
     def search_keyword

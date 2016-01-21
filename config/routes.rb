@@ -14,7 +14,8 @@ Rails.application.routes.draw do
   match '/contact', to: 'static_pages#contact', via: 'get'
   match '/how_to_use', to: 'static_pages#how', via: 'get'
   match '/search', to: 'boms#search_keyword', via: 'get'
-
+  match '/down_excel', to: 'boms#down_excel', via: 'get'
+  
   root to: 'boms#upload'
   #root to: "boms#index"
   match '/boms/choose', to: 'boms#choose',via: 'get'

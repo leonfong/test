@@ -16,6 +16,17 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
     end
     
+    def down_excel
+        path = params[:path]
+     
+        # ...
+        # 这里完成权限校验、下载统计等等
+        # ...
+     
+        # 重定向完成下载
+        @response.headers['X-Accel-Redirect'] = "/public/" + path
+    end   
+ 
     def search_keyword
         @bom = Bom.new
         #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")

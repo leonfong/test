@@ -120,16 +120,6 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   
   <div class="col-md-12">
 
-<div class="panel panel-primary">
-   <div class="panel-heading">面板标题</div>
-   <table class="table">
-      <th>产品</th><th>价格 </th>
-      <tr><td>产品 A</td><td>200</td></tr>
-      <tr><td>产品 B</td><td>400</td></tr>
-   </table>
-</div>
-
-
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title"><strong><%= t(:current_search) %>：</strong></h3>
@@ -157,7 +147,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     <div class="col-md-12">
       <table class="table table-bordered">
         <thead>
-          <tr class="bg-primary">
+          <tr class="bg-info">
             <th>Description</th>
             <th>Price(USD)</th>
           </tr>

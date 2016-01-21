@@ -21,6 +21,7 @@
         <% if user_signed_in? %>
           <% if current_user.email == "web@mokotechnology.com" %>
             <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
+            <td><%= link_to bom.excel_file_identifier, down_excel_path(:path =>bom.excel_file_url) %></td>
           <% else %>
             <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
           <% end %>
@@ -33,6 +34,6 @@
 </div>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
-     description: @itemall,
-     keywords: @itemall
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
 %>

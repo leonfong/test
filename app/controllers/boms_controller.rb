@@ -25,6 +25,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
      
         # 重定向完成下载
         @response.headers['X-Accel-Redirect'] = "/public/" + path
+        render :nothing => true
     end   
  
     def search_keyword

@@ -26,12 +26,40 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                 #Rails.logger.info(@mpn_item.inspect)
                 Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                 if @mpn_item == []
+                    if params[:part_name].nil? and params[:package2].nil?
+	                @ptype = ""
+		        @package2 = ""
+                        find_bom = ""
+	            elsif params[:package2].nil?
+		        @ptype = params[:part_name]
+                        #@ptype = ""
+	                @package2 = ""
+                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' "
+	            elsif params[:part_name].nil?
+	                @ptype = ""
+	                @package2 = params[:package2]
+                        find_bom = " AND `package2` = '"+@package2+"' "
+	            else
+	                @ptype = params[:part_name]
+                        #@ptype = ""
+	                @package2 = params[:package2]
+                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
+	            end
+
+                    
                     keywords = params[:mpn].split(" ")
                     key_where = " products.description LIKE '%%'"
                     keywords.each do |k|
                     key_where = key_where + " AND products.description LIKE '%" + k.to_s + "%'"
                     end
-                    @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where).to_ary
+                    @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where + find_bom).to_ary
+                    @counted = Hash.new(0)
+                    @key_item.each { |h| @counted[h["part_name"]] += 1 }
+                    @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
+				
+	            @counted1 = Hash.new(0)
+                    @key_item.each { |h| @counted1[h["package2"]] += 1 }
+                    @counted1 = Hash[@counted1.map {|k,v| [k,v.to_s] }]	
                     if @key_item == []
                         flash.now[:error] = "I'm sorry, not found your chip information query."
                     end
@@ -40,12 +68,39 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                 end
             else
+                if params[:part_name].nil? and params[:package2].nil?
+	            @ptype = ""
+		    @package2 = ""
+                    find_bom = ""
+	        elsif params[:package2].nil?
+		    @ptype = params[:part_name]
+                        #@ptype = ""
+	                @package2 = ""
+                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' "
+	            elsif params[:part_name].nil?
+	                @ptype = ""
+	                @package2 = params[:package2]
+                        find_bom = " AND `package2` = '"+@package2+"' "
+	            else
+	                @ptype = params[:part_name]
+                        #@ptype = ""
+	                @package2 = params[:package2]
+                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
+	            end
                 keywords = params[:mpn].split(" ")
                 key_where = " products.description LIKE '%%'"
                 keywords.each do |k|
                     key_where = key_where + " AND products.description LIKE '%" + k.to_s + "%'"
                 end
-                @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where).to_ary
+                @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where + find_bom).to_ary
+                #@key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where).to_ary
+                @counted = Hash.new(0)
+                @key_item.each { |h| @counted[h["part_name"]] += 1 }
+                @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
+				
+	        @counted1 = Hash.new(0)
+                @key_item.each { |h| @counted1[h["package2"]] += 1 }
+                @counted1 = Hash[@counted1.map {|k,v| [k,v.to_s] }]	
                 if @key_item == []
                     flash.now[:error] = "I'm sorry, not found your chip information query."
                 end

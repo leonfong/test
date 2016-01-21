@@ -115,6 +115,30 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 <% if not @key_item.blank? %>
 
+
+<div class="row">
+  
+  <div class="col-md-12">
+    <table class="table table-bordered">
+    <thead><tr><td><strong><%= t(:current_search) %>：</strong></td></tr></thead>
+    
+    <tbody>
+    
+    <% unless @package2 and @ptype %>
+      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}",  search_path(:part_name =>key, :mpn =>params[:mpn]) %> <span class="badge"> <%= value.to_s %> </span><% end %><% end %></td></tr>
+      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}",  search_path(:package2 =>key, :mpn =>params[:mpn]) %> <span class="badge"> <%= value.to_s %> </span><% end %><% end %></td></tr>
+    <% else %>
+      <tr><td><%= t(:category) %>： <% unless @counted.nil? %> <% @counted.each do |key, value| %>  <%= link_to "#{key}",  search_path(:part_name =>key, :mpn =>params[:mpn]) %> <span class="badge"> <%= value.to_s %> </span><% end %><% end %></td></tr>
+      <tr><td><%= t(:packaging) %>： <% unless @counted1.nil? %><% @counted1.each do |key, value| %> <%= link_to "#{key}", search_path(:package2 =>key, :part_name =>@ptype, :mpn =>params[:mpn]) %><span class="badge"> <%= value.to_s %> </span> <% end %><% end %></td></tr>
+    <% end %>
+      
+    
+    </tbody>
+    </table>
+  </div>
+</div>
+
+
   <div class="row">
     <div class="col-md-12">
       <table class="table table-bordered">

@@ -47,7 +47,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 	<div class=" col-md-8 form-group panel panel-default">
 		<%= form_for @bom, html: { multipart: true } do |f| %>
-			<label><h4><p class="text-muted"><%= t(:up_excel) %><p></h4></label>
+			<label><h4><p class="text-muted"><%= t(:up_excel) %><%= link_to t('bom_parser'),how_to_use_path %><p></h4></label>
 		    <%= f.file_field :excel_file, class: "btn btn-default" %>
 		    <br/>
 		    <%= f.submit t(:upload), class: "btn btn-warning btn-lg" %>
@@ -98,6 +98,33 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     </div>
   </div>
 </div>
-         
+     
+
+
+<ul id="myTab" class="nav nav-tabs">
+   <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+   <li><a href="#ios" data-toggle="tab">iOS</a></li>
+
+</ul>
+<div id="myTabContent" class="tab-content">
+   <div class="tab-pane fade in active" id="home">
+      <p>test1</p>
+   </div>
+   <div class="tab-pane fade" id="ios">
+      <p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple 
+      TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
+   </div>
+   <div class="tab-pane fade" id="jmeter">
+      <p>jMeter 是一款开源的测试软件。它是 100% 纯 Java 应用程序，用于负载和性能测试。</p>
+   </div>
+   <div class="tab-pane fade" id="ejb">
+      <p>Enterprise Java Beans（EJB）是一个创建高度可扩展性和强大企业级应用程序的开发架构，部署在兼容应用程序服务器（比如 JBOSS、Web Logic 等）的 J2EE 上。
+      </p>
+   </div>
+</div>
+
+
+
+      
 </div>
 </div>

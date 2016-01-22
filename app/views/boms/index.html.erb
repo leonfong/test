@@ -22,8 +22,11 @@
           <% if current_user.email == "web@mokotechnology.com" %>
 <!--
             <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
--->
+
+
             <td><%= link_to bom.excel_file_identifier, down_excel_path(:path =>raw(bom.excel_file_url),:filename =>bom.excel_file_identifier) %></td>
+-->
+            <td><%= link_to bom.excel_file_identifier, down_excel_path(:id =>bom.id,format: "xls") %></td>
           <% else %>
             <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
           <% end %>

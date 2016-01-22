@@ -17,25 +17,67 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
     end
     
     def down_excel
-        path = params[:path]
+        #path = params[:path]
         #path = "/var/www/fastbom/public"+params[:path]
-        filename = params[:filename]
-        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-        Rails.logger.info(path.inspect)
-        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #filename = params[:filename]
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #Rails.logger.info(path.inspect)
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         #response.headers['X-Accel-Redirect'] = "/public/" + path
         #render :nothing => true
 
-            if Rails.env = 'production'
-                return head(
-                    'X-Accel-Redirect' => "/public#{path}",
-                    'Content-Type' => "application/excel",
-                    'Content-Disposition' => "attachment; filename=\"#{filename}\""
-            )
-            else
-                send_file(path, filename: filename, type: "application/vnd.ms-excel")
+            #if Rails.env = 'production'
+                #return head(
+                    #'X-Accel-Redirect' => "/public#{path}",
+                    #'Content-Type' => "application/excel",
+                    #'Content-Disposition' => "attachment; filename=\"#{filename}\""
+            #)
+            #else
+                #send_file(path, filename: filename, type: "application/vnd.ms-excel")
                 #send_file("/var/www/fastbom/public"+path)
-            end
+            #end
+        
+
+        @bom = Bom.find(params[:id])
+        file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
+    
+
+        respond_to do |format|
+	    format.xls { 
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		sheet1.row(0).concat %w{No Des Location_code quantity Mpn}
+
+		@bom.bom_items.each_with_index do |item,index|
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :weight           => :bold,
+                    :pattern_bg_color => :red,
+                    :size             => 10,
+                    :color => :red
+                    })
+		    row = sheet1.row(rowNum)
+                    if item.warn
+                        #[0,1,2,3,4,5,6,7].each{|col|
+                        row.set_format(2,title_format)
+                        #row.default_format = color
+                        #}
+                    end
+		    row.push(rowNum)
+		    row.push(item.description)
+		    row.push(item.part_code)
+		    row.push(item.quantity)
+                    row.push(item.mpn)		 
+                end
+
+                file_contents = StringIO.new
+	        ff.write (file_contents)
+	        send_data(file_contents.string.force_encoding('binary'), filename: file_name)
+            }
+        end
 
     end   
  

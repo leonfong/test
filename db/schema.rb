@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218013345) do
+ActiveRecord::Schema.define(version: 20160122010749) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -60,16 +60,26 @@ ActiveRecord::Schema.define(version: 20151218013345) do
   add_index "boms", ["name"], name: "name", using: :btree
   add_index "boms", ["user_id"], name: "uid", using: :btree
 
+  create_table "keywords", force: :cascade do |t|
+    t.string   "keywords",   limit: 255
+    t.string   "ip",         limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "mpn_items", force: :cascade do |t|
     t.string   "mpn",                    limit: 255
     t.string   "manufacturer",           limit: 255
     t.string   "authorized_distributor", limit: 255
     t.string   "description",            limit: 255
+    t.string   "datasheets",             limit: 255
     t.string   "price",                  limit: 255
     t.string   "last_update",            limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "mpn_items", ["mpn"], name: "mpn", using: :btree
 
   create_table "parts", force: :cascade do |t|
     t.string   "part_code",  limit: 255

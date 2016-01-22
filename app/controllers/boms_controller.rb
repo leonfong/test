@@ -18,17 +18,23 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
     
     def down_excel
         path = params[:path]
+        #path = "/var/www/fastbom/public"+params[:path]
         filename = params[:filename]
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(path.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         #response.headers['X-Accel-Redirect'] = "/public/" + path
         #render :nothing => true
 
             if Rails.env = 'production'
                 return head(
-                    'X-Accel-Redirect' => "/public/#{path}",
+                    'X-Accel-Redirect' => "/public#{path}",
+                    'Content-Type' => "application/excel",
                     'Content-Disposition' => "attachment; filename=\"#{filename}\""
             )
             else
-                send_file(path, filename: filename)
+                send_file(path, filename: filename, type: "application/vnd.ms-excel")
+                #send_file("/var/www/fastbom/public"+path)
             end
 
     end   
@@ -37,6 +43,9 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
         @bom = Bom.new
         #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
         if not params[:mpn] == ""
+            key_up = Keywords.new
+            key_up.keywords = params[:mpn]
+            key_up.save
             if params[:mpn].split(" ").length == 1
                 @mpn_item = search_findchips(params[:mpn])
                 Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")

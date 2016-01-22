@@ -47,7 +47,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 	<div class=" col-md-8 form-group panel panel-default">
 		<%= form_for @bom, html: { multipart: true } do |f| %>
-			<label><h4><p class="text-muted"><%= t(:up_excel) %><p></h4></label>
+			<label><h4><p class="text-muted"><%= t(:up_excel) %><%= link_to t('bom_parser'),how_to_use_path %><p></h4></label>
 		    <%= f.file_field :excel_file, class: "btn btn-default" %>
 		    <br/>
 		    <%= f.submit t(:upload), class: "btn btn-warning btn-lg" %>

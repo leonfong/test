@@ -17,6 +17,5 @@
 //= require react_ujs
 //= require components
 //= require bootstrap
-//= require bootstrap/modal
 //= require_tree .
 

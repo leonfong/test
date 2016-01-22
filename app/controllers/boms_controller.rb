@@ -17,6 +17,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
     end
     
     def down_excel
+
         #path = params[:path]
         #path = "/var/www/fastbom/public"+params[:path]
         #filename = params[:filename]

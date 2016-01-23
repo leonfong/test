@@ -60,7 +60,7 @@ en:
   error_e: upload fails, please try again.
   success_c: has been deleted.
   step_b: "EXCEL(.xls or xlsx) file, including "
-  step_bb: ""
+  step_bb: ", these four headers must have but MPN and Des can be blank."
   step_c: "Upload the excel file."
   step_d: "Check Button."
   c_us: "If you want to contact us, please send an email to "

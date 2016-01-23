@@ -13,7 +13,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 			<label><h4><p class="text-muted"><%= t(:up_excel) %></p></h2></label>
 		    <%= f.file_field :excel_file, class: "btn btn-default" %>
 		    <br/>
-		    <%= f.submit t(:upload), class: "btn btn-primary" %>
+		    <%= f.submit t(:upload), class: "btn btn-warning btn-lg" %>
 		<% end %>
 
 	</div>
@@ -49,8 +49,8 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     <div class="item">
       <%= image_tag "2.1.png", class: "img-responsive" %>
       <div class="bg-success text-primary text-center">
-        <br><p><h3><strong>Step 2</strong></h3></p>
-        <p><h4><%= t('step_b') %><code>Qty</code>, <code>Des</code>, <code>Mpn</code>, <code>Ref</code><%= t('step_bb') %></h4></p><br><br>
+        <p><h3><strong>Step 2</strong></h3></p>
+        <p><h4><%= t('step_b') %><code>Qty</code>, <code>Des</code>, <code>Mpn</code>, <code>Ref</code><%= t('step_bb') %></h4></p><br>
       </div>
     </div>
     <div class="item">

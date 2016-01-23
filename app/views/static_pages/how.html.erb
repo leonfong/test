@@ -83,38 +83,35 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 </div>
 <br><br>
 
-<div class="row panel panel-info">
-  <div class="col-md-12" style="background-color: #e0e0e0;">
-    <div class="col-md-12">
-      <p><h4>Real-time electronic components price query<h4></p>
-    </div>
-  </div>
+<ul id="myTab" class="nav nav-pills nav-justified">
+   <li class="active"><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
+   <li><a href="#ios" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
 
-  <div class="row">
-    <div class="col-md-12">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>MPN</th>
-            <th>Description</th>
-            <th>Price(USD)</th>
-          </tr>
-        </thead>
-        <tbody>
+</ul>
+<div id="myTabContent" class="tab-content">
+   <div class="tab-pane fade in active" id="home">
+         <br><br>  
+         <p>   
           <% @mpn_show.each_with_index do |item,index| %>
-            <tr>
-              <th scope="row"><%= index+1 %></th>
-              <td><%= link_to item.mpn,  {controller: "boms",action: "mpn_item", mpn: item.mpn} %></td>
-              <td><%= item.description %></td>
-              <td><%= item.price %></td>
-            </tr>
+              <%= link_to item.mpn,  {controller: "boms", action: "search_keyword", mpn: item.mpn} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
+         </p>
+   </div>
+   <div class="tab-pane fade" id="ios">
+       <br><br>
+       <p>   
+          <% @des_show.each_with_index do |item,index| %>                   
+              <%= link_to item.description,  {controller: "boms", action: "des_item", mpn: item.description} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <% end %>
+       </p>
+   </div>
 </div>
+<script>
+   $(function () {
+      $('#myTab li:eq(1) a').tab('show');
+   });
+</script>
+
          
 </div>
 </div>

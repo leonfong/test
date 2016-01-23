@@ -560,7 +560,9 @@ WHERE
 
     def upload
         @bom = Bom.new
-        @mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
+        #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
+        @mpn_show = MpnItem.find_by_sql("SELECT * FROM mpn_items WHERE mpn IS NOT NULL AND id >= ((SELECT MAX(id) FROM mpn_items)-(SELECT MIN(id) FROM mpn_items)) * RAND() + (SELECT MIN(id) FROM mpn_items) LIMIT 100")
+        @des_show = Product.find_by_sql("SELECT * FROM products WHERE id >= ((SELECT MAX(id) FROM products)-(SELECT MIN(id) FROM products)) * RAND() + (SELECT MIN(id) FROM products) LIMIT 100")
     end
 
     def choose
@@ -998,6 +1000,10 @@ WHERE
 
     def mpn_item
         @mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` ='" + params[:mpn]+"'").first
+    end
+
+    def des_item
+        @des_item = Product.find_by_sql("SELECT * FROM `products` WHERE `description` ='" + params[:mpn]+"'").first
     end
 
     private

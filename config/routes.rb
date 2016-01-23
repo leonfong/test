@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   match '/bom_item/edit', to: 'bom_item#edit', via: 'post'
   match '/boms/mpn', to: 'boms#mpn#', via: 'get'
   match '/boms/mpn_item', to: 'boms#mpn_item', via: 'get'
+  match '/boms/des_item', to: 'boms#des_item', via: 'get'
 
   resources :boms, only: [:index,:show, :new, :create, :destroy, :mark, :mpn]
   #resources :boms

@@ -70,54 +70,26 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 
 <ul id="myTab" class="nav nav-pills nav-justified">
-   <li class="active"><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query</a></li>
-   <li><a href="#ios" type="button" data-toggle="tab">Real-time electronic components price query</a></li>
+   <li class="active"><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
+   <li><a href="#ios" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
 
 </ul>
 <div id="myTabContent" class="tab-content">
    <div class="tab-pane fade in active" id="home">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>MPN</th>
-            <th>Description</th>
-            <th>Price(USD)</th>
-          </tr>
-        </thead>
-        <tbody>
+         <br><br>  
+         <p>   
           <% @mpn_show.each_with_index do |item,index| %>
-            <tr>
-              <th scope="row"><%= index+1 %></th>
-              <td><%= link_to item.mpn,  {action: "mpn_item", mpn: item.mpn} %></td>
-              <td><%= item.description %></td>
-              <td><%= item.price %></td>
-            </tr>
+              <%= link_to item.mpn,  {action: "mpn_item", mpn: item.mpn} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <% end %>
-        </tbody>
-      </table>
+         </p>
    </div>
    <div class="tab-pane fade" id="ios">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>MPN</th>
-            <th>Description</th>
-            <th>Price(USD)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @mpn_show.each_with_index do |item,index| %>
-            <tr>
-              <th scope="row"><%= index+1 %></th>
-              <td><%= link_to item.mpn,  {action: "mpn_item", mpn: item.mpn} %></td>
-              <td><%= item.description %></td>
-              <td><%= item.price %></td>
-            </tr>
+       <br><br>
+       <p>   
+          <% @des_show.each_with_index do |item,index| %>                   
+              <%= link_to item.description,  {action: "des_item", mpn: item.description} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <% end %>
-        </tbody>
-      </table>
+       </p>
    </div>
 </div>
 <script>

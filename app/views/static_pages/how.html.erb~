@@ -10,7 +10,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 	<div class=" col-md-8 form-group panel panel-info">
 		<%= form_for @bom, html: { multipart: true } do |f| %>
-			<label><h2><%= t(:up_excel) %></h2></label>
+			<label><h4><p class="text-muted"><%= t(:up_excel) %></p></h2></label>
 		    <%= f.file_field :excel_file, class: "btn btn-default" %>
 		    <br/>
 		    <%= f.submit t(:upload), class: "btn btn-primary" %>
@@ -101,7 +101,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
        <br><br>
        <p>   
           <% @des_show.each_with_index do |item,index| %>                   
-              <%= link_to item.description,  {action: "des_item", mpn: item.description} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <%= link_to item.description,  {controller: "boms", action: "des_item", mpn: item.description} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <% end %>
        </p>
    </div>

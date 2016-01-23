@@ -3,7 +3,7 @@ require 'spreadsheet'
 
 class BomsController < ApplicationController
 skip_before_action :verify_authenticity_token
-before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword]
+before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword,:des_item]
     def index
         #@boms = Bom.all
         if current_user.email == "web@mokotechnology.com"

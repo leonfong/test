@@ -691,31 +691,30 @@ WHERE
     end
 
     def search_in_api(mpn)
+        if mpn == nil
+            mpn = ""
+        end
+        mpn = mpn.strip
+        @item_id = params[:itemid]
         mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+mpn+"%'").first
         Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item")
         Rails.logger.info(mpn_item.inspect)   
         Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item") 
         if mpn_item.blank?
-            url = 'http://octopart.com/api/v3/parts/match?'
-            url += '&queries=' + URI.encode(JSON.generate([{:mpn => mpn}]))
-            url += '&apikey=809ad885'
-            url += '&include[]=descriptions'
-     
-            resp = Net::HTTP.get_response(URI.parse(url))
-            server_response = JSON.parse(resp.body)
-            Rails.logger.info("prices_all--------------------------------------------------------------------------")
-            Rails.logger.info(server_response['results'].inspect)   
-            Rails.logger.info("prices_all--------------------------------------------------------------------------")     
+            @mpn_item = search_findchips(params[:mpn])
             prices_all = []
             naive_id_all = []
-            server_response['results'].each do |result|
-                result['items'].each do |part|
-                    for f in part['offers']      
-                        if f['prices'].has_key?"USD"
-                            for p in f['prices']['USD']
-                                prices_all << p[-1].to_f
-                                naive_id_all << f['_naive_id']
-                            end
+            part_all = []
+            @mpn_item.each do |result|
+                result['parts'].each do |part|
+                    Rails.logger.info("part--------------------------------------------------------------------------part")
+                    Rails.logger.info(part.inspect)   
+                    Rails.logger.info("part--------------------------------------------------------------------------part") 
+                    part['price'].each do |f|     
+                        if f.has_value?"USD"
+                            prices_all << f['price'].to_f
+                            naive_id_all << result['distributor']['id'] 
+                            part_all << part['part']                                    
                         end
                     end
                 end
@@ -723,54 +722,45 @@ WHERE
             Rails.logger.info("prices_all--------------------------------------------------------------------------")
             Rails.logger.info(prices_all.inspect)   
             Rails.logger.info("prices_all--------------------------------------------------------------------------")    
-            api_result = []
+            @api_result = []
             if not prices_all == []
-                naive_id= naive_id_all[(prices_all.index prices_all.min)]
-                
                 mpn_new = MpnItem.new
-                server_response['results'].each do |result|
-                    result['items'].each do |part|
-                        if part['mpn'].upcase == mpn.upcase
-                            Rails.logger.info("part['mpn']------------------------------------------------------------------part['mpn']")
-                            Rails.logger.info(part['mpn'].inspect)   
-                            Rails.logger.info("part['mpn']------------------------------------------------------------------part['mpn']") 
-                            api_result << part['mpn']
-                            mpn_new.mpn = part['mpn']
-                            api_result << part['brand']['name'] 
-                            mpn_new.manufacturer = part['brand']['name'] 
-                            for f in part['offers']
-                                if f['_naive_id'] == naive_id
-                                    api_result << f['seller']['name'] 
-                                    mpn_new.authorized_distributor = f['seller']['name'] 
-                                    d_value = ""
-                                    for d in part['descriptions']     
-                                        if d['attribution']['sources'][0]['name'] == f['seller']['name']
-                                            d_value = d['value'] 
-                                        end
-                                    end
-                                    api_result << d_value
-                                    api_result << f['prices']['USD'][-1][-1]
-                                    mpn_new.description = d_value
-                                    mpn_new.price = f['prices']['USD'][-1][-1]
-                                end
-                            end  
+                naive_id= naive_id_all[(prices_all.index prices_all.min)]
+                naive_part= part_all[(prices_all.index prices_all.min)]
+                @mpn_item.each do |result|
+                    if result['distributor']['id'] == naive_id
+                        result['parts'].each do |part|
+                            if part['part'] == naive_part
+                                @api_result << part['part']
+                                @api_result << part['manufacturer']
+                                @api_result << result['distributor']['name']
+                                @api_result << part['description']
+                                @api_result << prices_all.min
+                                @api_result << "http://www.alldatasheet.com/view.jsp?Searchword=" + part['part'].to_s
+                                mpn_new.mpn = part['part']
+                                mpn_new.manufacturer = part['manufacturer']
+                                mpn_new.authorized_distributor = result['distributor']['name']
+                                mpn_new.description = part['description']
+                                mpn_new.price = prices_all.min
+                                mpn_new.datasheets = "http://www.alldatasheet.com/view.jsp?Searchword=" + part['part'].to_s
+                            end                            
                         end
                     end
+                    mpn_new.save
+                    @api_result << mpn_new.id 
                 end
-                mpn_new.save
-                api_result << mpn_new.id
-                #result = api_result
             end
         else
-            api_result = []
-            api_result << mpn_item['mpn']
-            api_result << mpn_item['manufacturer'] 
-            api_result << mpn_item['authorized_distributor']
-            api_result << mpn_item['description']
-            api_result << mpn_item['price']
-            api_result << mpn_item['id']
+            @api_result = []
+            @api_result << mpn_item['mpn']
+            @api_result << mpn_item['manufacturer'] 
+            @api_result << mpn_item['authorized_distributor']
+            @api_result << mpn_item['description']
+            @api_result << mpn_item['price']
+            @api_result << mpn_item['datasheets']
+            @api_result << mpn_item['id'] 
         end
-        result = api_result
+        result = @api_result
     end
 
     def search_api

@@ -87,9 +87,15 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
         #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
         if not params[:mpn] == ""
             key_up = Keywords.new
-            key_up.keywords = params[:mpn]
+            key_up.keywords = params[:mpn].strip
             key_up.save
-            if params[:mpn].split(" ").length == 1
+            if params[:mpn].strip.split(" ").length == 1
+                #mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+params[:mpn]+"%'").first
+                #Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item")
+                #Rails.logger.info(mpn_item.inspect)   
+                #Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item") 
+                #if mpn_item.blank?
+                #end
                 @mpn_item = search_findchips(params[:mpn])
                 Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                 #Rails.logger.info(@mpn_item.inspect)
@@ -116,7 +122,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
 	            end
 
                     
-                    keywords = params[:mpn].split(" ")
+                    keywords = params[:mpn].strip.split(" ")
                     key_where = " products.description LIKE '%%'"
                     keywords.each do |k|
                     key_where = key_where + " AND products.description LIKE '%" + k.to_s + "%'"
@@ -135,6 +141,67 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     #Rails.logger.info(@key_item.inspect)
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                else
+                    prices_all = []
+                    naive_id_all = []
+                    part_all = []
+                    @mpn_item.each do |result|
+                        result['parts'].each do |part|
+                            part['price'].each do |f|     
+                                if f.has_value?"USD"
+                                    prices_all << f['price'].to_f
+                                    naive_id_all << result['distributor']['id'] 
+                                    part_all << part['part']                                    
+                                end
+                            end
+                        end
+                    end
+                    Rails.logger.info("prices_all--------------------------------------------------------------------------")
+                    Rails.logger.info(prices_all.inspect)   
+                    Rails.logger.info("prices_all--------------------------------------------------------------------------")    
+                    @price_result = []
+                    if not prices_all == []
+                        mpn_new = MpnItem.new
+                        naive_id= naive_id_all[(prices_all.index prices_all.min)]
+                        naive_part= part_all[(prices_all.index prices_all.min)]
+                        mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` = '"+naive_part+"'").first
+                        Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item")
+                        Rails.logger.info(mpn_item.inspect)   
+                        Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item") 
+                        if mpn_item.blank?
+                            @mpn_item.each do |result|
+                                if result['distributor']['id'] == naive_id
+                                    result['distributor']['parts'].each do |part|
+                                        if part['part'] == naive_part
+                                            @price_result << part['part']
+                                            @price_result << part['manufacturer']
+                                            @price_result << result['distributor']['name']
+                                            @price_result << part['description']
+                                            @price_result << prices_all.min
+                                            @price_result << "http://www.alldatasheet.com/view.jsp?Searchword=" + part['part'].to_s
+                                            mpn_new.mpn = part['part']
+                                            mpn_new.manufacturer = part['manufacturer']
+                                            mpn_new.authorized_distributor = result['distributor']['name']
+                                            mpn_new.description = part['description']
+                                            mpn_new.price = prices_all.min
+                                            mpn_new.datasheets = "http://www.alldatasheet.com/view.jsp?Searchword=" + part['part'].to_s
+                                        end                            
+                                    end
+                                end
+                            end
+                            mpn_new.save
+                            @price_result << mpn_new.id 
+                        else
+                            @price_result = []
+                            @price_result << mpn_item['mpn']
+                            @price_result << mpn_item['manufacturer'] 
+                            @price_result << mpn_item['authorized_distributor']
+                            @price_result << mpn_item['description']
+                            @price_result << mpn_item['price']
+                            @price_result << mpn_item['datasheets']
+                            @price_result << mpn_item['id'] 
+                        end    
+                    end
                 end
             else
                 if params[:part_name].nil? and params[:package2].nil?
@@ -143,20 +210,20 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                     find_bom = ""
 	        elsif params[:package2].nil?
 		    @ptype = params[:part_name]
-                        #@ptype = ""
-	                @package2 = ""
-                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' "
-	            elsif params[:part_name].nil?
-	                @ptype = ""
-	                @package2 = params[:package2]
-                        find_bom = " AND `package2` = '"+@package2+"' "
-	            else
-	                @ptype = params[:part_name]
-                        #@ptype = ""
-	                @package2 = params[:package2]
-                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
-	            end
-                keywords = params[:mpn].split(" ")
+                    #@ptype = ""
+	            @package2 = ""
+                    find_bom = " AND `part_name` LIKE '%"+@ptype+"%' "
+	        elsif params[:part_name].nil?
+	            @ptype = ""
+	            @package2 = params[:package2]
+                    find_bom = " AND `package2` = '"+@package2+"' "
+	        else
+	            @ptype = params[:part_name]
+                    #@ptype = ""
+	            @package2 = params[:package2]
+                    find_bom = " AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
+	        end
+                keywords = params[:mpn].strip.split(" ")
                 key_where = " products.description LIKE '%%'"
                 keywords.each do |k|
                     key_where = key_where + " AND products.description LIKE '%" + k.to_s + "%'"
@@ -706,6 +773,75 @@ WHERE
     end
 
     def search_api
+        mpn = params[:mpn].strip
+        @item_id = params[:itemid]
+        mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+mpn+"%'").first
+        Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item")
+        Rails.logger.info(mpn_item.inspect)   
+        Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item") 
+        if mpn_item.blank?
+            @mpn_item = search_findchips(params[:mpn])
+            prices_all = []
+            naive_id_all = []
+            part_all = []
+            @mpn_item.each do |result|
+                result['parts'].each do |part|
+                    Rails.logger.info("part--------------------------------------------------------------------------part")
+                    Rails.logger.info(part.inspect)   
+                    Rails.logger.info("part--------------------------------------------------------------------------part") 
+                    part['price'].each do |f|     
+                        if f.has_value?"USD"
+                            prices_all << f['price'].to_f
+                            naive_id_all << result['distributor']['id'] 
+                            part_all << part['part']                                    
+                        end
+                    end
+                end
+            end
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")
+            Rails.logger.info(prices_all.inspect)   
+            Rails.logger.info("prices_all--------------------------------------------------------------------------")    
+            @api_result = []
+            if not prices_all == []
+                mpn_new = MpnItem.new
+                naive_id= naive_id_all[(prices_all.index prices_all.min)]
+                naive_part= part_all[(prices_all.index prices_all.min)]
+                @mpn_item.each do |result|
+                    if result['distributor']['id'] == naive_id
+                        result['parts'].each do |part|
+                            if part['part'] == naive_part
+                                @api_result << part['part']
+                                @api_result << part['manufacturer']
+                                @api_result << result['distributor']['name']
+                                @api_result << part['description']
+                                @api_result << prices_all.min
+                                @api_result << "http://www.alldatasheet.com/view.jsp?Searchword=" + part['part'].to_s
+                                mpn_new.mpn = part['part']
+                                mpn_new.manufacturer = part['manufacturer']
+                                mpn_new.authorized_distributor = result['distributor']['name']
+                                mpn_new.description = part['description']
+                                mpn_new.price = prices_all.min
+                                mpn_new.datasheets = "http://www.alldatasheet.com/view.jsp?Searchword=" + part['part'].to_s
+                            end                            
+                        end
+                    end
+                    mpn_new.save
+                    @api_result << mpn_new.id 
+                end
+            end
+        else
+            @api_result = []
+            @api_result << mpn_item['mpn']
+            @api_result << mpn_item['manufacturer'] 
+            @api_result << mpn_item['authorized_distributor']
+            @api_result << mpn_item['description']
+            @api_result << mpn_item['price']
+            @api_result << mpn_item['datasheets']
+            @api_result << mpn_item['id'] 
+        end
+    end
+
+    def search_api_bak
         mpn = params[:mpn]
         @item_id = params[:itemid]
         mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` LIKE '%"+mpn+"%'").first
@@ -1007,7 +1143,6 @@ WHERE
     end
 
     private
-
         def search_findchips(mpn)
             #mpn = "LM2937IMP"
             url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
@@ -1028,6 +1163,7 @@ WHERE
                 Rails.logger.info("prices_44444444444444444444444444444444444")
                 Rails.logger.info(item.inspect)
             end
+            
         end
 
         def bom_params

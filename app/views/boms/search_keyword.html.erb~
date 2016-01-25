@@ -1,13 +1,13 @@
 <%
-meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
-     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
-     keywords: params[:mpn]
+meta title: params[:mpn] + " Stock and Price By Authorized Distributor and Manufacturer"
+     description: params[:mpn] + " price and " + params[:mpn] + " Stock is available by authorized distributors and independent electronic component manufacturer."
+     keywords: params[:mpn] +" , " +  params[:mpn] + " Stock, " +  params[:mpn] + "Price, " +  params[:mpn] + " Distributor," +  params[:mpn] + " manufacturer"
 %>
+
 
 
   <div class="row ">
     <div class="col-md-6 ">
-      <br>
       <%= form_tag('/search',method:"get", class:"form-inline") do %>
         <div class="form-group ">
           <lable for="mpn" , class="sr-only">Part : </lable>

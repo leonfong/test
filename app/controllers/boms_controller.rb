@@ -82,6 +82,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
 
     end   
  
+
     def search_keyword
         @bom = Bom.new
         #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")

@@ -7,7 +7,6 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
   <div class="row ">
     <div class="col-md-6 ">
-      <br>
       <%= form_tag('/search',method:"get", class:"form-inline") do %>
         <div class="form-group ">
           <lable for="mpn" , class="sr-only">Part : </lable>
@@ -21,20 +20,23 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
         </div>
       <% end %>
     </div>
-    <div class=" col-md-6 form-group panel panel-default">
-      <br>
-      <%= form_for @bom, html: { multipart: true } do |f| %>
-        <div class="input-group "> 	
-	  <%= f.file_field :excel_file, class: "form-control input-lg" %> 
-          <div class="input-group-btn">
-            <%= f.submit t(:upload), class: "btn btn-warning btn-lg" %>
-          </div>
-        </div>
+    <div class=" col-md-6 form-group">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><strong>EXCEL inport</strong></div>
+        <div class="panel-body">
+          <%= form_for @bom, html: { multipart: true } do |f| %>
+            <div class="input-group "> 	
+	      <%= f.file_field :excel_file, class: "form-control input-lg" %> 
+              <div class="input-group-btn">
+                <%= f.submit t(:upload), class: "btn btn-warning btn-lg" %>
+              </div>
+            </div>
 		    
-        <label><h4><p class="text-muted"><%= t(:up_excel) %><%= link_to t('bom_parser'),how_to_use_path %><p></h4></label>
-      <% end %>
+            <label><h4><p class="text-muted"><%= t(:up_excel) %><%= link_to t('bom_parser'),how_to_use_path %><p></h4></label>
+          <% end %>
+        </div>
+      </div>
     </div>
-  </div>
 <hr>
 
 

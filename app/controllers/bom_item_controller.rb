@@ -1148,7 +1148,11 @@ skip_before_action :verify_authenticity_token
                 end
                 query_str = query_str_all
                 #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
-                ary_q = query_str.to_s.scan(/([a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*-?\d*\.*\d*)/)
+                #ary_q = query_str.to_s.scan(/([a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*-?\d*\.*\d*)/)
+                ary_q = query_str.to_s.scan(/([a-zA-Z]*[0-9]*[a-zA-Z]*[0-9]*[a-zA-Z]*[0-9]*[a-zA-Z]*-?\d*\.*\d*[a-zA-Z]*)/)
+                Rails.logger.info("ic-1----------------")
+                Rails.logger.info(ary_q.inspect)
+                Rails.logger.info("ic----1-------------")
                 use_ic = ""
                 ary_q.join(" ").split(" ").each do |i|
 	            if i.include?"-"
@@ -1156,10 +1160,15 @@ skip_before_action :verify_authenticity_token
 		        #puts use_ic
 	            end
                 end
+                Rails.logger.info("use_ic-----------------")
+                Rails.logger.info(use_ic.inspect)
+                Rails.logger.info("use_ic-----------------")
                 if use_ic != ""
 	            ary_q = [] 
 	            ary_q << use_ic
-	            puts ary_q
+	            Rails.logger.info("ic-----------------")
+                    Rails.logger.info(ary_q.inspect)
+                    Rails.logger.info("ic-----------------")
                 end	
 
                 ary_q << "IC"

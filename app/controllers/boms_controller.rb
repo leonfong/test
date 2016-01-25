@@ -159,7 +159,11 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                     end
                     Rails.logger.info("prices_all--------------------------------------------------------------------------")
                     Rails.logger.info(prices_all.inspect)   
-                    Rails.logger.info("prices_all--------------------------------------------------------------------------")    
+                    Rails.logger.info("prices_all--------------------------------------------------------------------------") 
+                    Rails.logger.info(naive_id_all.inspect)   
+                    Rails.logger.info("naive_id_all--------------------------------------------------------------------------") 
+                    Rails.logger.info(part_all.inspect)   
+                    Rails.logger.info("part_all--------------------------------------------------------------------------")      
                     @price_result = []
                     if not prices_all == []
                         mpn_new = MpnItem.new
@@ -172,7 +176,10 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                         if mpn_item.blank?
                             @mpn_item.each do |result|
                                 if result['distributor']['id'] == naive_id
-                                    result['distributor']['parts'].each do |part|
+                                    Rails.logger.info("naive_id--------------------------------------------------------------------------") 
+                                    Rails.logger.info(naive_id.inspect)   
+                                    Rails.logger.info("naive_id------------------------------------------------------------------------")      
+                                    result['parts'].each do |part|
                                         if part['part'] == naive_part
                                             @price_result << part['part']
                                             @price_result << part['manufacturer']

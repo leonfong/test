@@ -71,8 +71,9 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <br><br>
 
 
-
-
+<div class="row ">
+<div class="col-md-12 panel panel-default">
+<div class="panel-body">
 <ul id="myTab" class="nav nav-tabs nav-justified">
    <li class="active"><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
    <li><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
@@ -80,15 +81,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 </ul>
 <div id="myTabContent" class="tab-content">
-   <div class="tab-pane fade in active" id="home">
-         <br><br>  
-         <p>   
-          <% @mpn_show.each_with_index do |item,index| %>
-              <%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <% end %>
-         </p>
-   </div>
-   <div class="tab-pane fade" id="des">
+   <div class="tab-pane fade in active" id="des">
        <br><br>
        <p>   
           <% @des_show.each_with_index do |item,index| %>                   
@@ -96,9 +89,19 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
           <% end %>
        </p>
    </div>
+   <div class="tab-pane fade" id="home">
+         <br><br>  
+         <p>   
+          <% @mpn_show.each_with_index do |item,index| %>
+              <%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <% end %>
+         </p>
+   </div>
+   
 </div>
-
-
+</div>
+</div>
+</div>
       
 </div>
 </div>

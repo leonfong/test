@@ -83,7 +83,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
            <br><br>
            <p>   
              <% @des_show.each_with_index do |item,index| %>                   
-              <%= link_to item.description,  {action: "des_item", mpn: item.description} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <%= link_to item.description,  {action: "des_item", mpn: item.description},target: "_black" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
              <% end %>
            </p>
          </div>
@@ -91,7 +91,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
            <br><br>  
            <p>   
            <% @mpn_show.each_with_index do |item,index| %>
-              <%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn},target: "_black" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            <% end %>
            </p>
          </div>

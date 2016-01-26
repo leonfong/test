@@ -1807,6 +1807,16 @@ WHERE
                 Rails.logger.info("DDD---------------------------------------------------------DDD")
                 ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+[a-zA-Z]*[0-9]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 ary_q[3] = "D"
+            elsif  ( part and part.part_name == "IN" )
+                Rails.logger.info("IN---------------------------------------------------------IN")
+                ary_q = []
+                ary_q << query_str.to_s.strip
+                ary_q << "IN"
+            elsif  ( part and part.part_name == "FB" )
+                Rails.logger.info("FB---------------------------------------------------------FB")
+                ary_q = []
+                ary_q << query_str.to_s.strip
+                ary_q << "FB"
             else
                 Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")

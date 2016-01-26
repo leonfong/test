@@ -1,7 +1,7 @@
 #require 'rubygems'
 #require 'json'
 #require 'net/http'
-require 'open-uri'
+#require 'open-uri'
 #require 'open_uri_redirections'
 
 class StaticPagesController < ApplicationController

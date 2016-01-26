@@ -7,9 +7,9 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
     def index
         #@boms = Bom.all
         if current_user.email == "web@mokotechnology.com"
-            @boms = Bom.find_by_sql("SELECT * FROM `boms` ORDER BY `id` DESC")
+            @boms = Bom.find_by_sql("SELECT * FROM `boms` ORDER BY `id` DESC LIMIT 35" )
         else
-            @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC")
+            @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC LIMIT 35")
         end
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(@boms.inspect)

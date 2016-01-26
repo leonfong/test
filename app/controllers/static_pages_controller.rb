@@ -20,44 +20,7 @@ class StaticPagesController < ApplicationController
   end
 
   def about
-      #urla = 'http://api.supplyframe.com/v1/t?d=ls1ki72&p=LM2937IMPX-10%2FNOPB&s=LM2937IMP&h=0-604xKA0Sys8NcPQeLRHw'
-      #open(urla, :allow_redirections => :safe) do |resp|
-          #@url = resp.base_uri.to_s
-          
-      #end
-      #Rails.logger.info("uri----------")         
-      #Rails.logger.info(@url.inspect) 
-      #Rails.logger.info("uri----------") 
-      #page = Nokogiri::HTML(open(urla, :allow_redirections => :safe)) 
-
-        
-      #Rails.logger.info("uri----------") 
-      #Rails.logger.info(page.inspect) 
-      #page.css('a').each do |aaa| 
-      #    Rails.logger.info(aaa['href'].inspect) 
-      #end       
       
-      #Rails.logger.info("uri----------") 
-
-
-
-
-      url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part=LM2937IMP'
-      
-      #url += '&queries=' + URI.encode(JSON.generate([{:mpn => mpn}]))
-      #url += '&apikey=809ad885'
-      #url += '&include[]=descriptions'
-     
-      resp = Net::HTTP.get_response(URI.parse(url))
-      #resp = Net::HTTP.get_response(URI(url))
-      #server_response = JSON.parse(resp.body)
-      Rails.logger.info("prices_all--------------------------------------------------------------------------")
-      #Rails.logger.info(url.inspect) 
-      Rails.logger.info(resp.code.inspect)                #"200"   
-      Rails.logger.info(resp.content_length.inspect)      #8023   
-      Rails.logger.info(resp.message.inspect)             #"OK"       
-      Rails.logger.info(JSON.parse(resp.body).inspect)   
-      Rails.logger.info("prices_all--------------------------------------------------------------------------")    
   end
 
 end

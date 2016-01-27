@@ -14,21 +14,22 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    
       <ul class="nav navbar-nav">
-        <li class="active"><%= link_to 'Search BOM',root_path %></li>
-        <li><%= link_to t('bom_parser'),how_to_use_path %></li>
-        <li><%= link_to t('all_boms'),boms_path %></li>
-        <li><%= link_to t('about'),about_path %></li>
-        <li><%= link_to t('contact'),contact_path %></li>
+        <li id="a"><%= link_to 'Search BOM',root_path %></li>
+        <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
+        <li id="c"><%= link_to t('all_boms'),boms_path %></li>
+        <li id="d"><%= link_to t('about'),about_path %></li>
+        <li id="e"><%= link_to t('contact'),contact_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
-           <li><%= link_to(t('welcome') + current_user.email, boms_path,:class=>"navbar-link") %></li>
-           <li><%= link_to(t('sign_out'), destroy_user_session_path, :method => :delete,:class=>"navbar-link") %></li>
-           <li><%= link_to(t('c_password'), edit_registration_path(:user),:class=>"navbar-link") %></li>
+           <li id="f"><%= link_to(t('welcome') + current_user.email, boms_path,:class=>"navbar-link") %></li>
+           <li id="g"><%= link_to(t('sign_out'), destroy_user_session_path, :method => :delete,:class=>"navbar-link") %></li>
+           <li id="h"><%= link_to(t('c_password'), edit_registration_path(:user),:class=>"navbar-link") %></li>
         <% else %>
-           <li><%= link_to(t('sign_up'), new_registration_path(:user),:class=>"navbar-link") %></li>
-           <li><%= link_to(t('login'), new_session_path(:user),:class=>"navbar-link") %></li>
+           <li id="i"><%= link_to(t('sign_up'), new_registration_path(:user),:class=>"navbar-link") %></li>
+           <li id="j"><%= link_to(t('login'), new_session_path(:user),:class=>"navbar-link") %></li>
         <% end %>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= t('menu.languages.lang') %><span class="caret"></span></a>
@@ -46,13 +47,38 @@
   </div><!-- /.container-fluid -->
 </nav>
 <script language="javascript">
-    $(document).ready(function () {
-$('ul.nav > li').hover(function (e) {
-e.preventDefault();
-$('ul.nav > li').removeClass('active');
-$(this).addClass('active');
-
-});
+$(document).ready(function () {
+    $("#a").hover(function (e) {         
+            e.preventDefault();
+            //alert(document.activeElement);
+            $("#b").removeClass('active');
+            $("#c").removeClass('active');
+            $("#d").removeClass('active');
+            $("#e").removeClass('active');
+            $("#f").removeClass('active');
+            $("#g").removeClass('active');
+            $("#h").removeClass('active');
+            $("#i").removeClass('active');
+            $("#j").removeClass('active');
+            $("#a").addClass('active');
+        
+    });
+    $("#b").hover(function (e) {         
+            e.preventDefault();
+            //alert(document.activeElement);
+            $("#a").removeClass('active');
+            $("#c").removeClass('active');
+            $("#d").removeClass('active');
+            $("#e").removeClass('active');
+            $("#f").removeClass('active');
+            $("#g").removeClass('active');
+            $("#h").removeClass('active');
+            $("#i").removeClass('active');
+            $("#j").removeClass('active');
+            $("#b").addClass('active');
+        
+    });
+   
 
 });
 </script>

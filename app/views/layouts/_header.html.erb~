@@ -48,7 +48,7 @@
 </nav>
 <script language="javascript">
 $(document).ready(function () {
-    $("#a").hover(function (e) {         
+    $("#a").click(function (e) {         
             e.preventDefault();
             //alert(document.activeElement);
             $("#b").removeClass('active');
@@ -61,9 +61,10 @@ $(document).ready(function () {
             $("#i").removeClass('active');
             $("#j").removeClass('active');
             $("#a").addClass('active');
-        
+            //document.getElementById('a').className="active"
+            
     });
-    $("#b").hover(function (e) {         
+    $("#b").click(function (e) {         
             e.preventDefault();
             //alert(document.activeElement);
             $("#a").removeClass('active');
@@ -76,7 +77,52 @@ $(document).ready(function () {
             $("#i").removeClass('active');
             $("#j").removeClass('active');
             $("#b").addClass('active');
-        
+           
+    });
+    $("#c").hover(function (e) {         
+            e.preventDefault();
+            //alert(document.activeElement);
+            $("#a").removeClass('active');
+            $("#b").removeClass('active');
+            $("#d").removeClass('active');
+            $("#e").removeClass('active');
+            $("#f").removeClass('active');
+            $("#g").removeClass('active');
+            $("#h").removeClass('active');
+            $("#i").removeClass('active');
+            $("#j").removeClass('active');
+            $("#c").addClass('active');
+    
+    });
+    $("#d").hover(function (e) {         
+            e.preventDefault();
+            //alert(document.activeElement);
+            $("#a").removeClass('active');
+            $("#c").removeClass('active');
+            $("#b").removeClass('active');
+            $("#e").removeClass('active');
+            $("#f").removeClass('active');
+            $("#g").removeClass('active');
+            $("#h").removeClass('active');
+            $("#i").removeClass('active');
+            $("#j").removeClass('active');
+            $("#d").addClass('active');
+           
+    });
+    $("#e").hover(function (e) {         
+            e.preventDefault();
+            //alert(document.activeElement);
+            $("#a").removeClass('active');
+            $("#c").removeClass('active');
+            $("#d").removeClass('active');
+            $("#b").removeClass('active');
+            $("#f").removeClass('active');
+            $("#g").removeClass('active');
+            $("#h").removeClass('active');
+            $("#i").removeClass('active');
+            $("#j").removeClass('active');
+            $("#e").addClass('active');
+            
     });
    
 

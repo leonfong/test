@@ -207,6 +207,8 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    sitemap_generator (5.1.0)
+      builder
     sphinx (2.1.1.3712)
     spreadsheet (1.0.4)
       ruby-ole (>= 1.0)
@@ -272,6 +274,7 @@ DEPENDENCIES
   roo (~> 2.0.0)
   roo-xls
   sass-rails (~> 5.0)
+  sitemap_generator
   sphinx
   spreadsheet
   spring

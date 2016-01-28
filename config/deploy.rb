@@ -93,7 +93,7 @@ task :deploy => :environment do
     #重新拉git服务器上的最新版本，即使没有改变
     invoke :'git:clone'
     #重新设定shared_path位置
-    invoke :'deploy:link_shared_paths'
+    #invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
     #invoke :'rails:db_migrate'
     invoke :'deploy:sitemap:refresh'

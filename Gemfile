@@ -60,6 +60,7 @@ gem 'roo-xls'
 gem 'spreadsheet'
 gem 'metamagic'
 gem 'sitemap_generator'
+gem 'mina-sitemap_generator', :require => false
 #gem 'autoprefixer-rails', '~> 5.1.11'
 gem 'rails_admin'
 gem 'devise'

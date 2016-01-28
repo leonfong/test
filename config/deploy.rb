@@ -4,6 +4,7 @@ require 'mina/git'
 # require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 require 'mina/rvm'    # for rvm support. (http://rvm.io)
 #require 'capistrano/sitemap_generator'
+require 'mina/sitemap_generator'
 
 # Basic settings:
 #   domain       - The hostname to  to.
@@ -104,6 +105,7 @@ task :deploy => :environment do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
       # queue "chown -R www-data #{deploy_to}"
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
+      invoke :'sitemap:refresh'
     end
   end
 end

@@ -4,7 +4,7 @@ require 'mina/git'
 # require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 require 'mina/rvm'    # for rvm support. (http://rvm.io)
 #require 'capistrano/sitemap_generator'
-require 'mina/sitemap_generator'
+#require 'mina/sitemap_generator'
 
 # Basic settings:
 #   domain       - The hostname to  to.

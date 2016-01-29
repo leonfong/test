@@ -167,9 +167,9 @@ skip_before_action :verify_authenticity_token
                     #tan_tag = "tan"                 
                 end
                 if  @package2 != ""
-                    find_bom = " AND `package2` = '"+@package2+"' "
+                    find_bom = " AND `package2` = '"+@package2+"'  LIMIT 20 "
                 else
-                    find_bom = ""
+                    find_bom = "  LIMIT 20"
                 end
                 Rails.logger.info(part.part_name.inspect)
                 Rails.logger.info(@ptype.inspect)
@@ -272,7 +272,7 @@ skip_before_action :verify_authenticity_token
             else
                 Rails.logger.info("7")
                 if params[:q].to_s =~ /led/i
-                    led_package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'LED' AND products.package2 <> '' GROUP BY products.package2")
+                    led_package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'LED' AND products.package2 <> '' GROUP BY products.package2  LIMIT 20")
                     led_p_all = led_package2_all.select { |item| params[:q].to_s.include?item.package2.to_s }
                     if not led_p_all.blank?
                         Rails.logger.info("led_p_all.first.package2__________0000000000000000000000000000000000000bbbbb_________")
@@ -299,13 +299,13 @@ skip_before_action :verify_authenticity_token
                         @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'"+find_led_p).to_ary
                     end
                 elsif params[:q].to_s =~ /螺丝端子/i or params[:q].to_s =~ /简牛/i or params[:q].to_s =~ /排针/i or params[:q].to_s =~ /排母/i or params[:q].to_s =~ /晶振/i or params[:q].to_s =~ /电感/i or params[:q].to_s =~ /开关/i
-                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `part_name` LIKE '%"+params[:q].to_s.split(" ")[0]+"%' AND `value2`  like '%"+params[:q].to_s.split(" ")[1]+"%' AND `value3`  LIKE '%"+params[:q].to_s.split(" ")[2]+"%'").to_ary
+                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `part_name` LIKE '%"+params[:q].to_s.split(" ")[0]+"%' AND `value2`  like '%"+params[:q].to_s.split(" ")[1]+"%' AND `value3`  LIKE '%"+params[:q].to_s.split(" ")[2]+"%'  LIMIT 20").to_ary
                 else
                     find_bom = ""
                     if  @package2 != ""
-                        find_bom = " AND `package2` = '"+@package2+"' "
+                        find_bom = " AND `package2` = '"+@package2+"'  LIMIT 20 "
                     else
-                        find_bom = ""
+                        find_bom = " LIMIT 20"
                     end
 	            #全局匹配产品
                     #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC')#.to_ary
@@ -458,6 +458,7 @@ skip_before_action :verify_authenticity_token
     def update
         if not params[:product_id].blank?
             @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            @bom = Bom.find(@bom_item.bom_id)
             if @bom_item.update_attribute("product_id", params[:product_id])
                 if @bom_item.product_id
 	            #@bom_item.product = Product.find(@bom_item.product_id)
@@ -468,7 +469,7 @@ skip_before_action :verify_authenticity_token
                     #@bom_item.mpn = nil
 	            @bom_item.save!
   
-
+   
                     #累加产品被选择的次数
                     prefer = (Product.find(@bom_item.product_id)).prefer + 1
                     Product.find(@bom_item.product_id).update(prefer: prefer) 
@@ -476,6 +477,51 @@ skip_before_action :verify_authenticity_token
                         flash[:success] = t('success_a')
                         redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
                     else
+                        @match_str_nn = "#{@bom.bom_items.count('product_id')+@bom.bom_items.count('mpn_id')} / #{@bom.bom_items.count}"
+                        @matched_items_nn = Product.find_by_sql("
+SELECT
+	bom_items.id,
+	bom_items.quantity,
+	bom_items.description,
+	bom_items.part_code,
+	bom_items.bom_id,
+	bom_items.product_id,
+	bom_items.created_at,
+	bom_items.updated_at,
+	bom_items.warn,
+	bom_items.user_id,
+	bom_items.danger,
+	bom_items.manual,
+	bom_items.mark,
+	bom_items.mpn,
+	bom_items.mpn_id,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.price,
+	products.price
+) AS price,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.description,
+	products.description
+) AS description_p
+FROM
+	bom_items
+LEFT JOIN products ON bom_items.product_id = products.id
+LEFT JOIN mpn_items ON bom_items.mpn_id = mpn_items.id
+WHERE
+	bom_items.bom_id = "+@bom_item.bom_id.to_s)             
+                        @total_price_nn = 0.00               
+	                unless @matched_items_nn.empty?
+                            @bom_api_all = []
+		            @matched_items_nn.each do |item|
+                                if not item.price.blank?
+                                    @total_price_nn += item.price * item.quantity  
+                                end                      
+		            end
+                        end
                         render "boms/choose_local.js.erb"
                     end
                 else

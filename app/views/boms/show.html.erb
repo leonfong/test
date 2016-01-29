@@ -17,8 +17,8 @@
     <div class="col-md-6">
       <ul class="list-group">
         <li class="list-group-item"><%= t(:bom_file) %>：<%= @bom.excel_file_identifier %></li>
-        <li class="list-group-item"><%= t(:matched) %>：<%= @match_str %></li>
-        <li class="list-group-item"><%= t(:total_price) %>：<%=  number_with_precision(@total_price, precision: 4)%></li>
+        <li class="list-group-item"><%= t(:matched) %>：<a class="text-muted" id="matched"><%= @match_str %></a></li>
+        <li class="list-group-item"><%= t(:total_price) %>：<a class="text-muted" id="total_price"><%=  number_with_precision(@total_price, precision: 4)%></a></li>
       </ul>
     </div>
 

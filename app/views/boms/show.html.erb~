@@ -1,7 +1,6 @@
 
 <div class="container">
-<div class="row">
-  
+<div class="row">  
     <ol class="breadcrumb">
       <li><%= link_to t(:all_bom),boms_path %></li>
       <li class="active"><%= @bom.excel_file_identifier %></li>
@@ -11,19 +10,15 @@
       <a class="navbar-right">&nbsp;&nbsp;</a>
       <%= link_to "Pro",  @bom, class: "btn btn-primary btn-xs navbar-right" %>
     </ol>
-    
-      
-      
-    
- 
+
 </div>
 
 <div class="row">
     <div class="col-md-6">
       <ul class="list-group">
         <li class="list-group-item"><%= t(:bom_file) %>：<%= @bom.excel_file_identifier %></li>
-        <li class="list-group-item"><%= t(:matched) %>：<%= @match_str %></li>
-        <li class="list-group-item"><%= t(:total_price) %>：<%=  number_with_precision(@total_price, precision: 4)%></li>
+        <li class="list-group-item" id="matched"><%= t(:matched) %>：<%= @match_str %></li>
+        <li class="list-group-item" id="total_price"><%= t(:total_price) %>：<%=  number_with_precision(@total_price, precision: 4)%></li>
       </ul>
     </div>
 

@@ -1,3 +1,5 @@
+document.getElementById('matched').innerHTML='<%= @match_str_n %>';
+document.getElementById('total_price').innerHTML='<%=  number_with_precision(@total_price_n, precision: 4)%>';
 
 document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= MpnItem.find(@bom_item.mpn_id).description %>';
 document.getElementById('<%= @bom_item.id.to_s + "p" %>').innerHTML='<%= "$"+number_with_precision(MpnItem.find(@bom_item.mpn_id).price, precision: 4) %>';

@@ -412,7 +412,7 @@ WHERE
                 Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
                 Rails.logger.info(@matched_items)
                 Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb22222222222222222222")
-		@match_str = "#{@bom.bom_items.count('product_id')} / #{@bom.bom_items.count}"
+		@match_str = "#{@bom.bom_items.count('product_id')+@bom.bom_items.count('mpn_id')} / #{@bom.bom_items.count}"
 		@total_price = 0.00
                 #Rails.logger.info(matched_items.inspect)
                 Rails.logger.info(@match_str.inspect)
@@ -668,14 +668,62 @@ WHERE
             end
         elsif not params[:mpn_id].blank?
             @bom_item = BomItem.find(params[:id]) #取回bom_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            @bom_n = Bom.find(@bom_item.bom_id)
+            
+            
             if @bom_item.update_attribute("mpn_id", params[:mpn_id])
                 if @bom_item.mpn_id
 	            #@bom_item.product = Product.find(@bom_item.product_id)
                     @bom_item.warn = false
                     @bom_item.mark = false
                     @bom_item.manual = true
+                    @bom_item.product_id = nil
 	            @bom_item.save!
- 
+                    @match_str_n = "#{@bom_n.bom_items.count('product_id')+@bom_n.bom_items.count('mpn_id')} / #{@bom_n.bom_items.count}"
+                    @matched_items_n = Product.find_by_sql("
+SELECT
+	bom_items.id,
+	bom_items.quantity,
+	bom_items.description,
+	bom_items.part_code,
+	bom_items.bom_id,
+	bom_items.product_id,
+	bom_items.created_at,
+	bom_items.updated_at,
+	bom_items.warn,
+	bom_items.user_id,
+	bom_items.danger,
+	bom_items.manual,
+	bom_items.mark,
+	bom_items.mpn,
+	bom_items.mpn_id,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.price,
+	products.price
+) AS price,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.description,
+	products.description
+) AS description_p
+FROM
+	bom_items
+LEFT JOIN products ON bom_items.product_id = products.id
+LEFT JOIN mpn_items ON bom_items.mpn_id = mpn_items.id
+WHERE
+	bom_items.bom_id = "+@bom_item.bom_id.to_s)             
+                    @total_price_n = 0.00               
+	            unless @matched_items_n.empty?
+                        @bom_api_all = []
+		        @matched_items_n.each do |item|
+                            if not item.price.blank?
+                                @total_price_n += item.price * item.quantity  
+                            end                      
+		        end
+                    end
                     #flash[:success] = t('success_a')
 
                     #redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
@@ -1031,7 +1079,7 @@ WHERE
                 Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
                 Rails.logger.info(@matched_items)
                 Rails.logger.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb22222222222222222222")
-		@match_str = "#{@bom.bom_items.count('product_id')} / #{@bom.bom_items.count}"
+		@match_str = "#{@bom.bom_items.count('product_id')+@bom.bom_items.count('mpn_id')} / #{@bom.bom_items.count}"
 		@total_price = 0.00
                 #Rails.logger.info(matched_items.inspect)
                 Rails.logger.info(@match_str.inspect)

@@ -24,11 +24,12 @@ SitemapGenerator::Sitemap.create do
   #   Article.find_each do |article|
   #     add article_path(article), :lastmod => article.updated_at
   #   end
-    Product.all.each do |item|                   
-        add des_item_path(:mpn => item.description), :lastmod => item.updated_at
-    end
+    
 
     MpnItem.all.each do |item|
         add search_path(:mpn => item.mpn), :lastmod => item.updated_at
+    end
+    Product.all.each do |item|                   
+        add des_item_path(:mpn => item.description), :lastmod => item.updated_at
     end
 end

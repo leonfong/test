@@ -5,7 +5,11 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= t('name') %></th>
+     <% if user_signed_in? %>
+          <% if current_user.email == "web@mokotechnology.com" %>
+              <th><%= t('name') %></th>
+          <% end %>
+      <% end %>
       <th>Created Date</th>
       <th><%= t('excel_file') %></th>
       <th>&nbsp;</th>
@@ -16,8 +20,7 @@
     <% @boms.each do |bom| %>
     <% @itemall = @itemall + " " + bom.excel_file_identifier %>
       <tr>
-        <td><%= bom.name %></td>
-        <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        
         <% if user_signed_in? %>
           <% if current_user.email == "web@mokotechnology.com" %>
 <!--
@@ -26,8 +29,11 @@
 
             <td><%= link_to bom.excel_file_identifier, down_excel_path(:path =>raw(bom.excel_file_url),:filename =>bom.excel_file_identifier) %></td>
 -->
+            <td><%= User.find_by(bom.user_id).email %></td>
+            <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
             <td><%= link_to bom.excel_file_identifier, down_excel_path(:id =>bom.id,format: "xls") %></td>
           <% else %>
+            <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
             <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
           <% end %>
         <% end %>

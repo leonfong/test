@@ -1002,7 +1002,10 @@ WHERE
                             #value2_use = value2_use.gsub!(/0+?$/, "")  
                             #value2_use = value2_use.gsub!(/[.]$/, "") 
                             if value2_use =~ /\./
-                                value2_use = value2_use.to_s[0..-2].gsub(/(\.?0+$)/,"").gsub(/(\.+)/,".")+value2_use.to_s[-1]
+                                value2_use = value2_use.gsub(/[A-Za-z]/, "").to_s.gsub(/(\.?0+$)/,"").gsub(/(\.+)/,".")+value2_use.scan(/[A-Za-z]+/)[0].to_s
+                                Rails.logger.info("value33333-------------------------------------------------------------value333333")
+                                Rails.logger.info(value2_use.inspect)
+                                Rails.logger.info("part_ffff----------------------------------------------------------------value333333")
                             end
                         end                        
                     end
@@ -1139,7 +1142,7 @@ WHERE
                             #value2_use = value2_use.gsub!(/0+?$/, "")  
                             #value2_use = value2_use.gsub!(/[.]$/, "") 
                             if value2_use =~ /\./
-                                value2_use = value2_use.to_s[0..-2].gsub(/(\.?0+$)/,"").gsub(/(\.+)/,".")+value2_use.to_s[-1]
+                                value2_use = value2_use.gsub(/[A-Za-z]/, "").to_s.gsub(/(\.?0+$)/,"").gsub(/(\.+)/,".")+value2_use.scan(/[A-Za-z]+/)[0].to_s
                             end
                         end
                         #value2 = query_str.to_s.scan(/-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)*[mMkKuUrR]|-?[1-9]\d*[mMkKuUrR]/)

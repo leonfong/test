@@ -628,6 +628,52 @@ WHERE
          @bom_item.mpn_id = nil
          @bom_item.mark = true
          @bom_item.save
+         @bom_n = Bom.find(@bom_item.bom_id)
+         @match_str_n = "#{@bom_n.bom_items.count('product_id')+@bom_n.bom_items.count('mpn_id')} / #{@bom_n.bom_items.count}"
+         @matched_items_n = Product.find_by_sql("
+SELECT
+	bom_items.id,
+	bom_items.quantity,
+	bom_items.description,
+	bom_items.part_code,
+	bom_items.bom_id,
+	bom_items.product_id,
+	bom_items.created_at,
+	bom_items.updated_at,
+	bom_items.warn,
+	bom_items.user_id,
+	bom_items.danger,
+	bom_items.manual,
+	bom_items.mark,
+	bom_items.mpn,
+	bom_items.mpn_id,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.price,
+	products.price
+) AS price,
+
+IF (
+	bom_items.mpn_id > 0,
+	mpn_items.description,
+	products.description
+) AS description_p
+FROM
+	bom_items
+LEFT JOIN products ON bom_items.product_id = products.id
+LEFT JOIN mpn_items ON bom_items.mpn_id = mpn_items.id
+WHERE
+	bom_items.bom_id = "+@bom_item.bom_id.to_s)             
+         @total_price_n = 0.00               
+	 unless @matched_items_n.empty?
+             @bom_api_all = []
+             @matched_items_n.each do |item|
+                 if not item.price.blank?
+                     @total_price_n += item.price * item.quantity  
+                 end                      
+	     end
+         end
 	 #redirect_to :back
          #redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
          render "mark_local.js.erb"

@@ -1715,6 +1715,7 @@ WHERE
                             value2_use = "nothing"
                         else
                             value2_use = value2[0]
+                            value2_use = value2_use.to_s[0..-2].gsub(/(\.?0+$)/,"").gsub(/(\.+)/,".")+value2_use.to_s[-1]
                         end                        
                     end
                 end
@@ -1830,6 +1831,7 @@ WHERE
                             value2_use = "nothing"
                         else
                             value2_use = value2[0]
+                            value2_use = value2_use.to_s[0..-2].gsub(/(\.?0+$)/,"").gsub(/(\.+)/,".")+value2_use.to_s[-1]
                         end
                         #value2 = query_str.to_s.scan(/-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)*[mMkKuUrR]|-?[1-9]\d*[mMkKuUrR]/)
                         

@@ -29,7 +29,7 @@
 
             <td><%= link_to bom.excel_file_identifier, down_excel_path(:path =>raw(bom.excel_file_url),:filename =>bom.excel_file_identifier) %></td>
 -->
-            <td><%= User.find_by(bom.user_id).email %></td>
+            <td><%= User.find(bom.user_id).email %></td>
             <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
             <td><%= link_to bom.excel_file_identifier, down_excel_path(:id =>bom.id,format: "xls") %></td>
           <% else %>

@@ -167,9 +167,9 @@ skip_before_action :verify_authenticity_token
                     #tan_tag = "tan"                 
                 end
                 if  @package2 != ""
-                    find_bom = " AND `package2` = '"+@package2+"'  LIMIT 20 "
+                    find_bom = " AND `package2` = '"+@package2+"' "
                 else
-                    find_bom = "  LIMIT 20"
+                    find_bom = " "
                 end
                 Rails.logger.info(part.part_name.inspect)
                 Rails.logger.info(@ptype.inspect)
@@ -272,7 +272,7 @@ skip_before_action :verify_authenticity_token
             else
                 Rails.logger.info("7")
                 if params[:q].to_s =~ /led/i
-                    led_package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'LED' AND products.package2 <> '' GROUP BY products.package2  LIMIT 20")
+                    led_package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'LED' AND products.package2 <> '' GROUP BY products.package2 ")
                     led_p_all = led_package2_all.select { |item| params[:q].to_s.include?item.package2.to_s }
                     if not led_p_all.blank?
                         Rails.logger.info("led_p_all.first.package2__________0000000000000000000000000000000000000bbbbb_________")
@@ -299,13 +299,13 @@ skip_before_action :verify_authenticity_token
                         @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'"+find_led_p).to_ary
                     end
                 elsif params[:q].to_s =~ /螺丝端子/i or params[:q].to_s =~ /简牛/i or params[:q].to_s =~ /排针/i or params[:q].to_s =~ /排母/i or params[:q].to_s =~ /晶振/i or params[:q].to_s =~ /电感/i or params[:q].to_s =~ /开关/i
-                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `part_name` LIKE '%"+params[:q].to_s.split(" ")[0]+"%' AND `value2`  like '%"+params[:q].to_s.split(" ")[1]+"%' AND `value3`  LIKE '%"+params[:q].to_s.split(" ")[2]+"%'  LIMIT 20").to_ary
+                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `part_name` LIKE '%"+params[:q].to_s.split(" ")[0]+"%' AND `value2`  like '%"+params[:q].to_s.split(" ")[1]+"%' AND `value3`  LIKE '%"+params[:q].to_s.split(" ")[2]+"%' ").to_ary
                 else
                     find_bom = ""
                     if  @package2 != ""
-                        find_bom = " AND `package2` = '"+@package2+"'  LIMIT 20 "
+                        find_bom = " AND `package2` = '"+@package2+"'  "
                     else
-                        find_bom = " LIMIT 20"
+                        find_bom = " "
                     end
 	            #全局匹配产品
                     #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC')#.to_ary
@@ -357,7 +357,7 @@ skip_before_action :verify_authenticity_token
                 if current_user.email == "web@mokotechnology.com"
                     @bom_html = ""
                     unless @match_products.nil?
-                        @match_products.each do |item|
+                        @match_products[0..19].each do |item|
                             @bom_html = @bom_html + "<tr>"
                             @bom_html = @bom_html + "<td>"
                             @bom_html = @bom_html + item.name.to_s
@@ -377,7 +377,7 @@ skip_before_action :verify_authenticity_token
                 else
                     @bom_html = ""
                     unless @match_products.nil?
-                        @match_products.each do |item|
+                        @match_products[0..19].each do |item|
                             @bom_html = @bom_html + "<tr>"
                             
                             @bom_html = @bom_html + "<td>"

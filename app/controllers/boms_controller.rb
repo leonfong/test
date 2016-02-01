@@ -611,7 +611,8 @@ WHERE
 	    redirect_to @bom,  notice: t('file') + " #{@bom.name} " + t('success_b')
             #redirect_to bom_url(@bom, bom_data: all_m_bom.to_json)
 	else
-	    redirect_to action: 'upload', notice: t('file') + " #{@bom.name} " + t('error_e')
+            flash[:error] = "Upload file error,please upload the XLS or XLSX file."
+	    redirect_to action: 'upload'
 	end
     rescue
         flash[:error] = "Upload file error,please upload the XLS or XLSX file."

@@ -613,6 +613,9 @@ WHERE
 	else
 	    redirect_to action: 'upload', notice: t('file') + " #{@bom.name} " + t('error_e')
 	end
+    rescue
+        flash[:error] = "Upload file error,please upload the XLS or XLSX file."
+        redirect_to :back
     end
 
     def destroy

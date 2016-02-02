@@ -73,7 +73,7 @@ div.mpnul ul li
     float:left; /* 向左漂移，将竖排变为横排 */
      
     
-    width: 260px; /* 宽度根据元素内容调整 */    
+    width: 270px; /* 宽度根据元素内容调整 */    
 }  
 /* 所有class为menu的div中的ul中的a样式(包括尚未点击的和点击过的样式) */  
 div.mpnul ul li a, div.upul ul li a:visited  

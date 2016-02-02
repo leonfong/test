@@ -4,23 +4,27 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
      keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
 %>
 <div class="container" >
+
+    
 <div class="row ">
 
 	<div class="col-md-2"></div>
 
-	<div class=" col-md-8 form-group panel panel-info">
+	<div class=" col-md-8 form-group">
+                <div class="panel panel-primary">
+                <div class="panel-heading"><strong>EXCEL inport</strong></div>
+                <div class="panel-body">
 		<%= form_for @bom, html: { multipart: true } do |f| %>
-			<label><h4><p class="text-muted"><%= t(:up_excel) %></p></h2></label>
+			<label><h4><p class="text-muted"><%= t(:up_excel) %><%= link_to t('bom_parser'),how_to_use_path %><p></h4></label>
 		    <%= f.file_field :excel_file, class: "btn btn-default" %>
 		    <br/>
 		    <%= f.submit t(:upload), class: "btn btn-warning btn-lg" %>
 		<% end %>
-
+                </div>
+                </div>
 	</div>
         <div class="col-md-2"></div>
 </div>
-    
-
 
 
 
@@ -83,35 +87,36 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 </div>
 <br><br>
 
-<ul id="myTab" class="nav nav-pills nav-justified">
-   <li class="active"><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
-   <li><a href="#ios" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
 
-</ul>
-<div id="myTabContent" class="tab-content">
-   <div class="tab-pane fade in active" id="home">
-         <br><br>  
-         <p>   
-          <% @mpn_show.each_with_index do |item,index| %>
-              <%= link_to item.mpn,  {controller: "boms", action: "search_keyword", mpn: item.mpn} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <% end %>
-         </p>
-   </div>
-   <div class="tab-pane fade" id="ios">
-       <br><br>
-       <p>   
-          <% @des_show.each_with_index do |item,index| %>                   
-              <%= link_to item.description,  {controller: "boms", action: "des_item", mpn: item.description} %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <% end %>
-       </p>
+
+<div class="row ">
+  <div class="col-md-12 panel panel-default">
+    <div class="panel-body ">
+      <ul id="myTab" class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
+        <li><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
+      </ul>
+      <div id="myTabContent" class="tab-content upul">
+         <div class="upul tab-pane fade in active" id="des">
+           <br><br>
+           <ul>   
+             <% @des_show.each_with_index do |item,index| %>                   
+              <li><%= link_to item.description,  {controller: "boms", action: "des_item", mpn: item.description},target: "_black",class: "text-overflow" %></li>
+             <% end %>
+           </ul>
+         </div>
+         <div class="mpnul tab-pane fade" id="home">
+           <br><br>  
+           <ul>
+           <% @mpn_show.each_with_index do |item,index| %>
+              <li><%= link_to item.mpn,  {controller: "boms", action: "search_keyword", mpn: item.mpn},target: "_black" %></li>
+           <% end %>
+           </ul>
+         </div>
+       </div>
+     </div>
    </div>
 </div>
-<script>
-   $(function () {
-      $('#myTab li:eq(1) a').tab('show');
-   });
-</script>
-
          
 </div>
 </div>

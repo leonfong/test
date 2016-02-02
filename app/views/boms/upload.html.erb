@@ -73,27 +73,27 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 <div class="row ">
   <div class="col-md-12 panel panel-default">
-    <div class="panel-body">
+    <div class="panel-body ">
       <ul id="myTab" class="nav nav-tabs nav-justified">
         <li class="active"><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
         <li><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
       </ul>
-      <div id="myTabContent" class="tab-content">
-         <div class="tab-pane fade in active" id="des">
+      <div id="myTabContent" class="tab-content upul">
+         <div class="upul tab-pane fade in active" id="des">
            <br><br>
-           <p>   
+           <ul>   
              <% @des_show.each_with_index do |item,index| %>                   
-              <%= link_to item.description,  {action: "des_item", mpn: item.description},target: "_black" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <li><%= link_to item.description,  {action: "des_item", mpn: item.description},target: "_black",class: "text-overflow" %></li>
              <% end %>
-           </p>
+           </ul>
          </div>
-         <div class="tab-pane fade" id="home">
+         <div class="mpnul tab-pane fade" id="home">
            <br><br>  
-           <p>   
+           <ul>
            <% @mpn_show.each_with_index do |item,index| %>
-              <%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn},target: "_black" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <li><%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn},target: "_black" %></li>
            <% end %>
-           </p>
+           </ul>
          </div>
        </div>
      </div>

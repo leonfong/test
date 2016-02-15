@@ -47,6 +47,11 @@ skip_before_action :verify_authenticity_token
     end
 
     def edit
+        if cookies.permanent[:educator_locale].to_s == "zh"
+            part_name_locale = "part_name"
+        elsif cookies.permanent[:educator_locale].to_s == "en"
+            part_name_locale = "part_name_en"
+        end
         #@fengzhuang = Product.find_by_sql("SELECT products.ptype, products.package2 FROM products GROUP BY products.package2 HAVING products.ptype = "+ params[:parent_id])
         @bom_item = BomItem.find(params[:id])
         Rails.logger.info("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
@@ -154,10 +159,20 @@ skip_before_action :verify_authenticity_token
                 end
                 tan_tag = ""
                 if params[:q].to_s =~ /t491/i or params[:q].to_s =~ /tant/i
-                    sql_a = sql_a  + " AND `part_name` = '钽电容'" 
+                    #sql_a = sql_a  + " AND `part_name` = '钽电容'" 
+                    if cookies.permanent[:educator_locale].to_s == "zh"
+                        sql_a = sql_a  + " AND `part_name` = '钽电容'" 
+                    elsif cookies.permanent[:educator_locale].to_s == "en"
+                        sql_a = sql_a  + " AND `part_name_en` = 'Tantalum capacitor'" 
+                    end
                     tan_tag = "tan" 
                 elsif params[:q].to_s =~ /radial/i   
-                    sql_a = sql_a  + " AND `part_name` = '电解电容'" 
+                    #sql_a = sql_a  + " AND `part_name` = '电解电容'" 
+                    if cookies.permanent[:educator_locale].to_s == "zh"
+                        sql_a = sql_a  + " AND `part_name` = '电解电容'" 
+                    elsif cookies.permanent[:educator_locale].to_s == "en"
+                        sql_a = sql_a  + " AND `part_name_en` = 'Ele capacitor'" 
+                    end
                     tan_tag = "tan"  
                 #elsif params[:q].to_s =~ /led/i   
                     #sql_a = sql_a  + " AND `part_name` = 'LED'" 
@@ -182,23 +197,23 @@ skip_before_action :verify_authenticity_token
                     #如果没有电压
                     Rails.logger.info("000000000000000000000000----------------------------------tan")
                     #@match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                    @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
+                    @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `" + part_name_locale + "` LIKE '%"+@ptype+"%'" + find_bom).to_ary
                 else
                     #如果有电压 电压在value3
                     Rails.logger.info("1")
                     #match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                    match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
+                    match_products_w = Product.find_by_sql(sql_a+" AND `value3` = '"+str.split(" ")[1]+"' AND `ptype` = '"+str.split(" ")[-1]+"' AND `" + part_name_locale + "` LIKE '%"+@ptype+"%'" + find_bom).to_ary
                     if match_products_w.blank?
                         #如果没查到 电压换成50V
                         Rails.logger.info("2")
                         if (part_code[0] =~ /[Cc]/ and str.split(" ")[0]=~ /[^uU]/)
                             #@match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                            @match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
+                            @match_products = Product.find_by_sql(sql_a+" AND `value3` = '50v' AND `ptype` = '"+str.split(" ")[-1]+"' AND `" + part_name_locale + "` LIKE '%"+@ptype+"%'" + find_bom).to_ary
                         else
                             #没查到去掉电压
                             Rails.logger.info("3")
                             #@match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary 
-                            @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary 
+                            @match_products = Product.find_by_sql(sql_a+" AND `ptype` = '"+str.split(" ")[-1]+"' AND `" + part_name_locale + "` LIKE '%"+@ptype+"%'" + find_bom).to_ary 
                         end
                     else
                         Rails.logger.info("4")
@@ -213,9 +228,9 @@ skip_before_action :verify_authenticity_token
                     Rails.logger.info("t22222222222222222222222222222222222222222222222222222222222222222")
                     #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
                     if params[:q].to_s =~ /res/i
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `ptype` = 'RES' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `ptype` = 'RES' AND `" + part_name_locale + "` LIKE '%"+@ptype+"%'" + find_bom).to_ary
                     else
-                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary              
+                        @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `" + part_name_locale + "` LIKE '%"+@ptype+"%'" + find_bom).to_ary              
                     end 
                     #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ").to_ary
                     
@@ -299,7 +314,7 @@ skip_before_action :verify_authenticity_token
                         @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` = 'LED'"+find_led_p).to_ary
                     end
                 elsif params[:q].to_s =~ /螺丝端子/i or params[:q].to_s =~ /简牛/i or params[:q].to_s =~ /排针/i or params[:q].to_s =~ /排母/i or params[:q].to_s =~ /晶振/i or params[:q].to_s =~ /电感/i or params[:q].to_s =~ /开关/i
-                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `part_name` LIKE '%"+params[:q].to_s.split(" ")[0]+"%' AND `value2`  like '%"+params[:q].to_s.split(" ")[1]+"%' AND `value3`  LIKE '%"+params[:q].to_s.split(" ")[2]+"%' ").to_ary
+                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `" + part_name_locale + "` LIKE '%"+params[:q].to_s.split(" ")[0]+"%' AND `value2`  like '%"+params[:q].to_s.split(" ")[1]+"%' AND `value3`  LIKE '%"+params[:q].to_s.split(" ")[2]+"%' ").to_ary
                 else
                     find_bom = ""
                     if  @package2 != ""
@@ -310,7 +325,7 @@ skip_before_action :verify_authenticity_token
 	            #全局匹配产品
                     #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC')#.to_ary
                     #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%' AND `package2` LIKE '%"+@package2+"%' ORDER BY `prefer` DESC").to_ary
-                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `part_name` LIKE '%"+@ptype+"%'" + find_bom).to_ary
+                    @match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%"+str.split(" ")[0]+"%' AND `" + part_name_locale + "` LIKE '%"+@ptype+"%'" + find_bom).to_ary
                 end
   
 	        #@match_products =Product.search(str,conditions: {ptype: @ptype, package2: @package2},star: true,order: 'prefer DESC').to_ary
@@ -344,7 +359,7 @@ skip_before_action :verify_authenticity_token
             end
 	    #计算相同类别和封装的个数，package1为元器件类别，package2为封装
 	    @counted = Hash.new(0)
-            @match_products.each { |h| @counted[h["part_name"]] += 1 }
+            @match_products.each { |h| @counted[h[part_name_locale]] += 1 }
             @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
 				
 	    @counted1 = Hash.new(0)

@@ -84,6 +84,14 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
  
 
     def search_keyword
+        Rails.logger.info("params[:locale]------------------------------------------------------params[:locale]")
+        Rails.logger.info(cookies.permanent[:educator_locale].to_s)
+        Rails.logger.info("params[:locale]--------------------------------------------------------params[:locale]")
+        if cookies.permanent[:educator_locale].to_s == "zh"
+            part_name_locale = "part_name"
+        elsif cookies.permanent[:educator_locale].to_s == "en"
+            part_name_locale = "part_name_en"
+        end
         @bom = Bom.new
         #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
         if not params[:mpn] == ""
@@ -110,7 +118,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
 		        @ptype = params[:part_name]
                         #@ptype = ""
 	                @package2 = ""
-                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' "
+                        find_bom = " AND `" + part_name_locale + "` LIKE '%"+@ptype+"%' "
 	            elsif params[:part_name].nil?
 	                @ptype = ""
 	                @package2 = params[:package2]
@@ -119,7 +127,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
 	                @ptype = params[:part_name]
                         #@ptype = ""
 	                @package2 = params[:package2]
-                        find_bom = " AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
+                        find_bom = " AND `" + part_name_locale + "` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
 	            end
 
                     
@@ -130,7 +138,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                     end
                     @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where + find_bom).to_ary
                     @counted = Hash.new(0)
-                    @key_item.each { |h| @counted[h["part_name"]] += 1 }
+                    @key_item.each { |h| @counted[h[part_name_locale]] += 1 }
                     @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
 				
 	            @counted1 = Hash.new(0)
@@ -220,7 +228,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
 		    @ptype = params[:part_name]
                     #@ptype = ""
 	            @package2 = ""
-                    find_bom = " AND `part_name` LIKE '%"+@ptype+"%' "
+                    find_bom = " AND `" + part_name_locale + "` LIKE '%"+@ptype+"%' "
 	        elsif params[:part_name].nil?
 	            @ptype = ""
 	            @package2 = params[:package2]
@@ -229,7 +237,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
 	            @ptype = params[:part_name]
                     #@ptype = ""
 	            @package2 = params[:package2]
-                    find_bom = " AND `part_name` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
+                    find_bom = " AND `" + part_name_locale + "` LIKE '%"+@ptype+"%' AND `package2` = '"+@package2+"' "
 	        end
                 keywords = params[:mpn].strip.split(" ")
                 key_where = " products.description LIKE '%%'"
@@ -239,7 +247,7 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                 @key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where + find_bom).to_ary
                 #@key_item = Product.find_by_sql("SELECT * FROM products WHERE" + key_where).to_ary
                 @counted = Hash.new(0)
-                @key_item.each { |h| @counted[h["part_name"]] += 1 }
+                @key_item.each { |h| @counted[h[part_name_locale]] += 1 }
                 @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
 				
 	        @counted1 = Hash.new(0)

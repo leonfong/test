@@ -120,11 +120,10 @@ div.mpnul ul li a:active
         
       
     </div>
-    <!--
+   
     <%= render 'layouts/google_analytics' %>
-    -->
-      <p class="notice"><%= notice %></p>
-       <p class="alert"><%= alert %></p>
+    
+
   </body>
 
 

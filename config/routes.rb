@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   resources :boms, only: [:index,:show, :new, :create, :destroy, :mark, :mpn]
   #resources :boms
   resources :bom_item
-  match '/search', to: 'boms#search', via: 'get'
+  #match '/search', to: 'boms#search', via: 'get'
   
   #match 'choose'=> 'boms#choose'
   match '/mark', to: 'boms#mark', via: 'post'

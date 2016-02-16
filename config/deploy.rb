@@ -95,10 +95,10 @@ task :deploy => :environment do
     invoke :'git:clone'
     #重新设定shared_path位置
     invoke :'deploy:link_shared_paths'
-    #invoke :'bundle:install'
-    #invoke :'rails:db_migrate'
+    invoke :'bundle:install'
+    invoke :'rails:db_migrate'
     ##invoke :'deploy:sitemap:refresh'
-    #invoke :'rails:assets_precompile'
+    invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
 
     to :launch do

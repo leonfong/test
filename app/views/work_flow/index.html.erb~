@@ -8,9 +8,13 @@
     {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
     }
     </script>
+    <% if user_signed_in? %>
+        <% if can? :work_a, :all %>
         <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">
             <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
+        <% end %>
+    <% end %>
     <div class="collapse" id="collapseExampledow">
         <div class="well">
                 <%= form_tag('/up_work', method:"get", class:"form-inline") do %>

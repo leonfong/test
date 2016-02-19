@@ -16,8 +16,8 @@ Rails.application.routes.draw do
   match '/search', to: 'boms#search_keyword', via: 'get'
   match '/down_excel', to: 'boms#down_excel', via: 'get'
   match '/work_flow', to: 'work_flow#index', via: 'get'  
-  match '/up_work', to: 'work_flow#up_work', via: 'get'
-  match '/edit_work', to: 'work_flow#edit_work', via: 'get'
+  match '/up_work', to: 'work_flow#up_work', via: 'post'
+  match '/edit_work', to: 'work_flow#edit_work', via: 'post'
 
   root to: 'boms#upload'
   #root to: "boms#index"

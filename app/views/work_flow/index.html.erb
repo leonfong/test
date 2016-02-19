@@ -17,7 +17,7 @@
     <% end %>
     <div class="collapse" id="collapseExampledow">
         <div class="well">
-                <%= form_tag('/up_work', method:"get", class:"form-inline") do %>
+                <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
                 <div class="panel" style="background-color: #d9edf7;">
                     
                     <table class="table table-bordered">
@@ -86,7 +86,7 @@
 <% @work_flow.each do |work| %>
 <div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
     <div class="well col-lg-12 " style="padding: 5px;" >
-        <%= form_tag('/edit_work', method:"get", class:"form-inline") do %>
+        <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
         <div class="panel" style="background-color: #d9edf7;">
         <table class="table table-bordered table-condensed" >
             <thead>

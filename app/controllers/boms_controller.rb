@@ -1251,6 +1251,7 @@ WHERE
             #mpn = "LM2937IMP"
             url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
             url += mpn
+            Rails.logger.info(mpn.inspect)
             resp = Net::HTTP.get_response(URI.parse(url))
             server_response = JSON.parse(resp.body)
             Rails.logger.info("prices_all--------------------------------------------------------------------------")

@@ -1,7 +1,7 @@
 <%
 meta title: params[:mpn] + " Stock and Price By Authorized Distributor and Manufacturer",
      description: params[:mpn] + " price and " + params[:mpn] + " Stock is available by authorized distributors and independent electronic component manufacturer.",
-     keywords: params[:mpn] +" , " +  params[:mpn] + " Stock, " +  params[:mpn] + "Price, " +  params[:mpn] + " Distributor," +  params[:mpn] + " manufacturer"
+     keywords: params[:mpn] +" , " +  params[:mpn] + " Stock, " +  params[:mpn] + " Price, " +  params[:mpn] + " Distributor," +  params[:mpn] + " manufacturer"
 %>
 
 

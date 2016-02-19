@@ -65,3 +65,10 @@ en:
   step_d: "Check Button."
   c_us: "If you want to contact us, please send an email to "
   thanks: "Thank you!"
+  date:
+    datepicker:
+      default: "mm/dd/yyyy"
+      long: "MM dd, yyyy"
+    formats:
+      default: "%m/%d/%Y"
+      long: ! '%B %d, %Y'

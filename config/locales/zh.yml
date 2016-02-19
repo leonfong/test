@@ -65,3 +65,10 @@ zh:
   step_d: 查看结果。
   c_us: 如果你要联系我们请发邮件给
   thanks: "谢谢!"
+  date:
+    datepicker:
+      default: "mm/dd/yyyy"
+      long: "MM dd, yyyy"
+    formats:
+      default: "%m/%d/%Y"
+      long: ! '%B %d, %Y'

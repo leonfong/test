@@ -19,6 +19,11 @@
         <li id="a"><%= link_to 'Search BOM',root_path %></li>
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
+        <% if user_signed_in? %>
+            <% if can? :work_flow, :all %>
+                <li id="f"><%= link_to "Work Flow",work_flow_path %></li>
+            <% end %>
+        <% end %>
         <li id="d"><%= link_to t('about'),about_path %></li>
         <li id="e"><%= link_to t('contact'),contact_path %></li>
       </ul>
@@ -48,7 +53,7 @@
 </nav>
 <script language="javascript">
 $(document).ready(function () {
-    $("#a").click(function (e) {         
+    $("#a").hover(function (e) {         
             e.preventDefault();
             //alert(document.activeElement);
             $("#b").removeClass('active');
@@ -64,7 +69,7 @@ $(document).ready(function () {
             //document.getElementById('a').className="active"
             
     });
-    $("#b").click(function (e) {         
+    $("#b").hover(function (e) {         
             e.preventDefault();
             //alert(document.activeElement);
             $("#a").removeClass('active');

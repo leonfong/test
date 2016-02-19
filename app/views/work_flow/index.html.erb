@@ -8,22 +8,26 @@
     {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
     }
     </script>
+    <% if user_signed_in? %>
+        <% if can? :work_a, :all %>
         <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">
             <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
+        <% end %>
+    <% end %>
     <div class="collapse" id="collapseExampledow">
         <div class="well">
                 <%= form_tag('/up_work', method:"get", class:"form-inline") do %>
-                <div class="bg-success panel panel-info" style="background-color: #d9edf7;">
+                <div class="panel" style="background-color: #d9edf7;">
                     
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>下单日期</th>
-                                <th>单号</th>
-                                <th>数量</th>
-                                <th>业务交期</th>
-                                <th>产品代码</th>
+                                <th class="bg-primary">下单日期</th>
+                                <th class="bg-primary">单号</th>
+                                <th class="bg-primary">数量</th>
+                                <th class="bg-primary">业务交期</th>
+                                <th class="bg-primary">产品代码</th>
                             </tr>
                         </thead>
                         <tbody class="table table-bordered">  
@@ -83,6 +87,7 @@
 <div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
     <div class="well col-lg-12 " style="padding: 5px;" >
         <%= form_tag('/edit_work', method:"get", class:"form-inline") do %>
+        <div class="panel" style="background-color: #d9edf7;">
         <table class="table table-bordered table-condensed" >
             <thead>
                 <tr>
@@ -370,6 +375,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
         <p>
         <% if user_signed_in? %>
             <% if can? :work_up, :all %>

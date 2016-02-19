@@ -2,7 +2,7 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     def index
         
-        @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` ORDER BY work_flows.created_at DESC" )
+        @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no like '%" + params[:order].strip + "%' ORDER BY work_flows.created_at DESC" )
         
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(@work_flow.inspect)

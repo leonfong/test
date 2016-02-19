@@ -1,5 +1,6 @@
-<div class="row">
-    <div class="col-md-6" >
+
+<div class="row" style="padding-down: 117px;padding-right: 8px;padding-left: 8px;">
+    <div class="col-md-1" >
     <script>
     function change_p(){
     if (document.getElementById('collapseExampledow').className=='collapse in')
@@ -15,9 +16,27 @@
         </button>
         <% end %>
     <% end %>
+    </div>
+    
+    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+       <div class="col-md-3 form-group ">
+          <lable for="order" , class="sr-only">Qrder : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>
+            
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+<div class="row" style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
+    <div class="col-md-6" >
     <div class="collapse" id="collapseExampledow">
         <div class="well">
-                <%= form_tag('/up_work', method:"get", class:"form-inline") do %>
+                <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
                 <div class="panel" style="background-color: #d9edf7;">
                     
                     <table class="table table-bordered">
@@ -121,7 +140,7 @@
                     <% if can? :work_a, :all %>
                     <td>
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
-                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"7"%>
+                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"8"%>
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"order_date" %>').datetimepicker({
@@ -137,7 +156,7 @@
                         <%= text_field_tag :order_quantity, params[:order_quantity], id: work.id.to_s+"order_quantity",class:"form-control input-sm",value:work.order_quantity , size:"1" %>
                     </td>
                     <td class="">
-                            <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"7"%>                                       
+                            <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"salesman_end_date" %>').datetimepicker({
@@ -152,7 +171,7 @@
                     <% else %>
                     <td>
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s  %>
-                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"7",disabled:true %>
+                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"8",disabled:true %>
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"order_date" %>').datetimepicker({
@@ -168,7 +187,7 @@
                         <%= text_field_tag :order_quantity, params[:order_quantity], id: work.id.to_s+"order_quantity",class:"form-control input-sm",value:work.order_quantity , size:"1" ,disabled:true %>
                     </td>
                     <td>
-                            <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"7",disabled:true %>                                       
+                            <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"8",disabled:true %>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"salesman_end_date" %>').datetimepicker({
@@ -196,7 +215,7 @@
                         <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"1" %>
                     </td>
                     <td>
-                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"7"%>                                       
+                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
@@ -206,7 +225,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"7"%>                                       
+                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
@@ -216,7 +235,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"7"%>                                       
+                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
@@ -226,7 +245,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"7"%>                                       
+                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
@@ -236,7 +255,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"7"%>                                       
+                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"update_date" %>').datetimepicker({
@@ -257,7 +276,7 @@
                         <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"1",disabled:true  %>
                     </td>
                     <td>
-                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"7",disabled:true %>                                       
+                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"8",disabled:true %>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
@@ -267,7 +286,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"7",disabled:true %>                                       
+                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8",disabled:true %>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
@@ -277,7 +296,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"7",disabled:true %>                                       
+                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"8",disabled:true %>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
@@ -287,7 +306,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"7",disabled:true %>                                       
+                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8",disabled:true %>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
@@ -297,7 +316,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"7",disabled:true %>                                       
+                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"8",disabled:true %>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"update_date" %>').datetimepicker({
@@ -313,7 +332,7 @@
               <% if user_signed_in? %>
                    <% if can? :work_c, :all %>
                    <td>
-                        <%= text_field_tag :engineering_end_date, params[:engineering_end_date], id: work.id.to_s+"engineering_end_date",class:"form-control input-sm",value:work.engineering_end_date , size:"7"%>                                       
+                        <%= text_field_tag :engineering_end_date, params[:engineering_end_date], id: work.id.to_s+"engineering_end_date",class:"form-control input-sm",value:work.engineering_end_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"engineering_end_date" %>').datetimepicker({
@@ -336,7 +355,7 @@
                     </td>
                     <% else %>
                     <td>
-                        <%= text_field_tag :engineering_end_date, params[:engineering_end_date], id: work.id.to_s+"engineering_end_date",class:"form-control input-sm",value:work.engineering_end_date , size:"7",disabled:true %>                                       
+                        <%= text_field_tag :engineering_end_date, params[:engineering_end_date], id: work.id.to_s+"engineering_end_date",class:"form-control input-sm",value:work.engineering_end_date , size:"8",disabled:true %>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"engineering_end_date" %>').datetimepicker({
@@ -364,11 +383,11 @@
                <% if user_signed_in? %>
                     <% if can? :work_d, :all %>
                     <td>  
-                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"18" %>
+                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"22" %>
                     </td>
                     <% else %>
                     <td>  
-                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"18" ,disabled:true%>
+                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"22" ,disabled:true%>
                     </td>
                     <% end %>
                 <% end %>

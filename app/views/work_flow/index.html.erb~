@@ -1,29 +1,46 @@
 
 <div class="row" style="padding-down: 117px;padding-right: 8px;padding-left: 8px;">
-    <div class="col-md-1" >
-    <script>
-    function change_p(){
-    if (document.getElementById('collapseExampledow').className=='collapse in')
-    {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
-    else
-    {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
-    }
-    </script>
+    
     <% if user_signed_in? %>
         <% if can? :work_a, :all %>
-        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">
+    <div class="col-md-1" >
+        <script>
+        function change_p(){
+        if (document.getElementById('collapseExampledow').className=='collapse in')
+        {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新建订单
             <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>
+        </button>       
+    </div>
+    <div class="col-md-2" >
+        <script>
+        function change_q(){
+        if (document.getElementById('upWarehouse').className=='collapse in')
+        {document.getElementById('upWarehousebut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('upWarehousebut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
+            <span id="upWarehousebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>       
+    </div>
+    <div class="col-md-2" >        
+        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"}, class: "btn btn-danger btn-lg" %>            
+    </div>
         <% end %>
     <% end %>
-    </div>
+
     
-    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+    <%= form_tag('/up_warehouse', method:"post", class:"form-inline") do %>
        <div class="col-md-3 form-group ">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group">    
-            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>
-            
+            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
             </div>
@@ -37,8 +54,11 @@
     <div class="collapse" id="collapseExampledow">
         <div class="well">
                 <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
-                <div class="panel" style="background-color: #d9edf7;">
-                    
+                <div>
+                    <p>
+                        <%= text_area_tag :order_info, params[:order_info], size:"130x10", class:"form-control", placeholder:"下单日期 单号 数量 业务交期 产品代码"%>
+                    </p>
+<!--
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -61,7 +81,8 @@
                                     <script type="text/javascript">
                                       $(function () {
                                         $('#datetimepicker1').datetimepicker({
-                                          format: 'YYYY-MM-DD'
+                                          useCurrent: false,
+                                          format: 'YYYY-MM-DD'                                          
                                          });    
                                        });
                                      </script>
@@ -78,6 +99,7 @@
                                     <script type="text/javascript">
                                       $(function () {
                                         $('#datetimepicker2').datetimepicker({
+                                          useCurrent: false,
                                           format: 'YYYY-MM-DD'
                                          });    
                                        });
@@ -87,10 +109,24 @@
                             </tr>   
                         </tbody>
                     </table>
-                    
+-->                   
                 </div> 
                 <div >
                     <%= submit_tag "提交订单", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+    <div class="collapse" id="upWarehouse">
+        <div class="well">
+                <%= form_tag('/up_warehouse', method:"post", class:"form-inline") do %>
+                <div>
+                    <p>
+                        <%= text_area_tag :warehouse_info, params[:warehouse_info], size:"130x10", class:"form-control", placeholder:" 单号 入库数量 "%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "更新", class:"btn btn-info btn-lg" %>
                 </div>
                 <% end %> 
         </div>
@@ -103,10 +139,13 @@
 
 
 <% @work_flow.each do |work| %>
+<% if user_signed_in? %>
+    <% if can? :work_a, :all %>
 <div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
     <div class="well col-lg-12 " style="padding: 5px;" >
         <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
         <div class="panel" style="background-color: #d9edf7;">
+        
         <table class="table table-bordered table-condensed" >
             <thead>
                 <tr>
@@ -116,34 +155,35 @@
                     <th class="bg-primary">业务交期</th>
                     <th class="bg-primary">产品代码</th>
                     
-                    <th class="bg-info">入库数量</th>
-                    <th class="bg-info">SMD</th>
-                    <th class="bg-info">DIP</th>
-                    <th class="bg-info">贴片通知生产</th>
+                    <th class="bg-primary">入库数量</th>
+                    <th class="bg-primary">SMD</th>
+                    <th class="bg-primary">DIP</th>
+                    <th class="bg-primary">贴片通知生产</th>
                     <th class="bg-info">贴片交期</th>
-                    <th class="bg-info">后焊通知生产</th>
+                    <th class="bg-primary">后焊通知生产</th>
                     <th class="bg-info">后焊交期</th>
-                    <th class="bg-info">更改交期</th>
+                    <th class="bg-primary">更改交期</th>
  
-                    <th class="bg-primary">工程交期</th>
-                    <th class="bg-primary">工厂状态</th>
-                    <th class="bg-primary">工程状态</th>
-                    <th class="bg-primary">采购状态</th>
+                    <th class="bg-warning">生产反馈</th>
+
+                    <th class="bg-danger">测试反馈</th>
+
+                    <th class="bg-primary">补料已回</th>
+                    <th class="bg-info">清尾完成</th>
                     <th class="bg-primary">业务状态</th>
 
-                    <th class="bg-info">备注</th>
+                    <th class="bg-primary">备注</th>
                 </tr>
             </thead>
             <tbody class="table table-bordered">
-                <tr class="active">
-                <% if user_signed_in? %>
-                    <% if can? :work_a, :all %>
+                <tr class="active">                
                     <td>
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"8"%>
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"order_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
@@ -152,59 +192,28 @@
                     <td>
                         <%= text_field_tag :order_no, params[:order_no], id: work.id.to_s+"order_no",class:"form-control input-sm",value:work.order_no, size:"14"%>
                     </td>
-                    <td class="">
+                    <td>
                         <%= text_field_tag :order_quantity, params[:order_quantity], id: work.id.to_s+"order_quantity",class:"form-control input-sm",value:work.order_quantity , size:"1" %>
                     </td>
-                    <td class="">
+                    <td>
                             <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"salesman_end_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
                         </script>
                     </td> 
-                    <td class="">
+                    <td>
                         <%= text_field_tag :product_code, params[:product_code], id: work.id.to_s+"product_code",class:"form-control input-sm",value:work.product_code, size:"14" %>
-                    </td>
-                    <% else %>
-                    <td>
-                        <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s  %>
-                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"8",disabled:true %>
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"order_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td>
-                    <td>
-                        <%= text_field_tag :order_no, params[:order_no], id: work.id.to_s+"order_no",class:"form-control input-sm",value:work.order_no, size:"14",disabled:true %>
-                    </td>
-                    <td >
-                        <%= text_field_tag :order_quantity, params[:order_quantity], id: work.id.to_s+"order_quantity",class:"form-control input-sm",value:work.order_quantity , size:"1" ,disabled:true %>
-                    </td>
-                    <td>
-                            <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"8",disabled:true %>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"salesman_end_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td>
-                        <%= text_field_tag :product_code, params[:product_code], id: work.id.to_s+"product_code",class:"form-control input-sm",value:work.product_code, size:"14",disabled:true  %>
-                    </td> 
-                    <% end %>
-                <% end %>
+                    </td>                 
+                    
 
 
-                <% if user_signed_in? %>
-                    <% if can? :work_b, :all %>
+
+
                     <td> 
                         <%= text_field_tag :warehouse_quantity, params[:warehouse_quantity], id: work.id.to_s+"warehouse_quantity",class:"form-control input-sm",value:work.warehouse_quantity , size:"1" %>
                     </td>
@@ -219,6 +228,7 @@
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
@@ -229,6 +239,7 @@
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
@@ -239,6 +250,7 @@
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
@@ -249,6 +261,7 @@
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
@@ -259,138 +272,50 @@
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"update_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
                         </script>
                     </td> 
-                    <% else %>
-                    <td> 
-                        <%= text_field_tag :warehouse_quantity, params[:warehouse_quantity], id: work.id.to_s+"warehouse_quantity",class:"form-control input-sm",value:work.warehouse_quantity , size:"1",disabled:true  %>
-                    </td>
-
-                    <td>
-                        <%= text_field_tag :smd, params[:smd], id: work.id.to_s+"smd",class:"form-control input-sm",value:work.smd , size:"1",disabled:true  %>
-                    </td>
-                    <td>
-                        <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"1",disabled:true  %>
-                    </td>
-                    <td>
-                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"8",disabled:true %>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td>
-                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8",disabled:true %>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td>
-                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"8",disabled:true %>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td>
-                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8",disabled:true %>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td>
-                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"8",disabled:true %>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"update_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td>
-                    <% end %>
-                <% end %>
+                    
 
 
-              <% if user_signed_in? %>
-                   <% if can? :work_c, :all %>
+
                    <td>
-                        <%= text_field_tag :engineering_end_date, params[:engineering_end_date], id: work.id.to_s+"engineering_end_date",class:"form-control input-sm",value:work.engineering_end_date , size:"8"%>                                       
+                        <%= text_field_tag :production_feedback, params[:production_feedback], id: work.id.to_s+"production_feedback",class:"form-control input-sm",value:work.production_feedback , size:"10"%>                                                            
+                    </td> 
+                    <td>
+                        <%= text_field_tag :test_feedback, params[:test_feedback], id: work.id.to_s+"test_feedback",class:"form-control input-sm",value:work.test_feedback , size:"10" %>
+                    </td>
+                    <td>
+                        <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"8" %>
                         <script type="text/javascript">
                           $(function () {
-                            $('#<%= work.id.to_s+"engineering_end_date" %>').datetimepicker({
+                            $('#<%= work.id.to_s+"supplement_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td>
+                    <td>
+                        <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" %>
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"clear_date" %>').datetimepicker({
+                              useCurrent: false,
                               format: 'YYYY-MM-DD'
                             });    
                           });
                         </script>
                     </td> 
-                    <td>
-                        <%= text_field_tag :factory_state, params[:factory_state], id: work.id.to_s+"factory_state",class:"form-control input-sm",value:work.factory_state , size:"1" %>
-                    </td>
-                    <td>
-                        <%= text_field_tag :engineering_state, params[:engineering_state], id: work.id.to_s+"engineering_state",class:"form-control input-sm",value:work.engineering_state , size:"1" %>
-                    </td>
-                    <td>
-                        <%= text_field_tag :purchasing_state, params[:purchasing_state], id: work.id.to_s+"purchasing_state",class:"form-control input-sm",value:work.purchasing_state , size:"1" %>
-                    </td>
                     <td>
                         <%= text_field_tag :salesman_state, params[:salesman_state], id: work.id.to_s+"salesman_state",class:"form-control input-sm",value:work.salesman_state , size:"1" %>
                     </td>
-                    <% else %>
-                    <td>
-                        <%= text_field_tag :engineering_end_date, params[:engineering_end_date], id: work.id.to_s+"engineering_end_date",class:"form-control input-sm",value:work.engineering_end_date , size:"8",disabled:true %>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"engineering_end_date" %>').datetimepicker({
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td>
-                        <%= text_field_tag :factory_state, params[:factory_state], id: work.id.to_s+"factory_state",class:"form-control input-sm",value:work.factory_state , size:"1",disabled:true  %>
-                    </td>
-                    <td>
-                        <%= text_field_tag :engineering_state, params[:engineering_state], id: work.id.to_s+"engineering_state",class:"form-control input-sm",value:work.engineering_state , size:"1",disabled:true  %>
-                    </td>
-                    <td>
-                        <%= text_field_tag :purchasing_state, params[:purchasing_state], id: work.id.to_s+"purchasing_state",class:"form-control input-sm",value:work.purchasing_state , size:"1",disabled:true  %>
-                    </td>
-                    <td>
-                        <%= text_field_tag :salesman_state, params[:salesman_state], id: work.id.to_s+"salesman_state",class:"form-control input-sm",value:work.salesman_state , size:"1",disabled:true  %>
-                    </td>
-                    <% end %>
-                <% end %>
-
-
-               <% if user_signed_in? %>
-                    <% if can? :work_d, :all %>
                     <td>  
                         <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"22" %>
-                    </td>
-                    <% else %>
-                    <td>  
-                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"22" ,disabled:true%>
-                    </td>
-                    <% end %>
-                <% end %>
+                    </td>   
                 </tr>
             </tbody>
         </table>
@@ -403,14 +328,198 @@
         <% end %>
         </p>
         <% end %>
-    
-        
-    
-        
-    
-        
+   
     </div>
 </div>
+        <% elsif can? :work_b, :all %>
+<div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
+    <div class="well col-lg-12 " style="padding: 5px;" >
+        <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
+        <div class="panel" style="background-color: #d9edf7;">
+        <table class="table table-bordered table-condensed" >
+            <thead>
+                <tr>
+                    
+                    <th class="bg-primary">单号</th>
+                    <th class="bg-primary">数量</th>
+                    <th class="bg-primary">业务交期</th>
+                    <th class="bg-primary">产品代码</th>
+                    
+                    <th class="bg-primary">入库数量</th>
+                   
+                    <th class="bg-primary">贴片通知生产</th>
+                    <th class="bg-info">贴片交期</th>
+                    <th class="bg-primary">后焊通知生产</th>
+                    <th class="bg-info">后焊交期</th>
+                    <th class="bg-primary">更改交期</th>
+ 
+                    <th class="bg-primary">补料已回</th>
+                    <th class="bg-info">清尾完成</th>
+
+                </tr>
+            </thead>
+            <tbody class="table table-bordered">
+                <tr class="active">                
+                    
+                    <td><%= work.order_no %></td>
+                    <td><%= work.order_quantity %></td>
+                    <td><%= work.salesman_end_date %></td> 
+                    <td><%= work.product_code %></td>                 
+                    <td><%= work.warehouse_quantity %></td>
+                    
+                    <td><%= work.smd_start_date %></td> 
+                    <td>
+                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                       
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td> 
+                    <td><%= work.dip_start_date %></td> 
+                    <td>
+                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8"%>                                       
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td> 
+                    <td><%= work.update_date %></td> 
+                    <td><%= work.supplement_date %></td>
+                    <td>
+                        <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" %>
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"clear_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td>
+                     
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <p>
+        <% if user_signed_in? %>
+            <% if can? :work_up, :all %>
+              <%= submit_tag "提交", class:"btn btn-info btn-sm" %>
+            <% end %>
+        <% end %>
+        </p>
+        <% end %>
+   
+    </div>
+</div>
+        <% elsif can? :work_c, :all %>
+<div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
+    <div class="well col-lg-6 " style="padding: 5px;" >
+        <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
+        <div class="panel" style="background-color: #d9edf7;">
+        <table class="table table-bordered table-condensed" >
+            <thead>
+
+                <tr>
+                    
+                    <th class="bg-primary">单号</th>
+
+                    <th class="bg-primary">数量</th>
+                    <th class="bg-primary">业务交期</th>
+                    <th class="bg-primary">产品代码</th>
+                    
+                    <th class="bg-primary" >入库数量</th>
+                   
+                    <th class="bg-primary">生产反馈</th>
+
+                </tr>
+            </thead>
+
+            <tbody class="table table-bordered">
+                <tr class="active">                
+                    
+                    <td><%= work.order_no %></td>
+                    <td><%= work.order_quantity %></td>
+                    <td><%= work.salesman_end_date %></td> 
+                    <td><%= work.product_code %></td>                 
+                    <td><%= work.warehouse_quantity %></td>
+                    
+                    <td>
+                        <%= text_field_tag :production_feedback, params[:production_feedback], id: work.id.to_s+"production_feedback",class:"form-control input-sm",value:work.production_feedback , size:"80"%>                                                            
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <p>
+        <% if user_signed_in? %>
+            <% if can? :work_up, :all %>
+              <%= submit_tag "提交", class:"btn btn-info btn-sm" %>
+            <% end %>
+        <% end %>
+        </p>
+        <% end %>
+   
+    </div>
+</div>
+        <% elsif can? :work_d, :all %>
+<div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
+    <div class="well col-lg-6 " style="padding: 5px;" >
+        <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
+        <div class="panel" style="background-color: #d9edf7;">
+        <table class="table table-bordered table-condensed" >
+            <thead>
+                <tr>
+                    
+                    <th class="bg-primary">单号</th>
+                    <th class="bg-primary">数量</th>
+                    <th class="bg-primary">业务交期</th>
+                    <th class="bg-primary">产品代码</th>
+                    
+                    <th class="bg-primary" >入库数量</th>
+                   
+                    <th class="bg-primary">测试反馈</th>
+
+                </tr>
+            </thead>
+            <tbody class="table table-bordered">
+                <tr class="active">                
+                    
+                    <td><%= work.order_no %></td>
+                    <td><%= work.order_quantity %></td>
+                    <td><%= work.salesman_end_date %></td> 
+                    <td><%= work.product_code %></td>                 
+                    <td><%= work.warehouse_quantity %></td>
+                    
+                    <td>
+                        <%= text_field_tag :test_feedback, params[:test_feedback], id: work.id.to_s+"test_feedback",class:"form-control input-sm",value:work.test_feedback , size:"80"%>                                                            
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <p>
+        <% if user_signed_in? %>
+            <% if can? :work_up, :all %>
+              <%= submit_tag "提交", class:"btn btn-info btn-sm" %>
+            <% end %>
+        <% end %>
+        </p>
+        <% end %>
+   
+    </div>
+</div>
+        <% end %>
+        <% end %>
+
 <% end %>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

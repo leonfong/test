@@ -20,8 +20,8 @@
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
         <% if user_signed_in? %>
-            <% if can? :work_flow, :all %>
-                <li id="f"><%= link_to "Work Flow",work_flow_path %></li>
+            <% if can? :work_up, :all %>
+                <li id="k"><%= link_to "Work Flow",work_flow_path %></li>
             <% end %>
         <% end %>
         <li id="d"><%= link_to t('about'),about_path %></li>
@@ -65,6 +65,7 @@ $(document).ready(function () {
             $("#h").removeClass('active');
             $("#i").removeClass('active');
             $("#j").removeClass('active');
+            $("#k").removeClass('active');
             $("#a").addClass('active');
             //document.getElementById('a').className="active"
             
@@ -81,6 +82,7 @@ $(document).ready(function () {
             $("#h").removeClass('active');
             $("#i").removeClass('active');
             $("#j").removeClass('active');
+            $("#k").removeClass('active');
             $("#b").addClass('active');
            
     });
@@ -96,6 +98,7 @@ $(document).ready(function () {
             $("#h").removeClass('active');
             $("#i").removeClass('active');
             $("#j").removeClass('active');
+            $("#k").removeClass('active');
             $("#c").addClass('active');
     
     });
@@ -111,6 +114,7 @@ $(document).ready(function () {
             $("#h").removeClass('active');
             $("#i").removeClass('active');
             $("#j").removeClass('active');
+            $("#k").removeClass('active');
             $("#d").addClass('active');
            
     });
@@ -126,6 +130,7 @@ $(document).ready(function () {
             $("#h").removeClass('active');
             $("#i").removeClass('active');
             $("#j").removeClass('active');
+            $("#k").removeClass('active');
             $("#e").addClass('active');
             
     });

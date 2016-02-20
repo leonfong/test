@@ -58,8 +58,9 @@
         <div class="well">
                 <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
                 <div>
+                    <p class="text-warning">数据格式：<code>下单日期 单号 数量 业务交期 产品代码</code></p>
                     <p>
-                        <%= text_area_tag :order_info, params[:order_info], size:"130x10", class:"form-control", placeholder:"下单日期 单号 数量 业务交期 产品代码"%>
+                        <%= text_area_tag :order_info, params[:order_info], size:"130x10", class:"form-control"%>
                     </p>
 <!--
                     <table class="table table-bordered">
@@ -124,8 +125,9 @@
         <div class="well">
                 <%= form_tag('/up_warehouse', method:"post", class:"form-inline") do %>
                 <div>
+                    <p class="text-warning">数据格式：<code>单号  入库数量 </code></p>
                     <p>
-                        <%= text_area_tag :warehouse_info, params[:warehouse_info], size:"130x10", class:"form-control", placeholder:" 单号 入库数量 "%>
+                        <%= text_area_tag :warehouse_info, params[:warehouse_info], size:"130x10", class:"form-control"%>
                     </p>                
                 </div> 
                 <div >

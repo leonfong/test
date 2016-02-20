@@ -1,15 +1,20 @@
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     def index
+        limit = "LIMIT 35"
         if params[:order]
             order = params[:order].strip
+            limit = ""
         else
             order = ""
+            limit = ""
         end
         if params[:empty_date] and params[:empty_date] == "show_empty"
             empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
+            limit = ""
         else
             empty_date = ""
+            limit = ""
         end 
         @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + "  work_flows.order_no like '%" + order + "%' ORDER BY work_flows.created_at DESC LIMIT 35" )
  

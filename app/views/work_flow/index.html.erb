@@ -90,7 +90,7 @@
 
 
 
-
+<% if @work_flow %>
 <% @work_flow.each do |work| %>
 <% if user_signed_in? %>
     <% if can? :work_a, :all %>
@@ -426,6 +426,8 @@
         <% end %>
 
 <% end %>
+<% end %>
+
 <script>
   $(function () {
   $('[data-toggle="popover"]').popover()

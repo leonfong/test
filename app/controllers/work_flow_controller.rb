@@ -9,14 +9,14 @@ before_filter :authenticate_user!
         else
             order = ""
             where_def = "  work_flows.order_no like '%" + order + "%'"
-            limit = ""
+            #limit = ""
         end
         if params[:empty_date] and params[:empty_date] == "show_empty"
             empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
             limit = ""
         else
             empty_date = ""
-            limit = ""
+            #limit = ""
         end 
         
 
@@ -28,7 +28,9 @@ before_filter :authenticate_user!
             end
             render "production_feedback.html.erb"
         else
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC " + limit )
+            #if params[:order]
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC " + limit )
+           # end
         end
         #line1 = "2015-11-05	MK51008BZ01B-3	1000	2015-11-29	C.2.CH.B.RO-0008"
         #line2 = line1.split(" ")

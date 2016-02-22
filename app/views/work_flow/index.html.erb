@@ -91,7 +91,7 @@
 
 
 <% if @work_flow %>
-<% @work_flow.each do |work| %>
+
 <% if user_signed_in? %>
     <% if can? :work_a, :all %>
 <div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">
@@ -99,7 +99,7 @@
         <%= form_tag('/edit_work', method:"post") do %>
         <div class="panel" style="margin: 2px;padding: 0px;">
         
-        <table class="table table-bordered table-condensed" style="font-size: 11px;">
+        <table class="table table-bordered table-condensed table-hover" style="font-size: 11px;">
             <thead>
                 <tr>
                     <th class="bg-primary">操作</th>
@@ -130,10 +130,11 @@
                     <th class="bg-primary">结单</th>
                 </tr>
             </thead>
-            <tbody class="table table-bordered">
+            <tbody >
+                <% @work_flow.each do |work| %>
                 <tr class="active">  
                     <td> 
-                        <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
+                        <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                     </td>             
                     <td>
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
@@ -241,10 +242,10 @@
 
 
                    <td>
-                       <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= work.production_feedback %>" , style="height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
+                       <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= work.production_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
                     </td> 
                     <td>
-                        <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= work.test_feedback %>" , style="height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
+                        <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= work.test_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
                     </td>
                     <td>
                         <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;" %>
@@ -275,149 +276,13 @@
                         <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"22" , style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                     </td>
                     <td>
-                        <%= submit_tag "结单", class:"btn btn-success btn-sm" , style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
+                        <%= submit_tag "结单", class:"btn btn-success btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                     </td> 
                 </tr>
+                <% end %>
             </tbody>
         </table>
         </div>
-        <% end %>
-   
-    </div>
-</div>
-        <% elsif can? :work_b, :all %>
-<div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
-    <div class="well col-lg-12 " style="padding: 5px;" >
-        <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
-        <div class="panel" style="background-color: #d9edf7;">
-        <table class="table table-bordered table-condensed" >
-            <thead>
-                <tr>
-                    
-                    <th class="bg-primary">单号</th>
-                    <th class="bg-primary">数量</th>
-                    <th class="bg-primary">业务交期</th>
-                    <th class="bg-primary">产品代码</th>
-                    
-                    <th class="bg-primary">入库数量</th>
-                   
-                    <th class="bg-primary">贴片通知生产</th>
-                    <th class="bg-info">贴片交期</th>
-                    <th class="bg-primary">后焊通知生产</th>
-                    <th class="bg-info">后焊交期</th>
-                    <th class="bg-primary">更改交期</th>
- 
-                    <th class="bg-primary">补料已回</th>
-                    <th class="bg-info">清尾完成</th>
-
-                </tr>
-            </thead>
-            <tbody class="table table-bordered">
-                <tr class="active">                
-                    
-                    <td><%= work.order_no %></td>
-                    <td><%= work.order_quantity %></td>
-                    <td><%= work.salesman_end_date %></td> 
-                    <td><%= work.product_code %></td>                 
-                    <td><%= work.warehouse_quantity %></td>
-                    
-                    <td><%= work.smd_start_date %></td> 
-                    <td>
-                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td><%= work.dip_start_date %></td> 
-                    <td>
-                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
-                    <td><%= work.update_date %></td> 
-                    <td><%= work.supplement_date %></td>
-                    <td>
-                        <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" %>
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"clear_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td>
-                     
-                </tr>
-            </tbody>
-        </table>
-        </div>
-        <p>
-        <% if user_signed_in? %>
-            <% if can? :work_up, :all %>
-              <%= submit_tag "提交", class:"btn btn-info btn-sm" %>
-            <% end %>
-        <% end %>
-        </p>
-        <% end %>
-   
-    </div>
-</div>
-        
-        <% elsif can? :work_d, :all %>
-<div class="row " style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
-    <div class="well col-lg-6 " style="padding: 5px;" >
-        <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
-        <div class="panel" style="background-color: #d9edf7;">
-        <table class="table table-bordered table-condensed" >
-            <thead>
-                <tr>
-                    
-                    <th class="bg-primary">单号</th>
-                    <th class="bg-primary">数量</th>
-                    <th class="bg-primary">业务交期</th>
-                    <th class="bg-primary">产品代码</th>
-                    
-                    <th class="bg-primary" >入库数量</th>
-                   
-                    <th class="bg-primary">测试反馈</th>
-
-                </tr>
-            </thead>
-            <tbody class="table table-bordered">
-                <tr class="active">                
-                    
-                    <td><%= work.order_no %></td>
-                    <td><%= work.order_quantity %></td>
-                    <td><%= work.salesman_end_date %></td> 
-                    <td><%= work.product_code %></td>                 
-                    <td><%= work.warehouse_quantity %></td>
-                    
-                    <td>
-                        <%= text_field_tag :test_feedback, params[:test_feedback], id: work.id.to_s+"test_feedback",class:"form-control input-sm",value:work.test_feedback , size:"80"%>                                                            
-                    </td> 
-                </tr>
-            </tbody>
-        </table>
-        </div>
-        <p>
-        <% if user_signed_in? %>
-            <% if can? :work_up, :all %>
-              <%= submit_tag "提交", class:"btn btn-info btn-sm" %>
-            <% end %>
-        <% end %>
-        </p>
         <% end %>
    
     </div>
@@ -426,7 +291,7 @@
         <% end %>
 
 <% end %>
-<% end %>
+
 
 <script>
   $(function () {

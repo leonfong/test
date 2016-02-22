@@ -1,0 +1,195 @@
+
+<div class="row" style="padding-bottom: 5px;padding-right: 8px;padding-left: 8px;">
+    
+    <% if user_signed_in? %>
+        <% if can? :work_a, :all %>
+    <div class="col-md-1" >
+        <script>
+        function change_p(){
+        if (document.getElementById('collapseExampledow').className=='collapse in')
+        {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新建订单
+            <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>       
+    </div>
+    <div class="col-md-2" >
+        <script>
+        function change_q(){
+        if (document.getElementById('upWarehouse').className=='collapse in')
+        {document.getElementById('upWarehousebut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('upWarehousebut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
+            <span id="upWarehousebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>       
+    </div>
+    <% end %>
+    <% end %>
+    <% if user_signed_in? %>
+        <% if (can? :work_b, :all) or (can? :work_a, :all) %>
+    <div class="col-md-2" >        
+        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-lg" %>            
+    </div>
+        <% end %>
+    <% end %>
+
+    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+       <div class="col-md-3 form-group ">
+          <lable for="order" , class="sr-only">Qrder : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+<div class="row" style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
+    <div class="col-md-6" >
+    <div class="collapse" id="collapseExampledow">
+        <div class="well">
+                <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>下单日期 单号 数量 业务交期 产品代码</code></p>
+                    <p>
+                        <%= text_area_tag :order_info, params[:order_info], size:"130x10", class:"form-control"%>
+                    </p>
+                </div> 
+                <div >
+                    <%= submit_tag "提交订单", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+    <div class="collapse" id="upWarehouse">
+        <div class="well">
+                <%= form_tag('/up_warehouse', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号  入库数量 </code></p>
+                    <p>
+                        <%= text_area_tag :warehouse_info, params[:warehouse_info], size:"130x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "更新", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+<% if @work_flow %>
+
+<% if user_signed_in? %>
+        <% if can? :work_b, :all %>
+<div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">
+    <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
+        <%= form_tag('/edit_work', method:"post") do %>
+        <div class="panel" style="margin: 2px;padding: 0px;"> 
+        <table class="table table-bordered table-condensed table-hover" >
+            <thead>
+                <tr>
+                    <th class="bg-primary">操作</th>
+                    <th class="bg-primary">单号</th>
+                    <th class="bg-primary">数量</th>
+                    <th class="bg-primary">业务交期</th>
+                    <th class="bg-primary">产品代码</th>
+                    
+                    <th class="bg-primary">入库数量</th>
+                   
+                    <th class="bg-primary">贴片通知生产</th>
+                    <th class="bg-info">贴片交期</th>
+                    <th class="bg-primary">后焊通知生产</th>
+                    <th class="bg-info">后焊交期</th>
+                    <th class="bg-primary">更改交期</th>
+ 
+                    <th class="bg-primary">补料已回</th>
+                    <th class="bg-info">清尾完成</th>
+
+                </tr>
+            </thead>
+            
+            <tbody>
+                <% @work_flow.each do |work| %>
+                <tr>                
+                    <td><%= submit_tag "提交", class:"btn btn-info btn-sm" %></td>
+                    <td><%= work.order_no %></td>
+                    <td><%= work.order_quantity %></td>
+                    <td><%= work.salesman_end_date %></td> 
+                    <td><%= work.product_code %></td>                 
+                    <td><%= work.warehouse_quantity %></td>
+                    
+                    <td><%= work.smd_start_date %></td> 
+                    <td>
+                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                       
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td> 
+                    <td><%= work.dip_start_date %></td> 
+                    <td>
+                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8"%>                                       
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td> 
+                    <td><%= work.update_date %></td> 
+                    <td><%= work.supplement_date %></td>
+                    <td>
+                        <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" %>
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"clear_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td>
+                     
+                </tr>
+                <% end %>
+            </tbody>
+            
+        </table>
+        </div>
+        
+        <% end %>
+   
+    </div>
+</div>
+
+        <% end %>
+        <% end %>
+
+<% end %>
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

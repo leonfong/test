@@ -32,6 +32,11 @@ before_filter :authenticate_user!
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.created_at DESC " + limit )
             end
             render "test_feedback.html.erb"
+        elsif can? :work_b, :all
+            empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
+            limit = ""            
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.created_at DESC " + limit )
+            render "delivery_date.html.erb"
         else
             #if params[:order]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC " + limit )

@@ -24,9 +24,14 @@ before_filter :authenticate_user!
  
         if can? :work_c, :all
             if params[:order]            
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC " + limit )
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.created_at DESC " + limit )
             end
             render "production_feedback.html.erb"
+        elsif can? :work_d, :all
+            if params[:order]            
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.created_at DESC " + limit )
+            end
+            render "test_feedback.html.erb"
         else
             #if params[:order]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC " + limit )

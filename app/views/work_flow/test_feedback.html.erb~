@@ -1,0 +1,70 @@
+<div class="container" >
+<div class="row" style="padding: 0px;">
+  <h2><p class="text-primary">生产反馈</p></h2><hr>
+</div>
+<div class="row"style="padding: 0px;">
+    
+    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+       <div class="col-md-6 form-group "style="padding: 0px;">
+          <lable for="order" , class="sr-only">Qrder : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+<% if @work_flow %>
+<% @work_flow.each do |work| %>
+
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="font-size: 18px;"><strong>生产反馈--<%= work.order_no %></strong></div>
+            <div class="panel-body">
+            <dl class="dl-horizontal" style="font-size: 15px;">
+                <dt style="width: 60px;padding-top: 7px;">单号</dt>
+                <dd style="margin-left: 80px;padding-top: 7px;">
+                    <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
+                    <%= work.order_no %>
+                </dd>
+                <dt style="width: 60px;padding-top: 7px;">数量</dt>
+                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.order_quantity %></dd>
+                <dt style="width: 60px;padding-top: 7px;">业务交期</dt>
+                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.salesman_end_date %></dd>
+                <dt style="width: 60px;padding-top: 7px;">产品代码</dt>
+                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.product_code %></dd>
+                <dt style="width: 60px;padding-top: 7px;">入库数量</dt>
+                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.warehouse_quantity %></dd>
+                <dt style="width: 60px;padding-top: 7px;">测试反馈</dt>
+                <dd style="margin-left: 80px;padding-top: 7px;padding-top: 7px;">                    
+                    <%= text_area_tag :test_feedback, work.test_feedback, cols:"100%", rows:"20",class:"form-control" %>     
+                </dd>
+            </dl>
+            <p>
+                <% if user_signed_in? %>
+                    <% if can? :work_up, :all %>
+                        <%= submit_tag "提交", class:"btn btn-info" %>
+                    <% end %>
+                <% end %>
+            </p>
+            </div>
+        </div>
+        <% end %>
+   
+    </div>
+</div>
+
+<% end %>
+<% end %>
+</div>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

@@ -14,9 +14,9 @@ class Ability
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
-      can :work_b, :all
+      #can :work_b, :all
       #can :work_c, :all
-      can :work_d, :all
+      #can :work_d, :all
       can :work_up, :all
     elsif user.has_role?(:manager)
       can :manage, :all

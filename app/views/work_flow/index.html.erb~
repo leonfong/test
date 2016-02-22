@@ -99,7 +99,7 @@
         <%= form_tag('/edit_work', method:"post") do %>
         <div class="panel" style="margin: 2px;padding: 0px;">
         
-        <table class="table table-bordered table-condensed table-striped " style="font-size: 11px;">
+        <table class="table table-bordered table-condensed table-hover" style="font-size: 11px;">
             <thead>
                 <tr>
                     <th class="bg-primary">操作</th>
@@ -132,7 +132,7 @@
             </thead>
             <tbody >
                 <% @work_flow.each do |work| %>
-                <tr class="active">  
+                <tr>  
                     <td> 
                         <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                     </td>             

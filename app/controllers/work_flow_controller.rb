@@ -1,7 +1,7 @@
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     def index
-        limit = "LIMIT 35"
+        limit = "LIMIT 20"
         if params[:order]
             order = params[:order].strip
             where_def = "  work_flows.order_no like '%" + order + "%'"
@@ -24,11 +24,11 @@ before_filter :authenticate_user!
  
         if can? :work_c, :all
             if params[:order]            
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC LIMIT 35" )
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC " + limit )
             end
             render "production_feedback.html.erb"
         else
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC LIMIT 35" )
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC " + limit )
         end
         #line1 = "2015-11-05	MK51008BZ01B-3	1000	2015-11-29	C.2.CH.B.RO-0008"
         #line2 = line1.split(" ")
@@ -90,66 +90,70 @@ before_filter :authenticate_user!
     
     def edit_work
         work_up = WorkFlow.find(params[:work_id])
-        if not params[:order_date].blank? 
-            work_up.order_date = params[:order_date].strip
-        end
-        if not params[:order_no].blank?
-            work_up.order_no = params[:order_no].strip
-        end
-        if not params[:order_quantity].blank?
-            work_up.order_quantity = params[:order_quantity].strip
-        end
-        if not params[:salesman_end_date].blank?
-            work_up.salesman_end_date = params[:salesman_end_date].strip
-        end
-        if not params[:product_code].blank?
-            work_up.product_code = params[:product_code].strip
-        end
-        if not params[:warehouse_quantity].blank?
-            work_up.warehouse_quantity = params[:warehouse_quantity].strip
-        end
-        if not params[:smd].blank?
-            work_up.smd = params[:smd].strip
-        end
-        if not params[:dip].blank?
-            work_up.dip = params[:dip].strip
-        end
-        if not params[:smd_start_date].blank?
+        if params[:commit] =="结单"
+            work_up.order_state = 1
+        else
+            if not params[:order_date].blank? 
+                work_up.order_date = params[:order_date].strip
+            end
+            if not params[:order_no].blank?
+                work_up.order_no = params[:order_no].strip
+            end
+            if not params[:order_quantity].blank?
+                work_up.order_quantity = params[:order_quantity].strip
+            end
+            if not params[:salesman_end_date].blank?
+                work_up.salesman_end_date = params[:salesman_end_date].strip
+            end
+            if not params[:product_code].blank?
+                work_up.product_code = params[:product_code].strip
+            end
+            if not params[:warehouse_quantity].blank?
+                work_up.warehouse_quantity = params[:warehouse_quantity].strip
+            end
+            if not params[:smd].blank?
+                work_up.smd = params[:smd].strip
+            end
+            if not params[:dip].blank?
+                work_up.dip = params[:dip].strip
+            end
+            if not params[:smd_start_date].blank?
             #if params[:smd_start_date] == ""
                 #work_up.smd_start_date = nil
             #else 
                 work_up.smd_start_date = params[:smd_start_date].strip
             #end
-        end
-        if not params[:smd_end_date].blank?
-            work_up.smd_end_date = params[:smd_end_date].strip
-        end
-        if not params[:dip_start_date].blank?
-            work_up.dip_start_date = params[:dip_start_date].strip
-        end
-        if not params[:dip_end_date].blank?
-            work_up.dip_end_date = params[:dip_end_date].strip
-        end
-        if not params[:update_date].blank?
-            work_up.update_date = params[:update_date].strip
-        end
-        if not params[:production_feedback].blank?
-            work_up.production_feedback = params[:production_feedback].strip
-        end
-        if not params[:test_feedback].blank?
-            work_up.test_feedback = params[:test_feedback].strip
-        end
-        if not params[:supplement_date].blank?
-            work_up.supplement_date = params[:supplement_date].strip
-        end
-        if not params[:clear_date].blank?
-            work_up.clear_date = params[:clear_date].strip
-        end
-        if not params[:salesman_state].blank?
-            work_up.salesman_state = params[:salesman_state].strip
-        end
-        if not params[:remark].blank?
-            work_up.remark = params[:remark].strip
+            end
+            if not params[:smd_end_date].blank?
+                work_up.smd_end_date = params[:smd_end_date].strip
+            end
+            if not params[:dip_start_date].blank?
+                work_up.dip_start_date = params[:dip_start_date].strip
+            end
+            if not params[:dip_end_date].blank?
+                work_up.dip_end_date = params[:dip_end_date].strip
+            end
+            if not params[:update_date].blank?
+                work_up.update_date = params[:update_date].strip
+            end
+            if not params[:production_feedback].blank?
+                work_up.production_feedback = params[:production_feedback].strip
+            end
+            if not params[:test_feedback].blank?
+                work_up.test_feedback = params[:test_feedback].strip
+            end
+            if not params[:supplement_date].blank?
+                work_up.supplement_date = params[:supplement_date].strip
+            end
+            if not params[:clear_date].blank?
+                work_up.clear_date = params[:clear_date].strip
+            end
+            if not params[:salesman_state].blank?
+                work_up.salesman_state = params[:salesman_state].strip
+            end
+            if not params[:remark].blank?
+                work_up.remark = params[:remark].strip
+            end
         end
         if work_up.save
             redirect_to work_flow_path(), notice: "订单数据更新成功！"

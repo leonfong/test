@@ -4,9 +4,11 @@ before_filter :authenticate_user!
         limit = "LIMIT 35"
         if params[:order]
             order = params[:order].strip
+            where_def = "  work_flows.order_no like '%" + order + "%'"
             limit = ""
         else
             order = ""
+            where_def = "  work_flows.order_no like '%" + order + "%'"
             limit = ""
         end
         if params[:empty_date] and params[:empty_date] == "show_empty"
@@ -16,9 +18,18 @@ before_filter :authenticate_user!
             empty_date = ""
             limit = ""
         end 
-        @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + "  work_flows.order_no like '%" + order + "%' ORDER BY work_flows.created_at DESC LIMIT 35" )
- 
         
+
+        #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC LIMIT 35" )
+ 
+        if can? :work_c, :all
+            if params[:order]            
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC LIMIT 35" )
+            end
+            render "production_feedback.html.erb"
+        else
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC LIMIT 35" )
+        end
         #line1 = "2015-11-05	MK51008BZ01B-3	1000	2015-11-29	C.2.CH.B.RO-0008"
         #line2 = line1.split(" ")
         #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")

@@ -102,6 +102,7 @@ before_filter :authenticate_user!
     
     def edit_work
         work_up = WorkFlow.find(params[:work_id])
+        
         if params[:commit] =="结单"
             work_up.order_state = 1
         else
@@ -167,8 +168,20 @@ before_filter :authenticate_user!
                 work_up.remark = params[:remark].strip
             end
         end
-        if work_up.save
-            redirect_to work_flow_path(), notice: "订单数据更新成功！"
+        if work_up.save                     
+            limit = "LIMIT 20"
+            where_def = "  work_flows.id = '" + params[:work_id] + "'"
+            @work_flow = @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.created_at DESC " + limit )
+            flash.now[:success] = "订单数据更新成功！"
+            if can? :work_c, :all
+                render "production_feedback.html.erb"
+            elsif can? :work_d, :all
+                render "test_feedback.html.erb"
+            elsif can? :work_b, :all
+                render "delivery_date.html.erb"
+            else
+                redirect_to work_flow_path(), notice: "订单数据更新成功！"
+            end
         end
     end
 end

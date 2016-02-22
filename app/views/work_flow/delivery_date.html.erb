@@ -125,7 +125,10 @@
                 <% @work_flow.each do |work| %>
                 <tr>                
                     <td><%= submit_tag "提交", class:"btn btn-info btn-sm" %></td>
-                    <td><%= work.order_no %></td>
+                    <td>
+                        <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
+                        <%= work.order_no %>
+                    </td>
                     <td><%= work.order_quantity %></td>
                     <td><%= work.salesman_end_date %></td> 
                     <td><%= work.product_code %></td>                 

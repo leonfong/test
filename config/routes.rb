@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   match '/up_work', to: 'work_flow#up_work', via: 'post'
   match '/edit_work', to: 'work_flow#edit_work', via: 'post'
   match '/up_warehouse', to: 'work_flow#up_warehouse', via: 'post'
+  match '/order_state', to: 'work_flow#order_state', via: 'post'
 
   root to: 'boms#upload'
   #root to: "boms#index"

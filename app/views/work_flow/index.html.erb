@@ -29,6 +29,19 @@
         </script>
         <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
             <span id="upWarehousebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button> 
+
+ 
+        <script>
+        function change_end(){
+        if (document.getElementById('order_state').className=='collapse in')
+        {document.getElementById('order_statebut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('order_statebut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#order_state" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">结单
+            <span id="order_statebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>       
     <% end %>
     <% end %>
@@ -71,7 +84,7 @@
                 <div>
                     <p class="text-warning">数据格式：<code>下单日期 单号 数量 业务交期 产品代码</code></p>
                     <p>
-                        <%= text_area_tag :order_info, params[:order_info], size:"130x10", class:"form-control"%>
+                        <%= text_area_tag :order_info, params[:order_info], size:"100x10", class:"form-control"%>
                     </p>
                 </div> 
                 <div >
@@ -86,11 +99,26 @@
                 <div>
                     <p class="text-warning">数据格式：<code>单号  入库数量 </code></p>
                     <p>
-                        <%= text_area_tag :warehouse_info, params[:warehouse_info], size:"130x10", class:"form-control"%>
+                        <%= text_area_tag :warehouse_info, params[:warehouse_info], size:"100x10", class:"form-control"%>
                     </p>                
                 </div> 
                 <div >
                     <%= submit_tag "更新", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+    <div class="collapse" id="order_state">
+        <div class="well">
+                <%= form_tag('/order_state', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号</code></p>
+                    <p>
+                        <%= text_area_tag :order_state, params[:order_state], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "结单", class:"btn btn-info btn-lg" %>
                 </div>
                 <% end %> 
         </div>
@@ -139,13 +167,12 @@
                     <th class="bg-primary">业务状态</th>
 
                     <th class="bg-primary">备注</th>
-                    <th class="bg-primary">结单</th>
                 </tr>
             </thead>
             <tbody >
                 <% @work_flow.each do |work| %>
                 <%= form_tag('/edit_work', method:"post") do %>
-                <tr> 
+                <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> > 
                     <td> 
                         <script>
                             function change_<%= work.id.to_s %>(){
@@ -160,11 +187,15 @@
                         </button>
                     </td> 
                     <td>
-                        <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                        
+                            <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                            <%= submit_tag "料齐", class:"btn btn-warning btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                            <%= submit_tag "异常", class:"btn btn-danger btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                        
                     </td>             
                     <td>
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
-                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"order_date" %>').datetimepicker({
@@ -220,7 +251,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
@@ -231,7 +262,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
@@ -242,7 +273,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
@@ -253,7 +284,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"update_date" %>').datetimepicker({
@@ -274,7 +305,7 @@
                         <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= work.test_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
                     </td>
                     <td>
-                        <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"supplement_date" %>').datetimepicker({
@@ -285,7 +316,7 @@
                         </script>
                     </td>
                     <td>
-                        <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"7" , style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                        <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" , style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"clear_date" %>').datetimepicker({
@@ -301,9 +332,6 @@
                     <td>  
                         <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"22" , style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
                     </td>
-                    <td>
-                        <%= submit_tag "结单", class:"btn btn-success btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
-                    </td> 
                 </tr>
                 <tr> 
                    <td colSpan="22" style="margin: 0px;padding: 0px;">

@@ -96,7 +96,7 @@
         <% if can? :work_b, :all %>
 <div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">
     <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
-        <%= form_tag('/edit_work', method:"post") do %>
+        
         <div class="panel" style="margin: 2px;padding: 0px;"> 
         <table class="table table-bordered table-condensed table-hover" >
             <thead>
@@ -123,6 +123,7 @@
             
             <tbody>
                 <% @work_flow.each do |work| %>
+                <%= form_tag('/edit_work', method:"post") do %>
                 <tr>                
                     <td><%= submit_tag "提交", class:"btn btn-info btn-sm" %></td>
                     <td>
@@ -174,12 +175,13 @@
                      
                 </tr>
                 <% end %>
+                <% end %>
             </tbody>
             
         </table>
         </div>
         
-        <% end %>
+        
    
     </div>
 </div>

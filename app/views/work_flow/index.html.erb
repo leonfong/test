@@ -143,6 +143,8 @@
                 <tr>
                     <th class="bg-primary">详细</th>
                     <th class="bg-primary">操作</th>
+                    <th class="bg-primary">料齐</th>
+                    <th class="bg-primary">异常</th>
                     <th class="bg-primary">下单日期</th>
                     <th class="bg-primary">单号</th>
                     <th class="bg-primary">数量</th>
@@ -189,27 +191,24 @@
                     <td>
                         
                             <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                    </td> 
+                    <td>
                             <%= submit_tag "料齐", class:"btn btn-warning btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                    </td> 
+                    <td>
                             <%= submit_tag "异常", class:"btn btn-danger btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
                         
                     </td>             
                     <td>
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
-                        <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"order_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
+                        <%= work.order_date %>
+                       
                     </td>
                     <td>
-                        <%= text_field_tag :order_no, params[:order_no], id: work.id.to_s+"order_no",class:"form-control input-sm",value:work.order_no, size:"13", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                        <%= work.order_no %>
                     </td>
                     <td>
-                        <%= text_field_tag :order_quantity, params[:order_quantity], id: work.id.to_s+"order_quantity",class:"form-control input-sm",value:work.order_quantity , size:"1", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= work.order_quantity %>
                     </td>
                     <td>
                             <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
@@ -231,7 +230,7 @@
 
 
                     <td> 
-                        <%= text_field_tag :warehouse_quantity, params[:warehouse_quantity], id: work.id.to_s+"warehouse_quantity",class:"form-control input-sm",value:work.warehouse_quantity , size:"1", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= work.warehouse_quantity %>
                     </td>
                     <td>
                         <%= text_field_tag :smd, params[:smd], id: work.id.to_s+"smd",class:"form-control input-sm",value:work.smd , size:"1", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
@@ -240,7 +239,7 @@
                         <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"1", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>
-                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
@@ -251,15 +250,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
+                        <%= work.smd_end_date %>                                               
                     </td> 
                     <td>
                         <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
@@ -273,15 +264,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"dip_end_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
+                        <%= work.dip_end_date %>
                     </td> 
                     <td>
                         <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"8", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
@@ -316,15 +299,7 @@
                         </script>
                     </td>
                     <td>
-                        <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" , style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"clear_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
+                        <%= work.clear_date %>
                     </td> 
                     <td>
                         <%= text_field_tag :salesman_state, params[:salesman_state], id: work.id.to_s+"salesman_state",class:"form-control input-sm",value:work.salesman_state , size:"15", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>

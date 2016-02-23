@@ -96,7 +96,7 @@
         <% if can? :work_b, :all %>
 <div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">
     <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
-        <%= form_tag('/edit_work', method:"post") do %>
+        
         <div class="panel" style="margin: 2px;padding: 0px;"> 
         <table class="table table-bordered table-condensed table-hover" >
             <thead>
@@ -123,6 +123,7 @@
             
             <tbody>
                 <% @work_flow.each do |work| %>
+                <%= form_tag('/edit_work', method:"post") do %>
                 <tr>                
                     <td><%= submit_tag "提交", class:"btn btn-info btn-sm" %></td>
                     <td>
@@ -137,14 +138,7 @@
                     <td><%= work.smd_start_date %></td> 
                     <td>
                         <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
+                        
                     </td> 
                     <td><%= work.dip_start_date %></td> 
                     <td>
@@ -174,12 +168,13 @@
                      
                 </tr>
                 <% end %>
+                <% end %>
             </tbody>
             
         </table>
         </div>
         
-        <% end %>
+        
    
     </div>
 </div>

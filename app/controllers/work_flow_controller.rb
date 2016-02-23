@@ -203,7 +203,65 @@ before_filter :authenticate_user!
                 work_up.remark = params[:remark].strip
             end
         end
-        if work_up.save                     
+        if work_up.save
+            work_history = Work.new
+            if not params[:order_date].blank? 
+                work_history.order_date = params[:order_date].strip
+            end
+            work_history.order_no = work_up.order_no
+            if not params[:order_quantity].blank?
+                work_history.order_quantity = params[:order_quantity].strip
+            end
+            if not params[:salesman_end_date].blank?
+                work_history.salesman_end_date = params[:salesman_end_date].strip
+            end
+            if not params[:product_code].blank?
+                work_history.product_code = params[:product_code].strip
+            end
+            if not params[:warehouse_quantity].blank?
+                work_history.warehouse_quantity = params[:warehouse_quantity].strip
+            end
+            if not params[:smd].blank?
+                work_history.smd = params[:smd].strip
+            end
+            if not params[:dip].blank?
+                work_history.dip = params[:dip].strip
+            end
+            if not params[:smd_start_date].blank?
+                work_history.smd_start_date = params[:smd_start_date].strip
+            end
+            if not params[:smd_end_date].blank?
+                work_history.smd_end_date = params[:smd_end_date].strip
+            end
+            if not params[:dip_start_date].blank?
+                work_history.dip_start_date = params[:dip_start_date].strip
+            end
+            if not params[:dip_end_date].blank?
+                work_history.dip_end_date = params[:dip_end_date].strip
+            end
+            if not params[:update_date].blank?
+                work_history.update_date = params[:update_date].strip
+            end
+            if not params[:production_feedback].blank?
+                work_history.production_feedback = params[:production_feedback].strip
+            end
+            if not params[:test_feedback].blank?
+                work_history.test_feedback = params[:test_feedback].strip
+            end
+            if not params[:supplement_date].blank?
+                work_history.supplement_date = params[:supplement_date].strip
+            end
+            if not params[:clear_date].blank?
+                work_history.clear_date = params[:clear_date].strip
+            end
+            if not params[:salesman_state].blank?
+                work_history.salesman_state = params[:salesman_state].strip
+            end
+            if not params[:remark].blank?
+                work_history.remark = params[:remark].strip
+            end
+            work_history.user_name = current_user.email
+            work_history.save                     
             limit = "LIMIT 20"
             where_def = "  work_flows.id = '" + params[:work_id] + "'"
             @work_flow = @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit )

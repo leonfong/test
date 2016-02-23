@@ -111,7 +111,7 @@
         <div  style="margin: 2px;padding: 0px;">
         
         <table class="table table-bordered table-condensed table-hover" >
-            <thead style="font-size: 11px;">
+            <thead style="font-size: 10px;">
                 <tr>
                     <th class="bg-primary">详细</th>
                     <th class="bg-primary">操作</th>
@@ -145,7 +145,7 @@
             <tbody >
                 <% @work_flow.each do |work| %>
                 <%= form_tag('/edit_work', method:"post") do %>
-                <tr style="font-size: 11px;"> 
+                <tr style="font-size: 9px;"> 
                     <td> 
                         <script>
                             function change_<%= work.id.to_s %>(){

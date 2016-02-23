@@ -1,9 +1,9 @@
 
-<div class="row" style="padding-bottom: 5px;padding-right: 8px;padding-left: 8px;">
+<div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
     
     <% if user_signed_in? %>
         <% if can? :work_a, :all %>
-    <div class="col-md-1" >
+    <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <script>
         function change_p(){
         if (document.getElementById('collapseExampledow').className=='collapse in')
@@ -15,8 +15,10 @@
         <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新建订单
             <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>       
-    </div>
-    <div class="col-md-2" >
+    
+
+
+
         <script>
         function change_q(){
         if (document.getElementById('upWarehouse').className=='collapse in')
@@ -28,19 +30,20 @@
         <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
             <span id="upWarehousebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>       
-    </div>
     <% end %>
     <% end %>
     <% if user_signed_in? %>
         <% if (can? :work_b, :all) or (can? :work_a, :all) %>
-    <div class="col-md-2" >        
+          
         <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger " %>            
-    </div>
+    
         <% end %>
     <% end %>
+    </div>
+
 
     <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
-       <div class="col-md-3 form-group ">
+       <div class="col-md-4 form-group nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group">
             <span class="input-group-addon"> 
@@ -107,9 +110,10 @@
         
         <div  style="margin: 2px;padding: 0px;">
         
-        <table class="table table-bordered table-condensed table-hover" style="font-size: 11px;">
-            <thead>
+        <table class="table table-bordered table-condensed table-hover" >
+            <thead style="font-size: 11px;">
                 <tr>
+                    <th class="bg-primary">详细</th>
                     <th class="bg-primary">操作</th>
                     <th class="bg-primary">下单日期</th>
                     <th class="bg-primary">单号</th>
@@ -141,12 +145,25 @@
             <tbody >
                 <% @work_flow.each do |work| %>
                 <%= form_tag('/edit_work', method:"post") do %>
-                <tr>  
+                <tr style="font-size: 11px;"> 
                     <td> 
+                        <script>
+                            function change_<%= work.id.to_s %>(){
+                                if (document.getElementById('<%= work.id.to_s + work.order_no %>').className=='collapse in')
+                                    {document.getElementById('<%= work.id.to_s + "but" %>').className='glyphicon glyphicon-plus';}
+                                else
+                                    {document.getElementById('<%= work.id.to_s + "but" %>').className='glyphicon glyphicon-minus';}
+                                }
+                        </script>
+                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
+                            <span id="<%= work.id.to_s + 'but' %>" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </td> 
+                    <td>
                         <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                     </td>             
                     <td>
-                        <%= text_field_tag :work_id, work.id.to_s,  size:2 , value: work.id.to_s %>
+                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"7", style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                         <script type="text/javascript">
                           $(function () {
@@ -287,6 +304,39 @@
                     <td>
                         <%= submit_tag "结单", class:"btn btn-success btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                     </td> 
+                </tr>
+                <tr> 
+                   <td colSpan="22" style="margin: 0px;padding: 0px;">
+                    <div class="col-md-12" style="margin: 0px;padding: 0px;">
+                        <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
+                            <div class="row " style="margin: 0px;padding: 0px;">
+                                <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
+                                    <table width="100%" class="table table-bordered">
+                                        <tr width="100%">  
+                                            <td width="50%">
+                                                
+                                                <p><span class="label label-warning" style="font-size: 13px;">生产反馈<%= work.order_no.to_s %></span></p>
+                                                <p><%= work.production_feedback %></p>
+                                                
+                                            </td>
+                                            <td width="50%">
+                                                
+                                                <p><span class="label label-danger" style="font-size: 13px;">测试反馈<%= work.order_no.to_s %></span></p>
+                                                <p><%= work.test_feedback %></p>
+                                                
+                                            </td>     
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row " style="margin: 0px;padding: 0px;">
+                                <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
+                                    <p><span class="label label-default" style="font-size: 13px;">历史记录<%= work.order_no.to_s %></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
                 </tr>
                 <% end %>
                 <% end %>

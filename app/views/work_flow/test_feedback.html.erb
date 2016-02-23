@@ -27,22 +27,22 @@
             <div class="panel-heading" style="font-size: 18px;"><strong>生产反馈--<%= work.order_no %></strong></div>
             <div class="panel-body">
             <dl class="dl-horizontal" style="font-size: 15px;">
-                <dt style="width: 60px;padding-top: 7px;">单号</dt>
-                <dd style="margin-left: 80px;padding-top: 7px;">
+                <dt style="width: 80px;padding-top: 7px;">单号</dt>
+                <dd style="margin-left: 100px;padding-top: 7px;">
                     <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
                     <%= work.order_no %>
                 </dd>
-                <dt style="width: 60px;padding-top: 7px;">数量</dt>
-                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.order_quantity %></dd>
-                <dt style="width: 60px;padding-top: 7px;">业务交期</dt>
-                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.salesman_end_date %></dd>
-                <dt style="width: 60px;padding-top: 7px;">产品代码</dt>
-                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.product_code %></dd>
-                <dt style="width: 60px;padding-top: 7px;">入库数量</dt>
-                <dd style="margin-left: 80px;padding-top: 7px;"><%= work.warehouse_quantity %></dd>
-                <dt style="width: 60px;padding-top: 7px;">测试反馈</dt>
-                <dd style="margin-left: 80px;padding-top: 7px;padding-top: 7px;">                    
-                    <%= text_area_tag :test_feedback, work.test_feedback, cols:"100%", rows:"20",class:"form-control" %>     
+                <dt style="width: 80px;padding-top: 7px;">数量</dt>
+                <dd style="margin-left: 100px;padding-top: 7px;"><%= work.order_quantity %></dd>
+                <dt style="width: 80px;padding-top: 7px;">业务交期</dt>
+                <dd style="margin-left: 100px;padding-top: 7px;"><%= work.salesman_end_date %></dd>
+                <dt style="width: 80px;padding-top: 7px;">产品代码</dt>
+                <dd style="margin-left: 100px;padding-top: 7px;"><%= work.product_code %></dd>
+                <dt style="width: 80px;padding-top: 7px;">入库数量</dt>
+                <dd style="margin-left: 100px;padding-top: 7px;"><%= work.warehouse_quantity %></dd>
+                <dt style="width: 80px;padding-top: 7px;">测试反馈</dt>
+                <dd style="margin-left: 100px;padding-top: 7px;padding-top: 7px;">                    
+                    <%= text_area_tag :test_feedback, work.test_feedback, cols:"100%", rows:"15",class:"form-control" %>     
                 </dd>
             </dl>
             <p>

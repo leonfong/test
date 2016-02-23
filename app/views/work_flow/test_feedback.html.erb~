@@ -1,6 +1,6 @@
 <div class="container" >
 <div class="row" style="padding: 0px;">
-  <h2><p class="text-primary">生产反馈</p></h2><hr>
+  <h2><p class="text-primary">测试反馈</p></h2><hr>
 </div>
 <div class="row"style="padding: 0px;">
     
@@ -42,7 +42,7 @@
                 <dd style="margin-left: 80px;padding-top: 7px;"><%= work.warehouse_quantity %></dd>
                 <dt style="width: 60px;padding-top: 7px;">测试反馈</dt>
                 <dd style="margin-left: 80px;padding-top: 7px;padding-top: 7px;">                    
-                    <%= text_area_tag :test_feedback, work.test_feedback, cols:"100%", rows:"20",class:"form-control" %>     
+                    <%= text_area_tag :test_feedback, work.test_feedback, cols:"100%", rows:"15",class:"form-control" %>     
                 </dd>
             </dl>
             <p>

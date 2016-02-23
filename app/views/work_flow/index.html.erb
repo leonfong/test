@@ -12,7 +12,7 @@
         {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
         }
         </script>
-        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新建订单
+        <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新建订单
             <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>       
     </div>
@@ -25,7 +25,7 @@
         {document.getElementById('upWarehousebut').className='glyphicon glyphicon-minus';}
         }
         </script>
-        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
+        <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
             <span id="upWarehousebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>       
     </div>
@@ -34,7 +34,7 @@
     <% if user_signed_in? %>
         <% if (can? :work_b, :all) or (can? :work_a, :all) %>
     <div class="col-md-2" >        
-        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-lg" %>            
+        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger " %>            
     </div>
         <% end %>
     <% end %>
@@ -42,10 +42,18 @@
     <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
        <div class="col-md-3 form-group ">
           <lable for="order" , class="sr-only">Qrder : </lable>
-          <div class="input-group">    
-            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
+          <div class="input-group">
+            <span class="input-group-addon"> 
+                <%= radio_button :order_s, :order_s, '1' , :checked => true %>
+                <%= label :order_s_all, '全部' %>
+                <%= radio_button :order_s, :order_s, '2' %> 
+                <%= label :order_s_end, '已结单' %>
+                <%= radio_button :order_s, :order_s, '3' %>
+                <%= label :order_s_ongoing, '未结单' %>
+            </span>    
+            <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%",  placeholder:"单号"%>          
             <div class="input-group-btn">
-              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+              <%= submit_tag "搜索", class:"btn btn-primary " %>
             </div>
           </div>
         </div>
@@ -96,8 +104,8 @@
     <% if can? :work_a, :all %>
 <div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">
     <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
-        <%= form_tag('/edit_work', method:"post") do %>
-        <div class="panel" style="margin: 2px;padding: 0px;">
+        
+        <div  style="margin: 2px;padding: 0px;">
         
         <table class="table table-bordered table-condensed table-hover" style="font-size: 11px;">
             <thead>
@@ -132,12 +140,13 @@
             </thead>
             <tbody >
                 <% @work_flow.each do |work| %>
+                <%= form_tag('/edit_work', method:"post") do %>
                 <tr>  
                     <td> 
                         <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                     </td>             
                     <td>
-                        <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
+                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= text_field_tag :order_date, params[:order_date], id: work.id.to_s+"order_date",class:"form-control input-sm",value:work.order_date, size:"7", style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
                         <script type="text/javascript">
                           $(function () {
@@ -166,7 +175,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :product_code, params[:product_code], id: work.id.to_s+"product_code",class:"form-control input-sm",value:work.product_code, size:"12", style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :product_code, params[:product_code], id: work.id.to_s+"product_code",class:"form-control input-sm",value:work.product_code, size:"15", style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;" %>
                     </td>                 
                     
 
@@ -270,7 +279,7 @@
                         </script>
                     </td> 
                     <td>
-                        <%= text_field_tag :salesman_state, params[:salesman_state], id: work.id.to_s+"salesman_state",class:"form-control input-sm",value:work.salesman_state , size:"1", style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :salesman_state, params[:salesman_state], id: work.id.to_s+"salesman_state",class:"form-control input-sm",value:work.salesman_state , size:"15", style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>  
                         <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"22" , style:"height: 25px;padding: 5px 10px;font-size: 11px;line-height: 1.5;border-radius: 3px;"%>
@@ -280,10 +289,11 @@
                     </td> 
                 </tr>
                 <% end %>
+                <% end %>
             </tbody>
         </table>
         </div>
-        <% end %>
+        
    
     </div>
 </div>

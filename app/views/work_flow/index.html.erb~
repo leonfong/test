@@ -194,9 +194,9 @@
                     </td> 
                     <td>
                         <div class="btn-group" role="group-sm" aria-label="...">
-                            <%= submit_tag "1", class:"btn btn-default" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
-                            <%= submit_tag "2", class:"btn btn-warning" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
-                            <%= submit_tag "3", class:"btn btn-danger" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
+                            <%= submit_tag "A", class:"btn btn-default" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
+                            <%= submit_tag "B", class:"btn btn-warning" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
+                            <%= submit_tag "C", class:"btn btn-danger" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
                         </div>   
                     </td>            
                     <td>
@@ -301,7 +301,7 @@
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
-                                    <table width="100%" class="table table-bordered">
+                                    <table width="100%" class="table table-bordered" style="table-layout: fixed">
                                         <tr width="100%">  
                                             <td width="50%">
                                                 

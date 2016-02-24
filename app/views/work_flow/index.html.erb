@@ -301,15 +301,15 @@
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
-                                    <table width="100%" class="table table-bordered">
+                                    <table width="100%" class="table table-bordered" style="table-layout: fixed">
                                         <tr width="100%">  
-                                            <td width="50%">
+                                            <td width="50%" style="word-warp: break-word">
                                                 
                                                 <p><span class="label label-warning" style="font-size: 13px;">生产反馈<%= work.order_no.to_s %></span></p>
                                                 <p><%= work.production_feedback %></p>
                                                 
                                             </td>
-                                            <td width="50%">
+                                            <td width="50%" style="word-warp: break-word">
                                                 
                                                 <p><span class="label label-danger" style="font-size: 13px;">测试反馈<%= work.order_no.to_s %></span></p>
                                                 <p><%= work.test_feedback %></p>

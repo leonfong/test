@@ -136,9 +136,11 @@ before_filter :authenticate_user!
     def edit_work
         work_up = WorkFlow.find(params[:work_id])
         
-        if params[:commit] =="料齐"
+        if params[:commit] =="A"
+            work_up.order_state = 0
+        elsif params[:commit] =="B"
             work_up.order_state = 2
-        elsif params[:commit] =="异常"
+        elsif params[:commit] =="C"
             work_up.order_state = 3
         else
             if not params[:order_date].blank? 

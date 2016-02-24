@@ -140,11 +140,11 @@
         
         <table class="table table-bordered table-condensed table-hover smfs">
             <thead >
-                <tr>
+                <tr nowrap="nowrap">
                     <th class="bg-primary">详细</th>
                     <th class="bg-primary">操作</th>
-                    <th class="bg-primary">料齐</th>
-                    <th class="bg-primary">异常</th>
+                    <th class="bg-primary">状态</th>
+
                     <th class="bg-primary">下单日期</th>
                     <th class="bg-primary">单号</th>
                     <th class="bg-primary">数量</th>
@@ -174,7 +174,7 @@
             <tbody >
                 <% @work_flow.each do |work| %>
                 <%= form_tag('/edit_work', method:"post") do %>
-                <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> > 
+                <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> nowrap="nowrap"> 
                     <td> 
                         <script>
                             function change_<%= work.id.to_s %>(){
@@ -193,12 +193,12 @@
                             <%= submit_tag "更新", class:"btn btn-info btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
                     </td> 
                     <td>
-                            <%= submit_tag "料齐", class:"btn btn-warning btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
-                    </td> 
-                    <td>
-                            <%= submit_tag "异常", class:"btn btn-danger btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
-                        
-                    </td>             
+                        <div class="btn-group" role="group-sm" aria-label="...">
+                            <%= submit_tag "A", class:"btn btn-default" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
+                            <%= submit_tag "B", class:"btn btn-warning" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
+                            <%= submit_tag "C", class:"btn btn-danger" , style:"height: 25px;padding: 1px 10px;font-size: 10px;"%>
+                        </div>   
+                    </td>            
                     <td>
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= work.order_date %>
@@ -211,32 +211,19 @@
                         <%= work.order_quantity %>
                     </td>
                     <td>
-                            <%= text_field_tag :salesman_end_date, params[:salesman_end_date], id: work.id.to_s+"salesman_end_date",class:"form-control input-sm",value:work.salesman_end_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"salesman_end_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
+                        <%= work.salesman_end_date %>
                     </td> 
                     <td>
-                        <%= text_field_tag :product_code, params[:product_code], id: work.id.to_s+"product_code",class:"form-control input-sm",value:work.product_code, size:"15", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= work.product_code %>
                     </td>                 
-                    
-
-
-
-
                     <td> 
                         <%= work.warehouse_quantity %>
                     </td>
                     <td>
-                        <%= text_field_tag :smd, params[:smd], id: work.id.to_s+"smd",class:"form-control input-sm",value:work.smd , size:"1", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :smd, params[:smd], id: work.id.to_s+"smd",class:"form-control input-sm",value:work.smd , size:"2", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>
-                        <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"1", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"2", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>
                         <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       

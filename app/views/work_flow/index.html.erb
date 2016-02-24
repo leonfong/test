@@ -161,8 +161,7 @@
                     <th class="bg-primary">贴片通知生产</th>
                     <th class="bg-info">贴片交期</th>
                     <th class="bg-primary">后焊通知生产</th>
-                    <th class="bg-info">后焊交期</th>
-                    <th class="bg-primary">更改交期</th>
+                    <th class="bg-info">后焊交期</th>                    
  
                     <th class="bg-warning">生产反馈</th>
 
@@ -236,6 +235,7 @@
                         <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"3", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>
+                        <% if work.smd_state == "" %>
                         <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
@@ -245,6 +245,9 @@
                             });    
                           });
                         </script>
+                       <% else %>
+                          <%= work.smd_state %>
+                       <% end %>
                     </td> 
                     <td>
                         <%= work.smd_end_date %>                                               
@@ -263,21 +266,7 @@
                     <td>
                         <%= work.dip_end_date %>
                     </td> 
-                    <td>
-                        <%= text_field_tag :update_date, params[:update_date], id: work.id.to_s+"update_date",class:"form-control input-sm",value:work.update_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"update_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
-                    </td> 
                     
-
-
-
                    <td>
                        <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= work.production_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
                     </td> 

@@ -111,9 +111,10 @@
                    
                     <th class="bg-primary">贴片通知生产</th>
                     <th class="bg-info">贴片交期</th>
+                    <th class="bg-info">贴片完成状态</th>
                     <th class="bg-primary">后焊通知生产</th>
                     <th class="bg-info">后焊交期</th>
-                    <th class="bg-primary">更改交期</th>
+                    
  
                     <th class="bg-primary">补料已回</th>
                     <th class="bg-info">清尾完成</th>
@@ -125,7 +126,7 @@
                 <% @work_flow.each do |work| %>
                 <%= form_tag('/edit_work', method:"post") do %>
                 <tr>                
-                    <td><%= submit_tag "提交", class:"btn btn-info btn-sm" %></td>
+                    <td><%= submit_tag "提交", class:"btn btn-success btn-sm" %></td>
                     <td>
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= work.order_no %>
@@ -137,9 +138,19 @@
                     
                     <td><%= work.smd_start_date %></td> 
                     <td>
-                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                       
-                        
+                        <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                      
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"smd_end_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
                     </td> 
+                    <td>
+                        <%= text_field_tag :smd_state, params[:smd_state], id: work.id.to_s+"smd_state",class:"form-control input-sm",value:work.smd_state , size:"5" %>
+                    </td>
                     <td><%= work.dip_start_date %></td> 
                     <td>
                         <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8"%>                                       

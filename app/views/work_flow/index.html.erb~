@@ -42,7 +42,9 @@
         </script>
         <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#order_state" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">结单
             <span id="order_statebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>       
+        </button> 
+        <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-danger " %> 
+        <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger " %>       
     <% end %>
     <% end %>
     <% if user_signed_in? %>
@@ -138,7 +140,7 @@
         
         <div  style="margin: 2px;padding: 0px;">
         
-        <table class="table table-bordered table-condensed table-hover smfs">
+        <table class="table table-bordered table-condensed table-hover smfs" >
             <thead >
                 <tr nowrap="nowrap">
                     <th class="bg-primary">详细</th>
@@ -301,7 +303,7 @@
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
-                                    <table width="100%" class="table table-bordered" style="table-layout: fixed">
+                                    <table width="100%" class="table table-bordered">
                                         <tr width="100%">  
                                             <td width="50%">
                                                 
@@ -309,7 +311,7 @@
                                                 <p><%= work.production_feedback %></p>
                                                 
                                             </td>
-                                            <td width="50%">
+                                            <td width="50%" >
                                                 
                                                 <p><span class="label label-danger" style="font-size: 13px;">测试反馈<%= work.order_no.to_s %></span></p>
                                                 <p><%= work.test_feedback %></p>

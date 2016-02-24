@@ -21,9 +21,17 @@ before_filter :authenticate_user!
             where_def = "  work_flows.order_no like '%" + order + "%'"
             #limit = ""
         end
-        if params[:empty_date] and params[:empty_date] == "show_empty"
-            empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
-            limit = ""
+        if params[:empty_date] 
+            if params[:empty_date] == "show_empty"
+                empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
+                limit = ""
+            elsif params[:empty_date] == "ready"
+                empty_date = "work_flows.order_state = 2 AND"
+                limit = ""
+            elsif params[:empty_date] == "danger"
+                empty_date = "work_flows.order_state = 3 AND"
+                limit = ""
+            end
         else
             empty_date = ""
             #limit = ""

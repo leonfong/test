@@ -80,11 +80,15 @@ before_filter :authenticate_user!
             render "delivery_date.html.erb"
         elsif can? :work_e, :all
             if params[:order]
-                if not params[:order] == ""
+                #if not params[:order] == ""
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
-                end
+                #end
             else
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state > 1  ORDER BY work_flows.updated_at DESC " + limit )
+                if empty_date == ""
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " AND feedback_state > 1  ORDER BY work_flows.updated_at DESC " + limit )
+                else
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
+                end  
             end
             render "sell.html.erb"
         else

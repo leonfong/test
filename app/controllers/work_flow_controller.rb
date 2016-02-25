@@ -140,12 +140,25 @@ before_filter :authenticate_user!
     end
 
     def order_state
-        if params[:order_state]
-            all_order = params[:order_state].strip.split("\r\n");
+        if params[:order_state] or params[:order_y] or params[:order_r]
+            if params[:order_state]
+                all_order = params[:order_state].strip.split("\r\n");
+            elsif params[:order_y]
+                all_order = params[:order_y].strip.split("\r\n");
+            elsif params[:order_r]
+                all_order = params[:order_r].strip.split("\r\n");
+            end
+            
             all_order.each do |item|
                 checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item + "'").first
                 if not checkorder.blank?
-                    checkorder.order_state = 1 
+                    if params[:order_state]
+                        checkorder.order_state = 1
+                    elsif params[:order_y]
+                        checkorder.order_state = 2
+                    elsif params[:order_r]
+                        checkorder.order_state = 3 
+                    end
                     checkorder.save
                     #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     #Rails.logger.info(checkorder.inspect)

@@ -3,7 +3,7 @@
     
     <% if user_signed_in? %>
         <% if can? :work_a, :all %>
-    <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
+    <div class="col-md-7 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <script>
         function change_p(){
         if (document.getElementById('collapseExampledow').className=='collapse in')
@@ -43,6 +43,31 @@
         <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#order_state" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">结单
             <span id="order_statebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button> 
+
+        <script>
+        function change_y(){
+        if (document.getElementById('order_y').className=='collapse in')
+        {document.getElementById('order_ybut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('order_ybut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-warning " type="button" data-toggle="collapse" data-target="#order_y" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_y()">标注料齐
+            <span id="order_ybut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button> 
+
+        <script>
+        function change_r(){
+        if (document.getElementById('order_r').className=='collapse in')
+        {document.getElementById('order_rbut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('order_rbut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-danger " type="button" data-toggle="collapse" data-target="#order_r" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_r()">标注异常
+            <span id="order_rbut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button> 
+
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning " %> 
         <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger " %>       
     <% end %>
@@ -125,6 +150,36 @@
                 <% end %> 
         </div>
     </div>
+    <div class="collapse" id="order_y">
+        <div class="well">
+                <%= form_tag('/order_state', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号</code></p>
+                    <p>
+                        <%= text_area_tag :order_state, params[:order_state], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "标注料齐", class:"btn btn-warning btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+    <div class="collapse" id="order_r">
+        <div class="well">
+                <%= form_tag('/order_state', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号</code></p>
+                    <p>
+                        <%= text_area_tag :order_state, params[:order_state], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "标注异常", class:"btn btn-danger btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
     </div>
 </div>
 
@@ -160,10 +215,10 @@
                     <th class="bg-primary" width="60">入库数量</th>
                     <th class="bg-primary" width="60">SMD</th>
                     <th class="bg-primary" width="60">DIP</th>
-                    <th class="bg-primary">贴片通知生产</th>
-                    <th class="bg-info">贴片交期</th>
-                    <th class="bg-primary">后焊通知生产</th>
-                    <th class="bg-info">后焊交期</th>                    
+                    <th class="bg-primary" width="100">贴片通知生产</th>
+                    <th class="bg-info" width="100">贴片交期</th>
+                    <th class="bg-primary" width="100">后焊通知生产</th>
+                    <th class="bg-info" width="100">后焊交期</th>                    
  
                     <th class="bg-warning">生产反馈</th>
 

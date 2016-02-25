@@ -125,7 +125,7 @@ div.mpnul ul li a:active
   word-wrap:break-word;
 } 
 .smfs {
-  font-size: 9px;
+  font-size: 10px;
 }
 </style>
   </head>

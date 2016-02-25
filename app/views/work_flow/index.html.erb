@@ -133,6 +133,8 @@
 
 <% if @work_flow %>
 
+<%= will_paginate(@work_flow) %>
+ 
 <% if user_signed_in? %>
     <% if can? :work_a, :all %>
 <div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">

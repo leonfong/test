@@ -3,7 +3,7 @@
 
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning " %> 
-        <%= link_to "未回复的订单",  {action: "index"},class: "btn btn-warning " %> 
+        <%= link_to "未回复的订单",  {action: "index"},class: "btn btn-danger " %> 
     </div>
 
     <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>

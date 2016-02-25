@@ -163,7 +163,6 @@
                           });
                         </script>
                     </td> 
-                    <td><%= work.update_date %></td> 
                     <td><%= work.supplement_date %></td>
                     <td>
                         <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" %>

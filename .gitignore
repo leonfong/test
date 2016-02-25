@@ -8,3 +8,4 @@
 *.xls
 *.xlsx
 Gemfile~
+public/uploads

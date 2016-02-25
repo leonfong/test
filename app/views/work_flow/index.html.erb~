@@ -132,9 +132,9 @@
 
 
 <% if @work_flow %>
-<div class="digg_pagination" style="margin: 0px;padding: 2px;">
+
 <%= will_paginate(@work_flow) %>
-</div> 
+ 
 <% if user_signed_in? %>
     <% if can? :work_a, :all %>
 <div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">
@@ -145,19 +145,19 @@
         <table class="table table-bordered table-condensed table-hover smfs" >
             <thead >
                 <tr nowrap="nowrap">
-                    <th class="bg-primary">详细</th>
-                    <th class="bg-primary">操作</th>
-                    <th class="bg-primary">状态</th>
+                    <th class="bg-primary" width="50">详细</th>
+                    <th class="bg-primary" width="50">操作</th>
+                    <th class="bg-primary" width="100">状态</th>
 <!--
                     <th class="bg-primary">下单日期</th>
 -->
-                    <th class="bg-primary">单号</th>
-                    <th class="bg-primary">数量</th>
+                    <th class="bg-primary" width="210">单号</th>
+                    <th class="bg-primary" width="50">数量</th>
 <!--
                     <th class="bg-primary">业务交期</th>
                     <th class="bg-primary">产品代码</th>
 -->                    
-                    <th class="bg-primary">入库数量</th>
+                    <th class="bg-primary" width="60">入库数量</th>
                     <th class="bg-primary">SMD</th>
                     <th class="bg-primary">DIP</th>
                     <th class="bg-primary">贴片通知生产</th>
@@ -210,7 +210,7 @@
                        
                     </td>
 -->
-                    <td>
+                    <td nowrap="nowrap">
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
                         
                         <a tabindex="0" class="btn btn-sm  btn-info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="订单号--<%= work.order_no %>" data-content="<%= '下单日期: '+work.order_date.to_s + '  业务交期: ' + work.salesman_end_date.to_s +  '  产品代码： ' + work.product_code.to_s %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">信息</a>                         

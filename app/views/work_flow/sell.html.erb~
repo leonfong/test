@@ -84,7 +84,7 @@
                                 }
                         </script>
                         <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
-                            <span id="<%= work.id.to_s + 'but' %>" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            <span id="<%= work.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
                         </button>
                     </td> 
 

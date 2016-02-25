@@ -300,28 +300,40 @@
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
-                                    <table width="100%" class="table table-bordered">
-                                        <tr width="100%">  
-                                            <td width="50%">
-                                                
-                                                <p><span class="label label-warning" style="font-size: 13px;">生产反馈<%= work.order_no.to_s %></span></p>
-                                                <p><%= work.production_feedback %></p>
-                                                
-                                            </td>
-                                            <td width="50%" >
-                                                
-                                                <p><span class="label label-danger" style="font-size: 13px;">测试反馈<%= work.order_no.to_s %></span></p>
-                                                <p><%= work.test_feedback %></p>
-                                                
-                                            </td>     
-                                        </tr>
-                                    </table>
+                                      
+
+
+
+
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " >
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="font-size: 18px;"><strong>反馈汇总--<%= work.order_no %></strong></div>
+            <div class="panel-body">
+            <% Feedback.where(order_no: work.order_no).each do |fed| %>
+                <div class="panel panel-info " style="background-color: #d9edf7;">
+                    
+                        <p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="test"%><span class="label label-danger" style="font-size: 13px;">测试反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务提问</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                        <p><strong><%= fed.feedback %></strong></p>
+                        
+                </div>
+            <% end %>
+            
+            </div>
+        </div>
+        
+   
+    </div>
+</div>
+
+
                                 </div>
                             </div>
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
                                     <p><span class="label label-default" style="font-size: 13px;">历史记录<%= work.order_no.to_s %></span></p>
-                                    <table class="table table-bordered table-condensed table-hover smfs" >
+                                    <table class="table table-bordered  table-hover" >
                                         <thead >
                                             <tr nowrap="nowrap" class="active">    
                                                 <th class="warning">用户名</th>                                            

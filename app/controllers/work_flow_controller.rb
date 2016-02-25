@@ -15,8 +15,14 @@ before_filter :authenticate_user!
             end
         end
         if params[:order]
-            if params[:order].strip.size == 1 or params[:order].strip.size == 2
+            if params[:order].strip.size == 1
                 order = params[:order].strip
+                #where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8"
+                where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8 and RIGHT(LEFT(work_flows.order_no,9),1) REGEXP '^[0-9]+$' "
+                limit = ""
+            elsif params[:order].strip.size == 2
+                order = params[:order].strip
+                #where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8"
                 where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8"
                 limit = ""
             else

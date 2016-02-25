@@ -1,0 +1,340 @@
+
+<div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
+
+
+    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+       <div class="col-md-4 form-group " style="margin: 3px;padding: 0px;">
+          <lable for="order" , class="sr-only">Qrder : </lable>
+          <div class="input-group">
+            <span class="input-group-addon"> 
+                <%= radio_button :order_s, :order_s, '1' , :checked => true %>
+                <%= label :order_s_all, '全部' %>
+                <%= radio_button :order_s, :order_s, '2' %> 
+                <%= label :order_s_end, '已结单' %>
+                <%= radio_button :order_s, :order_s, '3' %>
+                <%= label :order_s_ongoing, '未结单' %>
+            </span> 
+            <% if @order_no %>   
+                <%= text_field_tag :order, @order_no, class:"form-control ", size:"100%",  placeholder:"单号"%>     
+            <% else %> 
+                <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%",  placeholder:"单号"%>
+            <% end %>    
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary " %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+
+<% if @work_flow %>
+
+<% if user_signed_in? %>
+    <% if can? :work_e, :all %>
+<div class="row " style="padding-top: 1px;padding-right: 8px;padding-left: 8px;">
+    <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
+        
+        <div  style="margin: 2px;padding: 0px;">
+        
+        <table class="table table-bordered table-condensed table-hover smfs" >
+            <thead >
+                <tr nowrap="nowrap">
+                    <th class="bg-primary">详细</th>
+                    
+
+                    <th class="bg-primary">下单日期</th>
+
+                    <th class="bg-primary">单号</th>
+                    <th class="bg-primary">数量</th>
+
+                    <th class="bg-primary">业务交期</th>
+                    <th class="bg-primary">产品代码</th>
+                   
+                    <th class="bg-primary">入库数量</th>
+                    <th class="bg-primary">SMD</th>
+                    <th class="bg-primary">DIP</th>
+                    <th class="bg-primary">贴片通知生产</th>
+                    <th class="bg-info">贴片交期</th>
+                    <th class="bg-primary">后焊通知生产</th>
+                    <th class="bg-info">后焊交期</th>                    
+ 
+                    <th class="bg-warning">生产反馈</th>
+
+                    <th class="bg-danger">测试反馈</th>
+
+                    <th class="bg-primary">补料已回</th>
+                    <th class="bg-info">清尾完成</th>
+                    <th class="bg-primary">业务状态</th>
+
+                    <th class="bg-primary">备注</th>
+                </tr>
+            </thead>
+            <tbody >
+                <% @work_flow.each do |work| %>
+                
+                <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> nowrap="nowrap"> 
+                    <td> 
+                        <script>
+                            function change_<%= work.id.to_s %>(){
+                                if (document.getElementById('<%= work.id.to_s + work.order_no %>').className=='collapse in')
+                                    {document.getElementById('<%= work.id.to_s + "but" %>').className='glyphicon glyphicon-plus';}
+                                else
+                                    {document.getElementById('<%= work.id.to_s + "but" %>').className='glyphicon glyphicon-minus';}
+                                }
+                        </script>
+                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
+                            <span id="<%= work.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
+                        </button>
+                    </td> 
+
+                    <td>
+                        <%= work.order_date %>  
+                    </td>
+                    <td>
+                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>                         
+                        <%= work.order_no %>
+                    </td>
+                    <td>
+                        <%= work.order_quantity %>
+                    </td>
+
+                    <td>
+                        <%= work.salesman_end_date %>
+                    </td> 
+                    <td>
+                        <%= work.product_code %>
+                    </td> 
+                
+                    <td> 
+                        <%= work.warehouse_quantity %>
+                    </td>
+                    <td>
+                        <%= work.smd %>
+                    </td>
+                    <td>
+                        <%= work.dip %>
+                    </td>
+                    <td> 
+                        <%= work.smd_state %>
+                    </td> 
+                    <td>
+                        <%= work.smd_end_date %>                                               
+                    </td> 
+                    <td>
+                        <%= work.dip_start_date %>                                        
+                    </td> 
+                    <td>
+                        <%= work.dip_end_date %>
+                    </td> 
+                    
+                   <td>
+                       <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= work.production_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
+                    </td> 
+                    <td>
+                        <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= work.test_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
+                    </td>
+                    <td>
+                        <%= work.supplement_date %> 
+                    </td>
+                    <td>
+                        <%= work.clear_date %>
+                    </td> 
+                    <td>
+                        <%= work.salesman_state %>
+                    </td>
+                    <td>  
+                        <%= work.remark %>
+                    </td>
+                </tr>
+                <tr> 
+                   <td colSpan="19" style="margin: 0px;padding: 0px;">
+                    <div  >
+                        <div class="<%= @open %>" id="<%= work.id.to_s + work.order_no %>" >
+                            <div class="row " style="margin: 0px;padding: 0px;">
+                                <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
+<!--
+                                    <table width="100%" class="table table-bordered">
+                                        <tr width="100%">  
+                                            <td width="50%">
+                                                
+                                                <p><span class="label label-warning" style="font-size: 13px;">生产反馈<%= work.order_no.to_s %></span></p>
+                                                <p><%= work.production_feedback %></p>
+                                                
+                                            </td>
+                                            <td width="50%" >
+                                                
+                                                <p><span class="label label-danger" style="font-size: 13px;">测试反馈<%= work.order_no.to_s %></span></p>
+                                                <p><%= work.test_feedback %></p>
+                                                
+                                            </td>     
+                                        </tr>
+                                    </table>
+-->
+
+<% @work_flow.each do |work| %>
+
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " >
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="font-size: 18px;"><strong>反馈汇总--<%= work.order_no %></strong></div>
+            <div class="panel-body">
+            <% Feedback.where(order_no: work.order_no).each do |fed| %>
+                <div class="panel panel-info " style="background-color: #d9edf7;">
+                    
+                        <p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="test"%><span class="label label-danger" style="font-size: 13px;">测试反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务提问</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                        <p><strong><%= fed.feedback %></strong></p>
+                        
+                </div>
+            <% end %>
+            <%= form_tag('/edit_work', method:"post") do %>
+               <div class="panel panel-info " style="background-color: #d9edf7;">
+                   <div class="panel-heading"><span class="text-primary"><strong>业务反馈</strong></span></div>
+                    
+                    <table class="table table-bordered">  
+                        <thead>
+                            <tr>
+                                <th>单号</th>
+                                <th>数量</th>
+                                <th>业务交期</th>
+                                <th>产品代码</th>
+                                <th>入库数量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
+                                    <%= work.order_no %>
+                                </td>
+                                <td>
+                                    <%= work.order_quantity %>
+                                </td>
+                                <td>
+                                    <%= work.salesman_end_date %>
+                                </td>
+                                <td>
+                                    <%= work.product_code %>
+                                </td>
+                                <td>
+                                    <%= work.warehouse_quantity %>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="panel-body">
+                       
+                       <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: work.id.to_s %>                    
+                       <%= text_area_tag :sell_feedback, "", cols:"100%", rows:"15",id:work.order_no,class:"form-control" %>     
+
+                        <br><br><p><%= submit_tag "发表", class:"btn btn-info" %></p>
+                    </div>
+                </div>
+            <% end %>
+            </div>
+        </div>
+        
+   
+    </div>
+</div>
+
+<% end %>
+
+
+
+                                </div>
+                            </div>
+                            <div class="row " style="margin: 0px;padding: 0px;">
+                                <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
+                                    <p><span class="label label-default" style="font-size: 13px;">历史记录<%= work.order_no.to_s %></span></p>
+                                    <table class="table table-bordered  table-hover" >
+                                        <thead >
+                                            <tr nowrap="nowrap" class="active">    
+                                                <th class="warning">用户名</th>                                            
+                                                <th class="warning">日期</th>
+                                                <th>下单日期</th>
+                                                <th>单号</th>
+                                                <th>数量</th>
+                                                <th>业务交期</th>
+                                                <th>产品代码</th>    
+                                                <th>入库数量</th>
+                                                <th>SMD</th>
+                                                <th>DIP</th>
+                                                <th>贴片通知生产</th>
+                                                <th>贴片交期</th>
+                                                <th>后焊通知生产</th>
+                                                <th>后焊交期</th>                    
+                                                <th>生产反馈</th>
+                                                <th>测试反馈</th>
+                                                <th>补料已回</th>
+                                                <th>清尾完成</th>
+                                                <th>业务状态</th>
+                                                <th>备注</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <% Work.where(order_no: work.order_no).each do |his| %>
+                                            <tr>
+                                                <td><%= his.user_name %></td>
+                                                <td><%= his.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+                                                <td><%= his.order_date %></td>
+                                                <td><%= his.order_no %></td>
+                                                <td><%= his.order_quantity %></td>
+                                                <td><%= his.salesman_end_date %></td>
+                                                <td><%= his.product_code %></td>
+                                                <td><%= his.warehouse_quantity %></td>
+                                                <td><%= his.smd %></td>
+                                                <td><%= his.dip %></td>
+                                                <td><%= his.smd_start_date %></td>
+                                                <td><%= his.smd_end_date %></td>
+                                                <td><%= his.dip_start_date %></td>
+                                                <td><%= his.dip_end_date %></td>
+                                                <td>
+                                                    <a tabindex="0" class="btn btn-sm <% if his.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= his.order_no %>" data-content="<%= his.production_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
+                                                </td> 
+                                                <td>
+                                                    <a tabindex="0" class="btn btn-sm <% if his.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= his.order_no %>" data-content="<%= his.test_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
+                                                </td>
+                                                <td><%= his.supplement_date %></td>
+                                                <td><%= his.clear_date %></td>
+                                                <td><%= his.salesman_state %></td>
+                                                <td><%= his.remark %></td>                                               
+                                            </tr>
+                                            <% end %>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                <% end %>
+                
+            </tbody>
+        </table>
+        </div>
+        
+   
+    </div>
+</div>
+        <% end %>
+        <% end %>
+
+<% end %>
+
+
+<script>
+  $(function () {
+  $('[data-toggle="popover"]').popover()
+  });
+  
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

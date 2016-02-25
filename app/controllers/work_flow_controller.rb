@@ -1,6 +1,8 @@
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
-    def index 
+    def index
+        @open = "collapse" 
+        @pic = "glyphicon glyphicon-plus"
         limit = "LIMIT 20"
         add_where = "" 
         if params[:order_s] 
@@ -58,16 +60,19 @@ before_filter :authenticate_user!
             limit = ""            
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
             render "delivery_date.html.erb"
+        elsif can? :work_e, :all
+            if params[:order]
+                if not params[:order] == ""
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
+                end
+            end
+            render "sell.html.erb"
         else
             #if params[:order]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
            # end
         end
-        #line1 = "2015-11-05	MK51008BZ01B-3	1000	2015-11-29	C.2.CH.B.RO-0008"
-        #line2 = line1.split(" ")
-        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-        #Rails.logger.info(line2.inspect)
-        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        
     end
    
     def up_warehouse
@@ -142,6 +147,7 @@ before_filter :authenticate_user!
     end
     
     def edit_work
+        @open = "collapse"
         work_up = WorkFlow.find(params[:work_id])
         
         if params[:commit] =="A"
@@ -227,6 +233,9 @@ before_filter :authenticate_user!
                 elsif not params[:test_feedback].blank?
                     feedback_up.feedback = params[:test_feedback]
                     feedback_up.feedback_type = "test"
+                elsif not params[:sell_feedback].blank?
+                    feedback_up.feedback = params[:sell_feedback]
+                    feedback_up.feedback_type = "sell"
                 end
                 feedback_up.user_name = current_user.email
                 feedback_up.save
@@ -296,6 +305,10 @@ before_filter :authenticate_user!
             limit = "LIMIT 20"
             where_def = "  work_flows.id = '" + params[:work_id] + "'"
             @work_flow = @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit )
+            @order_no = work_up.order_no
+            @open = "collapse in"
+            @pic = "glyphicon glyphicon-minus"
+            
             flash.now[:success] = "订单数据更新成功！"
             if can? :work_c, :all
                 render "production_feedback.html.erb"
@@ -303,6 +316,8 @@ before_filter :authenticate_user!
                 render "test_feedback.html.erb"
             elsif can? :work_b, :all
                 render "delivery_date.html.erb"
+            elsif can? :work_e, :all
+                render "sell.html.erb"
             else
                 redirect_to work_flow_path(), notice: "订单数据更新成功！"
             end

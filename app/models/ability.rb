@@ -11,6 +11,7 @@ class Ability
     alias_action :update, :to => :work_b
     alias_action :update, :to => :work_c
     alias_action :update, :to => :work_d
+    alias_action :update, :to => :work_e
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -36,6 +37,10 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_d, :all
+    elsif user.has_role?(:work_five)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_e, :all
     else
       can :read, :all
     end

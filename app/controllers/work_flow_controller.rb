@@ -89,7 +89,10 @@ before_filter :authenticate_user!
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " AND feedback_state > 1  ORDER BY work_flows.updated_at DESC "  ).paginate(:page => params[:page], :per_page => 20)
                 else
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
-                end  
+                end 
+                if params[:page]
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+                end
             end
             render "sell.html.erb"
         else

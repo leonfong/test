@@ -151,7 +151,7 @@
 <!--
                     <th class="bg-primary">下单日期</th>
 -->
-                    <th class="bg-primary" width="210">单号</th>
+                    <th class="bg-primary" width="180">单号</th>
                     <th class="bg-primary" width="50">数量</th>
 <!--
                     <th class="bg-primary">业务交期</th>

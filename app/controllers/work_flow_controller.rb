@@ -15,9 +15,15 @@ before_filter :authenticate_user!
             end
         end
         if params[:order]
-            order = params[:order].strip
-            where_def = "  work_flows.order_no like '%" + order + "%'"
-            limit = ""
+            if params[:order].strip.size == 1 or params[:order].strip.size == 2
+                order = params[:order].strip
+                where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8"
+                limit = ""
+            else
+                order = params[:order].strip
+                where_def = "  work_flows.order_no like '%" + order + "%'"
+                limit = ""
+            end
         else
             order = ""
             where_def = "  work_flows.order_no like '%" + order + "%'"

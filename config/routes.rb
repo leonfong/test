@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     delete 'signout' => 'devise/sessions#destroy', :as => :destroy_admin_session
   end
   #mount RailsAdmin::Engine => '/moko', as: 'rails_admin'
+  #resources :work_flow
   match '/help', to: 'static_pages#help', via: 'get'
   match '/about', to: 'static_pages#about', via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
@@ -21,6 +22,8 @@ Rails.application.routes.draw do
   match '/edit_work', to: 'work_flow#edit_work', via: 'post'
   match '/up_warehouse', to: 'work_flow#up_warehouse', via: 'post'
   match '/order_state', to: 'work_flow#order_state', via: 'post'
+  match '/feedback', to: 'work_flow#show', via: 'get'
+  
 
   root to: 'boms#upload'
   #root to: "boms#index"

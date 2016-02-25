@@ -57,15 +57,21 @@ before_filter :authenticate_user!
         if can? :work_c, :all
             if params[:order]    
                 add_where = ""        
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + "  ORDER BY work_flows.updated_at DESC " + limit )
+            else
+                add_where = ""
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " + limit )
             end
-            render "production_feedback.html.erb"
+            render "production_feedback.list.html.erb"
         elsif can? :work_d, :all
             if params[:order]  
                 add_where = ""          
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
+            else
+                add_where = ""
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " + limit )
             end
-            render "test_feedback.html.erb"
+            render "test_feedback.list.html.erb"
         elsif can? :work_b, :all
             add_where = ""
             empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
@@ -75,8 +81,10 @@ before_filter :authenticate_user!
         elsif can? :work_e, :all
             if params[:order]
                 if not params[:order] == ""
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
                 end
+            else
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state > 1  ORDER BY work_flows.updated_at DESC " + limit )
             end
             render "sell.html.erb"
         else
@@ -87,6 +95,18 @@ before_filter :authenticate_user!
         
     end
    
+    def show
+        @work_flow = WorkFlow.find(params[:id])
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(@work_flow.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        if can? :work_c, :all
+            render "production_feedback.html.erb"
+        elsif can? :work_d, :all
+            render "test_feedback.html.erb"
+        end
+    end
+
     def up_warehouse
         if params[:warehouse_info]
             all_order = params[:warehouse_info].split("\r\n");
@@ -217,9 +237,14 @@ before_filter :authenticate_user!
             end
             if not params[:production_feedback].blank?
                 work_up.production_feedback = params[:production_feedback].strip
+                work_up.feedback_state = "3"
             end
             if not params[:test_feedback].blank?
                 work_up.test_feedback = params[:test_feedback].strip
+                work_up.feedback_state = "2"
+            end
+            if not params[:sell_feedback].blank?
+                work_up.feedback_state = "1"
             end
             if not params[:supplement_date].blank?
                 work_up.supplement_date = params[:supplement_date].strip
@@ -316,15 +341,17 @@ before_filter :authenticate_user!
             end                     
             limit = "LIMIT 20"
             where_def = "  work_flows.id = '" + params[:work_id] + "'"
-            @work_flow = @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit )
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit )
             @order_no = work_up.order_no
             @open = "collapse in"
             @pic = "glyphicon glyphicon-minus"
             
             flash.now[:success] = "订单数据更新成功！"
             if can? :work_c, :all
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit ).first
                 render "production_feedback.html.erb"
             elsif can? :work_d, :all
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit ).first
                 render "test_feedback.html.erb"
             elsif can? :work_b, :all
                 render "delivery_date.html.erb"

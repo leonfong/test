@@ -1,6 +1,6 @@
 <div class="container" >
 <div class="row" style="padding: 0px;">
-  <h2><p class="text-primary">生产反馈</p></h2><hr>
+  <h2><p class="text-primary">测试反馈</p></h2><hr>
 </div>
 <div class="row"style="padding: 0px;">
     
@@ -23,24 +23,13 @@
 <div class="row " style="padding-top: 7px;">
     <div class="col-md-12 " style="padding: 5px;" >
         
-        <div class="panel panel-primary">
-            <div class="panel-heading" style="font-size: 18px;"><strong>生产反馈--<%= @work_flow.order_no %></strong></div>
-            <div class="panel-body">
-            <% Feedback.where(order_no: @work_flow.order_no).order("created_at DESC").each do |fed| %>
-                <div class="panel panel-info " style="background-color: #d9edf7;">
-                    
-                        <p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="test"%><span class="label label-danger" style="font-size: 13px;">测试反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
-                        <p><strong><%= fed.feedback %></strong></p>
-                        
-                </div>
-            <% end %>
-            <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
-               <div class="panel panel-info " style="background-color: #d9edf7;">
-                   <div class="panel-heading"><span class="text-primary"><strong>生产反馈</strong></span></div>
+       <div class="panel panel-info " >
+                   <div class="panel-heading"><span class="text-primary"><strong>未反馈的订单</strong></span></div>
                     
                     <table class="table table-bordered">  
                         <thead>
                             <tr>
+                                <th>操作</th>
                                 <th>单号</th>
                                 <th>数量</th>
                                 <th>业务交期</th>
@@ -49,37 +38,34 @@
                             </tr>
                         </thead>
                         <tbody>
+<% @work_flow.each do |work| %>
                             <tr>
                                 <td>
-                                    <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: @work_flow.id.to_s %>
-                                    <%= @work_flow.order_no %>
+                                    <%= link_to "反馈",  {action: "show", id: work}, class: "btn btn-primary" %>
+                                </td>
+                                
+                                <td>
+                                    <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
+                                    <%= work.order_no %>
                                 </td>
                                 <td>
-                                    <%= @work_flow.order_quantity %>
+                                    <%= work.order_quantity %>
                                 </td>
                                 <td>
-                                    <%= @work_flow.salesman_end_date %>
+                                    <%= work.salesman_end_date %>
                                 </td>
                                 <td>
-                                    <%= @work_flow.product_code %>
+                                    <%= work.product_code %>
                                 </td>
                                 <td>
-                                    <%= @work_flow.warehouse_quantity %>
+                                    <%= work.warehouse_quantity %>
                                 </td>
                             </tr>
+<% end %>
                         </tbody>
                     </table>
-                    <div class="panel-body">
-                       
-                       <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: @work_flow.id.to_s %>                    
-                       <%= text_area_tag :production_feedback, "", cols:"100%", rows:"15",id:@work_flow.order_no,class:"form-control" %>     
-
-                        <br><br><p><%= submit_tag "发表回复", class:"btn btn-info" %></p>
-                    </div>
+                    
                 </div>
-            <% end %>
-            </div>
-        </div>
         
    
     </div>

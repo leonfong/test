@@ -3,9 +3,9 @@
   <h2><p class="text-primary">生产反馈</p></h2><hr>
 </div>
 <div class="row"style="padding: 0px;">
-    
+    <%= link_to "查询未反馈的订单",  {action: "index"}, class: "btn btn-danger " %>
     <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
-       <div class="col-md-6 form-group "style="padding: 0px;">
+       <div class="col-md-6 form-group nav navbar-nav navbar-right">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group">    
             <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
@@ -73,7 +73,7 @@
                        
                        <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: @work_flow.id.to_s %>                    
                        
-                       <%= kindeditor_tag :production_feedback, '' ,:items => ['undo', 'redo', '|', 'image', 'multiimage','insertfile', '|']%>
+                       <%= kindeditor_tag :production_feedback, '' , :items => ['undo', 'redo', '|', 'image', 'multiimage','insertfile', '|']%>
                         <br><br><p><%= submit_tag "发表回复", class:"btn btn-info" %></p>
                     </div>
                 </div>

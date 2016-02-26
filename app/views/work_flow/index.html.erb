@@ -416,7 +416,7 @@
                                             </tr>
                                         </thead>
                                         <tbody >
-                                            <% Work.where(order_no: work.order_no).each do |his| %>
+                                            <% Work.where(order_no: work.order_no).order("created_at DESC").each do |his| %>
                                             <tr>
                                                 <td><%= his.user_name %></td>
                                                 <td><%= his.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>

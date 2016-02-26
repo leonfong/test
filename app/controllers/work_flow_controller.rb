@@ -290,7 +290,7 @@ before_filter :authenticate_user!
             if not params[:salesman_state].blank?
                 work_up.salesman_state = params[:salesman_state].strip
             end
-            if not params[:remark].blank?
+            if params[:remark]
                 work_up.remark = params[:remark].strip
             end
         end

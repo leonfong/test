@@ -73,7 +73,7 @@
                        
                        <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: @work_flow.id.to_s %>                    
                        
-                       <%= kindeditor_tag :production_feedback, '' ,:simple_mode => true %>
+                       <%= kindeditor_tag :production_feedback, '' ,:items => ['undo', 'redo', '|', 'image', 'multiimage','insertfile', '|']%>
                         <br><br><p><%= submit_tag "发表回复", class:"btn btn-info" %></p>
                     </div>
                 </div>

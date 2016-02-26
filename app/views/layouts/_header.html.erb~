@@ -134,6 +134,23 @@ $(document).ready(function () {
             $("#e").addClass('active');
             
     });
+    $("#k").hover(function (e) {         
+            e.preventDefault();
+            //alert(document.activeElement);
+
+            $("#a").removeClass('active');
+            $("#c").removeClass('active');
+            $("#d").removeClass('active');
+            $("#b").removeClass('active');
+            $("#e").removeClass('active');
+            $("#f").removeClass('active');
+            $("#g").removeClass('active');
+            $("#h").removeClass('active');
+            $("#i").removeClass('active');
+            $("#j").removeClass('active');
+            $("#k").addClass('active');
+            
+    });
    
 
 });

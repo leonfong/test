@@ -156,7 +156,7 @@
                 <div>
                     <p class="text-warning">数据格式：<code>单号</code></p>
                     <p>
-                        <%= text_area_tag :order_state, params[:order_state], size:"100x10", class:"form-control"%>
+                        <%= text_area_tag :order_y, params[:order_y], size:"100x10", class:"form-control"%>
                     </p>                
                 </div> 
                 <div >
@@ -171,7 +171,7 @@
                 <div>
                     <p class="text-warning">数据格式：<code>单号</code></p>
                     <p>
-                        <%= text_area_tag :order_state, params[:order_state], size:"100x10", class:"form-control"%>
+                        <%= text_area_tag :order_r, params[:order_r], size:"100x10", class:"form-control"%>
                     </p>                
                 </div> 
                 <div >

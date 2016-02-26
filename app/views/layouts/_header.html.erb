@@ -21,7 +21,13 @@
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
         <% if user_signed_in? %>
             <% if can? :work_up, :all %>
-                <li id="k"><%= link_to "Work Flow",work_flow_path %></li>
+                <li id="k">
+                    <% if can? :work_e, :all %>
+                        <%= link_to "Work Flow",work_flow_path, data: { no_turbolink: true } %>
+                    <% else %>
+                        <%= link_to "Work Flow",work_flow_path %>
+                    <% end %>
+                </li>
             <% end %>
         <% end %>
         <li id="d"><%= link_to t('about'),about_path %></li>

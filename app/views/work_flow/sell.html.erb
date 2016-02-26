@@ -188,7 +188,7 @@
                 <div class="panel panel-info " style="background-color: #d9edf7;">
                     
                         <p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="test"%><span class="label label-danger" style="font-size: 13px;">测试反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
-                        <p><strong><%= fed.feedback %></strong></p>
+                        <p><strong><%= raw fed.feedback %></strong></p>
                         
                 </div>
             <% end %>
@@ -230,8 +230,8 @@
                     <div class="panel-body">
                        
                        <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: work.id.to_s %>                    
-                       <%= text_area_tag :sell_feedback, "", cols:"100%", rows:"15",id:work.order_no,class:"form-control" %>     
-
+                       
+                       <%= kindeditor_tag :sell_feedback, '' %>
                         <br><br><p><%= submit_tag "发表", class:"btn btn-info" %></p>
                     </div>
                 </div>

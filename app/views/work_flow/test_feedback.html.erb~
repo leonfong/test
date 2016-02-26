@@ -18,15 +18,15 @@
 </div>
 
 <% if @work_flow %>
-<% @work_flow.each do |work| %>
+
 
 <div class="row " style="padding-top: 7px;">
     <div class="col-md-12 " style="padding: 5px;" >
         
         <div class="panel panel-primary">
-            <div class="panel-heading" style="font-size: 18px;"><strong>测试反馈--<%= work.order_no %></strong></div>
+            <div class="panel-heading" style="font-size: 18px;"><strong>测试反馈--<%= @work_flow.order_no %></strong></div>
             <div class="panel-body">
-            <% Feedback.where(order_no: work.order_no).order("created_at DESC").each do |fed| %>
+            <% Feedback.where(order_no: @work_flow.order_no).order("created_at DESC").each do |fed| %>
                 <div class="panel panel-info " style="background-color: #d9edf7;">
                     
                        <p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="test"%><span class="label label-danger" style="font-size: 13px;">测试反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
@@ -51,29 +51,29 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
-                                    <%= work.order_no %>
+                                    <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: @work_flow.id.to_s %>
+                                    <%= @work_flow.order_no %>
                                 </td>
                                 <td>
-                                    <%= work.order_quantity %>
+                                    <%= @work_flow.order_quantity %>
                                 </td>
                                 <td>
-                                    <%= work.salesman_end_date %>
+                                    <%= @work_flow.salesman_end_date %>
                                 </td>
                                 <td>
-                                    <%= work.product_code %>
+                                    <%= @work_flow.product_code %>
                                 </td>
                                 <td>
-                                    <%= work.warehouse_quantity %>
+                                    <%= @work_flow.warehouse_quantity %>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="panel-body">
                        
-                       <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: work.id.to_s %>                    
-                       <%= text_area_tag :test_feedback, "", cols:"100%", rows:"15",id:work.order_no,class:"form-control" %>     
-
+                       <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: @work_flow.id.to_s %>                    
+                         
+                        <%= kindeditor_tag :test_feedback, '' %>
                         <br><br><p><%= submit_tag "发表回复", class:"btn btn-info" %></p>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
     </div>
 </div>
 
-<% end %>
+
 <% end %>
 </div>
 <%

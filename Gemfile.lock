@@ -124,6 +124,7 @@ GEM
     mina (0.3.7)
       open4 (~> 1.3.4)
       rake
+    mini_magick (4.4.0)
     mini_portile (0.6.2)
     minitest (5.7.0)
     momentjs-rails (2.11.0)
@@ -179,6 +180,9 @@ GEM
       remotipart (~> 1.0)
       safe_yaml (~> 1.0)
       sass-rails (>= 4.0, < 6)
+    rails_kindeditor (0.4.5)
+      carrierwave
+      mini_magick
     railties (4.2.1)
       actionpack (= 4.2.1)
       activesupport (= 4.2.1)
@@ -283,6 +287,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.1)
   rails_admin
+  rails_kindeditor
   react-rails (~> 1.0)
   rolify
   roo (~> 2.0.0)

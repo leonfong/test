@@ -363,7 +363,7 @@ before_filter :authenticate_user!
             end                     
             limit = "LIMIT 20"
             where_def = "  work_flows.id = '" + params[:work_id] + "'"
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit )
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC ").paginate(:page => params[:page], :per_page => 20)
             @order_no = work_up.order_no
             @open = "collapse in"
             @pic = "glyphicon glyphicon-minus"

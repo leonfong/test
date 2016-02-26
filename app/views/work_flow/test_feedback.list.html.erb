@@ -41,7 +41,7 @@
 <% @work_flow.each do |work| %>
                             <tr>
                                 <td>
-                                    <%= link_to "反馈",  {action: "show", id: work}, class: "btn btn-primary" %>
+                                    <%= link_to "反馈",  {action: "show", id: work}, class: "btn btn-primary", data: { no_turbolink: true } %>
                                 </td>
                                 
                                 <td>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160216013030) do
+ActiveRecord::Schema.define(version: 20160226013332) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -60,9 +60,29 @@ ActiveRecord::Schema.define(version: 20160216013030) do
   add_index "boms", ["name"], name: "name", using: :btree
   add_index "boms", ["user_id"], name: "uid", using: :btree
 
+  create_table "feedbacks", force: :cascade do |t|
+    t.string   "order_no",      limit: 255, default: ""
+    t.string   "product_code",  limit: 255, default: ""
+    t.string   "feedback",      limit: 255, default: ""
+    t.string   "user_name",     limit: 255, default: ""
+    t.string   "feedback_type", limit: 255, default: ""
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
   create_table "keywords", force: :cascade do |t|
     t.string   "keywords",   limit: 255
     t.string   "ip",         limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "kindeditor_assets", force: :cascade do |t|
+    t.string   "asset",      limit: 255
+    t.integer  "file_size",  limit: 4
+    t.string   "file_type",  limit: 255
+    t.integer  "owner_id",   limit: 4
+    t.string   "asset_type", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -171,5 +191,58 @@ ActiveRecord::Schema.define(version: 20160216013030) do
   end
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
+
+  create_table "work_flows", force: :cascade do |t|
+    t.date     "order_date"
+    t.string   "order_no",            limit: 255, default: ""
+    t.integer  "order_quantity",      limit: 4
+    t.date     "salesman_end_date"
+    t.string   "product_code",        limit: 255, default: ""
+    t.integer  "warehouse_quantity",  limit: 4
+    t.string   "smd",                 limit: 255, default: ""
+    t.string   "dip",                 limit: 255, default: ""
+    t.date     "smd_start_date"
+    t.string   "smd_end_date",        limit: 255
+    t.string   "smd_state",           limit: 255, default: ""
+    t.date     "dip_start_date"
+    t.date     "dip_end_date"
+    t.date     "update_date"
+    t.string   "production_feedback", limit: 255, default: ""
+    t.string   "test_feedback",       limit: 255, default: ""
+    t.date     "supplement_date"
+    t.date     "clear_date"
+    t.string   "salesman_state",      limit: 255, default: ""
+    t.string   "remark",              limit: 255, default: ""
+    t.integer  "order_state",         limit: 4,   default: 0
+    t.integer  "feedback_state",      limit: 4,   default: 0
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  create_table "works", force: :cascade do |t|
+    t.date     "order_date"
+    t.string   "order_no",            limit: 255, default: ""
+    t.integer  "order_quantity",      limit: 4
+    t.date     "salesman_end_date"
+    t.string   "product_code",        limit: 255, default: ""
+    t.integer  "warehouse_quantity",  limit: 4
+    t.string   "smd",                 limit: 255, default: ""
+    t.string   "dip",                 limit: 255, default: ""
+    t.date     "smd_start_date"
+    t.string   "smd_end_date",        limit: 255
+    t.date     "dip_start_date"
+    t.date     "dip_end_date"
+    t.date     "update_date"
+    t.string   "production_feedback", limit: 255, default: ""
+    t.string   "test_feedback",       limit: 255, default: ""
+    t.date     "supplement_date"
+    t.date     "clear_date"
+    t.string   "salesman_state",      limit: 255, default: ""
+    t.string   "remark",              limit: 255, default: ""
+    t.integer  "order_state",         limit: 4,   default: 0
+    t.string   "user_name",           limit: 255
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
 
 end

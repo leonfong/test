@@ -17,7 +17,7 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 
 gem 'bootstrap-will_paginate' 
 gem 'will-paginate-i18n'
-
+gem 'rails_kindeditor'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 

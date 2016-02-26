@@ -82,16 +82,16 @@
     </div>
 
 
-    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+    <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
        <div class="col-md-4 form-group nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group">
             <span class="input-group-addon"> 
-                <%= radio_button :order_s, :order_s, '1' , :checked => true %>
+                <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
                 <%= label :order_s_all, '全部' %>
-                <%= radio_button :order_s, :order_s, '2' %> 
+                <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
                 <%= label :order_s_end, '已结单' %>
-                <%= radio_button :order_s, :order_s, '3' %>
+                <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
                 <%= label :order_s_ongoing, '未结单' %>
             </span>    
             <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%",  placeholder:"单号"%>          

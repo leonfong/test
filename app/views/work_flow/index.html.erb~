@@ -87,11 +87,11 @@
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group">
             <span class="input-group-addon"> 
-                <%= radio_button :order_s, :order_s, '1' , :checked => true %>
+                <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
                 <%= label :order_s_all, '全部' %>
-                <%= radio_button :order_s, :order_s, '2' %> 
+                <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
                 <%= label :order_s_end, '已结单' %>
-                <%= radio_button :order_s, :order_s, '3' %>
+                <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
                 <%= label :order_s_ongoing, '未结单' %>
             </span>    
             <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%",  placeholder:"单号"%>          
@@ -372,7 +372,7 @@
                 <div class="panel panel-info " style="background-color: #d9edf7;">
                     
                         <p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="test"%><span class="label label-danger" style="font-size: 13px;">测试反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
-                        <p><strong><%= fed.feedback %></strong></p>
+                        <p><strong><%= raw fed.feedback %></strong></p>
                         
                 </div>
             <% end %>

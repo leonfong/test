@@ -5,21 +5,33 @@ before_filter :authenticate_user!
         @open = "collapse" 
         @pic = "glyphicon glyphicon-plus"
         limit = "LIMIT 20"
-        add_where = "" 
+        add_where = " AND work_flows.order_state = 0"
+        @order_check_1 = false
+        @order_check_2 = false
+        @order_check_3 = true
         if params[:order_s] 
             if params[:order_s][:order_s].to_i == 1 
                 add_where = "" 
+                @order_check_1 = true
+                @order_check_2 = false
+                @order_check_3 = false
             elsif params[:order_s][:order_s].to_i == 2 
                 add_where = " AND work_flows.order_state = 1"
+                @order_check_2 = true
+                @order_check_1 = false
+                @order_check_3 = false
             elsif params[:order_s][:order_s].to_i == 3 
-                add_where = " AND work_flows.order_state = 0" 
+                add_where = " AND work_flows.order_state = 0"
+                @order_check_3 = true
+                @order_check_2 = false
+                @order_check_1 = false
             end
         end
         if params[:order]
             if params[:order].strip.size == 1
                 order = params[:order].strip
                 #where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8"
-                where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8 and RIGHT(LEFT(work_flows.order_no,9),1) REGEXP '^[0-9]+$' "
+                where_def = "  POSITION('" + order + "' IN RIGHT(LEFT(work_flows.order_no,9),7)) = 6 and RIGHT(LEFT(work_flows.order_no,9),1) REGEXP '^[0-9]+$' "
                 limit = ""
             elsif params[:order].strip.size == 2
                 order = params[:order].strip
@@ -37,6 +49,7 @@ before_filter :authenticate_user!
             #limit = ""
         end
         if params[:empty_date] 
+            add_where = ""
             if params[:empty_date] == "show_empty"
                 empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
                 limit = ""

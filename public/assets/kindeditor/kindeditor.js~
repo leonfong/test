@@ -258,7 +258,8 @@ K.options = {
 	minChangeSize : 50,
 	zIndex : 811213,
 	items : [
-		'undo', 'redo', '|', 'image', 'multiimage','insertfile', '|'
+		'undo', 'redo', '|', 'image', 'multiimage',
+		'insertfile', '|'
 	],
 	noDisableItems : ['source', 'fullscreen'],
 	colorTable : [

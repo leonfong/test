@@ -9,3 +9,4 @@
 *.xlsx
 Gemfile~
 public/uploads
+public/assets

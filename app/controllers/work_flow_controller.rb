@@ -151,6 +151,29 @@ before_filter :authenticate_user!
         end
         redirect_to work_flow_path(), notice: "订单数据更新成功！"
     end
+  
+    def add_feed
+        if params[:add_feed]
+            all_order = params[:add_feed].split("\r\n");
+            all_order.each do |item|
+                item_order = item.split(" ")
+                if item_order.size == 2
+                    checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item_order[0] + "'").first
+                    if not checkorder.blank?
+                        checkorder.feed_state = item_order[1] 
+                        checkorder.save
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                        Rails.logger.info(item_order.inspect)
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    end
+                else
+                    redirect_to work_flow_path, :flash => {:error => item+"--------补料信息更新失败，请检查上传数据格式！"}
+                    return false
+                end
+            end
+        end
+        redirect_to work_flow_path(), notice: "订单数据更新成功！"
+    end
 
     def order_state
         if params[:order_state] or params[:order_y] or params[:order_r]
@@ -200,9 +223,9 @@ before_filter :authenticate_user!
                         work_up.salesman_end_date = item_order[3]
                         work_up.product_code = item_order[4]
                         work_up.save
-                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                        Rails.logger.info(item_order.inspect)
-                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                        #Rails.logger.info(item_order.inspect)
+                        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     end
                 else
                     redirect_to work_flow_path, :flash => {:error => item+"--------订单数据更新失败，请检查上传数据格式！"}

@@ -29,6 +29,21 @@
         </script>
         <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
             <span id="upWarehousebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+        
+
+
+
+        <script>
+        function change_add(){
+        if (document.getElementById('addFeed').className=='collapse in')
+        {document.getElementById('addFeedbut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('addFeedbut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#addFeed" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_add()">更新补料状态
+            <span id="addFeedbut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button> 
 
  
@@ -180,6 +195,21 @@
                 <% end %> 
         </div>
     </div>
+     <div class="collapse" id="addFeed">
+        <div class="well">
+                <%= form_tag('/add_feed', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号 补料状态</code></p>
+                    <p>
+                        <%= text_area_tag :add_feed, params[:add_feed], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "更新补料状态", class:"btn btn-danger btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
     </div>
 </div>
 
@@ -225,6 +255,7 @@
                     <th class="bg-danger">测试反馈</th>
 
                     <th class="bg-primary">补料已回</th>
+                    <th class="bg-primary">补料状态</th>
                     <th class="bg-info">清尾完成</th>
                     <th class="bg-primary">业务状态</th>
 
@@ -342,6 +373,9 @@
                         </script>
                     </td>
                     <td>
+                        <%= work.feed_state %>
+                    </td> 
+                    <td>
                         <%= work.clear_date %>
                     </td> 
                     <td>
@@ -352,7 +386,7 @@
                     </td>
                 </tr>
                 <tr> 
-                   <td colSpan="18" style="margin: 0px;padding: 0px;">
+                   <td colSpan="19" style="margin: 0px;padding: 0px;">
                     <div class="col-md-12" style="margin: 0px;padding: 0px;">
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
@@ -388,7 +422,7 @@
                                 </div>
                             </div>
                             <div class="row " style="margin: 0px;padding: 0px;">
-                                <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
+                                <div class="col-md-12 panel panel-default" style="margin-bottom: 50px;padding: 0px;">
                                     <p><span class="label label-default" style="font-size: 13px;">历史记录<%= work.order_no.to_s %></span></p>
                                     <table class="table table-bordered  table-hover" >
                                         <thead >

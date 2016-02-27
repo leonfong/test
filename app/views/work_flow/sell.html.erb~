@@ -68,6 +68,7 @@
                     <th class="bg-danger" width="70">测试反馈</th>
 
                     <th class="bg-primary" width="100">补料已回</th>
+                    <th class="bg-primary" width="100">补料状态</th>
                     <th class="bg-info" width="100">清尾完成</th>
                     <th class="bg-primary" width="150">业务状态</th>
 
@@ -142,6 +143,9 @@
                         <%= work.supplement_date %> 
                     </td>
                     <td>
+                        <%= work.feed_state %>
+                    </td>
+                    <td>
                         <%= work.clear_date %>
                     </td> 
                     <td>
@@ -152,7 +156,7 @@
                     </td>
                 </tr>
                 <tr> 
-                   <td colSpan="19" style="margin: 0px;padding: 0px;">
+                   <td colSpan="20" style="margin: 0px;padding: 0px;">
                     <div  >
                         <div class="<%= @open %>" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
@@ -231,7 +235,7 @@
                        
                        <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: work.id.to_s %>                    
                        
-                       <%= kindeditor_tag :sell_feedback, '' %>
+                       <%= kindeditor_tag :sell_feedback, '', :items => ['undo', 'redo', '|', 'image', 'multiimage','insertfile', '|'] %>
                         <br><br><p><%= submit_tag "发表", class:"btn btn-info" %></p>
                     </div>
                 </div>

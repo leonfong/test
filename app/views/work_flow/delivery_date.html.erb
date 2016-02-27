@@ -117,6 +117,7 @@
                     
  
                     <th class="bg-primary">补料已回</th>
+                    <th class="bg-primary">补料状态</th>
                     <th class="bg-info">清尾完成</th>
 
                 </tr>
@@ -164,6 +165,7 @@
                         </script>
                     </td> 
                     <td><%= work.supplement_date %></td>
+                    <td><%= work.feed_state %></td>
                     <td>
                         <%= text_field_tag :clear_date, params[:clear_date], id: work.id.to_s+"clear_date",class:"form-control input-sm",value:work.clear_date , size:"8" %>
                         <script type="text/javascript">

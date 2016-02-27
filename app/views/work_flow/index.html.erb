@@ -373,7 +373,7 @@
                         </script>
                     </td>
                     <td>
-                        <%= work.feed_state %>
+                        <%= text_field_tag :feed_state, params[:feed_state], id: work.id.to_s+"feed_state",class:"form-control input-sm",value:work.feed_state , size:"5", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td> 
                     <td>
                         <%= work.clear_date %>

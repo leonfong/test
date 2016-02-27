@@ -306,6 +306,9 @@ before_filter :authenticate_user!
             end
             if not params[:supplement_date].blank?
                 work_up.supplement_date = params[:supplement_date].strip
+            end    
+            if params[:feed_state]
+                work_up.feed_state = params[:feed_state].strip
             end
             if not params[:clear_date].blank?
                 work_up.clear_date = params[:clear_date].strip
@@ -385,13 +388,16 @@ before_filter :authenticate_user!
                 if not params[:supplement_date].blank?
                     work_history.supplement_date = params[:supplement_date].strip
                 end
+                if params[:feed_state]
+                    work_history.feed_state = params[:feed_state].strip
+                end
                 if not params[:clear_date].blank?
                     work_history.clear_date = params[:clear_date].strip
                 end
                 if not params[:salesman_state].blank?
                     work_history.salesman_state = params[:salesman_state].strip
                 end
-                if not params[:remark].blank?
+                if params[:remark]
                     work_history.remark = params[:remark].strip
                 end
                 work_history.user_name = current_user.email

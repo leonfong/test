@@ -21,7 +21,7 @@ before_filter :authenticate_user!
                 @order_check_1 = false
                 @order_check_3 = false
             elsif params[:order_s][:order_s].to_i == 3 
-                add_where = " AND work_flows.order_state = 0"
+                add_where = " AND work_flows.order_state != 3"
                 @order_check_3 = true
                 @order_check_2 = false
                 @order_check_1 = false
@@ -54,6 +54,7 @@ before_filter :authenticate_user!
                 empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
                 limit = ""
             elsif params[:empty_date] == "ready"
+                @show_title = "料齐的订单"
                 empty_date = "work_flows.order_state = 2 AND"
                 limit = ""
             elsif params[:empty_date] == "danger"
@@ -69,13 +70,15 @@ before_filter :authenticate_user!
         #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + " ORDER BY work_flows.created_at DESC LIMIT 35" )
  
         if can? :work_c, :all
-            if params[:order]    
+            if params[:order] or  params[:empty_date]                    
                 add_where = ""        
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + "  ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + "  ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
             else
+                @show_title = "未反馈的订单"
                 add_where = ""
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
             end
+            
             render "production_feedback.list.html.erb"
         elsif can? :work_d, :all
             if params[:order]  

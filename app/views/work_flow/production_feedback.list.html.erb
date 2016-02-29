@@ -4,12 +4,13 @@
 </div>
 <div class="row"style="padding: 0px;">
     <div class="col-md-3 nav navbar-nav" >
-        <%= link_to "查询未反馈的订单",  {action: "index"}, class: "btn btn-danger  btn-lg" %>
+        <%= link_to "查询未反馈的订单",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
+        <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
     </div>
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
        <div class="col-md-6 form-group nav navbar-nav navbar-right" >
           <lable for="order" , class="sr-only">Qrder : </lable>
-          <div class="input-group">    
+          <div class="input-group input-group-sm">    
             <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
@@ -26,7 +27,7 @@
     <div class="col-md-12 " style="padding: 5px;" >
         
        <div class="panel panel-info " >
-                   <div class="panel-heading"><span class="text-primary"><strong>未反馈的订单</strong></span></div>
+                   <div class="panel-heading"><span class="text-primary"><strong><%= @show_title %></strong></span></div>
                     
                     <table class="table table-bordered">  
                         <thead>
@@ -41,7 +42,7 @@
                         </thead>
                         <tbody>
 <% @work_flow.each do |work| %>
-                            <tr>
+                            <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> nowrap="nowrap"> 
                                 <td>
                                     <%= link_to "反馈",  {action: "show", id: work}, class: "btn btn-primary", data: { no_turbolink: true } %>
                                     

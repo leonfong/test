@@ -512,10 +512,6 @@ $(document).on "page:change", ->
   $(function () {
   $('[data-toggle="popover"]').popover()
   });
-  
-
-$(document).on "page:change", ->
-  alert "page has loaded!"
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

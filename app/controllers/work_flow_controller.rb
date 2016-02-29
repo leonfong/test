@@ -89,9 +89,9 @@ before_filter :authenticate_user!
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC "  ).paginate(:page => params[:page], :per_page => 20)
             end
             render "test_feedback.list.html.erb"
-        elsif can? :work_b, :all
-            add_orderby = ""
+        elsif can? :work_b, :all     
             empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"  
+            add_orderby = ""
             if params[:sort_date]
                 empty_date = ""
                 if params[:sort_date] == "smd"
@@ -128,11 +128,23 @@ before_filter :authenticate_user!
             end
             render "sell.html.erb"
         else
-            #if params[:order]
-                #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
-           # end
-            render "index.html.erb"
+            add_orderby = " ORDER BY work_flows.updated_at DESC " 
+            if params[:sort_date]
+                empty_date = ""
+                if params[:sort_date] == "smd"
+                    add_where = "AND smd_end_date IS NOT NULL "
+                    add_orderby = " ORDER BY work_flows.smd_end_date "
+                elsif params[:sort_date] == "dip"
+                    add_where = "AND dip_end_date IS NOT NULL"
+                    add_orderby = " ORDER BY work_flows.dip_end_date "
+                elsif params[:sort_date] == "clear"
+                    add_where = "AND clear_date IS NOT NULL"
+                    add_orderby = " ORDER BY work_flows.clear_date " 
+                end
+            end
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 20)
+           
+            #render "index.html.erb"
             #redirect_to action: :index, data: { no_turbolink: true }
         end
         
@@ -159,7 +171,7 @@ before_filter :authenticate_user!
                 if item_order.size == 2
                     checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item_order[0] + "'").first
                     if not checkorder.blank?
-                        checkorder.warehouse_quantity = item_order[1] 
+                        checkorder.warehouse_quantity = checkorder.warehouse_quantity.to_i + item_order[1].to_i 
                         checkorder.save
                         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                         Rails.logger.info(item_order.inspect)

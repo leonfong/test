@@ -251,9 +251,9 @@ $(document).on "page:change", ->
                     <th class="bg-primary" width="60">SMD</th>
                     <th class="bg-primary" width="60">DIP</th>
                     <th class="bg-primary" width="100">贴片通知生产</th>
-                    <th class="bg-info" width="80">贴片交期</th>
+                    <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %></th>
                     <th class="bg-primary" width="100">后焊通知生产</th>
-                    <th class="bg-info" width="80">后焊交期</th>                    
+                    <th class="bg-info" width="80"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %></th>                    
  
                     <th class="bg-warning" width="60">生产反馈</th>
 
@@ -261,7 +261,7 @@ $(document).on "page:change", ->
 
                     <th class="bg-primary" width="100">补料已回</th>
                     <th class="bg-primary" width="70">补料状态</th>
-                    <th class="bg-info" width="80">清尾完成</th>
+                    <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %></th>
                     <th class="bg-primary">业务状态</th>
 
                     <th class="bg-primary">备注</th>

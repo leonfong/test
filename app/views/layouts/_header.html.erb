@@ -25,7 +25,7 @@
                     <% if can? :work_e, :all %>
                         <%= link_to "Work Flow",work_flow_path, data: { no_turbolink: true } %>
                     <% else %>
-                        <%= link_to "Work Flow",work_flow_path %>
+                        <%= link_to "Work Flow",work_flow_path, data: { no_turbolink: true } %>
                     <% end %>
                 </li>
             <% end %>

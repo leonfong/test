@@ -20,10 +20,12 @@ Rails.application.routes.draw do
   match '/work_flow', to: 'work_flow#index', via: 'get'  
   match '/up_work', to: 'work_flow#up_work', via: 'post'
   match '/edit_work', to: 'work_flow#edit_work', via: 'post'
+  match '/edit_work', to: 'work_flow#edit_work', via: 'get'
   match '/up_warehouse', to: 'work_flow#up_warehouse', via: 'post'
   match '/order_state', to: 'work_flow#order_state', via: 'post'
   match '/feedback', to: 'work_flow#show', via: 'get'
   match '/add_feed', to: 'work_flow#add_feed', via: 'post'
+  match '/indexup', to: 'work_flow#indexup', via: 'get' 
 
   root to: 'boms#upload'
   #root to: "boms#index"

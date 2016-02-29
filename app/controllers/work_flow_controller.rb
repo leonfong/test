@@ -5,13 +5,13 @@ before_filter :authenticate_user!
         @open = "collapse" 
         @pic = "glyphicon glyphicon-plus"
         limit = "LIMIT 20"
-        add_where = " AND work_flows.order_state != 3 AND work_flows.order_state != 1"
+        add_where = " AND work_flows.order_state != 1"
         @order_check_1 = false
         @order_check_2 = false
         @order_check_3 = true
         if params[:order_s] 
             if params[:order_s][:order_s].to_i == 1 
-                add_where = " AND work_flows.order_state != 1" 
+                add_where = " " 
                 @order_check_1 = true
                 @order_check_2 = false
                 @order_check_3 = false
@@ -21,7 +21,7 @@ before_filter :authenticate_user!
                 @order_check_1 = false
                 @order_check_3 = false
             elsif params[:order_s][:order_s].to_i == 3 
-                add_where = " AND work_flows.order_state != 3 AND work_flows.order_state != 1"
+                add_where = " AND work_flows.order_state != 1"
                 @order_check_3 = true
                 @order_check_2 = false
                 @order_check_1 = false
@@ -95,7 +95,7 @@ before_filter :authenticate_user!
             if params[:sort_date]
                 empty_date = ""
                 if params[:sort_date] == "smd"
-                    add_where = "AND smd_end_date IS NOT NULL"
+                    add_where = "AND smd_end_date IS NOT NULL "
                     add_orderby = " ORDER BY work_flows.smd_end_date "
                 elsif params[:sort_date] == "dip"
                     add_where = "AND dip_end_date IS NOT NULL"
@@ -130,11 +130,14 @@ before_filter :authenticate_user!
         else
             #if params[:order]
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " + limit )
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where ).paginate(:page => params[:page], :per_page => 20)
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
            # end
+            render "index.html.erb"
+            #redirect_to action: :index, data: { no_turbolink: true }
         end
         
     end
+
    
     def show
         @work_flow = WorkFlow.find(params[:id])

@@ -220,7 +220,7 @@
 
 <%= will_paginate(@work_flow) %>
  <div class="page_info">
-      <%= page_entries_info @work_flow, :entry_name => 'item',:total_count => "aa" %>
+      <%# page_entries_info @work_flow, :entry_name => 'item',:total_count => "aa" %>
     </div>
 <% if user_signed_in? %>
     <% if can? :work_a, :all %>
@@ -238,7 +238,7 @@
 <!--
                     <th class="bg-primary">下单日期</th>
 -->
-                    <th class="bg-primary" width="250">单号</th>
+                    <th class="bg-primary" width="200">单号</th>
                     <th class="bg-primary" width="50">数量</th>
 <!--
                     <th class="bg-primary">业务交期</th>
@@ -256,9 +256,9 @@
 
                     <th class="bg-danger">测试反馈</th>
 
-                    <th class="bg-primary">补料已回</th>
-                    <th class="bg-primary">补料状态</th>
-                    <th class="bg-info">清尾完成</th>
+                    <th class="bg-primary" width="100">补料已回</th>
+                    <th class="bg-primary" width="70">补料状态</th>
+                    <th class="bg-info" width="100">清尾完成</th>
                     <th class="bg-primary">业务状态</th>
 
                     <th class="bg-primary">备注</th>

@@ -1,48 +1,26 @@
 
 <div class="row" style="padding-bottom: 5px;padding-right: 8px;padding-left: 8px;">
-    
-    <% if user_signed_in? %>
-        <% if can? :work_a, :all %>
-    <div class="col-md-1" >
-        <script>
-        function change_p(){
-        if (document.getElementById('collapseExampledow').className=='collapse in')
-        {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
-        else
-        {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
-        }
-        </script>
-        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新建订单
-            <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>       
-    </div>
-    <div class="col-md-2" >
-        <script>
-        function change_q(){
-        if (document.getElementById('upWarehouse').className=='collapse in')
-        {document.getElementById('upWarehousebut').className='glyphicon glyphicon-plus';}
-        else
-        {document.getElementById('upWarehousebut').className='glyphicon glyphicon-minus';}
-        }
-        </script>
-        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#upWarehouse" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_q()">更新入库数量
-            <span id="upWarehousebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>       
-    </div>
-    <% end %>
-    <% end %>
+   
     <% if user_signed_in? %>
         <% if (can? :work_b, :all) or (can? :work_a, :all) %>
     <div class="col-md-2" >        
-        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-lg" %>            
+        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-sm" %>            
     </div>
         <% end %>
     <% end %>
 
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
-       <div class="col-md-3 form-group ">
+       <div class="col-md-4 form-group ">
           <lable for="order" , class="sr-only">Qrder : </lable>
-          <div class="input-group">    
+          <div class="input-group input-group-sm"> 
+            <span class="input-group-addon"> 
+                <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
+                <%=  '全部' %>
+                <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
+                <%= '已结单' %>
+                <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
+                <%=  '未结单' %>
+            </span>   
             <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
@@ -110,15 +88,15 @@
                     <th class="bg-primary">入库数量</th>
                    
                     <th class="bg-primary">贴片通知生产</th>
-                    <th class="bg-info">贴片交期</th>
+                    <th class="bg-info"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %></th>
                     <th class="bg-info">贴片完成状态</th>
                     <th class="bg-primary">后焊通知生产</th>
-                    <th class="bg-info">后焊交期</th>
+                    <th class="bg-info"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %></th>
                     
  
                     <th class="bg-primary">补料已回</th>
                     <th class="bg-primary">补料状态</th>
-                    <th class="bg-info">清尾完成</th>
+                    <th class="bg-info"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %></th>
 
                 </tr>
             </thead>

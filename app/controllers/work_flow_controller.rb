@@ -5,13 +5,13 @@ before_filter :authenticate_user!
         @open = "collapse" 
         @pic = "glyphicon glyphicon-plus"
         limit = "LIMIT 20"
-        add_where = " AND work_flows.order_state = 0"
+        add_where = " AND work_flows.order_state != 3 AND work_flows.order_state != 1"
         @order_check_1 = false
         @order_check_2 = false
         @order_check_3 = true
         if params[:order_s] 
             if params[:order_s][:order_s].to_i == 1 
-                add_where = "" 
+                add_where = " AND work_flows.order_state != 1" 
                 @order_check_1 = true
                 @order_check_2 = false
                 @order_check_3 = false
@@ -21,7 +21,7 @@ before_filter :authenticate_user!
                 @order_check_1 = false
                 @order_check_3 = false
             elsif params[:order_s][:order_s].to_i == 3 
-                add_where = " AND work_flows.order_state != 3"
+                add_where = " AND work_flows.order_state != 3 AND work_flows.order_state != 1"
                 @order_check_3 = true
                 @order_check_2 = false
                 @order_check_1 = false
@@ -90,10 +90,26 @@ before_filter :authenticate_user!
             end
             render "test_feedback.list.html.erb"
         elsif can? :work_b, :all
-            add_where = ""
-            empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
+            add_orderby = ""
+            empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"  
+            if params[:sort_date]
+                empty_date = ""
+                if params[:sort_date] == "smd"
+                    add_where = "AND smd_end_date IS NOT NULL"
+                    add_orderby = " ORDER BY work_flows.smd_end_date "
+                elsif params[:sort_date] == "dip"
+                    add_where = "AND dip_end_date IS NOT NULL"
+                    add_orderby = " ORDER BY work_flows.dip_end_date "
+                elsif params[:sort_date] == "clear"
+                    add_where = "AND clear_date IS NOT NULL"
+                    add_orderby = " ORDER BY work_flows.clear_date " 
+                end
+            end
+            if params[:order_s] 
+                empty_date = ""  
+            end
             limit = ""            
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)            
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 20)            
             render "delivery_date.html.erb"
         elsif can? :work_e, :all
             if params[:order]

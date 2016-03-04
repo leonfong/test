@@ -98,7 +98,7 @@ task :deploy => :environment do
     invoke :'bundle:install'
     #invoke :'rails:db_migrate'
     ##invoke :'deploy:sitemap:refresh'
-    #invoke :'rails:assets_precompile'
+    invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
 
     to :launch do

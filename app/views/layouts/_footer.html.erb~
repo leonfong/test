@@ -1,7 +1,9 @@
 
-<nav class="navbar navbar-default navbar-fixed-bottom">
+<div>
             <p class="text-center">Copyright &copy; Fastbom.com 2016</p>
             <p class="text-center"><a href="http://www.miitbeian.gov.cn">粤ICP备15085690号-1</a></p>
-            
-    </div>
+            <div style="display: none">
+             <script src="http://s11.cnzz.com/z_stat.php?id=1257410154&web_id=1257410154" language="JavaScript"></script>      
+             </div>
+</div>
 

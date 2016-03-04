@@ -7,11 +7,13 @@ class Ability
     #
     #user ||= User.new # guest user (not logged in)
     alias_action :update, :to => :work_up
-    alias_action :update, :to => :work_a
-    alias_action :update, :to => :work_b
-    alias_action :update, :to => :work_c
-    alias_action :update, :to => :work_d
-    alias_action :update, :to => :work_e
+    alias_action :update, :to => :work_a          #吴莎
+    alias_action :update, :to => :work_b          #交期
+    alias_action :update, :to => :work_c          #生产
+    alias_action :update, :to => :work_d          #工程
+    alias_action :update, :to => :work_e          #业务
+    alias_action :update, :to => :work_f          #跟单
+    alias_action :update, :to => :work_g          #采购
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -41,6 +43,14 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_e, :all
+    elsif user.has_role?(:work_six)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_f, :all
+    elsif user.has_role?(:work_seven)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_g, :all
     else
       can :read, :all
     end

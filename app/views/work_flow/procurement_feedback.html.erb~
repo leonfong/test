@@ -1,6 +1,6 @@
 <div class="container" >
 <div class="row" style="padding: 0px;">
-  <h2><p class="text-primary">生产部处理问题</p></h2><hr>
+  <h2><p class="text-primary">采购部处理问题</p></h2><hr>
 </div>
 <div class="row"style="padding: 0px;">
     <div class="col-md-3 nav navbar-nav" >
@@ -33,8 +33,8 @@
              <% @feedback_all.each do |fed| %>
                 <div class="panel panel-info " style="background-color: #d9edf7;">
                     
-                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% elsif fed.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
-                        <p><strong><%= raw fed.feedback %></strong></p></div>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% elsif fed.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br><div>
+                        <p><strong><%= raw fed.feedback %></strong></p>
                         
                 </div>
             <% end %>
@@ -70,7 +70,7 @@
                         <li class="list-group-item" style="margin: 0px;padding: 0px;">
                             <%= text_field_tag :work_id, params[:work_id], class:"sr-only", value: @topic.order_id.to_s %>
                             <%= text_field_tag :feedback_up,params[:feedback_up],class:"sr-only",value: @topic.id.to_s %>
-                            <%= kindeditor_tag :production_feedback, '',:editor_id => 'my_feedback',:items => ["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"] %>
+                            <%= kindeditor_tag :procurement_feedback, '',:editor_id => 'my_feedback',:items => ["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"] %>
                         </li>    
                     </ul>  
                     
@@ -82,14 +82,14 @@
 
                        <div class="radio-inline">
                            <label>
-                               <%= radio_button :send_up, :send_up, 'engineering' %>
-                               <strong><%= '工程部' %></strong>
+                               <%= radio_button :send_up, :send_up, 'production' %>
+                               <strong><%= '生产部' %></strong>
                            </label>
                        </div>
                        <div class="radio-inline">
                            <label>
-                               <%= radio_button :send_up, :send_up, 'procurement' %> 
-                               <strong><%= '采购部' %></strong>
+                               <%= radio_button :send_up, :send_up, 'engineering' %> 
+                               <strong><%= '工程部' %></strong>
                            </label>
                        </div>
                        <div class="radio-inline">
@@ -148,7 +148,7 @@ else if (document.getElementById('topic_state_close').checked == false & documen
 　　    alert("请填写问题的内容！");                    
 　　    return false;                
 　     }
-    else if (document.getElementById('topic_state_open').checked == true & document.getElementById('send_up_send_up_engineering').checked == false & document.getElementById('send_up_send_up_procurement').checked == false & document.getElementById('send_up_send_up_merchandiser').checked == false & document.getElementById('send_up_send_up_sell').checked == false & document.getElementById('send_up_send_up_mark').checked == false)
+    else if (document.getElementById('topic_state_open').checked == true & document.getElementById('send_up_send_up_production').checked == false & document.getElementById('send_up_send_up_engineering').checked == false & document.getElementById('send_up_send_up_merchandiser').checked == false & document.getElementById('send_up_send_up_sell').checked == false & document.getElementById('send_up_send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                
@@ -157,7 +157,7 @@ else if (document.getElementById('topic_state_close').checked == false & documen
 if (document.getElementById('send_up_send_up_mark').checked == true)
     {
     }
-    else if (document.getElementById('send_up_send_up_engineering').checked == false & document.getElementById('send_up_send_up_procurement').checked == false & document.getElementById('send_up_send_up_merchandiser').checked == false & document.getElementById('send_up_send_up_sell').checked == false & document.getElementById('send_up_send_up_mark').checked == false)
+    else if (document.getElementById('send_up_send_up_production').checked == false & document.getElementById('send_up_send_up_engineering').checked == false & document.getElementById('send_up_send_up_merchandiser').checked == false & document.getElementById('send_up_send_up_sell').checked == false & document.getElementById('send_up_send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                

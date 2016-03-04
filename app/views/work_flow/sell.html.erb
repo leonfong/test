@@ -1,4 +1,6 @@
-
+<div class="row" style="margin: 0px;padding: 0px;" >
+  <h2 style="margin: 0px;padding: 0px;"><p class="text-primary" >业务部</p></h2><hr>
+</div>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
 
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
@@ -6,7 +8,7 @@
         <%= link_to "未回复的订单",  {action: "index"},class: "btn btn-danger " %> 
     </div>
 
-    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+    <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
        <div class="col-md-4 form-group nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group">
@@ -41,38 +43,38 @@
         
         <div  style="margin: 2px;padding: 0px;">
         
-        <table class="table table-bordered table-condensed table-hover smfs" >
+        <table class="table table-bordered table-condensed table-hover" >
             <thead >
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
                     
 
-                    <th class="bg-primary" width="100">下单日期</th>
+                    <th class="bg-primary" width="90">下单日期</th>
 
-                    <th class="bg-primary" width="180">单号</th>
+                    <th class="bg-primary" width="150">单号</th>
                     <th class="bg-primary" width="50">数量</th>
 
-                    <th class="bg-primary" width="100">业务交期</th>
+                    <th class="bg-primary" width="90">业务交期</th>
                     <th class="bg-primary" width="150">产品代码</th>
                    
-                    <th class="bg-primary" width="60">入库数量</th>
+                    <th class="bg-primary" width="80">入库数量</th>
                     <th class="bg-primary" width="50">SMD</th>
                     <th class="bg-primary" width="50">DIP</th>
                     <th class="bg-primary" width="100">贴片通知生产</th>
-                    <th class="bg-info" width="100">贴片交期</th>
+                    <th class="bg-info" width="90">贴片交期</th>
                     <th class="bg-primary" width="100">后焊通知生产</th>
-                    <th class="bg-info" width="100">后焊交期</th>                    
+                    <th class="bg-info" width="90">后焊交期</th>                    
  
-                    <th class="bg-warning" width="70">生产反馈</th>
+                    <th class="bg-warning" width="65">生产反馈</th>
 
-                    <th class="bg-danger" width="70">测试反馈</th>
+                    <th class="bg-danger" width="65">测试反馈</th>
 
-                    <th class="bg-primary" width="100">补料已回</th>
-                    <th class="bg-primary" width="100">补料状态</th>
-                    <th class="bg-info" width="100">清尾完成</th>
-                    <th class="bg-primary" width="150">业务状态</th>
+                    <th class="bg-primary" width="90">补料已回</th>
+                    <th class="bg-primary" width="80">补料状态</th>
+                    <th class="bg-info" width="90">清尾完成</th>
+                    
 
-                    <th class="bg-primary">备注</th>
+                    <th class="bg-primary" width="150">备注</th>
                 </tr>
             </thead>
             <tbody >
@@ -134,10 +136,10 @@
                     </td> 
                     
                    <td>
-                       <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= work.production_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
+                       <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.production_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
                     </td> 
                     <td>
-                        <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= work.test_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
+                        <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.test_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
                     </td>
                     <td>
                         <%= work.supplement_date %> 
@@ -148,103 +150,178 @@
                     <td>
                         <%= work.clear_date %>
                     </td> 
-                    <td>
-                        <%= work.salesman_state %>
-                    </td>
+                    
                     <td>  
                         <%= work.remark %>
                     </td>
                 </tr>
                 <tr> 
-                   <td colSpan="20" style="margin: 0px;padding: 0px;">
+                   <td colSpan="19" style="margin: 0px;padding: 0px;">
                     <div  >
                         <div class="<%= @open %>" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
-<!--
-                                    <table width="100%" class="table table-bordered">
-                                        <tr width="100%">  
-                                            <td width="50%">
-                                                
-                                                <p><span class="label label-warning" style="font-size: 13px;">生产反馈<%= work.order_no.to_s %></span></p>
-                                                <p><%= work.production_feedback %></p>
-                                                
-                                            </td>
-                                            <td width="50%" >
-                                                
-                                                <p><span class="label label-danger" style="font-size: 13px;">测试反馈<%= work.order_no.to_s %></span></p>
-                                                <p><%= work.test_feedback %></p>
-                                                
-                                            </td>     
-                                        </tr>
-                                    </table>
--->
 
 
 
+<div class="container" >
 <div class="row " style="padding-top: 7px;">
     <div class="col-md-12 " >
         
-        <div class="panel panel-primary">
-            <div class="panel-heading" style="font-size: 18px;"><strong>反馈汇总--<%= work.order_no %></strong></div>
-            <div class="panel-body">
-            <% Feedback.where(order_no: work.order_no).order("created_at DESC").each do |fed| %>
-                <div class="panel panel-info " style="background-color: #d9edf7;">
-                    
-                        <p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="test"%><span class="label label-danger" style="font-size: 13px;">测试反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
-                        <p><strong><%= raw fed.feedback %></strong></p>
+        <div class="panel ">
+            <div class="panel-heading">
+                <button class="btn btn-primary btn-sm" data-toggle="modal"  data-target="#<%= work.id.to_s + 'modal' %>">发表新的问题</button>
+                <strong>反馈汇总--<%= work.order_no %></strong>
+            </div>
+
+<div class="modal fade" id="<%= work.id.to_s + 'modal' %>" tabindex="-1" role="dialog" aria-labelledby="<%= work.id.to_s + 'ModalLabel' %>">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="<%= work.id.to_s + 'ModalLabel' %>">业务部---新建问题</h4>
+      </div>
+
+
+      <%= form_tag('/edit_work', method:"post") do %>
+      <div class="modal-body">
+       
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">标题:</label>           
+            <input type="text" name="feedback_title" id="<%= work.id.to_s %>feedback_title" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">内容:</label>
+            <%= text_field_tag :topic_up, params[:topic_up], class:"sr-only", size:2 , value: work.id.to_s %>  
+            <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>                    
+            
+            <textarea name="sell_topic" id="<%= work.id.to_s %>"></textarea>
+<script>
+KindEditor.ready(function(K){
+        	my_feedback<%= work.id.to_s %> = K.create('#<%= work.id.to_s %>', {"items":["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"],"width":"100%","height":300,"allowFileManager":true,"uploadJson":"http://192.168.1.135:3000/kindeditor/upload","fileManagerJson":"http://192.168.1.135:3000/kindeditor/filemanager","htmlTags":{
+		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
+		span : [
+			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',
+			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
+		],
+		div : [
+			'id', 'class', 'align', '.border', '.margin', '.padding', '.text-align', '.color',
+			'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
+			'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
+		],
+		table: [
+			'id', 'class', 'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
+			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
+			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
+			'.width', '.height', '.border-collapse'
+		],
+		'td,th': [
+			'id', 'class', 'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
+			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
+			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
+		],
+		a : ['id', 'class', 'href', 'target', 'name'],
+		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+		img : ['id', 'class', 'src', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
+		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
+			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
+			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
+		],
+		pre : ['id', 'class'],
+		hr : ['id', 'class', '.page-break-after'],
+		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : ['id', 'class'],
+		iframe : ['id', 'class', 'src', 'frameborder', 'width', 'height', '.width', '.height']
+	}}});
+        });
+</script>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <input type="submit" name="commit" value="提交" class="btn btn-primary" onclick="return postform<%= work.id.to_s %>()" />
+      </div>
+<script type="text/javascript">
+function postform<%= work.id.to_s %>() {  	
+         
+    var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value;
+    html = my_feedback<%= work.id.to_s %>.html();  
+    if (TextVal == "") 
+      {                    
+　　　   alert("标题不能为空！");                    
+　　    return false;                
+　　    }     
+    else if (html == "")
+      {                    
+　　    alert("内容不能为空！");                    
+　　    return false;                
+　     }        
+}    
+</script>  
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<% Topic.where(order_no: work.order_no).order("updated_at DESC").each do |fed| %>
+<div class="well" style="margin: 2px;padding: 0px;">
+
+
+                   <div class="row" style="padding-top: 7px;padding-left: 5px;padding-right: 20px;">
+                   <div class="col-md-12" style="margin: 0px;padding: 0px;">
+                   <div class="row" style="margin: 0px;padding: 0px;">
+                   <div class="col-md-6" style="margin: 0px;">
+                       <div class="panel panel-info" style="background-color: #d9edf7;">
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw fed.feedback %></strong></p></div>    
+                       
+                             
+                   </div>
+
+
+
+                   </div>
+                   
+
+                   
+
+
+             <div class="col-md-6  panel panel-success " style="margin: 0px;">
+             <% Feedback.where(topic_id: fed.id).order("created_at ").each do |feed| %>
+                <div class="row" >
+                <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= feed.user_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
+                        
                         
                 </div>
-            <% end %>
-            <%= form_tag('/edit_work', method:"post") do %>
-               <div class="panel panel-info " style="background-color: #d9edf7;">
-                   <div class="panel-heading"><span class="text-primary"><strong>业务反馈</strong></span></div>
-                    
-                    <table class="table table-bordered">  
-                        <thead>
-                            <tr>
-                                <th>单号</th>
-                                <th>数量</th>
-                                <th>业务交期</th>
-                                <th>产品代码</th>
-                                <th>入库数量</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
-                                    <%= work.order_no %>
-                                </td>
-                                <td>
-                                    <%= work.order_quantity %>
-                                </td>
-                                <td>
-                                    <%= work.salesman_end_date %>
-                                </td>
-                                <td>
-                                    <%= work.product_code %>
-                                </td>
-                                <td>
-                                    <%= work.warehouse_quantity %>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="panel-body">
-                       
-                       <%= text_field_tag :feedback_up, params[:feedback_up], class:"sr-only", size:2 , value: work.id.to_s %>                    
-                       
-                       <%= kindeditor_tag :sell_feedback, '', :items => ['undo', 'redo', '|', 'image', 'multiimage','insertfile', '|'] %>
-                        <br><br><p><%= submit_tag "发表", class:"btn btn-info" %></p>
-                    </div>
                 </div>
             <% end %>
             </div>
-        </div>
-        
-   
+            </div>
+             
+             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= fed.user_name %></span><strong> 部门 </strong><span class="text-primary"><%= fed.feedback_type %></span><strong> 当前状态 </strong><span class="text-primary"><%= fed.feedback_receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
+            
+            </div>
+            </div>
+
+
+</div>    
+<% end %>
+
+
+
+
+
+
+
+        </div>       
     </div>
+</div>
 </div>
 
 
@@ -252,14 +329,16 @@
 
                                 </div>
                             </div>
+
+
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin-bottom: 50px;padding: 0px;">
                                     <p><span class="label label-default" style="font-size: 13px;">历史记录<%= work.order_no.to_s %></span></p>
                                     <table class="table table-bordered  table-hover" >
                                         <thead >
                                             <tr nowrap="nowrap" class="active">    
-                                                <th class="warning">用户名</th>                                            
-                                                <th class="warning">日期</th>
+                                                <th class="warning" width="150">用户名</th>                                            
+                                                <th class="warning" width="120">日期</th>
                                                 <th>下单日期</th>
                                                 <th>单号</th>
                                                 <th>数量</th>
@@ -276,7 +355,6 @@
                                                 <th>测试反馈</th>
                                                 <th>补料已回</th>
                                                 <th>清尾完成</th>
-                                                <th>业务状态</th>
                                                 <th>备注</th>
                                             </tr>
                                         </thead>
@@ -305,7 +383,7 @@
                                                 </td>
                                                 <td><%= his.supplement_date %></td>
                                                 <td><%= his.clear_date %></td>
-                                                <td><%= his.salesman_state %></td>
+                                              
                                                 <td><%= his.remark %></td>                                               
                                             </tr>
                                             <% end %>
@@ -333,12 +411,103 @@
 <% end %>
 
 
+
+
+
+<% if @topic %>
+<%= will_paginate(@topic) %>
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        
+       <div class="panel panel-info " >
+                   <div class="panel-heading"><span class="text-primary"><strong>未处理的问题</strong></span></div>
+                    
+                    <table class="table table-bordered">  
+                        <thead>
+                            <tr>
+                                <th width="55">操作</th>
+                                <th width="80">问题编号</th>
+                                <th width="150">单号</th>  
+                                <th width="140">产品代码</th>
+                                <th width="150">作者</th>
+                                <th width="140">状态</th>
+                                <th width="150">owner</th>
+                                <th>标题</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<% @topic.each do |work| %>
+                            <tr <% if work.mark == "mark" %>class="warning"<% end %>>
+                                <td>
+                                    <%= link_to "回复",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %>
+                                </td>
+                                <td>
+                                    No.<%= work.id %>
+                                </td>
+                                <td> 
+                                    <%= work.order_no %>
+                                </td>
+                                <td>
+                                    <%= work.product_code %>
+                                </td>
+                                
+                                <td>
+                                    <%= work.user_name %>
+                                </td>
+                                <td>
+                                    <%= work.feedback_receive %>
+                                </td>
+                                <td>
+                                    <%= work.feedback_receive_user %>
+                                </td>
+                                <td>
+                                    <%= work.feedback_title %>
+                                </td> 
+                            </tr>
+<% end %>
+                        </tbody>
+                    </table>
+                    
+                </div>
+        
+   
+    </div>
+</div>
+
+
+<% end %>
 <script>
   $(function () {
   $('[data-toggle="popover"]').popover()
   });
-  
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

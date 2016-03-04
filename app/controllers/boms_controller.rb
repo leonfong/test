@@ -40,9 +40,11 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
         
 
         @bom = Bom.find(params[:id])
-        file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
-    
-
+        file_name = @bom.excel_file.to_s.scan(/[^\/]+$/).join('').split(".xls")[0]+".xls"
+        path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(file_name.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         respond_to do |format|
 	    format.xls { 
                 Spreadsheet.client_encoding = 'UTF-8'
@@ -74,9 +76,13 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                     row.push(item.mpn)		 
                 end
 
-                file_contents = StringIO.new
-	        ff.write (file_contents)
-	        send_data(file_contents.string.force_encoding('binary'), filename: file_name)
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('UTF-8'), filename: file_name)
+                              
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel")
+                #send_file(path,filename: file_name, type: "application/vnd.ms-excel")
             }
         end
 
@@ -357,8 +363,9 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
         Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         Rails.logger.info(@bom.inspect)
         Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
-    
+        #file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
+        file_name = @bom.excel_file.to_s.scan(/[^\/]+$/).join('').split(".xls")[0]+".xls"
+        path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
 
         respond_to do |format|
 
@@ -447,7 +454,7 @@ WHERE
                     Rails.logger.info("@bom_api_all---------------------------------------------------------")
 		end
 		    }
-
+            
 	    format.xls { 
                 Spreadsheet.client_encoding = 'UTF-8'
 		ff = Spreadsheet::Workbook.new
@@ -480,10 +487,12 @@ WHERE
 		    row.push(item.quantity)
 		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price*item.quantity)
                 end
-
-                file_contents = StringIO.new
-	        ff.write (file_contents)
-	        send_data(file_contents.string.force_encoding('binary'), filename: file_name)
+                
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel")
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('binary'), filename: file_name)
             }
         end
 
@@ -1071,8 +1080,9 @@ WHERE
         Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         Rails.logger.info(@bom.inspect)
         Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
-    
+        #file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
+        file_name = @bom.excel_file.to_s.scan(/[^\/]+$/).join('').split(".xls")[0]+".xls"
+        path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
 
         respond_to do |format|
 
@@ -1197,10 +1207,11 @@ WHERE
 		    row.push(item.quantity)
 		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price*item.quantity)
                 end
-
-                file_contents = StringIO.new
-	        ff.write (file_contents)
-	        send_data(file_contents.string.force_encoding('binary'), filename: file_name)
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel")
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('binary'), filename: file_name)
             }
         end
         

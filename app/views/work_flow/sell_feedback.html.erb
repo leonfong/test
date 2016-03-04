@@ -1,0 +1,125 @@
+<div class="container" >
+<div class="row" style="padding: 0px;">
+  <h2><p class="text-primary">业务部反馈</p></h2><hr>
+</div>
+<div class="row"style="padding: 0px;">
+    <div class="col-md-3 nav navbar-nav" >
+        <%= link_to "查询未反馈的订单",  {action: "index"}, class: "btn btn-danger  btn-lg" %>
+    </div>
+    <%= form_tag('/work_flow', method:"post", class:"form-inline") do %>
+       <div class="col-md-6 form-group  nav navbar-nav navbar-right">
+          <lable for="order" , class="sr-only">Qrder : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+<% if @topic %>
+
+
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="font-size: 18px;"><strong>业务反馈--(<%= @topic.order_no %>)---<%= @topic.feedback_title %></strong></div>
+            <div class="panel-body">
+                
+
+             <% @feedback_all.each do |fed| %>
+                <div class="panel panel-info " style="background-color: #d9edf7;">
+                    
+                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                        <p><strong><%= raw fed.feedback %></strong></p></div>
+                        
+                </div>
+            <% end %>
+            <div class="panel panel-info " style="background-color: #d9edf7;">
+                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= @topic.user_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                        <p><strong><%= raw @topic.feedback %></strong></p></div>
+                        
+                </div>
+<% if @topic.topic_state == "open" %>
+            <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
+               <div class="panel panel-info " style="background-color: #d9edf7;">
+                   <div class="panel-heading"><span class="text-primary"><strong>业务反馈---<%= @topic.feedback_title %></strong></span></div>
+
+
+<% if @topic.feedback_type == @topic.feedback_receive %>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="form-group">                                
+                                <div class="radio-inline">
+                                    <label>
+                                        <input type="radio" value="close" name="topic_state" id="topic_state_close" />
+                                        <strong><span class="label label-success" style="font-size: 13px;">反馈的信息我很满意,我要关闭问题</span></strong>
+                                    </label>
+                                </div>                                            
+                                <div class="radio-inline">
+                                    <label>
+                                        <input type="radio" value="open" name="topic_state" id="topic_state_open" />
+                                        <strong><span class="label label-danger" style="font-size: 13px;">我还不是很明白,我要继续提问</span></strong>
+                                    </label>
+                                </div> 
+                            </div>
+                        </li>                        
+                    </ul>  
+<% end %>
+
+
+
+                    <div class="panel-body" style="margin: 0px;padding: 0px;">
+
+                       <%= text_field_tag :work_id, params[:work_id], class:"sr-only", value: @topic.order_id.to_s %>
+                       <%= text_field_tag :feedback_up,params[:feedback_up],class:"sr-only",value: @topic.id.to_s %>                    
+                       <%= text_field_tag :order_no, params[:order_no], class:"sr-only",value: @topic.order_no %>                                            
+                       <%= text_field_tag :user_name, params[:user_name], class:"sr-only",value: @topic.user_name %>
+                       <%= kindeditor_tag :sell_feedback, '',:editor_id => 'my_feedback',:items => ["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"] %>
+                        <div class="modal-footer"><%= submit_tag "发表回复", :class =>"btn btn-info", :onclick => "return postform()" %></div>
+                    </div>
+                </div>
+            <% end %>
+<% end %>
+            </div>
+        </div>
+        
+   
+    </div>
+</div>
+
+
+<% end %>
+</div>
+<script type="text/javascript">
+function postform() {  	         
+    html = my_feedback.html();     
+<% if @topic.feedback_type == @topic.feedback_receive %>
+    if (document.getElementById('topic_state_close').checked == false & document.getElementById('topic_state_open').checked == false)
+      {                    
+　　    alert("请选择是否要关闭问题！");                    
+　　    return false;                
+　     } 
+    else if (document.getElementById('topic_state_open').checked == true & html == "")
+      {                    
+　　    alert("请填写回复的内容！");                    
+　　    return false;                
+　     }   
+<% else %>  
+      if (html == "")
+      {                    
+　　    alert("请填写回复的内容！");                    
+　　    return false;                
+　     }
+<% end %>
+}    
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

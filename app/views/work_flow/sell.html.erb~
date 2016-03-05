@@ -65,9 +65,9 @@
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="90">后焊交期</th>                    
  
-                    <th class="bg-warning" width="65">生产反馈</th>
+                    <th class="bg-warning" width="75">问题提醒</th>
 
-                    <th class="bg-danger" width="65">测试反馈</th>
+                    
 
                     <th class="bg-primary" width="90">补料已回</th>
                     <th class="bg-primary" width="80">补料状态</th>
@@ -136,11 +136,8 @@
                     </td> 
                     
                    <td>
-                       <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.production_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
-                    </td> 
-                    <td>
-                        <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.test_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
-                    </td>
+                       <a  class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>"  , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
+                    </td>                  
                     <td>
                         <%= work.supplement_date %> 
                     </td>
@@ -268,7 +265,7 @@ function postform<%= work.id.to_s %>() {
 
 
 
-<% Topic.where(order_no: work.order_no).order("created_at DESC").each do |fed| %>
+<% Topic.where(order_no: work.order_no).order("updated_at DESC").each do |fed| %>
 <div class="well" style="margin: 2px;padding: 0px;">
 
 
@@ -350,9 +347,7 @@ function postform<%= work.id.to_s %>() {
                                                 <th>贴片通知生产</th>
                                                 <th>贴片交期</th>
                                                 <th>后焊通知生产</th>
-                                                <th>后焊交期</th>                    
-                                                <th>生产反馈</th>
-                                                <th>测试反馈</th>
+                                                <th>后焊交期</th>
                                                 <th>补料已回</th>
                                                 <th>清尾完成</th>
                                                 <th>备注</th>
@@ -374,13 +369,7 @@ function postform<%= work.id.to_s %>() {
                                                 <td><%= his.smd_start_date %></td>
                                                 <td><%= his.smd_end_date %></td>
                                                 <td><%= his.dip_start_date %></td>
-                                                <td><%= his.dip_end_date %></td>
-                                                <td>
-                                                    <a tabindex="0" class="btn btn-sm <% if his.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= his.order_no %>" data-content="<%= his.production_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
-                                                </td> 
-                                                <td>
-                                                    <a tabindex="0" class="btn btn-sm <% if his.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= his.order_no %>" data-content="<%= his.test_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
-                                                </td>
+                                                <td><%= his.dip_end_date %></td> 
                                                 <td><%= his.supplement_date %></td>
                                                 <td><%= his.clear_date %></td>
                                               

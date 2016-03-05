@@ -2,13 +2,13 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     def index
-        phone = '<img width="200" title="" align="" alt="" src="/uploads/image/201603/1d479d38ffe2.jpg" /> ccc>'
+        #phone = '<img width="200" title="" align="" alt="" src="/uploads/image/201603/1d479d38ffe2.jpg" /> ccc>'
         #if ( phone =~ /width="(.\d*")/ )  
             #phone = phone.gsub!(/width="(.\d*")/, "")
         #end
-        dddddd = phone.scan(/width="(.\d*")/) 
+        #dddddd = phone.scan(/width="(.\d*")/) 
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-        Rails.logger.info(dddddd)
+        Rails.logger.info(request.original_fullpath)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         @open = "collapse" 
         @pic = "glyphicon glyphicon-plus"

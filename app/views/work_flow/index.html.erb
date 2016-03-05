@@ -236,7 +236,7 @@ $(document).on "page:change", ->
             <thead >
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
-                    <th class="bg-primary" width="50">操作</th>
+                    <th class="bg-primary" width="55">操作</th>
                     <th class="bg-primary" width="100">状态</th>
 <!--
                     <th class="bg-primary">下单日期</th>
@@ -255,15 +255,10 @@ $(document).on "page:change", ->
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="80"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
  
-                    <th class="bg-warning" width="60">生产反馈</th>
-
-                    <th class="bg-danger" width="60">测试反馈</th>
-
+                    <th class="bg-warning" width="75">问题提醒</th>
                     <th class="bg-primary" width="100">补料已回</th>
                     <th class="bg-primary" width="70">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
-                    <th class="bg-primary">业务状态</th>
-
                     <th class="bg-primary">备注</th>
                 </tr>
             </thead>
@@ -362,10 +357,8 @@ $(document).on "page:change", ->
                     </td> 
                     
                    <td>
-                       <a tabindex="0" class="btn btn-sm <% if work.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.production_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
-                    </td> 
-                    <td>
-                        <a tabindex="0" class="btn btn-sm <% if work.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.test_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
+                       <a tabindex="0" class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.production_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
+                    </td>                                        
                     </td>
                     <td>
                         <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
@@ -384,15 +377,12 @@ $(document).on "page:change", ->
                     <td>
                         <%= work.clear_date %>
                     </td> 
-                    <td>
-                        <%= text_field_tag :salesman_state, params[:salesman_state], id: work.id.to_s+"salesman_state",class:"form-control input-sm",value:work.salesman_state , size:"10", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
-                    </td>
                     <td>  
                         <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"20" , style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
                     </td>
                 </tr>
                 <tr> 
-                   <td colSpan="19" style="margin: 0px;padding: 0px;">
+                   <td colSpan="17" style="margin: 0px;padding: 0px;">
                     <div class="col-md-12" style="margin: 0px;padding: 0px;">
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
@@ -446,12 +436,9 @@ $(document).on "page:change", ->
                                                 <th>贴片通知生产</th>
                                                 <th>贴片交期</th>
                                                 <th>后焊通知生产</th>
-                                                <th>后焊交期</th>                    
-                                                <th>生产反馈</th>
-                                                <th>测试反馈</th>
+                                                <th>后焊交期</th>                                                                    
                                                 <th>补料已回</th>
-                                                <th>清尾完成</th>
-                                                <th>业务状态</th>
+                                                <th>清尾完成</th>                                                
                                                 <th>备注</th>
                                             </tr>
                                         </thead>
@@ -471,16 +458,9 @@ $(document).on "page:change", ->
                                                 <td><%= his.smd_start_date %></td>
                                                 <td><%= his.smd_end_date %></td>
                                                 <td><%= his.dip_start_date %></td>
-                                                <td><%= his.dip_end_date %></td>
-                                                <td>
-                                                    <a tabindex="0" class="btn btn-sm <% if his.production_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= his.order_no %>" data-content="<%= his.production_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                                                             
-                                                </td> 
-                                                <td>
-                                                    <a tabindex="0" class="btn btn-sm <% if his.test_feedback == "" %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="测试反馈--<%= his.order_no %>" data-content="<%= his.test_feedback %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">SHOW</a>                       
-                                                </td>
+                                                <td><%= his.dip_end_date %></td>                                               
                                                 <td><%= his.supplement_date %></td>
-                                                <td><%= his.clear_date %></td>
-                                                <td><%= his.salesman_state %></td>
+                                                <td><%= his.clear_date %></td>                                                
                                                 <td><%= his.remark %></td>                                               
                                             </tr>
                                             <% end %>

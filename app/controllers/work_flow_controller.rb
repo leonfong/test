@@ -502,7 +502,7 @@ before_filter :authenticate_user!
                         end
                     end
                     topic_up.save
-                    if not params[:production_feedback].blank? 
+                    if not params[:production_feedback].blank? and params[:send_up][:send_up].to_s != "mark" 
                         feedback_up = Feedback.new  
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id                                    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
@@ -524,7 +524,7 @@ before_filter :authenticate_user!
                         #feedback_up.feedback_id = 1                             #暂时没用
                         feedback_up.user_name = current_user.email                     #发帖的人
                         feedback_up.save
-                    elsif not params[:engineering_feedback].blank? 
+                    elsif not params[:engineering_feedback].blank? and params[:send_up][:send_up].to_s != "mark" 
                         feedback_up = Feedback.new  
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id                                    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
@@ -590,7 +590,7 @@ before_filter :authenticate_user!
                         #feedback_up.feedback_id = 1                             #暂时没用
                         feedback_up.user_name = current_user.email                     #发帖的人
                         feedback_up.save
-                    elsif not params[:procurement_feedback].blank?                        
+                    elsif not params[:procurement_feedback].blank? and params[:send_up][:send_up].to_s != "mark"                        
                         feedback_up = Feedback.new  
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id                                    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order

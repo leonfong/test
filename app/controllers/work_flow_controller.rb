@@ -59,7 +59,7 @@ before_filter :authenticate_user!
         if params[:empty_date] 
             add_where = ""
             if params[:empty_date] == "show_empty"
-                empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"
+                empty_date = "(work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL) AND work_flows.order_state != 1 AND "
                 limit = ""
             elsif params[:empty_date] == "ready"
                 @show_title = "料齐的订单"
@@ -102,7 +102,7 @@ before_filter :authenticate_user!
             #end
             #render "test_feedback.list.html.erb"
         elsif can? :work_b, :all     
-            empty_date = "work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL AND"  
+            empty_date = "(work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL) AND work_flows.order_state != 1 AND"  
             add_orderby = ""
             if params[:sort_date]
                 empty_date = ""
@@ -148,7 +148,8 @@ before_filter :authenticate_user!
             end
             render "procurement.html.erb"
         else
-            add_orderby = " ORDER BY work_flows.updated_at DESC " 
+            #add_orderby = " ORDER BY work_flows.updated_at DESC " 
+            add_orderby = " " 
             if params[:sort_date]
                 empty_date = ""
                 if params[:sort_date] == "smd"

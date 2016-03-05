@@ -246,7 +246,7 @@ function postform<%= work.id.to_s %>() {
 
 
 
-<% Topic.where(order_no: work.order_no).order("created_at DESC").each do |fed| %>
+<% Topic.where(order_no: work.order_no).order("updated_at DESC").each do |fed| %>
 <div class="well" style="margin: 2px;padding: 0px;">
 
 

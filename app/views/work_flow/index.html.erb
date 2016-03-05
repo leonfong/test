@@ -236,7 +236,7 @@ $(document).on "page:change", ->
             <thead >
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
-                    <th class="bg-primary" width="55">操作</th>
+                    <th class="bg-primary" width="60">操作</th>
                     <th class="bg-primary" width="100">状态</th>
 <!--
                     <th class="bg-primary">下单日期</th>
@@ -255,7 +255,7 @@ $(document).on "page:change", ->
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="80"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
  
-                    <th class="bg-warning" width="75">问题提醒</th>
+                    <th class="bg-warning" width="80">问题提醒</th>
                     <th class="bg-primary" width="100">补料已回</th>
                     <th class="bg-primary" width="70">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
@@ -357,7 +357,7 @@ $(document).on "page:change", ->
                     </td> 
                     
                    <td>
-                       <a tabindex="0" class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="生产反馈--<%= work.order_no %>" data-content="<%= strip_tags(work.production_feedback) %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
+                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
                     </td>                                        
                     </td>
                     <td>

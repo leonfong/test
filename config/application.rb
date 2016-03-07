@@ -28,7 +28,7 @@ module BomParser
     port:                 25,
     domain:               'exmail.qq.com',
     user_name:            'system@fastbom.com',
-    password:             'Moko2018',
+    password:             'Moko2020',
     authentication:       'plain',
     enable_starttls_auto: true  }  
   end

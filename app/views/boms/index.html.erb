@@ -32,7 +32,7 @@
             <td><%= User.find(bom.user_id).email %></td>
             <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
             <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
-            <td><%= link_to bom.excel_file_identifier, down_excel_path(:id =>bom.id,format: "xls") %></td>
+            
           <% else %>
             <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
             <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>

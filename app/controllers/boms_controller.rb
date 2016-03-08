@@ -490,11 +490,12 @@ WHERE
                 
                 ff.write (path+file_name)              
                 if Rails.env = 'production'
-                    return head(
-                        'X-Accel-Redirect' => "#{path}",
-                        'Content-Type' => "application/excel",
-                        'Content-Disposition' => "attachment; filename=\"#{file_name}\""
-                     )
+                    #return head(
+                       # 'X-Accel-Redirect' => "#{path}",
+                        #'Content-Type' => "application/excel",
+                       # 'Content-Disposition' => "attachment; filename=\"#{file_name}\""
+                     #)
+                    redirect_to "/uploads/bom/excel_file/"+file_name
                 else
                     send_file(path+file_name, type: "application/vnd.ms-excel")
                 end

@@ -9,6 +9,7 @@ before_filter :authenticate_user!
         #dddddd = phone.scan(/width="(.\d*")/) 
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(Rails.public_path)
+        Rails.logger.info(Rails.env)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         @open = "collapse" 
         @pic = "glyphicon glyphicon-plus"

@@ -638,8 +638,12 @@ WHERE
 
     def destroy
 	 @bom = Bom.find(params[:id])
-	 @bom.name = "del"
-         @bom.save
+         if current_user.email == "web@mokotechnology.com" and User.find(@bom.user_id).email == current_user.email
+             @bom.destroy
+         else
+	     @bom.name = "del"
+             @bom.save
+         end
 	 redirect_to boms_path, notice:  "BOM #{@bom.name} " + t('success_c')
     end
    

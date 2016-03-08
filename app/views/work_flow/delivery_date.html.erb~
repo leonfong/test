@@ -80,7 +80,7 @@
             <thead>
                 <tr>
                     <th class="bg-primary">操作</th>
-                    <th class="bg-primary">单号</th>
+                    <th class="bg-primary" width="200">单号</th>
                     <th class="bg-primary">数量</th>
                     <th class="bg-primary">业务交期</th>
                     <th class="bg-primary">产品代码</th>
@@ -96,7 +96,7 @@
  
                     <th class="bg-primary">补料已回</th>
                     <th class="bg-primary">补料状态</th>
-                    <th class="bg-info">清尾完成<%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %></th>
+                    <th class="bg-info"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %></th>
 
                 </tr>
             </thead>

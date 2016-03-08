@@ -289,6 +289,7 @@ before_filter :authenticate_user!
                         work_up.order_quantity = item_order[2] 
                         work_up.salesman_end_date = item_order[3]
                         work_up.product_code = item_order[4]
+                        #work_up.warehouse_quantity = item_order[5]
                         work_up.save
                         #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                         #Rails.logger.info(item_order.inspect)

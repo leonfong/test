@@ -37,7 +37,7 @@
             <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
           <% end %>
         <% end %>
-        <td><div class="btn-group"><%= link_to t('view'),  bom, class: "btn btn-primary" %></div> <div class="btn-group"><%= button_to t('delete'),  bom, method: :delete, class: "btn btn-danger", confirm: "确定要删除 #{bom.name}?" %></div></td>
+        <td><div class="btn-group"><%= link_to t('view'),  bom, class: "btn btn-primary" %></div> <div class="btn-group"><%= button_to t('delete'),  bom, method: :delete, class: "btn btn-danger", data:{confirm: "确定要删除 #{bom.name}?"} %></div></td>
       </tr>
     <% end %>
   </tbody>

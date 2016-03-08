@@ -402,7 +402,7 @@ function postform<%= work.id.to_s %>() {
                                     <%= work.feedback_receive_user %>
                                 </td>
                                 <td>
-                                    <%= work.feedback %>
+                                    <%= raw work.feedback %>
                                 </td> 
                             </tr>
 <% end %>

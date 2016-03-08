@@ -79,25 +79,25 @@
         <table class="table table-bordered table-condensed table-hover" >
             <thead>
                 <tr>
-                    <th class="bg-primary">操作</th>
+                    <th class="bg-primary" width="60">操作</th>
                     <th class="bg-primary" width="200">单号</th>
-                    <th class="bg-primary">数量</th>
+                    <th class="bg-primary" width="80">数量</th>
                     <th class="bg-primary">业务交期</th>
                     <th class="bg-primary" width="200">产品代码</th>
                     
-                    <th class="bg-primary">入库数量</th>
+                    <th class="bg-primary" width="80">入库数量</th>
                    
                     <th class="bg-primary">贴片通知生产</th>
-                    <th class="bg-info"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %></th>
+                    <th class="bg-info"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></th>
                     <th class="bg-info">贴片完成状态</th>
                     <th class="bg-primary">后焊通知生产</th>
-                    <th class="bg-info"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %></th>
+                    <th class="bg-info"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></th>
                     
  
                     <th class="bg-primary">补料已回</th>
                     <th class="bg-primary">补料状态</th>
-                    <th class="bg-info"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %></th>
-
+                    <th class="bg-info"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></th>
+                    <th class="bg-primary">备注</th>
                 </tr>
             </thead>
             
@@ -115,7 +115,7 @@
                     <td><%= work.product_code %></td>                 
                     <td><%= work.warehouse_quantity %></td>
                     
-                    <td><%= work.smd_start_date %></td> 
+                    <td class="bg-warning"><%= work.smd_start_date %></td> 
                     <td>
                         <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                      
                         <script type="text/javascript">
@@ -155,7 +155,9 @@
                           });
                         </script>
                     </td>
-                     
+                    <td>  
+                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"20" %>
+                    </td> 
                 </tr>
                 <% end %>
                 <% end %>

@@ -131,11 +131,12 @@
 
       <%= form_tag('/edit_work', method:"post") do %>
       <div class="modal-body">
-          
+          <!--
           <div class="form-group">
             <label for="recipient-name" class="control-label">标题:</label>
             <input type="text" name="feedback_title" id="<%= work.id.to_s %>feedback_title" class="form-control" />
           </div>
+          -->
           <div class="form-group">
               <label for="recipient-name" class="control-label">发送到:</label>
                       <div class="radio-inline">
@@ -217,14 +218,9 @@ KindEditor.ready(function(K){
       </div>
 <script type="text/javascript">
 function postform<%= work.id.to_s %>() {  	 
-    var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
+    //var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
     html = my_feedback<%= work.id.to_s %>.html();     
-    if (TextVal == "") 
-      {                    
-　　　   alert("请填写标题！");                    
-　　    return false;                
-　　    }
-    else if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
+    if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
       {                    
 　　    alert("请选择接收的部门！");                    
 　　    return false;                

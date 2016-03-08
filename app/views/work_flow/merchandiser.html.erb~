@@ -217,14 +217,9 @@ KindEditor.ready(function(K){
       </div>
 <script type="text/javascript">
 function postform<%= work.id.to_s %>() {  	 
-    var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
+    //var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
     html = my_feedback<%= work.id.to_s %>.html();     
-    if (TextVal == "") 
-      {                    
-　　　   alert("请填写标题！");                    
-　　    return false;                
-　　    }
-    else if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_procurement<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
+    if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_procurement<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
       {                    
 　　    alert("请选择接收的部门！");                    
 　　    return false;                
@@ -402,7 +397,7 @@ function postform<%= work.id.to_s %>() {
                                     <%= work.feedback_receive_user %>
                                 </td>
                                 <td>
-                                    <%= work.feedback %>
+                                    <%= raw work.feedback %>
                                 </td> 
                             </tr>
 <% end %>

@@ -131,11 +131,12 @@
 
       <%= form_tag('/edit_work', method:"post") do %>
       <div class="modal-body">
-          
+          <!--
           <div class="form-group">
             <label for="recipient-name" class="control-label">标题:</label>
             <input type="text" name="feedback_title" id="<%= work.id.to_s %>feedback_title" class="form-control" />
           </div>
+          -->
           <div class="form-group">
               <label for="recipient-name" class="control-label">发送到:</label>
                       <div class="radio-inline">
@@ -402,7 +403,7 @@ function postform<%= work.id.to_s %>() {
                                     <%= work.feedback_receive_user %>
                                 </td>
                                 <td>
-                                    <%= work.feedback %>
+                                    <%= raw work.feedback %>
                                 </td> 
                             </tr>
 <% end %>

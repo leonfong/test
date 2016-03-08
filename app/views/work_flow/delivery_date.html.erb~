@@ -20,6 +20,7 @@
         function change_3(){
                document.getElementById('upEndDate_2').className='collapse';
                document.getElementById('upEndDate_1').className='collapse';
++
            }
         </script>
 

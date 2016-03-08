@@ -403,6 +403,8 @@ before_filter :authenticate_user!
                 work_up.order_state = 2
             elsif params[:commit] =="C"
                 work_up.order_state = 3
+            elsif params[:commit] =="D"
+                work_up.order_state = 4
             else
                 if not params[:order_date].blank? 
                     work_up.order_date = params[:order_date].strip

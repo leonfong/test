@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   match '/feedback', to: 'work_flow#show', via: 'get'
   match '/add_feed', to: 'work_flow#add_feed', via: 'post'
   match '/indexup', to: 'work_flow#indexup', via: 'get' 
+  match '/up_enddate', to: 'work_flow#up_enddate', via: 'post' 
 
   root to: 'boms#upload'
   #root to: "boms#index"

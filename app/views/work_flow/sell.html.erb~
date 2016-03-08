@@ -186,11 +186,12 @@
 
       <%= form_tag('/edit_work', method:"post") do %>
       <div class="modal-body">
-       
+        <!--
           <div class="form-group">
             <label for="recipient-name" class="control-label">标题:</label>           
             <input type="text" name="feedback_title" id="<%= work.id.to_s %>feedback_title" class="form-control" />
           </div>
+-->
           <div class="form-group">
             <label for="message-text" class="control-label">内容:</label>
             <%= text_field_tag :topic_up, params[:topic_up], class:"sr-only", size:2 , value: work.id.to_s %>  
@@ -313,7 +314,7 @@ function postform<%= work.id.to_s %>() {
                                                 <th>贴片通知生产</th>
                                                 <th>贴片交期</th>
                                                 <th>后焊通知生产</th>
-                                                <th>后焊交期</th>
+                                                <th>后焊&完成交期</th>
                                                 <th>补料已回</th>
                                                 <th>清尾完成</th>
                                                 <th>备注</th>
@@ -322,7 +323,7 @@ function postform<%= work.id.to_s %>() {
                                         <tbody >
                                             <% Work.where(order_no: work.order_no).each do |his| %>
                                             <tr>
-                                                <td><%= his.user_name %></td>
+                                                <td><%= User.where(email: his.user_name).first.full_name %></td>
                                                 <td><%= his.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
                                                 <td><%= his.order_date %></td>
                                                 <td><%= his.order_no %></td>
@@ -407,7 +408,7 @@ function postform<%= work.id.to_s %>() {
                                 </td>
                                 
                                 <td>
-                                    <%= work.user_name %>
+                                    <%= User.where(email: work.user_name).first.full_name %>
                                 </td>
                                 <td>
                                     <%= work.feedback_receive %>

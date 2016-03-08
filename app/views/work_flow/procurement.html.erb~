@@ -218,14 +218,9 @@ KindEditor.ready(function(K){
       </div>
 <script type="text/javascript">
 function postform<%= work.id.to_s %>() {  	 
-    var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
+    //var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
     html = my_feedback<%= work.id.to_s %>.html();     
-    if (TextVal == "") 
-      {                    
-　　　   alert("请填写标题！");                    
-　　    return false;                
-　　    }
-    else if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
+    if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
       {                    
 　　    alert("请选择接收的部门！");                    
 　　    return false;                
@@ -274,7 +269,7 @@ function postform<%= work.id.to_s %>() {
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= feed.user_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p><div>
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p><div>
                         
                         
                 </div>

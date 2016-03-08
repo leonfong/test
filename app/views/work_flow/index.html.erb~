@@ -1,7 +1,4 @@
-<script>
-$(document).on "page:change", ->
-  alert "page has loaded!"
-</script>
+
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;" >
     
     <% if user_signed_in? %>
@@ -257,11 +254,11 @@ $(document).on "page:change", ->
                     <th class="bg-primary" width="100">贴片通知生产</th>
                     <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></span></th>
                     <th class="bg-primary" width="100">后焊通知生产</th>
-                    <th class="bg-info" width="80"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
+                    <th class="bg-info" width="100"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
  
                     <th class="bg-warning" width="80">问题提醒</th>
                     <th class="bg-primary" width="100">补料已回</th>
-                    <th class="bg-primary" width="70">补料状态</th>
+                    <th class="bg-primary" width="80">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
                     <th class="bg-primary">备注</th>
                 </tr>
@@ -376,7 +373,7 @@ $(document).on "page:change", ->
                         </script>
                     </td>
                     <td>
-                        <%= text_field_tag :feed_state, params[:feed_state], id: work.id.to_s+"feed_state",class:"form-control input-sm",value:work.feed_state , size:"5", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :feed_state, params[:feed_state], id: work.id.to_s+"feed_state",class:"form-control input-sm",value:work.feed_state , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td> 
                     <td>
                         <%= work.clear_date %>

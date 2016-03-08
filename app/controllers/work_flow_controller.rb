@@ -222,6 +222,87 @@ before_filter :authenticate_user!
         redirect_to work_flow_path(), notice: "订单数据更新成功！"
     end
   
+    def up_enddate
+        if params[:smd_end_date]
+            all_order = params[:smd_end_date].split("\r\n");
+            all_order.each do |item|
+                item_order = item.split(" ")
+                if item_order.size == 2
+                    checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item_order[0] + "'").first
+                    if not checkorder.blank?
+                        checkorder.smd_end_date = item_order[1] 
+                        checkorder.save
+                        work_history = Work.new
+                        work_history.order_date = checkorder.order_date
+                        work_history.order_no = checkorder.order_no
+                        work_history.order_quantity = checkorder.order_quantity
+                        work_history.smd_end_date = checkorder.smd_end_date
+                        work_history.user_name = current_user.email
+                        work_history.save
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                        Rails.logger.info(item_order.inspect)
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    end
+                else
+                    redirect_to work_flow_path, :flash => {:error => item+"--------入库数量更新失败，请检查上传数据格式！"}
+                    return false
+                end
+            end
+        elsif params[:dip_end_date]
+            all_order = params[:dip_end_date].split("\r\n");
+            all_order.each do |item|
+                item_order = item.split(" ")
+                if item_order.size == 2
+                    checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item_order[0] + "'").first
+                    if not checkorder.blank?
+                        checkorder.dip_end_date = item_order[1] 
+                        checkorder.save
+                        work_history = Work.new
+                        work_history.order_date = checkorder.order_date
+                        work_history.order_no = checkorder.order_no
+                        work_history.order_quantity = checkorder.order_quantity
+                        work_history.dip_end_date = checkorder.dip_end_date
+                        work_history.user_name = current_user.email
+                        work_history.save
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                        Rails.logger.info(item_order.inspect)
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    end
+                else
+                    redirect_to work_flow_path, :flash => {:error => item+"--------入库数量更新失败，请检查上传数据格式！"}
+                    return false
+                end
+            end
+        elsif params[:clear_date]
+            all_order = params[:clear_date].split("\r\n");
+            all_order.each do |item|
+                item_order = item.split(" ")
+                if item_order.size == 2
+                    checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item_order[0] + "'").first
+                    if not checkorder.blank?
+                        checkorder.clear_date = item_order[1] 
+                        checkorder.save
+                        work_history = Work.new
+                        work_history.order_date = checkorder.order_date
+                        work_history.order_no = checkorder.order_no
+                        work_history.order_quantity = checkorder.order_quantity
+                        work_history.clear_date = checkorder.clear_date
+                        work_history.user_name = current_user.email
+                        work_history.save
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                        Rails.logger.info(item_order.inspect)
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    end
+                else
+                    redirect_to work_flow_path, :flash => {:error => item+"--------入库数量更新失败，请检查上传数据格式！"}
+                    return false
+                end
+            end
+        end
+        
+        redirect_to work_flow_path(), notice: "订单数据更新成功！"
+    end
+
     def add_feed
         if params[:add_feed]
             all_order = params[:add_feed].split("\r\n");

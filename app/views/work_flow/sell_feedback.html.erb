@@ -33,13 +33,13 @@
              <% @feedback_all.each do |fed| %>
                 <div class="panel panel-info " style="background-color: #d9edf7;">
                     
-                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: fed.user_name).first.full_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
                         <p><strong><%= raw fed.feedback %></strong></p></div>
                         
                 </div>
             <% end %>
             <div class="panel panel-info " style="background-color: #d9edf7;">
-                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= @topic.user_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: @topic.user_name).first.full_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
                         <p><strong><%= raw @topic.feedback %></strong></p></div>
                         
                 </div>
@@ -77,7 +77,7 @@
                        <%= text_field_tag :work_id, params[:work_id], class:"sr-only", value: @topic.order_id.to_s %>
                        <%= text_field_tag :feedback_up,params[:feedback_up],class:"sr-only",value: @topic.id.to_s %>                    
                        <%= text_field_tag :order_no, params[:order_no], class:"sr-only",value: @topic.order_no %>                                            
-                       <%= text_field_tag :user_name, params[:user_name], class:"sr-only",value: @topic.user_name %>
+                       <%= text_field_tag :user_name, params[:user_name], class:"sr-only",value: User.where(email: @topic.user_name).first.full_name %>
                        <%= kindeditor_tag :sell_feedback, '',:editor_id => 'my_feedback',:items => ["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"] %>
                         <div class="modal-footer"><%= submit_tag "发表回复", :class =>"btn btn-info", :onclick => "return postform()" %></div>
                     </div>

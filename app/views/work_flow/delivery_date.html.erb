@@ -2,10 +2,50 @@
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
    
     
-    <div class="col-md-2 nav navbar-nav" style="margin: 3px;padding: 0px;">        
+    <div class="col-md-7 nav navbar-nav" style="margin: 3px;padding: 0px;">        
         <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-sm" %>            
     
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
+
+
+        <script>
+        function change_1(){
+               document.getElementById('upEndDate_2').className='collapse';
+               document.getElementById('upEndDate_3').className='collapse';           
+           }
+        function change_2(){
+               document.getElementById('upEndDate_1').className='collapse';
+               document.getElementById('upEndDate_3').className='collapse';            
+           }
+        function change_3(){
+               document.getElementById('upEndDate_2').className='collapse';
+               document.getElementById('upEndDate_1').className='collapse';
++
+           }
+        </script>
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >批量导入交期工具<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+        <li>        
+        <a  id="end1" type="button" data-toggle="collapse" data-target="#upEndDate_1" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_1()">批量导入贴片交期</a>
+        </li>
+
+        <li>       
+        <a  id="end2" type="button" data-toggle="collapse" data-target="#upEndDate_2" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_2()">批量导入后悍交期</a>
+        </li>
+
+        <li>        
+        <a  id="end3" type="button" data-toggle="collapse" data-target="#upEndDate_3" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_3()">批量导入清尾完成时间</a>
+        </li>
+        </ul>
+     </div>
+
+
+
+
+
     </div>
 
 
@@ -30,7 +70,62 @@
       <% end %>
 </div>
 
+<div class="row" style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
+    <div class="col-md-6" >
+    
+    <div class="collapse" id="upEndDate_1">
+        <div class="well">
+                <%= form_tag('/up_enddate', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号  贴片交期 </code></p>
+                    <p>
+                        <%= text_area_tag :smd_end_date, params[:smd_end_date], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "提交", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
 
+    <div class="collapse" id="upEndDate_2">
+        <div class="well">
+                <%= form_tag('/up_enddate', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号  后悍交期 </code></p>
+                    <p>
+                        <%= text_area_tag :dip_end_date, params[:dip_end_date], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "提交", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+  
+    <div class="collapse" id="upEndDate_3">
+        <div class="well">
+                <%= form_tag('/up_enddate', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号  清尾完成交期 </code></p>
+                    <p>
+                        <%= text_area_tag :clear_date, params[:clear_date], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "提交", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+    
+    
+    
+    
+    </div>
+</div>
 
 
 

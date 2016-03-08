@@ -17,15 +17,15 @@
     <div class="col-md-6">
       <ul class="list-group">
         <li class="list-group-item"><%= t(:bom_file) %>：<%= @bom.excel_file_identifier %></li>
-        <li class="list-group-item" id="matched"><%= t(:matched) %>：<%= @match_str %></li>
-        <li class="list-group-item" id="total_price"><%= t(:total_price) %>：<%=  number_with_precision(@total_price, precision: 4)%></li>
+        <li class="list-group-item"><%= t(:matched) %>：<a class="text-muted" id="matched"><%= @match_str %></a></li>
+        <li class="list-group-item"><%= t(:total_price) %>：<a class="text-muted" id="total_price"><%=  number_with_precision(@total_price, precision: 4)%></a></li>
       </ul>
     </div>
 
 <% if user_signed_in? %>
   <% if current_user.email == "web@mokotechnology.com" %>
     <div class ="col-md-6">
-    <%= link_to t(:export_excel), bom_path(format: "xls") %>
+    <%= link_to t(:export_excel), show_excel_path(id: @bom) %>
   </div>     
   <% end %>
 <% end %>

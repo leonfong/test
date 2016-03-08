@@ -507,6 +507,69 @@ WHERE
 
     end
 
+    def show_excel
+        if not params[:bom_data].blank?
+            if not params[:bom_data][1..-2][1..-2].blank?
+                @all_bom_data = params[:bom_data][1..-2][1..-2].split("],[")
+                Rails.logger.info("@all_bom_data-----------------------------------------------------@all_bom_data")
+                Rails.logger.info(@all_bom_data)
+                Rails.logger.info("@all_bom_data---------------------------------------------------@all_bom_data")           
+            end
+        end
+        @bom = Bom.find(params[:id])
+        Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        Rails.logger.info(@bom.inspect)
+        Rails.logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        #file_name = @bom.excel_file.to_s.scan(/[^\/]+\.xls$/).join('')
+        file_name = @bom.excel_file.to_s.scan(/[^\/]+$/).join('').split(".xls")[0]+".xls"
+        path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+
+        
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		sheet1.row(0).concat %w{No Intention_product Location_code Matching_products Material_code unit_price quantity total_price}
+
+		@bom.bom_items.each_with_index do |item,index|
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :weight           => :bold,
+                    :pattern_bg_color => :red,
+                    :size             => 10,
+                    :color => :red
+                    })
+		    row = sheet1.row(rowNum)
+                    if item.warn
+                        #[0,1,2,3,4,5,6,7].each{|col|
+                        row.set_format(2,title_format)
+                        #row.default_format = color
+                        #}
+                    end
+		    row.push(rowNum)
+		    row.push(item.description)
+		    row.push(item.part_code)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).description)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).name)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price)
+		    row.push(item.quantity)
+		    row.push(item.product_id.nil?? "" : Product.find(item.product_id).price*item.quantity)
+                end
+                
+                ff.write (path+file_name)              
+                if Rails.env = 'production'
+                    #return head(
+                       # 'X-Accel-Redirect' => "#{path}",
+                        #'Content-Type' => "application/excel",
+                       # 'Content-Disposition' => "attachment; filename=\"#{file_name}\""
+                     #)
+                    redirect_to "/uploads/bom/excel_file/"+file_name
+                else
+                    send_file(path+file_name, type: "application/vnd.ms-excel")
+                end
+    end
+
     def create
         @bom = Bom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id

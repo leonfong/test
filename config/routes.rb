@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   match '/how_to_use', to: 'static_pages#how', via: 'get'
   match '/search', to: 'boms#search_keyword', via: 'get'
   match '/down_excel', to: 'boms#down_excel', via: 'get'
+  match '/show_excel', to: 'boms#show_excel', via: 'get'
   match '/work_flow', to: 'work_flow#index', via: 'post'  
   match '/work_flow', to: 'work_flow#index', via: 'get'  
   match '/up_work', to: 'work_flow#up_work', via: 'post'

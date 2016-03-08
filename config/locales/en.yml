@@ -72,3 +72,8 @@ en:
     formats:
       default: "%m/%d/%Y"
       long: ! '%B %d, %Y'
+  production: "生产部"
+  engineering: "工程部"
+  merchandiser: "跟单部"
+  procurement: "采购部"
+  sell: "业务部"

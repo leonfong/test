@@ -87,3 +87,8 @@ zh:
         zero: "暂无%{model}记录"
     page_gap: "…"
     previous_label: "上一页"
+    production: 生产部
+  engineering: 工程部
+  sell: 业务部
+  merchandiser: 跟单部
+  procurement: 采购部

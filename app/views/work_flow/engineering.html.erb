@@ -278,7 +278,7 @@ function postform<%= work.id.to_s %>() {
             </div>
             </div>
              
-             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= fed.feedback_type %></span><strong> 当前状态 </strong><span class="text-primary"><%= fed.feedback_receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
+             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= t(:"#{fed.feedback_receive}") %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
             
             </div>
             </div>
@@ -392,7 +392,7 @@ function postform<%= work.id.to_s %>() {
                                     <%= User.where(email: work.user_name).first.full_name %>
                                 </td>
                                 <td>
-                                    <%= work.feedback_receive %>
+                                    <%= t(:"#{work.feedback_receive}") %>
                                 </td>
                                 <td>
                                     <%= work.feedback_receive_user %>

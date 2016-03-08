@@ -1,7 +1,4 @@
-<script>
-$(document).on "page:change", ->
-  alert "page has loaded!"
-</script>
+
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;" >
     
     <% if user_signed_in? %>
@@ -85,16 +82,20 @@ $(document).on "page:change", ->
         <button class="btn btn-danger btn-sm" type="button" data-toggle="collapse" data-target="#order_r" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_r()">标注异常
             <span id="order_rbut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button> 
-
+<!--
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
         <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger btn-sm" %>       
-    <% end %>
-    <% end %>
-    <% if user_signed_in? %>
-        <% if (can? :work_b, :all) or (can? :work_a, :all) %>
-          
-        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-sm" %>            
-    
+        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-sm" %>    
+-->        
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">查询工具<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"} %></li>
+                <li><%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"} %></li>
+                <li><%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"} %></li>
+            </ul>
+         </div>
         <% end %>
     <% end %>
     </div>

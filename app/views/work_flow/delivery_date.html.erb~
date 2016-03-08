@@ -1,16 +1,16 @@
 
-<div class="row" style="padding-bottom: 5px;padding-right: 8px;padding-left: 8px;">
+<div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
    
-    <% if user_signed_in? %>
-        <% if (can? :work_b, :all) or (can? :work_a, :all) %>
-    <div class="col-md-2" >        
+    
+    <div class="col-md-2 nav navbar-nav" style="margin: 3px;padding: 0px;">        
         <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-sm" %>            
+    
+        <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
     </div>
-        <% end %>
-    <% end %>
+
 
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
-       <div class="col-md-4 form-group ">
+       <div class="col-md-4 form-group nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm"> 
             <span class="input-group-addon"> 
@@ -30,40 +30,7 @@
       <% end %>
 </div>
 
-<div class="row" style="padding-top: 7px;padding-right: 8px;padding-left: 8px;">
-    <div class="col-md-6" >
-    <div class="collapse" id="collapseExampledow">
-        <div class="well">
-                <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
-                <div>
-                    <p class="text-warning">数据格式：<code>下单日期 单号 数量 业务交期 产品代码</code></p>
-                    <p>
-                        <%= text_area_tag :order_info, params[:order_info], size:"130x10", class:"form-control"%>
-                    </p>
-                </div> 
-                <div >
-                    <%= submit_tag "提交订单", class:"btn btn-info btn-lg" %>
-                </div>
-                <% end %> 
-        </div>
-    </div>
-    <div class="collapse" id="upWarehouse">
-        <div class="well">
-                <%= form_tag('/up_warehouse', method:"post", class:"form-inline") do %>
-                <div>
-                    <p class="text-warning">数据格式：<code>单号  入库数量 </code></p>
-                    <p>
-                        <%= text_area_tag :warehouse_info, params[:warehouse_info], size:"130x10", class:"form-control"%>
-                    </p>                
-                </div> 
-                <div >
-                    <%= submit_tag "更新", class:"btn btn-info btn-lg" %>
-                </div>
-                <% end %> 
-        </div>
-    </div>
-    </div>
-</div>
+
 
 
 
@@ -115,7 +82,7 @@
                     <td><%= work.product_code %></td>                 
                     <td><%= work.warehouse_quantity %></td>
                     
-                    <td><%= work.smd_start_date %></td> 
+                    <td class="bg-warning"><%= work.smd_start_date %></td> 
                     <td>
                         <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                      
                         <script type="text/javascript">

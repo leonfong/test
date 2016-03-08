@@ -101,8 +101,10 @@ before_filter :authenticate_user!
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC "  ).paginate(:page => params[:page], :per_page => 10)
             #end
             #render "test_feedback.list.html.erb"
-        elsif can? :work_b, :all     
-            empty_date = "(work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL) AND work_flows.order_state != 1 AND"  
+        elsif can? :work_b, :all
+            if params[:empty_date].blank?    
+                empty_date = "(work_flows.smd_start_date IS NOT NULL AND work_flows.smd_end_date IS NULL OR work_flows.dip_start_date IS NOT NULL AND work_flows.dip_end_date IS NULL OR work_flows.supplement_date IS NOT NULL AND work_flows.clear_date IS NULL) AND work_flows.order_state != 1 AND" 
+            end 
             add_orderby = ""
             if params[:sort_date]
                 empty_date = ""
@@ -391,6 +393,11 @@ before_filter :authenticate_user!
             end
             
             if work_up.save
+                if params[:page]
+                    use_page = params[:page].to_s
+                else
+                    use_page = ""
+                end
                 if params[:topic_up] 
                     topic_up = Topic.new                                      
                     topic_up.order_no = work_up.order_no                      #帖子对应的的order
@@ -705,6 +712,7 @@ before_filter :authenticate_user!
             render "engineering.html.erb"
         elsif can? :work_b, :all
             render "delivery_date.html.erb"
+            #redirect_to action: "index", page: "#{use_page}"
         elsif can? :work_e, :all
             #render "sell_feedback.html.erb"
             render "sell.html.erb"

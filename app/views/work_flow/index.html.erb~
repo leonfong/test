@@ -85,16 +85,20 @@ $(document).on "page:change", ->
         <button class="btn btn-danger btn-sm" type="button" data-toggle="collapse" data-target="#order_r" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_r()">标注异常
             <span id="order_rbut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button> 
-
+<!--
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
         <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger btn-sm" %>       
-    <% end %>
-    <% end %>
-    <% if user_signed_in? %>
-        <% if (can? :work_b, :all) or (can? :work_a, :all) %>
-          
-        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-sm" %>            
-    
+        <%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"},class: "btn btn-danger btn-sm" %>    
+-->        
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">查询工具<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"} %></li>
+                <li><%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"} %></li>
+                <li><%= link_to "查询未填写交期的订单",  {action: "index", empty_date: "show_empty"} %></li>
+            </ul>
+         </div>
         <% end %>
     <% end %>
     </div>
@@ -476,10 +480,10 @@ $(document).on "page:change", ->
                                     <table class="table table-bordered  table-hover" >
                                         <thead >
                                             <tr nowrap="nowrap" class="active">    
-                                                <th class="warning">用户名</th>                                            
-                                                <th class="warning">日期</th>
+                                                <th class="warning" width="190">用户名</th>                                            
+                                                <th class="warning" width="190">日期</th>
                                                 <th>下单日期</th>
-                                                <th>单号</th>
+                                                <th width="190">单号</th>
                                                 <th>数量</th>
                                                 <th>业务交期</th>
                                                 <th>产品代码</th>    

@@ -489,7 +489,15 @@ WHERE
                 end
                 
                 ff.write (path+file_name)              
-                send_file(path+file_name, type: "application/vnd.ms-excel")
+                if Rails.env = 'production'
+                    return head(
+                        'X-Accel-Redirect' => "#{path}",
+                        'Content-Type' => "application/excel",
+                        'Content-Disposition' => "attachment; filename=\"#{file_name}\""
+                     )
+                else
+                    send_file(path+file_name, type: "application/vnd.ms-excel")
+                end
                 #file_contents = StringIO.new
 	        #ff.write (file_contents)
 	        #send_data(file_contents.string.force_encoding('binary'), filename: file_name)

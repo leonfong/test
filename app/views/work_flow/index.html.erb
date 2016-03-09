@@ -1,4 +1,5 @@
 <small>
+<small>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;" >
     
     <% if user_signed_in? %>
@@ -286,10 +287,10 @@
                     </td> 
                     <td>
                         <div class="btn-group" role="group-sm" aria-label="...">
-                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default", style:"height: 25px;padding: 5px 10px;" %>
-                            <%= link_to "B",  {action: "edit_work", commit: "B", work_id: work.id.to_s},class: "btn btn-warning", style:"height: 25px;padding: 5px 10px;" %>
-                            <%= link_to "C",  {action: "edit_work", commit: "C", work_id: work.id.to_s},class: "btn btn-danger", style:"height: 25px;padding: 5px 10px;" %>
-                            <%= link_to "D",  {action: "edit_work", commit: "D", work_id: work.id.to_s},class: "btn btn-info", style:"height: 25px;padding: 5px 10px;" %> 
+                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default btn-sm", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "B",  {action: "edit_work", commit: "B", work_id: work.id.to_s},class: "btn btn-warning btn-sm", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "C",  {action: "edit_work", commit: "C", work_id: work.id.to_s},class: "btn btn-danger btn-sm", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "D",  {action: "edit_work", commit: "D", work_id: work.id.to_s},class: "btn btn-info btn-sm", style:"height: 25px;padding: 5px 10px;" %> 
                            
                         </div>   
                     </td>  
@@ -541,7 +542,7 @@
         <% end %>
 
 <% end %>
-
+</small>
 </small>
 <script>
   $(function () {

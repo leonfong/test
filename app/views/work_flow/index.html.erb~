@@ -1,4 +1,5 @@
 <small>
+<small>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;" >
     
     <% if user_signed_in? %>
@@ -256,7 +257,7 @@
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="110"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
  
-                    <th class="bg-warning" width="80">问题提醒</th>
+                    <th class="bg-warning" width="85">问题提醒</th>
                     <th class="bg-primary" width="100">补料已回</th>
                     <th class="bg-primary" width="80">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
@@ -286,8 +287,8 @@
                     </td> 
                     <td>
                         <div class="btn-group" role="group-sm" aria-label="...">
-                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default", style:"height: 25px;padding: 5px 10px;" %>
-                            <%= link_to "B",  {action: "edit_work", commit: "B", work_id: work.id.to_s},class: "btn btn-warning", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default btn-sm"%>
+                            <%= link_to "B",  {action: "edit_work", commit: "B", work_id: work.id.to_s},class: "btn btn-warning btn-sm", style:"height: 25px;padding: 5px 10px;" %>
                             <%= link_to "C",  {action: "edit_work", commit: "C", work_id: work.id.to_s},class: "btn btn-danger", style:"height: 25px;padding: 5px 10px;" %>
                             <%= link_to "D",  {action: "edit_work", commit: "D", work_id: work.id.to_s},class: "btn btn-info", style:"height: 25px;padding: 5px 10px;" %> 
                            
@@ -541,7 +542,7 @@
         <% end %>
 
 <% end %>
-
+</small>
 </small>
 <script>
   $(function () {

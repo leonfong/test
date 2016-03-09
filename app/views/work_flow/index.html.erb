@@ -1,4 +1,4 @@
-
+<small>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;" >
     
     <% if user_signed_in? %>
@@ -233,12 +233,12 @@
         
         <div  style="margin: 2px;padding: 0px;">
         
-        <table class="table table-bordered table-condensed table-hover smfs" >
+        <table class="table table-bordered table-condensed table-hover " >
             <thead >
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
                     <th class="bg-primary" width="60">操作</th>
-                    <th class="bg-primary" width="130">状态</th>
+                    <th class="bg-primary" width="140">状态</th>
 <!--
                     <th class="bg-primary">下单日期</th>
 -->
@@ -254,9 +254,9 @@
                     <th class="bg-primary" width="100">贴片通知生产</th>
                     <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></span></th>
                     <th class="bg-primary" width="100">后焊通知生产</th>
-                    <th class="bg-info" width="100"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
+                    <th class="bg-info" width="110"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
  
-                    <th class="bg-warning" width="80">问题提醒</th>
+                    <th class="bg-warning" width="85">问题提醒</th>
                     <th class="bg-primary" width="100">补料已回</th>
                     <th class="bg-primary" width="80">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
@@ -286,10 +286,10 @@
                     </td> 
                     <td>
                         <div class="btn-group" role="group-sm" aria-label="...">
-                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default", style:"height: 25px;padding: 5px 10px;font-size: 10px;" %>
-                            <%= link_to "B",  {action: "edit_work", commit: "B", work_id: work.id.to_s},class: "btn btn-warning", style:"height: 25px;padding: 5px 10px;font-size: 10px;" %>
-                            <%= link_to "C",  {action: "edit_work", commit: "C", work_id: work.id.to_s},class: "btn btn-danger", style:"height: 25px;padding: 5px 10px;font-size: 10px;" %>
-                            <%= link_to "D",  {action: "edit_work", commit: "D", work_id: work.id.to_s},class: "btn btn-info", style:"height: 25px;padding: 5px 10px;font-size: 10px;" %> 
+                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "B",  {action: "edit_work", commit: "B", work_id: work.id.to_s},class: "btn btn-warning", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "C",  {action: "edit_work", commit: "C", work_id: work.id.to_s},class: "btn btn-danger", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "D",  {action: "edit_work", commit: "D", work_id: work.id.to_s},class: "btn btn-info", style:"height: 25px;padding: 5px 10px;" %> 
                            
                         </div>   
                     </td>  
@@ -302,7 +302,7 @@
                     <td nowrap="nowrap">
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
                         
-                        <a tabindex="0" class="btn btn-sm  btn-info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="订单号--<%= work.order_no %>" data-content="<%= '下单日期: '+work.order_date.to_s + '  业务交期: ' + work.salesman_end_date.to_s +  '  产品代码： ' + work.product_code.to_s %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">信息</a>                         
+                        <a tabindex="0" class="btn btn-sm  btn-info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="订单号--<%= work.order_no %>" data-content="<%= '下单日期: '+work.order_date.to_s + '  业务交期: ' + work.salesman_end_date.to_s +  '  产品代码： ' + work.product_code.to_s %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">信息</a>                         
                         <%= work.order_no %>
                     </td>
                     <td>
@@ -320,13 +320,13 @@
                         <%= work.warehouse_quantity %>
                     </td>
                     <td>
-                        <%= text_field_tag :smd, params[:smd], id: work.id.to_s+"smd",class:"form-control input-sm",value:work.smd , size:"3", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :smd, params[:smd], id: work.id.to_s+"smd",class:"form-control input-sm",value:work.smd , size:"3", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>
-                        <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"3", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"3", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>                       
-                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
@@ -344,7 +344,7 @@
                        <% end %>                                             
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
@@ -359,11 +359,11 @@
                     </td> 
                     
                    <td>
-                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
+                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
                     </td>                                        
                     </td>
                     <td>
-                        <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"9", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;" %>
                         <script type="text/javascript">
                           $(function () {
                             $('#<%= work.id.to_s+"supplement_date" %>').datetimepicker({
@@ -374,13 +374,13 @@
                         </script>
                     </td>
                     <td>
-                        <%= text_field_tag :feed_state, params[:feed_state], id: work.id.to_s+"feed_state",class:"form-control input-sm",value:work.feed_state , size:"7", style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                        <%= text_field_tag :feed_state, params[:feed_state], id: work.id.to_s+"feed_state",class:"form-control input-sm",value:work.feed_state , size:"7", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td> 
                     <td>
                         <%= work.clear_date %>
                     </td> 
                     <td>  
-                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"20" , style:"height: 25px;padding: 5px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;"%>
+                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"20" , style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>
                     </td>
                 </tr>
                 <tr> 
@@ -398,7 +398,7 @@
     <div class="col-md-12 " >
         
         <div class="panel panel-primary">
-            <div class="panel-heading" style="font-size: 18px;"><strong>反馈汇总--<%= work.order_no %></strong></div>
+            <div class="panel-heading" ><strong>反馈汇总--<%= work.order_no %></strong></div>
             <div class="panel-body">
             
 
@@ -474,7 +474,7 @@
                             </div>
                             <div class="row " style="margin: 0px;padding: 0px;">
                                 <div class="col-md-12 panel panel-default" style="margin-bottom: 50px;padding: 0px;">
-                                    <p><span class="label label-default" style="font-size: 13px;">历史记录<%= work.order_no.to_s %></span></p>
+                                    <p><span class="label label-default" >历史记录<%= work.order_no.to_s %></span></p>
                                     <table class="table table-bordered  table-hover" >
                                         <thead >
                                             <tr nowrap="nowrap" class="active">    
@@ -542,7 +542,7 @@
 
 <% end %>
 
-
+</small>
 <script>
   $(function () {
   $('[data-toggle="popover"]').popover()

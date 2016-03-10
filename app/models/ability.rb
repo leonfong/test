@@ -14,6 +14,7 @@ class Ability
     alias_action :update, :to => :work_e          #业务
     alias_action :update, :to => :work_f          #跟单
     alias_action :update, :to => :work_g          #采购
+    alias_action :update, :to => :work_h          #工时
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -35,6 +36,7 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_c, :all
+      can :work_h, :all
     elsif user.has_role?(:work_four)
       #can :manage, :all
       can :work_up, :all
@@ -51,6 +53,10 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
+    elsif user.has_role?(:work_eight)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_h, :all
     else
       can :read, :all
     end

@@ -110,13 +110,13 @@ before_filter :authenticate_user!
             if params[:sort_date]
                 empty_date = ""
                 if params[:sort_date] == "smd"
-                    add_where = "AND smd_end_date IS NOT NULL "
+                    add_where = "AND smd_end_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.smd_end_date "
                 elsif params[:sort_date] == "dip"
-                    add_where = "AND dip_end_date IS NOT NULL"
+                    add_where = "AND dip_end_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.dip_end_date "
                 elsif params[:sort_date] == "clear"
-                    add_where = "AND clear_date IS NOT NULL"
+                    add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.clear_date " 
                 end
             end

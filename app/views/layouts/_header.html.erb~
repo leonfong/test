@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<%=root_path %>"><%= image_tag "logo.bmp",size: "67x67", class: " img-rounded" %></a>
+      <a class="navbar-brand" href="<%=root_path %>"><%= image_tag "logo.bmp",size: "30x30", class: " img-rounded" %></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -35,9 +35,13 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
-           <li id="f"><%= link_to(t('welcome') + current_user.email, boms_path,:class=>"navbar-link") %></li>
+           <% if can? :work_h, :all%>
+               <li id="f"><%= link_to(t('welcome') + current_user.full_name, boms_path,:class=>"navbar-link") %></li>
+           <% else %>
+               <li id="f"><%= link_to(t('welcome') + current_user.email, boms_path,:class=>"navbar-link") %></li>
+           <% end %>
            <li id="g"><%= link_to(t('sign_out'), destroy_user_session_path, :method => :delete,:class=>"navbar-link") %></li>
-           <li id="h"><%= link_to(t('c_password'), edit_registration_path(:user),:class=>"navbar-link") %></li>
+           <li id="h"><%= link_to(t('c_password'), edit_registration_path(:user),:class=>"navbar-link") %></li>           
         <% else %>
            <li id="i"><%= link_to(t('sign_up'), new_registration_path(:user),:class=>"navbar-link") %></li>
            <li id="j"><%= link_to(t('login'), new_session_path(:user),:class=>"navbar-link") %></li>

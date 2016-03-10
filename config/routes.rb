@@ -29,6 +29,10 @@ Rails.application.routes.draw do
   match '/indexup', to: 'work_flow#indexup', via: 'get' 
   match '/up_enddate', to: 'work_flow#up_enddate', via: 'post' 
 
+  match '/timesheet', to: 'timesheet#index', via: 'post'  
+  match '/timesheet', to: 'timesheet#index', via: 'get' 
+  match '/up_timesheet', to: 'timesheet#up_timesheet', via: 'get'  
+
   root to: 'boms#upload'
   #root to: "boms#index"
   match '/boms/choose', to: 'boms#choose',via: 'get'

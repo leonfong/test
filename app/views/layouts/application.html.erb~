@@ -166,8 +166,8 @@ footer {
 }
 </style>
   </head>
-<% if request.original_fullpath == "/work_flow"%>
-  <body style="padding-bottom: 70px;" data-no-turbolink>
+<% if request.original_fullpath =~ /work_flow/i %>
+  <body style="padding-bottom: 70px;padding-top: 5px;" data-no-turbolink>
 <% else %>
   <body style="padding-bottom: 70px;" >
 <% end %>

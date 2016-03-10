@@ -83,6 +83,7 @@ before_filter :authenticate_user!
                 #add_where = ""
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             #end
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL ) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL) AND work_flows.order_state != 1").paginate(:page => params[:page], :per_page => 10)
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'production' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def ).paginate(:page => params[:page], :per_page => 10)

@@ -1,25 +1,22 @@
-<div class="container" >
-<div class="row" style="padding: 0px;">
+<small>
+<div class="row" style="margin: 3px;padding: 0px;">
   <h2><p class="text-primary">生产部</p></h2><hr>
 </div>
-<div class="row" style="padding: 0px;">
-    <div class="col-md-2 nav navbar-nav" >
-        <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-lg" %>
-    </div>
-    <div class="col-md-2 nav navbar-nav" >
-        <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-lg" %> 
+<div class="row" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
+    <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
+        <%= link_to "查询料齐的订单&未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
     </div>
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
-       <div class="col-md-6 form-group  nav navbar-nav navbar-right">
+       <div class="col-md-4 form-group nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
           <lable for="order" , class="sr-only">Qrder : </lable>
-          <div class="input-group"> 
+          <div class="input-group input-group-sm"> 
             <% if @order_no %>   
                 <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%",  placeholder:"单号"%>     
             <% else %> 
                 <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>
             <% end %>               
             <div class="input-group-btn">
-              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+              <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
           </div>
         </div>
@@ -51,7 +48,7 @@
             <thead >
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
-                    
+                    <th class="bg-primary" width="60">操作</th>
 
                     <th class="bg-primary" width="80">下单日期</th>
 
@@ -64,12 +61,21 @@
                     <th class="bg-primary" width="60">入库数量</th>
                     <th class="bg-primary" width="60">SMD</th>
                     <th class="bg-primary" width="60">DIP</th>
-                    
+                    <th class="bg-primary" width="100">贴片通知生产</th>
+                    <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></span></th>
+                    <th class="bg-primary" width="100">后焊通知生产</th>
+                    <th class="bg-info" width="110"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
+ 
+                    <th class="bg-warning" width="85">问题提醒</th>
+                    <th class="bg-primary" width="100">补料已回</th>
+                    <th class="bg-primary" width="80">补料状态</th>
+                    <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
+                    <th class="bg-primary">备注</th>
                 </tr>
             </thead>
             <tbody >
                 <% @work_flow.each do |work| %>
-                
+                <%= form_tag('/edit_work', method:"get") do %>
                 <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> nowrap="nowrap"> 
                     <td> 
                         <script>
@@ -83,8 +89,10 @@
                         <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
                             <span id="<%= work.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
                         </button>
-                    </td> 
-
+                    </td>
+                    <td> 
+                    <%= submit_tag "更新", class:"btn btn-success btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
+                    </td>
                     <td>
                         <%= work.order_date %>  
                     </td>
@@ -111,8 +119,58 @@
                     </td>
                     <td>
                         <%= work.dip %>
-                    </td>                    
+                    </td> 
+                    <td>                       
+                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>  
+                    </td> 
+                    <td>
+                        <% if work.smd_state == "" %>
+                            <%= work.smd_end_date %>  
+                        <% else %>
+                          <%= work.smd_state %>
+                       <% end %>                                             
+                    </td> 
+                    <td>
+                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
+                        <script type="text/javascript">
+                          $(function () {
+                            $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                        </script>
+                    </td> 
+                    <td>
+                        <%= work.dip_end_date %>
+                    </td> 
+                    
+                   <td>
+                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
+                    </td>                                        
+                    </td>
+                    <td>
+                        <%= work.supplement_date %>                       
+                    </td>
+                    <td>
+                        <%= work.feed_state %>
+                    </td> 
+                    <td>
+                        <%= work.clear_date %>
+                    </td> 
+                    <td>  
+                        <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"20" , style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>
+                    </td>                   
                 </tr>
+                <% end %>
                 <tr> 
                    <td colSpan="9" style="margin: 0px;padding: 0px;">
                     <div  >
@@ -423,8 +481,8 @@ function postform<%= work.id.to_s %>() {
 
 
 <% end %>
-</div>
- 
+
+</small> 
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

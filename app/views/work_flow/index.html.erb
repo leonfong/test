@@ -58,7 +58,7 @@
         <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#order_state" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">结单
             <span id="order_statebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button> 
-
+<!--
         <script>
         function change_y(){
         if (document.getElementById('order_y').className=='collapse in')
@@ -70,7 +70,7 @@
         <button class="btn btn-warning btn-sm" type="button" data-toggle="collapse" data-target="#order_y" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_y()">标注料齐
             <span id="order_ybut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button> 
-
+-->
         <script>
         function change_r(){
         if (document.getElementById('order_r').className=='collapse in')
@@ -238,7 +238,7 @@
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
                     <th class="bg-primary" width="60">操作</th>
-                    <th class="bg-primary" width="140">状态</th>
+                    <th class="bg-primary" width="110">状态</th>
 <!--
                     <th class="bg-primary">下单日期</th>
 -->
@@ -286,8 +286,7 @@
                     </td> 
                     <td>
                         <div class="btn-group" role="group-sm" aria-label="...">
-                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default btn-sm", style:"height: 25px;padding: 5px 10px;" %>
-                            <%= link_to "B",  {action: "edit_work", commit: "B", work_id: work.id.to_s},class: "btn btn-warning btn-sm", style:"height: 25px;padding: 5px 10px;" %>
+                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default btn-sm", style:"height: 25px;padding: 5px 10px;" %>                           
                             <%= link_to "C",  {action: "edit_work", commit: "C", work_id: work.id.to_s},class: "btn btn-danger btn-sm", style:"height: 25px;padding: 5px 10px;" %>
                             <%= link_to "D",  {action: "edit_work", commit: "D", work_id: work.id.to_s},class: "btn btn-info btn-sm", style:"height: 25px;padding: 5px 10px;" %> 
                            
@@ -326,15 +325,7 @@
                         <%= text_field_tag :dip, params[:dip], id: work.id.to_s+"dip",class:"form-control input-sm",value:work.dip , size:"3", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
                     <td>                       
-                        <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"smd_start_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>  
+                        <%= work.smd_start_date %>                                                               
                     </td> 
                     <td>
                         <% if work.smd_state == "" %>
@@ -344,15 +335,7 @@
                        <% end %>                                             
                     </td> 
                     <td>
-                        <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
-                        <script type="text/javascript">
-                          $(function () {
-                            $('#<%= work.id.to_s+"dip_start_date" %>').datetimepicker({
-                              useCurrent: false,
-                              format: 'YYYY-MM-DD'
-                            });    
-                          });
-                        </script>
+                        <%= work.dip_start_date %>                                                              
                     </td> 
                     <td>
                         <%= work.dip_end_date %>

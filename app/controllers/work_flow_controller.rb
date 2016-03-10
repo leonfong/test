@@ -64,7 +64,7 @@ before_filter :authenticate_user!
                 limit = ""
             elsif params[:empty_date] == "ready"
                 @show_title = "料齐的订单"
-                empty_date = "work_flows.order_state = 2 AND"
+                empty_date = "(work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL ) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL) AND"
                 limit = ""
             elsif params[:empty_date] == "danger"
                 empty_date = "work_flows.order_state = 3 AND"
@@ -125,7 +125,7 @@ before_filter :authenticate_user!
                 empty_date = ""  
             end
             limit = ""            
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)            
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 14)            
             render "delivery_date.html.erb"
         elsif can? :work_e, :all
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'sell' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
@@ -297,6 +297,31 @@ before_filter :authenticate_user!
                     end
                 else
                     redirect_to work_flow_path, :flash => {:error => item+"--------入库数量更新失败，请检查上传数据格式！"}
+                    return false
+                end
+            end
+        elsif params[:remarks]
+            all_order = params[:remarks].split("\r\n");
+            all_order.each do |item|
+                item_order = item.split(" ")
+                if item_order.size == 2
+                    checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item_order[0] + "'").first
+                    if not checkorder.blank?
+                        checkorder.remark = item_order[1] 
+                        checkorder.save
+                        work_history = Work.new
+                        work_history.order_date = checkorder.order_date
+                        work_history.order_no = checkorder.order_no
+                        work_history.order_quantity = checkorder.order_quantity
+                        work_history.remark = checkorder.remark
+                        work_history.user_name = current_user.email
+                        work_history.save
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                        Rails.logger.info(item_order.inspect)
+                        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    end
+                else
+                    redirect_to work_flow_path, :flash => {:error => item+"--------备注更新失败，请检查上传数据格式！"}
                     return false
                 end
             end

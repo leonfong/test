@@ -11,15 +11,21 @@
         <script>
         function change_1(){
                document.getElementById('upEndDate_2').className='collapse';
-               document.getElementById('upEndDate_3').className='collapse';           
+               document.getElementById('upEndDate_3').className='collapse';
+               document.getElementById('upEndDate_4').className='collapse'; 
+               document.getElementById('upEndDate_4_statebut').className='glyphicon glyphicon-plus'          
            }
         function change_2(){
                document.getElementById('upEndDate_1').className='collapse';
-               document.getElementById('upEndDate_3').className='collapse';            
+               document.getElementById('upEndDate_3').className='collapse'; 
+               document.getElementById('upEndDate_4').className='collapse';   
+               document.getElementById('upEndDate_4_statebut').className='glyphicon glyphicon-plus'            
            }
         function change_3(){
                document.getElementById('upEndDate_2').className='collapse';
                document.getElementById('upEndDate_1').className='collapse';
+               document.getElementById('upEndDate_4').className='collapse'; 
+               document.getElementById('upEndDate_4_statebut').className='glyphicon glyphicon-plus'   
            }
         </script>
 
@@ -41,7 +47,27 @@
         </ul>
      </div>
 
-
+        <script>
+        function change_end(){
+        if (document.getElementById('upEndDate_4').className=='collapse in')
+            {
+             document.getElementById('upEndDate_4_statebut').className='glyphicon glyphicon-plus';
+             document.getElementById('upEndDate_1').className='collapse';
+             document.getElementById('upEndDate_2').className='collapse'; 
+             document.getElementById('upEndDate_3').className='collapse';  
+            }
+        else
+            {
+             document.getElementById('upEndDate_4_statebut').className='glyphicon glyphicon-minus';
+             document.getElementById('upEndDate_1').className='collapse';
+             document.getElementById('upEndDate_2').className='collapse'; 
+             document.getElementById('upEndDate_3').className='collapse';  
+            }
+        }
+        </script>
+        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#upEndDate_4" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">批量导入备注
+            <span id="upEndDate_4_statebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button> 
 
 
 
@@ -120,6 +146,21 @@
         </div>
     </div>
     
+    <div class="collapse" id="upEndDate_4">
+        <div class="well">
+                <%= form_tag('/up_enddate', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>单号  备注 </code></p>
+                    <p>
+                        <%= text_area_tag :remarks, params[:remarks], size:"100x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "提交", class:"btn btn-info btn-lg" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
     
     
     

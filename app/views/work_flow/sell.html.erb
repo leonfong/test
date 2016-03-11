@@ -1,5 +1,7 @@
+<small>
 <div class="row" style="margin: 0px;padding: 0px;" >
-  <h2 style="margin: 0px;padding: 0px;"><p class="text-primary" >业务部</p></h2><hr>
+  <h2 ><p class="text-primary" >业务部问题跟踪&反馈</p></h2><hr>
+  <%= render 'layouts/flash_messages' %>
 </div>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
 
@@ -49,32 +51,32 @@
                     <th class="bg-primary" width="50">详细</th>
                     
 
-                    <th class="bg-primary" width="90">下单日期</th>
+                    <th class="bg-primary" width="80">下单日期</th>
 
                     <th class="bg-primary" width="150">单号</th>
                     <th class="bg-primary" width="50">数量</th>
 
                     <th class="bg-primary" width="90">业务交期</th>
-                    <th class="bg-primary" width="150">产品代码</th>
+                    <th class="bg-primary" width="130">产品代码</th>
                    
-                    <th class="bg-primary" width="80">入库数量</th>
-                    <th class="bg-primary" width="50">SMD</th>
+                    <th class="bg-primary" width="70">入库数量</th>
+                    <th class="bg-primary" width="50">SMT</th>
                     <th class="bg-primary" width="50">DIP</th>
-                    <th class="bg-primary" width="100">贴片通知生产</th>
-                    <th class="bg-info" width="90">贴片交期</th>
-                    <th class="bg-primary" width="100">后焊通知生产</th>
+                    <th class="bg-primary" width="90">贴片通知生产</th>
+                    <th class="bg-info" width="80">贴片交期</th>
+                    <th class="bg-primary" width="90">后焊通知生产</th>
                     <th class="bg-info" width="90">后焊交期</th>                    
  
                     <th class="bg-warning" width="75">问题提醒</th>
 
                     
 
-                    <th class="bg-primary" width="90">补料已回</th>
+                    <th class="bg-primary" width="80">补料已回</th>
                     <th class="bg-primary" width="80">补料状态</th>
                     <th class="bg-info" width="90">清尾完成</th>
                     
 
-                    <th class="bg-primary" width="150">备注</th>
+                    <th class="bg-primary" >备注</th>
                 </tr>
             </thead>
             <tbody >
@@ -116,26 +118,26 @@
                     <td> 
                         <%= work.warehouse_quantity %>
                     </td>
-                    <td>
+                    <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>
                         <%= work.smd %>
                     </td>
-                    <td>
+                    <td <% if work.dip =~ /[齐]/ %>class="success"<% end %>>
                         <%= work.dip %>
                     </td>
-                    <td> 
+                    <td <% if work.smd_start_date != nil %>class="success"<% end %>> 
                         <%= work.smd_start_date %>
                     </td> 
-                    <td>
+                    <td <% if work.smd_end_date != nil or work.smd_state != "" %>class="success"<% end %>>
                         <% if work.smd_state == "" %>
                             <%= work.smd_end_date %>  
                         <% else %>
                           <%= work.smd_state %>
                        <% end %>                                                                                       
                     </td> 
-                    <td>
+                    <td <% if work.dip_start_date != nil %>class="success"<% end %>>
                         <%= work.dip_start_date %>                                        
                     </td> 
-                    <td>
+                    <td <% if work.dip_end_date != nil %>class="success"<% end %>>
                         <%= work.dip_end_date %>
                     </td> 
                     
@@ -259,7 +261,7 @@ function postform<%= work.id.to_s %>() {
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
                         
                         
                 </div>
@@ -267,8 +269,11 @@ function postform<%= work.id.to_s %>() {
             <% end %>
             </div>
             </div>
-             
-             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= t(:"#{fed.feedback_receive}") %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
+             <% receive = "" %>
+             <% fed.feedback_receive.split(',').each do |rece| %>
+             <% receive += " " + t(:"#{rece}") %>
+             <% end %>
+             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
             
             </div>
             </div>
@@ -411,7 +416,11 @@ function postform<%= work.id.to_s %>() {
                                     <%= User.where(email: work.user_name).first.full_name %>
                                 </td>
                                 <td>
-                                    <%= t(:"#{work.feedback_receive}") %>
+                                    <% receive = "" %>
+                                    <% work.feedback_receive.split(',').each do |rece| %>
+                                        <% receive += " " + t(:"#{rece}") %>
+                                    <% end %>
+                                    <%= receive %>
                                 </td>
                                 <td>
                                     <%= work.feedback_receive_user %>
@@ -432,6 +441,7 @@ function postform<%= work.id.to_s %>() {
 
 
 <% end %>
+</small>
 <script>
   $(function () {
   $('[data-toggle="popover"]').popover()

@@ -33,13 +33,13 @@
              <% @feedback_all.each do |fed| %>
                 <div class="panel panel-info " style="background-color: #d9edf7;">
                     
-                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% elsif fed.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单反馈</span><% end %> 由 <span class="text-primary"><strong><%= fed.user_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% elsif fed.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: fed.user_name).first.full_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
                         <p><strong><%= raw fed.feedback %></strong></p></div>
                         
                 </div>
             <% end %>
             <div class="panel panel-info " style="background-color: #d9edf7;">
-                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% elsif @topic.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单反馈</span><% end %> 由 <span class="text-primary"><strong><%= @topic.user_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% elsif @topic.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: @topic.user_name).first.full_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
                         <p><strong><%= raw @topic.feedback %></strong></p></div>
                         
                 </div>
@@ -80,33 +80,42 @@
                        
                        <%= text_field_tag :feedback_up,params[:feedback_up],class:"sr-only",value: @topic.id.to_s %>                    
 
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <%= radio_button :send_up, :send_up, 'production' %>
+                               <input type="checkbox" value="production" name="send_up[]" id="send_up1"> 
                                <strong><%= '生产部' %></strong>
                            </label>
                        </div>
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <%= radio_button :send_up, :send_up, 'procurement' %> 
+                               <input type="checkbox" value="procurement" name="send_up[]" id="send_up2">  
                                <strong><%= '采购部' %></strong>
                            </label>
                        </div>
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <%= radio_button :send_up, :send_up, 'merchandiser' %>
+                               <input type="checkbox" value="merchandiser" name="send_up[]" id="send_up3"> 
                                <strong><%= '跟单部' %></strong>
                            </label>
                        </div>
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <%= radio_button :send_up, :send_up, 'sell' %>
+                               <input type="checkbox" value="sell" name="send_up[]" id="send_up4"> 
                                <strong><%= '业务部' %></strong>
                            </label>
                        </div>
-                       <div class="radio">
+       <script>
+        function change_1(){
+               document.getElementById('send_up1').checked = false; 
+               document.getElementById('send_up2').checked = false; 
+               document.getElementById('send_up3').checked = false; 
+               document.getElementById('send_up4').checked = false; 
+                            
+           }       
+        </script>
+                       <div class="checkbox">
                            <label>
-                               <%= radio_button :send_up, :send_up, 'mark' %>
+                               <input type="checkbox" value="mark" name="send_up" id="send_up_mark" onclick="change_1()" />
                                <p><strong><%= '标记 ' %></strong><i class="text-info">---暂时不能确认分发到哪，可以先标注，待确认后再分发.</i></p>
                            </label>
                        </div>
@@ -135,7 +144,7 @@
 function postform() {  	         
     html = my_feedback.html();  
 <% if @topic.feedback_type == @topic.feedback_receive %>
-if (document.getElementById('send_up_send_up_mark').checked == true)
+if (document.getElementById('send_up_mark').checked == true)
     {
     }
 else if (document.getElementById('topic_state_close').checked == false & document.getElementById('topic_state_open').checked == false)
@@ -148,16 +157,16 @@ else if (document.getElementById('topic_state_close').checked == false & documen
 　　    alert("请填写问题的内容！");                    
 　　    return false;                
 　     }
-    else if (document.getElementById('topic_state_open').checked == true & document.getElementById('send_up_send_up_production').checked == false & document.getElementById('send_up_send_up_procurement').checked == false & document.getElementById('send_up_send_up_merchandiser').checked == false & document.getElementById('send_up_send_up_sell').checked == false & document.getElementById('send_up_send_up_mark').checked == false)
+    else if (document.getElementById('topic_state_open').checked == true & document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                
 　     }   
 <% else %>
-if (document.getElementById('send_up_send_up_mark').checked == true)
+if (document.getElementById('send_up_mark').checked == true)
     {
     }
-    else if (document.getElementById('send_up_send_up_production').checked == false & document.getElementById('send_up_send_up_procurement').checked == false & document.getElementById('send_up_send_up_merchandiser').checked == false & document.getElementById('send_up_send_up_sell').checked == false & document.getElementById('send_up_send_up_mark').checked == false)
+    else if (document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                

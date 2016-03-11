@@ -167,18 +167,16 @@ footer {
 </style>
   </head>
 <% if request.original_fullpath =~ /work_flow/i %>
-  <body style="padding-bottom: 70px;padding-top: 5px;" data-no-turbolink>
+  <body style="padding-bottom: 70px;padding-top: 0px;" data-no-turbolink>
 <% else %>
   <body style="padding-bottom: 70px;" >
 <% end %>
     
     <%= render 'layouts/header' %>
    
-    <div class="container-fluid" >
-     <br>
-     <br>
-     <br>
-      <%= render 'layouts/flash_messages' %>
+    <div class="container-fluid" style="padding-top: 50px;">
+
+      
 
         <%= yield %>
 

@@ -19,6 +19,7 @@
         <li id="a"><%= link_to 'Search BOM',root_path %></li>
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
+
         <% if user_signed_in? %>
             <% if can? :work_up, :all %>
                 <li id="k">
@@ -36,7 +37,7 @@
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
            <% if can? :work_h, :all%>
-               <li id="f"><%= link_to(t('welcome') + current_user.full_name, boms_path,:class=>"navbar-link") %></li>
+               <li id="f"><%= link_to(t('welcome') + current_user.full_name, timesheet_path,:class=>"navbar-link") %></li>
            <% else %>
                <li id="f"><%= link_to(t('welcome') + current_user.email, boms_path,:class=>"navbar-link") %></li>
            <% end %>
@@ -63,25 +64,58 @@
 </nav>
 <script language="javascript">
 $(document).ready(function () {
-    $("#a").hover(function (e) {         
-            e.preventDefault();
+    $("#a").mouseenter(function () {         
+            //e.preventDefault();
             //alert(document.activeElement);
-            $("#b").removeClass('active');
-            $("#c").removeClass('active');
-            $("#d").removeClass('active');
-            $("#e").removeClass('active');
-            $("#f").removeClass('active');
-            $("#g").removeClass('active');
-            $("#h").removeClass('active');
-            $("#i").removeClass('active');
-            $("#j").removeClass('active');
-            $("#k").removeClass('active');
+            //$("#b").removeClass('active');
+            //$("#c").removeClass('active');
+            //$("#d").removeClass('active');
+            //$("#e").removeClass('active');
+            //$("#f").removeClass('active');
+           // $("#g").removeClass('active');
+            //$("#h").removeClass('active');
+            //$("#i").removeClass('active');
+            //$("#j").removeClass('active');
+            //$("#k").removeClass('active');
             $("#a").addClass('active');
             //document.getElementById('a').className="active"
             
     });
-    $("#b").hover(function (e) {         
-            e.preventDefault();
+    $("#a").mouseleave(function () {             
+            $("#a").removeClass('active');          
+    });
+    $("#b").mouseleave(function () {             
+            $("#b").removeClass('active');          
+    });
+    $("#c").mouseleave(function () {             
+            $("#c").removeClass('active');          
+    });
+    $("#d").mouseleave(function () {             
+            $("#d").removeClass('active');          
+    });
+    $("#e").mouseleave(function () {             
+            $("#e").removeClass('active');          
+    });
+    $("#f").mouseleave(function () {             
+            $("#f").removeClass('active');          
+    });
+    $("#g").mouseleave(function () {             
+            $("#g").removeClass('active');          
+    });
+    $("#h").mouseleave(function () {             
+            $("#h").removeClass('active');          
+    });
+    $("#i").mouseleave(function () {             
+            $("#i").removeClass('active');          
+    });
+    $("#j").mouseleave(function () {             
+            $("#j").removeClass('active');          
+    });
+    $("#k").mouseleave(function () {             
+            $("#k").removeClass('active');          
+    });
+    $("#b").mouseenter(function () {         
+            //e.preventDefault();
             //alert(document.activeElement);
             $("#a").removeClass('active');
             $("#c").removeClass('active');
@@ -96,8 +130,8 @@ $(document).ready(function () {
             $("#b").addClass('active');
            
     });
-    $("#c").hover(function (e) {         
-            e.preventDefault();
+    $("#c").mouseenter(function () {         
+            //e.preventDefault();
             //alert(document.activeElement);
             $("#a").removeClass('active');
             $("#b").removeClass('active');
@@ -112,8 +146,8 @@ $(document).ready(function () {
             $("#c").addClass('active');
     
     });
-    $("#d").hover(function (e) {         
-            e.preventDefault();
+    $("#d").mouseenter(function () {         
+            //e.preventDefault();
             //alert(document.activeElement);
             $("#a").removeClass('active');
             $("#c").removeClass('active');
@@ -128,8 +162,8 @@ $(document).ready(function () {
             $("#d").addClass('active');
            
     });
-    $("#e").hover(function (e) {         
-            e.preventDefault();
+    $("#e").mouseenter(function () {         
+            //e.preventDefault();
             //alert(document.activeElement);
             $("#a").removeClass('active');
             $("#c").removeClass('active');
@@ -144,8 +178,8 @@ $(document).ready(function () {
             $("#e").addClass('active');
             
     });
-    $("#k").hover(function (e) {         
-            e.preventDefault();
+    $("#k").mouseenter(function () {         
+            //e.preventDefault();
             //alert(document.activeElement);
 
             $("#a").removeClass('active');

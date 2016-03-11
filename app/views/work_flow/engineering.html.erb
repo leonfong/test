@@ -1,6 +1,6 @@
 <div class="container" >
 <div class="row" style="padding: 0px;">
-  <h2><p class="text-primary">工程部</p></h2><hr>
+  <h2><p class="text-primary">工程部问题跟踪&反馈</p></h2><hr>
 </div>
 <div class="row"style="padding: 0px;">
     <div class="col-md-3 nav navbar-nav" >
@@ -139,27 +139,27 @@
 -->
           <div class="form-group">
               <label for="recipient-name" class="control-label">发送到:</label>
-                      <div class="radio-inline">
+                      <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="production" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_production<%= work.id.to_s %>" />
+                               <input type="checkbox" value="production" name="receive_feedback[]" id="receive_feedback_receive_feedback_production<%= work.id.to_s %>" />
                                <strong>生产部</strong>
                            </label>
                        </div>
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="procurement" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_procurement<%= work.id.to_s %>" /> 
+                               <input type="checkbox" value="procurement" name="receive_feedback[]" id="receive_feedback_receive_feedback_procurement<%= work.id.to_s %>" /> 
                                <strong>采购部</strong>
                            </label>
                        </div>
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="merchandiser" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>" />
+                               <input type="checkbox" value="merchandiser" name="receive_feedback[]" id="receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>" />
                                <strong>跟单部</strong>
                            </label>
                        </div> 
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="sell" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />
+                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />
                                <strong>业务部</strong>
                            </label>
                        </div> 
@@ -269,7 +269,7 @@ function postform<%= work.id.to_s %>() {
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
                         
                         
                 </div>
@@ -277,8 +277,11 @@ function postform<%= work.id.to_s %>() {
             <% end %>
             </div>
             </div>
-             
-             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= t(:"#{fed.feedback_receive}") %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
+             <% receive = "" %>
+             <% fed.feedback_receive.split(',').each do |rece| %>
+             <% receive += " " + t(:"#{rece}") %>
+             <% end %>
+             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
             
             </div>
             </div>
@@ -392,7 +395,11 @@ function postform<%= work.id.to_s %>() {
                                     <%= User.where(email: work.user_name).first.full_name %>
                                 </td>
                                 <td>
-                                    <%= t(:"#{work.feedback_receive}") %>
+                                    <% receive = "" %>
+                                    <% work.feedback_receive.split(',').each do |rece| %>
+                                        <% receive += " " + t(:"#{rece}") %>
+                                    <% end %>
+                                    <%= receive %>
                                 </td>
                                 <td>
                                     <%= work.feedback_receive_user %>

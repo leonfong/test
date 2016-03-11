@@ -1,6 +1,7 @@
 <small>
 <div class="row" style="margin: 3px;padding: 0px;">
-  <h2><p class="text-primary">生产部</p></h2><hr>
+  <h2><p class="text-primary">生产部问题跟踪&反馈</p></h2><hr>
+  <%= render 'layouts/flash_messages' %>
 </div>
 <div class="row" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
@@ -59,7 +60,7 @@
                     <th class="bg-primary" width="150">产品代码</th>
                    
                     <th class="bg-primary" width="60">入库数量</th>
-                    <th class="bg-primary" width="60">SMD</th>
+                    <th class="bg-primary" width="60">SMT</th>
                     <th class="bg-primary" width="60">DIP</th>
                     <th class="bg-primary" width="100">贴片通知生产</th>
                     <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></span></th>
@@ -114,13 +115,13 @@
                     <td> 
                         <%= work.warehouse_quantity %>
                     </td>
-                    <td>
+                    <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>
                         <%= work.smd %>
                     </td>
-                    <td>
+                    <td <% if work.dip =~ /[齐]/ %>class="success"<% end %>>
                         <%= work.dip %>
                     </td> 
-                    <td>                       
+                    <td <% if work.smd_start_date != nil %>class="success"<% end %>>                       
                         <%= text_field_tag :smd_start_date, params[:smd_start_date], id: work.id.to_s+"smd_start_date",class:"form-control input-sm",value:work.smd_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
@@ -131,14 +132,14 @@
                           });
                         </script>  
                     </td> 
-                    <td>
+                    <td <% if work.smd_end_date != nil or work.smd_state != "" %>class="success"<% end %>>
                         <% if work.smd_state == "" %>
                             <%= work.smd_end_date %>  
                         <% else %>
                           <%= work.smd_state %>
                        <% end %>                                             
                     </td> 
-                    <td>
+                    <td <% if work.dip_start_date != nil %>class="success"<% end %>>
                         <%= text_field_tag :dip_start_date, params[:dip_start_date], id: work.id.to_s+"dip_start_date",class:"form-control input-sm",value:work.dip_start_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>                                       
                         <script type="text/javascript">
                           $(function () {
@@ -149,7 +150,7 @@
                           });
                         </script>
                     </td> 
-                    <td>
+                    <td <% if work.dip_end_date != nil %>class="success"<% end %>>
                         <%= work.dip_end_date %>
                     </td> 
                     
@@ -207,27 +208,27 @@
 -->
           <div class="form-group">
               <label for="recipient-name" class="control-label">发送到:</label>
-                      <div class="radio-inline">
+                      <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="engineering" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_engineering<%= work.id.to_s %>" />
+                               <input type="checkbox" value="engineering" name="receive_feedback[]" id="receive_feedback_receive_feedback_engineering<%= work.id.to_s %>" />
                                <strong>工程部</strong>
                            </label>
                        </div>
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="procurement" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_procurement<%= work.id.to_s %>" /> 
+                               <input type="checkbox" value="procurement" name="receive_feedback[]" id="receive_feedback_receive_feedback_procurement<%= work.id.to_s %>" /> 
                                <strong>采购部</strong>
                            </label>
                        </div>
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="merchandiser" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>" />
+                               <input type="checkbox" value="merchandiser" name="receive_feedback[]" id="receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>" />
                                <strong>跟单部</strong>
                            </label>
                        </div> 
-                       <div class="radio-inline">
+                       <div class="checkbox-inline">
                            <label>
-                               <input type="radio" value="sell" name="receive_feedback[receive_feedback]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />
+                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />
                                <strong>业务部</strong>
                            </label>
                        </div> 
@@ -337,7 +338,7 @@ function postform<%= work.id.to_s %>() {
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
                         
                         
                 </div>
@@ -345,8 +346,11 @@ function postform<%= work.id.to_s %>() {
             <% end %>
             </div>
             </div>
-             
-             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= t(:"#{fed.feedback_receive}") %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
+             <% receive = "" %>
+             <% fed.feedback_receive.split(',').each do |rece| %>
+             <% receive += " " + t(:"#{rece}") %>
+             <% end %>
+             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
             
             </div>
             </div>
@@ -460,7 +464,11 @@ function postform<%= work.id.to_s %>() {
                                     <%= User.where(email: work.user_name).first.full_name %>
                                 </td>
                                 <td>
-                                    <%= t(:"#{work.feedback_receive}") %>
+                                    <% receive = "" %>
+                                    <% work.feedback_receive.split(',').each do |rece| %>
+                                        <% receive += " " + t(:"#{rece}") %>
+                                    <% end %>
+                                    <%= receive %>
                                 </td>
                                 <td>
                                     <%= work.feedback_receive_user %>

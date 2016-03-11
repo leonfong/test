@@ -64,7 +64,7 @@ before_filter :authenticate_user!
                 limit = ""
             elsif params[:empty_date] == "ready"
                 @show_title = "料齐的订单"
-                empty_date = "(work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL ) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL) AND"
+                empty_date = "(work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state != 1) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state != 1) AND"
                 limit = ""
             elsif params[:empty_date] == "danger"
                 empty_date = "work_flows.order_state = 3 AND"
@@ -83,14 +83,14 @@ before_filter :authenticate_user!
                 #add_where = ""
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             #end
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL ) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL) AND work_flows.order_state != 1").paginate(:page => params[:page], :per_page => 10)
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'production' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state != 1) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state != 1) ").paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def ).paginate(:page => params[:page], :per_page => 10)
             end
             render "production.html.erb"
         elsif can? :work_d, :all
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'engineering' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def ).paginate(:page => params[:page], :per_page => 10)
             end
@@ -119,6 +119,9 @@ before_filter :authenticate_user!
                 elsif params[:sort_date] == "clear"
                     add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.clear_date " 
+                elsif params[:sort_date] == "state"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.feed_state DESC" 
                 end
             end
             if params[:order_s] 
@@ -128,7 +131,7 @@ before_filter :authenticate_user!
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 14)            
             render "delivery_date.html.erb"
         elsif can? :work_e, :all
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'sell' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%sell%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order]
                 #if not params[:order] == ""
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
@@ -140,35 +143,50 @@ before_filter :authenticate_user!
             end
             render "sell.html.erb"
         elsif can? :work_f, :all
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'merchandiser' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
-            if params[:order] 
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def ).paginate(:page => params[:page], :per_page => 10)
+            add_orderby = " ORDER BY work_flows.updated_at DESC " 
+            #add_orderby = " " 
+            if params[:sort_date]
+                empty_date = ""
+                if params[:sort_date] == "smd"
+                    add_where = "AND smd_end_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.smd_end_date "
+                elsif params[:sort_date] == "dip"
+                    add_where = "AND dip_end_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.dip_end_date "
+                elsif params[:sort_date] == "clear"
+                    add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.clear_date " 
+                end
+            end
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            if params[:order] or params[:sort_date]
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
             end
 
             render "merchandiser.html.erb"
         elsif can? :work_g, :all
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'procurement' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def ).paginate(:page => params[:page], :per_page => 10)
             end
             render "procurement.html.erb"
         else
-            #add_orderby = " ORDER BY work_flows.updated_at DESC " 
-            add_orderby = " " 
+            add_orderby = " ORDER BY work_flows.updated_at DESC " 
+            #add_orderby = " " 
             if params[:sort_date]
                 empty_date = ""
                 if params[:sort_date] == "smd"
-                    add_where = "AND smd_end_date IS NOT NULL "
+                    add_where = "AND smd_end_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.smd_end_date "
                 elsif params[:sort_date] == "dip"
-                    add_where = "AND dip_end_date IS NOT NULL"
+                    add_where = "AND dip_end_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.dip_end_date "
                 elsif params[:sort_date] == "clear"
-                    add_where = "AND clear_date IS NOT NULL"
+                    add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.clear_date " 
                 end
             end
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)
            
             #render "index.html.erb"
             #redirect_to action: :index, data: { no_turbolink: true }
@@ -525,7 +543,7 @@ before_filter :authenticate_user!
                         params[:production_feedback].gsub!('<img ','<img width="200" height="100" ')
                         topic_up.feedback = params[:production_feedback]      #话题内容
                         topic_up.feedback_type = "production"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback][:receive_feedback]    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
                     elsif not params[:engineering_feedback].blank?
                         topic_up.feedback_title = params[:feedback_title]       #标题
                         if ( params[:engineering_feedback] =~ /width="(.\d*")/ )  
@@ -537,7 +555,7 @@ before_filter :authenticate_user!
                         params[:engineering_feedback].gsub!('<img ','<img width="200" height="100" ')
                         topic_up.feedback = params[:engineering_feedback]      #话题内容
                         topic_up.feedback_type = "engineering"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback][:receive_feedback]    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
                     elsif not params[:sell_topic].blank?
                         topic_up.feedback_title = params[:feedback_title]      #标题
                         if ( params[:sell_topic] =~ /width="(.\d*")/ )  
@@ -565,7 +583,7 @@ before_filter :authenticate_user!
                         topic_up.feedback = params[:merchandiser_feedback]      #话题内容
            
                         topic_up.feedback_type = "merchandiser"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback][:receive_feedback]    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
                         #topic_up.feedback_receive_user = "sell"                #收贴的人
                         #topic_up.feedback_level = 1                            #暂时没用
                         #topic_up.feedback_id = 1
@@ -580,7 +598,7 @@ before_filter :authenticate_user!
                         params[:procurement_feedback].gsub!('<img ','<img width="200" height="100" ')
                         topic_up.feedback = params[:procurement_feedback]      #话题内容
                         topic_up.feedback_type = "procurement"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback][:receive_feedback]    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
                         #topic_up.feedback_receive_user = "sell"                #收贴的人
                         #topic_up.feedback_level = 1                            #暂时没用
                         #topic_up.feedback_id = 1
@@ -593,14 +611,28 @@ before_filter :authenticate_user!
                     Rails.logger.info(params[:feedback_up].inspect)
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     if can? :work_e, :all                                       #业务回帖                        
-                        topic_up.feedback_receive = "merchandiser" 
+                        receive_new = topic_up.feedback_receive.split(",") <<  "merchandiser" 
+                        receive_new.delete("sell") 
+                        topic_up.feedback_receive = receive_new.join(",")
                     else                                                        #其他部门回帖                        
                         if params[:send_up]
                             topic_up = Topic.find(params[:feedback_up])
-                            if params[:send_up][:send_up].to_s == "mark"
-                                topic_up.mark = params[:send_up][:send_up]
+                            if params[:send_up] == "mark"
+                                topic_up.mark = params[:send_up]
                             else
-                                topic_up.feedback_receive = params[:send_up][:send_up]
+                                receive_new = topic_up.feedback_receive.split(",")|params[:send_up]  
+                                if can? :work_c, :all
+                                    receive_new.delete("production")    
+                                elsif can? :work_d, :all 
+                                    receive_new.delete("engineering")
+                                elsif can? :work_f, :all 
+                                    receive_new.delete("merchandiser")
+                                elsif can? :work_g, :all 
+                                    receive_new.delete("procurement")
+                                end
+
+                                topic_up.feedback_receive = receive_new.join(",")
+                                
                                 topic_up.mark = ""
                             end
                         end                                                         
@@ -608,7 +640,7 @@ before_filter :authenticate_user!
                             if params[:feedback_receive] == "sell"                       
                                 topic_up.feedback_receive_user = topic_up.user_name   #收贴的人
                             end
-                            topic_up.feedback_receive = params[:send_up][:send_up]     #收贴的部门
+                            topic_up.feedback_receive = params[:send_up]    #收贴的部门
                         end
                         if params[:feedback_receive_user]
                             topic_up.feedback_receive_user = params[:feedback_receive_user]   #收贴的人
@@ -621,7 +653,7 @@ before_filter :authenticate_user!
                         end
                     end
                     topic_up.save
-                    if not params[:production_feedback].blank? and params[:send_up][:send_up].to_s != "mark" 
+                    if not params[:production_feedback].blank? and params[:send_up] != "mark" 
                         feedback_up = Feedback.new  
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id                                    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
@@ -643,7 +675,7 @@ before_filter :authenticate_user!
                         #feedback_up.feedback_id = 1                             #暂时没用
                         feedback_up.user_name = current_user.email                     #发帖的人
                         feedback_up.save
-                    elsif not params[:engineering_feedback].blank? and params[:send_up][:send_up].to_s != "mark" 
+                    elsif not params[:engineering_feedback].blank? and params[:send_up].to_s != "mark" 
                         feedback_up = Feedback.new  
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id                                    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
@@ -687,7 +719,7 @@ before_filter :authenticate_user!
                         #feedback_up.feedback_id = 1                               #暂时没用
                         feedback_up.user_name = current_user.email                     #发帖的人
                         feedback_up.save
-                    elsif not params[:merchandiser_feedback].blank? and params[:send_up][:send_up].to_s != "mark"                      
+                    elsif not params[:merchandiser_feedback].blank? and params[:send_up].to_s != "mark"                      
                         feedback_up = Feedback.new  
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id                                    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
@@ -709,7 +741,7 @@ before_filter :authenticate_user!
                         #feedback_up.feedback_id = 1                             #暂时没用
                         feedback_up.user_name = current_user.email                     #发帖的人
                         feedback_up.save
-                    elsif not params[:procurement_feedback].blank? and params[:send_up][:send_up].to_s != "mark"                        
+                    elsif not params[:procurement_feedback].blank? and params[:send_up].to_s != "mark"                        
                         feedback_up = Feedback.new  
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id                                    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order

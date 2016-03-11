@@ -19,6 +19,7 @@
         <li id="a"><%= link_to 'Search BOM',root_path %></li>
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
+
         <% if user_signed_in? %>
             <% if can? :work_up, :all %>
                 <li id="k">
@@ -63,103 +64,56 @@
 </nav>
 <script language="javascript">
 $(document).ready(function () {
-    $("#a").hover(function (e) {         
-            e.preventDefault();
-            //alert(document.activeElement);
-            $("#b").removeClass('active');
-            $("#c").removeClass('active');
-            $("#d").removeClass('active');
-            $("#e").removeClass('active');
-            $("#f").removeClass('active');
-            $("#g").removeClass('active');
-            $("#h").removeClass('active');
-            $("#i").removeClass('active');
-            $("#j").removeClass('active');
-            $("#k").removeClass('active');
-            $("#a").addClass('active');
-            //document.getElementById('a').className="active"
-            
+    $("#a").mouseenter(function () {                     
+            $("#a").addClass('active');        
     });
-    $("#b").hover(function (e) {         
-            e.preventDefault();
-            //alert(document.activeElement);
-            $("#a").removeClass('active');
-            $("#c").removeClass('active');
-            $("#d").removeClass('active');
-            $("#e").removeClass('active');
-            $("#f").removeClass('active');
-            $("#g").removeClass('active');
-            $("#h").removeClass('active');
-            $("#i").removeClass('active');
-            $("#j").removeClass('active');
-            $("#k").removeClass('active');
-            $("#b").addClass('active');
-           
+    $("#a").mouseleave(function () {             
+            $("#a").removeClass('active');          
     });
-    $("#c").hover(function (e) {         
-            e.preventDefault();
-            //alert(document.activeElement);
-            $("#a").removeClass('active');
-            $("#b").removeClass('active');
-            $("#d").removeClass('active');
-            $("#e").removeClass('active');
-            $("#f").removeClass('active');
-            $("#g").removeClass('active');
-            $("#h").removeClass('active');
-            $("#i").removeClass('active');
-            $("#j").removeClass('active');
-            $("#k").removeClass('active');
-            $("#c").addClass('active');
-    
+    $("#b").mouseleave(function () {             
+            $("#b").removeClass('active');          
     });
-    $("#d").hover(function (e) {         
-            e.preventDefault();
-            //alert(document.activeElement);
-            $("#a").removeClass('active');
-            $("#c").removeClass('active');
-            $("#b").removeClass('active');
-            $("#e").removeClass('active');
-            $("#f").removeClass('active');
-            $("#g").removeClass('active');
-            $("#h").removeClass('active');
-            $("#i").removeClass('active');
-            $("#j").removeClass('active');
-            $("#k").removeClass('active');
-            $("#d").addClass('active');
-           
+    $("#c").mouseleave(function () {             
+            $("#c").removeClass('active');          
     });
-    $("#e").hover(function (e) {         
-            e.preventDefault();
-            //alert(document.activeElement);
-            $("#a").removeClass('active');
-            $("#c").removeClass('active');
-            $("#d").removeClass('active');
-            $("#b").removeClass('active');
-            $("#f").removeClass('active');
-            $("#g").removeClass('active');
-            $("#h").removeClass('active');
-            $("#i").removeClass('active');
-            $("#j").removeClass('active');
-            $("#k").removeClass('active');
-            $("#e").addClass('active');
-            
+    $("#d").mouseleave(function () {             
+            $("#d").removeClass('active');          
     });
-    $("#k").hover(function (e) {         
-            e.preventDefault();
-            //alert(document.activeElement);
-
-            $("#a").removeClass('active');
-            $("#c").removeClass('active');
-            $("#d").removeClass('active');
-            $("#b").removeClass('active');
-            $("#e").removeClass('active');
-            $("#f").removeClass('active');
-            $("#g").removeClass('active');
-            $("#h").removeClass('active');
-            $("#i").removeClass('active');
-            $("#j").removeClass('active');
-            $("#k").addClass('active');
-            
+    $("#e").mouseleave(function () {             
+            $("#e").removeClass('active');          
+    });
+    $("#f").mouseleave(function () {             
+            $("#f").removeClass('active');          
+    });
+    $("#g").mouseleave(function () {             
+            $("#g").removeClass('active');          
+    });
+    $("#h").mouseleave(function () {             
+            $("#h").removeClass('active');          
+    });
+    $("#i").mouseleave(function () {             
+            $("#i").removeClass('active');          
+    });
+    $("#j").mouseleave(function () {             
+            $("#j").removeClass('active');          
+    });
+    $("#k").mouseleave(function () {             
+            $("#k").removeClass('active');          
+    });
+    $("#b").mouseenter(function () {                    
+            $("#b").addClass('active');           
+    });
+    $("#c").mouseenter(function () {                    
+            $("#c").addClass('active');    
+    });
+    $("#d").mouseenter(function () {                     
+            $("#d").addClass('active');           
+    });
+    $("#e").mouseenter(function () {                    
+            $("#e").addClass('active');            
+    });
+    $("#k").mouseenter(function () {                     
+            $("#k").addClass('active');            
     });
    
 

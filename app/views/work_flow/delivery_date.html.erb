@@ -1,4 +1,8 @@
-
+<small>
+<div class="row" style="margin: 3px;padding: 0px;">
+  <h2><p class="text-primary">订单交期数据维护</p></h2><hr>
+  <%= render 'layouts/flash_messages' %>
+</div>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
    
     
@@ -182,23 +186,24 @@
             <thead>
                 <tr>
                     <th class="bg-primary" width="60">操作</th>
-                    <th class="bg-primary" width="200">单号</th>
+                    <th class="bg-primary" width="150">单号</th>
                     <th class="bg-primary" width="80">数量</th>
-                    <th class="bg-primary">业务交期</th>
-                    <th class="bg-primary" width="200">产品代码</th>
+                    <th class="bg-primary" width="80">业务交期</th>
+                    <th class="bg-primary" width="150">产品代码</th>
                     
-                    <th class="bg-primary" width="80">入库数量</th>
-                   
-                    <th class="bg-primary">贴片通知生产</th>
-                    <th class="bg-info"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></th>
-                    <th class="bg-info">贴片完成状态</th>
-                    <th class="bg-primary">后焊通知生产</th>
-                    <th class="bg-info"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></th>
+                    <th class="bg-primary" width="70">入库数量</th>
+                    <th class="bg-primary" width="60">SMT</th>
+                    <th class="bg-primary" width="60">DIP</th>
+                    <th class="bg-primary" width="90">贴片通知生产</th>
+                    <th class="bg-info" width="105"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></th>
+                    <th class="bg-info" width="90">贴片完成状态</th>
+                    <th class="bg-primary" width="90">后焊通知生产</th>
+                    <th class="bg-info" width="105"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></th>
                     
  
-                    <th class="bg-primary">补料已回</th>
-                    <th class="bg-primary">补料状态</th>
-                    <th class="bg-info"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></th>
+                    <th class="bg-primary" width="80">补料已回</th>
+                    <th class="bg-info" width="80"><%= link_to "补料状态",  {action: "index", sort_date: "state"} %><span class="caret"></th>
+                    <th class="bg-info" width="105"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></th>
                     <th class="bg-primary">备注</th>
                 </tr>
             </thead>
@@ -212,13 +217,18 @@
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= work.order_no %>
                     </td>
-                    <td><%= work.order_quantity %></td>
+                    <td><%= work.order_quantity %></td> 
                     <td><%= work.salesman_end_date %></td> 
                     <td><%= work.product_code %></td>                 
                     <td><%= work.warehouse_quantity %></td>
-                    
-                    <td class="bg-warning"><%= work.smd_start_date %></td> 
-                    <td>
+                    <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>
+                        <%= work.smd %>
+                    </td>
+                    <td <% if work.dip =~ /[齐]/ %>class="success"<% end %>>
+                        <%= work.dip %>
+                    </td> 
+                    <td <% if work.smd_start_date != nil %>class="success"<% end %>><%= work.smd_start_date %></td> 
+                    <td <% if work.smd_end_date != nil %>class="success"<% end %>>
                         <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                      
                         <script type="text/javascript">
                           $(function () {
@@ -229,11 +239,11 @@
                           });
                         </script>
                     </td> 
-                    <td>
+                    <td <% if work.smd_state != "" %>class="success"<% end %>>
                         <%= text_field_tag :smd_state, params[:smd_state], id: work.id.to_s+"smd_state",class:"form-control input-sm",value:work.smd_state , size:"5" %>
                     </td>
-                    <td><%= work.dip_start_date %></td> 
-                    <td>
+                    <td <% if work.dip_start_date != nil %>class="success"<% end %>><%= work.dip_start_date %></td> 
+                    <td <% if work.dip_end_date != nil %>class="success"<% end %>>
                         <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {
@@ -278,7 +288,7 @@
 
 <% end %>
 
-
+</small>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

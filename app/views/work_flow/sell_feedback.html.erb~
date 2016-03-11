@@ -1,6 +1,6 @@
 <div class="container" >
 <div class="row" style="padding: 0px;">
-  <h2><p class="text-primary">业务部反馈</p></h2><hr>
+  <h2><p class="text-primary">业务部问题反馈</p></h2><hr>
 </div>
 <div class="row"style="padding: 0px;">
     <div class="col-md-3 nav navbar-nav" >
@@ -26,27 +26,27 @@
     <div class="col-md-12 " style="padding: 5px;" >
         
         <div class="panel panel-primary">
-            <div class="panel-heading" style="font-size: 18px;"><strong>业务反馈--(<%= @topic.order_no %>)---<%= @topic.feedback_title %></strong></div>
+            <div class="panel-heading" style="font-size: 18px;"><strong>业务部反馈--(<%= @topic.order_no %>)</strong></div>
             <div class="panel-body">
                 
 
              <% @feedback_all.each do |fed| %>
                 <div class="panel panel-info " style="background-color: #d9edf7;">
                     
-                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: fed.user_name).first.full_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: fed.user_name).first.full_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
                         <p><strong><%= raw fed.feedback %></strong></p></div>
                         
                 </div>
             <% end %>
             <div class="panel panel-info " style="background-color: #d9edf7;">
-                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: @topic.user_name).first.full_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: @topic.user_name).first.full_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
                         <p><strong><%= raw @topic.feedback %></strong></p></div>
                         
                 </div>
 <% if @topic.topic_state == "open" %>
             <%= form_tag('/edit_work', method:"post", class:"form-inline") do %>
                <div class="panel panel-info " style="background-color: #d9edf7;">
-                   <div class="panel-heading"><span class="text-primary"><strong>业务反馈---<%= @topic.feedback_title %></strong></span></div>
+                   <div class="panel-heading"><span class="text-primary"><strong>业务反馈---<%= @topic.order_no %></strong></span></div>
 
 
 <% if @topic.feedback_type == @topic.feedback_receive %>

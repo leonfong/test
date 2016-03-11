@@ -88,19 +88,21 @@ before_filter :authenticate_user!
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def ).paginate(:page => params[:page], :per_page => 10)
+                if @work_flow.size == 1                
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                end
             end
-            if @work_flow.size == 1                
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
-            end
+            
             render "production.html.erb"
         elsif can? :work_d, :all
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def ).paginate(:page => params[:page], :per_page => 10)
+                if @work_flow.size == 1                
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                end
             end
-            if @work_flow.size == 1                
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
-            end
+            
             render "engineering.html.erb"
             #if params[:order]  
                 #add_where = ""          
@@ -144,14 +146,15 @@ before_filter :authenticate_user!
                 #if not params[:order] == ""
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 #end
+                if @work_flow.size == 1                
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                end
             else
                 if empty_date != ""                    
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 end               
             end
-            if @work_flow.size == 1                
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
-            end
+            
             render "sell.html.erb"
         elsif can? :work_f, :all
             add_orderby = " ORDER BY work_flows.updated_at DESC " 
@@ -172,19 +175,21 @@ before_filter :authenticate_user!
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] or params[:sort_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
+                if @work_flow.size == 1                
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                end
             end
-            if @work_flow.size == 1                
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
-            end
+            
             render "merchandiser.html.erb"
         elsif can? :work_g, :all
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def ).paginate(:page => params[:page], :per_page => 10)
+                if @work_flow.size == 1                
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                end
             end
-            if @work_flow.size == 1                
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
-            end
+            
             render "procurement.html.erb"
         else
             add_orderby = " ORDER BY work_flows.updated_at DESC " 

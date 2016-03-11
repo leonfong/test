@@ -195,15 +195,15 @@
                     <th class="bg-primary" width="60">SMT</th>
                     <th class="bg-primary" width="60">DIP</th>
                     <th class="bg-primary" width="90">贴片通知生产</th>
-                    <th class="bg-info" width="100"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></th>
+                    <th class="bg-info" width="105"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></th>
                     <th class="bg-info" width="90">贴片完成状态</th>
                     <th class="bg-primary" width="90">后焊通知生产</th>
-                    <th class="bg-info" width="100"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></th>
+                    <th class="bg-info" width="105"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></th>
                     
  
                     <th class="bg-primary" width="80">补料已回</th>
                     <th class="bg-info" width="80"><%= link_to "补料状态",  {action: "index", sort_date: "state"} %><span class="caret"></th>
-                    <th class="bg-info" width="100"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></th>
+                    <th class="bg-info" width="105"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></th>
                     <th class="bg-primary">备注</th>
                 </tr>
             </thead>

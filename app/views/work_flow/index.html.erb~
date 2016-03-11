@@ -59,7 +59,7 @@
         {document.getElementById('order_statebut').className='glyphicon glyphicon-minus';}
         }
         </script>
-        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#order_state" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">结单
+        <button class="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target="#order_state" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">结单
             <span id="order_statebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button> 
 <!--
@@ -192,7 +192,7 @@
         <div class="well">
                 <%= form_tag('/order_state', method:"post", class:"form-inline") do %>
                 <div>
-                    <p class="text-warning">数据格式：<code>单号</code></p>
+                    <p class="text-warning">数据格式：<code>单号 备注</code></p>
                     <p>
                         <%= text_area_tag :order_r, params[:order_r], size:"100x10", class:"form-control"%>
                     </p>                
@@ -236,7 +236,7 @@
     <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
         
         <div  style="margin: 2px;padding: 0px;">
-        <small>
+        
         <table class="table table-bordered table-condensed table-hover " >
             <thead >
                 <tr nowrap="nowrap">
@@ -302,13 +302,13 @@
                        
                     </td>
 -->
-                    <td nowrap="nowrap">
+                    <td class="success" nowrap="nowrap">
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
                         
                         <a tabindex="0" class="btn btn-sm  btn-info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="订单号--<%= work.order_no %>" data-content="<%= '下单日期: '+work.order_date.to_s + '  业务交期: ' + work.salesman_end_date.to_s +  '  产品代码： ' + work.product_code.to_s %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">信息</a>                         
                         <%= work.order_no %>
                     </td>
-                    <td>
+                    <td class="success">
                         <%= work.order_quantity %>
                     </td>
 <!--
@@ -319,7 +319,7 @@
                         <%= work.product_code %>
                     </td> 
 -->                
-                    <td> 
+                    <td class="success"> 
                         <%= work.warehouse_quantity %>
                     </td>
                     <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>
@@ -341,7 +341,7 @@
                     <td <% if work.dip_start_date != nil %>class="success"<% end %>>
                         <%= work.dip_start_date %>                                                              
                     </td> 
-                    <td>
+                    <td <% if work.dip_end_date != nil %>class="success"<% end %>>
                         <%= work.dip_end_date %>
                     </td> 
                     
@@ -521,7 +521,7 @@
                 <% end %>
                 <% end %>
             </tbody>
-        </small>
+        
         </table>
         </div>
         

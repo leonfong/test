@@ -375,29 +375,37 @@ before_filter :authenticate_user!
         if params[:order_state] or params[:order_y] or params[:order_r]
             if params[:order_state]
                 all_order = params[:order_state].strip.split("\r\n");
+                checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item + "'").first
+                if not checkorder.blank?
+                    checkorder.order_state = 1
+                else
+                    redirect_to work_flow_path, :flash => {:error => item+"--------结单失败，请检查订单号！"}
+                    return false
+                end
             elsif params[:order_y]
                 all_order = params[:order_y].strip.split("\r\n");
             elsif params[:order_r]
                 all_order = params[:order_r].strip.split("\r\n");
-            end
-            
-            all_order.each do |item|
-                checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item + "'").first
-                if not checkorder.blank?
-                    if params[:order_state]
-                        checkorder.order_state = 1
-                    elsif params[:order_y]
-                        checkorder.order_state = 2
-                    elsif params[:order_r]
-                        checkorder.order_state = 3 
+                all_order.each do |item|
+                    item_order = item.split(" ")
+                    if item_order.size == 2
+                        checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item_order[0] + "'").first
+                        if not checkorder.blank?
+                            checkorder.order_state = 3
+                            checkorder.remark = item_order[1] 
+                            checkorder.save
+                            work_history = Work.new
+                            work_history.order_date = checkorder.order_date
+                            work_history.order_no = checkorder.order_no
+                            work_history.order_quantity = checkorder.order_quantity
+                            work_history.remark = checkorder.remark
+                            work_history.user_name = current_user.email
+                            work_history.save
+                        end
+                    else
+                        redirect_to work_flow_path, :flash => {:error => item+"--------备注更新失败，请检查上传数据格式！"}
+                        return false
                     end
-                    checkorder.save
-                    #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                    #Rails.logger.info(checkorder.inspect)
-                    #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                else
-                    redirect_to work_flow_path, :flash => {:error => item+"--------结单失败，请检查订单号！"}
-                    return false
                 end
             end
         end

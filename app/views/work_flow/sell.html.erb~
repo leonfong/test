@@ -7,7 +7,7 @@
 
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning " %> 
-        <%= link_to "未回复的订单",  {action: "index"},class: "btn btn-danger " %> 
+        <%= link_to "未回复的问题",  {action: "index"},class: "btn btn-danger " %> 
     </div>
 
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
@@ -67,7 +67,7 @@
                     <th class="bg-primary" width="90">后焊通知生产</th>
                     <th class="bg-info" width="90">后焊交期</th>                    
  
-                    <th class="bg-warning" width="75">问题提醒</th>
+                    <th class="bg-warning" width="80">问题提醒</th>
 
                     
 

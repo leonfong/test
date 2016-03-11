@@ -94,25 +94,25 @@
                     <td> 
                     <%= submit_tag "更新", class:"btn btn-success btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
-                    <td>
+                    <td class="success">
                         <%= work.order_date %>  
                     </td>
-                    <td>
+                    <td class="success">
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>                         
                         <%= work.order_no %>
                     </td>
-                    <td>
+                    <td class="success">
                         <%= work.order_quantity %>
                     </td>
 
-                    <td>
+                    <td class="success">
                         <%= work.salesman_end_date %>
                     </td> 
-                    <td>
+                    <td class="success">
                         <%= work.product_code %>
                     </td> 
                 
-                    <td> 
+                    <td class="success"> 
                         <%= work.warehouse_quantity %>
                     </td>
                     <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>
@@ -150,7 +150,7 @@
                           });
                         </script>
                     </td> 
-                    <td>
+                    <td <% if work.dip_end_date != nil %>class="success"<% end %>>
                         <%= work.dip_end_date %>
                     </td> 
                     

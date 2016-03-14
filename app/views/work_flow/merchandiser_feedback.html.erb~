@@ -26,7 +26,7 @@
     <div class="col-md-12 " style="padding: 5px;" >
         
         <div class="panel panel-primary">
-            <div class="panel-heading" style="font-size: 18px;"><strong>问题--(<%= @topic.order_no %>)---<%= @topic.feedback_title %></strong></div>
+            <div class="panel-heading" style="font-size: 18px;"><strong>问题--(<%= @topic.order_no %>)</strong></div>
             <div class="panel-body">
                 
 

@@ -56,45 +56,7 @@
 <% end %>
 </div>
 
-<script type="text/javascript">
-function postform() {  	         
-    html = my_feedback.html();  
-<% if @topic.feedback_type == @topic.feedback_receive %>
-if (document.getElementById('send_up_mark').checked == true)
-    {
-    }
-else if (document.getElementById('topic_state_close').checked == false & document.getElementById('topic_state_open').checked == false)
-      {                    
-　　    alert("请选择是否要关闭问题！");                    
-　　    return false;                
-　     } 
-    else if (document.getElementById('topic_state_open').checked == true & html == "")
-      {                    
-　　    alert("请填写问题的内容！");                    
-　　    return false;                
-　     }
-    else if (document.getElementById('topic_state_open').checked == true & document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
-      {                    
-　　    alert("请选择接收问题的部门！");                    
-　　    return false;                
-　     }   
-<% else %>
-if (document.getElementById('send_up_mark').checked == true)
-    {
-    }
-    else if (document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
-      {                    
-　　    alert("请选择接收问题的部门！");                    
-　　    return false;                
-　     } 
-    else if (html == "")
-      {                    
-　　    alert("请填写问题的内容！");                    
-　　    return false;                
-　     }    
-<% end %>     
-}    
-</script>
+
 
 
 <%

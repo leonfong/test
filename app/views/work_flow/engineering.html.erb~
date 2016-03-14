@@ -4,19 +4,28 @@
 </div>
 <div class="row"style="padding: 0px;">
     <div class="col-md-3 nav navbar-nav" >
-        <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-lg" %>
+        <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
     </div>
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
        <div class="col-md-6 form-group  nav navbar-nav navbar-right">
           <lable for="order" , class="sr-only">Qrder : </lable>
-          <div class="input-group"> 
+          <div class="input-group input-group-sm"> 
+            <span class="input-group-addon"> 
+                <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
+                <%=  '全部' %>
+                <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
+                <%= '已结单' %>
+                <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
+                <%=  '未结单' %>
+                <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
+            </span> 
             <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%",  placeholder:"单号"%>     
+                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>
+                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%"%>
             <% end %>               
             <div class="input-group-btn">
-              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+              <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
           </div>
         </div>
@@ -39,7 +48,7 @@
 <%= will_paginate(@work_flow) %>
 <% if user_signed_in? %>
     <% if can? :work_d, :all %>
-<div class="row " style="padding-top: 10px;padding-right: 8px;padding-left: 8px;">
+<div class="row " style="padding-top: 10px;padding-right: 0px;padding-left: 0px;">
     <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
         
         <div  style="margin: 2px;padding: 0px;">

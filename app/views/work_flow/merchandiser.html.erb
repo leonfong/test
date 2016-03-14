@@ -19,11 +19,12 @@
                 <%= '已结单' %>
                 <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
                 <%=  '未结单' %>
+                <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
             </span>  
             <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%",  placeholder:"单号"%>     
+                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>
+                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%"%>
             <% end %>               
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>

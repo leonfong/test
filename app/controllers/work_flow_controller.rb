@@ -14,28 +14,7 @@ before_filter :authenticate_user!
         @open = "collapse" 
         @pic = "glyphicon glyphicon-plus"
         limit = "LIMIT 20"
-        add_where = " AND work_flows.order_state != 1"
-        @order_check_1 = false
-        @order_check_2 = false
-        @order_check_3 = true
-        if params[:order_s] 
-            if params[:order_s][:order_s].to_i == 1 
-                add_where = " " 
-                @order_check_1 = true
-                @order_check_2 = false
-                @order_check_3 = false
-            elsif params[:order_s][:order_s].to_i == 2 
-                add_where = " AND work_flows.order_state = 1"
-                @order_check_2 = true
-                @order_check_1 = false
-                @order_check_3 = false
-            elsif params[:order_s][:order_s].to_i == 3 
-                add_where = " AND work_flows.order_state != 1"
-                @order_check_3 = true
-                @order_check_2 = false
-                @order_check_1 = false
-            end
-        end
+        
         if params[:order]
             if params[:order].strip.size == 1
                 order = params[:order].strip
@@ -57,6 +36,39 @@ before_filter :authenticate_user!
             order = ""
             where_def = "  work_flows.order_no like '%" + order + "%'"
             #limit = ""
+        end
+        add_where = " AND work_flows.order_state != 1"
+        @order_check_1 = false
+        @order_check_2 = false
+        @order_check_3 = true
+        @order_check_4 = false
+        if params[:order_s] 
+            if params[:order_s][:order_s].to_i == 1 
+                add_where = " " 
+                @order_check_1 = true
+                @order_check_2 = false
+                @order_check_3 = false
+                @order_check_4 = false
+            elsif params[:order_s][:order_s].to_i == 2 
+                add_where = " AND work_flows.order_state = 1"
+                @order_check_2 = true
+                @order_check_1 = false
+                @order_check_3 = false
+                @order_check_4 = false
+            elsif params[:order_s][:order_s].to_i == 3 
+                add_where = " AND work_flows.order_state != 1"
+                @order_check_3 = true
+                @order_check_2 = false
+                @order_check_1 = false
+                @order_check_4 = false
+            elsif params[:order_s][:order_s].to_i == 4 
+                where_def = " product_code = '#{params[:order].strip}'"
+                add_where = ""
+                @order_check_3 = false
+                @order_check_2 = false
+                @order_check_1 = false
+                @order_check_4 = true
+            end
         end
         if params[:empty_date] 
             add_where = ""
@@ -221,6 +233,10 @@ before_filter :authenticate_user!
         #@work_flow = WorkFlow.find(params[:id])
         @topic = Topic.find(params[:id]) 
         @feedback_all = Feedback.where(topic_id: params[:id]).order("created_at DESC")
+        @receive = ""
+        @topic.feedback_receive.split(',').each do |rece|
+            @receive += " " + t(:"#{rece}")
+        end
         if can? :work_c, :all
             render "production_feedback.html.erb"
         elsif can? :work_d, :all

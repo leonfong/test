@@ -89,6 +89,7 @@
                 <%= '已结单' %>
                 <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
                 <%=  '未结单' %>
+                <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
             </span>   
             <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
             <div class="input-group-btn">
@@ -290,7 +291,7 @@
                 </tr>
                 <% end %>
                 <tr> 
-                   <td colSpan="18" style="margin: 0px;padding: 0px;">
+                   <td colSpan="19" style="margin: 0px;padding: 0px;">
                     <div  >
                         <div class="<%= @open %>" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">

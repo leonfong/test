@@ -16,16 +16,17 @@
           <div class="input-group">
             <span class="input-group-addon"> 
                 <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
-                <%= label :order_s_all, '全部' %>
+                <%=  '全部' %>
                 <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
-                <%= label :order_s_end, '已结单' %>
+                <%= '已结单' %>
                 <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
-                <%= label :order_s_ongoing, '未结单' %>
+                <%=  '未结单' %>
+                <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
             </span>    
             <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control ", size:"100%",  placeholder:"单号"%>     
+                <%= text_field_tag :order, @order_no, class:"form-control ", size:"100%"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%",  placeholder:"单号"%>
+                <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%"%>
             <% end %>    
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary " %>
@@ -83,7 +84,7 @@
                 <% @work_flow.each do |work| %>
                 
                 <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> nowrap="nowrap"> 
-                    <td> 
+                    <td class="success"> 
                         <script>
                             function change_<%= work.id.to_s %>(){
                                 if (document.getElementById('<%= work.id.to_s + work.order_no %>').className=='collapse in')
@@ -97,25 +98,25 @@
                         </button>
                     </td> 
 
-                    <td>
+                    <td class="success">
                         <%= work.order_date %>  
                     </td>
-                    <td>
+                    <td class="success">
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>                         
                         <%= work.order_no %>
                     </td>
-                    <td>
+                    <td class="success">
                         <%= work.order_quantity %>
                     </td>
 
-                    <td>
+                    <td class="success">
                         <%= work.salesman_end_date %>
                     </td> 
-                    <td>
+                    <td class="success">
                         <%= work.product_code %>
                     </td> 
                 
-                    <td> 
+                    <td class="success"> 
                         <%= work.warehouse_quantity %>
                     </td>
                     <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>

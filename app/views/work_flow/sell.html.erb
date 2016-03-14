@@ -6,26 +6,27 @@
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
 
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
-        <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning " %> 
-        <%= link_to "未回复的问题",  {action: "index"},class: "btn btn-danger " %> 
+        <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
+        <%= link_to "未回复的问题",  {action: "index"},class: "btn btn-danger btn-sm" %> 
     </div>
 
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
        <div class="col-md-4 form-group nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
           <lable for="order" , class="sr-only">Qrder : </lable>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <span class="input-group-addon"> 
                 <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
-                <%= label :order_s_all, '全部' %>
+                <%=  '全部' %>
                 <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
-                <%= label :order_s_end, '已结单' %>
+                <%= '已结单' %>
                 <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
-                <%= label :order_s_ongoing, '未结单' %>
+                <%=  '未结单' %>
+                <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
             </span>    
             <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control ", size:"100%",  placeholder:"单号"%>     
+                <%= text_field_tag :order, @order_no, class:"form-control ", size:"100%"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%",  placeholder:"单号"%>
+                <%= text_field_tag :order, params[:order], class:"form-control ", size:"100%"%>
             <% end %>    
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary " %>

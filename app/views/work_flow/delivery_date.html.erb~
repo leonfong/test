@@ -212,15 +212,15 @@
                 <% @work_flow.each do |work| %>
                 <%= form_tag('/edit_work', method:"post") do %>
                 <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> >                
-                    <td><%= submit_tag "提交", class:"btn btn-success btn-sm" %></td>
-                    <td>
+                    <td class="success"><%= submit_tag "提交", class:"btn btn-success btn-sm" %></td>
+                    <td class="success">
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= work.order_no %>
                     </td>
-                    <td><%= work.order_quantity %></td> 
-                    <td><%= work.salesman_end_date %></td> 
-                    <td><%= work.product_code %></td>                 
-                    <td><%= work.warehouse_quantity %></td>
+                    <td class="success"><%= work.order_quantity %></td> 
+                    <td class="success"><%= work.salesman_end_date %></td> 
+                    <td class="success"><%= work.product_code %></td>                 
+                    <td class="success"><%= work.warehouse_quantity %></td>
                     <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>
                         <%= work.smd %>
                     </td>
@@ -287,6 +287,91 @@
         <% end %>
 
 <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% if @topic %>
+<%= will_paginate(@topic) %>
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        
+       <div class="panel panel-info " >
+                   <div class="panel-heading"><span class="text-primary"><strong>未处理的问题</strong></span></div>
+                    
+                    <table class="table table-bordered">  
+                        <thead>
+                            <tr>
+                                <th width="55">操作</th>
+                                <th width="80">问题编号</th>
+                                <th width="150">单号</th>  
+                                <th width="140">产品代码</th>
+                                <th width="70">作者</th>
+                                <th width="70">状态</th>
+                                <th width="70">owner</th>
+                                <th>内容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<% @topic.each do |work| %>
+                            <tr <% if work.mark == "mark" %>class="warning"<% end %>>
+                                <td>
+                                    <%= link_to "处理",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %>
+                                </td>
+                                <td>
+                                    No.<%= work.id %>
+                                </td>
+                                <td> 
+                                    <%= work.order_no %>
+                                </td>
+                                <td>
+                                    <%= work.product_code %>
+                                </td>
+                                
+                                <td>
+                                    <%= User.where(email: work.user_name).first.full_name %>
+                                </td>
+                                <td>
+                                    <% receive = "" %>
+                                    <% work.feedback_receive.split(',').each do |rece| %>
+                                        <% receive += " " + t(:"#{rece}") %>
+                                    <% end %>
+                                    <%= receive %>
+                                </td>
+                                <td>
+                                    <%= work.feedback_receive_user %>
+                                </td>
+                                <td>
+                                    <%= raw work.feedback %>
+                                </td> 
+                            </tr>
+<% end %>
+                        </tbody>
+                    </table>
+                    
+                </div>
+        
+   
+    </div>
+</div>
+
+
+<% end %>
+
+
+
+
 
 </small>
 <%

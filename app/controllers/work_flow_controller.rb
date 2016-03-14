@@ -138,7 +138,7 @@ before_filter :authenticate_user!
             end
             limit = ""            
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 14)   
-                    
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)   
             render "delivery_date.html.erb"
         elsif can? :work_e, :all
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%sell%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)

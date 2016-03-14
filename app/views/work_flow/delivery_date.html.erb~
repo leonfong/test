@@ -201,7 +201,7 @@
                     <th class="bg-primary" width="90">后焊通知生产</th>
                     <th class="bg-info" width="105"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></th>
                     
- 
+                    <th class="bg-warning" width="85">问题提醒</th>
                     <th class="bg-primary" width="80">补料已回</th>
                     <th class="bg-info" width="80"><%= link_to "补料状态",  {action: "index", sort_date: "state"} %><span class="caret"></th>
                     <th class="bg-info" width="105"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></th>
@@ -267,6 +267,9 @@
                             });    
                           });
                         </script>
+                    </td>
+                    <td>
+                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">Warning</a>
                     </td> 
                     <td><%= work.supplement_date %></td>
                     <td><%= work.feed_state %></td>
@@ -301,128 +304,9 @@
         
         <div class="panel ">
             <div class="panel-heading">
-                <button class="btn btn-primary btn-sm" data-toggle="modal"  data-target="#<%= work.id.to_s + 'modal' %>">发表新的问题</button>
+                
                 <strong>反馈汇总--<%= work.order_no %></strong>
             </div>
-<div class="modal fade" id="<%= work.id.to_s + 'modal' %>" tabindex="-1" role="dialog" aria-labelledby="<%= work.id.to_s + 'ModalLabel' %>">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="<%= work.id.to_s + 'ModalLabel' %>">生产部---新建问题</h4>
-      </div>
-
-      <%= form_tag('/edit_work', method:"post") do %>
-      <div class="modal-body">
-          <!--
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">标题:</label>
-            <input type="text" name="feedback_title" id="<%= work.id.to_s %>feedback_title" class="form-control" />
-          </div>
--->
-          <div class="form-group">
-              <label for="recipient-name" class="control-label">发送到:</label>
-                      <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="engineering" name="receive_feedback[]" id="receive_feedback_receive_feedback_engineering<%= work.id.to_s %>" />
-                               <strong>工程部</strong>
-                           </label>
-                       </div>
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="procurement" name="receive_feedback[]" id="receive_feedback_receive_feedback_procurement<%= work.id.to_s %>" /> 
-                               <strong>采购部</strong>
-                           </label>
-                       </div>
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="merchandiser" name="receive_feedback[]" id="receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>" />
-                               <strong>跟单部</strong>
-                           </label>
-                       </div> 
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />
-                               <strong>业务部</strong>
-                           </label>
-                       </div> 
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">内容:</label>
-            <%= text_field_tag :topic_up, params[:topic_up], class:"sr-only", size:2 , value: work.id.to_s %>  
-            <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %> 
-
-            <textarea name="production_feedback" id="<%= work.id.to_s %>"></textarea>
-<script>
-KindEditor.ready(function(K){
-        	my_feedback<%= work.id.to_s %> = K.create('#<%= work.id.to_s %>', {"items":["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"],"width":"100%","height":300,"allowFileManager":true,"uploadJson":"http://www.fastbom.com/kindeditor/upload","fileManagerJson":"http://www.fastbom.com/kindeditor/filemanager","htmlTags":{
-		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
-		span : [
-			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',
-			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
-		],
-		div : [
-			'id', 'class', 'align', '.border', '.margin', '.padding', '.text-align', '.color',
-			'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
-			'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
-		],
-		table: [
-			'id', 'class', 'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
-			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
-			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
-			'.width', '.height', '.border-collapse'
-		],
-		'td,th': [
-			'id', 'class', 'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
-			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
-			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
-		],
-		a : ['id', 'class', 'href', 'target', 'name'],
-		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
-		img : ['id', 'class', 'src', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
-		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
-			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
-			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
-		],
-		pre : ['id', 'class'],
-		hr : ['id', 'class', '.page-break-after'],
-		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : ['id', 'class'],
-		iframe : ['id', 'class', 'src', 'frameborder', 'width', 'height', '.width', '.height']
-	}});
-        });
-</script>
-          </div>
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-         
-        <input type="submit" name="commit" value="提交" class="btn btn-primary" onclick="return postform<%= work.id.to_s %>()" />
-      </div>
-<script type="text/javascript">
-function postform<%= work.id.to_s %>() {  	 
-    //var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
-    html = my_feedback<%= work.id.to_s %>.html();     
-    if (document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_procurement<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
-      {                    
-　　    alert("请选择接收的部门！");                    
-　　    return false;                
-　     }            
-    else if (html == "")
-      {                    
-　　    alert("请填写内容！");                    
-　　    return false;                
-　     }        
-}    
-</script>  
-      <% end %>
-
-    </div>
-  </div>
-</div>
-
-
-
 
 
 <% Topic.where(order_no: work.order_no).order("updated_at DESC").each do |fed| %>

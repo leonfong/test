@@ -155,9 +155,8 @@
                     </td> 
                     
                    <td>
-                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">Warning</a>                                                             
+                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">Warning</a>
                     </td>                                        
-                    </td>
                     <td>
                         <%= work.supplement_date %>                       
                     </td>

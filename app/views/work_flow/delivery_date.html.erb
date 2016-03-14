@@ -201,7 +201,7 @@
                     <th class="bg-primary" width="90">后焊通知生产</th>
                     <th class="bg-info" width="105"><%= link_to "后焊交期",  {action: "index", sort_date: "dip"} %><span class="caret"></th>
                     
- 
+                    <th class="bg-warning" width="85">问题提醒</th>
                     <th class="bg-primary" width="80">补料已回</th>
                     <th class="bg-info" width="80"><%= link_to "补料状态",  {action: "index", sort_date: "state"} %><span class="caret"></th>
                     <th class="bg-info" width="105"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></th>
@@ -267,6 +267,9 @@
                             });    
                           });
                         </script>
+                    </td>
+                    <td>
+                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">Warning</a>
                     </td> 
                     <td><%= work.supplement_date %></td>
                     <td><%= work.feed_state %></td>
@@ -287,7 +290,7 @@
                 </tr>
                 <% end %>
                 <tr> 
-                   <td colSpan="18" style="margin: 0px;padding: 0px;">
+                   <td colSpan="19" style="margin: 0px;padding: 0px;">
                     <div  >
                         <div class="<%= @open %>" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">

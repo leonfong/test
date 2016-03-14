@@ -208,8 +208,8 @@ before_filter :authenticate_user!
                 end
             end
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)
-            if @work_flow.size == 1                
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+            #if @work_flow.size == 1                
+                #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
             end
             #render "index.html.erb"
             #redirect_to action: :index, data: { no_turbolink: true }

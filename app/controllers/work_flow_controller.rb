@@ -184,7 +184,7 @@ before_filter :authenticate_user!
         elsif can? :work_g, :all
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def ).paginate(:page => params[:page], :per_page => 10)
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
@@ -397,12 +397,15 @@ before_filter :authenticate_user!
         if params[:order_state] or params[:order_y] or params[:order_r]
             if params[:order_state]
                 all_order = params[:order_state].strip.split("\r\n");
-                checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item + "'").first
-                if not checkorder.blank?
-                    checkorder.order_state = 1
-                else
-                    redirect_to work_flow_path, :flash => {:error => item+"--------结单失败，请检查订单号！"}
-                    return false
+                all_order.each do |item|
+                    checkorder = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE  work_flows.order_no = '" + item + "'").first
+                    if not checkorder.blank?
+                        checkorder.order_state = 1
+                        checkorder.save
+                    else
+                        redirect_to work_flow_path, :flash => {:error => item+"--------结单失败，请检查订单号！"}
+                        return false
+                    end
                 end
             elsif params[:order_y]
                 all_order = params[:order_y].strip.split("\r\n");

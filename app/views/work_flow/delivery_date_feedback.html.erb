@@ -1,0 +1,67 @@
+<div class="container" >
+<div class="row" style="padding: 0px;">
+  <h2><p class="text-primary">生产部处理问题</p></h2><hr>
+</div>
+<div class="row"style="padding: 0px;">
+    <div class="col-md-3 nav navbar-nav" >
+        <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-lg" %>
+    </div>
+    <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
+       <div class="col-md-6 form-group  nav navbar-nav navbar-right">
+          <lable for="order" , class="sr-only">Qrder : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>          
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+<% if @topic %>
+
+
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="font-size: 18px;"><strong>问题--(<%= @topic.order_no %>)</strong></div>
+            <div class="panel-body">
+                
+
+             <% @feedback_all.each do |fed| %>
+                <div class="panel panel-info " style="background-color: #d9edf7;">
+                    
+                       <div style="word-break:break-all;white-space:normal;"><p><% if fed.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif fed.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif fed.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif fed.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% elsif fed.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: fed.user_name).first.full_name %></strong></span> &raquo; <%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                        <p><strong><%= raw fed.feedback %></strong></p></div>
+                        
+                </div>
+            <% end %>
+            
+            <div class="panel panel-info " style="background-color: #d9edf7;">
+                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% elsif @topic.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: @topic.user_name).first.full_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                        <p><strong><%= raw @topic.feedback %></strong></p></div>
+                        
+                </div>
+            
+            </div>
+        </div>
+        
+   
+    </div>
+</div>
+
+
+<% end %>
+</div>
+
+
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts purchasing and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

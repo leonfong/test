@@ -231,6 +231,8 @@ before_filter :authenticate_user!
             render "merchandiser_feedback.html.erb"
         elsif can? :work_g, :all
             render "procurement_feedback.html.erb"
+        elsif can? :work_b, :all
+            render "delivery_date_feedback.html.erb"
         end
     end
 

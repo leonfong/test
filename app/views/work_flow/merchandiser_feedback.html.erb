@@ -50,13 +50,13 @@
 
                     
                     <ul class="list-group">
-                    <% if @topic.feedback_type == @topic.feedback_receive %>
+                    
                         <li class="list-group-item">
                             <div class="form-group">                                
                                 <div class="radio-inline">
                                     <label>
                                         <input type="radio" value="close" name="topic_state" id="topic_state_close" />
-                                        <strong><span class="label label-success" style="font-size: 13px;">反馈的信息我很满意,我要关闭问题</span></strong>
+                                        <strong><span class="label label-success" style="font-size: 13px;">反馈的信息我很满意,我要关闭问题，并且总结问题的解决方案</span></strong>
                                     </label>
                                 </div>                                            
                                 <div class="radio-inline">
@@ -67,7 +67,7 @@
                                 </div> 
                             </div>
                         </li>
-                    <% end %> 
+                    
                         <li class="list-group-item" style="margin: 0px;padding: 0px;">
                             <%= text_field_tag :work_id, params[:work_id], class:"sr-only", value: @topic.order_id.to_s %>
                             <%= text_field_tag :feedback_up,params[:feedback_up],class:"sr-only",value: @topic.id.to_s %>
@@ -145,7 +145,6 @@
 <script type="text/javascript">
 function postform() {  	         
     html = my_feedback.html();  
-<% if @topic.feedback_type == @topic.feedback_receive %>
 if (document.getElementById('send_up_mark').checked == true)
     {
     }
@@ -156,24 +155,19 @@ else if (document.getElementById('topic_state_close').checked == false & documen
 　     } 
     else if (document.getElementById('topic_state_open').checked == true & html == "")
       {                    
-　　    alert("请填写问题的内容！");                    
+　　    alert("请填写回复的内容！");                    
 　　    return false;                
 　     }
-    else if (document.getElementById('topic_state_open').checked == true & document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
+    else if (document.getElementById('topic_state_close').checked == true & html == "")
+      {                    
+　　    alert("请填写回复的内容！");                    
+　　    return false;                
+　     }
+    else if (document.getElementById('topic_state_open').checked == true & html != "" & document.getElementById('topic_state_open').checked == true & document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                
 　     }   
-<% else %>
-if (document.getElementById('send_up_mark').checked == true)
-    {
-    }
-    else if (document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
-      {                    
-　　    alert("请选择接收问题的部门！");                    
-　　    return false;                
-　     }     
-<% end %>     
 }    
 </script>
 

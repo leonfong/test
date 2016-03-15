@@ -257,17 +257,60 @@ function postform<%= work.id.to_s %>() {
                    
 
 
-             <div class="col-md-6  panel panel-success " style="margin: 0px;">
+                          <div class="col-md-6  panel  " style="margin: 0px;">
+             <% answer = Feedback.where(topic_id: fed.id, feedback_level: '1').order("created_at ")%>
+             <% if not answer.blank? %>
+             <% answer.each do |feed| %>
+                <div class="row " >
+                <div class="col-md-12  panel panel-danger " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
+
+                        <script>
+                            function change_<%= feed.id.to_s %>(){
+                                if (document.getElementById('<%= feed.id.to_s + feed.order_no %>').className=='collapse in')
+                                    {document.getElementById('<%= feed.id.to_s + "but" %>').className='glyphicon glyphicon-plus';}
+                                else
+                                    {document.getElementById('<%= feed.id.to_s + "but" %>').className='glyphicon glyphicon-minus';}
+                                }
+                        </script>
+                        
+
+                       <p class="text-right" style="margin: 0px;"><small><span class="text-danger" ><strong>跟单部反馈-解决方案</strong></span> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %><button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#<%= feed.id.to_s + feed.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  onclick="change_<%= feed.id.to_s %>()">
+                            <span id="<%= feed.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
+                        </button></small></p></div>                     
+                </div>
+                </div>
+            
+<div class="collapse" id="<%= feed.id.to_s + feed.order_no %>" >
              <% Feedback.where(topic_id: fed.id).order("created_at ").each do |feed| %>
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
-                        
-                        
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
+                </div>
+                </div>
+            <% end %>   
+</div>
+            <% end %>
+            <% else %> 
+             <% Feedback.where(topic_id: fed.id).order("created_at ").each do |feed| %>
+                <div class="row" >
+                <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
                 </div>
                 </div>
             <% end %>
+            <% end %>
+
+
+
+
+
+
+
+
+
             </div>
             </div>
              <% receive = "" %>

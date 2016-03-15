@@ -28,6 +28,7 @@ gem 'tilt','~> 1.1', '!= 1.3.0'
 gem 'sprockets-rails', '~>2.2.4'
 
 
+gem 'rufus-scheduler', '~> 3.2.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 

@@ -5,7 +5,8 @@
 </div>
 <div class="row" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
-        <%= link_to "查询料齐的订单&未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
+        <%= link_to "查询料齐的订单&未处理的问题",  {action: "index"}, class: "btn btn-warning  btn-sm" %>
+        <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger  btn-sm" %>
     </div>
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
        <div class="col-md-4 form-group nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
@@ -21,9 +22,9 @@
                 <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
             </span> 
             <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%",  placeholder:"单号"%>     
+                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%",  placeholder:"单号"%>
+                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%"%>
             <% end %>               
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
@@ -59,15 +60,8 @@
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
                     <th class="bg-primary" width="60">操作</th>
-
-                    <th class="bg-primary" width="80">下单日期</th>
-
                     <th class="bg-primary" width="150">单号</th>
                     <th class="bg-primary" width="50">数量</th>
-
-                    <th class="bg-primary" width="80">业务交期</th>
-                    <th class="bg-primary" width="150">产品代码</th>
-                   
                     <th class="bg-primary" width="60">入库数量</th>
                     <th class="bg-primary" width="60">SMT</th>
                     <th class="bg-primary" width="60">DIP</th>
@@ -103,24 +97,14 @@
                     <td class="success"> 
                     <%= submit_tag "更新", class:"btn btn-success btn-sm" , style:"height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" %>
                     </td>
+                    
                     <td class="success">
-                        <%= work.order_date %>  
-                    </td>
-                    <td class="success">
-                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>                         
+                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>   
                         <%= work.order_no %>
                     </td>
                     <td class="success">
                         <%= work.order_quantity %>
-                    </td>
-
-                    <td class="success">
-                        <%= work.salesman_end_date %>
-                    </td> 
-                    <td class="success">
-                        <%= work.product_code %>
-                    </td> 
-                
+                    </td>  
                     <td class="success"> 
                         <%= work.warehouse_quantity %>
                     </td>
@@ -181,7 +165,7 @@
                 </tr>
                 <% end %>
                 <tr> 
-                   <td colSpan="19" style="margin: 0px;padding: 0px;">
+                   <td colSpan="16" style="margin: 0px;padding: 0px;">
                     <div  >
                         <div class="<%= @open %>" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">
@@ -341,17 +325,59 @@ function postform<%= work.id.to_s %>() {
                    
 
 
-             <div class="col-md-6  panel panel-success " style="margin: 0px;">
+                          <div class="col-md-6  panel  " style="margin: 0px;">
+             <% answer = Feedback.where(topic_id: fed.id, feedback_level: '1').order("created_at ")%>
+             <% if not answer.blank? %>
+             <% answer.each do |feed| %>
+                <div class="row " >
+                <div class="col-md-12  panel panel-danger " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
+
+                        <script>
+                            function change_<%= feed.id.to_s %>(){
+                                if (document.getElementById('<%= feed.id.to_s + feed.order_no %>').className=='collapse in')
+                                    {document.getElementById('<%= feed.id.to_s + "but" %>').className='glyphicon glyphicon-plus';}
+                                else
+                                    {document.getElementById('<%= feed.id.to_s + "but" %>').className='glyphicon glyphicon-minus';}
+                                }
+                        </script>
+                        
+
+                       <p class="text-right" style="margin: 0px;"><small><span class="text-danger" ><strong>跟单部反馈-解决方案</strong></span> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %><button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#<%= feed.id.to_s + feed.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  onclick="change_<%= feed.id.to_s %>()">
+                            <span id="<%= feed.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
+                        </button></small></p></div>                     
+                </div>
+                </div>
+            
+<div class="collapse" id="<%= feed.id.to_s + feed.order_no %>" >
              <% Feedback.where(topic_id: fed.id).order("created_at ").each do |feed| %>
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>
-                        
-                        
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
+                </div>
+                </div>
+            <% end %>   
+</div>
+            <% end %>
+            <% else %> 
+             <% Feedback.where(topic_id: fed.id).order("created_at ").each do |feed| %>
+                <div class="row" >
+                <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
                 </div>
                 </div>
             <% end %>
+            <% end %>
+
+
+
+
+
+
+
+
             </div>
             </div>
              <% receive = "" %>

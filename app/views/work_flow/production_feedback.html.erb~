@@ -40,7 +40,7 @@
             <% end %>
             
             <div class="panel panel-info " style="background-color: #d9edf7;">
-                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% elsif @topic.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: @topic.user_name).first.full_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></p><br>
+                       <div style="word-break:break-all;white-space:normal;"><p><% if @topic.feedback_type=="production" %><span class="label label-warning" style="font-size: 13px;">生产部反馈</span><% elsif @topic.feedback_type=="engineering"%><span class="label label-danger" style="font-size: 13px;">工程部反馈</span><% elsif @topic.feedback_type=="sell"%><span class="label label-success" style="font-size: 13px;">业务部反馈</span><% elsif @topic.feedback_type=="procurement"%><span class="label label-info" style="font-size: 13px;">采购部反馈</span><% elsif @topic.feedback_type=="merchandiser"%><span class="label label-info" style="font-size: 13px;">跟单部反馈</span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: @topic.user_name).first.full_name %></strong></span> &raquo; <%= @topic.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %><strong> 当前状态 </strong><span class="text-primary"><%= @receive %></span></p><br>
                         <p><strong><%= raw @topic.feedback %></strong></p></div>
                         
                 </div>
@@ -50,24 +50,7 @@
 
                     
                     <ul class="list-group">
-                    <% if @topic.feedback_type == @topic.feedback_receive %>
-                        <li class="list-group-item">
-                            <div class="form-group">                                
-                                <div class="radio-inline">
-                                    <label>
-                                        <input type="radio" value="close" name="topic_state" id="topic_state_close" />
-                                        <strong><span class="label label-success" style="font-size: 13px;">反馈的信息我很满意,我要关闭问题</span></strong>
-                                    </label>
-                                </div>                                            
-                                <div class="radio-inline">
-                                    <label>
-                                        <input type="radio" value="open" name="topic_state" id="topic_state_open" />
-                                        <strong><span class="label label-danger" style="font-size: 13px;">我还不是很明白,我要继续提问</span></strong>
-                                    </label>
-                                </div> 
-                            </div>
-                        </li>
-                    <% end %> 
+                     
                         <li class="list-group-item" style="margin: 0px;padding: 0px;">
                             <%= text_field_tag :work_id, params[:work_id], class:"sr-only", value: @topic.order_id.to_s %>
                             <%= text_field_tag :feedback_up,params[:feedback_up],class:"sr-only",value: @topic.id.to_s %>

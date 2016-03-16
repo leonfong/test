@@ -1,15 +1,15 @@
 <small>
-<div class="container" >
 <div class="row" style="padding: 0px;">
   <h2><p class="text-primary">跟单部问题跟踪&反馈</p></h2><hr>
   <%= render 'layouts/flash_messages' %>
 </div>
-<div class="row"style="padding: 0px;">
-    <div class="col-md-3 nav navbar-nav" >
+<div class="row" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
+    <div class="col-md-3 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
+        <%= link_to "查询已经关闭的问题",  {action: "index",close: "1"}, class: "btn btn-success  btn-sm" %>
     </div>
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
-       <div class="col-md-6 form-group  nav navbar-nav navbar-right">
+       <div class="col-md-4 form-group  nav navbar-nav navbar-right" style="margin: 3px;padding: 0px;">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm">
             <span class="input-group-addon"> 
@@ -61,12 +61,12 @@
                     <th class="bg-primary" width="50">详细</th>
                     
 
-                    <th class="bg-primary" width="80">下单日期</th>
+                    
 
                     <th class="bg-primary" width="150">单号</th>
                     <th class="bg-primary" width="50">数量</th>
 
-                    <th class="bg-primary" width="80">业务交期</th>
+                    
                     <th class="bg-primary" width="150">产品代码</th>
                    
                     <th class="bg-primary" width="60">入库数量</th>
@@ -76,7 +76,8 @@
                     <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></span></th>
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="110"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>
-                    
+                    <th class="bg-warning" width="85">问题提醒</th>
+                    <th class="bg-primary">备注</th>
                 </tr>
             </thead>
             <tbody >
@@ -97,20 +98,15 @@
                         </button>
                     </td> 
 
+                    
                     <td>
-                        <%= work.order_date %>  
-                    </td>
-                    <td>
-                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>                         
+                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>  
                         <%= work.order_no %>
                     </td>
                     <td>
                         <%= work.order_quantity %>
                     </td>
 
-                    <td>
-                        <%= work.salesman_end_date %>
-                    </td> 
                     <td>
                         <%= work.product_code %>
                     </td> 
@@ -140,6 +136,12 @@
                     <td <% if work.dip_end_date != nil %>class="success"<% end %>>
                         <%= work.dip_end_date %>
                     </td> 
+                    <td>
+                       <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">Warning</a>
+                    </td>
+                    <td>  
+                        <%= work.remark %>
+                    </td>  
                 </tr>
                 <tr> 
                    <td colSpan="13" style="margin: 0px;padding: 0px;">
@@ -443,7 +445,7 @@ function postform<%= work.id.to_s %>() {
     <div class="col-md-12 " style="padding: 5px;" >
         
        <div class="panel panel-info " >
-                   <div class="panel-heading"><span class="text-primary"><strong>未处理的问题</strong></span></div>
+                   <div class="panel-heading"><span class="text-primary"><strong><%= @issue_lable %></strong></span></div>
                     
                     <table class="table table-bordered">  
                         <thead>
@@ -503,7 +505,7 @@ function postform<%= work.id.to_s %>() {
 
 
 <% end %>
-</div>
+
 </small> 
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

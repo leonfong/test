@@ -184,7 +184,13 @@ before_filter :authenticate_user!
                     add_orderby = " ORDER BY work_flows.clear_date " 
                 end
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            if params[:close]
+                @issue_lable = "已经关闭的问题"
+                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY topics.updated_at DESC" ).paginate(:page => params[:page], :per_page => 10)
+            else
+                @issue_lable = "未关闭的问题"
+                @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            end
             if params[:order] or params[:sort_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                

@@ -184,15 +184,15 @@ before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword
                         naive_id= naive_id_all[(prices_all.index prices_all.min)]
                         naive_part= part_all[(prices_all.index prices_all.min)]
                         mpn_item = MpnItem.find_by_sql("SELECT * FROM `mpn_items` WHERE `mpn` = '"+naive_part+"'").first
-                        Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item")
+                        Rails.logger.info("mpn_item---------------------------------------------------------------mpn_item")
                         Rails.logger.info(mpn_item.inspect)   
-                        Rails.logger.info("mpn_item--------------------------------------------------------------------------mpn_item") 
+                        Rails.logger.info("mpn_item------------------------------------------------------------mpn_item") 
                         if mpn_item.blank?
                             @mpn_item.each do |result|
                                 if result['distributor']['id'] == naive_id
-                                    Rails.logger.info("naive_id--------------------------------------------------------------------------") 
+                                    Rails.logger.info("naive_id-----------------") 
                                     Rails.logger.info(naive_id.inspect)   
-                                    Rails.logger.info("naive_id------------------------------------------------------------------------")      
+                                    Rails.logger.info("naive_id--------------------")      
                                     result['parts'].each do |part|
                                         if part['part'] == naive_part
                                             @price_result << part['part']

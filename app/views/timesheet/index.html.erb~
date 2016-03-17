@@ -1,3 +1,4 @@
+<% if can? :work_h, :all  %>
 <div class="container" >
 <div class="row" style="padding: 0px;">
   <h2><p class="text-primary">工时统计&录入</p></h2><hr>
@@ -141,7 +142,7 @@
                                 <th colSpan="2">工时</th> 
                                 <th rowspan="2" width="180">更新时间</th> 
                             </tr>
-                            <tr style="background-color:#E0E0E0;">                                    
+                            <tr style="background-color:#F0F0F0;">                                    
                                 <th width="55">钢网</th>
                                 <th width="55">过炉</th>
                                 <th width="55">测试</th>
@@ -203,7 +204,8 @@ function postform() {
 　     }            
         
 }    
-</script>   
+</script>  
+<% end %> 
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

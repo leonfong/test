@@ -62,7 +62,7 @@
                     <th class="bg-primary" width="60">操作</th>
                     <th class="bg-primary" width="150">单号</th>
                     <th class="bg-primary" width="50">数量</th>
-                    <th class="bg-primary" width="60">入库数量</th>
+                    <th class="bg-primary" width="80">入库数量</th>
                     <th class="bg-primary" width="60">SMT</th>
                     <th class="bg-primary" width="60">DIP</th>
                     <th class="bg-primary" width="100">贴片通知生产</th>
@@ -212,12 +212,7 @@
                                <strong>采购部</strong>
                            </label>
                        </div>
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="merchandiser" name="receive_feedback[]" id="receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>" />
-                               <strong>跟单部</strong>
-                           </label>
-                       </div> 
+                        
                        <div class="checkbox-inline">
                            <label>
                                <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />

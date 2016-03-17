@@ -2073,7 +2073,7 @@ a.bg-primary:hover {
 
 /* line 5, /home/michael/.rvm/gems/ruby-2.2.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_background-variant.scss */
 .bg-success {
-  background-color: #dff0d8;
+  background-color: #339966;
 }
 
 /* line 8, /home/michael/.rvm/gems/ruby-2.2.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_background-variant.scss */
@@ -6135,7 +6135,7 @@ tbody.collapse.in {
 .pagination {
   display: inline-block;
   padding-left: 0;
-  margin: 5px 0;
+  margin: 20px 0;
   border-radius: 4px;
 }
 /* line 10, /home/michael/.rvm/gems/ruby-2.2.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_pagination.scss */

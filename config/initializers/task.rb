@@ -20,7 +20,7 @@ scheduler.every '48h' do  #在10分钟以后执行一次任务
         ##Rails.logger.info("prices_all--------------------------------------------------------------------------")   
         #Rails.logger.info("prices_all222222222222222222222222222222222222222222222222222222222222222222222222222") 
         #Rails.logger.info(server_response['response'].inspect)
-        #Rails.logger.info(server_response.inspect)
+        #Rails.logger.info(resp.body)
         ###Rails.logger.info("prices_all22222222222222222222222222222222222222222222222222222222222222222222") 
         #server_response['response'].each do |it|
             #Rails.logger.info("prices_44444444444444444444444444444444444")
@@ -28,7 +28,7 @@ scheduler.every '48h' do  #在10分钟以后执行一次任务
         #end
         info_mpn = InfoPart.new
         info_mpn.mpn = mpn
-        info_mpn.info = server_response
+        info_mpn.info = resp.body
         info_mpn.save
     end
             

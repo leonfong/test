@@ -161,12 +161,7 @@
                                <strong>采购部</strong>
                            </label>
                        </div>
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="merchandiser" name="receive_feedback[]" id="receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>" />
-                               <strong>跟单部</strong>
-                           </label>
-                       </div> 
+                        
                        <div class="checkbox-inline">
                            <label>
                                <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />
@@ -230,7 +225,7 @@ KindEditor.ready(function(K){
 function postform<%= work.id.to_s %>() {  	 
     //var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
     html = my_feedback<%= work.id.to_s %>.html();     
-    if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_procurement<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_merchandiser<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
+    if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_procurement<%= work.id.to_s %>').checked == false &  document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
       {                    
 　　    alert("请选择接收的部门！");                    
 　　    return false;                

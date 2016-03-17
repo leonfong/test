@@ -210,12 +210,12 @@
                     <th class="bg-primary">备注</th>
                 </tr>
             </thead>
-            
+
             <tbody>
                 <% @work_flow.each do |work| %>
                 <%= form_tag('/edit_work', method:"post") do %>
                 <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> >  
-                    <td class="success"> 
+                    <td  class="bbg-success"> 
                         <script>
                             function change_<%= work.id.to_s %>(){
                                 if (document.getElementById('<%= work.id.to_s + work.order_no %>').className=='collapse in')
@@ -228,25 +228,25 @@
                             <span id="<%= work.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
                         </button>
                     </td>              
-                    <td class="success"><%= submit_tag "提交", class:"btn btn-success btn-sm" %></td>
-                    <td class="success">
+                    <td class="bbg-success"><%= submit_tag "提交", class:"btn btn-primary btn-sm" %></td>
+                    <td class="bbg-success">
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= work.order_no %>
                     </td>
-                    <td class="success"><%= work.order_quantity %></td> 
-                    <td class="success"><%= work.salesman_end_date %></td> 
+                    <td class="bbg-success"><%= work.order_quantity %></td> 
+                    <td class="bbg-success"><%= work.salesman_end_date %></td> 
 <!--
-                    <td class="success"><%= work.product_code %></td>     
+                    <td class="bbg-success"><%= work.product_code %></td>     
 -->            
-                    <td class="success"><%= work.warehouse_quantity %></td>
-                    <td <% if work.smd =~ /[齐]/ %>class="success"<% end %>>
+                    <td class="bbg-success"><%= work.warehouse_quantity %></td>
+                    <td <% if work.smd =~ /[齐]/ %>class="bbg-success"<% end %>>
                         <%= work.smd %>
                     </td>
-                    <td <% if work.dip =~ /[齐]/ %>class="success"<% end %>>
+                    <td <% if work.dip =~ /[齐]/ %>class="bbg-success"<% end %>>
                         <%= work.dip %>
                     </td> 
-                    <td <% if work.smd_start_date != nil %>class="success"<% end %>><%= work.smd_start_date %></td> 
-                    <td <% if work.smd_end_date != nil %>class="success"<% end %>>
+                    <td <% if work.smd_start_date != nil %>class="bbg-success"<% end %>><%= work.smd_start_date %></td> 
+                    <td <% if work.smd_end_date != nil %>class="bbg-success"<% end %>>
                         <%= text_field_tag :smd_end_date, params[:smd_end_date], id: work.id.to_s+"smd_end_date",class:"form-control input-sm",value:work.smd_end_date , size:"8"%>                                      
                         <script type="text/javascript">
                           $(function () {
@@ -257,11 +257,11 @@
                           });
                         </script>
                     </td> 
-                    <td <% if work.smd_state != "" %>class="success"<% end %>>
+                    <td <% if work.smd_state != "" %>class="bbg-success"<% end %>>
                         <%= text_field_tag :smd_state, params[:smd_state], id: work.id.to_s+"smd_state",class:"form-control input-sm",value:work.smd_state , size:"5" %>
                     </td>
-                    <td <% if work.dip_start_date != nil %>class="success"<% end %>><%= work.dip_start_date %></td> 
-                    <td <% if work.dip_end_date != nil %>class="success"<% end %>>
+                    <td <% if work.dip_start_date != nil %>class="bbg-success"<% end %>><%= work.dip_start_date %></td> 
+                    <td <% if work.dip_end_date != nil %>class="bbg-success"<% end %>>
                         <%= text_field_tag :dip_end_date, params[:dip_end_date], id: work.id.to_s+"dip_end_date",class:"form-control input-sm",value:work.dip_end_date , size:"8"%>                                       
                         <script type="text/javascript">
                           $(function () {

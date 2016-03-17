@@ -600,7 +600,7 @@ before_filter :authenticate_user!
                         params[:production_feedback].gsub!('<img ','<img width="200" height="100" ')
                         topic_up.feedback = params[:production_feedback]      #话题内容
                         topic_up.feedback_type = "production"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",") + ",merchandiser"    #收贴的部门
                     elsif not params[:engineering_feedback].blank?
                         topic_up.feedback_title = params[:feedback_title]       #标题
                         if ( params[:engineering_feedback] =~ /width="(.\d*")/ )  
@@ -612,7 +612,7 @@ before_filter :authenticate_user!
                         params[:engineering_feedback].gsub!('<img ','<img width="200" height="100" ')
                         topic_up.feedback = params[:engineering_feedback]      #话题内容
                         topic_up.feedback_type = "engineering"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",") + ",merchandiser"    #收贴的部门
                     elsif not params[:sell_topic].blank?
                         topic_up.feedback_title = params[:feedback_title]      #标题
                         if ( params[:sell_topic] =~ /width="(.\d*")/ )  
@@ -640,7 +640,7 @@ before_filter :authenticate_user!
                         topic_up.feedback = params[:merchandiser_feedback]      #话题内容
            
                         topic_up.feedback_type = "merchandiser"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",") + ",merchandiser"    #收贴的部门
                         #topic_up.feedback_receive_user = "sell"                #收贴的人
                         #topic_up.feedback_level = 1                            #暂时没用
                         #topic_up.feedback_id = 1
@@ -655,7 +655,7 @@ before_filter :authenticate_user!
                         params[:procurement_feedback].gsub!('<img ','<img width="200" height="100" ')
                         topic_up.feedback = params[:procurement_feedback]      #话题内容
                         topic_up.feedback_type = "procurement"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback].join(",")    #收贴的部门
+                        topic_up.feedback_receive = params[:receive_feedback].join(",") + ",merchandiser"    #收贴的部门
                         #topic_up.feedback_receive_user = "sell"                #收贴的人
                         #topic_up.feedback_level = 1                            #暂时没用
                         #topic_up.feedback_id = 1

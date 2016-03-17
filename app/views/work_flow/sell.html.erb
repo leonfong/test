@@ -8,6 +8,7 @@
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
         <%= link_to "未回复的问题",  {action: "index"},class: "btn btn-danger btn-sm" %> 
+        <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger btn-sm" %>
     </div>
 
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>

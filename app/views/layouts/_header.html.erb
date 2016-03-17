@@ -38,6 +38,8 @@
         <% if user_signed_in? %>
            <% if can? :work_h, :all%>
                <li id="f"><%= link_to(t('welcome') + current_user.full_name, timesheet_path,:class=>"navbar-link") %></li>
+           <% elsif can? :work_i, :all%>
+               <li id="f"><%= link_to(t('welcome') + current_user.full_name, mpn_info_path,:class=>"navbar-link") %></li>
            <% else %>
                <li id="f"><%= link_to(t('welcome') + current_user.email, boms_path,:class=>"navbar-link") %></li>
            <% end %>

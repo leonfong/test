@@ -34,6 +34,10 @@ Rails.application.routes.draw do
   match '/up_timesheet', to: 'timesheet#up_timesheet', via: 'post'  
   match '/down_timesheet', to: 'timesheet#down_excel', via: 'post'
 
+  match '/mpn_info', to: 'mpn_info#index', via: 'get' 
+  match '/up_mpn', to: 'mpn_info#up_mpn', via: 'post' 
+  match '/down_mpn_excel', to: 'mpn_info#down_excel', via: 'get'
+
   root to: 'boms#upload'
   #root to: "boms#index"
   match '/boms/choose', to: 'boms#choose',via: 'get'

@@ -1,0 +1,121 @@
+<% if can? :work_i, :all  %>
+<div class="container" >
+<div class="row" style="padding: 0px;">
+  <h2><p class="text-primary">MPN全球库存和价格统计</p></h2><hr>
+</div>
+<div class="row"style="padding: 0px;">
+     <div class="col-md-6 form-group  nav navbar-nav">
+     <script>
+        function change_end(){
+        if (document.getElementById('order_state').className=='collapse in')
+        {document.getElementById('order_statebut').className='glyphicon glyphicon-plus';}
+        else
+        {document.getElementById('order_statebut').className='glyphicon glyphicon-minus';}
+        }
+        </script>
+        <button class="btn btn-primary btn-lg" type="button" data-toggle="collapse" data-target="#order_state" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_end()">批量导入MPN
+            <span id="order_statebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+       </button>
+       </div>
+    <%= form_tag('/mpn_info', method:"get", class:"form-inline") do %>
+       <div class="col-md-6 form-group  nav navbar-nav navbar-right">
+          <lable for="order" , class="sr-only">MPN : </lable>
+          <div class="input-group">             
+                <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"MPN"%>
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+<div class="row" style="padding-top: 7px;padding-right: 0px;padding-left: 0px;">
+    <div class="col-md-6" style="padding-top: 7px;padding-right: 0px;padding-left: 0px;">
+    <div class="collapse" id="order_state">
+        <div class="well">
+                <%= form_tag('/up_mpn', method:"post", class:"form-inline") do %>
+                <div>
+                    <p class="text-warning">数据格式：<code>MPN</code></p>
+                    <p>
+                        <%= text_area_tag :mpn_all, params[:mpn_all], size:"70x10", class:"form-control"%>
+                    </p>                
+                </div> 
+                <div >
+                    <%= submit_tag "提交", class:"btn btn-primary" %>
+                </div>
+                <% end %> 
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<% if not @mpn.blank? %>
+<%= will_paginate(@all_info) %>
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        
+       <div class="panel panel-info " >
+                  
+                   
+                    
+                    <table class="table table-bordered">  
+                        <thead>                           
+                            <tr style="background-color:#F0F0F0;">                               
+                                <th >MPN</th>
+                                <th >第一次记录时间</th>
+                                <th >最后一次记录时间</th>
+                                <th >天数</th>
+                                <th >预计销售数量</th>
+                                <th >当前最低售价</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <% @all_info.each do |mpn| %>                            
+                            <tr >                                                                 
+                                <td>
+                                    <%= link_to mpn[0], down_mpn_excel_path(id: "#{mpn[0]}") %>
+                                </td> 
+                                <td>
+                                    <%= mpn[1] %>
+                                </td> 
+                                <td>
+                                    <%= mpn[2] %>
+                                </td> 
+                                <td>
+                                    <%= mpn[3] %>
+                                </td> 
+                                <td>
+                                    <%= mpn[4] %>
+                                </td>                                                            
+                            </tr>
+                            <% end %>
+
+                        </tbody>
+                    </table>
+                    
+                </div>
+        
+   
+    </div>
+</div>
+
+
+
+
+
+
+<% end %>
+</div>
+
+<% else %> 
+You don't have permission to access this page
+<% end %> 
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

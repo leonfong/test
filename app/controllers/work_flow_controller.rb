@@ -570,8 +570,12 @@ before_filter :authenticate_user!
                 if not params[:sell_feedback].blank?
                     work_up.feedback_state = "1"
                 end
-                if not params[:supplement_date].blank?
-                    work_up.supplement_date = params[:supplement_date].strip
+                if params[:supplement_date]
+                    #if params[:supplement_date].strip == ""
+                        #work_up.supplement_date = nil
+                    #else
+                        work_up.supplement_date = params[:supplement_date].strip
+                    #end
                 end    
                 if params[:feed_state]
                     work_up.feed_state = params[:feed_state].strip

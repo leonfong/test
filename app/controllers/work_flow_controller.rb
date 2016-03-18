@@ -130,19 +130,28 @@ before_filter :authenticate_user!
             end 
             add_orderby = ""
             if params[:sort_date]
-                empty_date = ""
                 if params[:sort_date] == "smd"
+                    empty_date = ""
                     add_where = "AND smd_end_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.smd_end_date "
                 elsif params[:sort_date] == "dip"
+                    empty_date = ""
                     add_where = "AND dip_end_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.dip_end_date "
                 elsif params[:sort_date] == "clear"
+                    empty_date = ""
                     add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.clear_date " 
                 elsif params[:sort_date] == "state"
+                    empty_date = ""
                     add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.feed_state DESC" 
+                elsif params[:sort_date] == "smd_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.smd_start_date DESC" 
+                elsif params[:sort_date] == "dip_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.dip_start_date DESC" 
                 end
             end
             if params[:order_s] 

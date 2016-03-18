@@ -1,4 +1,5 @@
 <small>
+<small>
 <div class="row" style="margin: 3px;padding: 0px;">
   <h2><p class="text-primary">订单数据维护</p></h2><hr>
   <%= render 'layouts/flash_messages' %>
@@ -512,7 +513,7 @@
                                                 <th class="warning" width="190">用户名</th>      
                                                 <th class="warning" width="140">日期</th>
                                                 <th width="140">单号</th>
-                                                <th width="40">数量</th>
+                                                <th width="50">数量</th>
                                                     
                                                 <th width="65">入库数量</th>
                                                 <th width="50">SMD</th>
@@ -569,6 +570,7 @@
         <% end %>
 
 <% end %>
+
 
 </small>
 <script>

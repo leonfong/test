@@ -276,12 +276,7 @@ KindEditor.ready(function(K){
 function postform<%= work.id.to_s %>() {  	 
     //var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
     html = my_feedback<%= work.id.to_s %>.html();     
-    if (document.getElementById('receive_feedback_receive_feedback_engineering<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_procurement<%= work.id.to_s %>').checked == false &  document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
-      {                    
-　　    alert("请选择接收的部门！");                    
-　　    return false;                
-　     }            
-    else if (html == "")
+    if (html == "")
       {                    
 　　    alert("请填写内容！");                    
 　　    return false;                

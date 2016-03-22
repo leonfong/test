@@ -88,6 +88,9 @@
                document.getElementById('send_up2').checked = false; 
                document.getElementById('send_up4').checked = false; 
                             
+           }  
+         function change_2(){
+               document.getElementById('send_up_mark').checked = false;                            
            }       
         </script>
                        <div class="checkbox">

@@ -9,7 +9,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   <div class="row center-block" style="padding-top: 100px;margin: 0px;">
     
     <div class="col-md-12 " style="padding: 0px;margin: 0px;">
-      <h3 ><p class="text-muted text-center"  ><strong>Find price,availability,and datasheets for manufacturer part numbers from top distributors worldwide. </strong></p></h3>
+      <h3 ><p class="text-center" style="color: #ffffff" ><strong>Find price,availability,and datasheets for manufacturer part numbers from top distributors worldwide. </strong></p></h3>
     </div>
     
   </div>
@@ -56,7 +56,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 </div>
 <br><br>
 
-<div class="row center-block" style="width: 50%; ">
+<div class="row center-block" style="width: 40%; ">
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -120,14 +120,14 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
    </div>
 </div>
 
-<div class="row center-block " style="width: 100%;background-color:#F0F0F0;">
+<div class="row center-block " style="width: 100%;background-color:#000033;color:#ffffff;">
 <small>
     <div class="col-md-3"></div>
     <div class="col-md-2">
         <h5><strong>Contact Us</strong></h5>
         <p><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Add:4F,Buidling2,Guanghui Technology Park,MinQing Rd,Longhua,SZ 518109,China</p>
         <p><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>Telephone:86-75523573370</p>
-        <p><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>Email:<a href="mailto:#">bruse@mokotechnology.com.cn</a></p>
+        <p><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>Email:<a href="mailto:#" style="color:#ffffff;">bruse@mokotechnology.com.cn</a></p>
     </div>
     <div class="col-md-2">
         <h5><strong>About MOKO</strong></h5>

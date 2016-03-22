@@ -29,6 +29,7 @@ gem 'sprockets-rails', '~>2.2.4'
 
 
 gem 'rufus-scheduler'
+gem 'whenever', :require => false
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 

@@ -1,7 +1,7 @@
 require 'rufus-scheduler'
 scheduler = Rufus::Scheduler.new
 
-scheduler.every '15s' do  #在10分钟以后执行一次任务
+scheduler.every '8s' do  #在10分钟以后执行一次任务
     all_mpn = AllPart.all
     all_mpn.each do |item|
         time =  (Time.new.strftime('%Y-%m-%d %H:%M:%S').to_s.to_time.to_i - item.updated_at.strftime('%Y-%m-%d %H:%M:%S').to_s.to_time.to_i)/86400.00

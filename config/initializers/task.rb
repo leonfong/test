@@ -43,4 +43,4 @@ scheduler.every '8s' do  #在10分钟以后执行一次任务
         end
     end           
 end
-#scheduler.join
+scheduler.join

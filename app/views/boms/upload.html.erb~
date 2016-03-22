@@ -6,7 +6,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <div  style="padding: 0px;margin: 0px auto;width: 100%;background-image: url(/uploads/background.jpg);background-size: 100%;height: 400px;">
 
 
-  <div class="row center-block" style="padding-top: 150px;margin: 0px;">
+  <div class="row center-block" style="padding-top: 50px;margin: 0px;">
     
     <div class="col-md-12 " style="padding: 0px;margin: 0px;">
       <h3 ><p class="text-muted text-center"  ><strong>Find price,availability,and datasheets for manufacturer part numbers from top distributors worldwide. </strong></p></h3>
@@ -55,7 +55,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <div class="col-md-2"></div>
 </div>
 <br><br>
-
+<!--
 <div class="row center-block" style="width: 70%; ">
     <div class="col-md-4">
         <div class="panel panel-default">
@@ -88,6 +88,8 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
         </div>
     </div>
 </div>
+-->
+
 
 <div class="row center-block" style="width: 70%;">
   <div class="col-md-12 panel panel-default">

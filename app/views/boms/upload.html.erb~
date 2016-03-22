@@ -6,7 +6,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <div  style="padding: 0px;margin: 0px auto;width: 100%;background-image: url(/uploads/background.jpg);background-size: 100%;height: 400px;">
 
 
-  <div class="row center-block" style="padding-top: 50px;margin: 0px;">
+  <div class="row center-block" style="padding-top: 100px;margin: 0px;">
     
     <div class="col-md-12 " style="padding: 0px;margin: 0px;">
       <h3 ><p class="text-muted text-center"  ><strong>Find price,availability,and datasheets for manufacturer part numbers from top distributors worldwide. </strong></p></h3>
@@ -33,14 +33,14 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     <div class=" col-md-2 form-group">
     <%= form_for @bom, html: { multipart: true, class:"form-inline"} do |f| %>	
         <div class="form-group ">
-            <div class="input-group"> 	
-<!--	
-                <%= f.file_field :excel_file,class:"text-muted glyphicon glyphicon-cloud-upload",size:"5",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
--->
+             	
+	
+                <%= f.file_field :excel_file,class:"text-muted sr-only",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
+
                 <div class="input-group-btn">
                 <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg" %>
                 </div>
-            </div>
+            
         </div>
     <% end %>
     </div>

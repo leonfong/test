@@ -34,9 +34,9 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     <%= form_for @bom, html: { multipart: true, class:"form-inline"} do |f| %>	
         <div class="form-group ">
             <div class="input-group"> 	
-<!--	
-                <%= f.file_field :excel_file,class:"text-muted glyphicon glyphicon-cloud-upload",size:"5",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
--->
+	
+                <%= f.file_field :excel_file,class:"text-muted sr-only",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
+
                 <div class="input-group-btn">
                 <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg" %>
                 </div>

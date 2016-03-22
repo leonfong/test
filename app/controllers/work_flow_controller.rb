@@ -613,7 +613,11 @@ before_filter :authenticate_user!
                         params[:production_feedback].gsub!('<img ','<img width="200" height="100" ')
                         topic_up.feedback = params[:production_feedback]      #话题内容
                         topic_up.feedback_type = "production"                 #发帖人部门
-                        topic_up.feedback_receive = params[:receive_feedback].join(",") + ",merchandiser"    #收贴的部门
+                        if not params[:receive_feedback].blank?
+                            topic_up.feedback_receive = params[:receive_feedback].join(",") + ",merchandiser"    #收贴的部门
+                        else
+                            topic_up.feedback_receive =  "merchandiser"    #收贴的部门
+                        end
                     elsif not params[:engineering_feedback].blank?
                         topic_up.feedback_title = params[:feedback_title]       #标题
                         if ( params[:engineering_feedback] =~ /width="(.\d*")/ )  

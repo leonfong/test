@@ -65,19 +65,19 @@
 
                        <div class="checkbox-inline">
                            <label>
-                               <input type="checkbox" value="production" name="send_up[]" id="send_up2">
+                               <input type="checkbox" value="production" name="send_up[]" id="send_up2" onclick="change_2()">
                                <strong><%= '生产部' %></strong>
                            </label>
                        </div>
                        <div class="checkbox-inline">
                            <label>
-                               <input type="checkbox" value="engineering" name="send_up[]" id="send_up2">
+                               <input type="checkbox" value="engineering" name="send_up[]" id="send_up2" onclick="change_2()">
                                <strong><%= '工程部' %></strong>
                            </label>
                        </div>                       
                        <div class="checkbox-inline">
                            <label>
-                               <input type="checkbox" value="sell" name="send_up[]" id="send_up4"> 
+                               <input type="checkbox" value="sell" name="send_up[]" id="send_up4" onclick="change_2()"> 
                                <strong><%= '业务部' %></strong>
                            </label>
                        </div>
@@ -85,9 +85,11 @@
         function change_1(){
                document.getElementById('send_up1').checked = false; 
                document.getElementById('send_up2').checked = false; 
-               document.getElementById('send_up4').checked = false; 
-                            
-           }       
+               document.getElementById('send_up4').checked = false;                
+           }  
+         function change_2(){
+               document.getElementById('send_up_mark').checked = false;                            
+           }     
         </script>
                        <div class="checkbox">
                            <label>
@@ -123,12 +125,12 @@ function postform() {
 if (document.getElementById('send_up_mark').checked == true)
     {
     }
-    else if (document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false &  document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
+else if (document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false &  document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                
 　     } 
-    else if (html == "")
+else if (html == "")
       {                    
 　　    alert("请填写问题的内容！");                    
 　　    return false;                

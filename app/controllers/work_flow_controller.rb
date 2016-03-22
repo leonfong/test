@@ -871,7 +871,7 @@ before_filter :authenticate_user!
                     if not params[:smd_end_date].blank?
                         work_history.smd_end_date = params[:smd_end_date].strip
                     end
-                    if not params[:smd_state].blank?
+                    if not params[:smd_state]
                         work_history.smd_state = params[:smd_state].strip
                     end
                     if not params[:dip_start_date].blank?

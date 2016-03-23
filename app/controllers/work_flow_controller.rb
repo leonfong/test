@@ -195,10 +195,10 @@ before_filter :authenticate_user!
             end
             if params[:close]
                 @issue_lable = "已经关闭的问题"
-                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY topics.updated_at DESC" ).paginate(:page => params[:page], :per_page => 10)
+                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY topics.mark" ).paginate(:page => params[:page], :per_page => 10)
             else
                 @issue_lable = "未关闭的问题"
-                @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+                @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.mark" ).paginate(:page => params[:page], :per_page => 10)
             end
             if params[:order] or params[:sort_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
@@ -246,7 +246,7 @@ before_filter :authenticate_user!
    
     def show
         #@work_flow = WorkFlow.find(params[:id])
-        @topic = Topic.find(params[:id]) 
+        @topic = Topic.find(params[:id])
         @feedback_all = Feedback.where(topic_id: params[:id]).order("created_at DESC")
         @receive = ""
         @topic.feedback_receive.split(',').each do |rece|
@@ -259,6 +259,8 @@ before_filter :authenticate_user!
         elsif can? :work_e, :all
             render "sell_feedback.html.erb"
         elsif can? :work_f, :all
+            @topic.mark = "1"
+            @topic.save
             render "merchandiser_feedback.html.erb"
         elsif can? :work_g, :all
             render "procurement_feedback.html.erb"
@@ -688,6 +690,7 @@ before_filter :authenticate_user!
                         receive_new = topic_up.feedback_receive.split(",") <<  "merchandiser" 
                         receive_new.delete("sell") 
                         topic_up.feedback_receive = receive_new.join(",")
+                        
                     else                                                        #其他部门回帖                        
                         if params[:send_up]
                             topic_up = Topic.find(params[:feedback_up])
@@ -728,6 +731,7 @@ before_filter :authenticate_user!
                             topic_up.feedback_receive = ""
                         end
                     end
+                    topic_up.mark = ""
                     topic_up.save
                     if not params[:production_feedback].blank? and params[:send_up] != "mark" 
                         feedback_up = Feedback.new  

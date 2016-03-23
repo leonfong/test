@@ -1,3 +1,4 @@
+=begin
 require 'rufus-scheduler'
 scheduler = Rufus::Scheduler.new
 
@@ -44,3 +45,4 @@ scheduler.every '100h' do  #在10分钟以后执行一次任务
     end           
 end
 #scheduler.join
+=end

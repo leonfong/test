@@ -166,8 +166,10 @@ footer {
   </head>
 <% if request.original_fullpath =~ /work_flow/i or request.original_fullpath =~ /feedback/i %>
   <body style="padding-bottom: 70px;padding-top: 50px;margin-left: 15px;margin-right: 15px;" data-no-turbolink>
-<% else %>
+<% elsif request.original_fullpath == "/" %>
   <body style="padding-bottom: 70px;padding-top: 50px;" >
+<% else %>
+  <body style="padding: 70px;" >
 <% end %>
     
     <%= render 'layouts/header' %>

@@ -777,6 +777,10 @@ WHERE
     end    
 
     def upload
+        Rails.logger.info("-------------------------")
+        Rails.logger.info(request.original_fullpath.inspect)   
+        Rails.logger.info("----------------------------------") 
+        
         @bom = Bom.new
         #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
         @mpn_show = MpnItem.find_by_sql("SELECT * FROM mpn_items WHERE mpn IS NOT NULL AND id >= ((SELECT MAX(id) FROM mpn_items)-(SELECT MIN(id) FROM mpn_items)) * RAND() + (SELECT MIN(id) FROM mpn_items) LIMIT 100")

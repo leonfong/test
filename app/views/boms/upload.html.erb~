@@ -59,13 +59,13 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 </div>
 <br><br>
 
-<div class="row center-block" style="width: 60%; ">
-    <div class="col-md-4">
-        <div class="panel panel-info">
+<div class="row center-block" style="width: 60%;">
+    <div class="col-md-4" >
+        <div class="panel panel-info" >
             <div class="panel-heading">
                 <h3 class="panel-title">PCB</h3>
             </div>
-            <div class="panel-body" style="padding: 0px;margin: 0px;background-color:#73bbe6;">
+            <div class="panel-body" style="padding: 0px;margin: 0px;background-color:#73bbe6;height: 400px;">
               <p><h3 class="text-center" style="color: #ffffff"><strong>PCB Capabilites</strong></h3></p>
               <img width="50%" src="/uploads/pcb.png" class="img-circle center-block">
               <p><h4 class="text-center" style="color: #ffffff"><strong>Affordable PCB Manufacturer</strong></h4></p>
@@ -164,7 +164,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                 </div> 
             </div>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
         <h5><strong>News Center</strong></h5>
         <p>PCB Assembly FAQs</p>
 <p>PCB Glossary</p>
@@ -181,6 +181,6 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <p>PCBA</p>
 <p>PCB Reverse Engineering</p>
     </div>
-    <div class="col-md-1"></div>
+
 </small>
 </div>

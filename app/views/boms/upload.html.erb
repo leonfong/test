@@ -15,8 +15,11 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   </div>
 
   <div class="row center-block" style="padding-top: 50px;margin: 0px;">
-    <div class="col-md-3"></div>
-    <div class="col-md-5 ">
+    <div class="col-md-2"></div>
+    <div class="col-md-7 ">
+      <div class="row" >
+      <div class="col-md-1 "></div>
+      <div class="col-md-9 ">
       <%= form_tag('/search', method:"get", class:"form-inline") do %>
         <div class="form-group ">
           <lable for="mpn" , class="sr-only">Part : </lable>
@@ -25,10 +28,19 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
             <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
             <div class="input-group-btn">
               <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
             </div>
+            
+            
           </div>
+          
         </div>
+        
       <% end %>
+      </div>
+      <div class="col-md-1 "><%= submit_tag "Upload BOM file", class: "btn btn-warning btn-lg" %></div>
+      <div class="col-md-1 "></div>
+      </div>
     </div>
     <div class=" col-md-2 form-group">
     <%= form_for @bom, html: { multipart: true, class:"form-inline"} do |f| %>	
@@ -37,7 +49,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                 <%= f.file_field :excel_file,class:"text-muted sr-only",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
 
              
-                <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg" %>
+                <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg sr-only" %>
    
     <% end %>
     </div>
@@ -92,6 +104,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 
 <div class="row center-block" style="width: 70%;">
+<small>
   <div class="col-md-12 panel panel-default">
     <div class="panel-body ">
       <ul id="myTab" class="nav nav-tabs nav-justified">
@@ -118,12 +131,13 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
        </div>
      </div>
    </div>
+</small>
 </div>
 
 <div class="row center-block " style="width: 100%;background-color:#1d3245;color:#ffffff;">
 <small>
     <div class="col-md-2"></div>
-    <div class="col-md-2">
+    <div class="col-md-3">
         <h5><strong>Contact Us</strong></h5>
         <p><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Add:4F,Buidling2,Guanghui Technology Park,MinQing Rd,Longhua,SZ 518109,China</p>
         <p><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>Telephone:86-75523573370</p>
@@ -150,7 +164,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                 </div> 
             </div>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
         <h5><strong>News Center</strong></h5>
         <p>PCB Assembly FAQs</p>
 <p>PCB Glossary</p>
@@ -167,6 +181,6 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <p>PCBA</p>
 <p>PCB Reverse Engineering</p>
     </div>
-    <div class="col-md-2"></div>
+
 </small>
 </div>

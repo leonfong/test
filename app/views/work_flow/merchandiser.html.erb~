@@ -462,7 +462,7 @@ function postform<%= work.id.to_s %>() {
                         </thead>
                         <tbody>
 <% @topic.each do |work| %>
-                            <tr <% if work.mark == "mark" %>class="warning"<% end %>>
+                            <tr <% if not work.mark ~= /lwork_fl/ %>class="warning"<% end %>>
                                 <td>
                                     <%= link_to "处理",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %>
                                 </td>

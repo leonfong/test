@@ -159,10 +159,10 @@ before_filter :authenticate_user!
             end
             limit = ""            
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)   
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)   
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)   
             render "delivery_date.html.erb"
         elsif can? :work_e, :all
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%sell%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%sell%' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order]
                 #if not params[:order] == ""
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
@@ -259,12 +259,14 @@ before_filter :authenticate_user!
         elsif can? :work_e, :all
             render "sell_feedback.html.erb"
         elsif can? :work_f, :all
-            @topic.mark = "1"
+            @topic.mark += "lwork_fl"
             @topic.save
             render "merchandiser_feedback.html.erb"
         elsif can? :work_g, :all
             render "procurement_feedback.html.erb"
         elsif can? :work_b, :all
+            @topic.mark += "lwork_bl"
+            @topic.save
             #render "delivery_date_feedback.html.erb"
             render "production_feedback.html.erb"
         end

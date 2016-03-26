@@ -159,7 +159,7 @@ before_filter :authenticate_user!
             end
             limit = ""            
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)   
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)   
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.mark" ).paginate(:page => params[:page], :per_page => 10)   
             render "delivery_date.html.erb"
         elsif can? :work_e, :all
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%sell%' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
@@ -195,10 +195,10 @@ before_filter :authenticate_user!
             end
             if params[:close]
                 @issue_lable = "已经关闭的问题"
-                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY topics.mark" ).paginate(:page => params[:page], :per_page => 10)
+                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
             else
                 @issue_lable = "未关闭的问题"
-                @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.mark" ).paginate(:page => params[:page], :per_page => 10)
+                @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
             end
             if params[:order] or params[:sort_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)

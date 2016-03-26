@@ -3,7 +3,7 @@ require 'spreadsheet'
 
 class BomsController < ApplicationController
 skip_before_action :verify_authenticity_token
-before_filter :authenticate_user!, :except => [:upload,:mpn_item,:search_keyword,:des_item]
+before_filter :authenticate_user!, :except => [:root,:upload,:mpn_item,:search_keyword,:des_item]
     def index
         #@boms = Bom.all
         if current_user.email == "web@mokotechnology.com"
@@ -777,6 +777,16 @@ WHERE
     end    
 
     def upload
+        Rails.logger.info("-------------------------")
+        Rails.logger.info(request.original_fullpath.inspect)   
+        Rails.logger.info("----------------------------------") 
+        
+        @bom = Bom.new
+        #@mpn_show = MpnItem.find_by_sql("SELECT * FROM `mpn_items` LIMIT 0, 30")
+        @mpn_show = MpnItem.find_by_sql("SELECT * FROM mpn_items WHERE mpn IS NOT NULL AND id >= ((SELECT MAX(id) FROM mpn_items)-(SELECT MIN(id) FROM mpn_items)) * RAND() + (SELECT MIN(id) FROM mpn_items) LIMIT 100")
+        @des_show = Product.find_by_sql("SELECT * FROM products WHERE id >= ((SELECT MAX(id) FROM products)-(SELECT MIN(id) FROM products)) * RAND() + (SELECT MIN(id) FROM products) LIMIT 100")
+    end
+    def root
         Rails.logger.info("-------------------------")
         Rails.logger.info(request.original_fullpath.inspect)   
         Rails.logger.info("----------------------------------") 

@@ -37,11 +37,11 @@
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
            <% if can? :work_h, :all%>
-               <li id="f"><%= link_to(t('welcome') + current_user.full_name, timesheet_path,:class=>"navbar-link") %></li>
+               <li id="f"><%= link_to(current_user.full_name, timesheet_path,:class=>"navbar-link") %></li>
            <% elsif can? :work_i, :all%>
-               <li id="f"><%= link_to(t('welcome') + current_user.full_name, mpn_info_path,:class=>"navbar-link") %></li>
+               <li id="f"><%= link_to(current_user.full_name, mpn_info_path,:class=>"navbar-link") %></li>
            <% else %>
-               <li id="f"><%= link_to(t('welcome') + current_user.email, boms_path,:class=>"navbar-link") %></li>
+               <li id="f"><%= link_to(current_user.email, boms_path,:class=>"navbar-link") %></li>
            <% end %>
            <li id="g"><%= link_to(t('sign_out'), destroy_user_session_path, :method => :delete,:class=>"navbar-link") %></li>
            <li id="h"><%= link_to(t('c_password'), edit_registration_path(:user),:class=>"navbar-link") %></li>           

@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   match '/up_mpn', to: 'mpn_info#up_mpn', via: 'post' 
   match '/down_mpn_excel', to: 'mpn_info#down_excel', via: 'get'
 
-  root to: 'boms#upload'
+  root to: 'boms#root'
   #root to: "boms#index"
   match '/boms/choose', to: 'boms#choose',via: 'get'
   #match '/boms', to: 'boms#index',via: 'get'
@@ -57,6 +57,8 @@ Rails.application.routes.draw do
   match '/mark', to: 'boms#mark', via: 'post'
   match '/s_mpn', to: 'boms#s_mpn', via: 'post'
   match '/bom_item/add', to: 'bom_item#add', via: 'post'
+  match '/root', to: 'boms#root', via: 'post'
+  match '/upload', to: 'boms#upload', via: 'get'
   #
   match '/bom_item/select_with_ajax', to: 'bom_item#select_with_ajax', via: 'post'
   # The priority is based upon order of creation: first created -> highest priority.

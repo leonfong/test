@@ -22,7 +22,7 @@ set :branch, 'master'
 
 
 # For system-wide RVM install.
-set :rvm_path, '/usr/local/rvm/scripts/rvm'
+set :rvm_path, '/home/fastbom/.rvm/scripts/rvm'
 #set :rvm_path, '/home/leon/.rvm/scripts/rvm'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.

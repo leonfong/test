@@ -5,7 +5,7 @@ en:
     new_article: "Add an article"
     languages:
       lang: "Language"
-      zh: "Chinese"
+      zh: "中文"
       en: "English"
   all_boms: My BOM
   category: The category

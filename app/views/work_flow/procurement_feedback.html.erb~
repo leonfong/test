@@ -65,7 +65,7 @@
 
                        <div class="checkbox-inline">
                            <label>
-                               <input type="checkbox" value="production" name="send_up[]" id="send_up2" onclick="change_2()">
+                               <input type="checkbox" value="production" name="send_up[]" id="send_up1" onclick="change_2()">
                                <strong><%= '生产部' %></strong>
                            </label>
                        </div>
@@ -81,10 +81,17 @@
                                <strong><%= '业务部' %></strong>
                            </label>
                        </div>
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="merchandiser" name="send_up[]" id="send_up3" onclick="change_2()"> 
+                               <strong><%= '跟单部' %></strong>
+                           </label>
+                       </div>
         <script>
         function change_1(){
                document.getElementById('send_up1').checked = false; 
                document.getElementById('send_up2').checked = false; 
+               document.getElementById('send_up3').checked = false; 
                document.getElementById('send_up4').checked = false;                
            }  
          function change_2(){

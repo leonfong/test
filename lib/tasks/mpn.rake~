@@ -7,17 +7,17 @@ namespace :mpn do
     all_mpn.each do |item|
         time =  (Time.new.strftime('%Y-%m-%d %H:%M:%S').to_s.to_time.to_i - item.updated_at.strftime('%Y-%m-%d %H:%M:%S').to_s.to_time.to_i)/86400.00
         part_day = format("%.2f",time)
-        Rails.logger.info("11111111111111111111111111111")
-        Rails.logger.info(Time.new.strftime('%Y-%m-%d %H:%M:%S').inspect)
-        Rails.logger.info(item.updated_at.strftime('%Y-%m-%d %H:%M:%S').inspect)
-        Rails.logger.info(part_day.inspect)
-        Rails.logger.info("11111111111111111111111111111111")
+        #Rails.logger.info("11111111111111111111111111111")
+        #Rails.logger.info(Time.new.strftime('%Y-%m-%d %H:%M:%S').inspect)
+        #Rails.logger.info(item.updated_at.strftime('%Y-%m-%d %H:%M:%S').inspect)
+        #Rails.logger.info(part_day.inspect)
+        #Rails.logger.info("11111111111111111111111111111111")
         if part_day.to_f > 2      
             mpn = item.mpn
             #mpn = "LM2937IMP"
             url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
             url += mpn
-            Rails.logger.info(mpn.inspect)
+            #Rails.logger.info(mpn.inspect)
             resp = Net::HTTP.get_response(URI.parse(url))
             server_response = JSON.parse(resp.body)           
             info_mpn = InfoPart.new
@@ -29,7 +29,7 @@ namespace :mpn do
         end
     end           
   end  
-end
+
 
  
 end  

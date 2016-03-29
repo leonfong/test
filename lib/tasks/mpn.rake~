@@ -18,8 +18,15 @@ namespace :mpn do
             url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
             url += mpn
             #Rails.logger.info(mpn.inspect)
-            puts mpn.inspect
-            resp = Net::HTTP.get_response(URI.parse(url))
+            begin
+                puts mpn.inspect
+                resp = Net::HTTP.get_response(URI.parse(url))
+            rescue
+                puts "----try"
+                puts mpn.inspect
+                puts "----try"
+                resp = Net::HTTP.get_response(URI.parse(url))
+            end
             server_response = JSON.parse(resp.body)           
             info_mpn = InfoPart.new
             info_mpn.mpn = mpn

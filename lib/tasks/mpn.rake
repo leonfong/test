@@ -25,7 +25,8 @@ namespace :mpn do
                 puts "----try"
                 puts mpn.inspect
                 puts "----try"
-                resp = Net::HTTP.get_response(URI.parse(url))
+                #resp = Net::HTTP.get_response(URI.parse(url))
+                retry
             end
             server_response = JSON.parse(resp.body)           
             info_mpn = InfoPart.new

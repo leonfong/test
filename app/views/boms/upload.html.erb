@@ -5,44 +5,49 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 %>
 
 
-<div class="container">
-    <div class="mt25 clearfix">
+<div class="container" >
+    <div class="mt25 clearfix" >
         <ul class="list-inline blick-l pull-left">
             <li><a href="/site/index.html">Home</a></li>
             <li>&gt;</li>
             <li><a href="#">Bom Manager</a></li>
         </ul>
+<!--
         <div class="pull-right">
             <button class="btn btn-feedback" type="button" onclick="window.location.href='/company/feedback.html'">FEEDBACK <i class="glyphicon glyphicon-play f0 c5 pl10"></i></button>
         </div>
+-->
     </div>
-    <div class="row pt20">
-        <div class="col-md-8 col-sm-8">
+    <div class="row pt20" style="margin-right: 0px;margin-left: 0px;">
+        <div class="col-md-8 col-sm-8" style="padding: 0px;margin: 0px;">
             <div class="">
        		 <h1>BOM Manager <a href="/user/bom.html" id="estimate" style="display:none;" data-original-title="" title="">
        		 	<i class="glyphicon icon-question m10"></i></a>
        		 </h1>
             </div>
             <h3>Three Easy Ways to Upload Your BOM!</h3>
-            <dl class="p10 f5">
+            <dl style="font-size: 1.2em!important;padding: 10px 0px!important;">
                 <dt>What is the BOM Manager?</dt>
                 <dd>BOM Manager is a tool to get stock and price information quickly and easily.</dd>
             </dl>
-            <dl class="p10 f5" style="display:none;">
+            <dl style="display:none;font-size: 1.2em!important;padding: 10px 0px!important;">
                 <dt>Advanced Features:</dt>
                 <dd>1 Ease of Import Export of BOM Data in Excel Format for Upload</dd>
                 <dd>2 Obtain Timely Cost Estimates</dd>
                 <dd>3 Obtain Availability and Lead Time</dd>
             </dl>
-            <dl class="p10 f5">
-                <dd class="line20"></dd>
-                <dt class="mb20 m5">Choose one of the below options to start!</dt>
+            <dl style="font-size: 1.2em!important;padding: 10px 0px!important;">
+                <dd style="clear:both;height:20px;"></dd>
+                <dt style="margin-bottom: 20px!important;margin-top: 5px!important;">Choose one of the below options to start!</dt>
                 <dd>
-                    <div class="border-ddd m10 mb20 pa20 w95 clearfix">
+                    <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
                         <h4>1.Upload BOM from EXCEL Spreadsheet</h4>
                         <ul class="list-inline pt20 mt15">
                             <li class="w50">
-                            	<a class="btn btn-red manager-btn1" id="UploadButton" style="position: relative;">BROWSE<form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/bom/ajaxcreatebycsv.html"> <input name="bom_file" type="file" accept=".csv" style="display: block; overflow: hidden; width: 80px; height: 30px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;"></form></a>
+                            	<a class="btn btn-danger" id="UploadButton" style="position: relative;">BROWSE
+<form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/boms"> 
+<input name="bom[excel_file]" id="bom_excel_file" type="file" style="display: block; overflow: hidden; width: 80px; height: 30px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
+</form></a>
                             </li>
                         </ul>
                         <h4>Download <a href="/themes/classic/samples/bom.csv" class="yellow-l" target="_blank">BOM Template</a></h4>
@@ -50,7 +55,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                     </div>
                 </dd>
                 <dd>
-                    <div class="border-ddd m10 mb20 pa20 w95 clearfix">
+                    <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
                         <h4>2.Copy and Paste Your BOM</h4>
                         <h5>Copy and paste Part# and Quantity on separate lines</h5>
                         <form id="copy_form" onsubmit="return check_copy_form();">
@@ -67,7 +72,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                     </div>
                 </dd>
                 <dd>
-                    <div class="border-ddd m10 mb20 pa20 w95 clearfix">
+                    <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
                         <h4>3.Creat a BOM</h4>
                         <h5>Enter Part Number and Quantity</h5>
                         <div class="m990-bom-box1 w80">
@@ -115,7 +120,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                 </dd>
                             </dl>
         </div>
-        <div class="col-md-4 col-sm-4">
+        <div class="col-md-4 col-sm-4" style="padding: 0px;margin: 0px;">
            	 <div class="bom-logined-ban" style="display:none;">
             	<a>
             	<img src="/themes/classic/images/banner/BOMmanager-1.jpg?v=20160229" alt="Big Savings in ICkey!" class="img-responsive">
@@ -123,50 +128,48 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
             </div>
 
 <% if not user_signed_in? %>
-          	<div class="items-txt p30 " style="height:222px;padding:10px 30px 20px 30px!important;">
-                          <div class="portlet" id="yw0">
-<div class="portlet-content">
-<form id="login-form2" action="/account/login.html?returnUrl=http%3A%2F%2Fwww.ickey.com%2Fsite%2Findex.html" method="post">
-<div style="display:none"><input type="hidden" value="05a7bfb349657d24ca8727d7db6d67cf61c26e9a" name="YII_CSRF_TOKEN"></div><h1>Login</h1>
-<h3><input class="form-control" placeholder="Email" name="LoginForm[username]" id="LoginForm_username" type="text"></h3>
-<h3><input class="form-control" placeholder="Password" name="LoginForm[password]" id="LoginForm_password" type="password"></h3>
-<h3>
-	<button class="btn btn-yellow btn-md" type="submit">
-	<strong>LOGIN</strong> 
-    <i class="glyphicon glyphicon-play f0 pl10"></i>
-    </button> 
-    <small class="f0 pull-right m15">
-    			<a href="/account/findpassword.html" class="forget-link">Forgot Password?</a>
-		    </small>
-</h3>
-    
-<div class="err_msg">
+<div style="height:222px;padding:10px 30px 250px;background:#f0f0f0;">
+<div>
+<div style="padding: 0px;margin: 0px;">
+<form class="new_user" id="new_user" action="/users/sign_in" accept-charset="UTF-8" method="post">
+<h1>Login</h1>
+   <h3><input class="form-control" autofocus="autofocus" placeholder="Email" type="email" value="" name="user[email]" id="user_email" /></h3>   
+
+  <h3><input class="form-control" autocomplete="off" placeholder="Password" type="password" name="user[password]" id="user_password" /></h3>
+
+   <h3>
+      <input type="submit" name="commit" value="Log in" class="btn btn-primary btn-md" />
+   
+    <small class="pull-right"><a href="/users/password/new">Forgot your password?</a></small>
+  </h3>
+ 
+</form>
 </div>
-</form></div>
-</div>                            
+</div>  
+</div>                  
 <% end %>                
-            </div>
-            <div class="line20"></div>
-            <div class="items-txt" style="padding:15px 30px;">
-            <h5 class="b mb20">How to upload BOM?</h5>
-            <p class="line-28 mb10">
-            To import a BOM, create an Excel with your required Part# and Quantity, or just download and fill in the ICkey BOM TEMPLATE simply. Please SAVE AS a csv format.
+
+<div style="clear:both;height:20px;"></div>
+<div style="padding:15px 30px;background:#f0f0f0;text-align: left;">
+            <h5 style="font-weight: bold!important;margin-bottom: 20px!important;">How to upload BOM?</h5>
+            <p style="line-height: 28px!important;margin-bottom: 10px!important;">
+            To import a BOM, create an Excel with your required Part# and Quantity, or just download and fill in the BOM TEMPLATE simply. Please SAVE AS a xls format.
             </p>
             </div>
-            <div class="line20"></div>
-            <div class="items-txt p30">
-            <h5 class="b mb20">How to copy and paste BOM data?</h5>
-             <p class="line-28">
+            <div style="clear:both;height:20px;"></div>
+            <div style="padding:15px 30px;background:#f0f0f0;text-align: left;">
+            <h5 style="font-weight: bold!important;margin-bottom: 20px!important;">How to copy and paste BOM data?</h5>
+             <p style="line-height: 28px!important;margin-bottom: 10px!important;">
             Copy and paste Part# and Quantity on separate lines, shown as below:
             </p>
             <p class="m10">
             <img src="/themes/classic/images/figure/bom_r1_c2.png" alt="" width="260" height="200">
             </p>
             </div>
-             <div class="line20"></div>
-            <div class="items-txt p30">
-            <h5 class="b mb20 m5">How to create a BOM by adding one by one?</h5>
-             <p class="line-28">
+             <div style="clear:both;height:20px;"></div>
+            <div style="padding:15px 30px;background:#f0f0f0;text-align: left;">
+            <h5 style="font-weight: bold!important;margin-bottom: 20px!important;">How to create a BOM by adding one by one?</h5>
+             <p style="line-height: 28px!important;margin-bottom: 10px!important;">
            Type Part# and Quantity in the input text area, and submit your BOM data.
             </p>
             <p class="m10">

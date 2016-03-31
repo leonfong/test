@@ -571,11 +571,40 @@ WHERE
     end
 
     def create
+        Rails.logger.info("------------------------------------------------------------1")
+                Rails.logger.info(params[:select_part].inspect)
+                Rails.logger.info("------------------------------------------------------------1")
+                Rails.logger.info("------------------------------------------------------------2")
+                Rails.logger.info(params[:select_quantity].inspect)
+                Rails.logger.info("------------------------------------------------------------2")
+                Rails.logger.info("------------------------------------------------------------3")
+                Rails.logger.info(params[:select_refDes].inspect)
+                Rails.logger.info("------------------------------------------------------------3")
+                Rails.logger.info("------------------------------------------------------------4")
+                Rails.logger.info(params[:select_description].inspect)
+                Rails.logger.info("------------------------------------------------------------4")
         @bom = Bom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         #如果上传成功
 	if @bom.save
-           
+            if not params[:select_part]
+                if @bom.excel_file_identifier.split('.')[-1] == 'xls'
+	            @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+                else
+                    @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+                end
+                @sheet = @xls_file.sheet(0)
+                render "select_column.html.erb" 
+                return false
+            else
+                
+                
+
+
+                render "select_column.html.erb" 
+                #redirect_to @bom,  notice: t('file') + " #{@bom.name} " + t('success_b')
+                return false 
+            end
             if @bom.excel_file_identifier.split('.')[-1] == 'xls'
 	        @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
             else

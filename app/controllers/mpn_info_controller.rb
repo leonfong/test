@@ -68,7 +68,7 @@ before_filter :authenticate_user!
                 @one_info << all_date
                 @all_info << @one_info
             end
-            @all_info = @all_info.sort{|a,b| b[3]<=>a[3]}.paginate(:page => params[:page], :per_page => 10)
+            @all_info = @all_info.sort{|a,b| b[3]<=>a[3]}.paginate(:page => params[:page], :per_page => 15)
 
 
 

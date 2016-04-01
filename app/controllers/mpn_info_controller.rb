@@ -34,9 +34,9 @@ before_filter :authenticate_user!
                         @mpn_item['response'].each do |result|
                            
                             result['parts'].each do |part|
-                                Rails.logger.info("part-----------------------------------------part")
-                                Rails.logger.info(part.inspect)   
-                                Rails.logger.info("part----------------------------------------------part")
+                                #Rails.logger.info("part-----------------------------------------part")
+                                #Rails.logger.info(part.inspect)   
+                                #Rails.logger.info("part----------------------------------------------part")
                                 part['price'].each do |f|     
                                     if f.has_value?"USD"
                                         prices_all << f['price'].to_f
@@ -47,9 +47,9 @@ before_filter :authenticate_user!
                                 mpn_stock += part['stock'].to_i
                             end                        
                         end
-                        Rails.logger.info("prices_all--------------------------------------------------------------------------")
-                        Rails.logger.info(prices_all.inspect)   
-                        Rails.logger.info("prices_all----------------------------------------------------------")    
+                        #Rails.logger.info("prices_all--------------------------------------------------------------------------")
+                        #Rails.logger.info(prices_all.inspect)   
+                        #Rails.logger.info("prices_all----------------------------------------------------------")    
                         if index == 0
                             stock = mpn_stock
                         end

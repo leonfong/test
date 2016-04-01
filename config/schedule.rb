@@ -18,6 +18,6 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-every 10.hours do
+every 4.hours do
   rake "mpn:get_mpn" 
 end

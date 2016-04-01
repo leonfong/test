@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   root to: 'boms#root'
   #root to: "boms#index"
+  match '/new_bom', to: 'boms#upbom',via: 'post'
   match '/boms/choose', to: 'boms#choose',via: 'get'
   #match '/boms', to: 'boms#index',via: 'get'
   match '/boms/search_api', to: 'boms#search_api',via: 'post'

@@ -570,19 +570,58 @@ WHERE
                 end
     end
 
-    def create
+    def upbom
         Rails.logger.info("------------------------------------------------------------1")
-                Rails.logger.info(params[:select_part].inspect)
-                Rails.logger.info("------------------------------------------------------------1")
-                Rails.logger.info("------------------------------------------------------------2")
-                Rails.logger.info(params[:select_quantity].inspect)
-                Rails.logger.info("------------------------------------------------------------2")
-                Rails.logger.info("------------------------------------------------------------3")
-                Rails.logger.info(params[:select_refDes].inspect)
-                Rails.logger.info("------------------------------------------------------------3")
-                Rails.logger.info("------------------------------------------------------------4")
-                Rails.logger.info(params[:select_description].inspect)
-                Rails.logger.info("------------------------------------------------------------4")
+        Rails.logger.info(params[:bom_id].inspect)
+        Rails.logger.info(params[:select_part].inspect)
+        Rails.logger.info("------------------------------------------------------------1")
+        Rails.logger.info("------------------------------------------------------------2")
+        Rails.logger.info(params[:select_quantity].inspect)
+        Rails.logger.info("------------------------------------------------------------2")
+        Rails.logger.info("------------------------------------------------------------3")
+        Rails.logger.info(params[:select_refDes].inspect)
+        Rails.logger.info("------------------------------------------------------------3")
+        Rails.logger.info("------------------------------------------------------------4")
+        Rails.logger.info(params[:select_description].inspect)
+        Rails.logger.info("------------------------------------------------------------4")
+        if params[:bom_id]
+            if params[:bom_file].split('.')[-1] == 'xls'
+	        @xls_file = Roo::Excel.new(params[:bom_path])
+            else
+                @xls_file = Roo::Excelx.new(params[:bom_path])
+            end
+            @sheet = @xls_file.sheet(0)
+
+            @parse_result = @sheet.parse(clean:true)
+	     
+	    #remove first row 
+	    @parse_result.shift
+	    #@parse_result.select! {|item| !item[:des].blank?||!item[:mpn].blank? } #选择非空行
+            Rails.logger.info("------------------------------------------------------------qq")
+            Rails.logger.info(@parse_result.inspect)
+            Rails.logger.info("------------------------------------------------------------qq")
+            #行号
+            row_num = 0
+           # all_m_bom = []
+            #one_m_bom = []
+	    @parse_result.each do |item| #处理每一行的数据 
+	        part_code = item[:ref]
+		desc = item[:des]
+                #if desc.include?".0uF"
+                    #desc[".0uF"]="uF"
+                    #Rails.logger.info("0000000000000000000000000000000000000")
+                    #Rails.logger.info(desc)
+                    #Rails.logger.info("0000000000000000000000000000000")
+                #end
+	        quantity = item[:qty]
+    
+                mpn = item[:mpn]
+		
+            end
+            render "select_column.html.erb" 
+            return false
+        end 
+
         @bom = Bom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         #如果上传成功
@@ -597,7 +636,18 @@ WHERE
                 render "select_column.html.erb" 
                 return false
             else
-                
+                Rails.logger.info("------------------------------------------------------------11")
+                Rails.logger.info(params[:select_part].inspect)
+                Rails.logger.info("------------------------------------------------------------11")
+                Rails.logger.info("------------------------------------------------------------12")
+                Rails.logger.info(params[:select_quantity].inspect)
+                Rails.logger.info("------------------------------------------------------------12")
+                Rails.logger.info("------------------------------------------------------------13")
+                Rails.logger.info(params[:select_refDes].inspect)
+                Rails.logger.info("------------------------------------------------------------13")
+                Rails.logger.info("------------------------------------------------------------14")
+                Rails.logger.info(params[:select_description].inspect)
+                Rails.logger.info("------------------------------------------------------------14")
                 
 
 
@@ -605,6 +655,17 @@ WHERE
                 #redirect_to @bom,  notice: t('file') + " #{@bom.name} " + t('success_b')
                 return false 
             end
+        end
+    end
+
+
+    def create
+       
+        @bom = Bom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
+        @bom.user_id = current_user.id
+        #如果上传成功
+	if @bom.save
+            
             if @bom.excel_file_identifier.split('.')[-1] == 'xls'
 	        @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
             else

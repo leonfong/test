@@ -9,7 +9,7 @@
 </script>
 <%= @bom.excel_file_identifier.inspect %>
     <div class="row ">
-    <%= form_tag('/boms', method:"get", class:"form-inline") do %>
+    <%= form_tag('/boms', method:"POST", class:"form-inline") do %>
         <table class="table table-bordered">
             <tr>
                 <% @sheet.row(1).each do |item| %>
@@ -58,6 +58,9 @@
             <% end %>
         </table>
         <div class="modal-footer">
+            <%= text_field_tag :bom_id, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.id.to_s %>
+            <%= text_field_tag :bom_path, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file.current_path %>
+            <%= text_field_tag :bom_file, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file_identifier %>
             <%= submit_tag "提交", class:"btn btn-primary", :onclick => "return postform()" %>
         </div>
     <% end %>
@@ -66,65 +69,5 @@
 
 
 
-    <div class="row ">
-        <%= form_tag('/upload', method:"get", class:"form-inline") do %>
-        <table class="table table-bordered">
-            <tr>
-                <td width="100"><strong>Part</strong></td>
-                <td>
-                    <% @sheet.row(1).each do |item| %>
-                    <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="production" name="select_part[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/>
-                               <strong><%= item.inspect %></strong>
-                           </label>
-                     </div>
-                     <% end %>
-                </td>
-            </tr>
-            <tr>
-                <td width="100"><strong>Quantity</strong></td>
-                <td>                    
-                    <% @sheet.row(1).each do |item| %>
-                    <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="production" name="select_quantity[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/>
-                               <strong><%= item.inspect %></strong>
-                           </label>
-                     </div>
-                     <% end %>
-                </td>
-            </tr>
-            <tr>
-                <td width="100"><strong>RefDes</strong></td>
-                <td>                    
-                    <% @sheet.row(1).each do |item| %>
-                    <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="production" name="select_refdes[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/>
-                               <strong><%= item.inspect %></strong>
-                           </label>
-                     </div>
-                     <% end %>
-                </td>
-            </tr>
-            <tr>
-                <td width="100"><strong>Description</strong></td>
-                <td>                    
-                    <% @sheet.row(1).each do |item| %>
-                    <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="production" name="select_description[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/>
-                               <strong><%= item.inspect %></strong>
-                           </label>
-                     </div>
-                     <% end %>
-                </td>
-            </tr>
-        </table>
-        <div class="modal-footer">
-            <%= submit_tag "提交", class:"btn btn-primary", :onclick => "return postform()" %>
-        </div>
-        <% end %>
-    </div>
+   
 </div>

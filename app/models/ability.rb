@@ -61,6 +61,11 @@ class Ability
     elsif user.has_role?(:work_nine)
       #can :manage, :all
       can :work_i, :all
+    elsif user.has_role?(:work_ten)
+      #can :manage, :all
+      can :work_i, :all
+      can :work_h, :all
+      can :work_e, :all
     else
       can :read, :all
     end

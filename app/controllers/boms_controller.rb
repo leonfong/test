@@ -1,6 +1,6 @@
 require 'roo'
 require 'spreadsheet'
-
+require 'will_paginate/array'
 class BomsController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!, :except => [:root,:upload,:mpn_item,:search_keyword,:des_item]
@@ -570,60 +570,135 @@ WHERE
                 end
     end
 
-    def upbom
-        Rails.logger.info("------------------------------------------------------------1")
-        Rails.logger.info(params[:bom_id].inspect)
-        Rails.logger.info(params[:select_part].inspect)
-        Rails.logger.info("------------------------------------------------------------1")
-        Rails.logger.info("------------------------------------------------------------2")
-        Rails.logger.info(params[:select_quantity].inspect)
-        Rails.logger.info("------------------------------------------------------------2")
-        Rails.logger.info("------------------------------------------------------------3")
-        Rails.logger.info(params[:select_refDes].inspect)
-        Rails.logger.info("------------------------------------------------------------3")
-        Rails.logger.info("------------------------------------------------------------4")
-        Rails.logger.info(params[:select_description].inspect)
-        Rails.logger.info("------------------------------------------------------------4")
-        if params[:bom_id]
+    def upbom        
+        if params[:bom_id] 
+             
+            @bom = Bom.find(params[:bom_id]) 
+            @bom.p_name = params[:p_name]
+            @bom.qty = params[:qty]
+            @bom.d_day = params[:day]  
+            @bom.save    
+            Rails.logger.info("------------------------------------------------------------1")
+            Rails.logger.info(params[:bom_id].inspect)
+            Rails.logger.info(params[:noselect].inspect)
+            Rails.logger.info("------------------------------------------------------------1")
+            #Rails.logger.info("------------------------------------------------------------2")
+            #Rails.logger.info(params[:select_quantity].inspect)
+            #Rails.logger.info("------------------------------------------------------------2")
+            #Rails.logger.info("------------------------------------------------------------3")
+            #Rails.logger.info(params[:select_refDes].inspect)
+            #Rails.logger.info("------------------------------------------------------------3")
+            #Rails.logger.info("------------------------------------------------------------4")
+            #Rails.logger.info(params[:select_description].inspect)
+            #Rails.logger.info("------------------------------------------------------------4")
+            @file = params[:bom_file]
             if params[:bom_file].split('.')[-1] == 'xls'
 	        @xls_file = Roo::Excel.new(params[:bom_path])
             else
                 @xls_file = Roo::Excelx.new(params[:bom_path])
             end
             @sheet = @xls_file.sheet(0)
-
-            @parse_result = @sheet.parse(clean:true)
-	     
+            all_item = []
+            @sheet.row(1).each do |item|
+                if not item.blank?
+                    all_item << '"'+item+'":'+'"'+item+'"'
+                end
+            end
+            all_item = "{"+all_item.join(",")+"}"
+            Rails.logger.info("------------------------------------------------------------qq1")
+            Rails.logger.info(all_item.inspect)
+            Rails.logger.info("------------------------------------------------------------qq2")
+            #@parse_result = @sheet.parse(:Qty => "Qty",clean:true)
+	    @parse_result = @sheet.parse(JSON.parse(all_item))  
 	    #remove first row 
 	    @parse_result.shift
-	    #@parse_result.select! {|item| !item[:des].blank?||!item[:mpn].blank? } #选择非空行
-            Rails.logger.info("------------------------------------------------------------qq")
+            #render "select_column.html.erb" 
+            #return false  
+            all_use = @sheet.row(1)[params[:partCol].to_i].split("")+@sheet.row(1)[params[:quantityCol].to_i].split("")+@sheet.row(1)[params[:refdesCol].to_i].split("")
+            #params[:select_part].each do |use|
+	     @parse_result.select! {|item| !item["#{@sheet.row(1)[params[:partCol].to_i]}"].blank? } #选择非空行
+            #end
+            Rails.logger.info("------------------------------------------------------------qq1")
+            Rails.logger.info(all_item.inspect)
+            Rails.logger.info("------------------------------------------------------------qq2")
             Rails.logger.info(@parse_result.inspect)
-            Rails.logger.info("------------------------------------------------------------qq")
+            Rails.logger.info(@sheet.row(1)[params[:partCol].to_i].inspect)
+            Rails.logger.info("------------------------------------------------------------qq3")
             #行号
             row_num = 0
            # all_m_bom = []
             #one_m_bom = []
+            other_all = @sheet.row(1)-@sheet.row(1)[params[:partCol].to_i].split("")-@sheet.row(1)[params[:quantityCol].to_i].split("")-@sheet.row(1)[params[:refdesCol].to_i].split("")
 	    @parse_result.each do |item| #处理每一行的数据 
-	        part_code = item[:ref]
-		desc = item[:des]
-                #if desc.include?".0uF"
-                    #desc[".0uF"]="uF"
-                    #Rails.logger.info("0000000000000000000000000000000000000")
-                    #Rails.logger.info(desc)
-                    #Rails.logger.info("0000000000000000000000000000000")
+                mpna = ""
+                if item["#{@sheet.row(1)[params[:partCol].to_i]}"].blank?
+                    mpna += ""
+                else
+                    mpna += item["#{@sheet.row(1)[params[:partCol].to_i]}"].to_s + " " 
+                end
+                qtya = ""
+                if item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].blank?
+                    qtya += ""
+                else
+                    qtya += item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].to_s + " "             
+                end
+                refa = ""
+                if item["#{@sheet.row(1)[params[:refdesCol].to_i]}"].blank?
+                    refa += ""
+                else
+                    refa += item["#{@sheet.row(1)[params[:refdesCol].to_i]}"].to_s + " "
+                end
+                #desa = ""
+                #params[:select_description].each do |des|                    
+                    #if item["#{des}"].blank?
+                        #desa += ""
+                    #else
+                        #desa += item["#{des}"].to_s + " "
+                    #end
                 #end
-	        quantity = item[:qty]
-    
-                mpn = item[:mpn]
-		
+                othera = ""
+                other_all.each do |other|                    
+                    if item["#{other}"].blank?
+                        othera += ""
+                    else
+                        othera += item["#{other}"].to_s + " "
+                    end
+                end
+	        
+		Rails.logger.info("------------------------------------------------------------des")
+                Rails.logger.info(mpna.inspect)
+                Rails.logger.info(qtya.inspect)
+                Rails.logger.info(refa.inspect)
+                #Rails.logger.info(desa.inspect)
+                Rails.logger.info(othera.inspect)
+                Rails.logger.info("------------------------------------------------------------des")
+                find_mpn = BomItem.where(bom_id: params[:bom_id],mpn: mpna)
+                if find_mpn.blank?
+                    bom_item = @bom.bom_items.build() #创建bom_items对象
+                    bom_item.part_code = refa
+		    #bom_item.description = desa
+                    bom_item.quantity = qtya.to_i
+                    bom_item.mpn = mpna
+                    bom_item.other = othera
+                    bom_item.user_id = current_user.id
+                    bom_item.save
+                end
             end
-            render "select_column.html.erb" 
+            
+            #render "select_column.html.erb" 
+            #redirect_to search_part_path(:bom_id => params[:bom_id])
+            #return false
+            @bom_item = BomItem.where(bom_id: params[:bom_id])
+            render "search_part.html.erb"
             return false
-        end 
-
+        end
+                
+         
+        
         @bom = Bom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
+        @file = @bom.excel_file_identifier
+        @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Bom.find_by_sql('SELECT Count(boms.id)+1 AS all_no FROM boms WHERE to_days(boms.created_at) = to_days(NOW())').first.all_no.to_s + "B"
         #如果上传成功
 	if @bom.save
             if not params[:select_part]
@@ -658,6 +733,780 @@ WHERE
         end
     end
 
+    def up_order_info
+        if params[:bom_id]
+            Rails.logger.info("------------------------------------------------------------11")
+            @bom = Bom.find(params[:bom_id]) 
+            @bom.p_name = params[:p_name]
+            @bom.qty = params[:qty]
+            @bom.d_day = params[:day]
+            Rails.logger.info("------------------------------------------------------------22")
+            if @bom.save
+                Rails.logger.info("------------------------------------------------------------33")
+                @bom_item = BomItem.where(bom_id: params[:bom_id],mpn_id: nil)
+                if not @bom_item.blank?
+                    render "up_order_info.js.erb" and return
+                else
+                    @bom_item = BomItem.where(bom_id: params[:bom_id])
+                    @total_p = 0 
+                    @bom_item.each do |bomitem|
+                        api_info = find_price(bomitem.mpn_id,@bom.qty)
+                        if not api_info.blank?
+                            bomitem.price = api_info[0]
+                            bomitem.mf = api_info[1]
+                            bomitem.dn = api_info[2]
+                            bomitem.save
+                            @total_p += bomitem.price*bomitem.quantity
+                        end
+                    end
+                    @total_p = @total_p*@bom.qty.to_i
+                    @bom.t_p = @total_p
+                    @bom.save
+                    @bom_id = params[:bom_id]
+                    render "to_viewbom_info.js.erb" and return
+                    #render inline: "window.location='/viewbom?bom_id=#{params[:bom_id]}';" and return
+                end
+            end         
+        end
+        render nothing: true
+    end
+    
+    def up_pcb_info
+        Rails.logger.info("@parse_result------------------------------------------------------------1111111")
+        #Rails.logger.info(params[:bom_pcb_file].current_path.inspect)params.require(:bom).permit(:name, :bom_pcb_file)
+        Rails.logger.info("@parse_result------------------------------------------------------------1111111")
+        @bom = Bom.new
+        
+        if params[:bom_id]
+            @boms = Bom.find(params[:bom_id])
+        else
+            #render nothing: true and return
+        end
+        if params[:bom_pcb_file]
+            uploaded_io = params[:bom_pcb_file]
+            File.open(Rails.root.join('public', 'uploads', 'bom', 'excel_file', params[:bom_id].to_s, uploaded_io.original_filename), 'wb') do |file|
+                file.write(uploaded_io.read)
+            end
+            if params[:pcb_qty].to_i < 5
+                pcb_qty = 5
+            else
+                pcb_qty = params[:pcb_qty].to_i
+            end 
+            if (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty) <= 150000
+                if params[:pcb_layer] == "1" or params[:pcb_layer] == "2"
+                    if params[:pcb_t] == "1.6" or params[:pcb_t] == "1.2" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6" 
+                        if params[:pcb_sf] == "HASL" or params[:pcb_sf] == "OSP"
+                            if params[:pcb_sc] == "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 13 + 7.6
+                                else
+                                    @pcb_p = 13
+                                end
+                            elsif params[:pcb_sc] != "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 13 + 15.2
+                                else
+                                    @pcb_p = 13 + 7.6
+                                end
+                            end
+                        elsif params[:pcb_sf] == "ENIG" 
+                            if params[:pcb_sc] == "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 31 + 7.6
+                                else
+                                    @pcb_p = 31
+                                end
+                            elsif params[:pcb_sc] != "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 31 + 15.2
+                                else
+                                    @pcb_p = 31 + 7.6
+                                end
+                            end                        
+                        end
+                    elsif params[:pcb_t] == "2.0" or params[:pcb_t] == "0.4"
+                        if params[:pcb_sf] == "HASL" or params[:pcb_sf] == "OSP"
+                            @pcb_p = 31
+                        elsif params[:pcb_sf] == "ENIG"
+                            @pcb_p = 46.2
+                        end
+                    end
+                elsif params[:pcb_layer] == "4"
+                    if params[:pcb_t] == "1.6" or params[:pcb_t] == "1.2" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6" 
+                        if params[:pcb_sf] == "HASL" or params[:pcb_sf] == "OSP"
+                            if params[:pcb_sc] == "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 40 + 7.6
+                                else
+                                    @pcb_p = 40
+                                end
+                            elsif params[:pcb_sc] != "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 40 + 15.2
+                                else
+                                    @pcb_p = 40 + 7.6
+                                end
+                            end
+                        elsif params[:pcb_sf] == "ENIG" 
+                            if params[:pcb_sc] == "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 55.4 + 7.6
+                                else
+                                    @pcb_p = 55.4
+                                end
+                            elsif params[:pcb_sc] != "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 55.4 + 15.2
+                                else
+                                    @pcb_p = 55.4 + 7.6
+                                end
+                            end                        
+                        end
+                    elsif params[:pcb_t] == "2.0" or params[:pcb_t] == "0.4"
+                        if params[:pcb_sf] == "HASL" or params[:pcb_sf] == "OSP"
+                            @pcb_p = 77
+                        elsif params[:pcb_sf] == "ENIG"
+                            @pcb_p = 92.3
+                        end
+                    end
+                elsif params[:pcb_layer] == "6"
+                    if params[:pcb_t] == "1.6" or params[:pcb_t] == "1.2" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6" 
+                        if params[:pcb_sf] == "HASL" or params[:pcb_sf] == "OSP"
+                            if params[:pcb_sc] == "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 200 + 7.6
+                                else
+                                    @pcb_p = 200
+                                end
+                            elsif params[:pcb_sc] != "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 200 + 15.2
+                                else
+                                    @pcb_p = 200 + 7.6
+                                end
+                            end
+                        elsif params[:pcb_sf] == "ENIG" 
+                            if params[:pcb_sc] == "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 245 + 7.6
+                                else
+                                    @pcb_p = 245
+                                end
+                            elsif params[:pcb_sc] != "Green"
+                                if params[:pcb_size_c].to_i > 100 or params[:pcb_size_k].to_i > 100
+                                    @pcb_p = 245 + 15.2
+                                else
+                                    @pcb_p = 245 + 7.6
+                                end
+                            end                        
+                        end
+                    elsif params[:pcb_t] == "2.0" or params[:pcb_t] == "0.4"
+                        if params[:pcb_sf] == "HASL" or params[:pcb_sf] == "OSP"
+                            @pcb_p = 231
+                        elsif params[:pcb_sf] == "ENIG"
+                            @pcb_p = 246
+                        end
+                    end
+                end
+            elsif (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty) >= 150000 and (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty) <= 3000000
+                if params[:pcb_layer] == "1"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0000625) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 19
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007692) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00009231) + 19
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 19
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 19
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007385) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008932) + 19
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 19
+                            end 
+                        end
+                    end
+                elsif params[:pcb_layer] == "2"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007692) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00009231) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000108) + 19
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000105) + 19
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008923) + 19
+                            end  
+                        end
+                    end
+                elsif params[:pcb_layer] == "4"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000146) + 95
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000185) + 95
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000162) + 95
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 95
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000146) + 95
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000185) + 95
+                            end  
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000146) + 95
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000185) + 95
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0000146) + 95
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 95
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000146) + 95
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000185) + 95
+                            end 
+                        end
+                    end
+                elsif params[:pcb_layer] == "6"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0003) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000339) + 188
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0003) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000346) + 188
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0003) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000339) + 188
+                            end  
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0003) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000339) + 188
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0003) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000346) + 188
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.0003) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000339) + 188
+                            end  
+                        end
+                    end
+                end
+            elsif (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty) >= 3000000 and (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty) <= 10000000
+                if params[:pcb_layer] == "1"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000043085) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 123
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00004308) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            end  
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00004308) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005538) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006769) + 123
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00004308) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            end  
+                        end  
+                    end
+                elsif params[:pcb_layer] == "2"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007385) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008615) + 123
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 123
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008308) + 123
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005846) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 123
+                            end  
+                        end
+                    end
+                elsif params[:pcb_layer] == "4"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000131) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000146) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000177) + 123
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000131) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 123
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000131) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000146) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000177) + 123
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000131) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 123
+                            end  
+                        end
+                    end
+                elsif params[:pcb_layer] == "6"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000292) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000323) + 188
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000292) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000323) + 188
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            end 
+                        end
+                    end
+                end
+            elsif (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty) >= 10000000
+                if params[:pcb_layer] == "1"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00004) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005538) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006769) + 123
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00004) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00004) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006462) + 123
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00004) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            end 
+                        end
+                    end
+                elsif params[:pcb_layer] == "2"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005538) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006769) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00007077) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008308) + 123
+                            end
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006769) + 123
+                            end  
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006769) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006769) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00008) + 123
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00005231) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.00006769) + 123
+                            end  
+                        end
+                    end
+                elsif params[:pcb_layer] == "4"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000128) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000154) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000143) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 123
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000128) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000154) + 123
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000128) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000154) + 123
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000143) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000169) + 123
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000128) + 123
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000154) + 123
+                            end 
+                        end
+                    end
+                elsif params[:pcb_layer] == "6"
+                    if params[:pcb_t] == "1.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000308) + 188
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000297) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000323) + 188
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000308) + 188
+                            end 
+                        end
+                    elsif params[:pcb_t] == "1.2" or params[:pcb_t] == "1.0" or params[:pcb_t] == "0.8" or params[:pcb_t] == "0.6"
+                        if params[:pcb_sf] == "HASL"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000308) + 188
+                            end
+                        elsif params[:pcb_sf] == "ENIG"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000297) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000323) + 188
+                            end 
+                        elsif params[:pcb_sf] == "OSP"
+                            if params[:pcb_ct] == "1"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000281) + 188
+                            elsif params[:pcb_ct] == "2"
+                                @pcb_p = (params[:pcb_size_c].to_i * params[:pcb_size_k].to_i * pcb_qty * 0.000308) + 188
+                            end 
+                        end
+                    end
+                end
+            end
+
+
+
+
+
+
+            @boms = Bom.find(params[:bom_id])
+            @boms.pcb_file = uploaded_io.original_filename
+            @boms.pcb_layer = params[:pcb_layer]
+            @boms.pcb_qty = params[:pcb_qty]
+            @boms.pcb_size_c = params[:pcb_size_c]
+            @boms.pcb_size_k = params[:pcb_size_k]
+            @boms.pcb_sc = params[:pcb_sc]
+            @boms.pcb_material = params[:pcb_material]
+            @boms.pcb_cc = params[:pcb_cc]
+            @boms.pcb_ct = params[:pcb_ct]
+            @boms.pcb_sf = params[:pcb_sf]
+            @boms.pcb_t = params[:pcb_t]
+            @boms.save
+        
+            render "submit_order.html.erb" and return
+        end
+    end
+
+    def create_order
+
+    end
+
+    def search_part
+        if params[:bom_id]
+            @bom_item = BomItem.where(bom_id: params[:bom_id])
+            @bom_item.each do |item|
+                if item.mpn_id.blank? 
+                    mpn = item.mpn
+                    url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
+                    url += mpn
+                    begin
+                        resp = Net::HTTP.get_response(URI.parse(url))
+                    rescue
+                        retry
+                    end
+                    server_response = JSON.parse(resp.body)    
+                    info_mpn = InfoPart.new
+                    info_mpn.mpn = mpn
+                    info_mpn.info = resp.body
+                    info_mpn.save
+                    item.mpn_id = info_mpn.id
+                    item.save
+                    @item = item
+                    render "search_part.js.erb" and return
+                end                          
+            end 
+            @bom = Bom.find(params[:bom_id])      
+            if not @bom.qty.blank?
+                @total_p = 0              
+                @bom_item.each do |bomitem|
+                    api_info = find_price(bomitem.mpn_id,@bom.qty)
+                    if not api_info.blank?  
+                       bomitem.price = api_info[0]
+                       bomitem.mf = api_info[1]
+                       bomitem.dn = api_info[2]
+                       bomitem.save
+                       @total_p += bomitem.price*bomitem.quantity
+                    end
+                end
+                @total_p = @total_p*@bom.qty.to_i
+                @bom.t_p = @total_p
+                @bom.save
+                render inline: "window.location='/viewbom?bom_id=#{params[:bom_id]}';" 
+            end           
+        end      
+    end
+    
+    def viewbom
+        @bom = Bom.new
+        @boms = Bom.find(params[:bom_id])
+        @bom_item = BomItem.where(bom_id: params[:bom_id])
+        if @boms.pcb_file.blank?
+            render "viewbom.html.erb"
+        else
+            render "submit_order.html.erb"
+        end
+    end
+
+    def bomlist
+        @bom = Bom.new
+        @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
+    end
 
     def create
        
@@ -799,6 +1648,9 @@ WHERE
     end
 
     def destroy
+         Rails.logger.info("-------------------------111111111")
+         Rails.logger.info(request.original_fullpath.inspect)   
+         Rails.logger.info("----------------------------------222222222222222") 
 	 @bom = Bom.find(params[:id])
          if current_user.email == "web@mokotechnology.com" and User.find(@bom.user_id).email == current_user.email
              @bom.destroy
@@ -806,7 +1658,11 @@ WHERE
 	     @bom.name = "del"
              @bom.save
          end
-	 redirect_to boms_path, notice:  "BOM #{@bom.name} " + t('success_c')
+         if params[:do]
+             redirect_to bomlist_path, notice:  "BOM #{@bom.name} " + t('success_c')
+         else
+	     redirect_to boms_path, notice:  "BOM #{@bom.name} " + t('success_c')
+         end
     end
    
     def mark
@@ -1438,6 +2294,70 @@ WHERE
     end
 
     private
+        def find_price(mpn_id,qty)
+            mpn_info = InfoPart.find(mpn_id)
+            @mpn_item = JSON.parse(mpn_info.info)    
+            #naive_id_all = []
+            part_all = []
+            mf_all = []
+            dm_all = []
+            prices_all = []
+            #Rails.logger.info(@mpn_item['response'].inspect)
+            #mpn_stock = 0
+            if @mpn_item['response'].blank?
+                result = ""
+            else
+                @mpn_item['response'].each do |result|  
+                    if result['distributor']['name'] == "Digi-Key"
+                        result['parts'].each do |part|
+                            part['price'].each do |f|     
+                                if f.has_value?"USD"
+                                    if f['quantity'].to_i >= qty.to_i
+                                        prices_all << f['price'].to_f
+                                        mf_all << part['manufacturer']
+                                        dm_all << "Digi-Key"
+                                    end
+                                    #naive_id_all << result['distributor']['id']                                    
+                                end
+                            end
+                            #mpn_stock += part['stock'].to_i
+                        end  
+                    else
+                        result['parts'].each do |part|
+                            part['price'].each do |f|     
+                                if f.has_value?"USD"
+                                    if f['quantity'].to_i >= qty.to_i
+                                        prices_all << f['price'].to_f
+                                        Rails.logger.info("--------------------------")
+                                        Rails.logger.info(f['price'].to_f.inspect)
+                                        mf_all << part['manufacturer']
+                                        Rails.logger.info("--------------------------")
+                                        Rails.logger.info(part['manufacturer'].inspect)
+                                        dm_all << result['distributor']['name']
+                                        Rails.logger.info("--------------------------")
+                                        Rails.logger.info(result['distributor']['name'].inspect)
+                                    end
+                                    #naive_id_all << result['distributor']['id']                         
+                                end
+                            end
+                            #mpn_stock += part['stock'].to_i
+                        end  
+                    end                                
+                end
+                Rails.logger.info("--------------------------")
+                Rails.logger.info(mpn_id.inspect)
+                Rails.logger.info(prices_all.inspect)
+                Rails.logger.info(mf_all.inspect)
+                Rails.logger.info(dm_all.inspect)
+                Rails.logger.info("--------------------------")
+                @mpn_result = []
+                @mpn_result << prices_all.min     
+                @mpn_result << mf_all[(prices_all.index prices_all.min)]   
+                @mpn_result << dm_all[(prices_all.index prices_all.min)]
+                result = @mpn_result
+            end
+        end
+ 
         def search_findchips(mpn)
             #mpn = "LM2937IMP"
             url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
@@ -1458,8 +2378,7 @@ WHERE
             server_response['response'].each do |item|
                 Rails.logger.info("prices_44444444444444444444444444444444444")
                 Rails.logger.info(item.inspect)
-            end
-            
+            end            
         end
 
         def bom_params

@@ -6,19 +6,111 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 
 <div class="container" >
-    <div class="mt25 clearfix" >
-        <ul class="list-inline blick-l pull-left">
-            <li><a href="/site/index.html">Home</a></li>
+  
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    <div class=" col-md-2 form-group">
+    <%= form_for @bom, html: { multipart: true, class:"form-inline"} do |f| %>	
+        
+	
+                <%= f.file_field :excel_file,class:"text-muted sr-only",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
+
+             
+                <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg sr-only" %>
+   
+    <% end %>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+
+
+
+
+
+
+    <div class="clearfix" >
+<!--
+        <ul class="list-inline pull-left">
+            <li><a href="#">Home</a></li>
             <li>&gt;</li>
             <li><a href="#">Bom Manager</a></li>
         </ul>
-<!--
+
         <div class="pull-right">
             <button class="btn" type="button" onclick="window.location.href='#'">FEEDBACK <i class="glyphicon glyphicon-play f0 c5 pl10"></i></button>
         </div>
 -->
     </div>
-    <div class="row pt20" style="margin-right: 0px;margin-left: 0px;">
+    <div class="row" style="margin-right: 0px;margin-left: 0px;">
+    
+<div class="sui-steps steps-large steps-auto">
+  <div class="wrap">
+    <div class="current">
+      <label><span class="round">1</span><span>STEP 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload your BOM file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">2</span><span>STEP 2 Upload your PCB file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">3</span><span>STEP 3 Submit Qrder</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">4</span><span>STEP 4 Order review</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">5</span><span>STEP 5 Payment</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+</div>              
+
+
+
+
         <div class="col-md-8 col-sm-8" style="padding: 0px;margin: 0px;">
             <div class="">
        		 <h1>BOM Manager <a href="/user/bom.html" id="estimate" style="display:none;" data-original-title="" title="">
@@ -30,12 +122,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                 <dt>What is the BOM Manager?</dt>
                 <dd>BOM Manager is a tool to get stock and price information quickly and easily.</dd>
             </dl>
-            <dl style="display:none;font-size: 1.2em!important;padding: 10px 0px!important;">
-                <dt>Advanced Features:</dt>
-                <dd>1 Ease of Import Export of BOM Data in Excel Format for Upload</dd>
-                <dd>2 Obtain Timely Cost Estimates</dd>
-                <dd>3 Obtain Availability and Lead Time</dd>
-            </dl>
+            
             <dl style="font-size: 1.2em!important;padding: 10px 0px!important;">
                 <dd style="clear:both;height:20px;"></dd>
                 <dt style="margin-bottom: 20px!important;margin-top: 5px!important;">Choose one of the below options to start!</dt>
@@ -54,6 +141,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                         <p style="height:19px;">&nbsp;</p>
                     </div>
                 </dd>
+<!--
                 <dd>
                     <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
                         <h4>2.Copy and Paste Your BOM</h4>
@@ -71,59 +159,23 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                         </form>
                     </div>
                 </dd>
+-->
                 <dd>
-                    <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
-                        <h4>3.Creat a BOM</h4>
-                        <h5>Enter Part Number and Quantity</h5>
-                        <div class="m990-bom-box1 w80">
-                        <ul class="list-inline pt20">
-                            <li class="w40 text_center">
-                                 Part# 
-                            </li>
-                            <li class="w20 text_center">
-                                Quantity
-                            </li>
-                            <li class="w15 text_center">
-                                Action
-                            </li>
-                        </ul>
-                        <form id="input_form" onsubmit="return check_input_form()">
-                        <div id="bom_div">
-                        <ul class="list-inline pt10 mt5" id="ul_base">
-                            <li class="w40">
-                                <input type="text" name="pro_sno[]" class="form-control">
-                            </li>
-                            <li class="w20">
-                                <input type="text" name="pro_num[]" class="form-control" data-content="" data-placement="top" data-trigger="manual">
-                            </li>
-                            <li class="w15 vertical-top">
-                            <button class="btn btn-gray2 shopping-btn " type="button" style="padding:7px 20px;">DELETE</button>
-                            </li>
-                        </ul>
-                       </div>                                                 
-                        <ul class="clearfix pt20 mt15">                           
-                            <li class="text_right" style="width: 79%">
-                            	<input type="hidden" name="YII_CSRF_TOKEN" value="05a7bfb349657d24ca8727d7db6d67cf61c26e9a">
-                                <button class="btn btn-yellow manager-btn1 mr10" type="button" onclick="add_tr();">ADD ITEM</button>
-                                <input type="submit" class="btn btn-red manager-btn1 mr10" value="SUBMIT" style="width: 85px;">
-                            </li>
-                                                                              
-                        </ul>
-                        </form>
-                        </div>
-                    </div>
+                   
                     
                         <div class="pa20"></div>                    
                 </dd>
+<% if not user_signed_in? %>
                                 <dd>
-                    <h3><a href="#" class="yellow-l">Sign in</a> to view your saved BOMs!</h3>
+                    <h3><%= link_to(t('sign_up'), new_registration_path(:user),:class=>"navbar-link") %> to view your saved BOMs!</h3>
                 </dd>
+<% end %>
                             </dl>
         </div>
         <div class="col-md-4 col-sm-4" style="padding: 0px;margin: 0px;">
            	 <div class="bom-logined-ban" style="display:none;">
             	<a>
-            	<img src="#" alt="Big Savings in ICkey!" class="img-responsive">
+            	<img src="#" alt="Big Savings in FastBOM!" class="img-responsive">
             	</a>
             </div>
 
@@ -157,6 +209,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
             </p>
             </div>
             <div style="clear:both;height:20px;"></div>
+<!--
             <div style="padding:15px 30px;background:#f0f0f0;text-align: left;">
             <h5 style="font-weight: bold!important;margin-bottom: 20px!important;">How to copy and paste BOM data?</h5>
              <p style="line-height: 28px!important;margin-bottom: 10px!important;">
@@ -176,7 +229,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
             <img src="#" alt="">
             </p>
             </div>
-            
+-->           
         </div>
     </div>
 </div>

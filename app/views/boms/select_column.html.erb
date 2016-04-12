@@ -1,73 +1,254 @@
-<div class="container" >
+<div class="center-block well" >
+
 <script>
-        function change_1(){
-               document.getElementById('send_up1').checked = false; 
-               document.getElementById('send_up2').checked = false; 
-               document.getElementById('send_up4').checked = false;                 
-           } 
-      
+function _step2_submit() {
+    var partCol = document.getElementById("partCol");//代表芯片名称的列的序号
+    var quantityCol = document.getElementById("quantityCol");//代表数量的列的序号
+    if(partCol.value == "") {
+        alert("请选择代表型号的列");
+        return false;
+    }
+    if(quantityCol.value == "") {
+	alert("请选择代表数量的列");
+        return false;
+    }
+    if($("#p_name").val() == ""){
+        alert("Please enter your project name.");                    
+　　      return false;    
+    }
+    else if($("#qty").val() == ""){
+        alert("Please enter your quantity.");                    
+　　      return false;    
+    }
+				
+}
+
+ 
+
+$(document).ready(function() {
+    $(".changes").change(function(){
+        
+        if(this.value == '1') {            
+            //互斥
+            if(document.getElementById("partCol").value != ""){
+                document.getElementById("rowselect_"+document.getElementById("partCol").value).value = 0;
+                this.value = 1
+            }
+            //设置数值
+            document.getElementById("partCol").value = this.id.replace("rowselect_", ""); 
+            if(document.getElementById("partCol").value == document.getElementById("quantityCol").value){
+                document.getElementById("quantityCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("refdesCol").value){
+                document.getElementById("refdesCol").value = "";
+            }
+            //alert("partCol"+ document.getElementById("partCol").value);
+            //return false;
+        }
+        if(this.value == '2') {
+            if(document.getElementById("quantityCol").value != ""){
+                document.getElementById("rowselect_"+document.getElementById("quantityCol").value).value = 0;
+                this.value = 2
+            }
+            document.getElementById("quantityCol").value = this.id.replace("rowselect_", "");
+            if(document.getElementById("quantityCol").value == document.getElementById("partCol").value){
+                document.getElementById("partCol").value = "";
+            }
+            if(document.getElementById("quantityCol").value == document.getElementById("refdesCol").value){
+                document.getElementById("refdesCol").value = "";
+            }
+            //alert("quantityCol"+ document.getElementById("quantityCol").value);
+            //return false;
+        }
+        if(this.value == '3') {
+            if(document.getElementById("refdesCol").value != ""){
+                document.getElementById("rowselect_"+document.getElementById("refdesCol").value).value = 0;
+                this.value = 3
+            }
+            document.getElementById("refdesCol").value = this.id.replace("rowselect_", "");
+            if(document.getElementById("refdesCol").value == document.getElementById("partCol").value){
+                document.getElementById("partCol").value = "";
+            }
+            if(document.getElementById("refdesCol").value == document.getElementById("quantityCol").value){
+                document.getElementById("quantityCol").value = "";
+            }
+            //alert("refdesCol"+ document.getElementById("refdesCol").value);
+            //return false;
+        }
+
+    });
+});
+
 </script>
-<%= @bom.excel_file_identifier.inspect %>
-    <div class="row ">
-    <%= form_tag('/new_bom', method:"POST", class:"form-inline") do %>
-        <table class="table table-bordered">
-            <tr>
-                <% @sheet.row(1).each do |item| %>
-                <td>
-                    <ul class="list-unstyled">
-                    <li>
-                     <div class="checkbox-inline">
-                        <label>
-                            <input type="checkbox" value="<%= item %>" name="select_part[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/><strong>Part</strong>
-                         </label>      
-                     </div>
-                     </li> 
-                     <li>
-                     <div class="checkbox-inline">
-                        <label>
-                            <input type="checkbox" value="<%= item %>" name="select_quantity[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/><strong>Quantity</strong>
-                         </label>  
-                     </div> 
-                     </li> 
-                     <li>
-                     <div class="checkbox-inline">
-                        <label>
-                            <input type="checkbox" value="<%= item %>" name="select_refDes[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/><strong>RefDes</strong>
-                         </label>      
-                     </div> 
-                     </li> 
-                     <li>
-                     <div class="checkbox-inline">
-                        <label>
-                            <input type="checkbox" value="<%= item %>" name="select_description[]" id="receive_feedback_receive_feedback_<%= item.to_s %>" onclick="change_2()"/><strong>Description</strong>
-                         </label>  
-                     </div>
-                     </li> 
-                    </ul>
-                </td>
-                <% end %>
-            </tr>
-            <% @sheet.parse.each do |row| %>
-                <tr>
-                <% row.each do |item| %>
-                    <td width="100" style="word-wrap:break-word;word-break:break-all;">
-                        <%= item %>
-                    </td>
-                <% end %>
-                </tr>
+
+<div class="sui-steps steps-large steps-auto">
+  <div class="wrap">
+    <div class="current">
+      <label><span class="round">1</span><span>STEP 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload your BOM file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">2</span><span>STEP 2 Upload your PCB file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">3</span><span>STEP 3 Submit Qrder</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">4</span><span>STEP 4 Order review</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">5</span><span>STEP 5 Payment</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+</div> 
+
+
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-11 pull-left">
+                <p>Correct "Part", "Quantity"and "RefDes" should be selected and then click "SUBMIT". Current page shows 10 items as examples at most but no any effect on real quantity.</p>
+            </div>
+            <%= form_tag('/up_order_info', remote: true, class:"form-horizontal",id:"f1") do %>
+               <fieldset id="set">
+                <%= text_field_tag :bom_id, params[:bom_id], class:"sr-only", size:2 , value: @bom.id.to_s %>
+                
+                </fieldset>
             <% end %>
-        </table>
-        <div class="modal-footer">
-            <%= text_field_tag :bom_id, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.id.to_s %>
-            <%= text_field_tag :bom_path, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file.current_path %>
-            <%= text_field_tag :bom_file, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file_identifier %>
-            <%= submit_tag "提交", class:"btn btn-primary", :onclick => "return postform()" %>
         </div>
-    <% end %>
     </div>
 
 
 
 
+
+
+
+    <%= form_tag('/new_bom', method:"POST") do %> 
+    <div class="row ">
+        <div class="col-sm-11 form-group">
+                    <label for="p_name" class="col-sm-4 control-label form-inline">Project name:
+                        <%= text_field_tag :p_name, params[:p_name], class:"form-control", size:50  %>  
+                    </label>
+                    <div class="col-sm-1 form-inline"></div> 
+                    <label for="qty"  class="col-sm-6 control-label  form-inline">Quantity:
+                    
+                        <%= number_field_tag :qty, params[:qty], class:"form-control", size:2  %>
+
+                        <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="10" name="qty_pcs[]" id="10p" />
+                               <strong>10pcs</strong>
+                           </label>
+                       </div>
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="50" name="qty_pcs[]" id="50p" /> 
+                               <strong>50pcs</strong>
+                           </label>
+                       </div>         
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="100" name="qty_pcs[]" id="100p" />
+                               <strong>100pcs</strong>
+                           </label>
+                       </div> 
+                    </label>  
+                </div> 
+        
+        <div class="col-sm-1 form-group pull-right" >
+            <%= text_field_tag :bom_id, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.id.to_s %>
+            <%= text_field_tag :bom_path, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file.current_path %>
+            <%= text_field_tag :bom_file, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file_identifier %> 
+
+            <%= text_field_tag :partCol, @bom.id.to_s, class:"sr-only", size:2 , value:""  %>
+            <%= text_field_tag :quantityCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
+            <%= text_field_tag :refdesCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
+            <%= submit_tag t("ok"), class:"btn btn-danger", :onclick => "return _step2_submit()" %>
+        </div>
+        
+    </div>
+    <div class="row " style="padding-top: 10px;padding-bottom: 40px;">
+        <div class="col-md-12 ">
+        <table class="table table-bordered">
+            <tr style="background-color: #32b0cc;">
+                <% @sheet.row(1).each_with_index do |item,index| %>
+                <td>
+                    <div >
+                    <select name="noselect[]" id="rowselect_<%= index %>"  class="changes form-control center-block" >
+		        <option value="0">
+			    None
+		        </option>
+			<option value="1">
+			    Part
+			</option>
+			<option value="2">
+		            Quantity
+			</option>
+                        <option value="3">
+		            RefDes
+			</option>
+		    </select>
+                    </div>
+                </td>
+                <% end %>
+            </tr>
+            
+            <% @sheet.parse.first(10).each do |row| %>
+                <tr>
+                <% row.each do |item| %>
+                    <td  style="word-wrap:break-word;word-break:break-all;">
+                        <% if item.to_s =~ /\.0/ %><%= item.to_s.sub!(/\.0/,"") %><% else %><%= item  %><% end %>
+                    </td>
+                <% end %>
+                </tr>
+            <% end %>
+        </table>
+        </div>
+    </div>
+    <% end %>
+                   
+<script>
+$(document).ready(function() {   
+    $("#10p").click(function(){
+        document.getElementById('50p').checked = false; 
+        document.getElementById('100p').checked = false;
+        if(document.getElementById('10p').checked == false){
+            $("#qty").val("");
+        }else if(document.getElementById('10p').checked == true){
+            $("#qty").val("10");
+        }
+    });
+    $("#50p").click(function(){
+        document.getElementById('10p').checked = false; 
+        document.getElementById('100p').checked = false;
+        if(document.getElementById('50p').checked == false){
+            $("#qty").val("");
+        }else if(document.getElementById('50p').checked == true){
+            $("#qty").val("50");
+        }
+    });
+    $("#100p").click(function(){
+        document.getElementById('50p').checked = false; 
+        document.getElementById('10p').checked = false;
+        if(document.getElementById('100p').checked == false){
+            $("#qty").val("");
+        }else if(document.getElementById('100p').checked == true){
+            $("#qty").val("100");
+        }
+    });
+});
+</script>
+
    
 </div>
+

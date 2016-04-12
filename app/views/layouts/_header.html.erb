@@ -16,7 +16,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
     
       <ul class="nav navbar-nav" >
-        <li id="a"><%= link_to 'Search BOM',root_path %></li>
+        <li id="a"><%= link_to 'HOME',root_path %></li>
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
 
@@ -41,7 +41,7 @@
            <% elsif can? :work_i, :all%>
                <li id="f"><%= link_to(current_user.full_name, mpn_info_path,:class=>"navbar-link") %></li>
            <% else %>
-               <li id="f"><%= link_to(current_user.email, boms_path,:class=>"navbar-link") %></li>
+               <li id="f"><%= link_to(current_user.email, bomlist_path,:class=>"navbar-link") %></li>
            <% end %>
            <li id="g"><%= link_to(t('sign_out'), destroy_user_session_path, :method => :delete,:class=>"navbar-link") %></li>
            <li id="h"><%= link_to(t('c_password'), edit_registration_path(:user),:class=>"navbar-link") %></li>           

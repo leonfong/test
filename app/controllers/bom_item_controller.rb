@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'json'
 require 'net/http'
-
+require 'will_paginate/array'
 class BomItemController < ApplicationController
 skip_before_action :verify_authenticity_token
     #respond_to :json, :html

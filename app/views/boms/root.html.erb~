@@ -40,7 +40,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
       </div>
       <div class="col-md-1 ">
 
-           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/">
 	       <img src="/uploads/upbom.png" alt="search">
 	       BOM
            </a>

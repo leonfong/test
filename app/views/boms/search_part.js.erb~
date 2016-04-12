@@ -1,0 +1,8 @@
+<% if not @item.id.blank? %>
+    <%= "document.getElementById('"+@item.id+"').innerHTML='The query is completed';" %>
+<% end %>
+$("#btn").click();
+
+
+
+

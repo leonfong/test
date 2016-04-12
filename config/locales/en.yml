@@ -23,7 +23,7 @@ en:
   product_name: Product name
   price: Price
   operate: Choose
-  ok: OK
+  ok: SUBMIT
   new_bom: New BOM
   name: User
   excel_file: Excel file

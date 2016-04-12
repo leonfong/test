@@ -1,0 +1,132 @@
+<div class="container" >
+ 
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    <div class=" col-md-2 form-group">
+    <%= form_for @bom, html: { multipart: true, class:"form-inline"} do |f| %>	
+        
+	
+                <%= f.file_field :excel_file,class:"text-muted sr-only",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
+
+             
+                <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg sr-only" %>
+   
+    <% end %>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+
+
+
+
+  
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-2 list-group" style="padding: 0px;">
+            <a href="#" class="list-group-item"><strong>My Order</strong></a>
+            <%= link_to "My BOM", bomlist_path ,class: "list-group-item active"%>
+            <a href="#" class="list-group-item"><strong>My Profile</strong></a>
+        </div>
+        <div class="col-md-10">
+<%= will_paginate(@boms) %>            
+<table class="table table-striped">
+  <thead>
+    <tr class="bg-info">
+     <% if user_signed_in? %>
+          <% if current_user.email == "web@mokotechnology.com" %>
+<!--
+              <th><%= t('name') %></th>
+-->
+          <% end %>
+      <% end %>
+      <th>Order No.</th>
+      <th>Created Date</th>
+      <th>Project name</th>
+      <th>QTY</th>
+      <th>BOM File</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @itemall = "" %>
+    <% @boms.each do |bom| %>
+    <% @itemall = @itemall + " " + bom.excel_file_identifier %>
+      <tr>
+        
+        <% if user_signed_in? %>
+          <% if current_user.email == "web@mokotechnology.com" %>
+<!--
+            <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
+
+<td><%= link_to bom.excel_file_identifier, down_excel_path(:id =>bom.id,format: "xls") %></td>
+            <td><%= link_to bom.excel_file_identifier, down_excel_path(:path =>raw(bom.excel_file_url),:filename =>bom.excel_file_identifier) %></td>
+
+            <td><%= User.find(bom.user_id).email %></td>
+-->
+            <td><%= link_to bom.no,  viewbom_path(bom_id: bom.id) %></td>
+            <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+            <td><%= bom.p_name %></td>
+            <td><%= bom.qty %></td>
+            <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
+<!--
+            <td><div class="btn-group"><%= link_to t('view'),  up_pcb_info_path(bom_id: bom.id), class: "btn btn-primary" %></div> <div class="btn-group"></td>
+-->
+          <% else %>
+            <td><%= link_to bom.no,  viewbom_path(bom_id: bom.id) %></td>
+            <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+            <td><%= bom.p_name %></td>
+            <td><%= bom.qty %></td>
+            <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
+<!--
+            <td><div class="btn-group"><%= link_to t('view'),  up_pcb_info_path(bom_id: bom.id), class: "btn btn-primary" %></div> <div class="btn-group"></td>
+-->
+          <% end %>
+        <% end %>  
+        <td><div class="btn-group"><%= button_to t('delete'),  bom_path(bom,do: "list"), method: :delete, class: "btn btn-danger", data:{confirm: "确定要删除 #{bom.name}?"} %></div></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+        </div>
+    </div>
+</div>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

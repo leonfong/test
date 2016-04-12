@@ -48,6 +48,14 @@ Rails.application.routes.draw do
   match '/boms/mpn', to: 'boms#mpn#', via: 'get'
   match '/mpn_item', to: 'boms#mpn_item', via: 'get'
   match '/des_item', to: 'boms#des_item', via: 'get'
+  match '/search_part', to: 'boms#search_part',via: 'post'
+  match '/viewbom', to: 'boms#viewbom',via: 'get'
+  match '/bomlist', to: 'boms#bomlist',via: 'get'
+  match '/up_order_info', to: 'boms#up_order_info',via: 'post'
+  match '/up_pcb_info', to: 'boms#up_pcb_info',via: 'get'
+  match '/up_pcb_info', to: 'boms#up_pcb_info',via: 'post'
+  match '/create_order', to: 'boms#create_order',via: 'post'
+
 
   resources :boms, only: [:index,:show, :new, :create, :destroy, :mark, :mpn]
   #resources :boms

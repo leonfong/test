@@ -1,0 +1,166 @@
+<div class="container" >
+ 
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
+<div class="row" style="padding: 0px;">
+
+<div class="sui-steps  steps-auto">
+  <div class="wrap">
+    <div class="finished">
+      <label><span class="round"><i class="glyphicon glyphicon-ok"></i></span><span>STEP 1 Upload your BOM file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="finished">
+      <label><span class="round"><i class="glyphicon glyphicon-ok"></i></span><span>STEP 2 Upload your PCB file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="current">
+      <label><span class="round">3</span><span>STEP 3 Submit Qrder</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">4</span><span>STEP 4 Order review</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">5</span><span>STEP 5 Payment</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+</div>    
+</div>
+
+  
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-2 list-group" style="padding: 0px;">
+            <a href="#" class="list-group-item"><strong>My Order</strong></a>
+            <%= link_to "My BOM", bomlist_path ,class: "list-group-item active"%>
+            <a href="#" class="list-group-item"><strong>My Profile</strong></a>
+        </div>
+        <div class="col-md-10">
+            <h1><strong>PCBA INFO</strong></h1>
+            <h4 style="color: #32aacb;"><strong>BOM No. --- <%= @boms.no %></strong></h4>
+            
+            <fieldset id="set">
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="panel panel-default ">  
+                        <div class="panel-heading"><strong>BOM info</strong></div>
+                        <div class="panel-body form-horizontal">
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </fieldset>
+
+            <div class="row ">
+                <div class="col-md-12">
+                    <div class="panel panel-default ">  
+                        <div class="panel-heading"><strong>PCB info</strong></div>
+                        <div class="panel-body form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Layers:</label>
+                                <div class="col-sm-2"><label class="control-label"><%= @boms.pcb_layer %></label></div>
+                                <div class="col-sm-1"></div>
+                                <label for="pcb_qty" class="col-sm-3 control-label">Quantity:</label>
+                                <div class="col-sm-3 form-inline"><label class="control-label"><%= @boms.pcb_qty %></label> 
+                                    <label  class=" control-label">pcs</label>
+                                </div>   
+                            </div>
+                            <div class="form-group">
+                                <label for="pcb_size_c" class="col-sm-2 control-label">Board Size:(mm)</label>
+                                <div class="col-sm-3 form-inline">
+                                    <label class="control-label"><%= @boms.pcb_size_c %></label>
+                                    <label for="inputEmail3" class=" control-label">X</label>
+                                    <label class="control-label"><%= @boms.pcb_size_k %></label>
+                                </div>
+
+                                <label for="pcb_sc" class="col-sm-3 control-label">Solder Mask Color:</label>
+                                <div class="col-sm-2"><label class="control-label"><%= @boms.pcb_sc %></label></div>
+                                <div class="col-sm-1"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pcb_material" class="col-sm-2 control-label">Material:</label>
+                                <div class="col-sm-2"><label class="control-label"><%= @boms.pcb_material %></label></div>
+                                <div class="col-sm-1"></div>
+                                <label for="pcb_cc" class="col-sm-3 control-label">Character Color:</label>
+                                <div class="col-sm-2"><label class="control-label"><%= @boms.pcb_cc %></label></div>
+                                <div class="col-sm-1"></div>
+                            </div> 
+                            <div class="form-group">
+                                <label for="pcb_t" class="col-sm-2 control-label">Thickness:</label>
+                                <div class="col-sm-2"><label class="control-label"><%= @boms.pcb_t %></label></div>
+                                <div class="col-sm-1"></div>
+                                <label for="pcb_ct" class="col-sm-3 control-label">Copper Thick:</label>
+                                <div class="col-sm-2"><label class="control-label"><%= @boms.pcb_ct %></label></div>
+                                <div class="col-sm-1"></div>
+                            </div>
+                             <div class="form-group">
+                                <label for="pcb_sf" class="col-sm-2 control-label">Surface Finish:</label>
+                                <div class="col-sm-2"><label class="control-label"><%= @boms.pcb_sf %></label></div>
+                                <div class="col-sm-1"></div>
+                                
+                                <div class="col-sm-1"></div>
+                            </div>                        
+                        </div>
+                    </div> 
+                </div>   
+            </div>
+            <%= form_tag({action: :create_order}, multipart: true, class:"form-horizontal") do %>
+            <div class="row">
+                <div class="col-md-12">
+                <div class="modal-footer">
+                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only", size:2  %>
+                    <%= submit_tag "SUBMIT ORDER", class:"btn btn-danger", id:"btn",:onclick => "return _step2_submit()" %>
+                </div>
+                </div>
+            </div>
+            <% end %>      
+        </div> 
+    </div>   
+</div>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

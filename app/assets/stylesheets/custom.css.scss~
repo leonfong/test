@@ -1,0 +1,11 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import 'bootstrap-datetimepicker';
+@import 'bootstrap-table';
+body {
+  padding-top: 70px;
+}
+
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}

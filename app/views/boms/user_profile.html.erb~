@@ -1,0 +1,737 @@
+<div class="container" >
+ 
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    <div class=" col-md-2 form-group">
+    <%= form_for @bom, html: { multipart: true, class:"form-inline"} do |f| %>	
+        
+	
+                <%= f.file_field :excel_file,class:"text-muted sr-only",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
+
+             
+                <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg sr-only" %>
+   
+    <% end %>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+
+
+
+
+  
+    <div class="row" style="padding: 0px;">
+        <h1>My Profile</h1>
+        <div class="col-md-2 list-group" style="padding: 0px;">
+            <% if can? :pcb_review, :all %>
+            <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
+            <% end %>
+            <% if can? :pcb_dc, :all %>
+            <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
+            <% end %>
+            <%= link_to "My Order", orderlist_path ,class: "list-group-item"%>
+            <%= link_to "My BOM", bomlist_path ,class: "list-group-item"%>
+            <%= link_to "My Profile", user_profile_path ,class: "list-group-item active"%>
+        </div>
+        
+        <div class="col-md-10">
+            <%= form_tag({action: :up_user_profile}, multipart: true, class:"form-horizontal") do %>
+            <div class="row" style="padding-left: 30px;width: 70%;">
+                <div class="row" >
+                    <div class="col-md-6 col-sm-6 text_left" style="padding: 0px;">
+                        <h3>Personal Information</h3>
+                    </div>
+                    <div class="col-md-6 col-sm-6" >
+                        <%= link_to("CHANGE MY PASSWORD", edit_registration_path(:user),:class=>"btn btn-danger btn-xs pull-right",:style=>"padding: 0px;") %>    
+                    </div>              
+                </div>
+                <div class="row" >
+                    <%= render 'layouts/flash_messages' %>
+                </div>
+                <div class="form-group " >
+                    <div for="first_name" class="col-md-4 col-sm-4  text-left" style="padding: 0px;">E-mail:</div>
+                    <div class="col-md-8 col-sm-8">
+                        <%= current_user.email%>
+                        <br>
+                        <small><span>Your email address is served as your user ID.</span></small>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <div for="first_name" class="col-md-4 col-sm-4 text-left" style="padding: 0px;">First Name <span style="color:#f00;"><strong>*</strong></span></div>
+                    <div class="col-md-8 col-sm-8">
+                        <input type="text" class="form-control" name="first_name" id="first_name" min="0" value="<%= @user_profile.first_name %>" > 
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <div for="last_name" class="col-md-4 col-sm-4 text-left" style="padding: 0px;">Last Name <span style="color:#f00;"><strong>*</strong></span></div>
+                    <div class="col-md-8 col-sm-8">
+                        <input type="text" class="form-control" name="last_name" id="last_name" min="0" value="<%= @user_profile.last_name %>" > 
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <div for="user_country" class="col-md-4 col-sm-4 text-left" style="padding: 0px;">Country <span style="color:#f00;"><strong>*</strong></span></div>
+                    <div class="col-md-8 col-sm-8">
+                        <% if @user_profile.country.blank? %>
+                            <%= country_select("user","country_code",{ include_blank: 'Select a country' },{ class: "form-control" }) %> 
+                        <% else %>
+                            <%= country_select("user","country_code",{selected: @user_profile.country},{ class: "form-control" }) %> 
+                        <% end %>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <div for="skype" class="col-md-4 col-sm-4 text-left" style="padding: 0px;">Skype</div>
+                    <div class="col-md-8 col-sm-8">
+                        <input type="text" class="form-control" name="skype" id="skype" min="0" value="<%= @user_profile.skype %>" >  
+                    </div>
+                </div> 
+                <div class="form-group" >
+                    <div  class="col-md-4 col-sm-4 text-left" style="padding: 0px;"><span style="color:#f00;"><strong>*</strong></span> Indicates a required field</div>
+                </div>   
+            </div>
+
+
+
+
+            <div class="row" style="padding-left: 30px;">
+                <div class="row" >
+                    <div class="col-md-6 col-sm-6 text_left" style="padding: 0px;">
+                        <h3>Shipping information</h3>
+                    </div>     
+                </div>
+                <small><div class="row" >
+                    <div class="col-md-12 col-sm-12 text_left" style="padding: 0px;">                       
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="bg-info">
+                                    <th>Action</th>                                    
+                                    <th>Company</th>
+                                    <th>Address</th>
+                                    <th>Contacts</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% @shipping_info.each do |shipping| %>
+                                <tr>
+                                    <td><div class="btn-group text-nowrap" role="group">
+                                            <span><button type="button" class="btn btn-warning btn-xs" aria-hidden="true" data-target="#<%=shipping.id%>_s" data-toggle="modal" >Edit</button></span>
+                                            <span><%= link_to "Delete",  del_shipping_path(shipping_id: shipping.id),type:"button", class:"btn btn-default btn-xs", data:{confirm: "Are you sure you want to delete it?"} %></span>
+                                        </div>
+                                    </td>
+                                    <td><%= shipping.company %></td>
+                                    <td><%= shipping.address_line + " " + shipping.city + " " + shipping.country_name + " " + shipping.postal_code %> </td>
+                                    <td><%= shipping.first_name + " " + shipping.last_name %></td>
+                                    <td><%= shipping.phone %></td>
+                                    <td><%= shipping.email %></td>
+                                </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>     
+                </div></small>
+                <div class="row" >
+                    <div class="col-md-6 col-sm-6 text_left" style="padding: 0px;">
+                        <h3>Billing information</h3>
+                    </div>
+                </div>
+                <small><div class="row" >
+                    <div class="col-md-12 col-sm-12 text_left" style="padding: 0px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="bg-info">
+                                    <th>Action</th>                                    
+                                    <th>Company</th>
+                                    <th>Address</th>
+                                    <th>Contacts</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% @billing_info.each do |billing| %>
+                                <tr>
+                                    <td><div class="btn-group text-nowrap" role="group">
+                                            <span><button type="button" class="btn btn-warning btn-xs" aria-hidden="true" data-target="#<%=billing.id%>_b" data-toggle="modal" >Edit</button></span>
+                                            <span><%= link_to "Delete",  del_billing_path(billing_id: billing.id),type:"button", class:"btn btn-default btn-xs", data:{confirm: "Are you sure you want to delete it?"} %></span>
+                                        </div>
+                                    </td>
+                                    <td><%= billing.company %></td>
+                                    <td><%= billing.address_line + " " + billing.city + " " + billing.country_name + " " + billing.postal_code %> </td>
+                                    <td><%= billing.first_name + " " + billing.last_name %></td>
+                                    <td><%= billing.phone %></td>
+                                    <td><%= billing.email %></td>
+                                </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>     
+                </div></small>     
+            </div>
+            <div class="row" style="padding-left: 30px;">
+            <div class="row" style="padding: 30px 0px 30px;">
+            <script>
+            function change_p(){
+            if (document.getElementById('shipping').className=='collapse in')
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
+            else
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
+            }
+            </script>
+            <button class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">Add a new address <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
+            </div>
+            <div class="collapse" id="shipping">
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_first_name" class="col-md-4  text-left" style="padding: 0px;">First Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_first_name" id="shipping_first_name" min="0" value="<%= @user_profile.first_name %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_last_name" class="col-md-4  text-left" style="padding: 0px;">Last Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_last_name" id="shipping_last_name" min="0" value="<%= @user_profile.last_name %>" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_address_line" class="col-md-4  text-left" style="padding: 0px;">Address Line <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_address_line" id="shipping_address_line" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_postal_code" class="col-md-4  text-left" style="padding: 0px;">Postal Code <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_postal_code" id="shipping_postal_code" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_email" class="col-md-4  text-left" style="padding: 0px;">E-mail <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_email" id="shipping_email" min="0" value="<%= current_user.email %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_phone" class="col-md-4  text-left" style="padding: 0px;">Phone <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_phone" id="shipping_phone" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_city" class="col-md-4  text-left" style="padding: 0px;">City <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_city" id="shipping_city" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_country" class="col-md-4  text-left" style="padding: 0px;">Country <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <% if @user_profile.country.blank? %>
+                                    <%= country_select("shipping_c","country",{ include_blank: 'Select a country' },{ class: "form-control" }) %> 
+                                <% else %>
+                                    <%= country_select("shipping_c","country",{selected: @user_profile.country},{ class: "form-control" }) %> 
+                                <% end %>                                
+                            </div>
+                        </div> 
+                    </li>
+                </ul>  
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_company" class="col-md-4  text-left" style="padding: 0px;">Company <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_company" id="shipping_company" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>  
+                </ul>
+                <ul class="form-group list-inline clearfix" style="padding: 0px;display: block;">                   
+                    <li style="padding: 0px;width: 30%;">
+                        
+                        <h4 style="padding: 0px;">Shipping &amp; Billing are the same?</h4>
+                    </li>
+                    <li>
+                        <label>
+                        <input type="radio" id="yes" checked="checked" name="shipping"  value="yes" >Yes </label>
+                    </li>
+                    <li>
+                        <label>
+                        <input type="radio" id="no" name="shipping"  value="no" >No <label>
+                    </li>
+                </ul>
+
+
+
+
+
+
+
+
+            <div class="collapse" id="shipping_2">
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_first_name" class="col-md-4  text-left" style="padding: 0px;">First Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_first_name" id="billing_first_name" min="0" value="<%= @user_profile.first_name %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_last_name" class="col-md-4  text-left" style="padding: 0px;">Last Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_last_name" id="billing_last_name" min="0" value="<%= @user_profile.last_name %>" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_address_line" class="col-md-4  text-left" style="padding: 0px;">Address Line <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_address_line" id="billing_address_line" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_postal_code" class="col-md-4  text-left" style="padding: 0px;">Postal Code <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_postal_code" id="billing_postal_code" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_email" class="col-md-4  text-left" style="padding: 0px;">E-mail <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_email" id="billing_email" min="0" value="<%= current_user.email %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_phone" class="col-md-4  text-left" style="padding: 0px;">Phone <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_phone" id="billing_phone" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_city" class="col-md-4  text-left" style="padding: 0px;">City <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_city" id="billing_city" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_country" class="col-md-4  text-left" style="padding: 0px;">Country <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <%= country_select("billing","country",{ include_blank: 'Select a country' },{ class: "form-control" }) %>
+                            </div>
+                        </div> 
+                    </li>
+                </ul>  
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_company" class="col-md-4  text-left" style="padding: 0px;">Company <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_company" id="billing_company" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>  
+                </ul>
+            </div>
+            <div class="pull-right ">
+                <%= submit_tag "DELIVER TO THIS ADDRESS", class:"btn btn-warning btn-xs",:onclick => "return address_info()" %>
+            </div>
+            </div>
+            
+            </div>
+            <div class="row" style="padding: 30px  0px 0px 30px;">
+                <div class="pull-right ">                    
+                    <%= submit_tag "UPDATE", class:"btn btn-danger btn-sm", :onclick => "return user_info()" %>
+                </div>
+            </div>
+
+        </div>
+        <% end %> 
+    </div>
+</div>
+
+
+<% @shipping_info.each do |shipping| %>
+<div class="modal fade" id="<%=shipping.id%>_s" tabindex="-1" role="dialog" aria-labelledby="pcb_pLabel" style="padding: 30px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="pcb_pLabel">Edit Shipping Info</h4>
+      </div>
+      <%= form_tag({action: :edit_shipping},method:"post") do %>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">First name:</label>
+            <%= text_field_tag :shipping_id, shipping.id, class:"sr-only", size:2  %>           
+            <%= text_field_tag :first_name, shipping.first_name, id: "#{shipping.id}_first_name", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Last name:</label>
+            <%= text_field_tag :last_name, shipping.last_name, id: "#{shipping.id}_last_name", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Address line:</label>
+            <%= text_field_tag :address_line, shipping.address_line, id: "#{shipping.id}_address_line", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Postal code:</label>
+            <%= text_field_tag :postal_code, shipping.postal_code, id: "#{shipping.id}_postal_code", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">E-mail:</label>
+            <%= text_field_tag :email, shipping.email, id: "#{shipping.id}_email", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Phone:</label>
+            <%= text_field_tag :phone, shipping.phone, id: "#{shipping.id}_phone", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">City:</label>
+            <%= text_field_tag :city, shipping.city, id: "#{shipping.id}_city", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Country:</label>
+            <%= country_select("user","country_code",{selected: shipping.country},{ class: "form-control" }) %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Company:</label>
+            <%= text_field_tag :company, shipping.company, id: "#{shipping.id}_company", class:"form-control"  %>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick = "return edit_shipping_<%=shipping.id%>()">Edit</button>
+      </div>
+      <% end %> 
+    </div>
+  </div>
+</div>
+<script>
+function edit_shipping_<%=shipping.id%>(){
+    if($("#<%=shipping.id%>_first_name").val() == ""){
+        alert("Please enter your First Name of Shipping information!");                    
+        return false;    
+    }else if($("#<%=shipping.id%>_last_name").val() == ""){
+        alert("Please enter your Last Name of Shipping information!");                    
+        return false;    
+    }else if($("<%=shipping.id%>_address_line").val() == ""){
+        alert("Please enter your Address Line of Shipping information!");                    
+        return false;    
+    }else if($("#<%=shipping.id%>_postal_code").val() == ""){
+        alert("Please enter your Postal Code of Shipping information!");                    
+        return false;    
+    }else if($("#<%=shipping.id%>_email").val() == ""){
+        alert("Please enter your E-mail of Shipping information!");                    
+        return false;    
+    }else if($("#<%=shipping.id%>_phone").val() == ""){
+        alert("Please enter your Phone of Shipping information!");                    
+        return false;    
+    }else if($("#<%=shipping.id%>_city").val() == ""){
+        alert("Please enter your City of Shipping information!");                    
+        return false;    
+    }else if($("#<%=shipping.id%>_company").val() == ""){
+        alert("Please enter your Company of Shipping information!");                    
+        return false;    
+    }
+}
+</script>
+<% end %>
+
+<% @billing_info.each do |billing| %>
+<div class="modal fade" id="<%=billing.id%>_b" tabindex="-1" role="dialog" aria-labelledby="pcb_pLabel" style="padding: 30px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="pcb_pLabel">Edit Shipping Info</h4>
+      </div>
+      <%= form_tag({action: :edit_billing},method:"post") do %>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">First name:</label>
+            <%= text_field_tag :billing_id, billing.id, class:"sr-only", size:2  %>           
+            <%= text_field_tag :first_name, billing.first_name, id: "#{billing.id}_first_name", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Last name:</label>
+            <%= text_field_tag :last_name, billing.last_name, id: "#{billing.id}_last_name", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Address line:</label>
+            <%= text_field_tag :address_line, billing.address_line, id: "#{billing.id}_address_line", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Postal code:</label>
+            <%= text_field_tag :postal_code, billing.postal_code, id: "#{billing.id}_postal_code", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">E-mail:</label>
+            <%= text_field_tag :email, billing.email, id: "#{billing.id}_email", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Phone:</label>
+            <%= text_field_tag :phone, billing.phone, id: "#{billing.id}_phone", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">City:</label>
+            <%= text_field_tag :city, billing.city, id: "#{billing.id}_city", class:"form-control"  %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Country:</label>
+            <%= country_select("user","country_code",{selected: billing.country},{ class: "form-control" }) %>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Company:</label>
+            <%= text_field_tag :company, billing.company, id: "#{billing.id}_company", class:"form-control"  %>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick = "return edit_billing_<%=billing.id%>()">Edit</button>
+      </div>
+      <% end %> 
+    </div>
+  </div>
+</div>
+<script>
+function edit_billing_<%=billing.id%>(){
+    if($("#<%=billing.id%>_first_name").val() == ""){
+        alert("Please enter your First Name of Billing information!");                    
+        return false;    
+    }else if($("#<%=billing.id%>_last_name").val() == ""){
+        alert("Please enter your Last Name of Billing information!");                    
+        return false;    
+    }else if($("<%=billing.id%>_address_line").val() == ""){
+        alert("Please enter your Address Line of Billing information!");                    
+        return false;    
+    }else if($("#<%=billing.id%>_postal_code").val() == ""){
+        alert("Please enter your Postal Code of Billing information!");                    
+        return false;    
+    }else if($("#<%=billing.id%>_email").val() == ""){
+        alert("Please enter your E-mail of Billing information!");                    
+        return false;    
+    }else if($("#<%=billing.id%>_phone").val() == ""){
+        alert("Please enter your Phone of Billing information!");                    
+        return false;    
+    }else if($("#<%=billing.id%>_city").val() == ""){
+        alert("Please enter your City of Billing information!");                    
+        return false;    
+    }else if($("#<%=billing.id%>_company").val() == ""){
+        alert("Please enter your Company of Billing information!");                    
+        return false;    
+    }
+}
+</script>
+<% end %>
+
+
+
+
+
+
+
+<script>
+function address_info(){    
+        if (document.getElementById('yes').checked == true){    
+            if($("#shipping_first_name").val() == ""){
+                alert("Please enter your First Name of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_last_name").val() == ""){
+                alert("Please enter your Last Name of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_address_line").val() == ""){
+                alert("Please enter your Address Line of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_postal_code").val() == ""){
+                alert("Please enter your Postal Code of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_email").val() == ""){
+                alert("Please enter your E-mail of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_phone").val() == ""){
+                alert("Please enter your Phone of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_city").val() == ""){
+                alert("Please enter your City of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_c_country").val() == ""){
+                alert("Please enter your Country of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_company").val() == ""){
+                alert("Please enter your Company of Shipping information!");                    
+　　              return false;    
+            }
+        } 
+        if (document.getElementById('no').checked == true){
+            if($("#billing_first_name").val() == ""){
+                alert("Please enter your First Name of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_last_name").val() == ""){
+                alert("Please enter your Last Name of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_address_line").val() == ""){
+                alert("Please enter your Address Line of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_postal_code").val() == ""){
+                alert("Please enter your Postal Code of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_email").val() == ""){
+                alert("Please enter your E-mail of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_phone").val() == ""){
+                alert("Please enter your Phone of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_city").val() == ""){
+                alert("Please enter your City of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_country").val() == ""){
+                alert("Please enter your Country of Billing information!");                    
+　　              return false;    
+            }else if($("#billing_company").val() == ""){
+                alert("Please enter your Company of Billing information!");                    
+　　              return false;    
+            }else if($("#shipping_first_name").val() == ""){
+                alert("Please enter your First Name of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_last_name").val() == ""){
+                alert("Please enter your Last Name of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_address_line").val() == ""){
+                alert("Please enter your Address Line of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_postal_code").val() == ""){
+                alert("Please enter your Postal Code of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_email").val() == ""){
+                alert("Please enter your E-mail of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_phone").val() == ""){
+                alert("Please enter your Phone of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_city").val() == ""){
+                alert("Please enter your City of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_c_country").val() == ""){
+                alert("Please enter your Country of Shipping information!");                    
+　　              return false;    
+            }else if($("#shipping_company").val() == ""){
+                alert("Please enter your Company of Shipping information!");                    
+　　              return false;    
+            }
+        }
+}
+
+function user_info(){
+    if ($("#first_name").val() == ""){
+        alert("Please enter your First name!");                    
+　　      return false;
+    }else if ($("#last_name").val() == ""){
+        alert("Please enter your Last name!");                    
+　　      return false;
+    }else if ($("#country").val() == ""){
+        alert("Please enter your First name!");                    
+　　      return false;
+    }      
+}
+
+$(document).ready(function(){
+  $("#yes").click(function(){
+      if (document.getElementById('yes').checked == true){
+          document.getElementById('shipping_2').className = 'collapse';
+      }
+      if (document.getElementById('no').checked == true){
+          document.getElementById('shipping_2').className = 'collapse in';
+      }
+    });
+  $("#no").click(function(){
+      if (document.getElementById('yes').checked == true){
+          document.getElementById('shipping_2').className = 'collapse';
+      }
+      if (document.getElementById('no').checked == true){
+          document.getElementById('shipping_2').className = 'collapse in';
+      }
+    });
+});
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

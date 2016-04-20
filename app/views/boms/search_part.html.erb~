@@ -148,9 +148,9 @@ function postform() {
 
 }
 $(document).ready(function() {
-    $("form.f1").submit(function(e){
-        $("#set").attr("disabled","true");  
-    });
+    //$("form.f1").submit(function(e){
+        //$("#set").attr("disabled","true");  
+    //});
     $("#btn").click();
     $("#10p").click(function(){
         document.getElementById('50p').checked = false; 

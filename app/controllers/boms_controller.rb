@@ -571,8 +571,11 @@ WHERE
     end
 
     def upbom        
-        if params[:bom_id] 
-             
+        if params[:bom_id] and params[:bak_bom].blank?
+            old_bom = BomItem.where(bom_id: params[:bom_id]) 
+            old_bom.each do |old_item|
+                old_item.destroy
+            end
             @bom = Bom.find(params[:bom_id]) 
             @bom.p_name = params[:p_name]
             @bom.qty = params[:qty]
@@ -693,44 +696,46 @@ WHERE
             return false
         end
                 
-         
-        
+        if not params[:bak_bom].blank? 
+            @bom = Bom.find(params[:bom_id])
+            #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
+	        #@xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            #else
+                #@xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+            #end
+            #@sheet = @xls_file.sheet(0)
+            #render "select_column.html.erb"
+            redirect_to select_column_path(bom: @bom)
+            return false
+        end
+
         @bom = Bom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         @file = @bom.excel_file_identifier
         @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Bom.find_by_sql('SELECT Count(boms.id)+1 AS all_no FROM boms WHERE to_days(boms.created_at) = to_days(NOW())').first.all_no.to_s + "B"
         #如果上传成功
 	if @bom.save
-            if not params[:select_part]
-                if @bom.excel_file_identifier.split('.')[-1] == 'xls'
-	            @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
-                else
-                    @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
-                end
-                @sheet = @xls_file.sheet(0)
-                render "select_column.html.erb" 
-                return false
-            else
-                Rails.logger.info("------------------------------------------------------------11")
-                Rails.logger.info(params[:select_part].inspect)
-                Rails.logger.info("------------------------------------------------------------11")
-                Rails.logger.info("------------------------------------------------------------12")
-                Rails.logger.info(params[:select_quantity].inspect)
-                Rails.logger.info("------------------------------------------------------------12")
-                Rails.logger.info("------------------------------------------------------------13")
-                Rails.logger.info(params[:select_refDes].inspect)
-                Rails.logger.info("------------------------------------------------------------13")
-                Rails.logger.info("------------------------------------------------------------14")
-                Rails.logger.info(params[:select_description].inspect)
-                Rails.logger.info("------------------------------------------------------------14")
-                
+            #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
+	        #@xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            #else
+                #@xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+            #end
+            #@sheet = @xls_file.sheet(0)
+            #render "select_column.html.erb"
+            redirect_to select_column_path(bom: @bom)  
+            return false
+        end 
+    end
 
-
-                render "select_column.html.erb" 
-                #redirect_to @bom,  notice: t('file') + " #{@bom.name} " + t('success_b')
-                return false 
-            end
+    def select_column
+        @sheet = params[:sheet]
+        @bom = Bom.find(params[:bom])
+        if @bom.excel_file_identifier.split('.')[-1] == 'xls'
+	    @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+        else
+            @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
         end
+        @sheet = @xls_file.sheet(0)
     end
 
     def up_order_info
@@ -779,6 +784,7 @@ WHERE
         
         if params[:bom_id]
             @boms = Bom.find(params[:bom_id])
+            @bom_item = BomItem.where(bom_id: params[:bom_id])
         else
             #render nothing: true and return
         end
@@ -1423,8 +1429,9 @@ WHERE
 
 
 
-
-
+            Rails.logger.info("@pcb_p------------------------------------------------------------1111111")
+            Rails.logger.info(@pcb_p.inspect)
+            Rails.logger.info("@pcb_p------------------------------------------------------------1111111")
             @boms = Bom.find(params[:bom_id])
             @boms.pcb_file = uploaded_io.original_filename
             @boms.pcb_layer = params[:pcb_layer]
@@ -1437,6 +1444,7 @@ WHERE
             @boms.pcb_ct = params[:pcb_ct]
             @boms.pcb_sf = params[:pcb_sf]
             @boms.pcb_t = params[:pcb_t]
+            @boms.pcb_p = @pcb_p
             @boms.save
         
             render "submit_order.html.erb" and return
@@ -1444,7 +1452,63 @@ WHERE
     end
 
     def create_order
-
+        if params[:bom_id]
+            bom = Bom.find(params[:bom_id])
+            Rails.logger.info("bom------------------------------------------------------------1111111")
+            Rails.logger.info(bom.class.inspect)
+            Rails.logger.info("bom------------------------------------------------------------1111111")
+            @order = Order.new
+            @order.order_no = "MO" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Order.find_by_sql('SELECT Count(orders.id)+1 AS all_no FROM orders WHERE to_days(orders.created_at) = to_days(NOW())').first.all_no.to_s + "B"
+            @order.no = bom.no
+            @order.shipping_info = params[:shipping_info]
+            @order.bom_id = bom.id
+            @order.name = bom.name
+            @order.p_name = bom.p_name
+            @order.qty = bom.qty
+            @order.t_p = bom.t_p
+            @order.d_day = bom.d_day
+            @order.description = bom.description
+            @order.excel_file = bom.excel_file
+            @order.pcb_p = bom.pcb_p
+            @order.pcb_file = bom.pcb_file
+            @order.pcb_layer = bom.pcb_layer
+            @order.pcb_qty = bom.pcb_qty
+            @order.pcb_size_c = bom.pcb_size_c
+            @order.pcb_size_k = bom.pcb_size_k
+            @order.pcb_sc = bom.pcb_sc
+            @order.pcb_material = bom.pcb_material
+            @order.pcb_cc = bom.pcb_cc
+            @order.pcb_ct = bom.pcb_ct
+            @order.pcb_sf = bom.pcb_sf
+            @order.pcb_t = bom.pcb_t
+            @order.t_c = bom.t_c
+            @order.c_p = bom.c_p
+            @order.user_id = bom.user_id
+            @order.save
+            bom_item = BomItem.where(bom_id: params[:bom_id])
+            bom_item.each do |bomitem|
+                order_item = OrderItem.new
+                order_item.quantity = bomitem.quantity
+                order_item.description = bomitem.description
+                order_item.part_code = bomitem.part_code
+                order_item.order_id = @order.id
+                order_item.product_id = bomitem.product_id
+                order_item.warn = bomitem.warn
+                order_item.user_id = bomitem.user_id
+                order_item.danger = bomitem.danger
+                order_item.manual = bomitem.manual
+                order_item.mark = bomitem.mark
+                order_item.mpn = bomitem.mpn
+                order_item.mpn_id = bomitem.mpn_id
+                order_item.price = bomitem.price
+                order_item.mf = bomitem.mf
+                order_item.dn = bomitem.dn
+                order_item.other = bomitem.other
+                order_item.save
+            end
+                
+            redirect_to vieworder_path(order_id: @order.id)
+        end
     end
 
     def search_part
@@ -1473,7 +1537,8 @@ WHERE
             end 
             @bom = Bom.find(params[:bom_id])      
             if not @bom.qty.blank?
-                @total_p = 0              
+                @total_p = 0   
+                all_c = 0           
                 @bom_item.each do |bomitem|
                     api_info = find_price(bomitem.mpn_id,@bom.qty)
                     if not api_info.blank?  
@@ -1481,11 +1546,20 @@ WHERE
                        bomitem.mf = api_info[1]
                        bomitem.dn = api_info[2]
                        bomitem.save
-                       @total_p += bomitem.price*bomitem.quantity
+                       if not bomitem.price.blank?
+                           @total_p += bomitem.price*bomitem.quantity
+                       end
                     end
+                    all_c += bomitem.quantity
                 end
                 @total_p = @total_p*@bom.qty.to_i
                 @bom.t_p = @total_p
+                @bom.t_c = all_c*@bom.qty.to_i
+                c_p = all_c*@bom.qty.to_i*0.06
+                if c_p < 200
+                    c_p = 200
+                end
+                @bom.c_p = c_p
                 @bom.save
                 render inline: "window.location='/viewbom?bom_id=#{params[:bom_id]}';" 
             end           
@@ -1496,16 +1570,429 @@ WHERE
         @bom = Bom.new
         @boms = Bom.find(params[:bom_id])
         @bom_item = BomItem.where(bom_id: params[:bom_id])
-        if @boms.pcb_file.blank?
+        if @boms.p_name.blank?
+            @bom = Bom.find(params[:bom_id])
+            #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
+	        #@xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            #else
+                #@xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+            #end
+            #@sheet = @xls_file.sheet(0)
+            #render "select_column.html.erb"
+            redirect_to select_column_path(bom: @bom)
+            return false
+        elsif @boms.pcb_file.blank? or params[:bak]
             render "viewbom.html.erb"
+            return false
         else
+            @shipping_info = ShippingInfo.where(user_id: current_user.id)
             render "submit_order.html.erb"
+            return false
         end
     end
 
     def bomlist
         @bom = Bom.new
         @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
+    end
+   
+    def orderlist
+        @bom = Bom.new
+        @order = Bom.find_by_sql("SELECT * FROM `orders` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
+    end
+   
+    def vieworder
+        @order = Order.find(params[:order_id])
+        @order_item = OrderItem.where(order_id: params[:order_id])
+        if not @order.pcb_dc_p.blank?
+            @pcb_p = @order.pcb_dc_p
+        elsif not @order.pcb_r_p.blank?
+            @pcb_p = @order.pcb_r_p
+        else
+            @pcb_p = @order.pcb_p
+        end
+        if not @order.pcb_dc_remark.blank?
+            @remark = @order.pcb_dc_remark
+        elsif not @order.pcb_r_remark.blank?
+            @remark = @order.pcb_r_remark
+        else
+            @remark = ""
+        end
+    end
+   
+    def order_review_list
+        @bom = Bom.new
+        @order = Order.where(state: "review", double_check_state: nil).order(id: :desc).paginate(:page => params[:page], :per_page => 10)
+    end
+
+    def order_review    
+        @order = Order.find(params[:order_id])
+        @order_item = OrderItem.where(order_id: params[:order_id])
+        if not @order.pcb_dc_p.blank?
+            @pcb_p = @order.pcb_dc_p
+        elsif not @order.pcb_r_p.blank?
+            @pcb_p = @order.pcb_r_p
+        else
+            @pcb_p = @order.pcb_p
+        end
+    end
+
+    def review_pass
+        order = Order.find(params[:order_id])
+        order.double_check_state = "pass_one"
+        order.save
+        @order = Order.where(state: "review", double_check_state: nil).paginate(:page => params[:page], :per_page => 10)
+        @bom = Bom.new
+        render "order_review_list.html.erb"
+    end
+  
+    def order_dc_list
+        @bom = Bom.new
+        @order = Order.where(state: "review", double_check_state: "pass_one").order(id: :desc).paginate(:page => params[:page], :per_page => 10)
+        render "order_dc_list.html.erb"
+    end
+
+    def order_dc
+        @order = Order.find(params[:order_id])
+        @order_item = OrderItem.where(order_id: params[:order_id])
+        if not @order.pcb_dc_p.blank?
+            @pcb_p = @order.pcb_dc_p
+        elsif not @order.pcb_r_p.blank?
+            @pcb_p = @order.pcb_r_p
+        else
+            @pcb_p = @order.pcb_p
+        end
+    end
+
+    def dc_pass
+        order = Order.find(params[:order_id])
+        order.double_check_state = "pass_dc"
+        order.state = "review pass"
+        order.save
+        @order = Order.where(state: "review", double_check_state: "pass_one").paginate(:page => params[:page], :per_page => 10)
+        @bom = Bom.new
+        render "order_dc_list.html.erb"
+    end
+
+    def pcb_dc_change
+        @order = Order.find(params[:order_id])
+        @order.pcb_dc_p = params[:pcb_dc_p]
+        @order.pcb_dc_remark = params[:pcb_dc_remark]
+        @order.save
+        redirect_to order_dc_path(order_id: @order.id)
+    end
+
+    def pcb_r_change
+        @order = Order.find(params[:order_id])
+        @order.pcb_r_p = params[:pcb_r_p]
+        @order.pcb_r_remark = params[:pcb_r_remark]
+        @order.save
+        redirect_to order_review_path(order_id: @order.id)
+    end
+
+    def user_profile
+        @bom = Bom.new
+        @user_profile = User.find(current_user.id)
+        @billing_info = BillingInfo.where(user_id: current_user.id)
+        @shipping_info = ShippingInfo.where(user_id: current_user.id)
+    end
+
+    def edit_billing
+        billing = BillingInfo.find(params[:billing_id])  
+        if billing.user_id = current_user.id
+            billing.first_name = params[:first_name]
+            billing.last_name = params[:last_name]
+            billing.address_line = params[:address_line]
+            billing.postal_code = params[:postal_code]
+            billing.email = params[:email]
+            billing.phone = params[:phone]
+            billing.city = params[:city]
+            billing.country = params[:user][:country_code]
+            country = ISO3166::Country[params[:user][:country_code]]
+            billing.country_name = country.translations['es'] || country.name
+            billing.company = params[:company]
+            billing.save
+        else
+            redirect_to user_profile_path()
+        end 
+        redirect_to user_profile_path()
+    end
+
+    def edit_shipping
+        shipping = ShippingInfo.find(params[:shipping_id])  
+        if shipping.user_id = current_user.id
+            shipping.first_name = params[:first_name]
+            shipping.last_name = params[:last_name]
+            shipping.address_line = params[:address_line]
+            shipping.postal_code = params[:postal_code]
+            shipping.email = params[:email]
+            shipping.phone = params[:phone]
+            shipping.city = params[:city]
+            shipping.country = params[:user][:country_code]
+            country = ISO3166::Country[params[:user][:country_code]]
+            shipping.country_name = country.translations['es'] || country.name
+            shipping.company = params[:company]
+            shipping.save
+        else
+            redirect_to user_profile_path()
+        end 
+        redirect_to user_profile_path()
+    end
+
+    def edit_shipping_js
+        shipping = ShippingInfo.find(params[:shipping_id])  
+        if shipping.user_id = current_user.id
+            shipping.first_name = params[:first_name]
+            shipping.last_name = params[:last_name]
+            shipping.address_line = params[:address_line]
+            shipping.postal_code = params[:postal_code]
+            shipping.email = params[:email]
+            shipping.phone = params[:phone]
+            shipping.city = params[:city]
+            shipping.country = params[:user][:country_code]
+            country = ISO3166::Country[params[:user][:country_code]]
+            shipping.country_name = country.translations['es'] || country.name
+            shipping.company = params[:company]
+            shipping.save
+        else
+            redirect_to user_profile_path()
+        end 
+        redirect_to user_profile_path()
+    end
+
+    def del_billing
+        billing = BillingInfo.find_by(id: params[:billing_id],user_id: current_user.id)
+        if not billing.blank?
+            billing.destroy
+        end
+        redirect_to user_profile_path()
+    end
+
+    def del_shipping
+        shipping = ShippingInfo.find_by(id: params[:shipping_id],user_id: current_user.id)
+        if not shipping.blank?
+            shipping.destroy
+        end
+        redirect_to user_profile_path()
+    end
+
+    def up_user_profile
+        @bom = Bom.new
+        if params[:commit] == "UPDATE"
+            user_profile = User.find(current_user.id)   
+            user_profile.first_name = params[:first_name]
+            user_profile.last_name = params[:last_name]
+            user_profile.country = params[:user][:country_code]
+            country = ISO3166::Country[params[:user][:country_code]]
+            user_profile.country_name = country.translations['es'] || country.name         
+            user_profile.skype = params[:skype]
+            user_profile.save
+        elsif params[:commit] == "DELIVER TO THIS ADDRESS" 
+            if params[:shipping] == "yes"
+                user_billing = BillingInfo.new
+                user_billing.user_id = current_user.id
+                user_billing.first_name = params[:shipping_first_name]
+                user_billing.last_name = params[:shipping_last_name]
+                user_billing.address_line = params[:shipping_address_line]
+                user_billing.postal_code = params[:shipping_postal_code]
+                user_billing.email = params[:shipping_email]
+                user_billing.phone = params[:shipping_phone]
+                user_billing.city = params[:shipping_city]
+                user_billing.country = params[:shipping_c][:country]
+                country = ISO3166::Country[params[:shipping_c][:country]]
+                user_billing.country_name = country.translations['es'] || country.name
+                user_billing.company = params[:shipping_company]
+                user_billing.save 
+                user_shipping = ShippingInfo.new
+                user_shipping.user_id = current_user.id
+                user_shipping.first_name = params[:shipping_first_name]
+                user_shipping.last_name = params[:shipping_last_name]
+                user_shipping.address_line = params[:shipping_address_line]
+                user_shipping.postal_code = params[:shipping_postal_code]
+                user_shipping.email = params[:shipping_email]
+                user_shipping.phone = params[:shipping_phone]
+                user_shipping.city = params[:shipping_city]
+                user_shipping.country = params[:shipping_c][:country]
+                country = ISO3166::Country[params[:shipping_c][:country]]
+                user_shipping.country_name = country.translations['es'] || country.name
+                user_shipping.company = params[:shipping_company]
+                user_shipping.save 
+            elsif params[:shipping] == "no"
+                user_billing = BillingInfo.new
+                user_billing.user_id = current_user.id
+                user_billing.first_name = params[:billing_first_name]
+                user_billing.last_name = params[:billing_last_name]
+                user_billing.address_line = params[:billing_address_line]
+                user_billing.postal_code = params[:billing_postal_code]
+                user_billing.email = params[:billing_email]
+                user_billing.phone = params[:billing_phone]
+                user_billing.city = params[:billing_city]
+                user_billing.country = params[:billing][:country]
+                country = ISO3166::Country[params[:billing][:country]]
+                user_billing.country_name = country.translations['es'] || country.name
+                user_billing.company = params[:billing_company]
+                user_billing.save
+                user_shipping = ShippingInfo.new
+                user_shipping.user_id = current_user.id
+                user_shipping.first_name = params[:shipping_first_name]
+                user_shipping.last_name = params[:shipping_last_name]
+                user_shipping.address_line = params[:shipping_address_line]
+                user_shipping.postal_code = params[:shipping_postal_code]
+                user_shipping.email = params[:shipping_email]
+                user_shipping.phone = params[:shipping_phone]
+                user_shipping.city = params[:shipping_city]
+                user_shipping.country = params[:shipping_c][:country]
+                country = ISO3166::Country[params[:shipping_c][:country]]
+                user_shipping.country_name = country.translations['es'] || country.name
+                user_shipping.company = params[:shipping_company]
+                user_shipping.save 
+            end             
+        end
+        redirect_to user_profile_path()
+    end
+
+    def update_bom
+        bom_item = BomItem.find(params[:pk])
+        @bom = Bom.find(bom_item.bom_id)
+        if not params[:value].blank? 
+            mpn = params[:value].strip
+            url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
+            url += mpn
+            begin
+                resp = Net::HTTP.get_response(URI.parse(url))
+            rescue
+                retry
+            end
+            server_response = JSON.parse(resp.body)    
+            info_mpn = InfoPart.new
+            info_mpn.mpn = mpn
+            info_mpn.info = resp.body
+            info_mpn.save
+            bom_item.mpn_id = info_mpn.id
+            bom_item.mpn = params[:value]
+            api_info = find_price(bom_item.mpn_id,@bom.qty)
+            if not api_info.blank?  
+               bom_item.price = api_info[0]
+               bom_item.mf = api_info[1]
+               bom_item.dn = api_info[2]
+            end
+            bom_item.save
+        end                          
+        @bom_item = BomItem.where(bom_id: bom_item.bom_id)
+        if not @bom.qty.blank?
+            @total_p = 0   
+            all_c = 0           
+            @bom_item.each do |bomitem|
+                if not bomitem.price.blank?
+                    @total_p += bomitem.price*bomitem.quantity
+                end
+                all_c += bomitem.quantity
+            end
+            @total_p = @total_p*@bom.qty.to_i
+            @bom.t_p = @total_p
+            @bom.t_c = all_c*@bom.qty.to_i
+            c_p = all_c*@bom.qty.to_i*0.06
+            if c_p < 200
+                c_p = 200
+            end
+            @bom.c_p = c_p
+            @bom.save           
+        end
+        #render inline: "window.location='/viewbom?bom_id=#{bom_item.bom_id}';"  
+        #redirect_to viewbom_path(bom_id: bom_item.bom_id)     
+        bom_all = BomItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.bom_id = '#{bom_item.bom_id}'")
+        render json: bom_all and return
+    end
+
+    def get_bom      
+        @bom_item = BomItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.bom_id = '#{params[:bom_id]}'")
+        render json: @bom_item
+    end
+
+    def del_bom      
+        bom_item = BomItem.where(id: params[:id],user_id: current_user.id).first
+        if not bom_item.blank?
+            bom_id = bom_item.bom_id
+            bom_item.destroy 
+        end
+        @bom = Bom.find(bom_id)
+                               
+        @bom_item = BomItem.where(bom_id: bom_id)
+        if not @bom.qty.blank?
+            @total_p = 0   
+            all_c = 0           
+            @bom_item.each do |bomitem|
+                if not bomitem.price.blank?
+                    @total_p += bomitem.price*bomitem.quantity
+                end
+                all_c += bomitem.quantity
+            end
+            @total_p = @total_p*@bom.qty.to_i
+            @bom.t_p = @total_p
+            @bom.t_c = all_c*@bom.qty.to_i
+            c_p = all_c*@bom.qty.to_i*0.06
+            if c_p < 200
+                c_p = 200
+            end
+            @bom.c_p = c_p
+            @bom.save           
+        end
+        redirect_to viewbom_path(bak: "bak",bom_id: bom_id)
+    end
+    
+    def add_bom
+        bom_item = BomItem.new
+        bom_id = params[:bom_id]
+        @bom = Bom.find(params[:bom_id])
+        if not params[:part].blank? 
+            mpn = params[:part].strip
+            url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
+            url += mpn
+            begin
+                resp = Net::HTTP.get_response(URI.parse(url))
+            rescue
+                retry
+            end
+            server_response = JSON.parse(resp.body)    
+            info_mpn = InfoPart.new
+            info_mpn.mpn = mpn
+            info_mpn.info = resp.body
+            info_mpn.save
+            bom_item.mpn_id = info_mpn.id
+            bom_item.mpn = params[:part]
+            bom_item.quantity = params[:qty]
+            bom_item.part_code = params[:code]
+            bom_item.bom_id = params[:bom_id]
+            bom_item.user_id = current_user.id
+            api_info = find_price(bom_item.mpn_id,@bom.qty)
+            if not api_info.blank?  
+               bom_item.price = api_info[0]
+               bom_item.mf = api_info[1]
+               bom_item.dn = api_info[2]
+            end
+            bom_item.save
+        end                          
+        @bom_item = BomItem.where(bom_id: bom_item.bom_id)
+        if not @bom.qty.blank?
+            @total_p = 0   
+            all_c = 0           
+            @bom_item.each do |bomitem|
+                if not bomitem.price.blank?
+                    @total_p += bomitem.price*bomitem.quantity
+                end
+                all_c += bomitem.quantity
+            end
+            @total_p = @total_p*@bom.qty.to_i
+            @bom.t_p = @total_p
+            @bom.t_c = all_c*@bom.qty.to_i
+            c_p = all_c*@bom.qty.to_i*0.06
+            if c_p < 200
+                c_p = 200
+            end
+            @bom.c_p = c_p
+            @bom.save           
+        end
+        redirect_to viewbom_path(bak: "bak",bom_id: bom_id)
     end
 
     def create
@@ -2351,9 +2838,11 @@ WHERE
                 Rails.logger.info(dm_all.inspect)
                 Rails.logger.info("--------------------------")
                 @mpn_result = []
-                @mpn_result << prices_all.min     
-                @mpn_result << mf_all[(prices_all.index prices_all.min)]   
-                @mpn_result << dm_all[(prices_all.index prices_all.min)]
+                if not prices_all.blank?
+                    @mpn_result << prices_all.min     
+                    @mpn_result << mf_all[(prices_all.index prices_all.min)]   
+                    @mpn_result << dm_all[(prices_all.index prices_all.min)]
+                end
                 result = @mpn_result
             end
         end

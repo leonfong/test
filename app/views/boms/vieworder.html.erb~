@@ -52,12 +52,12 @@
     </div>
   </div>
   <div class="wrap">
-    <div class="current">
-      <label><span class="round">3</span><span>STEP 3 Submit Qrder</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    <div class="finished">
+      <label><span class="round"><i class="glyphicon glyphicon-ok"></i></span><span>STEP 3 Submit Qrder</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
     </div>
   </div>
   <div class="wrap">
-    <div class="todo">
+    <div class="current">
       <label><span class="round">4</span><span>STEP 4 Order review</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
     </div>
   </div>
@@ -71,7 +71,7 @@
 
   
     <div class="row" style="padding: 0px;">
-        <h1>Place Qrder</h1>
+        <h1>My Order</h1>
         <div class="col-md-2 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
@@ -79,57 +79,24 @@
             <% if can? :pcb_dc, :all %>
             <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
             <% end %>
-            <%= link_to "My Order", orderlist_path ,class: "list-group-item "%>
-            <%= link_to "My BOM", bomlist_path ,class: "list-group-item active"%>
+            <%= link_to "My Order", orderlist_path ,class: "list-group-item active"%>
+            <%= link_to "My BOM", bomlist_path ,class: "list-group-item"%>
             <%= link_to "My Profile", user_profile_path ,class: "list-group-item"%>
         </div>
         <div class="col-md-10">
 <!--
             <h1><strong>PCBA INFO</strong></h1>
 -->
+            
             <div class="row">
                 <div class="col-md-4 col-sm-4 " >
-                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>BOM No. <%= @boms.no %></strong></h4>
+                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>Order No. --- <%= @order.order_no %></strong></h4>
                 </div>
                 <div class="col-md-8 col-sm-8 pull-right" style="color:#999;">
                     PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com</a></strong> 
                 </div>
             </div>
-            
-            
-            
-           <div class="row ">
-               <div class="col-md-12">
-                   <div >
-                   <h3>Shipping Information</h3>
-                   <ul class="list-unstyled">
-                   <% @shipping_info.each do |shipping| %>
-                       <small>
-                       <li id="address_<%= shipping.id %>" style="padding-right: 40px;padding-top: 5px;padding-bottom: 5px;">
-                            
 
-                                    <i class="hid_<%= shipping.id %> glyphicon glyphicon-map-marker hid-all" style="visibility: hidden;"></i>
-                                    <span class="hid_<%= shipping.id %> hid-all" style="visibility: hidden;">Send to </span>
-                                    <div class="address-info" style="visibility: visible;">
-                                        <input type="radio" value='<%= shipping.address_line + " " + shipping.city + " " + shipping.country_name + " " + shipping.postal_code + "(Contacts: #{shipping.first_name + " " + shipping.last_name})" + " " + shipping.phone %>' name="shipping_info[]" id="shipping_info_<%= shipping.id %>" />
-                                        <label for="shipping_info_<%= shipping.id %>" id="lab_<%= shipping.id %>" class="user-address" style="font-weight:normal;display:inherit;">    
-                                            <%= shipping.address_line + " " + shipping.city + " " + shipping.country_name + " " + shipping.postal_code + "(Contacts: #{shipping.first_name + " " + shipping.last_name})" + " " + shipping.phone %>
-                                            
-                                        </label> 
-<!--
-                                        <span class="pull-right hid_<%= shipping.id %> hid-all" style="float:right;visibility: hidden;padding-bottom: 9px"><a type="button" class="btn btn-link" aria-hidden="true" data-target="#<%=shipping.id%>_s" data-toggle="modal" >Edit Address</a></span>
--->
-                                   </div>
-                                   
-                           
-                       </li>
-                       </small>
-                   <% end %>
-                   </ul>
-                   </div>
-               </div>
-           </div>
-         
             <div class="row ">
                 <div class="col-md-12">
                     <div class="panel panel-default ">  
@@ -153,59 +120,65 @@ function change_pcb(){
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="pcb_size_c" >Board Size:(mm)</label>
-                                    <label class="control-label"><%= @boms.pcb_size_c %></label>
+                                    <label class="control-label"><%= @order.pcb_size_c %></label>
                                     <label for="inputEmail3" class=" control-label">X</label>
-                                    <label class="control-label"><%= @boms.pcb_size_k %></label>
+                                    <label class="control-label"><%= @order.pcb_size_k %></label>
                                 </div>
                                 <div class="col-sm-2">
                                     <label for="pcb_qty">Quantity:</label>
-                                    <label class="control-label"><%= @boms.pcb_qty %>pcs</label>
+                                    <label class="control-label"><%= @order.pcb_qty %>pcs</label>
                                 </div>
                                 <div class="col-sm-3 pull-right">
-                                    <label for="pcb_qty">PCB total price:</label>
-                                    <label class="control-label">$<%= @boms.pcb_p %></label>
+                                    <label for="pcb_qty">PCB total:</label>
+                                    <% if not @remark.blank? %>
+                                        <label class="control-label bg-danger text-danger" data-container="body" data-toggle="popover" data-placement="top" data-content="<%= @remark %>">$<%= @pcb_p %><li class="bg-danger text-danger glyphicon glyphicon-question-sign"></li></label>
+                                    <% else %>
+                                        <label class="control-label">$<%= @pcb_p %></label>
+                                    <% end %>
                                 </div>
                             </div>
                         </div>
                         <div class="panel-body form-horizontal collapse" id="pcb"> 
                             <div class="form-group">
                                 <div class="col-sm-2 control-label">Layers:</div>
-                                <div class="col-sm-2"><p class="form-control-static"><%= @boms.pcb_layer %></p></div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= @order.pcb_layer %></p></div>
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-3 control-label">Quantity:</div>
-                                <div class="col-sm-3 "><p class="form-control-static"><%= @boms.pcb_qty %>pcs</p></div>    
+                                <div class="col-sm-3 "><p class="form-control-static"><%= @order.pcb_qty %>pcs</p></div>    
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-2 control-label">Board Size:(mm)</div>
                                 <div class="col-sm-3 form-inline">
-                                    <p class="form-control-static"><%= @boms.pcb_size_c %>X<%= @boms.pcb_size_k %></p>
+                                    <p class="form-control-static"><%= @order.pcb_size_c %>X<%= @order.pcb_size_k %></p>
                                 </div>
 
                                 <div class="col-sm-3 control-label">Solder Mask Color:</div>
-                                <div class="col-sm-2"><p class="form-control-static"><%= @boms.pcb_sc %></p></div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= @order.pcb_sc %></p></div>
                                 <div class="col-sm-1"></div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-2 control-label">Material:</div>
-                                <div class="col-sm-2"><p class="form-control-static"><%= @boms.pcb_material %></p></div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= @order.pcb_material %></p></div>
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-3 control-label">Character Color:</div>
-                                <div class="col-sm-2"><p class="form-control-static"><%= @boms.pcb_cc %></p></div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= @order.pcb_cc %></p></div>
                                 <div class="col-sm-1"></div>
                             </div> 
                             <div class="form-group">
                                 <div for="pcb_t" class="col-sm-2 control-label">Thickness:</div>
-                                <div class="col-sm-2"><p class="form-control-static"><%= @boms.pcb_t %></p></div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= @order.pcb_t %></p></div>
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-3 control-label">Copper Thick:</div>
-                                <div class="col-sm-2"><p class="form-control-static"><%= @boms.pcb_ct %></p></div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= @order.pcb_ct %></p></div>
                                 <div class="col-sm-1"></div>
                             </div>
                              <div class="form-group">
                                 <div class="col-sm-2 control-label">Surface Finish:</div>
-                                <div class="col-sm-2"><p class="form-control-static"><%= @boms.pcb_sf %></p></div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= @order.pcb_sf %></p></div>
                                 <div class="col-sm-1"></div>
-                                
+                                <div class="col-sm-3 control-label">PCB File:</div>
+                                <div class="col-sm-2"><p class="form-control-static"><%= link_to "Download-"+@order.pcb_file, "/uploads/bom/excel_file/"+@order.bom_id.to_s+"/"+@order.pcb_file %></p></div>
+                                <div class="col-sm-1"></div>
                                 <div class="col-sm-1"></div>
                             </div>                        
                         </div>
@@ -236,15 +209,15 @@ function change_bom(){
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="pcb_size_c" >The total part:</label>
-                                    <label class="control-label"><%= @bom_item.size %></label>
+                                    <label class="control-label"><%= @order_item.size %></label>
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="pcb_size_c" >Quantity:</label>
-                                    <label class="control-label"><%= @boms.qty %>pcs</label>
+                                    <label class="control-label"><%= @order.qty %>pcs</label>
                                 </div>
                                 <div class="col-sm-3 pull-right">
-                                    <label for="pcb_qty">BOM total price:</label>
-                                    <label class="control-label">$<%= @boms.t_p %></label>
+                                    <label for="pcb_qty">BOM total:</label>
+                                    <label class="control-label">$<%= @order.t_p %></label>
                                 </div>
                             </div>
                         </div>
@@ -261,7 +234,7 @@ function change_bom(){
                                         <th>Distributor</th>
                                     </tr>
                                 </thead>
-                                <% @bom_item.each do |item| %> 
+                                <% @order_item.each do |item| %> 
                                     <tr <% if item.price.blank? %>class="danger"<% end %> >
                                         <td><small><%= item.mpn %></small></td>
                                         <td><small><%= item.part_code %></small></td>
@@ -285,11 +258,11 @@ function change_bom(){
                             <div class="row">
                                 <div class="col-sm-4">
                                    <label >Component:</label>
-                                    <label class="control-label"><%= @boms.t_c %></label>
+                                    <label class="control-label"><%= @order.t_c %></label>
                                 </div>
                                 <div class="col-sm-3 pull-right">
                                    <label>Assembly Price:</label>
-                                    <label class="control-label">$<%= @boms.c_p %></label>
+                                    <label class="control-label">$<%= @order.c_p %></label>
                                 </div>
                             </div>
                         </div>
@@ -306,7 +279,23 @@ function change_bom(){
                                 </div>
                                 <div class="col-sm-3 pull-right">
                                    <label>Amount:</label>
-                                    <label class="control-label">$<%= @boms.c_p+@boms.t_p+@boms.pcb_p %></label>
+                                    <label class="control-label">$<%= @order.c_p+@order.t_p+@pcb_p %></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel ">
+                        <div class="panel-heading"> 
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <label>Shipping Infomation</label>   
+                                </div>
+                                <div class="col-sm-9 pull-right">
+                                    <i ><%= @order.shipping_info %></i>
                                 </div>
                             </div>
                         </div>
@@ -316,11 +305,13 @@ function change_bom(){
             <%= form_tag({action: :create_order}, multipart: true, class:"form-horizontal") do %>
             <div class="row">
                 <div class="col-md-12">
-                <div class="modal-footer">
-                    <%= link_to "BACK MODIFY PCB", up_pcb_info_path(bom_id: @boms.id),class:"btn btn-default pull-left"%>
-                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only", size:2  %>
-                    <input type="text" name="shipping_info" id="shipping_info" value="" class="sr-only" size="2">
-                    <%= submit_tag "PLACE ORDER", class:"btn btn-danger", id:"btn",:onclick => "return check_submit()" %>
+                <div class="modal-footer"> 
+                    <%= text_field_tag :bom_id, @order.id, class:"sr-only", size:2  %>
+                    <% if @order.state == "review"%>
+                        <%= submit_tag "Pay", class:"btn btn-danger", id:"btn",:onclick => "return _step2_submit()", disabled: "disabled" %>
+                    <% elsif @order.state == "review pass"%>
+                        <%= submit_tag "Pay", class:"btn btn-danger", id:"btn",:onclick => "return _step2_submit()" %>
+                    <% end %>
                 </div>
                 </div>
             </div>
@@ -328,120 +319,10 @@ function change_bom(){
         </div> 
     </div>   
 </div>
-<% @shipping_info.each do |shipping| %>
-<div class="modal fade" id="<%=shipping.id%>_s" tabindex="-1" role="dialog" aria-labelledby="pcb_pLabel" style="padding: 30px;">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="pcb_pLabel">Edit Shipping Info</h4>
-      </div>
-      <%= form_tag({action: :edit_shipping_js},remote: true,method:"post") do %>
-      <div class="modal-body">
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">First name:</label>
-            <%= text_field_tag :shipping_id, shipping.id, class:"sr-only", size:2  %> 
-            <%= text_field_tag :place_order, "place_order", class:"sr-only", size:2  %>        
-            <%= text_field_tag :first_name, shipping.first_name, id: "#{shipping.id}_first_name", class:"form-control"  %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">Last name:</label>
-            <%= text_field_tag :last_name, shipping.last_name, id: "#{shipping.id}_last_name", class:"form-control"  %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">Address line:</label>
-            <%= text_field_tag :address_line, shipping.address_line, id: "#{shipping.id}_address_line", class:"form-control"  %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">Postal code:</label>
-            <%= text_field_tag :postal_code, shipping.postal_code, id: "#{shipping.id}_postal_code", class:"form-control"  %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">E-mail:</label>
-            <%= text_field_tag :email, shipping.email, id: "#{shipping.id}_email", class:"form-control"  %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">Phone:</label>
-            <%= text_field_tag :phone, shipping.phone, id: "#{shipping.id}_phone", class:"form-control"  %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">City:</label>
-            <%= text_field_tag :city, shipping.city, id: "#{shipping.id}_city", class:"form-control"  %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">Country:</label>
-            <%= country_select("user","country_code",{selected: shipping.country},{ class: "form-control" }) %>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">Company:</label>
-            <%= text_field_tag :company, shipping.company, id: "#{shipping.id}_company", class:"form-control"  %>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" onclick = "return edit_shipping_<%=shipping.id%>()">Edit</button>
-      </div>
-      <% end %> 
-    </div>
-  </div>
-</div>
 <script>
-function edit_shipping_<%=shipping.id%>(){
-    if($("#<%=shipping.id%>_first_name").val() == ""){
-        alert("Please enter your First Name of Shipping information!");                    
-        return false;    
-    }else if($("#<%=shipping.id%>_last_name").val() == ""){
-        alert("Please enter your Last Name of Shipping information!");                    
-        return false;    
-    }else if($("<%=shipping.id%>_address_line").val() == ""){
-        alert("Please enter your Address Line of Shipping information!");                    
-        return false;    
-    }else if($("#<%=shipping.id%>_postal_code").val() == ""){
-        alert("Please enter your Postal Code of Shipping information!");                    
-        return false;    
-    }else if($("#<%=shipping.id%>_email").val() == ""){
-        alert("Please enter your E-mail of Shipping information!");                    
-        return false;    
-    }else if($("#<%=shipping.id%>_phone").val() == ""){
-        alert("Please enter your Phone of Shipping information!");                    
-        return false;    
-    }else if($("#<%=shipping.id%>_city").val() == ""){
-        alert("Please enter your City of Shipping information!");                    
-        return false;    
-    }else if($("#<%=shipping.id%>_company").val() == ""){
-        alert("Please enter your Company of Shipping information!");                    
-        return false;    
-    }
-}
-</script>
-<% end %>
-<script language="javascript">
-function check_submit(){
-    if($("#shipping_info").val() == ""){
-        alert("Please choose your Shipping information!");                    
-        return false;    
-    }
-}
-$(document).ready(function () {
-    <% @shipping_info.each do |shipping| %>
-    $("#address_<%= shipping.id %>").mouseenter(function () {                     
-            $("#address_<%= shipping.id %>").addClass('bg-address');        
-    });
-    $("#address_<%= shipping.id %>").mouseleave(function () {             
-            $("#address_<%= shipping.id %>").removeClass('bg-address');
-    });
-    
-    $("#shipping_info_<%= shipping.id %>").focus(function(){
-       $("#shipping_info").val($("#shipping_info_<%= shipping.id %>").val()); 
-       $(".user-address").css("font-weight","normal");
-       $("#lab_<%= shipping.id %>").css("font-weight","bold");
-       $(".chk-address").removeClass('chk-address');
-       $("#address_<%= shipping.id %>").addClass('chk-address');
-       $(".hid-all").css("visibility","hidden");
-       $(".hid_<%= shipping.id %>").css("visibility","visible");
-    });
-    <% end %> 
-});
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

@@ -80,14 +80,28 @@
 
   
     <div class="row" style="padding: 0px;">
+        <h1><strong>Components Quote</strong></h1>
         <div class="col-md-2 list-group" style="padding: 0px;">
-            <a href="#" class="list-group-item"><strong>My Order</strong></a>
+            <% if can? :pcb_review, :all %>
+            <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
+            <% end %>
+            <% if can? :pcb_dc, :all %>
+            <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
+            <% end %>
+            <%= link_to "My Order", orderlist_path ,class: "list-group-item "%>
             <%= link_to "My BOM", bomlist_path ,class: "list-group-item active"%>
-            <a href="#" class="list-group-item"><strong>My Profile</strong></a>
+            <%= link_to "My Profile", user_profile_path ,class: "list-group-item"%>
         </div>
-        <div class="col-md-10">
-            <h1><strong>Components Quote</strong></h1>
-            <h4 style="color: #32aacb;"><strong>BOM Oeder No. --- <%= @boms.no %></strong></h4>
+        <div class="col-md-10">           
+            
+            <div class="row">
+                <div class="col-md-4 col-sm-4 " >
+                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>BOM No. <%= @boms.no %></strong></h4>
+                </div>
+                <div class="col-md-8 col-sm-8 pull-right" style="color:#999;">
+                    PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com</a></strong> 
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <table class="table table-striped table-bordered">
@@ -104,18 +118,22 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-            <table class="table">
+            <small>
+            <table  id="table" data-toggle="table" data-url="/get_bom?bom_id=<%=@boms.id%>" data-id-field="id" data-editable-emptytext="Default empty text." data-editable-url="/update_bom" >
+
                 <thead class="bg-info">
-                <tr>
-                    <th>Part#</th>
-                    <th>REF.DES.</th>
-                    <th>QTY</th>
-                    <th>Unit Price</th>
-                    <th>sub-total</th>
-                    <th>Manufacturer</th>
-                    <th>Distributor</th>
+                <tr> 
+                    <th data-field="mpn"  data-editable="true" data-align="center" data-width="200" >Part#</th>
+                    <th data-field="part_code" data-width="70">REF.DES.</th>
+                    <th data-field="quantity" data-width="50">QTY</th>
+                    <th data-field="price" data-width="80">Unit Price</th>
+                    <th data-field="total" data-width="80">Sub Total</th>
+                    <th data-field="mf" >Manufacturer</th>
+                    <th data-field="dn" >Distributor</th>
+                    <th data-field="id" data-formatter="actionFormatter" data-width="70">Action</th>
                 </tr>
                 </thead>
+<!--
                 <% @bom_item.each do |item| %> 
                 <tr <% if item.price.blank? %>class="danger"<% end %> >
                     <td><small><%= item.mpn %></small></td>
@@ -127,7 +145,8 @@
                     <td><small><%= item.dn %></small></td>
                 </tr>
                 <% end %>
-            </table>
+-->
+            </table></small>
                </div>
             </div>
             <div class="row">
@@ -140,12 +159,58 @@
             </table>
                 </div>
             </div>
+
+            <div class="row" style="padding-bottom: 20px;">
+                <div class="col-md-12">
+            <script>
+            function change_p(){
+            if (document.getElementById('shipping').className=='collapse in')
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
+            else
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
+            }
+            </script>
+                    <button class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">ADD A NEW PART <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
+                </div>
+            </div>
+            <div class="collapse" id="shipping" style="padding-bottom: 20px;">
+                <%= form_tag({action: :add_bom},method:"post",class:"form-inline") do %>
+                    <div class="form-group">
+                        <label for="part">Part</label>
+                        <input type="text" class="form-control" id="part" name="part" placeholder="Part">
+                    </div>
+                    <div class="form-group">
+                        <label for="qty">QTY</label>
+                        <input type="text" class="form-control" id="qty" name="qty" placeholder="quantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="code">REF.DES.</label>
+                        <input type="text" class="form-control" id="code" name="code" placeholder="REF.DES.">
+                    </div>
+                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
+                    <button type="submit" class="btn btn-warning">SUBMIT</button>
+                <% end %> 
+            </div>
             <div class="modal-footer">
+                <%= link_to "BACK MODIFY BOM COLUMN", new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-default pull-left"%>
                 <%= link_to "Upload PCB file",  up_pcb_info_path(bom_id: @boms.id), class: "btn btn-danger" %>
             </div>
         </div>
     </div>
 </div>
+<script>
+function actionFormatter(value, row, index) {
+    return  '<a class="btn btn-link btn-lg" href="/del_bom?id='+row.id+'" title="Remove" , data-confirm= "Are you sure you want to delete it?"><i class="glyphicon glyphicon-remove"></i></a>'
+    
+}
+
+$(function () {
+   $('#table').on('editable-save.bs.table', function (e) {
+       window.location='/viewbom?bak=bak&bom_id=<%= @boms.id %>';
+   });
+});
+
+</script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

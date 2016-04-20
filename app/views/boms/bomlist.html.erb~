@@ -57,22 +57,29 @@
 
   
     <div class="row" style="padding: 0px;">
+        <h1>My BOM</h1>
         <div class="col-md-2 list-group" style="padding: 0px;">
-            <a href="#" class="list-group-item"><strong>My Order</strong></a>
+            <% if can? :pcb_review, :all %>
+            <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
+            <% end %>
+            <% if can? :pcb_dc, :all %>
+            <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
+            <% end %>
+            <%= link_to "My Order", orderlist_path ,class: "list-group-item"%>
             <%= link_to "My BOM", bomlist_path ,class: "list-group-item active"%>
-            <a href="#" class="list-group-item"><strong>My Profile</strong></a>
+            <%= link_to "My Profile", user_profile_path ,class: "list-group-item"%>
         </div>
         <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 " >
+            <span class="pull-left" style="color:#999;">PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com</a></strong> </span>
+            </div>
+        </div>
 <%= will_paginate(@boms) %>            
 <table class="table table-striped">
   <thead>
     <tr class="bg-info">
-     <% if user_signed_in? %>
-          <% if current_user.email == "web@mokotechnology.com" %>
-              <th><%= t('name') %></th>
-          <% end %>
-      <% end %>
-      <th>Order No.</th>
+      <th>BOM No.</th>
       <th>Created Date</th>
       <th>Project name</th>
       <th>QTY</th>
@@ -85,36 +92,12 @@
     <% @boms.each do |bom| %>
     <% @itemall = @itemall + " " + bom.excel_file_identifier %>
       <tr>
-        
-        <% if user_signed_in? %>
-          <% if current_user.email == "web@mokotechnology.com" %>
-<!--
-            <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
-
-<td><%= link_to bom.excel_file_identifier, down_excel_path(:id =>bom.id,format: "xls") %></td>
-            <td><%= link_to bom.excel_file_identifier, down_excel_path(:path =>raw(bom.excel_file_url),:filename =>bom.excel_file_identifier) %></td>
--->
-            <td><%= User.find(bom.user_id).email %></td>
-            <td><%= link_to bom.no,  viewbom_path(bom_id: bom.id) %></td>
-            <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-            <td><%= bom.p_name %></td>
-            <td><%= bom.qty %></td>
-            <td><%= link_to bom.excel_file_identifier, bom.excel_file_url %></td>
-<!--
-            <td><div class="btn-group"><%= link_to t('view'),  up_pcb_info_path(bom_id: bom.id), class: "btn btn-primary" %></div> <div class="btn-group"></td>
--->
-          <% else %>
-            <td><%= link_to bom.no,  viewbom_path(bom_id: bom.id) %></td>
-            <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-            <td><%= bom.p_name %></td>
-            <td><%= bom.qty %></td>
-            <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
-<!--
-            <td><div class="btn-group"><%= link_to t('view'),  up_pcb_info_path(bom_id: bom.id), class: "btn btn-primary" %></div> <div class="btn-group"></td>
--->
-          <% end %>
-        <% end %>  
-        <td><div class="btn-group"><%= button_to t('delete'),  bom_path(bom,do: "list"), method: :delete, class: "btn btn-danger", data:{confirm: "确定要删除 #{bom.name}?"} %></div></td>
+        <td><%= link_to bom.no,  viewbom_path(bom_id: bom.id,bak: "bak") %></td>
+        <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= bom.p_name %></td>
+        <td><%= bom.qty %></td>
+        <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
+        <td><div class="btn-group"><%= link_to "PLACE ORDER",  viewbom_path(bom_id: bom.id), class:"btn btn-danger" %></div></td>
       </tr>
     <% end %>
   </tbody>

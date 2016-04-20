@@ -16,12 +16,16 @@ class Ability
     alias_action :update, :to => :work_g          #采购
     alias_action :update, :to => :work_h          #工时
     alias_action :update, :to => :work_i          #MPN
+    alias_action :update, :to => :pcb_review      #PCB_R
+    alias_action :update, :to => :pcb_dc          #PCB_DC
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
       #can :work_b, :all
       #can :work_c, :all
       #can :work_d, :all
+      can :pcb_review, :all
+      can :pcb_dc, :all
       can :work_up, :all
     elsif user.has_role?(:manager)
       can :manage, :all
@@ -66,6 +70,10 @@ class Ability
       can :work_i, :all
       can :work_up, :all
       can :work_e, :all
+    elsif user.has_role?(:work_pcb_review)
+      can :pcb_review, :all
+    elsif user.has_role?(:work_pcb_dc)
+      can :pcb_dc, :all
     else
       can :read, :all
     end

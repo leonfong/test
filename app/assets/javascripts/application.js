@@ -14,10 +14,12 @@
 //= require bootstrap
 //= require moment
 //= require bootstrap-datetimepicker
+//= require bootstrap-table
 //= require jquery_ujs
 //= require turbolinks
 //= require react
 //= require react_ujs
 //= require components
 //= require kindeditor
+//= require extensions/bootstrap-table-editable
 //= require_tree .

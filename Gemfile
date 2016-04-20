@@ -19,6 +19,8 @@ gem 'bootstrap-will_paginate'
 gem 'will-paginate-i18n'
 gem 'rails_kindeditor'
 
+gem "bootstrap-table-rails"
+
 gem 'sprockets', '~> 2.12.3'
 gem 'hike', '~> 1.2'
 gem 'multi_json', '~> 1.0'
@@ -85,6 +87,7 @@ gem 'rolify'
 gem 'cancan'
 gem 'devise-i18n'
 gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
+gem 'country_select'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :development, :test do

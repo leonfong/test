@@ -22,15 +22,10 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
             <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
             <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
             <div class="input-group-btn">
-              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
-               
-            </div>
-            
-            
-          </div>
-          
-        </div>
-        
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>  
+            </div>      
+          </div>          
+        </div>    
       <% end %>
       </div>
       <div class="col-md-1 ">
@@ -83,27 +78,36 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <div class="sui-steps steps-large steps-auto">
   <div class="wrap">
     <div class="current">
-      <label><span class="round">1</span><span>STEP 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload your BOM file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+      <label><span class="round">1</span><span>STEP 1 Upload your BOM file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
     </div>
   </div>
   <div class="wrap">
     <div class="todo">
-      <label><span class="round">2</span><span>STEP 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload your PCB file and Quote</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+      <label><span class="round">2</span><span>STEP 2 Upload your PCB file</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
     </div>
   </div>
   <div class="wrap">
     <div class="todo">
-      <label><span class="round">3</span><span>STEP 3</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+      <label><span class="round">3</span><span>STEP 3 Submit Qrder</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
     </div>
   </div>
   <div class="wrap">
     <div class="todo">
-      <label><span class="round">4</span><span>STEP 4</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+      <label><span class="round">4</span><span>STEP 4 Order review</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="todo">
+      <label><span class="round">5</span><span>STEP 5 Payment</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
     </div>
   </div>
 </div>              
 
-
+        <div class="row">
+            <div class="col-md-12 col-sm-12 " >
+            <span class="pull-right" style="color:#999;">PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com</a></strong></span>
+        </div>
+        </div>
 
 
         <div class="col-md-8 col-sm-8" style="padding: 0px;margin: 0px;">
@@ -112,12 +116,11 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
        		 	<i class="glyphicon icon-question m10"></i></a>
        		 </h1>
             </div>
-            <h3>Three Easy Ways to Upload Your BOM!</h3>
+            <h3>The Easy Ways to Upload Your BOM!</h3>
             <dl style="font-size: 1.2em!important;padding: 10px 0px!important;">
                 <dt>What is the BOM Manager?</dt>
                 <dd>BOM Manager is a tool to get stock and price information quickly and easily.</dd>
-            </dl>
-            
+            </dl> 
             <dl style="font-size: 1.2em!important;padding: 10px 0px!important;">
                 <dd style="clear:both;height:20px;"></dd>
                 <dt style="margin-bottom: 20px!important;margin-top: 5px!important;">Choose one of the below options to start!</dt>

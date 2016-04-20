@@ -26,6 +26,7 @@ namespace :mpn do
                 puts mpn.inspect
                 puts "----try"
                 #resp = Net::HTTP.get_response(URI.parse(url))
+                sleep 5
                 retry
             end
             server_response = JSON.parse(resp.body)           

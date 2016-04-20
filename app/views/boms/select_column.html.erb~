@@ -5,11 +5,11 @@ function _step2_submit() {
     var partCol = document.getElementById("partCol");//代表芯片名称的列的序号
     var quantityCol = document.getElementById("quantityCol");//代表数量的列的序号
     if(partCol.value == "") {
-        alert("请选择代表型号的列");
+        alert("Please choose "Part" column");
         return false;
     }
     if(quantityCol.value == "") {
-	alert("请选择代表数量的列");
+	alert("Please choose "Quantity" Column");
         return false;
     }
     if($("#p_name").val() == ""){
@@ -108,7 +108,11 @@ $(document).ready(function() {
     </div>
   </div>
 </div> 
-
+        <div class="row">
+            <div class="col-md-12 col-sm-12 " >
+            <span class="pull-right" style="color:#999;">PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com</a></strong> </span>
+            </div>
+        </div>
 
 
 
@@ -137,12 +141,12 @@ $(document).ready(function() {
     <div class="row ">
         <div class="col-sm-11 form-group">
                     <label for="p_name" class="col-sm-4 control-label form-inline">Project name:
-                        <%= text_field_tag :p_name, params[:p_name], class:"form-control", size:50  %>  
+                        <%= text_field_tag :p_name, @bom.p_name, class:"form-control", size:50  %>  
                     </label>
                     <div class="col-sm-1 form-inline"></div> 
                     <label for="qty"  class="col-sm-6 control-label  form-inline">Quantity:
                     
-                        <%= number_field_tag :qty, params[:qty], class:"form-control", size:2  %>
+                        <%= number_field_tag :qty, @bom.qty, class:"form-control", size:2  %>
 
                         <div class="checkbox-inline">
                            <label>
@@ -162,7 +166,6 @@ $(document).ready(function() {
                                <strong>100pcs</strong>
                            </label>
                        </div> 
-                     
                     </label>  
                 </div> 
         
@@ -185,7 +188,7 @@ $(document).ready(function() {
                 <% @sheet.row(1).each_with_index do |item,index| %>
                 <td>
                     <div >
-                    <select name="noselect[]" id="rowselect_<%= index %>"  class="changes form-control center-block" >
+                    <select name="noselect[]" id="rowselect_<%= index %>"  class="changes form-control center-block" style="font-weight:bold;">
 		        <option value="0">
 			    None
 		        </option>

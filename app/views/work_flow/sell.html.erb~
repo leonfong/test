@@ -7,7 +7,7 @@
 
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
-        <%= link_to "未回复的问题",  {action: "index"},class: "btn btn-danger btn-sm" %> 
+        <%= link_to "未回复的问题"+current_user.s_name,  {action: "index"},class: "btn btn-danger btn-sm" %> 
         <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger btn-sm" %>
     </div>
 
@@ -200,9 +200,7 @@
             <label for="message-text" class="control-label">内容:</label>
             <%= text_field_tag :topic_up, params[:topic_up], class:"sr-only", size:2 , value: work.id.to_s %>  
             <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>    
-<!--                
-            <%= kindeditor_tag :sell_topic, '',:editor_id => "my_feedback#{work.id.to_s}", :items => ["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"] %>
--->
+
             <textarea name="sell_topic" id="<%= work.id.to_s %>"></textarea>
 <script>
 KindEditor.ready(function(K){

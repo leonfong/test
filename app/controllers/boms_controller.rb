@@ -1446,7 +1446,7 @@ WHERE
             @boms.pcb_t = params[:pcb_t]
             @boms.pcb_p = @pcb_p
             @boms.save
-        
+            @shipping_info = ShippingInfo.where(user_id: current_user.id) 
             render "submit_order.html.erb" and return
         end
     end

@@ -81,11 +81,18 @@
                                <strong><%= '业务部' %></strong>
                            </label>
                        </div>
+                        <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="merchandiser" name="send_up[]" id="send_up3" onclick="change_2()"> 
+                               <strong><%= '跟单部' %></strong>
+                           </label>
+                       </div>
        <script>
         function change_1(){
                document.getElementById('send_up1').checked = false; 
                document.getElementById('send_up2').checked = false; 
-               document.getElementById('send_up4').checked = false;                 
+               document.getElementById('send_up4').checked = false;
+               document.getElementById('send_up3').checked = false;                 
            } 
          function change_2(){
                document.getElementById('send_up_mark').checked = false;                            
@@ -125,7 +132,7 @@ function postform() {
 if (document.getElementById('send_up_mark').checked == true)
     {
     }
-    else if (document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false &  document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
+    else if (document.getElementById('send_up1').checked == false & document.getElementById('send_up2').checked == false & document.getElementById('send_up3').checked == false &  document.getElementById('send_up4').checked == false & document.getElementById('send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                

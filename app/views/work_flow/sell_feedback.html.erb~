@@ -49,26 +49,7 @@
                    <div class="panel-heading"><span class="text-primary"><strong>业务反馈---<%= @topic.order_no %></strong></span></div>
 
 
-<% if @topic.feedback_type == @topic.feedback_receive %>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <div class="form-group">                                
-                                <div class="radio-inline">
-                                    <label>
-                                        <input type="radio" value="close" name="topic_state" id="topic_state_close" />
-                                        <strong><span class="label label-success" style="font-size: 13px;">反馈的信息我很满意,我要关闭问题</span></strong>
-                                    </label>
-                                </div>                                            
-                                <div class="radio-inline">
-                                    <label>
-                                        <input type="radio" value="open" name="topic_state" id="topic_state_open" />
-                                        <strong><span class="label label-danger" style="font-size: 13px;">我还不是很明白,我要继续提问</span></strong>
-                                    </label>
-                                </div> 
-                            </div>
-                        </li>                        
-                    </ul>  
-<% end %>
+
 
 
 

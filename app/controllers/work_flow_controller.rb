@@ -747,7 +747,8 @@ before_filter :authenticate_user!
                     topic_up.mark = ""
                     topic_up.save
                     if not params[:production_feedback].blank? and params[:send_up] != "mark" 
-                        feedback_up = Feedback.new  
+                        feedback_up = Feedback.new 
+                        feedback_up.send_to = params[:send_up].join(",")   
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
                         feedback_up.product_code = work_up.product_code          #回复对应的物料
@@ -770,6 +771,7 @@ before_filter :authenticate_user!
                         feedback_up.save
                     elsif not params[:engineering_feedback].blank? and params[:send_up].to_s != "mark" 
                         feedback_up = Feedback.new  
+                        feedback_up.send_to = params[:send_up].join(",") 
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id    
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
                         feedback_up.product_code = work_up.product_code          #回复对应的物料
@@ -814,6 +816,7 @@ before_filter :authenticate_user!
                         feedback_up.save
                     elsif not params[:merchandiser_feedback].blank? and params[:send_up].to_s != "mark"                      
                         feedback_up = Feedback.new  
+                        feedback_up.send_to = params[:send_up].join(",") 
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id 
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
                         feedback_up.product_code = work_up.product_code          #回复对应的物料
@@ -836,7 +839,8 @@ before_filter :authenticate_user!
                         feedback_up.user_name = current_user.email                     #发帖的人
                         feedback_up.save
                     elsif not params[:procurement_feedback].blank? and params[:send_up].to_s != "mark"                        
-                        feedback_up = Feedback.new  
+                        feedback_up = Feedback.new 
+                        feedback_up.send_to = params[:send_up].join(",") 
                         feedback_up.topic_id = params[:feedback_up]              #回复对应的帖子 id     
                         feedback_up.order_no = work_up.order_no                  #回复对应的的order
                         feedback_up.product_code = work_up.product_code          #回复对应的物料

@@ -16,7 +16,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
     
       <ul class="nav navbar-nav" >
-        <li id="a"><%= link_to 'Search BOM',root_path %></li>
+        <li id="a"><%= link_to 'HOME',root_path %></li>
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
 

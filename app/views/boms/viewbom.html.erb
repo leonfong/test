@@ -126,11 +126,11 @@
                     <th data-field="mpn"  data-editable="true" data-align="center" data-width="200" >Part#</th>
                     <th data-field="part_code" data-width="70">REF.DES.</th>
                     <th data-field="quantity" data-width="50">QTY</th>
-                    <th data-field="price" data-width="80">Unit Price</th>
-                    <th data-field="total" data-width="80">Sub Total</th>
+                    <th data-field="price" data-width="80" data-formatter="priceFormatter">Unit Price</th>
+                    <th data-field="total" data-width="80" data-formatter="totalFormatter">Sub Total</th>
                     <th data-field="mf" >Manufacturer</th>
                     <th data-field="dn" >Distributor</th>
-                    <th data-field="id" data-formatter="actionFormatter" data-width="70">Action</th>
+                    <th data-field="id" data-formatter="actionFormatter" data-events="actionEvents" data-align="center" data-width="70">Action</th>
                 </tr>
                 </thead>
 <!--
@@ -198,15 +198,46 @@
         </div>
     </div>
 </div>
+<%= form_tag('/viewbom', remote: true, method:"post", class:"form-inline") do %>
+        <%= text_field_tag :bom_id, params[:bom_id], class:"sr-only", size:2 , value: @boms.id %>
+        <%= text_field_tag :ajax, params[:ajax], class:"sr-only", size:2 , value: "" %>
+        <%= submit_tag t(:search), class:"btn-ajax  sr-only", id:"btn-ajax" %>
+<% end %>
+<%= form_tag('/del_bom', remote: true, method:"post", class:"form-inline") do %>
+        <%= text_field_tag :id, params[:id], class:"sr-only", size:200, value: "" %>
+        <%= submit_tag t(:search), class:"btn-del  sr-only", id:"btn-del" %>
+<% end %>
 <script>
+var $table = $('#table');
 function actionFormatter(value, row, index) {
-    return  '<a class="btn btn-link btn-lg" href="/del_bom?id='+row.id+'" title="Remove" , data-confirm= "Are you sure you want to delete it?"><i class="glyphicon glyphicon-remove"></i></a>'
-    
+    return '<a class="btn-d btn btn-link" ><i class="glyphicon glyphicon-remove"></a>'
+}
+
+window.actionEvents = {
+    'click .btn-d': function (e, value, row, index) {
+            $("#id").val(row.id);
+            $("#btn-del").click();
+            $table.bootstrapTable('remove', {
+                field: 'mpn',
+                values: [row.mpn]
+            });
+    }
+};
+
+
+function priceFormatter(value, row, index) {
+    return  '<span id="price_'+row.id+'">'+value+'</span>'   
+}
+
+function totalFormatter(value, row, index) {
+    return  '<span id="total_'+row.id+'">'+value+'</span>'   
 }
 
 $(function () {
-   $('#table').on('editable-save.bs.table', function (e) {
-       window.location='/viewbom?bak=bak&bom_id=<%= @boms.id %>';
+   $('#table').on('editable-save.bs.table', function (e, field, row, old, $el) {
+       $("#ajax").val(row.id);
+       //window.location='/viewbom?bak=bak&bom_id=<%= @boms.id %>';
+       $("#btn-ajax").click();
    });
 });
 

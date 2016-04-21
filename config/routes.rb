@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   match '/des_item', to: 'boms#des_item', via: 'get'
   match '/search_part', to: 'boms#search_part',via: 'post'
   match '/viewbom', to: 'boms#viewbom',via: 'get'
+  match '/viewbom', to: 'boms#viewbom',via: 'post'
   match '/vieworder', to: 'boms#vieworder',via: 'get'
   match '/bomlist', to: 'boms#bomlist',via: 'get'
   match '/up_order_info', to: 'boms#up_order_info',via: 'post'
@@ -78,7 +79,7 @@ Rails.application.routes.draw do
   match '/edit_shipping_js', to: 'boms#edit_shipping_js',via: 'post'
   match '/update_bom', to: 'boms#update_bom',via: 'post'
   match '/get_bom', to: 'boms#get_bom',via: 'get'
-  match '/del_bom', to: 'boms#del_bom',via: 'get'
+  match '/del_bom', to: 'boms#del_bom',via: 'post'
   match '/add_bom', to: 'boms#add_bom',via: 'post'
 
   resources :boms, only: [:index,:show, :new, :create, :destroy, :mark, :mpn]

@@ -200,13 +200,9 @@
             <label for="message-text" class="control-label">内容:</label>
             <%= text_field_tag :topic_up, params[:topic_up], class:"sr-only", size:2 , value: work.id.to_s %>  
             <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>                    
+            <%= kindeditor_tag :sell_topic, '',:editor_id => "my_feedback#{work.id.to_s}",:items => ["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"] %>
+
             
-            <textarea name="sell_topic" id="<%= work.id.to_s %>"></textarea>
-<script>
-KindEditor.ready(function(K){
-        	my_feedback<%= work.id.to_s %> = K.create('#<%= work.id.to_s %>', {"items":["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"],"width":"100%","height":300,"allowFileManager":true,"uploadJson":"http://www.fastbom.com/kindeditor/upload","fileManagerJson":"http://www.fastbom.com/kindeditor/filemanager"});
-        });
-</script>
           </div>
         
       </div>

@@ -1,0 +1,2 @@
+$("#matched").html("<%= @bom_item.size %>");
+$("#total_price").html("$<%= @boms.t_p %>");

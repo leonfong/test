@@ -1570,6 +1570,11 @@ WHERE
         @bom = Bom.new
         @boms = Bom.find(params[:bom_id])
         @bom_item = BomItem.where(bom_id: params[:bom_id])
+        if  params[:ajax]
+            @bomitem = BomItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
+            render "viewbom.js.erb"
+            return false
+        end
         if @boms.p_name.blank?
             @bom = Bom.find(params[:bom_id])
             #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
@@ -1583,7 +1588,7 @@ WHERE
             return false
         elsif @boms.pcb_file.blank? or params[:bak]
             render "viewbom.html.erb"
-            return false
+            return false  
         else
             @shipping_info = ShippingInfo.where(user_id: current_user.id)
             render "submit_order.html.erb"
@@ -1909,24 +1914,35 @@ WHERE
         render json: @bom_item
     end
 
-    def del_bom      
+    def del_bom     
         bom_item = BomItem.where(id: params[:id],user_id: current_user.id).first
+        Rails.logger.info("----------------------------------------------------1")
+        @bomitem = bom_item.mpn
+        Rails.logger.info("----------------------------------------------------2")
         if not bom_item.blank?
-            bom_id = bom_item.bom_id
+            Rails.logger.info("----------------------------------------------------3")
+            @bom_id = bom_item.bom_id
             bom_item.destroy 
+            Rails.logger.info("----------------------------------------------------")
+            Rails.logger.info(@bom_id.inspect)
+            Rails.logger.info("----------------------------------------------------")
         end
-        @bom = Bom.find(bom_id)
-                               
-        @bom_item = BomItem.where(bom_id: bom_id)
+        @bom = Bom.find(@bom_id)
+        Rails.logger.info("----------------------------------------------------4")                               
+        @bom_item = BomItem.where(bom_id: @bom_id)
+        Rails.logger.info("----------------------------------------------------5")
         if not @bom.qty.blank?
+            Rails.logger.info("----------------------------------------------------6")
             @total_p = 0   
             all_c = 0           
             @bom_item.each do |bomitem|
+                Rails.logger.info("----------------------------------------------------7")
                 if not bomitem.price.blank?
                     @total_p += bomitem.price*bomitem.quantity
                 end
                 all_c += bomitem.quantity
             end
+            Rails.logger.info("----------------------------------------------------8")
             @total_p = @total_p*@bom.qty.to_i
             @bom.t_p = @total_p
             @bom.t_c = all_c*@bom.qty.to_i
@@ -1935,9 +1951,12 @@ WHERE
                 c_p = 200
             end
             @bom.c_p = c_p
-            @bom.save           
+            @bom.save 
+            Rails.logger.info("----------------------------------------------------9")          
         end
-        redirect_to viewbom_path(bak: "bak",bom_id: bom_id)
+        Rails.logger.info("----------------------------------------------------10")
+        #render del_bom.js.erb and return
+        #redirect_to viewbom_path(bak: "bak",bom_id: bom_id)
     end
     
     def add_bom

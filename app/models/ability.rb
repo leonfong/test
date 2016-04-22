@@ -18,6 +18,7 @@ class Ability
     alias_action :update, :to => :work_i          #MPN
     alias_action :update, :to => :pcb_review      #PCB_R
     alias_action :update, :to => :pcb_dc          #PCB_DC
+    alias_action :update, :to => :old_bom         #老bom匹配功能
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -27,6 +28,7 @@ class Ability
       can :pcb_review, :all
       can :pcb_dc, :all
       can :work_up, :all
+      can :old_bom, :all
     elsif user.has_role?(:manager)
       can :manage, :all
     elsif user.has_role?(:work_one)
@@ -46,6 +48,7 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_d, :all
+      can :old_bom, :all
     elsif user.has_role?(:work_five)
       #can :manage, :all
       can :work_up, :all

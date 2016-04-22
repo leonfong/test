@@ -8,6 +8,7 @@ en:
       zh: "中文"
       en: "English"
   all_boms: My BOM
+  my_order: My Order
   category: The category
   packaging: Packaging
   describe: Describe

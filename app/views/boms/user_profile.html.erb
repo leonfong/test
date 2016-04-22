@@ -68,6 +68,10 @@
             <%= link_to "My Order", orderlist_path ,class: "list-group-item"%>
             <%= link_to "My BOM", bomlist_path ,class: "list-group-item"%>
             <%= link_to "My Profile", user_profile_path ,class: "list-group-item active"%>
+            <% if can? :old_bom, :all %>
+            <%= link_to "(old)上传BOM",how_to_use_path ,class: "list-group-item"%>
+            <%= link_to "(old)BOM列表",boms_path ,class: "list-group-item"%>
+            <% end %>
         </div>
         
         <div class="col-md-10">

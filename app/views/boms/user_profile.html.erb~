@@ -393,7 +393,11 @@
                         <div class="form-group" >
                             <div for="billing_country" class="col-md-4  text-left" style="padding: 0px;">Country <span style="color:#f00;"><strong>*</strong></span></div>
                             <div class="col-md-8 col-sm-8">
-                                <%= country_select("billing","country",{ include_blank: 'Select a country' },{ class: "form-control" }) %>
+                                <% if @user_profile.country.blank? %>
+                                    <%= country_select("billing","country",{ include_blank: 'Select a country' },{ class: "form-control" }) %> 
+                                <% else %>
+                                    <%= country_select("billing","country",{selected: @user_profile.country},{ class: "form-control" }) %> 
+                                <% end %>                                 
                             </div>
                         </div> 
                     </li>

@@ -5,11 +5,11 @@ function _step2_submit() {
     var partCol = document.getElementById("partCol");//代表芯片名称的列的序号
     var quantityCol = document.getElementById("quantityCol");//代表数量的列的序号
     if(partCol.value == "") {
-        alert("Please choose "Part" column");
+        alert("Please choose 'Part' column");
         return false;
     }
     if(quantityCol.value == "") {
-	alert("Please choose "Quantity" Column");
+	alert("Please choose 'Quantity' Column");
         return false;
     }
     if($("#p_name").val() == ""){

@@ -114,11 +114,11 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   <div class="col-md-12 panel panel-default">
     <div class="panel-body ">
       <ul id="myTab" class="nav nav-tabs nav-justified">
-        <li class="active"><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
-        <li><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
+        <li ><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
+        <li class="active"><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
       </ul>
       <div id="myTabContent" class="tab-content upul">
-         <div class="upul tab-pane fade in active" id="des">
+         <div class="upul tab-pane fade " id="des">
            <br><br>
            <ul>   
              <% @des_show.each_with_index do |item,index| %>                   
@@ -126,7 +126,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
              <% end %>
            </ul>
          </div>
-         <div class="mpnul tab-pane fade" id="home">
+         <div class="mpnul tab-pane fade in active" id="home">
            <br><br>  
            <ul>
            <% @mpn_show.each_with_index do |item,index| %>

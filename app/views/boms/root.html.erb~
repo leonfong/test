@@ -40,7 +40,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
       </div>
       <div class="col-md-1 ">
 
-           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/">
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
 	       <img src="/uploads/upbom.png" alt="search">
 	       BOM
            </a>
@@ -114,8 +114,8 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   <div class="col-md-12 panel panel-default">
     <div class="panel-body ">
       <ul id="myTab" class="nav nav-tabs nav-justified">
-        <li class="active"><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
-        <li><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
+        <li ><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
+        <li class="active"><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
       </ul>
       <div id="myTabContent" class="tab-content upul">
          <div class="upul tab-pane fade in active" id="des">

@@ -435,7 +435,7 @@
                         </script>
                         
 
-                       <p class="text-right" style="margin: 0px;"><small><span class="text-danger" ><strong>跟单部反馈-解决方案</strong></span> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %><button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#<%= feed.id.to_s + feed.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  onclick="change_<%= feed.id.to_s %>()">
+                       <p class="text-right" style="margin: 0px;"><small><span class="text-danger" ><strong>跟单部反馈-解决方案</strong></span> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name.to_s %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %><button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#<%= feed.id.to_s + feed.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  onclick="change_<%= feed.id.to_s %>()">
                             <span id="<%= feed.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
                         </button></small></p></div>                     
                 </div>
@@ -446,7 +446,7 @@
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> 发到 
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name.to_s %></strong></span> 发到 
 <% feed.send_to.to_s.split(',').each do |rece| %>
             <%= t(:"#{rece}") %>
 <% end %> 
@@ -461,7 +461,7 @@
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> 发到 
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name.to_s %></strong></span> 发到 
 <% feed.send_to.to_s.split(',').each do |rece| %>
             <%= t(:"#{rece}") %>
 <% end %> 
@@ -480,7 +480,7 @@
              <% fed.feedback_receive.split(',').each do |rece| %>
              <% receive += " " + t(:"#{rece}") %>
              <% end %>
-             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
+             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name.to_s %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
             
             </div>
             </div>

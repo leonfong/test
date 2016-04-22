@@ -124,7 +124,7 @@
                 <thead class="bg-info">
                 <tr> 
                     <th data-field="mpn"  data-editable="true" data-align="center" data-width="200" >Part#</th>
-                    <th data-field="part_code" data-width="70">REF.DES.</th>
+                    <th data-field="part_code" data-width="70" data-formatter="codeFormatter">REF.DES.</th>
                     <th data-field="quantity" data-width="50">QTY</th>
                     <th data-field="price" data-width="80" data-formatter="priceFormatter">Unit Price</th>
                     <th data-field="total" data-width="80" data-formatter="totalFormatter">Sub Total</th>
@@ -211,6 +211,10 @@
 var $table = $('#table');
 function actionFormatter(value, row, index) {
     return '<a class="btn-d btn btn-link" ><i class="glyphicon glyphicon-remove"></a>'
+}
+
+function codeFormatter(value, row, index) {
+    return value.substring(0,4)+' ...'
 }
 
 window.actionEvents = {

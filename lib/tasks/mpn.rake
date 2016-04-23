@@ -16,7 +16,7 @@ namespace :mpn do
             mpn = item.mpn
             #mpn = "LM2937IMP"
             url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
-            url += mpn
+            url += CGI::escape(mpn)
             #Rails.logger.info(mpn.inspect)
             begin
                 puts mpn.inspect

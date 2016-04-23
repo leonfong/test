@@ -1,0 +1,77 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+<div class="container">
+
+
+
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+<div class="page-header">
+<h1>MOKO FAQ( Frequently Asked Questions）</h1>
+</div>
+  <div class="row">
+      <div class="col-md-12">
+          
+
+<h4><strong>Q.Do I need to register as a member to conduct searches and requests for quote?</strong></h4>
+<p>A: You can conduct basic searches without logging in. If you find the item you need, you can add it directly to the shopping cart or issue a RFQ to proceed. In the middle of the procedures, you can log in on the login screen appeared in the page. If you haven’t registered as a member, you can register the membership on the login screen at first.</p>
+
+<h4><strong>Q: What should I do if I forget my Login ID and password?</p>
+<p>A: Your email address is served as your user ID. If you forget it, you’d better register another account. With the e-mail address you registered, you can confirm your login ID and password. If you are having trouble logging in, click on “Forgot Password” and a new password can be reset in the link of Login page in your email.</p>
+
+<h4><strong>Q.How to search a product?</p>
+<p>A: To search for product and information, you can enter a part number, keywords or technical attribute in the search box. From the left hand navigation column, you can begin a new search or narrow your current search by selecting supplier, lead time, manufacturer, RoHS compliant and in stock. About 10 million items in the database can be searched.</p>
+
+<h4><strong>Q.What method of payment do you support?</p>
+<p>We support two payment methods: Paypal  Western Union, Money Gram,L/C, and TT in advance (bank transfer).</p>
+
+
+<h4><strong>Q.Can I get invoice?</p>
+<p>For all orders, the invoice will be sent with products for your reference. If you choose pay via TT in advance (bank transfer), please download the invoice on My Order page for payment. If you choose pay via PayPal, you can ask the invoice from our customer service.</p>
+
+      </div>
+  </div>
+</div>

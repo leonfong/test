@@ -1521,10 +1521,10 @@ WHERE
                     url += mpn
                     begin
                         resp = Net::HTTP.get_response(URI.parse(url))
+                        server_response = JSON.parse(resp.body) 
                     rescue
                         retry
-                    end
-                    server_response = JSON.parse(resp.body)    
+                    end   
                     info_mpn = InfoPart.new
                     info_mpn.mpn = mpn
                     info_mpn.info = resp.body

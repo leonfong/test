@@ -23,4 +23,12 @@ class StaticPagesController < ApplicationController
       
   end
 
+  def faq
+      
+  end
+
+  def terms
+      
+  end
+
 end

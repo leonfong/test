@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   match '/help', to: 'static_pages#help', via: 'get'
   match '/about', to: 'static_pages#about', via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
+  match '/faq', to: 'static_pages#faq', via: 'get'
+  match '/terms', to: 'static_pages#terms', via: 'get'
   match '/how_to_use', to: 'static_pages#how', via: 'get'
   match '/search', to: 'boms#search_keyword', via: 'get'
   match '/down_excel', to: 'boms#down_excel', via: 'get'

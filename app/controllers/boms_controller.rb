@@ -1516,10 +1516,10 @@ WHERE
             @bom_item = BomItem.where(bom_id: params[:bom_id])
             @bom_item.each do |item|
                 if item.mpn_id.blank? 
-                    mpn = item.mpn
+                    mpn = item.mpn.strip
                     #mpn = "LT4356IS-1%23PBF"
-                    url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
-                    url += CGI::escape(mpn)
+                    url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part=' + mpn
+                    #url += CGI::escape(mpn)
                     
 
                     begin
@@ -1532,6 +1532,7 @@ WHERE
                         
                         server_response = JSON.parse(resp.body) 
                     rescue
+                        sleep 5
                         retry
                     end   
                     info_mpn = InfoPart.new

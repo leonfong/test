@@ -20,7 +20,8 @@ namespace :mpn do
             #Rails.logger.info(mpn.inspect)
             begin
                 puts mpn.inspect
-                resp = Net::HTTP.get_response(URI.parse(url))
+                #resp = Net::HTTP.get_response(URI.parse(url))
+                resp = Net::HTTP.get_response(URI(url))
             rescue
                 puts "----try"
                 puts mpn.inspect
@@ -29,7 +30,8 @@ namespace :mpn do
                 sleep 5
                 retry
             end
-            server_response = JSON.parse(resp.body)           
+            #server_response = JSON.parse(resp.body)
+            server_response = JSON(resp.body)            
             info_mpn = InfoPart.new
             info_mpn.mpn = mpn
             info_mpn.info = resp.body

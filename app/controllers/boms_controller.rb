@@ -1521,18 +1521,25 @@ WHERE
                     url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part=' + mpn
                     #url += CGI::escape(mpn)
                     
+                    #url = URI('http://api.findchips.com/v1/search')
+                    #params = { :apiKey => "RDQCwiQN4yhvRYKulcgw&part=", :page => CGI::escape(mpn) }
+                    #url.query = URI.encode_www_form(params)
 
+                    
                     begin
                         Rails.logger.info("------------------------1")
                         Rails.logger.info(url.inspect)
-                        resp = Net::HTTP.get_response(URI(url))
+                        resp = Net::HTTP.get_response(URI.parse(url))
+                        #resp = Net::HTTP.get(URI(url))
+                        #resp = Net::HTTP.get_response(url)
+                        #puts res.body if res.is_a?(Net::HTTPSuccess)
                         Rails.logger.info("------------------------2")
-                        Rails.logger.info(url.inspect)
+                        Rails.logger.info(resp.inspect)
                         Rails.logger.info("-------------------------url")
                         
-                        server_response = JSON(resp.body) 
+                        #server_response = JSON.parse(resp.body) 
                     rescue
-                        sleep 5
+                        #sleep 5
                         retry
                     end   
                     info_mpn = InfoPart.new

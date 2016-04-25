@@ -46,10 +46,10 @@ en:
   about: About Us
   contact: Contact
   welcome: "Welcome "
-  sign_out: Sign out
+  sign_out: Logout
   c_password: Change Password
-  sign_up: Sign up
-  login: Login
+  sign_up: Register
+  login: Sign In
   error_a: The parameters of the error, please check whether the query keyword is wrong!
   error_b: Can not find a matching unit, please check whether the query keyword is wrong!
   error_c: Can not find the products you want, please revise the keywords to try again.

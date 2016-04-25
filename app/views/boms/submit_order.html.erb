@@ -129,7 +129,265 @@
                    </div>
                </div>
            </div>
-         
+           
+           <%= form_tag({action: :up_user_profile}, multipart: true, class:"form-horizontal") do %>
+            <div class="row" style="padding-left: 30px;">
+            <div class="row" style="padding: 30px 0px 30px;">
+            <script>
+            function change_p(){
+            if (document.getElementById('shipping').className=='collapse in')
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
+            else
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
+            }
+            </script>
+            <button class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">Add a new address <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
+            </div>
+            <div class="collapse" id="shipping">
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_first_name" class="col-md-4  text-left" style="padding: 0px;">First Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_first_name" id="shipping_first_name" min="0" value="<%= current_user.first_name %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_last_name" class="col-md-4  text-left" style="padding: 0px;">Last Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_last_name" id="shipping_last_name" min="0" value="<%= current_user.last_name %>" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_address_line" class="col-md-4  text-left" style="padding: 0px;">Address Line <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_address_line" id="shipping_address_line" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_postal_code" class="col-md-4  text-left" style="padding: 0px;">Postal Code <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_postal_code" id="shipping_postal_code" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_email" class="col-md-4  text-left" style="padding: 0px;">E-mail <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_email" id="shipping_email" min="0" value="<%= current_user.email %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_phone" class="col-md-4  text-left" style="padding: 0px;">Phone <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_phone" id="shipping_phone" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_city" class="col-md-4  text-left" style="padding: 0px;">City <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_city" id="shipping_city" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="shipping_country" class="col-md-4  text-left" style="padding: 0px;">Country <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <% if current_user.country.blank? %>
+                                    <%= country_select("shipping_c","country",{ include_blank: 'Select a country' },{ class: "form-control" }) %> 
+                                <% else %>
+                                    <%= country_select("shipping_c","country",{selected: current_user.country},{ class: "form-control" }) %> 
+                                <% end %>                                
+                            </div>
+                        </div> 
+                    </li>
+                </ul>  
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="shipping_company" class="col-md-4  text-left" style="padding: 0px;">Company <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="shipping_company" id="shipping_company" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>  
+                </ul>
+                <ul class="form-group list-inline clearfix" style="padding: 0px;display: block;">                   
+                    <li style="padding: 0px;width: 30%;">
+                        
+                        <h4 style="padding: 0px;">Shipping &amp; Billing are the same?</h4>
+                    </li>
+                    <li>
+                        <label>
+                        <input type="radio" id="yes" checked="checked" name="shipping"  value="yes" >Yes </label>
+                    </li>
+                    <li>
+                        <label>
+                        <input type="radio" id="no" name="shipping"  value="no" >No <label>
+                    </li>
+                </ul>
+
+
+
+
+
+
+
+
+            <div class="collapse" id="shipping_2">
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_first_name" class="col-md-4  text-left" style="padding: 0px;">First Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_first_name" id="billing_first_name" min="0" value="<%= current_user.first_name %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_last_name" class="col-md-4  text-left" style="padding: 0px;">Last Name <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_last_name" id="billing_last_name" min="0" value="<%= current_user.last_name %>" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_address_line" class="col-md-4  text-left" style="padding: 0px;">Address Line <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_address_line" id="billing_address_line" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_postal_code" class="col-md-4  text-left" style="padding: 0px;">Postal Code <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_postal_code" id="billing_postal_code" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_email" class="col-md-4  text-left" style="padding: 0px;">E-mail <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_email" id="billing_email" min="0" value="<%= current_user.email %>" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_phone" class="col-md-4  text-left" style="padding: 0px;">Phone <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_phone" id="billing_phone" min="0" value="" >  
+                            </div>
+                        </div> 
+                    </li>
+                </ul>
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_city" class="col-md-4  text-left" style="padding: 0px;">City <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_city" id="billing_city" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>
+                     <li style="width: 45%;" class="pull-right">
+                        <div class="form-group" >
+                            <div for="billing_country" class="col-md-4  text-left" style="padding: 0px;">Country <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <% if current_user.country.blank? %>
+                                    <%= country_select("billing","country",{ include_blank: 'Select a country' },{ class: "form-control" }) %> 
+                                <% else %>
+                                    <%= country_select("billing","country",{selected: current_user.country},{ class: "form-control" }) %> 
+                                <% end %>                                 
+                            </div>
+                        </div> 
+                    </li>
+                </ul>  
+                <ul class="list-inline clearfix">
+                    <li style="width: 45%;">
+                        <div class="form-group" >
+                            <div for="billing_company" class="col-md-4  text-left" style="padding: 0px;">Company <span style="color:#f00;"><strong>*</strong></span></div>
+                            <div class="col-md-8 col-sm-8">
+                                <input type="text" class="form-control" name="billing_company" id="billing_company" min="0" value="" >  
+                            </div>
+                         </div> 
+                    </li>  
+                </ul>
+            </div>
+            <div class="modal-footer" style="border-top:0px">
+                <%= text_field_tag :placeorder, "go", class:"sr-only", size:2  %> 
+                <%= submit_tag "DELIVER TO THIS ADDRESS", class:"btn btn-warning btn-xs",:onclick => "return address_info()" %>
+            </div>
+            </div>
+            
+            </div>
+            <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div class="row ">
                 <div class="col-md-12">
                     <div class="panel panel-default ">  
@@ -423,6 +681,23 @@ function check_submit(){
     }
 }
 $(document).ready(function () {
+  $("#yes").click(function(){
+      if (document.getElementById('yes').checked == true){
+          document.getElementById('shipping_2').className = 'collapse';
+      }
+      if (document.getElementById('no').checked == true){
+          document.getElementById('shipping_2').className = 'collapse in';
+      }
+    });
+  $("#no").click(function(){
+      if (document.getElementById('yes').checked == true){
+          document.getElementById('shipping_2').className = 'collapse';
+      }
+      if (document.getElementById('no').checked == true){
+          document.getElementById('shipping_2').className = 'collapse in';
+      }
+    });
+
     <% @shipping_info.each do |shipping| %>
     $("#address_<%= shipping.id %>").mouseenter(function () {                     
             $("#address_<%= shipping.id %>").addClass('bg-address');        

@@ -1870,7 +1870,11 @@ WHERE
                 user_shipping.save 
             end             
         end
-        redirect_to user_profile_path()
+        if params[:placeorder].blank?
+            redirect_to user_profile_path()
+        else
+            redirect_to :back
+        end
     end
 
     def update_bom

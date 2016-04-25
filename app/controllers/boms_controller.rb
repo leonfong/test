@@ -1525,12 +1525,12 @@ WHERE
                     begin
                         Rails.logger.info("------------------------1")
                         Rails.logger.info(url.inspect)
-                        resp = Net::HTTP.get_response(URI.parse(url))
+                        resp = Net::HTTP.get_response(URI(url))
                         Rails.logger.info("------------------------2")
                         Rails.logger.info(url.inspect)
                         Rails.logger.info("-------------------------url")
                         
-                        server_response = JSON.parse(resp.body) 
+                        server_response = JSON(resp.body) 
                     rescue
                         sleep 5
                         retry

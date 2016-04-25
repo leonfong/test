@@ -1,0 +1,75 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+<div class="container">
+
+
+
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+<div class="page-header">
+<h1>MOKO  Payment Policy</h1>
+</div>
+  <div class="row">
+      <div class="col-md-12">
+
+<h5>MOKO-Your Trusted One-Stop PCB Service</h5>
+<h5>All customers order with confidence,  as we guarantee  the manufacture of their printed circuit boards is performed in a well-defined and controlled environment.</h5> 
+<h5>How to Pay for our Printed Circuit Boards? </h5>
+<h5>We accept payment method including  Paypal, Western Union, Money Gram,L/C, T/T.  </h5>
+<h5>1. TT in advance (bank transfer)</h5>
+<h5>This is the method where the product is shipped after you deposit payment into the bank account as designated and described in the notification e-mail sent to you on completion of the order. Please transfer money within two business days from the date of order placement. The product is shipped after we confirm payment. We designate the account for transfer in each case. The customer is responsible for payment of the bank transfer fee. Please note that the transfer certificate (payment slip) takes the place of the receipt.</h5>
+ 
+<h5>2. Credit card</h5>
+<h5>This is a credit card transaction. The credit cards that can be used for payment are Visa, Master, JCB and AMEX. Select the credit card as the payment method on the order condition setting screen and enter the card number and expiry date. The credit card is authorized immediately. Please note that the account statement issued by the credit card company takes the place of the receipt.</h5>
+<h5>*You can view the receipt data on the order completion screen and the order history screen.</h5>
+ 
+<h5>3. Money Gram</h5>
+<h5>MoneyGram offers convenient money transfer options. It's easy to send money online or in person; for cash pick-up or direct to a bank. also offer inmate services & transfers to mobile wallets.</h5> 
+<h5>4. Paypal</h5>
+<h5>This is a transaction through Paypal. For using this settlement, the member needs to sign up and have Paypal account before purchasing transaction.</h5>
+      </div>
+  </div>
+</div>

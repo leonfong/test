@@ -139,40 +139,43 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
    </div>
 </small>
 </div>
-
+<footer>
 <div class="row center-block " style="width: 100%;background-color:#1d3245;color:#ffffff;">
 <small>
     <div class="col-md-2"></div>   
     <div class="col-md-2">
         <h5><strong>FastBOM</strong></h5>
             
-<p>About Us</p>
-<p>Suppliers</p>
-<p>Product Index</p>
-<p>Site Map</p>
+<p><%= link_to "About Us", about_path(), style:"color: #ffffff"%></p>
+<p><%= link_to "Contact Us", contact_path(), style:"color: #ffffff"%></p>
+<p><%= link_to "Suppliers", supplier_path(), style:"color: #ffffff"%></p>
     </div>            
     <div class="col-md-2">
         <h5><strong>Services</strong></h5>
-        <p>My Order</p>
-<p>Price Comparison</p>
-<p>BOM Manager</p>
-<p>RFQ</p>
+        <p><%= link_to "My Order",orderlist_path , style:"color: #ffffff"%></p>
+<p><%= link_to "BOM Manager",bomlist_path , style:"color: #ffffff"%></p>
     </div>
     <div class="col-md-2">
         <h5><strong>Policies</strong></h5>
-<p>Shipping Policy</p>
-<p>Payment Policy</p>
-<p>Return Policy</p>
+<p><%= link_to "Shipping Policy", shipping_path(), style:"color: #ffffff"%></p>
+<p><%= link_to "Payment Policy", payment_path(), style:"color: #ffffff"%></p>
+<p><%= link_to "Return Policy", return_path(), style:"color: #ffffff"%></p>
 <p><%= link_to "Terms of Use", terms_path(), style:"color: #ffffff"%></p>
-<p>Privacy Policy</p>
+<p><%= link_to "Privacy Policy", privacy_path(), style:"color: #ffffff"%></p>
     </div>
     <div class="col-md-2">
         <h5><strong>Support</strong></h5>
-<p><%= link_to "Contact Us", contact_path(), style:"color: #ffffff"%></p>
-<p>Feedback</p>
-<p>Return (RMA)</p>
+<p><%= link_to "Technical Support", technical_path(), style:"color: #ffffff"%></p>
 <p><%= link_to "FAQ", faq_path(), style:"color: #ffffff"%></p>
     </div>
 <div class="col-md-2"></div>
 </small>
 </div>
+<div class="row center-block " style="width: 100%;background-color:#1d3245;color:#ffffff;">
+
+            <p class="text-center" style:"color: #ffffff"><small>Copyright &copy; 2015-2016 Fastbom.com  <a href="http://www.miitbeian.gov.cn">粤ICP备15085690号-1</a></small></p>
+            <div style="display: none">
+             <script src="http://s11.cnzz.com/z_stat.php?id=1257410154&web_id=1257410154" language="JavaScript"></script>      
+             </div>
+</div>
+</footer>

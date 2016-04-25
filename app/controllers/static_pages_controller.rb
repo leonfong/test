@@ -31,4 +31,28 @@ class StaticPagesController < ApplicationController
       
   end
 
+  def returns
+
+  end
+
+  def shipping
+
+  end
+
+  def supplier
+
+  end
+
+  def payment
+
+  end
+
+  def privacy
+
+  end
+
+  def technical
+
+  end
+
 end

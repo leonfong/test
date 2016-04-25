@@ -1,0 +1,98 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+<div class="container">
+
+
+
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+<div class="page-header">
+<h1>MOKO  Shipping Policy</h1>
+</div>
+  <div class="row">
+      <div class="col-md-12">
+
+<h4>Shipping Methods</h4>
+
+<p>MOKO offers different kinds of shipping methods: MOKO may help you arrange the delivery of the package via FedEx or DHL; you may choose your own logistic service if you have cooperated with some specific delivery company; you may pick up the package from MOKO warehouse by yourself.</p>
+
+<h4>Shipping Cost</h4>
+
+<p>Shipping cost may differ based on the shipping method you choose. If you pick up the package by yourself or you have your own logistic service account, MOKO will help you prepare the package without any charge when all of the parts arrive at warehouse.</p>
+
+<p>Once you register your region, a shipping cost for the parts within 1kg will be displayed in your Shopping Cart. Shipping costs will be added to the final invoice.</p>
+
+<p>After all of the parts arrive at warehouse, MOKO will check the total size and weight, as well as the delivery address and shipping option you selected. If your order is oversized or overweight, MOKO Customer Service Representative will contact you to pay the difference. (Normally the postage for 1kg parts has been added when you place the order).</p>
+
+<p>MOKO has long-term business relationship with FedEx and DHL. We will try our best to offer you the favorable express price. For your packaging security, MOKO will buy insurance for the parcel of big amount.</p>
+
+<h4>Delivery Time and Destinations</h4>
+
+<p>We will arrange delivery within 2 days from the date of all items arrive at our warehouse.</p>
+
+<p>*Our business days are Monday to Friday excluding Saturday, Sunday and holidays.</p>
+
+<p>**Delivery Time depends on Shipping Method and Delivery Destinations.</p>
+
+<p>Duties, taxes and other fees are the responsibility of the recipient, as our charges only cover the package transportation fee. To estimate possible costs, please check with your country's customs office.</p>
+
+<p>Here is deliver time table from our warehouse to your destination for your reference.</p>
+
+<table class="table table-bordered">
+<tr>Asia	North America	Europe 	Middle East	South America	Africa</tr>
+<tr>DHL	2-4 	3-4 	3-6	3-5 	4-6</tr>
+<tr>FedEx IP	2-4	3-4	4-5	3-6 	4-6 </tr>
+<tr>FedEx IE 	3-6 	4-6	5-7	4-8	5-8</tr>
+<tr>UPS	3-5	3-6	5-7	5-7	4-8</tr>
+<tr>EMS	3-5	3-6	3-6	5-7	4-8</tr>
+<tr>International AIR Mail	7-15	7-15	10-15	10-15	10-15</tr>
+</table>
+
+<p>*shipping and delivery times are calculated in working days from Monday to Friday. In the case of major holidays such as Christmas and Chinese Lunar New Year, please allow extra delivery time. During those special occasions we will remind you the possible delays.</p>
+
+      </div>
+  </div>
+</div>

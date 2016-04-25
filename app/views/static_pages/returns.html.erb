@@ -1,0 +1,87 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+<div class="container">
+
+
+
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+<div class="page-header">
+<h1>MOKO  Return&Warranty Policy</h1>
+</div>
+  <div class="row">
+      <div class="col-md-12">
+  <h3>Return Policy</h3>        
+<h5>Only product originally shipped by MOKO to you is eligible for return. By returning product to MOKO, you confirm that you acquired the product from MOKO.</h5>
+
+<h5>Users must ensure that all orders are correct before submitting for processing: users cannot cancel their orders, change products or change quantities after orders have been confirmed. MOKO is not responsible for the problem caused by customer. Only when MOKO has confirmed that there is a deficiency in quantity, wrong merchandise received or apparent defect (broken, rust, etc.) on products delivered from MOKO, the product can be returned.</h5>
+
+<h5>There are a few important things to keep in mind when returning a product you purchased from MOKO:</h5>
+
+    
+<h5>1. You have 14 days to apply for Return Service from the date you received it.</h5>
+    
+<h5>2. Please click AFTER SALES and fill the information on My Order page. Invoice number, images and a description of defects shall be provided. The customer service representative will offer you an RMA (Returned Merchandise Authorization) number after confirmation. Please kindly note that Products returned without RMA # will not be accepted.</h5>
+    
+<h5>3. Please ensure that the item you're returning is repackaged with products, undamaged label, packing filler and original packages that were included when you received it.</h5>
+
+
+<h5>MOKO will advise the customer on how to send the product and provide the delivery address when your return application is accepted.</h5>
+
+<h5>Although MOKO is responsible for the shipping charge, the shipping charges will not be covered by MOKO if the product is not sent via the method MOKO specifies.</h5>
+
+<h5>Warranty related return procedures will be determined by the manufacturer's warranty policy for the applicable product. Please contact your MOKO Customer Service Representative for details.</h5>
+<h3>Warranty Policy</h3>
+
+<p>All products sold from MOKO have a two year warranty period unless otherwise stated. The products are quallity warranty and are free from defects in material and quality.</p> 
+
+<h3>Our detailed warranty policy is as follows:</h3>
+
+<p>Unless otherwise specified, we warrant our products for 2 years under normal, non-artificial damage. We will, subject to inspection, repair the defective PCB boards or replace it with a new. The return must be accompanied by a Return Merchandise Authorization (RMA) number, which is to be issued upon request, and must be shipped prepaid, Return packages by C.O.D will not be accepted. A shipping rebate will be extended to the customer in the event that a defect in material or workmanship is confirmed.</p>
+
+      </div>
+  </div>
+</div>

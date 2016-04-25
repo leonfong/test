@@ -1,0 +1,78 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+<div class="container">
+
+
+
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+<div class="page-header">
+<h1>MOKO  Privacy Policy</h1>
+</div>
+  <div class="row">
+      <div class="col-md-12">
+
+
+<h4>General</h4>
+Welcome To View the MOKO Web Site. Your privacy is very important to MOKO and always has been. So we've developed a Privacy Policy that covers how we collect, use, disclose and store your information. Please take a moment to familiarize yourself with our privacy practices and let us know if you have any questions.
+
+While visiting an MOKO site, we may ask you to register and/or provide information that personally identifies you ("Personal Information") for purposes of interacting with our site, including, for example, when you place order, request for quotation, or download material. MOKO is committed to respecting your privacy and granting you with appropriate protection and management of any personally identifiable information you share with us.
+
+<h4>Personal Information</h4>
+MOKO collects personally information that you provide to us. Personal Information means any information that may be used to identify an individual, including, but not limited to, a first and last name, a home or other physical address and an email address or other contact information, whether at work or at home. If you do decide to give us this information, you are telling us that this information is both true and accurate. Also, you are telling us that you have the authorization to provide us with that information.
+
+This information is used to ensure a quick, efficient flow of products and services to you. We may also collect certain non PII information (such as destination or site usage behavior) based on your use of MOKO. We may use this information to display information that you find interesting and suppress information that you might find boring or annoying. For example, we might show you search suggestions or part suggestions.
+To help us debug problems with our software (rare as they are), we may collect some technical information from your browser software (such as Mozilla Firefox or Internet Explorer), screen resolution and the website that referred you to us.
+<h4>Protecting Your Security</h4>
+We are always striving to make sure your information is protected. As soon as we receive your information, we use various security features and procedures, taking into account industry standards, to try to protect the personal information that you provide and to prevent unauthorized access to that information.
+
+We will do our best to protect your personal data. There are a number of general things we would also recommend that you do. Please help keep your account safe by using a strong password that includes characters other than just letters. We will also encourage you not to use the same password across all or many of your online accounts. As emails, instant messaging, and similar means of communication are not encrypted, we also would recommend not communicating any confidential information through these means.
+<h4>Cookies</h4>
+There is a technology called "cookies" which can be used to provide you with tailored information from a website. When you visit MOKO we may store information about your web session and assign you one or more 'cookies'. Your browser will store these cookies on your computer in a small text file. Some MOKO pages may use cookies so that we may better serve you when you return to our site. For example, when you decide to login as an MOKO member, we store encrypted information in your browser so you don't have to login on every page. Permanent cookie files remain on your computer's hard drive until you delete them manually using your browser or operating system software. You can set your browser to notify you when you receive a cookie, giving you the chance to decide whether to accept it.
+
+      </div>
+  </div>
+</div>

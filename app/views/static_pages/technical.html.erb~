@@ -1,0 +1,77 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+<div class="container">
+
+
+
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    
+    <div class="col-md-2"></div>
+  </div>
+
+
+
+<div class="page-header">
+<h1>Technical Support</h1>
+</div>
+  <div class="row">
+      <div class="col-md-12">
+
+
+<h5>MOKO is your best one-stop PCB services. We continuously strive to provide the best customer service in the electronics manufacturing service (EMS) Industry. All customer questions regarding PCB design and layout, fabrication, final assembly, and testing will be promptly answered. We have extensive experience in whole PCB solutions!</h5>
+
+<h5>If you have any queries or questions, please fill out the form below and let us know. Include your e-mail address, and you will get a reply within one working day. For immediate service, please call us at one of our contact numbers during our normal working hours.</h5>
+<h5>We would like to hear about your experience on our website.</h5>
+<h4>Customer Support</h4>
+
+<address>
+        <div class="col-md-10">   
+          <p><strong>E-mail:</strong><a href="mailto:#">bruse@mokotechnology.com.cn</a></p>
+          <p>Moblephone:+86-15889772429</p>
+          <p>Fax:(86)-0755-23573370-808</p>   
+        </div>
+<p>Our Address: 4F,Buidling2,Guanghui Technology Park, MinQing Rd,Longhua,SZ,China 518109 </p>
+      </address>
+
+
+      </div>
+  </div>
+</div>

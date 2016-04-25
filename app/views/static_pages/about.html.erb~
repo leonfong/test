@@ -1,18 +1,90 @@
-
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
      keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
 %>
+<div class="container">
+
+
+
+
+  <div class="row center-block" style="padding: 10px 0px 45px;margin: 0px;">
+    <div class="col-md-2">
+        <a class="navbar-brand" href="<%=root_path %>" style="padding-top: 0px;margin: 10px;"><%= image_tag "logo.bmp",size: "70x70", class: " img-rounded" %></a>
+    </div>
+    <div class="col-md-9 " style="margin: 20px;">
+      <div class="row" >
+      <div class="col-md-10 ">
+      <%= form_tag('/search', method:"get", class:"form-inline") do %>
+        <div class="form-group ">
+          <lable for="mpn" , class="sr-only">Part : </lable>
+          <div class="input-group">    
+            <%= text_field_tag :mpn, params[:mpn], class:"form-control input-lg", size:"100%",  placeholder:"Part Number/Keyword"%>
+            <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2  %>
+            <div class="input-group-btn">
+              <%= submit_tag t(:search), class:"btn btn-primary btn-lg" %>
+               
+            </div>
+            
+            
+          </div>
+          
+        </div>
+        
+      <% end %>
+      </div>
+      <div class="col-md-1 ">
+
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+	       <img src="/uploads/upbom.png" alt="search">
+	       BOM
+           </a>
+      </div>
+      <div class="col-md-1 "></div>
+      </div>
+    </div>
+    
+    <div class="col-md-2"></div>
+  </div>
+
 
 
 <div class="page-header">
-    <h1>About Us</h1>
-      
+<h1>About MOKO</h1>
 </div>
-    <p>Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.</p>
-    <a href="http://www.fastbom.com">www.fastbom.com </a>
+  <div class="row">
+      <div class="col-md-12">
+          
 
+<h3>One-stop PCB Services</h3>
+<p>MOKO is a leading provider of printed circuit boards and related PCB services. Our specialty is in the complex, advanced technology of PCB fabrication, producing high quality multi-layered PCBs from elaborate layouts. With us, you gain the benefit of unparalleled technical expertise at competitive prices and the most progressive solutions available.</p>
+<h4>One Stop Solution: Beyond PCB Fab with Low & Medium Volume , Purchasing & Assembly</h4>
+<p>Our elevated competence in circuit boards is not just limited to PCB manufacturing but extends to all related services including purchasing platform that provides one-stop online purchase of electronic component service to electronic engineers and industrial purchasers and PCB assembly. </p>
 
+<p>we take care of the entire process, including preparation of Printed Circuit Boards, procurement of components, online order tracking, continuous monitoring of quality and final assembly.</p> 
 
+<p>Our Capabilities: </p>
+<p>PCB Fabrication & Manufacturing</p>
 
+<p>Affordable PCB Manufacturer</p> 
+<p>From prototypes to production of high quality and standards printed circuit boards , meet your all PCB needs with the lowest cost.</p>
+
+<h4>One-Stop Online Purchase</h4>
+<p>China's Largest Electronic components distributor with huge selection in stock with no minimum orders.provides one-stop online purchase of electronic component service to electronic engineers and industrial purchasers.</p>
+
+<p>PCB Assembly<p>
+<p>Quick-turn, Small Quantity PCB Assembly building your short-run,one-off,and prototype PCB assembly.</p>
+<p>MOKO is capable of providing full turn-key printed circuit board assembly services. For full turn-key, we take care of the entire process, including preparation of Printed Circuit Boards, procurement of components, online order tracking, continuous monitoring of quality and final assembly. <p>
+
+ 
+
+<p>Our customers request PCB production that is outside the realm of normal circuit board providers.</p>
+<p>We strive for our customers to feel that our service is so unique and valuable that they would want to work with us forever. We understand that you want solutions, you want what you need, not what we want to sell you. Through a diverse portfolio of vendor relationships, our offering of borderless boards ensures you are satisfied with the end result.</p>
+
+<p>MOKO is your single source solution for printed circuit board manufacturing. View our full offering of PCB production capabilities and register today for an instant PCB quote from our online quoting system.</p> 
+
+<p>Our experts are available to consult you on your PCB fabrication project via phone, email or contact us.  From PCB design to PCB manufacturing, MOKO does it all.</p>
+
+      </div>
+  </div>
+</div>

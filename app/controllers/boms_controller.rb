@@ -617,6 +617,7 @@ WHERE
 	    @parse_result.shift
             #render "select_column.html.erb" 
             #return false  
+            
             all_use = @sheet.row(1)[params[:partCol].to_i].split("")+@sheet.row(1)[params[:quantityCol].to_i].split("")+@sheet.row(1)[params[:refdesCol].to_i].split("")
             #params[:select_part].each do |use|
 	     @parse_result.select! {|item| !item["#{@sheet.row(1)[params[:partCol].to_i]}"].blank? } #选择非空行

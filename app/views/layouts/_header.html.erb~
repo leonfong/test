@@ -22,7 +22,7 @@
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
 -->
         <li id="c"><%= link_to t('all_boms'),bomlist_path %></li>
-        <li id="c"><%= link_to t('my_order'),bomlist_path %></li>
+        <li id="c"><%= link_to t('my_order'),orderlist_path %></li>
         <% if user_signed_in? %>
             <% if can? :work_up, :all %>
                 <li id="k">
@@ -31,6 +31,12 @@
                     <% else %>
                         <%= link_to "Work Flow",work_flow_path, data: { no_turbolink: true } %>
                     <% end %>
+                </li>
+                
+            <% end %>
+            <% if can? :work_g, :all %>
+                <li id="l">
+                    <%= link_to "Procurement",procurement_new_path, data: { no_turbolink: true } %>
                 </li>
             <% end %>
         <% end %>

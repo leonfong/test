@@ -37,6 +37,18 @@ Rails.application.routes.draw do
   match '/indexup', to: 'work_flow#indexup', via: 'get' 
   match '/up_enddate', to: 'work_flow#up_enddate', via: 'post' 
 
+  match '/procurement_new', to: 'procurement#create_bom', via: 'get' 
+  match '/p_new_bom', to: 'procurement#upbom',via: 'post'
+  match '/p_new_bom', to: 'procurement#upbom',via: 'get'
+  match '/p_select_column', to: 'procurement#select_column',via: 'get' 
+
+
+
+
+
+
+
+
   match '/timesheet', to: 'timesheet#index', via: 'post'  
   match '/timesheet', to: 'timesheet#index', via: 'get' 
   match '/up_timesheet', to: 'timesheet#up_timesheet', via: 'post'  

@@ -42,6 +42,15 @@ $(document).ready(function() {
             if(document.getElementById("partCol").value == document.getElementById("refdesCol").value){
                 document.getElementById("refdesCol").value = "";
             }
+            if(document.getElementById("partCol").value == document.getElementById("desCol").value){
+                document.getElementById("desCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("packageCol").value){
+                document.getElementById("packageCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("linkCol").value){
+                document.getElementById("linkCol").value = "";
+            }
             //alert("partCol"+ document.getElementById("partCol").value);
             //return false;
         }
@@ -57,6 +66,15 @@ $(document).ready(function() {
             if(document.getElementById("quantityCol").value == document.getElementById("refdesCol").value){
                 document.getElementById("refdesCol").value = "";
             }
+            if(document.getElementById("partCol").value == document.getElementById("desCol").value){
+                document.getElementById("desCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("packageCol").value){
+                document.getElementById("packageCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("linkCol").value){
+                document.getElementById("linkCol").value = "";
+            }
             //alert("quantityCol"+ document.getElementById("quantityCol").value);
             //return false;
         }
@@ -71,6 +89,87 @@ $(document).ready(function() {
             }
             if(document.getElementById("refdesCol").value == document.getElementById("quantityCol").value){
                 document.getElementById("quantityCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("desCol").value){
+                document.getElementById("desCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("packageCol").value){
+                document.getElementById("packageCol").value = "";
+            }
+            if(document.getElementById("partCol").value == document.getElementById("linkCol").value){
+                document.getElementById("linkCol").value = "";
+            }
+            //alert("refdesCol"+ document.getElementById("refdesCol").value);
+            //return false;
+        }
+        if(this.value == '4') {
+            if(document.getElementById("desCol").value != ""){
+                document.getElementById("rowselect_"+document.getElementById("desCol").value).value = 0;
+                this.value = 4
+            }
+            document.getElementById("desCol").value = this.id.replace("rowselect_", "");
+            if(document.getElementById("desCol").value == document.getElementById("partCol").value){
+                document.getElementById("partCol").value = "";
+            }
+            if(document.getElementById("desCol").value == document.getElementById("quantityCol").value){
+                document.getElementById("quantityCol").value = "";
+            }
+            if(document.getElementById("desCol").value == document.getElementById("refdesCol").value){
+                document.getElementById("refdesCol").value = "";
+            }
+            if(document.getElementById("desCol").value == document.getElementById("packageCol").value){
+                document.getElementById("packageCol").value = "";
+            }
+            if(document.getElementById("desCol").value == document.getElementById("linkCol").value){
+                document.getElementById("linkCol").value = "";
+            }
+            //alert("refdesCol"+ document.getElementById("refdesCol").value);
+            //return false;
+        }
+        if(this.value == '5') {
+            if(document.getElementById("packageCol").value != ""){
+                document.getElementById("rowselect_"+document.getElementById("packageCol").value).value = 0;
+                this.value = 5
+            }
+            document.getElementById("packageCol").value = this.id.replace("rowselect_", "");
+            if(document.getElementById("packageCol").value == document.getElementById("partCol").value){
+                document.getElementById("partCol").value = "";
+            }
+            if(document.getElementById("packageCol").value == document.getElementById("quantityCol").value){
+                document.getElementById("quantityCol").value = "";
+            }
+             if(document.getElementById("packageCol").value == document.getElementById("refdesCol").value){
+                document.getElementById("refdesCol").value = "";
+            }
+            if(document.getElementById("packageCol").value == document.getElementById("desCol").value){
+                document.getElementById("desCol").value = "";
+            }
+            if(document.getElementById("packageCol").value == document.getElementById("linkCol").value){
+                document.getElementById("linkCol").value = "";
+            }
+            //alert("refdesCol"+ document.getElementById("refdesCol").value);
+            //return false;
+        }
+        if(this.value == '6') {
+            if(document.getElementById("linkCol").value != ""){
+                document.getElementById("rowselect_"+document.getElementById("linkCol").value).value = 0;
+                this.value = 6
+            }
+            document.getElementById("linkCol").value = this.id.replace("rowselect_", "");
+            if(document.getElementById("linkCol").value == document.getElementById("partCol").value){
+                document.getElementById("partCol").value = "";
+            }
+            if(document.getElementById("linkCol").value == document.getElementById("quantityCol").value){
+                document.getElementById("quantityCol").value = "";
+            }
+            if(document.getElementById("linkCol").value == document.getElementById("refdesCol").value){
+                document.getElementById("refdesCol").value = "";
+            }
+            if(document.getElementById("linkCol").value == document.getElementById("desCol").value){
+                document.getElementById("desCol").value = "";
+            }
+            if(document.getElementById("linkCol").value == document.getElementById("packageCol").value){
+                document.getElementById("packageCol").value = "";
             }
             //alert("refdesCol"+ document.getElementById("refdesCol").value);
             //return false;
@@ -108,14 +207,7 @@ $(document).ready(function() {
     </div>
   </div>
 </div> 
-        <div class="row">
-            <div class="col-md-12 col-sm-12 " >
-            <span class="pull-right" style="color:#999;">PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong></span>
-            </div>
-        </div>
-
-
-
+       
 
     <div class="row">
         <div class="col-md-12">
@@ -177,6 +269,9 @@ $(document).ready(function() {
             <%= text_field_tag :partCol, @bom.id.to_s, class:"sr-only", size:2 , value:""  %>
             <%= text_field_tag :quantityCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
             <%= text_field_tag :refdesCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
+            <%= text_field_tag :desCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
+            <%= text_field_tag :packageCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
+            <%= text_field_tag :linkCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
             <%= submit_tag t("ok"), class:"btn btn-danger", :onclick => "return _step2_submit()" %>
         </div>
         
@@ -193,13 +288,22 @@ $(document).ready(function() {
 			    None
 		        </option>
 			<option value="1">
-			    Part# (LM339DR)
+			    MPN
 			</option>
 			<option value="2">
-		            Quantity
+		            数量
 			</option>
                         <option value="3">
-		            RefDes (R1,R2...)
+		            位号
+			</option>
+                        <option value="4">
+		            描述
+			</option>
+                        <option value="5">
+		            封装
+			</option>
+                        <option value="6">
+		            LINK
 			</option>
 		    </select>
                     </div>

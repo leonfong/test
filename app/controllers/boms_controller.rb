@@ -601,8 +601,23 @@ WHERE
                 @xls_file = Roo::Excelx.new(params[:bom_path])
             end
             @sheet = @xls_file.sheet(0)
+            row_n = 0
+            row_use = 1
+            @sheet.each do |row_i|
+                row_n += 1
+                #Rails.logger.info("quantityCol------------------------------------------------------------quantityCol")
+                #Rails.logger.info(row_i[params[:quantityCol].strip.to_i].inspect)
+                #Rails.logger.info("quantityCol------------------------------------------------------------quantityCol")
+                if row_i[params[:quantityCol].strip.to_i].is_a?(Numeric)
+                    row_use = row_n - 1
+                    break
+                end
+            end
+            #Rails.logger.info("row_use------------------------------------------------------------row_use")
+            #Rails.logger.info(row_use.inspect)
+            #Rails.logger.info("row_use------------------------------------------------------------row_use")
             all_item = []
-            @sheet.row(1).each do |item|
+            @sheet.row(row_use).each do |item|
                 if not item.blank?
                     all_item << '"'+item+'":'+'"'+item+'"'
                 end
@@ -618,39 +633,39 @@ WHERE
             #render "select_column.html.erb" 
             #return false  
             
-            all_use = @sheet.row(1)[params[:partCol].to_i].split("")+@sheet.row(1)[params[:quantityCol].to_i].split("")+@sheet.row(1)[params[:refdesCol].to_i].split("")
+            all_use = @sheet.row(row_use)[params[:partCol].to_i].split("")+@sheet.row(row_use)[params[:quantityCol].to_i].split("")+@sheet.row(row_use)[params[:refdesCol].to_i].split("")
             #params[:select_part].each do |use|
-	     @parse_result.select! {|item| !item["#{@sheet.row(1)[params[:partCol].to_i]}"].blank? } #选择非空行
+	     @parse_result.select! {|item| !item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].blank? } #选择非空行
             #end
             Rails.logger.info("------------------------------------------------------------qq1")
             Rails.logger.info(all_item.inspect)
             Rails.logger.info("------------------------------------------------------------qq2")
             Rails.logger.info(@parse_result.inspect)
-            Rails.logger.info(@sheet.row(1)[params[:partCol].to_i].inspect)
+            Rails.logger.info(@sheet.row(row_use)[params[:partCol].to_i].inspect)
             Rails.logger.info("------------------------------------------------------------qq3")
             #行号
             row_num = 0
            # all_m_bom = []
             #one_m_bom = []
-            other_all = @sheet.row(1)-@sheet.row(1)[params[:partCol].to_i].split("")-@sheet.row(1)[params[:quantityCol].to_i].split("")-@sheet.row(1)[params[:refdesCol].to_i].split("")
+            other_all = @sheet.row(row_use)-@sheet.row(row_use)[params[:partCol].to_i].split("")-@sheet.row(row_use)[params[:quantityCol].to_i].split("")-@sheet.row(row_use)[params[:refdesCol].to_i].split("")
 	    @parse_result.each do |item| #处理每一行的数据 
                 mpna = ""
-                if item["#{@sheet.row(1)[params[:partCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].blank?
                     mpna += ""
                 else
-                    mpna += item["#{@sheet.row(1)[params[:partCol].to_i]}"].to_s + " " 
+                    mpna += item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].to_s + " " 
                 end
                 qtya = ""
-                if item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank?
                     qtya += ""
                 else
-                    qtya += item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].to_s + " "             
+                    qtya += item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].to_s + " "             
                 end
                 refa = ""
-                if item["#{@sheet.row(1)[params[:refdesCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].blank?
                     refa += ""
                 else
-                    refa += item["#{@sheet.row(1)[params[:refdesCol].to_i]}"].to_s + " "
+                    refa += item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].to_s + " "
                 end
                 #desa = ""
                 #params[:select_description].each do |des|                    
@@ -737,6 +752,9 @@ WHERE
             @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
         end
         @sheet = @xls_file.sheet(0)
+        Rails.logger.info("------------------------------------------------------------11")
+        Rails.logger.info(@sheet.row(1).inspect)
+        Rails.logger.info("------------------------------------------------------------11")
     end
 
     def up_order_info

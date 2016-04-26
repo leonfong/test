@@ -20,8 +20,9 @@
 <!--
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
--->
+
         <li id="c"><%= link_to t('all_boms'),bomlist_path %></li>
+-->
         <li id="c"><%= link_to t('my_order'),orderlist_path %></li>
         <% if user_signed_in? %>
             <% if can? :work_up, :all %>

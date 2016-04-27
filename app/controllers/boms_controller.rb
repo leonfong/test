@@ -1561,6 +1561,12 @@ WHERE
                         #sleep 5
                         #retry
                     #end
+
+
+
+
+
+=begin
                     url = URI('http://api.findchips.com/v1/search')
                     params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
                     url.query = URI.encode_www_form(params)
@@ -1568,19 +1574,34 @@ WHERE
                         Rails.logger.info("------------------------1")
                         Rails.logger.info(url.inspect)
                         resp = Net::HTTP.get_response(url)
-                        #resp = Net::HTTP.get_response(url)
-                        #puts res.body if res.is_a?(Net::HTTPSuccess)
-                        #Rails.logger.info("------------------------2")
-                        #Rails.logger.info(resp.inspect)
-                        #Rails.logger.info("-------------------------url")
                         server_response = JSON.parse(resp.body) 
                     rescue
                         sleep 5
                         retry
-                    end      
+                    end   
+
+=end
+
+                    url = URI('http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='+CGI::escape(mpn))
+                    begin
+                        Rails.logger.info("url--------------------------------------------------------------------------11")
+                        Rails.logger.info(url.inspect)
+                        resp = Net::HTTP.get(url)
+                        Rails.logger.info(resp.inspect)
+                        server_response = JSON.parse(resp)
+                        Rails.logger.info(server_response.inspect)
+                    rescue
+                        retry
+                    end
+
+
+
+
+   
                     info_mpn = InfoPart.new
                     info_mpn.mpn = mpn
-                    info_mpn.info = resp.body
+                    #info_mpn.info = resp.body
+                    info_mpn.info = resp
                     info_mpn.save
                     item.mpn_id = info_mpn.id
                     item.save
@@ -2957,37 +2978,33 @@ WHERE
         end
  
         def search_findchips(mpn)
-            #url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part=' + mpn
-            #url += CGI::escape(mpn)
             mpn = mpn.strip
-            url = URI('http://api.findchips.com/v1/search')
-            params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
-            url.query = URI.encode_www_form(params)
-            begin
-                #Rails.logger.info("------------------------1")
-                #Rails.logger.info(url.inspect)
-                resp = Net::HTTP.get_response(url)
+            #url = URI('http://api.findchips.com/v1/search')
+            #params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
+            #url.query = URI.encode_www_form(params)
+            #begin 
                 #resp = Net::HTTP.get_response(url)
-                #puts res.body if res.is_a?(Net::HTTPSuccess)
-                #Rails.logger.info("------------------------2")
-                #Rails.logger.info(resp.inspect)
-                #Rails.logger.info("-------------------------url")
-                server_response = JSON.parse(resp.body) 
-            rescue
-                #sleep 5
-                retry
-            end   
-            #url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
-            #url += CGI::escape(mpn)
-            #begin
-                #Rails.logger.info("url--------------------------------------------------------------------------11")
-                #Rails.logger.info(url.inspect)
-                #resp = Net::HTTP.get_response(URI.parse(url))
-            #Rails.logger.info(mpn.inspect)
-                #server_response = JSON.parse(resp.body)
+                #server_response = JSON.parse(resp.body) 
             #rescue
+                ##sleep 5
                 #retry
-            #end
+            #end 
+
+
+  
+            url = URI('http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='+CGI::escape(mpn))
+            begin
+                Rails.logger.info("url--------------------------------------------------------------------------11")
+                Rails.logger.info(url.inspect)
+                resp = Net::HTTP.get(url)
+                Rails.logger.info(resp.inspect)
+                server_response = JSON.parse(resp)
+                Rails.logger.info(server_response.inspect)
+            rescue
+                retry
+            end
+
+
             #Rails.logger.info("prices_all--------------------------------------------------------------------------")
             #Rails.logger.info(url.inspect) 
             #Rails.logger.info(resp.code.inspect)                #"200"   

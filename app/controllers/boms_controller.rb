@@ -1587,9 +1587,9 @@ WHERE
                         Rails.logger.info("url--------------------------------------------------------------------------11")
                         Rails.logger.info(url.inspect)
                         resp = Net::HTTP.get(url)
-                        Rails.logger.info(resp.inspect)
+                        #Rails.logger.info(resp.inspect)
                         server_response = JSON.parse(resp)
-                        Rails.logger.info(server_response.inspect)
+                        #Rails.logger.info(server_response.inspect)
                     rescue
                         retry
                     end

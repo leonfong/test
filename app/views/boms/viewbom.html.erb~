@@ -119,13 +119,13 @@
             <div class="row">
                 <div class="col-md-12">
             <small>
-            <table  id="table" data-toggle="table" data-url="/get_bom?bom_id=<%=@boms.id%>" data-id-field="id" data-editable-emptytext="Default empty text." data-editable-url="/update_bom" >
+            <table  id="table" data-toggle="table" data-url="/get_bom?bom_id=<%=@boms.id%>" data-id-field="id" data-editable-emptytext="Part# can't be empty." data-editable-url="/update_bom" >
 
                 <thead class="bg-info">
                 <tr> 
                     <th data-field="mpn"  data-editable="true" data-align="center" data-width="200" >Part#</th>
                     <th data-field="part_code" data-width="70" data-formatter="codeFormatter">REF.DES.</th>
-                    <th data-field="quantity" data-width="50">QTY</th>
+                    <th data-field="quantity" data-width="50" data-formatter="qtyFormatter">QTY</th>
                     <th data-field="price" data-width="80" data-formatter="priceFormatter">Unit Price</th>
                     <th data-field="total" data-width="80" data-formatter="totalFormatter">Sub Total</th>
                     <th data-field="mf" >Manufacturer</th>
@@ -214,7 +214,15 @@ function actionFormatter(value, row, index) {
 }
 
 function codeFormatter(value, row, index) {
-    return value.substring(0,6)+' ...'
+    return value.substring(0,5)+' ...'
+}
+
+function qtyFormatter(value, row, index) {
+    if(value == 0){
+        return "<b class='text-danger'>QTY can't be empty.</b>"
+    }else{
+        return value
+    }   
 }
 
 window.actionEvents = {

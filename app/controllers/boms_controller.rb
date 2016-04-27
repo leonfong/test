@@ -1575,7 +1575,7 @@ WHERE
                         #Rails.logger.info("-------------------------url")
                         server_response = JSON.parse(resp.body) 
                     rescue
-                        #sleep 5
+                        sleep 5
                         retry
                     end      
                     info_mpn = InfoPart.new

@@ -1565,8 +1565,8 @@ WHERE
                     params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
                     url.query = URI.encode_www_form(params)
                     begin
-                        #Rails.logger.info("------------------------1")
-                        #Rails.logger.info(url.inspect)
+                        Rails.logger.info("------------------------1")
+                        Rails.logger.info(url.inspect)
                         resp = Net::HTTP.get_response(url)
                         #resp = Net::HTTP.get_response(url)
                         #puts res.body if res.is_a?(Net::HTTPSuccess)
@@ -2924,14 +2924,14 @@ WHERE
                                 if f.has_value?"USD"
                                     if f['quantity'].to_i >= qty.to_i
                                         prices_all << f['price'].to_f
-                                        Rails.logger.info("--------------------------")
-                                        Rails.logger.info(f['price'].to_f.inspect)
+                                        #Rails.logger.info("--------------------------")
+                                        #Rails.logger.info(f['price'].to_f.inspect)
                                         mf_all << part['manufacturer']
-                                        Rails.logger.info("--------------------------")
-                                        Rails.logger.info(part['manufacturer'].inspect)
+                                        #Rails.logger.info("--------------------------")
+                                        #Rails.logger.info(part['manufacturer'].inspect)
                                         dm_all << result['distributor']['name']
-                                        Rails.logger.info("--------------------------")
-                                        Rails.logger.info(result['distributor']['name'].inspect)
+                                        #Rails.logger.info("--------------------------")
+                                        #Rails.logger.info(result['distributor']['name'].inspect)
                                     end
                                     #naive_id_all << result['distributor']['id']                         
                                 end
@@ -2940,12 +2940,12 @@ WHERE
                         end  
                     end                                
                 end
-                Rails.logger.info("--------------------------")
-                Rails.logger.info(mpn_id.inspect)
-                Rails.logger.info(prices_all.inspect)
-                Rails.logger.info(mf_all.inspect)
-                Rails.logger.info(dm_all.inspect)
-                Rails.logger.info("--------------------------")
+                #Rails.logger.info("--------------------------")
+                #Rails.logger.info(mpn_id.inspect)
+                #Rails.logger.info(prices_all.inspect)
+                #Rails.logger.info(mf_all.inspect)
+                #Rails.logger.info(dm_all.inspect)
+                #Rails.logger.info("--------------------------")
                 @mpn_result = []
                 if not prices_all.blank?
                     @mpn_result << prices_all.min     

@@ -5,7 +5,7 @@ meta title: params[:mpn] + " Stock and Price By Authorized Distributor and Manuf
 %>
 
 
-
+<div class="container">
   <div class="row ">
     <div class="col-md-6 ">
       <%= form_tag('/search',method:"get", class:"form-inline") do %>
@@ -25,6 +25,7 @@ meta title: params[:mpn] + " Stock and Price By Authorized Distributor and Manuf
       <div class="panel panel-primary">
         <div class="panel-heading"><strong>EXCEL inport</strong></div>
         <div class="panel-body">
+<!--
           <%= form_for @bom, html: { multipart: true } do |f| %>
             <div class="input-group "> 	
 	      <%= f.file_field :excel_file, class: "form-control input-lg" %> 
@@ -35,6 +36,7 @@ meta title: params[:mpn] + " Stock and Price By Authorized Distributor and Manuf
 		    
             <label><h4><p class="text-muted"><%= t(:up_excel) %><%= link_to t('bom_parser'),how_to_use_path %><p></h4></label>
           <% end %>
+-->
         </div>
       </div>
     </div>
@@ -166,8 +168,9 @@ meta title: params[:mpn] + " Stock and Price By Authorized Distributor and Manuf
       </table>
     </div>
   </div>
-<% end %>
 
+<% end %>
+  </div>
 
 
     

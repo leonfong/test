@@ -691,8 +691,8 @@ WHERE
                 #Rails.logger.info(desa.inspect)
                 Rails.logger.info(othera.inspect)
                 Rails.logger.info("------------------------------------------------------------des")
-                find_mpn = BomItem.where(bom_id: params[:bom_id],mpn: mpna)
-                if find_mpn.blank?
+                #find_mpn = BomItem.where(bom_id: params[:bom_id],mpn: mpna)
+                #if find_mpn.blank?
                     bom_item = @bom.bom_items.build() #创建bom_items对象
                     bom_item.part_code = refa
 		    #bom_item.description = desa
@@ -701,7 +701,7 @@ WHERE
                     bom_item.other = othera
                     bom_item.user_id = current_user.id
                     bom_item.save
-                end
+                #end
             end
             
             #render "select_column.html.erb" 

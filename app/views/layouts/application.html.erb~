@@ -206,7 +206,7 @@ footer {
   </head>
 <% if request.original_fullpath =~ /work_flow/i or request.original_fullpath =~ /feedback/i  %>
   <body style="padding-bottom: 70px;padding-top: 50px;margin-left: 15px;margin-right: 15px;" data-no-turbolink>
-<% elsif request.original_fullpath =~ /new_bom/i or request.original_fullpath =~ /viewbom/i or request.original_fullpath =~ /bomlist/i %>
+<% elsif request.original_fullpath =~ /new_bom/i or request.original_fullpath =~ /viewbom/i or request.original_fullpath =~ /bomlist/i or request.original_fullpath =~ /up_pcb_info/i %>
   <body style="padding-bottom: 70px;padding-top: 50px;" data-no-turbolink>
 <% elsif request.original_fullpath == "/" %>
   <body style="padding-bottom: 70px;padding-top: 50px;" >

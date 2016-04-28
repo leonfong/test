@@ -37,14 +37,20 @@ Rails.application.routes.draw do
   match '/indexup', to: 'work_flow#indexup', via: 'get' 
   match '/up_enddate', to: 'work_flow#up_enddate', via: 'post' 
 
-  match '/procurement_new', to: 'procurement#create_bom', via: 'get' 
-  match '/p_new_bom', to: 'procurement#upbom',via: 'post'
-  match '/p_new_bom', to: 'procurement#upbom',via: 'get'
-  match '/p_select_column', to: 'procurement#select_column',via: 'get' 
 
 
-
-
+  match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 
+  match '/p_new_bom', to: 'procurement#p_upbom',via: 'post'
+  match '/p_new_bom', to: 'procurement#p_upbom',via: 'get'
+  match '/p_select_column', to: 'procurement#p_select_column',via: 'get' 
+  match '/p_search_part', to: 'procurement#p_search_part',via: 'post'
+  match '/p_viewbom', to: 'procurement#p_viewbom',via: 'get'
+  match '/p_viewbom', to: 'procurement#p_viewbom',via: 'post'
+  match '/p_update_bom', to: 'procurement#update_bom',via: 'post'
+  match '/p_get_bom', to: 'procurement#p_get_bom',via: 'get'
+  match '/p_del_bom', to: 'procurement#p_del_bom',via: 'post'
+  match '/p_add_bom', to: 'procurement#p_add_bom',via: 'post'
+  match '/p_bomlist', to: 'procurement#p_bomlist',via: 'get'
 
 
 

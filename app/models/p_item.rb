@@ -5,5 +5,5 @@ class PItem < ActiveRecord::Base
 	#has_one :product, as: :product_able
 
 
-	validates :bom_id , presence: true
+	validates :procurement_bom_id , presence: true
 end

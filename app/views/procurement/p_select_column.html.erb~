@@ -28,7 +28,10 @@ function _step2_submit() {
 $(document).ready(function() {
     $(".changes").change(function(){
         
-        if(this.value == '1') {            
+        if(this.value == '1') {    
+            //alert(document.getElementById("desCol").value);  
+            //alert(document.getElementById("desCol").value.trim().split(" ")); 
+            //alert(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("partCol").value));                    
             //互斥
             if(document.getElementById("partCol").value != ""){
                 document.getElementById("rowselect_"+document.getElementById("partCol").value).value = 0;
@@ -42,9 +45,20 @@ $(document).ready(function() {
             if(document.getElementById("partCol").value == document.getElementById("refdesCol").value){
                 document.getElementById("refdesCol").value = "";
             }
-            if(document.getElementById("partCol").value == document.getElementById("desCol").value){
-                document.getElementById("desCol").value = "";
+
+            if(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("partCol").value) > -1){
+                var a=document.getElementById("desCol").value.trim().split(" ");
+                var b=a.indexOf(document.getElementById("partCol").value);
+                a.splice(b,1);
+                a.join(" ");
+                //alert(a);
+                //alert(b);
+                //alert(c);
+                //alert(d);
+                document.getElementById("desCol").value = a.join(" ");
+                //document.getElementById("desCol").value = document.getElementById("desCol").value.split(" ").splice(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("partCol").value)-1,1).join(" ");
             }
+
             if(document.getElementById("partCol").value == document.getElementById("packageCol").value){
                 document.getElementById("packageCol").value = "";
             }
@@ -66,13 +80,21 @@ $(document).ready(function() {
             if(document.getElementById("quantityCol").value == document.getElementById("refdesCol").value){
                 document.getElementById("refdesCol").value = "";
             }
-            if(document.getElementById("partCol").value == document.getElementById("desCol").value){
-                document.getElementById("desCol").value = "";
+            if(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("quantityCol").value) > -1){
+                var a=document.getElementById("desCol").value.trim().split(" ");
+                var b=a.indexOf(document.getElementById("quantityCol").value);
+                a.splice(b,1);
+                a.join(" ");
+                //alert(b);
+                //alert(c);
+                //alert(d);
+                document.getElementById("desCol").value = a.join(" ");
+                //document.getElementById("desCol").value = document.getElementById("desCol").value.split(" ").splice(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("partCol").value)-1,1).join(" ");
             }
-            if(document.getElementById("partCol").value == document.getElementById("packageCol").value){
+            if(document.getElementById("quantityCol").value == document.getElementById("packageCol").value){
                 document.getElementById("packageCol").value = "";
             }
-            if(document.getElementById("partCol").value == document.getElementById("linkCol").value){
+            if(document.getElementById("quantityCol").value == document.getElementById("linkCol").value){
                 document.getElementById("linkCol").value = "";
             }
             //alert("quantityCol"+ document.getElementById("quantityCol").value);
@@ -90,42 +112,56 @@ $(document).ready(function() {
             if(document.getElementById("refdesCol").value == document.getElementById("quantityCol").value){
                 document.getElementById("quantityCol").value = "";
             }
-            if(document.getElementById("partCol").value == document.getElementById("desCol").value){
-                document.getElementById("desCol").value = "";
+            if(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("refdesCol").value) > -1){
+                var a=document.getElementById("desCol").value.trim().split(" ");
+                var b=a.indexOf(document.getElementById("refdesCol").value);
+                a.splice(b,1);
+                a.join(" ");
+                //alert(b);
+                //alert(c);
+                //alert(d);
+                document.getElementById("desCol").value = a.join(" ");
+                //document.getElementById("desCol").value = document.getElementById("desCol").value.split(" ").splice(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("partCol").value)-1,1).join(" ");
             }
-            if(document.getElementById("partCol").value == document.getElementById("packageCol").value){
+            if(document.getElementById("refdesCol").value == document.getElementById("packageCol").value){
                 document.getElementById("packageCol").value = "";
             }
-            if(document.getElementById("partCol").value == document.getElementById("linkCol").value){
+            if(document.getElementById("refdesCol").value == document.getElementById("linkCol").value){
                 document.getElementById("linkCol").value = "";
             }
             //alert("refdesCol"+ document.getElementById("refdesCol").value);
             //return false;
         }
+
         if(this.value == '4') {
+            /*
             if(document.getElementById("desCol").value != ""){
                 document.getElementById("rowselect_"+document.getElementById("desCol").value).value = 0;
                 this.value = 4
             }
-            document.getElementById("desCol").value = this.id.replace("rowselect_", "");
-            if(document.getElementById("desCol").value == document.getElementById("partCol").value){
+            */
+            document.getElementById("desCol").value = this.id.replace("rowselect_", "") + " " + document.getElementById("desCol").value;
+            
+            if(this.id.replace("rowselect_", "") == document.getElementById("partCol").value){
                 document.getElementById("partCol").value = "";
             }
-            if(document.getElementById("desCol").value == document.getElementById("quantityCol").value){
+            if(this.id.replace("rowselect_", "") == document.getElementById("quantityCol").value){
                 document.getElementById("quantityCol").value = "";
             }
-            if(document.getElementById("desCol").value == document.getElementById("refdesCol").value){
+            if(this.id.replace("rowselect_", "") == document.getElementById("refdesCol").value){
                 document.getElementById("refdesCol").value = "";
             }
-            if(document.getElementById("desCol").value == document.getElementById("packageCol").value){
+            if(this.id.replace("rowselect_", "") == document.getElementById("packageCol").value){
                 document.getElementById("packageCol").value = "";
             }
-            if(document.getElementById("desCol").value == document.getElementById("linkCol").value){
+            if(this.id.replace("rowselect_", "") == document.getElementById("linkCol").value){
                 document.getElementById("linkCol").value = "";
             }
+            
             //alert("refdesCol"+ document.getElementById("refdesCol").value);
             //return false;
         }
+
         if(this.value == '5') {
             if(document.getElementById("packageCol").value != ""){
                 document.getElementById("rowselect_"+document.getElementById("packageCol").value).value = 0;
@@ -141,8 +177,13 @@ $(document).ready(function() {
              if(document.getElementById("packageCol").value == document.getElementById("refdesCol").value){
                 document.getElementById("refdesCol").value = "";
             }
-            if(document.getElementById("packageCol").value == document.getElementById("desCol").value){
-                document.getElementById("desCol").value = "";
+            if(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("packageCol").value) > -1){
+                var a=document.getElementById("desCol").value.trim().split(" ");
+                var b=a.indexOf(document.getElementById("packageCol").value);
+                a.splice(b,1);
+                a.join(" ");
+                document.getElementById("desCol").value = a.join(" ");
+                //document.getElementById("desCol").value = document.getElementById("desCol").value.split(" ").splice(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("partCol").value)-1,1).join(" ");
             }
             if(document.getElementById("packageCol").value == document.getElementById("linkCol").value){
                 document.getElementById("linkCol").value = "";
@@ -165,8 +206,13 @@ $(document).ready(function() {
             if(document.getElementById("linkCol").value == document.getElementById("refdesCol").value){
                 document.getElementById("refdesCol").value = "";
             }
-            if(document.getElementById("linkCol").value == document.getElementById("desCol").value){
-                document.getElementById("desCol").value = "";
+            if(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("linkCol").value) > -1){
+                var a=document.getElementById("desCol").value.trim().split(" ");
+                var b=a.indexOf(document.getElementById("linkCol").value);
+                a.splice(b,1);
+                a.join(" ");
+                document.getElementById("desCol").value = a.join(" ");
+                //document.getElementById("desCol").value = document.getElementById("desCol").value.split(" ").splice(document.getElementById("desCol").value.split(" ").indexOf(document.getElementById("partCol").value)-1,1).join(" ");
             }
             if(document.getElementById("linkCol").value == document.getElementById("packageCol").value){
                 document.getElementById("packageCol").value = "";
@@ -229,7 +275,7 @@ $(document).ready(function() {
 
 
 
-    <%= form_tag('/new_bom', method:"POST") do %> 
+    <%= form_tag('/up_new_bom', method:"POST") do %> 
     <div class="row ">
         <div class="col-sm-11 form-group">
                     <label for="p_name" class="col-sm-4 control-label form-inline">Project name:
@@ -262,16 +308,16 @@ $(document).ready(function() {
                 </div> 
         
         <div class="col-sm-1 form-group pull-right" >
-            <%= text_field_tag :bom_id, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.id.to_s %>
-            <%= text_field_tag :bom_path, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file.current_path %>
-            <%= text_field_tag :bom_file, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file_identifier %> 
+            <%= text_field_tag :bom_id, @bom.id.to_s, class:"", size:2 , value: @bom.id.to_s %>
+            <%= text_field_tag :bom_path, @bom.id.to_s, class:"", size:2 , value: @bom.excel_file.current_path %>
+            <%= text_field_tag :bom_file, @bom.id.to_s, class:"", size:2 , value: @bom.excel_file_identifier %> 
 
-            <%= text_field_tag :partCol, @bom.id.to_s, class:"sr-only", size:2 , value:""  %>
-            <%= text_field_tag :quantityCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
-            <%= text_field_tag :refdesCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
-            <%= text_field_tag :desCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
-            <%= text_field_tag :packageCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
-            <%= text_field_tag :linkCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
+            <%= text_field_tag :partCol, @bom.id.to_s, class:"", size:2 , value:""  %>
+            <%= text_field_tag :quantityCol, @bom.id.to_s, class:"", size:2 , value:"" %>
+            <%= text_field_tag :refdesCol, @bom.id.to_s, class:"", size:2 , value:"" %>
+            <%= text_field_tag :desCol, @bom.id.to_s, class:"", size:10 , value:"" %>
+            <%= text_field_tag :packageCol, @bom.id.to_s, class:"", size:2 , value:"" %>
+            <%= text_field_tag :linkCol, @bom.id.to_s, class:"", size:2 , value:"" %>
             <%= submit_tag t("ok"), class:"btn btn-danger", :onclick => "return _step2_submit()" %>
         </div>
         

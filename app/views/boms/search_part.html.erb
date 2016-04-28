@@ -30,70 +30,7 @@
 
 
    <h4 style="color: #32aacb;"><strong>BOM No. --- <%= @bom.no %></strong></h4>
-<!--
-    <div class="row">
-        <div class="col-md-12">
-            <%= form_tag('/up_order_info', remote: true, class:"form-horizontal",id:"f1") do %>
-               <fieldset id="set">
-                <%= text_field_tag :bom_id, params[:bom_id], class:"sr-only", size:2 , value: @bom.id.to_s %>
-                <div class="form-group">
-                    <label for="exampleInputEmail1" class="col-sm-2 control-label">Project name</label>
-                    <div class="col-sm-4">
-                        <%= text_field_tag :p_name, params[:p_name], class:"form-control", size:2  %>
-                    </div>   
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1"  class="col-sm-2 control-label">Quantity</label>
-                    <div class="col-sm-2">
-                        <%= number_field_tag :qty, params[:qty], class:"form-control", size:2  %>
-                    </div> 
-                    <div class="col-sm-6">
-                        <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="10" name="qty_pcs[]" id="10p" />
-                               <strong>10pcs</strong>
-                           </label>
-                       </div>
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="50" name="qty_pcs[]" id="50p" /> 
-                               <strong>50pcs</strong>
-                           </label>
-                       </div>         
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="100" name="qty_pcs[]" id="100p" />
-                               <strong>100pcs</strong>
-                           </label>
-                       </div> 
-                    </div>   
-                </div>          
-                <div class="form-group">
-                    <label for="exampleInputPassword1"  class="col-sm-2 control-label">Dellvery date</label>
-                    <div class="col-sm-2">    
-                        <select name="day" id="day"  class="changes form-control center-block" >
-		            <option value="0">
-			        None
-		            </option>
-			    <option value="1">
-			        7~10 Days
-			    </option>
-			    <option value="2">
-		                11~25 Days
-			    </option>
-		        </select>
-                    </div>                    
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <%= submit_tag t(:ok), class:"btn btn-primary",id:"atn", :onclick => "return postform()" %>
-                    </div>                    
-                </div>
-                </fieldset>
-            <% end %>
-        </div>
-    </div>
--->
+
     <div class="row" style="padding: 0px;">
         <div class="col-md-12">
             <table class="table table-bordered">
@@ -125,60 +62,8 @@
         <%= submit_tag t(:search), class:"btn btn-primary sr-only", id:"btn" %>
     <% end %>
 <script>
-
-function postform() {
-    if($("#p_name").val() == ""){
-        alert("Please enter your project name.");                    
-　　      return false;    
-    }
-    else if($("#qty").val() == ""){
-        alert("Please enter your quantity.");                    
-　　      return false;    
-    }
-    //else{
-        //$("#atn").click(function(){
-            //$("#set").attr("disabled","true");
-            return true; 
-        //});
-    //}
-    //if($("#day").val() == 0){
-        //alert("Please choose your Dellvery date.");                    
-　　      //return false;    
-    //} 
-
-}
 $(document).ready(function() {
-    //$("form.f1").submit(function(e){
-        //$("#set").attr("disabled","true");  
-    //});
-    $("#btn").click();
-    $("#10p").click(function(){
-        document.getElementById('50p').checked = false; 
-        document.getElementById('100p').checked = false;
-        if(document.getElementById('10p').checked == false){
-            $("#qty").val("");
-        }else if(document.getElementById('10p').checked == true){
-            $("#qty").val("10");
-        }
-    });
-    $("#50p").click(function(){
-        document.getElementById('10p').checked = false; 
-        document.getElementById('100p').checked = false;
-        if(document.getElementById('50p').checked == false){
-            $("#qty").val("");
-        }else if(document.getElementById('50p').checked == true){
-            $("#qty").val("50");
-        }
-    });
-    $("#100p").click(function(){
-        document.getElementById('50p').checked = false; 
-        document.getElementById('10p').checked = false;
-        if(document.getElementById('100p').checked == false){
-            $("#qty").val("");
-        }else if(document.getElementById('100p').checked == true){
-            $("#qty").val("100");
-        }
-    });
+    $("#btn").click();  
 });
 </script>
 </div>

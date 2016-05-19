@@ -1,0 +1,51 @@
+
+
+
+
+document.getElementById('matched').innerHTML='<%= @match_str_nn %>';
+document.getElementById('total_price').innerHTML='<%=  number_with_precision(@total_price_nn, precision: 4)%>';
+
+
+
+
+
+<% if @bom_item.product_id != 0 %>
+document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= Product.find(@bom_item.product_id).description %>';
+$("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_item.product_id).name %>");
+<% else %>
+document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
+$("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
+<% end %>
+
+
+<% PDn.where(item_id: @bom_item.id).each do |ppp| %>
+    document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="";
+<% end %>
+document.getElementById('<%= @bom_item.id.to_s + "_" + @add_dns.id.to_s %>').className="bg-info";
+
+
+
+
+
+
+
+
+document.getElementById('<%= @bom_item.id.to_s + "p" %>').innerHTML='<%= "￥"+@bom_item.cost.to_s %>';
+document.getElementById('<%= @bom_item.id.to_s + "p_t" %>').innerHTML='<%= "￥"+(@bom_item.cost*@bom.qty).to_s %>';
+
+
+
+
+
+
+
+
+
+
+//document.getElementById('<%= @bom_item.id.to_s %>').className="bg-success row table table-hover panel panel-success"
+//document.getElementById('<%= @bom_item.id.to_s %>').style.backgroundColor="#dff0d8"
+//document.getElementById('<%= @bom_item.id.to_s + "dow" %>').className="collapse"
+//document.getElementById('<%= @bom_item.id.to_s + "but" %>').className="glyphicon glyphicon-plus"
+
+//document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw @view_dn %>';
+

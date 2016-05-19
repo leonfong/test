@@ -20,7 +20,7 @@ gem 'will-paginate-i18n'
 gem 'rails_kindeditor'
 
 gem "bootstrap-table-rails"
-
+#gem "bootstrap-typeahead-rails"
 gem 'sprockets', '~> 2.12.3'
 gem 'hike', '~> 1.2'
 gem 'multi_json', '~> 1.0'

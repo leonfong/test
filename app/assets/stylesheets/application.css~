@@ -12,7 +12,8 @@
  *
  
 
-
+ *= require bootstrap-table
+ *= require bootstrap-typeahead-rails
  *= require_tree .
  *= require_self
  */

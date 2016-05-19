@@ -161,32 +161,37 @@ before_filter :authenticate_user!
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)   
             @topic = Topic.find_by_sql("SELECT *, POSITION('work_b' IN topics.mark) AS mark_chk FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY mark_chk" ).paginate(:page => params[:page], :per_page => 10)   
             render "delivery_date.html.erb"
+#业务
         elsif can? :work_e, :all
             where_o = ""
+            where_o_a = ""
             if not current_user.s_name.blank?
                 if current_user.s_name.size == 1
                     s_name = current_user.s_name
                     where_o = "  POSITION('" + s_name + "' IN RIGHT(LEFT(topics.order_no,9),7)) = 6 and RIGHT(LEFT(topics.order_no,9),1) REGEXP '^[0-9]+$' AND "
+                    where_o_a = " WHERE POSITION('" + s_name + "' IN RIGHT(LEFT(a.order_no,9),7)) = 6 and RIGHT(LEFT(a.order_no,9),1) REGEXP '^[0-9]+$' "
                 elsif current_user.s_name.size == 2
                     s_name = current_user.s_name
                     where_o = "  POSITION('" + s_name + "' IN topics.order_no) = 8 AND "
+                    where_o_a = " WHERE POSITION('" + s_name + "' IN a.order_no) = 8 "
                 end
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE #{where_o}  topics.feedback_receive LIKE '%sell%' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE #{where_o}  topics.feedback_receive <> '' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order]
                 #if not params[:order] == ""
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 #end
                 if @work_flow.size == 1 and params[:order].size > 2               
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             else
                 if empty_date != ""                    
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 end               
             end
             
             render "sell.html.erb"
+#跟单
         elsif can? :work_f, :all
             add_orderby = " ORDER BY work_flows.updated_at DESC " 
             #add_orderby = " " 
@@ -267,6 +272,8 @@ before_filter :authenticate_user!
         elsif can? :work_d, :all
             render "engineering_feedback.html.erb"
         elsif can? :work_e, :all
+            @topic.mark += "lwork_" + current_user.s_name + "l"
+            @topic.save
             render "sell_feedback.html.erb"
         elsif can? :work_f, :all
             @topic.mark += "lwork_fl"

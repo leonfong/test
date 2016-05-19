@@ -2,6 +2,7 @@ require 'roo'
 require 'spreadsheet'
 require 'will_paginate/array'
 class ProcurementController < ApplicationController
+before_filter :authenticate_user!
     def p_create_bom
         Rails.logger.info("-------------------------")
         Rails.logger.info(request.original_fullpath.inspect)   
@@ -62,7 +63,7 @@ class ProcurementController < ApplicationController
             #return false  
             all_use = @sheet.row(1)[params[:partCol].to_i].split("")+@sheet.row(1)[params[:quantityCol].to_i].split("")+@sheet.row(1)[params[:refdesCol].to_i].split("")
             #params[:select_part].each do |use|
-	     #@parse_result.select! {|item| !item["#{@sheet.row(1)[params[:partCol].to_i]}"].blank? } #选择非空行
+	    @parse_result.select! {|item| !item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].blank? } #选择非空行
             #end
             Rails.logger.info("------------------------------------------------------------qq1")
             Rails.logger.info(all_item.inspect)
@@ -79,7 +80,7 @@ class ProcurementController < ApplicationController
             other_all.delete(@sheet.row(1)[params[:partCol].to_i])
             other_all.delete(@sheet.row(1)[params[:quantityCol].to_i])
             other_all.delete(@sheet.row(1)[params[:refdesCol].to_i])
-            params[:desCol].strip.split(" ").each do |des|
+            params[:desCol].strip.split(" ").sort!.each do |des|
                 other_all.delete(@sheet.row(1)[des.to_i])
             end
             Rails.logger.info("------------------------------------------------------------aaaa")
@@ -118,7 +119,7 @@ class ProcurementController < ApplicationController
                     link += item["#{@sheet.row(1)[params[:linkCol].to_i]}"].to_s + " "
                 end
                 desa = ""
-                params[:desCol].strip.split(" ").each do |des|                    
+                params[:desCol].strip.split(" ").sort!.each do |des|                    
                     if item["#{@sheet.row(1)[des.to_i]}"].blank?
                         desa += ""
                     else
@@ -141,10 +142,21 @@ class ProcurementController < ApplicationController
                 Rails.logger.info(desa.inspect)
                 Rails.logger.info(othera.inspect)
                 Rails.logger.info("------------------------------------------------------------des")
-                find_mpn = PItem.where(procurement_bom_id: params[:bom_id],mpn: mpna)
-                if find_mpn.blank?
+                #find_mpn = PItem.where(procurement_bom_id: params[:bom_id],mpn: mpna)
+                #if find_mpn.blank?
                     bom_item = @bom.p_items.build() #创建bom_items对象
                     bom_item.part_code = refa
+                    if refa.blank? 
+                        bom_item.user_do = 7
+                    else
+                        if refa =~ /r/i or refa =~ /c/i or refa =~ /d/i or refa =~ /v/i or refa =~ /q/i or refa =~ /lcd/i or refa =~ /led/i
+                            bom_item.user_do = 77
+                        elsif refa =~ /l/i or refa =~ /x/i or refa =~ /w/i
+                            bom_item.user_do = 75
+                        else
+                            bom_item.user_do = 7
+                        end
+                    end
 		    bom_item.description = desa
                     bom_item.quantity = qtya.to_i
                     bom_item.mpn = mpna
@@ -153,7 +165,7 @@ class ProcurementController < ApplicationController
                     bom_item.other = othera
                     bom_item.user_id = current_user.id
                     bom_item.save
-                end
+                #end
             end
             
             #render "select_column.html.erb" 
@@ -180,7 +192,7 @@ class ProcurementController < ApplicationController
         @bom = ProcurementBom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         @file = @bom.excel_file_identifier
-        @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Bom.find_by_sql('SELECT Count(boms.id)+1 AS all_no FROM boms WHERE to_days(boms.created_at) = to_days(NOW())').first.all_no.to_s + "B"
+        @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Bom.find_by_sql('SELECT Count(procurement_boms.id)+1 AS all_no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').first.all_no.to_s + "B"
         #如果上传成功
 	if @bom.save
             #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
@@ -210,56 +222,186 @@ class ProcurementController < ApplicationController
         if params[:bom_id]
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
             @bom_item.each do |item|
-
-#0如果有描述
-                if not item.description.blank?
+                if item.product_id.blank? and item.mpn_id.blank?
+#0如果有描述 
+                    if not item.description.blank?
     #0.1如果有mpn
-                    if not item.mpn.blank?
+                        if not item.mpn.blank?
         #0.1.1先从自有物料中匹配mpn
-                        use_mpn = Product.find_by_sql("SELECT * FROM products WHERE products.mpn LIKE '%#{item.mpn}%'")
-                        if not use_mpn.blank?
-                            item.product_id = use_mpn.id
-                            item.save
-                            @item = item
-                            render "p_search_part.js.erb" and return
-                        else
+                            use_mpn = Product.find_by_sql("SELECT * FROM products WHERE products.mpn LIKE '%#{item.mpn.strip}%'")
+                            if not use_mpn.blank?
+                                item.product_id = use_mpn.id
+                                
+                                @item = item
+                                part_code = Product.find(item.product_id).name
+                                all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+                                if all_dns.blank?
+                                    all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
+                                end
+                                #all_dns.each do |dns|
+                                if not all_dns.blank?
+                                    add_dns = PDn.new
+                                    add_dns.item_id = @item.id
+                                    add_dns.date = all_dns.date
+                                    add_dns.part_code = all_dns.part_code
+                                    add_dns.dn = all_dns.dn
+                                    add_dns.dn_long = all_dns.dn_long
+                                    add_dns.cost = all_dns.price
+                                    add_dns.qty = all_dns.qty
+                                    add_dns.color = "g"
+                                    add_dns.save
+                                    item.cost = add_dns.cost
+                                    item.color = "g"
+                                    item.dn_id = add_dns.id
+                                    item.save
+                                else
+                                    item.save
+                                end
+                                #item.save
+                                render "p_search_part.js.erb" and return
+                            else
         #0.1.2如果自有物料不能匹配 
-                            match_product = search_bom_use(item.description,item.mpn) #根据历史记录查询产品
-                            if match_product == []
-                               match_product = search_bom(item.description,item.part_code) #根据关键字和位号查询产品
-                            end
-                            item.product_id = match_product.first.id if match_product.count > 0
-                            item.save
-                            @item = item
-                            render "p_search_part.js.erb" and return        
-                            end
-                    else
+                                Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
+                                match_product_old = search_bom_use(item.description) #根据历史记录查询产品
+                                Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
+                                Rails.logger.info(match_product_old.inspect)
+                                Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
+                                if match_product_old.blank?
+                                    match_product = search_bom(item.description,item.part_code) #根据关键字和位号查询产品
+                                elsif not match_product_old.dn_id.blank?
+                                   
+                                    match_dn = PDn.find(match_product_old.dn_id)
+                                    add_dns = PDn.new
+                                    add_dns.item_id = item.id
+                                    add_dns.date = match_dn.date
+                                    add_dns.part_code = match_dn.part_code
+                                    add_dns.dn = match_dn.dn
+                                    add_dns.dn_long = match_dn.dn_long
+                                    add_dns.cost = match_dn.cost
+                                    add_dns.qty = match_dn.qty
+                                    add_dns.color = "g"
+                                    add_dns.save
+                                    item.cost = add_dns.cost
+                                    item.color = "g"
+                                    item.product_id = match_product_old.product_id
+                                    item.dn_id = add_dns.id
+                                    item.save
+                                    @item = item
+                                    render "p_search_part.js.erb" and return 
+                                end
+                                if not match_product.blank?
+                                    item.product_id = match_product.first.id if match_product.count > 0
+                                    
+                                    @item = item
+                                    part_code = Product.find(item.product_id).name
+                                    all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+                                #all_dns.each do |dns|
+                                    if all_dns.blank?
+                                        all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
+                                    end
+                                    if not all_dns.blank?
+                                        add_dns = PDn.new
+                                        add_dns.item_id = @item.id
+                                        add_dns.date = all_dns.date
+                                        add_dns.part_code = all_dns.part_code
+                                        add_dns.dn = all_dns.dn
+                                        add_dns.dn_long = all_dns.dn_long
+                                        add_dns.cost = all_dns.price
+                                        add_dns.qty = all_dns.qty
+                                        add_dns.color = "g"
+                                        add_dns.save
+                                        item.cost = add_dns.cost
+                                        item.color = "g"
+                                        item.dn_id = add_dns.id
+                                        item.save
+                                    else
+                                        item.save
+                                    end
+                                #item.save
+                                else
+                                    item.product_id = 0
+                                    item.save
+                                    @item = item
+                                end
+                                
+                                #Rails.logger.info(match_product.inspect)
+                                Rails.logger.info("11-------------------------------------------------------11")
+                                #item.product_id = match_product.first.id if match_product.count > 0
+                                #item.save
+                                #@item = item
+                                render "p_search_part.js.erb" and return        
+                                end
+                        else
     #0.2如果没有mpn只有描述
-                        match_product = search_bom_use(item.description,item.mpn) #根据历史记录查询产品
-                        if match_product == []
-                            match_product = search_bom(item.description,item.part_code) #根据关键字和位号查询产品
+                            Rails.logger.info("22-------------------------------------------------------22")
+                            match_product_old = search_bom_use(item.description) #根据历史记录查询产品
+                            Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
+                            Rails.logger.info(match_product_old.inspect)
+                            Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
+                            if match_product_old.blank?
+                                match_product = search_bom(item.description,item.part_code) #根据关键字和位号查询产品
+                            elsif not match_product_old.dn_id.blank?
+                                match_dn = PDn.find(match_product_old.dn_id)
+                                add_dns = PDn.new
+                                add_dns.item_id = item.id
+                                add_dns.date = match_dn.date
+                                add_dns.part_code = match_dn.part_code
+                                add_dns.dn = match_dn.dn
+                                add_dns.dn_long = match_dn.dn_long
+                                add_dns.cost = match_dn.cost
+                                add_dns.qty = match_dn.qty
+                                add_dns.color = "g"
+                                add_dns.save
+                                item.cost = add_dns.cost
+                                item.color = "g"
+                                item.product_id = match_product_old.product_id
+                                item.dn_id = add_dns.id
+                                item.save
+                                @item = item
+                                render "p_search_part.js.erb" and return 
+                            end
+                            if not match_product.blank?
+                                item.product_id = match_product.first.id if match_product.count > 0
+                                
+                                @item = item
+                                part_code = Product.find(item.product_id).name
+                                all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+                                if all_dns.blank?
+                                    all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
+                                end
+                                #all_dns.each do |dns|
+                                if not all_dns.blank?
+                                    add_dns = PDn.new
+                                    add_dns.item_id = @item.id
+                                    add_dns.date = all_dns.date
+                                    add_dns.part_code = all_dns.part_code
+                                    add_dns.dn = all_dns.dn
+                                    add_dns.dn_long = all_dns.dn_long
+                                    add_dns.cost = all_dns.price
+                                    add_dns.qty = all_dns.qty
+                                    add_dns.color = "g"
+                                    add_dns.save
+                                    item.cost = add_dns.cost
+                                    item.color = "g"
+                                    item.dn_id = add_dns.id
+                                    item.save
+                                else
+                                    item.save
+                                end
+                                #item.save
+                            else
+                                item.product_id = 0
+                                item.save
+                                @item = item
+                            end
+                            
+                            #item.product_id = match_product.first.id if match_product.count > 0
+                            #item.save
+                            #@item = item
+                            render "p_search_part.js.erb" and return
                         end
-                        item.product_id = match_product.first.id if match_product.count > 0
-                        item.save
-                        @item = item
-                        render "p_search_part.js.erb" and return
                     end
                 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -297,10 +439,6 @@ class ProcurementController < ApplicationController
 =end
 
 
-
-
-
-                       
             end
 
 
@@ -310,19 +448,12 @@ class ProcurementController < ApplicationController
                 @total_p = 0   
                 all_c = 0           
                 @bom_item.each do |bomitem|
-                    api_info = find_price(bomitem.mpn_id,@bom.qty)
-                    if not api_info.blank?  
-                       bomitem.price = api_info[0]
-                       bomitem.mf = api_info[1]
-                       bomitem.dn = api_info[2]
-                       bomitem.save
-                       if not bomitem.price.blank?
-                           @total_p += bomitem.price*bomitem.quantity
-                       end
+                    if not bomitem.cost.blank?
+                        @total_p += bomitem.cost*bomitem.quantity*@bom.qty.to_i
                     end
-                    all_c += bomitem.quantity
+                    all_c += bomitem.quantity                    
                 end
-                @total_p = @total_p*@bom.qty.to_i
+                #@total_p = @total_p*@bom.qty.to_i
                 @bom.t_p = @total_p
                 @bom.t_c = all_c*@bom.qty.to_i
                 c_p = all_c*@bom.qty.to_i*0.06
@@ -331,16 +462,32 @@ class ProcurementController < ApplicationController
                 end
                 @bom.c_p = c_p
                 @bom.save
+
                 render inline: "window.location='/p_viewbom?bom_id=#{params[:bom_id]}';" 
             end           
         end      
     end
 
-    def p_viewbom
+    def p_viewbom       
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+        end
+        @all_dn += "&quot;]"
         @boms = ProcurementBom.find(params[:bom_id])
-        @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+        if can? :work_g_all, :all
+            @user_do = "7"
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+        elsif can? :work_g_a, :all
+            @user_do = "77"
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],user_do: "77")
+        elsif can? :work_g_b, :all
+            @user_do = "75"
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],user_do: "75")
+        end
         if  params[:ajax]
-            @bomitem = BomItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
+            @bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
             render "viewbom.js.erb"
             return false
         end
@@ -365,19 +512,624 @@ class ProcurementController < ApplicationController
         end
     end
 
+
+
+
+
+
     def p_bomlist
-        @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
+        @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `check` DESC ").paginate(:page => params[:page], :per_page => 10)
     end
 
+    def search_m
+        if cookies.permanent[:educator_locale].to_s == "zh"
+            part_name_locale = "part_name"
+        elsif cookies.permanent[:educator_locale].to_s == "en"
+            part_name_locale = "part_name_en"
+        end
+        @bom_item = PItem.find(params[:id])
+        #params[:q]=@bom_item.description
+	params[:p]=@bom_item.part_code
+        if not params[:q].blank?
+            des = params[:q].strip.split(" ")
+            where_des = ""
+            des.each_with_index do |de,index|
+                where_des += "products.description LIKE '%#{de}%'"
+                if des.size > (index + 1)
+                    where_des += " AND "
+                end
+            end      
+        end
+        if params[:part_name].nil? and params[:package2].nil?
+	    @ptype = ""
+            @package2 = ""
+	elsif params[:package2].nil?
+	    @ptype = params[:part_name]
+                #@ptype = ""
+	    @package2 = ""
+	elsif params[:part_name].nil?
+	    @ptype = ""
+	    @package2 = params[:package2]
+	else
+	    @ptype = params[:part_name]
+                #@ptype = ""
+	    @package2 = params[:package2]
+	end
+        Rails.logger.info("--------------------------")
+        #Rails.logger.info(@package2.inspect)
+        Rails.logger.info("--------------------------")
+        if  @package2 != ""
+            find_bom = " AND `package2` = '"+@package2+"' "
+        else
+            find_bom = " "
+        end
+        if  @ptype != ""
+            find_ptype = " AND "+part_name_locale+" = '"+@ptype+"' "
+        else
+            find_ptype = " "
+        end
+        #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%#{des}%' " + find_ptype +  find_bom).to_ary
+        @match_products = Product.find_by_sql("SELECT products.*, min(`all_dns`.`price`) AS `min_price` FROM products INNER JOIN all_dns ON products.`name` = all_dns.part_code WHERE #{where_des} #{find_ptype} #{find_bom}  GROUP BY	`all_dns`.`part_code`").to_ary
+        @counted = Hash.new(0)
+        @match_products.each { |h| @counted[h[part_name_locale]] += 1 }
+        @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
+        
+        @counted1 = Hash.new(0)
+        @match_products.each { |h| @counted1[h["package2"]] += 1 }
+        @counted1 = Hash[@counted1.map {|k,v| [k,v.to_s] }]	
+        if user_signed_in?
+            if current_user.email == "web@mokotechnology.com"
+                @bom_html = ""
+                unless @match_products.nil?
+                    @match_products[0..19].each do |item|
+                        @bom_html = @bom_html + "<tr>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{ActionController::Base.helpers.number_with_precision(item.min_price, precision: 4).to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "</tr>"
+                    end           
+                end
+            else
+                @bom_html = ""
+                unless @match_products.nil?
+                    @match_products[0..19].each do |item|
+                        @bom_html = @bom_html + "<tr>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{ActionController::Base.helpers.number_with_precision(item.min_price, precision: 4).to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "</tr>"
+                    end           
+                end
+            end
+        end
+        
+        
+        @bom_lab = '<table class="table table-bordered"><thead><tr><td><strong>' + t(:current_search) + '：</strong></td></tr></thead><tbody>'
+        unless @package2 and @ptype
+            @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "：" 
+            unless @counted.nil?
+                @counted.each do |key, value|
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %>
+                    Rails.logger.info("--------------------------")
+                    Rails.logger.info(params[:q].inspect)
+                    Rails.logger.info(params[:p].inspect)
+                    Rails.logger.info(key.inspect)
+                    Rails.logger.info("--------------------------")
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;part_name=" + key + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end 
+            @bom_lab = @bom_lab + "</td></tr>"
+        
+            @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "： "
+            unless @counted1.nil?
+                @counted1.each do |key, value| 
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %>
+                    #<a href="/bom_item/8315/edit?p=C6-1%2CC7-1%2CC67-1%2CC68-1&amp;package2=0402&amp;q=CAP+CER+10PF+16V+NP0+0402">0402</a>
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end
+            @bom_lab = @bom_lab + "</td></tr>"
+        else
+            @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "： "
+            unless @counted.nil? 
+                @counted.each do |key, value| 
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> 
+                    Rails.logger.info("--------------------------")
+                    Rails.logger.info(key.inspect)
+                    Rails.logger.info(value.inspect)
+                    Rails.logger.info("--------------------------")
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>" 
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end
+            @bom_lab = @bom_lab + "</td></tr>"
+            @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "："
+            unless @counted1.nil?
+                @counted1.each do |key, value|
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %>
+                     @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end
+            @bom_lab = @bom_lab + "</td></tr>"
+        end
+        @bom_lab = @bom_lab + "</tbody></table>"
+        Rails.logger.info("--------------------------")
+        Rails.logger.info(@bom_html.inspect)
+        Rails.logger.info("--------------------------")
+    end
+
+    def p_update
+        if not params[:product_id].blank?
+            del_dn = PDn.find_by_sql("SELECT * FROM p_dns WHERE p_dns.item_id = '#{params[:id]}' AND p_dns.tag IS NULL")
+            #del_dn = PDn.find_by(item_id: params[:id], tag: nil)
+            if not del_dn.blank?
+                #del_dn.delete 
+                #del_dn.save
+                del_dn.each do |del_a|
+                    del_a.destroy 
+                end
+            end
+            part_code = Product.find(params[:product_id]).name
+            all_dns = AllDn.where(part_code: part_code).order('date DESC')
+            all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+            if all_dns.blank?
+                all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
+            end
+            #all_dns.each do |dns|
+            if not all_dns.blank?
+                add_dns = PDn.new
+                add_dns.item_id = params[:id]
+                add_dns.dn = all_dns.dn
+                add_dns.dn_long = all_dns.dn_long
+                add_dns.date = all_dns.date
+                add_dns.part_code = all_dns.part_code
+                add_dns.qty = all_dns.qty
+                #add_dns.remark = dns.remark
+                add_dns.cost = all_dns.price
+                add_dns.color = "b"
+                add_dns.save
+            end
+            @view_dns = ''
+            @view_dns += '<table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">'
+=begin            
+            @view_dns += '<thead >'
+            @view_dns += '<tr > '
+            @view_dns += '<th width="30"></th>'
+            @view_dns += '<th width="90">日期</th>'
+            @view_dns += '<th width="100">供应商</th>' 
+            @view_dns += '<th width="80">数量</th>'
+            @view_dns += '<th width="80">成本价</th>'
+            @view_dns += '<th width="80">技术资料</th>'
+            @view_dns += '<th>备注</th>'
+            @view_dns += '<th width="30"></th>'
+            
+            @view_dns += '</tr>'
+            @view_dns += '</thead>'
+=end
+            @view_dns += '<tbody >'
+            PDn.where(item_id: params[:id]).each do |dn|
+                @view_dns += '<tr id="' + params[:id].to_s + '_' + dn.id.to_s + '" '
+                if dn.color == "b"
+                    @view_dns += ' class="bg-info">'
+                elsif dn.color == "g" 
+                    @view_dns += ' class="bg-success">' 
+                else
+                    @view_dns += ' >'
+                end
+                #@view_dns += '<td width="25"><small><a class="glyphicon glyphicon-edit" data-method="get" data-remote="true" href=""></a></small></td>'
+                @view_dns += '<td width="25"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:id].to_s + '" ></small></a></td>'
+                @view_dns += '<td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'
+                
+                @view_dns += '<td width="100" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + '</div></a></small></td>'
+                @view_dns += '<td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>'+dn.qty.to_s+'</div></a></small></td>'
+                @view_dns += '<td width="80"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>￥'+dn.cost.to_s+'</div></a></small></td>'
+                if not dn.info.blank?                
+                    @view_dns += '<td width="80"><small><a href="'+dn.info.to_s+'">下载</a></small></td>'
+                else
+                    @view_dns += '<td width="80"><small></small></td>'
+                end 
+                @view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
+                @view_dns += '<td width="30"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:id].to_s+'"></a></small></td>'
+                @view_dns += '</tr>'
 
 
+                #@view_dns += '<tr id="' + params[:id].to_s + '_' + dn.id.to_s + '" class="">'
+                #@view_dns += '<td><small>'+dn.dn.to_s+'</small></td>'
+                #@view_dns += '<td><small>$'+dn.cost.to_s+'</small></td>'
+                #if not dn.info.blank?                
+                 #   @view_dns += '<td><small><a href="'+dn.info.to_s+'">下载</a></small></td>'
+                #else
+                #    @view_dns += '<td><small></small></td>'
+                #end 
+                  #  @view_dns += '<td><small>'+dn.remark.to_s+'</small></td>'
+                  #  @view_dns += '<td><small><a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:id].to_s+'"></a></small></td>'
+
+                    #@view_dns += '</tr>'
+            end
+            @view_dns += '</tbody>'
+            @view_dns += '</table>'
+            Rails.logger.info("----------------------")
+            #Rails.logger.info(@view_dns)
+            Rails.logger.info("----------------------")
+            #@view_dns = "wwwww"
+            @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            if @bom_item.update_attribute("product_id", params[:product_id])
+                if @bom_item.product_id
+	            #@bom_item.product = Product.find(@bom_item.product_id)
+                    @bom_item.warn = false
+                    @bom_item.cost = add_dns.cost
+                    @bom_item.dn_id = add_dns.id
+                    @bom_item.mark = false
+                    @bom_item.manual = true
+                    @bom_item.mpn_id = nil
+                    #@bom_item.mpn = nil
+                    @bom_item.color = "b"
+	            @bom_item.save!
+  
+   
+                    #累加产品被选择的次数
+                    prefer = (Product.find(@bom_item.product_id)).prefer + 1
+                    Product.find(@bom_item.product_id).update(prefer: prefer) 
+                    if params[:bomsuse].blank?
+                        flash[:success] = t('success_a')
+                        redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    else
+                        @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+                        @matched_items_nn = Product.find_by_sql("
+SELECT
+	p_items.id,
+	p_items.quantity,
+	p_items.description,
+	p_items.part_code,
+	p_items.procurement_bom_id,
+	p_items.product_id,
+	p_items.created_at,
+	p_items.updated_at,
+	p_items.warn,
+	p_items.user_id,
+	p_items.danger,
+	p_items.manual,
+	p_items.mark,
+	p_items.mpn,
+	p_items.mpn_id,
+
+IF (
+	p_items.mpn_id > 0,
+	mpn_items.price,
+	products.price
+) AS price,
+
+IF (
+	p_items.mpn_id > 0,
+	mpn_items.description,
+	products.description
+) AS description_p
+FROM
+	p_items
+LEFT JOIN products ON p_items.product_id = products.id
+LEFT JOIN mpn_items ON p_items.mpn_id = mpn_items.id
+WHERE
+	p_items.procurement_bom_id = "+@bom_item.procurement_bom_id.to_s)             
+                        @total_price_nn = 0.00               
+	                unless @matched_items_nn.empty?
+                            @bom_api_all = []
+		            @matched_items_nn.each do |item|
+                                if not item.price.blank?
+                                    @total_price_nn += item.price * item.quantity * @bom.qty.to_i 
+                                end                      
+		            end
+                        end
+                        render "p_update.js.erb"
+                    end
+                else
+	            flash[:error] = t('error_d')
+	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	        end
+            end  
+            
+
+            
+            
+            #Rails.logger.info(@bom_item.id.to_s + '_dns')
+        end
+    end
+
+    def p_updateii
+        dell_dns_color = PDn.where(item_id: params[:id])
+        c_color = nil
+        dell_dns_color = PDn.where(item_id: params[:id]).update_all "color = '#{c_color}'"
+        if not params[:product_name].blank?
+            @add_dns = PDn.find(params[:dn_id])
+            @add_dns.color = "b"
+            @add_dns.save
+            @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            if @bom_item.update_attribute("product_id", Product.find_by(name: params[:product_name]).id)
+                if @bom_item.product_id
+	            #@bom_item.product = Product.find(@bom_item.product_id)
+                    @bom_item.warn = false
+                    @bom_item.cost = @add_dns.cost
+                    @bom_item.dn_id = @add_dns.id
+                    @bom_item.mark = false
+                    @bom_item.manual = true
+                    @bom_item.mpn_id = nil
+                    #@bom_item.mpn = nil
+                    @bom_item.color = "b"
+	            @bom_item.save!
+  
+   
+                    #累加产品被选择的次数
+                    prefer = (Product.find(@bom_item.product_id)).prefer + 1
+                    Product.find(@bom_item.product_id).update(prefer: prefer) 
+                    if params[:bomsuse].blank?
+                        flash[:success] = t('success_a')
+                        redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    else
+                        @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+                        @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)            
+                        @total_price_nn = 0.00               
+	                unless @matched_items_nn.empty?
+                            @bom_api_all = []
+		            @matched_items_nn.each do |item|
+                                if not item.cost.blank?
+                                    @total_price_nn += item.cost * item.quantity * @bom.qty.to_i 
+                                end                      
+		            end
+                        end
+                        render "p_updateii.js.erb"
+                    end
+                else
+	            flash[:error] = t('error_d')
+	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	        end
+            end  
+            
+
+            
+            
+            #Rails.logger.info(@bom_item.id.to_s + '_dns')
+        else
+            @add_dns = PDn.find(params[:dn_id])
+            @add_dns.color = "b"
+            @add_dns.save
+            @bom_item = PItem.find(params[:id]) 
+            @bom_item.cost = @add_dns.cost
+            @bom_item.dn_id = @add_dns.id
+            @bom_item.product_id = 0
+            @bom_item.color = "b"
+            @bom_item.save
 
 
+            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+            @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)      
+            @total_price_nn = 0.00               
+	    if not @matched_items_nn.blank?
+                @bom_api_all = []
+		@matched_items_nn.each do |item|
+                    if not item.cost.blank?
+                        @total_price_nn += item.cost * item.quantity * @bom.qty.to_i 
+                    end                      
+		end
+            end
+            render "p_updateii.js.erb"    
+        end
+    end
 
+    def p_edit
+        @bom_item = PItem.find(params[:item_id])
+        if not @bom_item.blank?
+            if not params[:info].blank?
+                p_dn = PDn.new(bn_params)
+            else
+                p_dn = PDn.new()
+            end
+            #Rails.logger.info("--------------------------")
+            #Rails.logger.info(p_dn.info.current_path.inspect)
+            #Rails.logger.info("--------------------------")
+            p_dn.item_id = params[:item_id]
+            p_dn.cost = params[:cost]
+            p_dn.dn = params[:dn]
+            p_dn.dn_long = params[:dn_long]
+            p_dn.qty = params[:qty]
+            p_dn.date = Time.new
+            p_dn.remark = params[:remark]
+            p_dn.tag = "a"
+            p_dn.save
+            #Rails.logger.info("--------------------------")
+            #Rails.logger.info(p_dn.info.current_path)
+            #Rails.logger.info("--------------------------")
+        end
+        redirect_to :back
+        #render :nothing => true
 
+    end
 
+    def p_edit_dn
+        
+        dn = PDn.find(params[:dn_id])
+        if not params[:dn_info].blank?
+            dn.update(editbn_params)
+        end
+        
+        if not params[:dn_dn].blank?
+            dn.dn = params[:dn_dn]
+        end
+        if not params[:dnlong].blank?
+            dn.dn_long = params[:dnlong]
+        end
+        if not params[:dn_qty].blank?
+            dn.qty = params[:dn_qty]
+        end
+        if not params[:dn_cost].blank?
+            dn.cost = params[:dn_cost]
+        end
+        
+        if not params[:dn_remark].blank?
+            dn.remark = params[:dn_remark]
+        end
+        dn.save
+        @itemid = params[:dn_itemid]
+        @dnid = params[:dn_id]
+        @view_dns = ""
+        @view_dns += '<td width="25"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:dn_itemid].to_s + '" ></small></a></td>'
+        @view_dns += '<td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'    
+        @view_dns += '<td width="100" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + '</div></a></small></td>'
+        @view_dns += '<td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>'+dn.qty.to_s+'</div></a></small></td>'
+        @view_dns += '<td width="80"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>￥'+dn.cost.to_s+'</div></a></small></td>'
+        if not dn.info.blank?                
+            @view_dns += '<td width="80"><small><a href="'+dn.info.to_s+'">下载</a></small></td>'
+        else
+            @view_dns += '<td width="80"><small></small></td>'
+        end 
+        @view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
+        @view_dns += '<td width="30"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:id].to_s+'"></a></small></td>'
+        redirect_to :back
+        return false
+        #render "p_edit_dn.js.erb"
+    end
 
+    def p_up_userdo
+        @user_do = params[:user_do]
+        @bom_item = PItem.find(params[:id])
+        if not @bom_item.blank?
+            if @bom_item.user_do != params[:user_do]
+                @bom_item.user_do = params[:user_do]
+                @bom_item.user_do_change = "c"
+                @bom_item.save
+            end
+        end
+    end
 
+    def up_check
+        check_user_do = PItem.where(procurement_bom_id: params[:bom_id],user_do: params[:user_do],user_do_change: "c")
+        if not check_user_do.blank?
+            redirect_to :back 
+            return false
+        else
+            check_do = PItem.where(procurement_bom_id: params[:bom_id],user_do: params[:user_do]).update_all "check = 'do'"
+            check_all = PItem.where(procurement_bom_id: params[:bom_id], check: nil)
+            if check_all.blank?
+                ProcurementBom.find(params[:bom_id]).update(check: "do")
+            end
+            redirect_to :back 
+            return false
+        end
+    end
+
+    def del_dn
+        @item_id = params[:item_id]
+        @dn_id = params[:id]
+        @dn = PDn.find(params[:id])
+        if not @dn.blank?
+            @dn.destroy
+        end
+    end
+
+    def p_excel
+        @bom = ProcurementBom.find(params[:bom_id])
+        file_name = @bom.no.to_s+"_out.xls"
+        path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #Rails.logger.info(file_name.inspect)
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		sheet1.row(0).concat %w{No 描述 报价 技术资料}
+                sheet1.column(1).width = 50
+		@bom.p_items.each_with_index do |item,index|
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :weight           => :bold,
+                    #:pattern_bg_color => :red,
+                    :size             => 10,
+                    :color => :red
+                    })
+		    row = sheet1.row(rowNum)
+                    if item.warn
+                        #[0,1,2,3,4,5,6,7].each{|col|
+                        row.set_format(2,title_format)
+                        #row.default_format = color
+                        #}
+                    end
+		    row.push(rowNum)
+		    row.push(item.description)
+		    #row.push(item.quantity)
+                    row.push(item.price)
+                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    Rails.logger.info(item.dn_id.inspect)
+                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    if not item.dn_id.blank?
+                        Rails.logger.info("111111111111111")
+                        Rails.logger.info(request.protocol)
+                        Rails.logger.info(request.host_with_port)
+                        Rails.logger.info(PDn.find(item.dn_id).info_url.inspect)
+                        Rails.logger.info("111111111111111")
+                        if not PDn.find(item.dn_id).info_url.blank?
+                            #row.push(request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url)
+                            row.push(Spreadsheet::Link.new request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url, '技术资料')
+                        else
+                            row.push("")
+                        end
+                    else
+                        row.push("")
+                    end		 
+                end
+
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('UTF-8'), filename: file_name)
+                              
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel")
+                #send_file(path,filename: file_name, type: "application/vnd.ms-excel")    
+    end
+
+    def p_profit
+        bom = ProcurementBom.find(params[:bom_id])
+        
+        t_p = 0
+        t_pp = 0
+        bom.p_items.each do |item|
+            if not item.cost.blank?
+                t_p += item.cost*item.quantity
+                item.price = item.cost*(100+params[:profit].to_i)/100
+                t_pp += item.price*item.quantity
+                item.save
+            end
+        end
+        bom.t_p = t_p*bom.qty
+        bom.profit = params[:profit].to_i
+        bom.t_pp = t_pp*bom.qty
+        bom.save
+        redirect_to :back 
+    end
 
     private
         def find_price(mpn_id,qty)
@@ -451,11 +1203,17 @@ class ProcurementController < ApplicationController
   	    params.require(:bom).permit(:name, :excel_file)
   	end
 
-        def search_bom_use (query_str,mpn)
-            if query_str != ""
-                result = MpnItem.find_by_sql("SELECT bom_items.*, products.* FROM products INNER JOIN bom_items ON bom_items.product_id = products.id WHERE bom_items.description = '" + query_str.to_s.strip + "' ORDER BY products.prefer DESC")
-            elsif query_str == "" and mpn != ""
-                result = MpnItem.find_by_sql("SELECT bom_items.*, mpn_items.* FROM mpn_items INNER JOIN bom_items ON bom_items.mpn = mpn_items.mpn WHERE bom_items.mpn_id IS NOT NULL AND bom_items.mpn = '" + mpn.to_s.strip + "' ")
+        def bn_params
+  	    params.require(:info).permit(:name, :info)
+  	end
+
+        def editbn_params
+  	    params.require(:dn_info).permit(:info)
+  	end
+
+        def search_bom_use (query_str)
+            if not query_str.blank?
+                result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
             end
         end
 

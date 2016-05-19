@@ -51,9 +51,17 @@ Rails.application.routes.draw do
   match '/p_del_bom', to: 'procurement#p_del_bom',via: 'post'
   match '/p_add_bom', to: 'procurement#p_add_bom',via: 'post'
   match '/p_bomlist', to: 'procurement#p_bomlist',via: 'get'
-
-
-
+  match '/search_m', to: 'procurement#search_m',via: 'post'
+  match '/search_m', to: 'procurement#search_m',via: 'get'
+  match '/p_update', to: 'procurement#p_update',via: 'get'
+  match '/p_updateii', to: 'procurement#p_updateii',via: 'get'
+  match '/p_edit', to: 'procurement#p_edit',via: 'post'
+  match '/p_up_userdo', to: 'procurement#p_up_userdo',via: 'get'
+  match '/del_dn', to: 'procurement#del_dn',via: 'get'
+  match '/p_edit_dn', to: 'procurement#p_edit_dn',via: 'post'
+  match '/up_check', to: 'procurement#up_check',via: 'post'
+  match '/p_excel', to: 'procurement#p_excel',via: 'get'
+  match '/p_profit', to: 'procurement#p_profit',via: 'post'
 
   match '/timesheet', to: 'timesheet#index', via: 'post'  
   match '/timesheet', to: 'timesheet#index', via: 'get' 

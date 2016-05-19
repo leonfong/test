@@ -275,7 +275,7 @@ $(document).ready(function() {
 
 
 
-    <%= form_tag('/up_new_bom', method:"POST") do %> 
+    <%= form_tag('/p_new_bom', method:"POST") do %> 
     <div class="row ">
         <div class="col-sm-11 form-group">
                     <label for="p_name" class="col-sm-4 control-label form-inline">Project name:

@@ -106,12 +106,12 @@
                     <td><%= item.mpn %></td>
                     <td id="<%= item.id %>">
                     <% if item.mpn_id.blank? or item.product_id.blank? %>
-                        The query is completed
-                    <% else %>
-                        
                         <div class="card">
                             <span class="spinner-loader">Loading…</span>
                         </div>
+                    <% else %>
+                        The query is completed
+                        
                     <% end %>
                     </td>
                 </tr>

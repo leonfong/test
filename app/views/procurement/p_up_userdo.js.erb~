@@ -1,0 +1,3 @@
+document.getElementById('<%= @bom_item.id.to_s + "_77" %>').className="";
+document.getElementById('<%= @bom_item.id.to_s + "_75" %>').className="";
+document.getElementById('<%= @bom_item.id.to_s + "_7" %>').className="";

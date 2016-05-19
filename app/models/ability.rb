@@ -14,6 +14,11 @@ class Ability
     alias_action :update, :to => :work_e          #业务
     alias_action :update, :to => :work_f          #跟单
     alias_action :update, :to => :work_g          #采购
+    alias_action :update, :to => :work_g_all      #采购主管
+    alias_action :update, :to => :work_g_a        #采购1
+    alias_action :update, :to => :work_g_b        #采购2
+    alias_action :update, :to => :work_g_c        #采购3
+    alias_action :update, :to => :work_g_d        #采购4
     alias_action :update, :to => :work_h          #工时
     alias_action :update, :to => :work_i          #MPN
     alias_action :update, :to => :pcb_review      #PCB_R
@@ -61,6 +66,37 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
+      can :old_bom, :all
+    elsif user.has_role?(:work_seven_all)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_g, :all
+      can :work_g_all, :all
+      can :old_bom, :all
+    elsif user.has_role?(:work_seven_a)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_g, :all
+      can :work_g_a, :all
+      can :old_bom, :all
+    elsif user.has_role?(:work_seven_b)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_g, :all
+      can :work_g_b, :all
+      can :old_bom, :all
+    elsif user.has_role?(:work_seven_c)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_g, :all
+      can :work_g_c, :all
+      can :old_bom, :all
+    elsif user.has_role?(:work_seven_d)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_g, :all
+      can :work_g_d, :all
+      can :old_bom, :all
     elsif user.has_role?(:work_eight)
       #can :manage, :all
       can :work_up, :all

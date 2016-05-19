@@ -1,0 +1,8 @@
+
+document.getElementById("<%= @bom_item.id.to_s + 'cost' %>").innerHTML = <%= @bom_item.cost %>;
+document.getElementById("<%= @bom_item.id.to_s + 'p' %>").innerHTML = <%= @bom_item.price %>;
+document.getElementById("<%= @bom_item.id.to_s + 'dn' %>").innerHTML = <%= @bom_item.dn %>;
+document.getElementById("<%= @bom_item.id.to_s + 'info' %>").innerHTML = <%= @bom_item.info %>;
+document.getElementById("<%= @bom_item.id.to_s + 'remark' %>").innerHTML = <%= @bom_item.remark %>;
+$(function() { $('#exampleModal').modal('hide');});
+

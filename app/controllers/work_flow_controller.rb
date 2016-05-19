@@ -272,7 +272,11 @@ before_filter :authenticate_user!
         elsif can? :work_d, :all
             render "engineering_feedback.html.erb"
         elsif can? :work_e, :all
-            @topic.mark += "lwork_" + current_user.s_name + "l"
+            if current_user.s_name.blank?
+                @topic.mark += "lwork_" + "all" + "l"
+            else
+                @topic.mark += "lwork_" + current_user.s_name + "l"
+            end
             @topic.save
             render "sell_feedback.html.erb"
         elsif can? :work_f, :all

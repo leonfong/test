@@ -1,13 +1,14 @@
 <small>
 <div class="row" style="margin: 0px;padding: 0px;" >
   <h2 ><p class="text-primary" >业务部问题跟踪&反馈</p></h2><hr>
+  <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2851001005&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2851001005:52" alt="hello" title="hello"/></a>
   <%= render 'layouts/flash_messages' %>
 </div>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
 
     <div class="col-md-6 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <%= link_to "查询料齐的订单",  {action: "index", empty_date: "ready"},class: "btn btn-warning btn-sm" %> 
-        <%= link_to "未回复的问题("+current_user.s_name.to_s+")",  {action: "index"},class: "btn btn-danger btn-sm" %> 
+        <%= link_to "未关闭的问题("+current_user.s_name.to_s+")",  {action: "index"},class: "btn btn-danger btn-sm" %> 
         <%= link_to "查询异常的订单",  {action: "index", empty_date: "danger"},class: "btn btn-danger btn-sm" %>
     </div>
 

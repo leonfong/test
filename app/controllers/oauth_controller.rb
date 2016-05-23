@@ -13,17 +13,17 @@ before_filter :authenticate_user!
             url += params[:state]
             url += '&redirect_uri=http://www.fastbom.com/oauth/callback'    
         end  
-        #Rails.logger.info(mpn.inspect)
-
+        
         resp = Net::HTTP.get_response(URI(url))
         server_response = JSON(resp.body)
-          
-
+        Rails.logger.info("-----------------------------------------------")  
+        Rails.logger.info(server_response.inspect)
+        Rails.logger.info("-----------------------------------------------")
         oauth = Oauth.new
-        oauth.company_id = resp['data']['company_id']
-        oauth.company_token = resp['data']['company_token']
-        oauth.expires_in = resp['data']['expires_in']
-        oauth.refresh_token = resp['data']['refresh_token']
+        oauth.company_id = server_response['data']['company_id']
+        oauth.company_token = server_response['data']['company_token']
+        oauth.expires_in = server_response['data']['expires_in']
+        oauth.refresh_token = server_response['data']['refresh_token']
         oauth.save
 
         @ret = "{'ret':0}"

@@ -19,10 +19,11 @@ before_filter :authenticate_user!
         Rails.logger.info("-----------------------------------------------11")  
         Rails.logger.info(server_response.inspect)
         Rails.logger.info("-----------------------------------------------22")
+
         oauth = Oauth.new
         oauth.company_id = server_response['data']['company_id']
         oauth.company_token = server_response['data']['company_token']
-        oauth.expires_in = server_response['data']['expires_in']
+        oauth.expires_in = server_response['data']['expires_in'].to_i
         oauth.refresh_token = server_response['data']['refresh_token']
         oauth.save
 

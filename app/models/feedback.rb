@@ -19,15 +19,15 @@ class Feedback < ActiveRecord::Base
                 url += '&oauth_version=2'
                 url += '&to_all=0'  
                 url += '&receivers='+open_id
-                url += '&window_title=MOKO-issue management'
-                url += '&tips_title=There is a new reply to you!'
-                url += '&tips_content=Click to view' 
+                url += '&window_title=Fastbom-PCB AND PCBA'
+                url += '&tips_title='+URI.encode('亲爱的'+User.find_by(email: (Topic.find_by(self.topic_id).user_name)).full_name)
+                url += '&tips_content='+URI.encode('你有新的回复，点击查看。')
                 url += '&tips_url=www.fastbom.com/feedback?id='+self.topic_id.to_s 
                 resp = Net::HTTP.get_response(URI(url))
                 
             end 
             Rails.logger.info("1111111111111111111111111111111111111111111111111")
-            Rails.logger.info(server_response = JSON(resp.body)  .inspect)
+            Rails.logger.info(server_response = JSON(resp.body).inspect)
             Rails.logger.info("111111111111111111111111111111111111111111111111")
             
         end	

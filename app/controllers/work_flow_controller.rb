@@ -570,10 +570,10 @@ before_filter :authenticate_user!
                 if not params[:warehouse_quantity].blank?
                     work_up.warehouse_quantity = params[:warehouse_quantity].strip
                 end
-                if not params[:smd].blank?
+                if  params[:smd]
                     work_up.smd = params[:smd].strip
                 end
-                if not params[:dip].blank?
+                if  params[:dip]
                     work_up.dip = params[:dip].strip
                 end
                 if not params[:smd_start_date].blank?
@@ -904,10 +904,10 @@ before_filter :authenticate_user!
                     if not params[:warehouse_quantity].blank?
                         work_history.warehouse_quantity = params[:warehouse_quantity].strip
                     end
-                    if  params[:smd]
+                    if not params[:smd].blank?
                         work_history.smd = params[:smd].strip
                     end
-                    if  params[:dip]
+                    if not params[:dip].blank?
                         work_history.dip = params[:dip].strip
                     end
                     if not params[:smd_start_date].blank?

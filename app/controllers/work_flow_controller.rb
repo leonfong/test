@@ -176,13 +176,14 @@ before_filter :authenticate_user!
                     where_o_a = " WHERE POSITION('" + s_name + "' IN a.order_no) = 8 "
                 elsif current_user.s_name.size > 2
                     where_o_a = " WHERE "
+                    where_o = "("
                     current_user.s_name.split(",").each_with_index do |item,index|
                         s_name = item
                         if current_user.s_name.split(",").size > (index+1)
                             where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8 OR "
                             where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 OR"
                         else
-                            where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8 AND"
+                            where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8) AND"
                             where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 "
                         end
                     end

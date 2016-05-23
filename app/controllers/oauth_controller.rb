@@ -22,12 +22,14 @@ class OauthController < ApplicationController
         Rails.logger.info("-----------------------------------------------22")
 
         if not server_response['data'].blank?
-            oauth = Oauth.new
-            oauth.company_id = server_response['data']['company_id']
-            oauth.company_token = server_response['data']['company_token']
-            oauth.expires_in = server_response['data']['expires_in'].to_i
-            oauth.refresh_token = server_response['data']['refresh_token']
-            oauth.save
+            if not Oauth.find_by_sql("SELECT * FROM oauth").blank?
+                oauth = Oauth.new
+                oauth.company_id = server_response['data']['company_id']
+                oauth.company_token = server_response['data']['company_token']
+                oauth.expires_in = server_response['data']['expires_in'].to_i
+                oauth.refresh_token = server_response['data']['refresh_token']
+                oauth.save
+            end
         end
         @ret = '{"ret":0}'
         render json: @ret

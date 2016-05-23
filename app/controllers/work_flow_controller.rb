@@ -904,10 +904,10 @@ before_filter :authenticate_user!
                     if not params[:warehouse_quantity].blank?
                         work_history.warehouse_quantity = params[:warehouse_quantity].strip
                     end
-                    if not params[:smd].blank?
+                    if  params[:smd]
                         work_history.smd = params[:smd].strip
                     end
-                    if not params[:dip].blank?
+                    if  params[:dip]
                         work_history.dip = params[:dip].strip
                     end
                     if not params[:smd_start_date].blank?

@@ -1,5 +1,4 @@
 class OauthController < ApplicationController
-before_filter :authenticate_user!
     def callback
 
         url = 'https://openapi.b.qq.com/oauth2/companyToken?'

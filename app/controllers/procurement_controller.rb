@@ -2,6 +2,7 @@ require 'roo'
 require 'spreadsheet'
 require 'will_paginate/array'
 class ProcurementController < ApplicationController
+skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
     def p_create_bom
         Rails.logger.info("-------------------------")

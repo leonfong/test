@@ -18,12 +18,17 @@ class Feedback < ActiveRecord::Base
                 url += '&client_ip=192.168.1.102'
                 url += '&oauth_version=2'
                 url += '&to_all=0'  
-                url += '&receivers=7e9b053ee6edd2bc3562f7a5e087f60f'
-                url += '&window_title=MOKO问题处理系统提醒您！'
-                url += '&tips_title=您有一条新的回复！'
-                url += '&tips_content=点击查看。' 
+                url += '&receivers='+open_id
+                url += '&window_title=MOKO-issue management'
+                url += '&tips_title=There is a new reply to you!'
+                url += '&tips_content=Click to view' 
                 url += '&tips_url=www.fastbom.com/feedback?id='+self.topic_id.to_s 
                 resp = Net::HTTP.get_response(URI(url))
-            end   
+                
+            end 
+            Rails.logger.info("1111111111111111111111111111111111111111111111111")
+            Rails.logger.info(server_response = JSON(resp.body)  .inspect)
+            Rails.logger.info("111111111111111111111111111111111111111111111111")
+            
         end	
 end

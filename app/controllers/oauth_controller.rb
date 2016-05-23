@@ -6,8 +6,8 @@ before_filter :authenticate_user!
         if not params[:code].blank?
             url += 'grant_type=authorization_code&'
             url += 'app_id=200710667&'
-            url += 'app_secret=9DBKbtctgDAZMjfR&'
-            url += 'code='
+            url += 'app_secret=9DBKbtctgDAZMjfR'
+            url += '&code='
             url += params[:code]
             url += '&state='
             url += params[:state]
@@ -16,9 +16,9 @@ before_filter :authenticate_user!
         
         resp = Net::HTTP.get_response(URI(url))
         server_response = JSON(resp.body)
-        Rails.logger.info("-----------------------------------------------")  
+        Rails.logger.info("-----------------------------------------------11")  
         Rails.logger.info(server_response.inspect)
-        Rails.logger.info("-----------------------------------------------")
+        Rails.logger.info("-----------------------------------------------22")
         oauth = Oauth.new
         oauth.company_id = server_response['data']['company_id']
         oauth.company_token = server_response['data']['company_token']
@@ -26,7 +26,7 @@ before_filter :authenticate_user!
         oauth.refresh_token = server_response['data']['refresh_token']
         oauth.save
 
-        @ret = "{'ret':0}"
+        @ret = '{"ret":0}'
         render json: @ret
     end
 end

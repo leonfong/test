@@ -9,13 +9,14 @@ before_filter :authenticate_user!
             url += 'app_secret=9DBKbtctgDAZMjfR&'
             url += 'code='
             url += params[:code]
-            url += '&state=test&'
-            url += 'redirect_uri=http://www.fastbom.com/oauth/callback'    
+            url += '&state='
+            url += params[:state]
+            url += '&redirect_uri=http://www.fastbom.com/oauth/callback'    
         end  
         #Rails.logger.info(mpn.inspect)
 
         resp = Net::HTTP.get_response(URI(url))
-        server_response = JSON(resp.body)  
+        server_response = JSON(resp.body)
           
 
         oauth = Oauth.new

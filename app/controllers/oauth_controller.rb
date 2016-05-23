@@ -17,17 +17,21 @@ before_filter :authenticate_user!
         resp = Net::HTTP.get_response(URI(url))
         server_response = JSON(resp.body)
         Rails.logger.info("-----------------------------------------------11")  
-        Rails.logger.info(server_response.inspect)
+        Rails.logger.info(server_response['ret'].inspect)
+        Rails.logger.info(server_response['msg'].inspect)
+        Rails.logger.info(server_response['data'].inspect)
         Rails.logger.info("-----------------------------------------------22")
 
-        oauth = Oauth.new
-        oauth.company_id = server_response['data']['company_id']
-        oauth.company_token = server_response['data']['company_token']
-        oauth.expires_in = server_response['data']['expires_in'].to_i
-        oauth.refresh_token = server_response['data']['refresh_token']
-        oauth.save
-
+        if not server_response['data'].blank?
+            oauth = Oauth.new
+            oauth.company_id = server_response['data']['company_id']
+            oauth.company_token = server_response['data']['company_token']
+            oauth.expires_in = server_response['data']['expires_in'].to_i
+            oauth.refresh_token = server_response['data']['refresh_token']
+            oauth.save
+        end
         @ret = '{"ret":0}'
         render json: @ret
+        return false
     end
 end

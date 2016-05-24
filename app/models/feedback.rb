@@ -15,7 +15,7 @@ class Feedback < ActiveRecord::Base
                 url += '?company_id='+company_id
                 url += '&company_token='+company_token
                 url += '&app_id=200710667'
-                url += '&client_ip=192.168.1.102'
+                url += '&client_ip=120.25.151.208'
                 url += '&oauth_version=2'
                 url += '&to_all=0'  
                 url += '&receivers='+open_id
@@ -28,6 +28,8 @@ class Feedback < ActiveRecord::Base
             end 
             Rails.logger.info("1111111111111111111111111111111111111111111111111")
             Rails.logger.info(server_response = JSON(resp.body).inspect)
+            Rails.logger.info(open_id)
+            Rails.logger.info(User.find_by(email: (Topic.find_by(self.topic_id).user_name)).full_name)
             Rails.logger.info("111111111111111111111111111111111111111111111111")
             
         end	

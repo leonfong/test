@@ -718,6 +718,115 @@ before_filter :authenticate_user!
                     end
                     topic_up.user_name = current_user.email                     #发帖的人
                     topic_up.save
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '6'")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('生产部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '7'")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('工程部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '9'")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('跟单部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND (users_roles.role_id = '10' OR users_roles.role_id = '16' OR users_roles.role_id = '17' OR users_roles.role_id = '18')")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('采购部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
+
                 elsif params[:feedback_up] 
                     topic_up = Topic.find(params[:feedback_up])
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
@@ -770,6 +879,121 @@ before_filter :authenticate_user!
                     end
                     topic_up.mark = ""
                     topic_up.save
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '6'")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('生产部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '7'")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('工程部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '9'")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('跟单部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
+                    if topic_up.feedback_receive =~ /production/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND (users_roles.role_id = '10' OR users_roles.role_id = '16' OR users_roles.role_id = '17' OR users_roles.role_id = '18')")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('采购部的亲们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end                    
+
+
+
+
+
+
+
                     if not params[:production_feedback].blank? and params[:send_up] != "mark" 
                         feedback_up = Feedback.new 
                         feedback_up.send_to = params[:send_up].join(",")   

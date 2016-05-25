@@ -1079,6 +1079,7 @@ WHERE
                 all_title = @bom.all_title.split("|",-1)
                 all_title << "MOKO物料名称"
                 all_title << "MOKO物料描述"
+                all_title << "成本价"
                 all_title << "报价"
                 sheet1.row(0).concat all_title
                 #sheet1.column(1).width = 50
@@ -1120,6 +1121,7 @@ WHERE
                         row.push("")
                         row.push("")
                     end
+                    row.push(item.cost)
                     row.push(item.price)
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     Rails.logger.info(item.all_info.inspect)

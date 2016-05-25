@@ -11,7 +11,7 @@ class Feedback < ActiveRecord::Base
             company_id = oauth.company_id
             company_token = oauth.company_token
             url = 'https://openapi.b.qq.com/api/tips/send'
-            if not open_id.blank?
+            if not open_id.blank? or open_id != ""
                 url += '?company_id='+company_id
                 url += '&company_token='+company_token
                 url += '&app_id=200710667'

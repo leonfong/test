@@ -47,17 +47,30 @@ before_filter :authenticate_user!
                 @xls_file = Roo::Excelx.new(params[:bom_path])
             end
             @sheet = @xls_file.sheet(0)
+            row_n = 0
+            row_use = 1
+            @sheet.each do |row_i|
+                row_n += 1
+                #Rails.logger.info("quantityCol------------------------------------------------------------quantityCol")
+                #Rails.logger.info(row_i[params[:quantityCol].strip.to_i].inspect)
+                #Rails.logger.info("quantityCol------------------------------------------------------------quantityCol")
+                if row_i[params[:quantityCol].strip.to_i].is_a?(Numeric)
+                    row_use = row_n - 1
+                    break
+                end
+            end
             all_item = []
-            @sheet.row(1).each do |item|
+            @sheet.row(row_use).each do |item|
                 if not item.blank?
                     all_item << '"'+item+'":'+'"'+item+'"'
                 end
             end
-            all_title = @sheet.row(1).join("|")
+            all_title = @sheet.row(row_use).join("|")
             @bom.all_title = all_title  
             @bom.save
             all_item = "{"+all_item.join(",")+"}"
             Rails.logger.info("------------------------------------------------------------qq1")
+            Rails.logger.info(row_use.inspect)
             Rails.logger.info(all_item.inspect)
             Rails.logger.info("------------------------------------------------------------qq2")
             #@parse_result = @sheet.parse(:Qty => "Qty",clean:true)
@@ -65,28 +78,33 @@ before_filter :authenticate_user!
 	    #remove first row 
 	    @parse_result.shift
             #render "select_column.html.erb" 
-            #return false  
-            all_use = @sheet.row(1)[params[:partCol].to_i].split("")+@sheet.row(1)[params[:quantityCol].to_i].split("")+@sheet.row(1)[params[:refdesCol].to_i].split("")
+            #return false 
+            Rails.logger.info("------------------------------------------------------------qq1")
+            Rails.logger.info(@sheet.row(row_use)[params[:partCol].to_i].split("").inspect)
+            Rails.logger.info(@sheet.row(row_use)[params[:quantityCol].to_i].split("").inspect)
+            Rails.logger.info(@sheet.row(row_use)[params[:refdesCol].to_i].split("").inspect)
+            Rails.logger.info("------------------------------------------------------------qq2") 
+            all_use = @sheet.row(row_use)[params[:partCol].to_i].split("")+@sheet.row(row_use)[params[:quantityCol].to_i].split("")+@sheet.row(row_use)[params[:refdesCol].to_i].split("")
             #params[:select_part].each do |use|
-	    @parse_result.select! {|item| !item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].blank? } #选择非空行
+	    @parse_result.select! {|item| !item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank? } #选择非空行
             #end
             Rails.logger.info("------------------------------------------------------------qq1")
             Rails.logger.info(all_item.inspect)
             Rails.logger.info("------------------------------------------------------------qq2")
             Rails.logger.info(@parse_result.inspect)
-            Rails.logger.info(@sheet.row(1)[params[:partCol].to_i].inspect)
+            Rails.logger.info(@sheet.row(row_use)[params[:partCol].to_i].inspect)
             Rails.logger.info("------------------------------------------------------------qq3")
             #行号
             row_num = 0
            # all_m_bom = []
             #one_m_bom = []
             #other_all = @sheet.row(1)-@sheet.row(1)[params[:partCol].to_i].split("")-@sheet.row(1)[params[:quantityCol].to_i].split("")-@sheet.row(1)[params[:refdesCol].to_i].split("")
-            other_all = @sheet.row(1)
-            other_all.delete(@sheet.row(1)[params[:partCol].to_i])
-            other_all.delete(@sheet.row(1)[params[:quantityCol].to_i])
-            other_all.delete(@sheet.row(1)[params[:refdesCol].to_i])
+            other_all = @sheet.row(row_use)
+            other_all.delete(@sheet.row(row_use)[params[:partCol].to_i])
+            other_all.delete(@sheet.row(row_use)[params[:quantityCol].to_i])
+            other_all.delete(@sheet.row(row_use)[params[:refdesCol].to_i])
             params[:desCol].strip.split(" ").sort!.each do |des|
-                other_all.delete(@sheet.row(1)[des.to_i])
+                other_all.delete(@sheet.row(row_use)[des.to_i])
             end
             Rails.logger.info("------------------------------------------------------------aaaa")
             Rails.logger.info(other_all.inspect)
@@ -94,41 +112,41 @@ before_filter :authenticate_user!
             Rails.logger.info("------------------------------------------------------------aaaa")
 	    @parse_result.each do |item| #处理每一行的数据 
                 mpna = ""
-                if item["#{@sheet.row(1)[params[:partCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].blank?
                     mpna += ""
                 else
-                    mpna += item["#{@sheet.row(1)[params[:partCol].to_i]}"].to_s + " " 
+                    mpna += item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].to_s + " " 
                 end
                 qtya = ""
-                if item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank?
                     qtya += ""
                 else
-                    qtya += item["#{@sheet.row(1)[params[:quantityCol].to_i]}"].to_s + " "             
+                    qtya += item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].to_s + " "             
                 end
                 refa = ""
-                if item["#{@sheet.row(1)[params[:refdesCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].blank?
                     refa += ""
                 else
-                    refa += item["#{@sheet.row(1)[params[:refdesCol].to_i]}"].to_s + " "
+                    refa += item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].to_s + " "
                 end
                 fengzhuang = ""
-                if item["#{@sheet.row(1)[params[:packageCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:packageCol].to_i]}"].blank?
                     fengzhuang += ""
                 else
-                    fengzhuang += item["#{@sheet.row(1)[params[:packageCol].to_i]}"].to_s + " "
+                    fengzhuang += item["#{@sheet.row(row_use)[params[:packageCol].to_i]}"].to_s + " "
                 end
                 link = ""
-                if item["#{@sheet.row(1)[params[:linkCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:linkCol].to_i]}"].blank?
                     link += ""
                 else
-                    link += item["#{@sheet.row(1)[params[:linkCol].to_i]}"].to_s + " "
+                    link += item["#{@sheet.row(row_use)[params[:linkCol].to_i]}"].to_s + " "
                 end
                 desa = ""
                 params[:desCol].strip.split(" ").sort!.each do |des|                    
-                    if item["#{@sheet.row(1)[des.to_i]}"].blank?
+                    if item["#{@sheet.row(row_use)[des.to_i]}"].blank?
                         desa += ""
                     else
-                        desa += item["#{@sheet.row(1)[des.to_i]}"].to_s + " "
+                        desa += item["#{@sheet.row(row_use)[des.to_i]}"].to_s + " "
                     end
                 end
                 othera = ""
@@ -139,7 +157,7 @@ before_filter :authenticate_user!
                         othera += item["#{other}"].to_s + " "
                     end
                 end
-                all_info_n = @sheet.row(1)
+                all_info_n = @sheet.row(row_use)
 	        all_info = ""
                 all_info_n.each do |info|                    
                     #if item["#{info}"].blank?
@@ -1043,7 +1061,7 @@ WHERE
             redirect_to :back 
             return false
         else
-            check_do = PItem.where(procurement_bom_id: params[:bom_id],user_do: params[:user_do]).update_all "check = 'do'"
+            check_do = PItem.where(procurement_bom_id: params[:bom_id],user_do: params[:user_do]).update_all(check: "do")
             check_all = PItem.where(procurement_bom_id: params[:bom_id], check: nil)
             if check_all.blank?
                 ProcurementBom.find(params[:bom_id]).update(check: "do")

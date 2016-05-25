@@ -66,7 +66,7 @@ Rails.application.routes.draw do
   match '/p_excel', to: 'procurement#p_excel',via: 'get'
   match '/p_profit', to: 'procurement#p_profit',via: 'post'
   match '/del_cost', to: 'procurement#del_cost',via: 'get'
-
+  match '/up_check', to: 'procurement#up_check',via: 'get'
 
   match '/timesheet', to: 'timesheet#index', via: 'post'  
   match '/timesheet', to: 'timesheet#index', via: 'get' 

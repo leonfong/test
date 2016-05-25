@@ -21,7 +21,7 @@ $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
 <% PDn.where(item_id: @bom_item.id).each do |ppp| %>
     document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="";
 <% end %>
-document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info"
+document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info";
 document.getElementById('<%= @bom_item.id.to_s + "_" + @add_dns.id.to_s %>').className="bg-info";
 
 

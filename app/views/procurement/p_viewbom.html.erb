@@ -126,7 +126,12 @@
                     <td style="padding: 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
 
                     
-                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a></small></td>
+                    <td style="padding: 0px;margin: 0px;">
+                        <small>
+                            <a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_cost?id=<%=item.id.to_s%>"></a>
+                            <a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a>
+                        </small>
+                    </td>
                     <% if item.cost%>
                     <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
                     <% else %>

@@ -53,7 +53,7 @@ before_filter :authenticate_user!
                     all_item << '"'+item+'":'+'"'+item+'"'
                 end
             end
-            all_title = @sheet.row(1).join("||")
+            all_title = @sheet.row(1).join("|")
             @bom.all_title = all_title  
             @bom.save
             all_item = "{"+all_item.join(",")+"}"
@@ -145,7 +145,7 @@ before_filter :authenticate_user!
                     #if item["#{info}"].blank?
                         #all_info += ""
                     #else
-                        all_info += item["#{info}"].to_s + "||"
+                        all_info += item["#{info}"].to_s + "|"
                     #end
                 end
 		Rails.logger.info("------------------------------------------------------------des")
@@ -176,7 +176,7 @@ before_filter :authenticate_user!
                     bom_item.fengzhuang = fengzhuang
                     bom_item.link = link
                     bom_item.other = othera
-                    bom_item.all_info = all_info
+                    bom_item.all_info = all_info.chop
                     bom_item.user_id = current_user.id
                     bom_item.save
                 #end
@@ -1076,7 +1076,9 @@ WHERE
 		sheet1 = ff.create_worksheet
 
 		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
-                all_title = @bom.all_title.split("||")
+                all_title = @bom.all_title.split("|",-1)
+                all_title << "MOKO物料名称"
+                all_title << "MOKO物料描述"
                 all_title << "报价"
                 sheet1.row(0).concat all_title
                 #sheet1.column(1).width = 50
@@ -1093,6 +1095,11 @@ WHERE
                     })
 		    row = sheet1.row(rowNum)
                     row.set_format(2,title_format)
+                    set_f = 0  
+                    while set_f < all_title.size do         
+                        row.set_format(set_f,title_format)
+                        set_f += 1
+                    end
                     #if item.warn
                         #[0,1,2,3,4,5,6,7].each{|col|
                         #row.set_format(2,title_format)
@@ -1100,15 +1107,23 @@ WHERE
                         #}
                     #end
                     
-                    item.all_info.split("||").each do |info|
+                    item.all_info.split("|",-1).each do |info|
                         row.push(info)
                     end
 		    #row.push(rowNum)
 		    #row.push(item.description)
 		    #row.push(item.quantity)
+                    if item.product_id > 0
+                        row.push(Product.find(item.product_id).name)
+                        row.push(Product.find(item.product_id).description)
+                    else
+                        row.push("")
+                        row.push("")
+                    end
                     row.push(item.price)
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                    Rails.logger.info(item.dn_id.inspect)
+                    Rails.logger.info(item.all_info.inspect)
+                    Rails.logger.info(item.all_info.split("|",-1).inspect)
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     if not item.dn_id.blank?
                         Rails.logger.info("111111111111111")
@@ -1154,6 +1169,32 @@ WHERE
         bom.t_pp = t_pp*bom.qty
         bom.save
         redirect_to :back 
+    end
+
+    def del_cost
+        @p_item = PItem.find(params[:id])
+        Rails.logger.info("--------------------------")
+        Rails.logger.info(@p_item.id.inspect)
+        Rails.logger.info("--------------------------")
+        if not @p_item.blank?
+            @p_item.product_id = 0
+            @p_item.cost = nil 
+            @p_item.price = nil
+            @p_item.color = nil
+            @p_item.save
+        end 
+        @bom = ProcurementBom.find(@p_item.procurement_bom_id)
+        @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+        @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)      
+        @total_price_nn = 0.00               
+	if not @matched_items_nn.blank?
+            @bom_api_all = []
+	    @matched_items_nn.each do |item|
+                if not item.cost.blank?
+                    @total_price_nn += item.cost * item.quantity * @bom.qty.to_i 
+                end                      
+	    end
+        end
     end
 
     private

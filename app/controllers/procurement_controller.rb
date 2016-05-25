@@ -1,3 +1,4 @@
+#encoding: UTF-8
 require 'roo'
 require 'spreadsheet'
 require 'will_paginate/array'
@@ -25,7 +26,7 @@ before_filter :authenticate_user!
             @bom.p_name = params[:p_name]
             @bom.qty = params[:qty]
             @bom.d_day = params[:day]  
-            @bom.save    
+            #@bom.save    
             Rails.logger.info("------------------------------------------------------------1")
             Rails.logger.info(params[:bom_id].inspect)
             Rails.logger.info(params[:noselect].inspect)
@@ -52,6 +53,9 @@ before_filter :authenticate_user!
                     all_item << '"'+item+'":'+'"'+item+'"'
                 end
             end
+            all_title = @sheet.row(1).join("||")
+            @bom.all_title = all_title  
+            @bom.save
             all_item = "{"+all_item.join(",")+"}"
             Rails.logger.info("------------------------------------------------------------qq1")
             Rails.logger.info(all_item.inspect)
@@ -135,7 +139,15 @@ before_filter :authenticate_user!
                         othera += item["#{other}"].to_s + " "
                     end
                 end
-	        
+                all_info_n = @sheet.row(1)
+	        all_info = ""
+                all_info_n.each do |info|                    
+                    #if item["#{info}"].blank?
+                        #all_info += ""
+                    #else
+                        all_info += item["#{info}"].to_s + "||"
+                    #end
+                end
 		Rails.logger.info("------------------------------------------------------------des")
                 Rails.logger.info(mpna.inspect)
                 Rails.logger.info(qtya.inspect)
@@ -164,6 +176,7 @@ before_filter :authenticate_user!
                     bom_item.fengzhuang = fengzhuang
                     bom_item.link = link
                     bom_item.other = othera
+                    bom_item.all_info = all_info
                     bom_item.user_id = current_user.id
                     bom_item.save
                 #end
@@ -1062,25 +1075,36 @@ WHERE
 
 		sheet1 = ff.create_worksheet
 
-		sheet1.row(0).concat %w{No 描述 报价 技术资料}
-                sheet1.column(1).width = 50
+		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
+                all_title = @bom.all_title.split("||")
+                all_title << "报价"
+                sheet1.row(0).concat all_title
+                #sheet1.column(1).width = 50
+                set_color = 0  
+                while set_color < all_title.size do         
+                    sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
+                    sheet1.column(set_color).width = 20
+                    set_color += 1
+                end
 		@bom.p_items.each_with_index do |item,index|
 		    rowNum = index+1
                     title_format = Spreadsheet::Format.new({
-                    :weight           => :bold,
-                    #:pattern_bg_color => :red,
-                    :size             => 10,
-                    :color => :red
+                    :text_wrap => 1
                     })
 		    row = sheet1.row(rowNum)
-                    if item.warn
+                    row.set_format(2,title_format)
+                    #if item.warn
                         #[0,1,2,3,4,5,6,7].each{|col|
-                        row.set_format(2,title_format)
+                        #row.set_format(2,title_format)
                         #row.default_format = color
                         #}
+                    #end
+                    
+                    item.all_info.split("||").each do |info|
+                        row.push(info)
                     end
-		    row.push(rowNum)
-		    row.push(item.description)
+		    #row.push(rowNum)
+		    #row.push(item.description)
 		    #row.push(item.quantity)
                     row.push(item.price)
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
@@ -1133,6 +1157,12 @@ WHERE
     end
 
     private
+        class ColorFormat < Spreadsheet::Format
+            def initialize(gb_color, font_color)
+                super :pattern => 1, :pattern_fg_color => gb_color,:color => font_color, :text_wrap => 1
+            end
+        end
+
         def find_price(mpn_id,qty)
             mpn_info = InfoPart.find(mpn_id)
             @mpn_item = JSON.parse(mpn_info.info)    
@@ -1447,12 +1477,15 @@ WHERE
             #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
   	    #ary_q.join(" ")
             #判断是否电容
+            if query_str =~ /[Μµμ]/
+                query_str.gsub!(/[Μµμ]/, "u")
+            end
             if query_str.include?".0uF"
                 query_str[".0uF"]="uF"
             elsif query_str.include?"0.1uF"
                 query_str["0.1uF"]="100nF"
             elsif query_str.include?"0.1UF"
-                query_str["0.1UF"]="100nF"
+                query_str["0.1UF"]="100nF" 
             end
             if query_str.include?"Y5V"    
                 query_str["Y5V"]=""
@@ -1466,14 +1499,14 @@ WHERE
             #end
             #获取容值
             ary_q = []
-            value2_test = query_str.to_s.scan(/[0-9]*[uUnNpPmM][0-9]/)            
+            value2_test = query_str.to_s.scan(/[0-9]*[uUnNpPmMμ][0-9]/)            
             value2_use = "nothing"
             if value2_test != []
-                value2_use = value2_test[0].to_s.sub(/[uUnNpPmM]/, ".") + value2_test[0].to_s.scan(/[uUnNpPmM]/)[0]
+                value2_use = value2_test[0].to_s.sub(/[uUnNpPmMμ]/, ".") + value2_test[0].to_s.scan(/[uUnNpPmMμ]/)[0]
             else
-                value2_all = ary_all.join(" ").to_s.split(" ").grep(/[uUnNpPmM]/)                 
+                value2_all = ary_all.join(" ").to_s.split(" ").grep(/[uUnNpPmMμ]/)                 
                 if value2_all != []
-                    value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[uUnNpPmM]+[F]?/.match(value2_all.join(" ").to_s)
+                    value2 = /[+-]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][+-]?[0-9]+)?[uUnNpPmMμ]+[F]?/.match(value2_all.join(" ").to_s)
                     if value2.blank?
                         value2_use = "nothing"
                     else
@@ -1608,20 +1641,20 @@ WHERE
   	end
 
         def get_query_str_new(query_str,part_code)
-            Rails.logger.info("0000000000000000000000000000000000000bbbbb")
-            Rails.logger.info(query_str)
-            Rails.logger.info(part_code)
-            Rails.logger.info("0000000000000000000000000000000000000bbbbb")
-            part = Part.find_by(part_code: part_code)
             
+            part = Part.find_by(part_code: part_code)
+            query_str = query_str.to_s
             #if  ( part_code[0] =~ /[Cc]/ )
             if  ( part and part.part_name == "CAP" )
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
                 Rails.logger.info("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
-                if query_str =~ /[Μμ]/
-                    query_str.gsub!(/[Μμ]/, "u")
+                if query_str =~ /[Μµμ]/
+                    query_str.gsub!(/[Μµμ]/, "u")
                 end
+                Rails.logger.info("--------------------------------------------------------------11")
+                Rails.logger.info(query_str)
+                Rails.logger.info("---------------------------------------------------------------11")
                 if query_str.include?".0uF"
                     query_str[".0uF"]="uF"
                 elsif query_str.include?"0.1uF"
@@ -1630,10 +1663,15 @@ WHERE
                     query_str["0.1UF"]="100nF"
                 elsif query_str.include?"μ"
                     query_str["μ"]="u"
+                elsif query_str.include?"µ"
+                    query_str["µ"]="u"
                 end
                 if query_str.include?"Y5V"    
                     query_str["Y5V"]=""
                 end 
+                Rails.logger.info("--------------------------------------------------------------22")
+                Rails.logger.info(query_str)
+                Rails.logger.info("---------------------------------------------------------------22")
                 #ary_all = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 ary_all = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 Rails.logger.info("____________________________________________0000000000000000000000000000000000000bbbbb")

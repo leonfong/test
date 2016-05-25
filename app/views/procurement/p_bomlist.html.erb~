@@ -55,8 +55,9 @@
         <td><%= bom.qty %></td>
 <!--
         <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
--->
+
         <td><div class="btn-group"><%= link_to "PLACE ORDER",  viewbom_path(bom_id: bom.id), class:"btn btn-danger" %></div></td>
+-->
       </tr>
     <% end %>
   </tbody>

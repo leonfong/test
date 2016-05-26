@@ -118,9 +118,9 @@
                                 <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><%= item.mpn %></small></td>
                             </tr>
                             <tr>
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>"></a></small></td>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description %>"></a></small></td>
                             
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>" target="_blank"></a></small></td>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= Digikey.find_by(manufacturer_part_number: @mpninfo).image %>"></a></small></td>
                                             
                                 <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).datasheets %>" target="_blank"></a></small></td>
                             </tr>
@@ -481,6 +481,28 @@ $('#editModal').on('show.bs.modal', function (event) {
 <script>$(function () 
       { $("[data-toggle='popover']").popover();
       });
+</script>
+<script>$(function () 
+      { $("[data-toggle='popoverii']").popover({
+       html: true,
+       trigger: 'hover',
+       content: function () {
+         return '<img src="'+$(this).attr('data_src') + '" />';
+       }
+      });
+      
+      });
+</script>
+<script>             
+$(function() {
+ $('.imgzm').popover({
+  html: true,
+  trigger: 'hover',
+  content: function () {
+    return '<img src="'+$(this).attr('src') + '" width="500" height="500" />';
+  }
+ });
+})
 </script>
 <script>
 var localObjectData = [{ id: 1, name: 'beijing' }, { id: 2, name: 'shanghai' }, { id: 3, name: 'guangzhou' }, { id: 4, name: 'sz' }];

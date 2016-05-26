@@ -501,6 +501,7 @@ before_filter :authenticate_user!
     end
 
     def p_viewbom 
+         @mpninfo = "SP1007-01WTG"
         #@mpninfo = Digikey.find(1)   
         #Rails.logger.info("--------------------------")
         #Rails.logger.info(@mpninfo.inspect)

@@ -984,7 +984,11 @@ WHERE
             p_dn.item_id = params[:item_id]
             p_dn.cost = params[:cost]
             p_dn.dn = params[:dn]
-            p_dn.dn_long = params[:dn_long]
+            if params[:dn_long] == ""
+                p_dn.dn_long = AllDn.find_by(dn: params[:dn].strip).dn_long
+            else
+                p_dn.dn_long = params[:dn_long]
+            end
             p_dn.qty = params[:qty]
             p_dn.date = Time.new
             p_dn.remark = params[:remark]

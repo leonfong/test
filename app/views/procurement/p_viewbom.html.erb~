@@ -118,11 +118,24 @@
                                 <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><%= item.mpn %></small></td>
                             </tr>
                             <tr>
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description %>"></a></small></td>
+                                <% if Digikey.find_by(manufacturer_part_number: item.mpn).blank? %>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" ></a></small></td>
                             
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= Digikey.find_by(manufacturer_part_number: @mpninfo).image %>"></a></small></td>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src=""></a></small></td>
+                                            
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href=""  target="_blank"></a></small></td>
+                                <% else %>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description %>"></a></small></td>
+                            
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>"></a></small></td>
                                             
                                 <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).datasheets %>" target="_blank"></a></small></td>
+                                <% end %>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" <% if Digikey.find_by(manufacturer_part_number: item.mpn).blank? %> data-content="NO DATA" <% else %> data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description %>" <% end %>></a></small></td>
+                            
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>"></a></small></td>
+                                            
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" <% if Digikey.find_by(manufacturer_part_number: item.mpn).blank? %> href="" <% else %> href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).datasheets %>" <% end %> target="_blank"></a></small></td>
                             </tr>
                         </table>
 
@@ -493,17 +506,7 @@ $('#editModal').on('show.bs.modal', function (event) {
       
       });
 </script>
-<script>             
-$(function() {
- $('.imgzm').popover({
-  html: true,
-  trigger: 'hover',
-  content: function () {
-    return '<img src="'+$(this).attr('src') + '" width="500" height="500" />';
-  }
- });
-})
-</script>
+
 <script>
 var localObjectData = [{ id: 1, name: 'beijing' }, { id: 2, name: 'shanghai' }, { id: 3, name: 'guangzhou' }, { id: 4, name: 'sz' }];
 var objMap = {};

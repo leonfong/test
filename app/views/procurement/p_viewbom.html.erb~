@@ -109,7 +109,25 @@
 
 
                     </small></td>
+<!--
                     <td style="padding: 0px;margin: 0px;"><small><%= item.mpn %></small></td>
+-->
+                    <td style="padding: 0px;margin: 0px;"><small>
+                        <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
+                            <tr>
+                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><%= item.mpn %></small></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>"></a></small></td>
+                            
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>" target="_blank"></a></small></td>
+                                            
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).datasheets %>" target="_blank"></a></small></td>
+                            </tr>
+                        </table>
+
+
+                    </small></td>                    
                     <td style="padding: 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  ><small><%= item.description %></small></td> 
                     <% if item.product_id !=0 %>
                         <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a></small></td>
@@ -126,7 +144,12 @@
                     <td style="padding: 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
 
                     
-                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a></small></td>
+                    <td style="padding: 0px;margin: 0px;">
+                        <small>
+                            <a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_cost?id=<%=item.id.to_s%>"></a>
+                            <a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a>
+                        </small>
+                    </td>
                     <% if item.cost%>
                     <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
                     <% else %>

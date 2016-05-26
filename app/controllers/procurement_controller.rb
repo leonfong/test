@@ -500,7 +500,11 @@ before_filter :authenticate_user!
         end      
     end
 
-    def p_viewbom       
+    def p_viewbom 
+        #@mpninfo = Digikey.find(1)   
+        #Rails.logger.info("--------------------------")
+        #Rails.logger.info(@mpninfo.inspect)
+        #Rails.logger.info("--------------------------")  
         @all_dn = "[&quot;"
         all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
         all_s_dn.each do |dn|
@@ -1143,8 +1147,8 @@ WHERE
                         row.push("")
                         row.push("")
                     end
-                    row.push(item.cost)
-                    row.push(item.price)
+                    row.push("￥#{item.cost}")
+                    row.push("￥#{item.price}")
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     Rails.logger.info(item.all_info.inspect)
                     Rails.logger.info(item.all_info.split("|",-1).inspect)

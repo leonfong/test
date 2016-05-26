@@ -131,11 +131,7 @@
                                             
                                 <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).datasheets %>" target="_blank"></a></small></td>
                                 <% end %>
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" <% if Digikey.find_by(manufacturer_part_number: item.mpn).blank? %> data-content="NO DATA" <% else %> data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description %>" <% end %>></a></small></td>
-                            
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>"></a></small></td>
-                                            
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" <% if Digikey.find_by(manufacturer_part_number: item.mpn).blank? %> href="" <% else %> href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).datasheets %>" <% end %> target="_blank"></a></small></td>
+                                
                             </tr>
                         </table>
 

@@ -43,6 +43,7 @@
                            <td><strong><%= t(:bom_file) %>：</strong><%= @boms.excel_file_identifier %></td> 
 -->
                            <td>
+                               <% if can? :work_g_all, :all%>
                                <%= form_tag({action: :p_profit},method:"post",class:"form-inline") do %>
                                    <div class="form-group">
                                        <label for="profit">利润：</label>
@@ -50,6 +51,7 @@
                                    </div>
                                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
                                   <button type="submit" class="btn btn-warning">提交</button>
+                               <% end %>
                                <% end %> 
                            </td> 
                            <td><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td> 

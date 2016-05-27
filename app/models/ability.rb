@@ -7,8 +7,8 @@ class Ability
     #
     #user ||= User.new # guest user (not logged in)
     alias_action :update, :to => :work_up
-    alias_action :update, :to => :work_a          #吴莎
-    alias_action :update, :to => :work_b          #交期
+    alias_action :update, :to => :work_a          #吴莎4
+    alias_action :update, :to => :work_b          #交期5
     alias_action :update, :to => :work_c          #生产6
     alias_action :update, :to => :work_d          #工程7
     alias_action :update, :to => :work_e          #业务8

@@ -555,7 +555,7 @@ before_filter :authenticate_user!
 
 
     def p_bomlist
-        @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `check` DESC ").paginate(:page => params[:page], :per_page => 10)
+        @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL ORDER BY `check` DESC ").paginate(:page => params[:page], :per_page => 10)
     end
 
     def search_m

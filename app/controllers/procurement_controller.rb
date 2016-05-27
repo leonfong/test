@@ -1236,6 +1236,60 @@ WHERE
         end
     end
 
+    def p_edit_mpn
+        item = PItem.find(params[:itemp_id])
+        @p_item = item
+        item.mpn = params[:item_mpn].strip
+        use_mpn = Product.find_by_sql("SELECT * FROM products WHERE products.mpn LIKE '%#{item.mpn.strip}%'")
+        if not use_mpn.blank?
+            item.product_id = use_mpn.id
+            
+            part_code = Product.find(item.product_id).name
+            all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+            if all_dns.blank?
+                all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
+            end
+            if not all_dns.blank?
+                add_dns = PDn.new
+                add_dns.item_id = @item.id
+                add_dns.date = all_dns.date
+                add_dns.part_code = all_dns.part_code
+                add_dns.dn = all_dns.dn
+                add_dns.dn_long = all_dns.dn_long
+                add_dns.cost = all_dns.price
+                add_dns.qty = all_dns.qty
+                add_dns.color = "g"
+                add_dns.save
+                item.cost = add_dns.cost
+                item.color = "g"
+                item.dn_id = add_dns.id
+                item.save
+            else
+                item.save
+            end
+        else
+            item.product_id = 0
+            item.cost = nil
+            item.price = nil
+            item.color = nil
+            item.dn_id = nil
+            item.save
+        end
+        @bom = ProcurementBom.find(item.procurement_bom_id)
+        @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+        @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)      
+        @total_price_nn = 0.00               
+	if not @matched_items_nn.blank?
+            @bom_api_all = []
+	    @matched_items_nn.each do |item|
+                if not item.cost.blank?
+                    @total_price_nn += item.cost * item.quantity * @bom.qty.to_i 
+                end                      
+	    end
+        end
+        #redirect_to :back
+    end
+
     private
         class ColorFormat < Spreadsheet::Format
             def initialize(gb_color, font_color)

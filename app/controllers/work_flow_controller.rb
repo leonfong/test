@@ -719,7 +719,7 @@ before_filter :authenticate_user!
                     topic_up.user_name = current_user.email                     #发帖的人
                     topic_up.save
                     if topic_up.feedback_receive =~ /production/
-                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '6'")
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id > 4 AND users_roles.role_id < 7")
                         open_id = ""
                         all_open_id.each do |item|
                             if not item.open_id.blank?

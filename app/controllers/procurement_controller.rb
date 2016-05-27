@@ -1108,6 +1108,7 @@ WHERE
                 all_title << "MOKO物料描述"
                 all_title << "成本价"
                 all_title << "报价"
+                all_title << "备注"
                 sheet1.row(0).concat all_title
                 #sheet1.column(1).width = 50
                 set_color = 0  
@@ -1150,6 +1151,15 @@ WHERE
                     end
                     row.push("￥#{item.cost}")
                     row.push("￥#{item.price}")
+                    if item.dn_id.blank?
+                        row.push("")
+                    else
+                        if PDn.find(item.dn_id).remark.blank?
+                            row.push("")
+                        else
+                            row.push(PDn.find(item.dn_id).remark)
+                        end
+                    end
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     Rails.logger.info(item.all_info.inspect)
                     Rails.logger.info(item.all_info.split("|",-1).inspect)

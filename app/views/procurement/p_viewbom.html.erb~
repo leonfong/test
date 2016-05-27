@@ -421,7 +421,7 @@
         <h4 class="modal-title" id="editModalLabel">Update MPN</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_mpn},method:"post",remote: true,) do %>
+        <%= form_tag({action: :p_edit_mpn},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">

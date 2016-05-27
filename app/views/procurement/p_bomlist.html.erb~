@@ -40,15 +40,22 @@
       <th>QTY</th>
 <!--
       <th>BOM File</th>
--->
+
       <th>Action</th>
+-->
     </tr>
   </thead>
   <tbody>
     <% @itemall = "" %>
     <% @boms.each do |bom| %>
     <% @itemall = @itemall + " " + bom.excel_file_identifier %>
-      <tr <% if not bom.check.blank? %>class="bg-info"<% end %>>
+      <% if can? :work_g_all, :all %>
+          <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil).blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+      <% elsif can? :work_g_a, :all %>
+          <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil,user_do: "77").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+      <% elsif can? :work_g_b, :all %>
+          <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil,user_do: "75").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+      <% end %>
         <td><%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %></td>
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= bom.p_name %></td>

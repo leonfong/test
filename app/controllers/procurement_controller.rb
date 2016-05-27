@@ -823,6 +823,7 @@ before_filter :authenticate_user!
                     @bom_item.mpn_id = nil
                     #@bom_item.mpn = nil
                     @bom_item.color = "b"
+                    @bom_item.user_do_change = nil
 	            @bom_item.save!
   
    
@@ -914,6 +915,7 @@ WHERE
                     @bom_item.mpn_id = nil
                     #@bom_item.mpn = nil
                     @bom_item.color = "b"
+                    @bom_item.user_do_change = nil
 	            @bom_item.save!
   
    
@@ -956,6 +958,7 @@ WHERE
             @bom_item.dn_id = @add_dns.id
             @bom_item.product_id = 0
             @bom_item.color = "b"
+            @bom_item.user_do_change = nil
             @bom_item.save
 
 
@@ -1059,9 +1062,29 @@ WHERE
             if @bom_item.user_do != params[:user_do]
                 @bom_item.user_do = params[:user_do]
                 @bom_item.user_do_change = "c"
+                @bom_item.color = nil
                 @bom_item.save
+                open_id = User.find(params[:user_do]).open_id
+                oauth = Oauth.find(1)
+                company_id = oauth.company_id
+                company_token = oauth.company_token
+                url = 'https://openapi.b.qq.com/api/tips/send'
+                if not open_id.blank? or open_id != ""
+                    url += '?company_id='+company_id
+                    url += '&company_token='+company_token
+                    url += '&app_id=200710667'
+                    url += '&client_ip=120.25.151.208'
+                    url += '&oauth_version=2'
+                    url += '&to_all=0'  
+                    url += '&receivers='+open_id
+                    url += '&window_title=Fastbom-PCB AND PCBA'
+                    url += '&tips_title='+URI.encode('亲爱的'+User.find_by(email: (Topic.find(self.topic_id).user_name)).full_name)
+                    url += '&tips_content='+URI.encode('你有新的任务，点击查看。')
+                    url += '&tips_url=www.fastbom.com/p_viewbom?bom_id='+@bom_item.procurement_bom_id.to_s 
+                    resp = Net::HTTP.get_response(URI(url))
+                end 
             end
-        end
+        end  
     end
 
     def up_check
@@ -1071,11 +1094,13 @@ WHERE
             return false
         else
             check_do = PItem.where(procurement_bom_id: params[:bom_id],user_do: params[:user_do]).update_all(check: "do")
-            check_all = PItem.where(procurement_bom_id: params[:bom_id], check: nil)
-            if check_all.blank?
-                ProcurementBom.find(params[:bom_id]).update(check: "do")
+            if can? :work_g_all, :all
+                check_all = PItem.where(procurement_bom_id: params[:bom_id], check: nil)
+                if check_all.blank?
+                    ProcurementBom.find(params[:bom_id]).update(check: "do")
+                end
             end
-            redirect_to :back 
+            redirect_to :p_bomlist 
             return false
         end
     end

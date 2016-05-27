@@ -281,7 +281,7 @@ before_filter :authenticate_user!
         @topic.feedback_receive.split(',').each do |rece|
             @receive += " " + t(:"#{rece}")
         end
-        if can? :work_c, :all
+        if can? :work_c, :all or can? :work_a, :all
             render "production_feedback.html.erb"
         elsif can? :work_d, :all
             render "engineering_feedback.html.erb"

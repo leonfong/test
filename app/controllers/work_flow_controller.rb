@@ -727,6 +727,9 @@ before_filter :authenticate_user!
                                 open_id += item.open_id + ","
                             end
                         end
+                        Rails.logger.info("oauth-------------------------")
+                        Rails.logger.info(open_id.inspect)   
+                        Rails.logger.info("oauth----------------------------------")
                         oauth = Oauth.find(1)
                         company_id = oauth.company_id
                         company_token = oauth.company_token

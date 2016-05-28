@@ -738,7 +738,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('生产部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
@@ -765,7 +765,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('工程部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
@@ -792,7 +792,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('跟单部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
@@ -819,7 +819,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('采购部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
@@ -899,7 +899,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('生产部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
@@ -926,7 +926,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('工程部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
@@ -953,7 +953,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('跟单部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
@@ -980,7 +980,7 @@ before_filter :authenticate_user!
                             url += '&client_ip=120.25.151.208'
                             url += '&oauth_version=2'
                             url += '&to_all=0'  
-                            url += '&receivers='+open_id
+                            url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
                             url += '&tips_title='+URI.encode('采购部的亲们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')

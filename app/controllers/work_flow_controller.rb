@@ -910,7 +910,7 @@ before_filter :authenticate_user!
                             resp = Net::HTTP.get_response(URI(url))
                         end 
                     end
-                    if topic_up.feedback_receive =~ /production/
+                    if topic_up.feedback_receive =~ /engineering/
                         all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '7'")
                         open_id = ""
                         all_open_id.each do |item|
@@ -937,7 +937,7 @@ before_filter :authenticate_user!
                             resp = Net::HTTP.get_response(URI(url))
                         end 
                     end
-                    if topic_up.feedback_receive =~ /production/
+                    if topic_up.feedback_receive =~ /merchandiser/
                         all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '9'")
                         open_id = ""
                         all_open_id.each do |item|
@@ -964,7 +964,7 @@ before_filter :authenticate_user!
                             resp = Net::HTTP.get_response(URI(url))
                         end 
                     end
-                    if topic_up.feedback_receive =~ /production/
+                    if topic_up.feedback_receive =~ /procurement/
                         all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND (users_roles.role_id = '10' OR users_roles.role_id = '16' OR users_roles.role_id = '17' OR users_roles.role_id = '18')")
                         open_id = ""
                         all_open_id.each do |item|

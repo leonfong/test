@@ -1078,7 +1078,7 @@ WHERE
                     url += '&to_all=0'  
                     url += '&receivers='+open_id
                     url += '&window_title=Fastbom-PCB AND PCBA'
-                    url += '&tips_title='+URI.encode('亲爱的'+User.find_by(email: (Topic.find(self.topic_id).user_name)).full_name)
+                    url += '&tips_title='+URI.encode('亲爱的'+User.find(params[:user_do]).full_name)
                     url += '&tips_content='+URI.encode('你有新的任务，点击查看。')
                     url += '&tips_url=www.fastbom.com/p_viewbom?bom_id='+@bom_item.procurement_bom_id.to_s 
                     resp = Net::HTTP.get_response(URI(url))

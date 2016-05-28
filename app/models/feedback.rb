@@ -11,7 +11,7 @@ class Feedback < ActiveRecord::Base
             company_id = oauth.company_id
             company_token = oauth.company_token
             url = 'https://openapi.b.qq.com/api/tips/send'
-            if not open_id.blank? or open_id != ""
+            if not open_id.blank? 
                 url += '?company_id='+company_id
                 url += '&company_token='+company_token
                 url += '&app_id=200710667'
@@ -26,11 +26,11 @@ class Feedback < ActiveRecord::Base
                 resp = Net::HTTP.get_response(URI(url))
                 
             end 
-            Rails.logger.info("1111111111111111111111111111111111111111111111111")
-            Rails.logger.info(server_response = JSON(resp.body).inspect)
-            Rails.logger.info(open_id)
-            Rails.logger.info(User.find_by(email: (Topic.find_by(self.topic_id).user_name)).full_name)
-            Rails.logger.info("111111111111111111111111111111111111111111111111")
+            #Rails.logger.info("1111111111111111111111111111111111111111111111111")
+            #Rails.logger.info(server_response = JSON(resp.body).inspect)
+            #Rails.logger.info(open_id)
+            #Rails.logger.info(User.find_by(email: (Topic.find_by(self.topic_id).user_name)).full_name)
+            #Rails.logger.info("111111111111111111111111111111111111111111111111")
             
         end	
 end

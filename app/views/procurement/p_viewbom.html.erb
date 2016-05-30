@@ -5,7 +5,11 @@
 
   
     <div class="row" style="padding: 0px;">
-        <h1><strong>Components Quote</strong></h1>
+        <% if can? :work_g_all, :all%>
+        <h1><strong>权限-采购主管</strong></h1>
+        <% else %>
+        <h1><strong>权限-采购工程师</strong></h1>
+        <% end %>
 <!--
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>

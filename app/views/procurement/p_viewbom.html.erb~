@@ -2,7 +2,7 @@
 
 
 
-<% if not @bom_item.blank? %>
+
   
     <div class="row" style="padding: 0px;">
         <h1><strong>Components Quote</strong></h1>
@@ -60,6 +60,7 @@
                     </table>    
                 </div>
             </div>
+<% if not @bom_item.blank? %>
             <div class="row">
                 <div class="col-md-12">
             <small>

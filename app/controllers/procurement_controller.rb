@@ -26,7 +26,10 @@ before_filter :authenticate_user!
             @bom.p_name = params[:p_name]
             @bom.qty = params[:qty]
             @bom.d_day = params[:day]  
-            #@bom.save    
+            #@bom.save   
+            Rails.logger.info("------------------------------------------------------------0")
+            Rails.logger.info(params[:partCol].inspect)
+            Rails.logger.info("------------------------------------------------------------0") 
             Rails.logger.info("------------------------------------------------------------1")
             Rails.logger.info(params[:bom_id].inspect)
             Rails.logger.info(params[:noselect].inspect)
@@ -61,8 +64,10 @@ before_filter :authenticate_user!
             end
             all_item = []
             @sheet.row(row_use).each do |item|
-                if not item.blank?
-                    all_item << '"'+item+'":'+'"'+item+'"'
+                if not item =~ /\n/
+                    if not item.blank? 
+                        all_item << '"'+item+'":'+'"'+item+'"'
+                    end
                 end
             end
             all_title = @sheet.row(row_use).join("|")
@@ -71,6 +76,7 @@ before_filter :authenticate_user!
             all_item = "{"+all_item.join(",")+"}"
             Rails.logger.info("------------------------------------------------------------qq1")
             Rails.logger.info(row_use.inspect)
+            Rails.logger.info("------------------------------------------------------------qq000")
             Rails.logger.info(all_item.inspect)
             Rails.logger.info("------------------------------------------------------------qq2")
             #@parse_result = @sheet.parse(:Qty => "Qty",clean:true)
@@ -112,31 +118,31 @@ before_filter :authenticate_user!
             Rails.logger.info("------------------------------------------------------------aaaa")
 	    @parse_result.each do |item| #处理每一行的数据 
                 mpna = ""
-                if item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].blank? or params[:partCol].blank?
                     mpna += ""
                 else
                     mpna += item["#{@sheet.row(row_use)[params[:partCol].to_i]}"].to_s + " " 
                 end
                 qtya = ""
-                if item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank? or params[:quantityCol].blank?
                     qtya += ""
                 else
                     qtya += item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].to_s + " "             
                 end
                 refa = ""
-                if item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].blank? or params[:refdesCol].blank?
                     refa += ""
                 else
                     refa += item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].to_s + " "
                 end
                 fengzhuang = ""
-                if item["#{@sheet.row(row_use)[params[:packageCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:packageCol].to_i]}"].blank? or params[:packageCol].blank?
                     fengzhuang += ""
                 else
                     fengzhuang += item["#{@sheet.row(row_use)[params[:packageCol].to_i]}"].to_s + " "
                 end
                 link = ""
-                if item["#{@sheet.row(row_use)[params[:linkCol].to_i]}"].blank?
+                if item["#{@sheet.row(row_use)[params[:linkCol].to_i]}"].blank? or params[:linkCol].blank?
                     link += ""
                 else
                     link += item["#{@sheet.row(row_use)[params[:linkCol].to_i]}"].to_s + " "

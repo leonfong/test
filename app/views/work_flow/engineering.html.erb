@@ -8,10 +8,30 @@
         <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
     </div>
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
-       <div class="col-md-6 form-group  nav navbar-nav navbar-right">
+       <div class="col-md-9 form-group  nav navbar-nav navbar-right">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm"> 
-            <span class="input-group-addon"> 
+                <div class="input-group-addon " >开始 : </div>
+                <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                    <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                </script>
+                <div class="input-group-addon " >结束 : </div>
+                <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                    <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                </script>
+            <div class="input-group-addon"> 
                 <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
                 <%=  '全部' %>
                 <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
@@ -19,11 +39,12 @@
                 <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
                 <%=  '未结单' %>
                 <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
-            </span> 
+            </div> 
+            
             <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%"%>     
+                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"30"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%"%>
+                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"30"%>
             <% end %>               
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>

@@ -107,14 +107,26 @@ before_filter :authenticate_user!
             
             render "production.html.erb"
         elsif can? :work_d, :all
+#工程部      
+            start_date = ""
+            if params[:start_date] != ""
+                start_date = " AND topics.created_at > '#{params[:start_date]}'"
+            end
+            end_date = ""
+            if params[:end_date] != ""
+                end_date = " AND topics.created_at < '#{params[:end_date]}'"
+            end
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
+                @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
-            
+            Rails.logger.info("--------------------------------------")
+            Rails.logger.info("SELECT * FROM `work_flows` WHERE " + where_def + add_where)
+            Rails.logger.info("--------------------------------------")
             render "engineering.html.erb"
             #if params[:order]  
                 #add_where = ""          

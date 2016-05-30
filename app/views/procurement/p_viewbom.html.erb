@@ -64,7 +64,7 @@
                     </table>    
                 </div>
             </div>
-<% if not @bom_item.blank? %>
+
             <div class="row">
                 <div class="col-md-12">
             <small>
@@ -101,7 +101,7 @@
 
                 </tr>
                 </thead>
-                
+<% if not @bom_item.blank? %>                
                 <% @bom_item.each_with_index do |item,index| %> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %> >
                     <td style="padding: 0px;margin: 0px;"><small>
@@ -263,7 +263,7 @@
             <div class="row">
                 <div class="col-md-12">
             <table class="table table-striped table-bordered">
-                <tr>
+                <tr>               
                     <td><strong><%= "The total part" %>：</strong><a class="text-muted" id="matched"><%= @bom_item.size %></a></td>
                     <td><strong><%= "The total cost" %>：</strong><a class="text-muted" id="total_price">￥<%= @boms.t_p %></a></td>
                     <td><strong><%= "The total price" %>：</strong><a class="text-muted" >￥<%= @boms.t_pp %></a></td>
@@ -271,7 +271,7 @@
             </table>
                 </div>
             </div>
-            
+            <% end %>
             <div class="row" style="padding-bottom: 20px;">
                 <div class="col-md-12">
             <script>
@@ -311,7 +311,7 @@
     </div>
 
 
-<% end %>
+
 
 
 

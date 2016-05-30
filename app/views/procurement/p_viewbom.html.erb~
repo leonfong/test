@@ -5,7 +5,11 @@
 
   
     <div class="row" style="padding: 0px;">
-        <h1><strong>Components Quote</strong></h1>
+        <% if can? :work_g_all, :all%>
+        <h1><strong>权限-采购主管</strong></h1>
+        <% else %>
+        <h1><strong>权限-采购工程师</strong></h1>
+        <% end %>
 <!--
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>
@@ -60,7 +64,7 @@
                     </table>    
                 </div>
             </div>
-<% if not @bom_item.blank? %>
+
             <div class="row">
                 <div class="col-md-12">
             <small>
@@ -97,7 +101,7 @@
 
                 </tr>
                 </thead>
-                
+<% if not @bom_item.blank? %>                
                 <% @bom_item.each_with_index do |item,index| %> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %> >
                     <td style="padding: 0px;margin: 0px;"><small>
@@ -236,7 +240,7 @@
                                     <%= text_field_tag :id, params[:id], class:"sr-only", size:2 , value: item.id.to_s %>
                                     <%= submit_tag t(:search), class:"btn btn-primary" %>
                                 </div>
-                                <% end %>
+                                <% end %><% end %>
 <div class="row">
   <div class="col-md-12" id="<%= item.id.to_s + 'lab' %>">
   </div>
@@ -307,7 +311,7 @@
     </div>
 
 
-<% end %>
+
 
 
 

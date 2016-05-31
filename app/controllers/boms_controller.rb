@@ -618,8 +618,10 @@ WHERE
             #Rails.logger.info("row_use------------------------------------------------------------row_use")
             all_item = []
             @sheet.row(row_use).each do |item|
-                if not item.blank?
-                    all_item << '"'+item+'":'+'"'+item+'"'
+                if not item =~ /\n/
+                    if not item.blank?
+                        all_item << '"'+item+'":'+'"'+item+'"'
+                    end
                 end
             end
             all_item = "{"+all_item.join(",")+"}"
@@ -1548,7 +1550,7 @@ WHERE
                     #begin
                         #Rails.logger.info("------------------------1")
                         #Rails.logger.info(url.inspect)
-                       # resp = Net::HTTP.get_response(URI.parse(url))
+                        #resp = Net::HTTP.get_response(URI.parse(url))
                         #resp = Net::HTTP.get(URI(url))
                         #resp = Net::HTTP.get_response(url)
                         #puts res.body if res.is_a?(Net::HTTPSuccess)

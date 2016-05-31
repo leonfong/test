@@ -1536,7 +1536,7 @@ WHERE
         if params[:bom_id]
             @bom_item = BomItem.where(bom_id: params[:bom_id])
             @bom_item.each do |item|
-                if item.mpn_id.blank? 
+                if item.mpn_id.blank? and item.price.blank?
                     mpn = item.mpn.strip
                     #mpn = "LT4356IS-1%23PBF"
                     #url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part=' + mpn
@@ -1563,11 +1563,6 @@ WHERE
                         #sleep 5
                         #retry
                     #end
-
-
-
-
-
 =begin
                     url = URI('http://api.findchips.com/v1/search')
                     params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
@@ -1581,32 +1576,33 @@ WHERE
                         sleep 5
                         retry
                     end   
-
-=end
-
-                    url = URI('http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='+CGI::escape(mpn))
-                    begin
-                        Rails.logger.info("url--------------------------------------------------------------------------11")
-                        Rails.logger.info(url.inspect)
-                        resp = Net::HTTP.get(url)
-                        #Rails.logger.info(resp.inspect)
-                        server_response = JSON.parse(resp)
-                        #Rails.logger.info(server_response.inspect)
-                    rescue
-                        retry
+=end                 
+                    mpn_data = Digikey.find_by(manufacturer_part_number: item.mpn)
+                    if mpn_data.blank?
+                        url = URI('http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='+CGI::escape(mpn))
+                        begin
+                            Rails.logger.info("url--------------------------------------------------------------------------11")
+                            Rails.logger.info(url.inspect)
+                            resp = Net::HTTP.get(url)
+                            #Rails.logger.info(resp.inspect)
+                            server_response = JSON.parse(resp)
+                            #Rails.logger.info(server_response.inspect)
+                        rescue
+                            retry
+                        end
+                        info_mpn = InfoPart.new
+                        info_mpn.mpn = mpn
+                        #info_mpn.info = resp.body
+                        info_mpn.info = resp
+                        info_mpn.save
+                        item.mpn_id = info_mpn.id
+                        item.save
+                    else
+                        item.price = mpn_data.unit_price_usd_50
+                        item.mf = mpn_data.manufacturer
+                        item.dn = mpn_data.from_site
+                        item.save
                     end
-
-
-
-
-   
-                    info_mpn = InfoPart.new
-                    info_mpn.mpn = mpn
-                    #info_mpn.info = resp.body
-                    info_mpn.info = resp
-                    info_mpn.save
-                    item.mpn_id = info_mpn.id
-                    item.save
                     @item = item
                     render "search_part.js.erb" and return
                 end                          
@@ -1616,15 +1612,19 @@ WHERE
                 @total_p = 0   
                 all_c = 0           
                 @bom_item.each do |bomitem|
-                    api_info = find_price(bomitem.mpn_id,@bom.qty)
-                    if not api_info.blank?  
-                       bomitem.price = api_info[0]
-                       bomitem.mf = api_info[1]
-                       bomitem.dn = api_info[2]
-                       bomitem.save
-                       if not bomitem.price.blank?
-                           @total_p += bomitem.price*bomitem.quantity
-                       end
+                    if bomitem.price.blank?
+                        api_info = find_price(bomitem.mpn_id,@bom.qty)
+                        if not api_info.blank?  
+                           bomitem.price = api_info[0]
+                           bomitem.mf = api_info[1]
+                           bomitem.dn = api_info[2]
+                           bomitem.save
+                           if not bomitem.price.blank?
+                               @total_p += bomitem.price*bomitem.quantity
+                           end
+                        end
+                    else
+                        @total_p += bomitem.price*bomitem.quantity
                     end
                     all_c += bomitem.quantity
                 end
@@ -1948,37 +1948,46 @@ WHERE
             #rescue
                 #retry
             #end
-            url = URI('http://api.findchips.com/v1/search')
-            params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
-            url.query = URI.encode_www_form(params)
-            begin
-                #Rails.logger.info("------------------------1")
-                #Rails.logger.info(url.inspect)
-                resp = Net::HTTP.get_response(url)
-                #resp = Net::HTTP.get_response(url)
-                #puts res.body if res.is_a?(Net::HTTPSuccess)
-                #Rails.logger.info("------------------------2")
-                #Rails.logger.info(resp.inspect)
-                #Rails.logger.info("-------------------------url")
-                server_response = JSON.parse(resp.body) 
-            rescue
-                #sleep 5
-                retry
-            end   
-            #server_response = JSON.parse(resp.body)    
-            info_mpn = InfoPart.new
-            info_mpn.mpn = mpn
-            info_mpn.info = resp.body
-            info_mpn.save
-            bom_item.mpn_id = info_mpn.id
-            bom_item.mpn = params[:value]
-            api_info = find_price(bom_item.mpn_id,@bom.qty)
-            if not api_info.blank?  
-               bom_item.price = api_info[0]
-               bom_item.mf = api_info[1]
-               bom_item.dn = api_info[2]
+
+            mpn_data = Digikey.find_by(manufacturer_part_number: mpn)
+            if mpn_data.blank?
+                url = URI('http://api.findchips.com/v1/search')
+                params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
+                url.query = URI.encode_www_form(params)
+                begin
+                    #Rails.logger.info("------------------------1")
+                    #Rails.logger.info(url.inspect)
+                    resp = Net::HTTP.get_response(url)
+                    #resp = Net::HTTP.get_response(url)
+                    #puts res.body if res.is_a?(Net::HTTPSuccess)
+                    #Rails.logger.info("------------------------2")
+                    #Rails.logger.info(resp.inspect)
+                    #Rails.logger.info("-------------------------url")
+                    server_response = JSON.parse(resp.body) 
+                rescue
+                    #sleep 5
+                    retry
+                end   
+                #server_response = JSON.parse(resp.body)    
+                info_mpn = InfoPart.new
+                info_mpn.mpn = mpn
+                info_mpn.info = resp.body
+                info_mpn.save
+                bom_item.mpn_id = info_mpn.id
+                bom_item.mpn = params[:value]
+                api_info = find_price(bom_item.mpn_id,@bom.qty)
+                if not api_info.blank?  
+                   bom_item.price = api_info[0]
+                   bom_item.mf = api_info[1]
+                   bom_item.dn = api_info[2]
+                end
+                bom_item.save
+            else
+                bom_item.price = mpn_data.unit_price_usd_50
+                bom_item.mf = mpn_data.manufacturer
+                bom_item.dn = mpn_data.from_site
+                bom_item.save 
             end
-            bom_item.save
         end                          
         @bom_item = BomItem.where(bom_id: bom_item.bom_id)
         if not @bom.qty.blank?
@@ -2059,50 +2068,68 @@ WHERE
     def add_bom
         bom_item = BomItem.new
         bom_id = params[:bom_id]
+        qty = params[:qty]
+        part_code = params[:code]
         @bom = Bom.find(params[:bom_id])
         if not params[:part].blank? 
             mpn = params[:part].strip
             #url = 'http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='
             #url += CGI::escape(mpn)
             #begin
-                resp = Net::HTTP.get_response(URI.parse(url))
+                #resp = Net::HTTP.get_response(URI.parse(url))
             #rescue
                 #retry
             #end
-            url = URI('http://api.findchips.com/v1/search')
-            params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
-            url.query = URI.encode_www_form(params)
-            begin
-                #Rails.logger.info("------------------------1")
-                #Rails.logger.info(url.inspect)
-                resp = Net::HTTP.get_response(url)
-                #resp = Net::HTTP.get_response(url)
-                #puts res.body if res.is_a?(Net::HTTPSuccess)
-                #Rails.logger.info("------------------------2")
-                #Rails.logger.info(resp.inspect)
-                #Rails.logger.info("-------------------------url")
-                server_response = JSON.parse(resp.body) 
-            rescue
-                #sleep 5
-                retry
-            end      
-            info_mpn = InfoPart.new
-            info_mpn.mpn = mpn
-            info_mpn.info = resp.body
-            info_mpn.save
-            bom_item.mpn_id = info_mpn.id
-            bom_item.mpn = params[:part]
-            bom_item.quantity = params[:qty]
-            bom_item.part_code = params[:code]
-            bom_item.bom_id = params[:bom_id]
-            bom_item.user_id = current_user.id
-            api_info = find_price(bom_item.mpn_id,@bom.qty)
-            if not api_info.blank?  
-               bom_item.price = api_info[0]
-               bom_item.mf = api_info[1]
-               bom_item.dn = api_info[2]
+            mpn_data = Digikey.find_by(manufacturer_part_number: mpn)
+            if mpn_data.blank?
+                url = URI('http://api.findchips.com/v1/search')
+                params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
+                url.query = URI.encode_www_form(params)
+                begin
+                    #Rails.logger.info("------------------------1")
+                    #Rails.logger.info(url.inspect)
+                    resp = Net::HTTP.get_response(url)
+                    #resp = Net::HTTP.get_response(url)
+                    #puts res.body if res.is_a?(Net::HTTPSuccess)
+                    #Rails.logger.info("------------------------2")
+                    #Rails.logger.info(resp.inspect)
+                    #Rails.logger.info("-------------------------url")
+                    server_response = JSON.parse(resp.body) 
+                rescue
+                    #sleep 5
+                    retry
+                end      
+                info_mpn = InfoPart.new
+                info_mpn.mpn = mpn
+                info_mpn.info = resp.body
+                info_mpn.save
+                bom_item.mpn_id = info_mpn.id
+                bom_item.mpn = params[:part]
+                bom_item.quantity = params[:qty]
+                bom_item.part_code = params[:code]
+                bom_item.bom_id = params[:bom_id]
+                bom_item.user_id = current_user.id
+                api_info = find_price(bom_item.mpn_id,@bom.qty)
+                if not api_info.blank?  
+                   bom_item.price = api_info[0]
+                   bom_item.mf = api_info[1]
+                   bom_item.dn = api_info[2]
+                end
+                bom_item.save
+            else
+                Rails.logger.info("------------------------1111111")
+                Rails.logger.info(mpn.inspect)
+                Rails.logger.info("-------------------------1111111")
+                bom_item.mpn = mpn
+                bom_item.quantity = qty
+                bom_item.part_code = part_code
+                bom_item.bom_id = bom_id
+                bom_item.user_id = current_user.id
+                bom_item.price = mpn_data.unit_price_usd_50
+                bom_item.mf = mpn_data.manufacturer
+                bom_item.dn = mpn_data.from_site
+                bom_item.save 
             end
-            bom_item.save
         end                          
         @bom_item = BomItem.where(bom_id: bom_item.bom_id)
         if not @bom.qty.blank?

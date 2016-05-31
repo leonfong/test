@@ -1173,7 +1173,7 @@ WHERE
 		    #row.push(rowNum)
 		    #row.push(item.description)
 		    #row.push(item.quantity)
-                    if item.product_id > 0
+                    if item.product_id != 0 and item.product_id != nil
                         row.push(Product.find(item.product_id).name)
                         row.push(Product.find(item.product_id).description)
                     else

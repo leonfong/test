@@ -313,9 +313,9 @@ $(document).ready(function() {
             <%= text_field_tag :bom_file, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file_identifier %> 
 
             <%= text_field_tag :partCol, @bom.id.to_s, class:"sr-only", size:2 , value:""  %>
-            <%= text_field_tag :quantityCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
+            <%= text_field_tag :quantityCol, @bom.id.to_s, class:"sr-only", size:20 , value:"" %>
             <%= text_field_tag :refdesCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
-            <%= text_field_tag :desCol, @bom.id.to_s, class:"sr-only", size:10 , value:"" %>
+            <%= text_field_tag :desCol, @bom.id.to_s, class:"", size:10 , value:"" %>
             <%= text_field_tag :packageCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
             <%= text_field_tag :linkCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
             <%= submit_tag t("ok"), class:"btn btn-danger", :onclick => "return _step2_submit()" %>

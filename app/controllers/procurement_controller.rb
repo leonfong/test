@@ -148,6 +148,12 @@ before_filter :authenticate_user!
                     link += item["#{@sheet.row(row_use)[params[:linkCol].to_i]}"].to_s + " "
                 end
                 desa = ""
+                #Rails.logger.info("------------------------------------------------------------des----")
+                #Rails.logger.info(params[:desCol].strip.split(" ").sort!.inspect)
+                #Rails.logger.info(item.inspect)
+                #Rails.logger.info(item[2].inspect)
+                #Rails.logger.info(item[3].inspect)
+                #Rails.logger.info("------------------------------------------------------------des----")
                 params[:desCol].strip.split(" ").sort!.each do |des|                    
                     if item["#{@sheet.row(row_use)[des.to_i]}"].blank?
                         desa += ""

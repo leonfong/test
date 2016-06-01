@@ -146,7 +146,7 @@
 
                     </small></td>                    
                     <td style="padding: 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  ><small><%= item.description %></small></td> 
-                    <% if item.product_id !=0 %>
+                    <% if item.product_id !=0 and item.product_id != nil%>
                         <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a></small></td>
                         
                     <% else %>

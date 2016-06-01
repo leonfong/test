@@ -133,7 +133,7 @@
                                             
                                 <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
                                 <% else %>
-                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description %>"></a></small></td>
+                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: "GRM033R61A222KA01J").others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>"></a></small></td>
                             
                                 <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>" href="<%= Digikey.find_by(manufacturer_part_number: item.mpn).image %>"  target="_blank"></a></small></td>
                                             

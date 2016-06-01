@@ -513,6 +513,10 @@ before_filter :authenticate_user!
     end
 
     def p_viewbom 
+        abc = Digikey.find_by(manufacturer_part_number: "GRM033R61A222KA01J").others
+        Rails.logger.info("--------------------------")
+        Rails.logger.info(abc.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].inspect)
+        Rails.logger.info("--------------------------") 
          @mpninfo = "SP1007-01WTG"
         #@mpninfo = Digikey.find(1)   
         #Rails.logger.info("--------------------------")

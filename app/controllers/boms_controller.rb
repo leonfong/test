@@ -2125,7 +2125,15 @@ WHERE
                 bom_item.part_code = part_code
                 bom_item.bom_id = bom_id
                 bom_item.user_id = current_user.id
-                bom_item.price = mpn_data.unit_price_usd_50
+                if @bom.qty < 50
+                    bom_item.price = mpn_data.unit_price_usd_50
+                elsif @bom.qty > 49 and @bom.qty < 99
+                    bom_item.price = mpn_data.unit_price_usd_50
+                elsif @bom.qty > 99 and @bom.qty < 499
+                    bom_item.price = mpn_data.unit_price_usd_100
+                elsif @bom.qty > 499
+                    bom_item.price = mpn_data.unit_price_usd_500
+                end
                 bom_item.mf = mpn_data.manufacturer
                 bom_item.dn = mpn_data.from_site
                 bom_item.save 

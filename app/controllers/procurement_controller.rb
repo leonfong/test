@@ -86,7 +86,7 @@ before_filter :authenticate_user!
             #render "select_column.html.erb" 
             #return false 
             Rails.logger.info("------------------------------------------------------------qq1")
-            Rails.logger.info(@sheet.row(row_use)[params[:partCol].to_i].split("").inspect)
+            #Rails.logger.info(@sheet.row(row_use)[params[:partCol].to_i].split("").inspect)
             Rails.logger.info(@sheet.row(row_use)[params[:quantityCol].to_i].split("").inspect)
             Rails.logger.info(@sheet.row(row_use)[params[:refdesCol].to_i].split("").inspect)
             Rails.logger.info("------------------------------------------------------------qq2") 
@@ -513,10 +513,6 @@ before_filter :authenticate_user!
     end
 
     def p_viewbom 
-        abc = Digikey.find_by(manufacturer_part_number: "GRM033R61A222KA01J").others
-        Rails.logger.info("--------------------------")
-        Rails.logger.info(abc.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].inspect)
-        Rails.logger.info("--------------------------") 
          @mpninfo = "SP1007-01WTG"
         #@mpninfo = Digikey.find(1)   
         #Rails.logger.info("--------------------------")

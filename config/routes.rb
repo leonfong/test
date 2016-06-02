@@ -69,7 +69,7 @@ Rails.application.routes.draw do
   match '/up_check', to: 'procurement#up_check',via: 'get'
   match '/p_edit_mpn', to: 'procurement#p_edit_mpn',via: 'post'
   match '/copy_data', to: 'procurement#copy_data',via: 'get'
-
+  match '/p_del_bb', to: 'procurement#p_del_bb',via: 'get'
 
 
 

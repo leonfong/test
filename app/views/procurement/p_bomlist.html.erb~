@@ -43,12 +43,16 @@
 
       <th>Action</th>
 -->
+      <th width="5">Action</th>
     </tr>
   </thead>
   <tbody>
     <% @itemall = "" %>
     <% @boms.each do |bom| %>
     <% @itemall = @itemall + " " + bom.excel_file_identifier %>
+    <% if bom.check == "do" %>
+        <tr class="bg-success" >
+    <% else %>
       <% if can? :work_g_all, :all %>
           <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil).blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
       <% elsif can? :work_g_a, :all %>
@@ -56,6 +60,7 @@
       <% elsif can? :work_g_b, :all %>
           <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil,user_do: "75").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
       <% end %>
+    <% end %>
         <td><%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %></td>
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= bom.p_name %></td>
@@ -65,6 +70,15 @@
 
         <td><div class="btn-group"><%= link_to "PLACE ORDER",  viewbom_path(bom_id: bom.id), class:"btn btn-danger" %></div></td>
 -->
+        <% if can? :work_g_all, :all %>
+            <% if bom.check == "do" %>
+                <td><div class="btn-group">无权限</div></td>
+            <% else %>
+                <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/p_del_bb?bom_id=<%= bom.id.to_s %>">删除</a></div></td>  
+            <% end %>
+        <% else %> 
+           <td><div class="btn-group">无权限</div></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

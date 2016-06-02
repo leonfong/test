@@ -1336,6 +1336,16 @@ WHERE
         redirect_to :back
     end
 
+    def p_del_bb
+        p_bom = ProcurementBom.find(params[:bom_id])
+        if can? :work_g_all, :all
+            if p_bom.check != "do"
+                p_bom.destroy
+            end
+        end
+        redirect_to :back
+    end
+
     private
         class ColorFormat < Spreadsheet::Format
             def initialize(gb_color, font_color)

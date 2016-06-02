@@ -43,6 +43,7 @@
 
       <th>Action</th>
 -->
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -69,6 +70,15 @@
 
         <td><div class="btn-group"><%= link_to "PLACE ORDER",  viewbom_path(bom_id: bom.id), class:"btn btn-danger" %></div></td>
 -->
+        <% if can? :work_g_all, :all %>
+            <% if bom.check == "do" %>
+                <td><div class="btn-group">无权限</div></td>
+            <% else %>
+                <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/p_del_bb?bom_id=<%= bom.id.to_s %>">删除</a></div></td>  
+            <% end %>
+        <% else %> 
+           <td><div class="btn-group">无权限</div></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

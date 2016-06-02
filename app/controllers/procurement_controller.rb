@@ -1327,6 +1327,15 @@ WHERE
         #redirect_to :back
     end
 
+    def copy_data
+        source_data = PItem.find(params[:item_id])
+        if not source_data.blank?
+            update_data = PItem.where("procurement_bom_id = #{source_data.procurement_bom_id} AND description = '#{source_data.description.strip}' AND color != 'b'")
+            update_data.update_all(product_id: source_data.product_id, cost: source_data.cost, price: source_data.price, dn_id: source_data.dn_id, color: source_data.color)
+        end
+        redirect_to :back
+    end
+
     private
         class ColorFormat < Spreadsheet::Format
             def initialize(gb_color, font_color)

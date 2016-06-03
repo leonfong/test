@@ -1121,8 +1121,11 @@ WHERE
     def del_dn
         @item_id = params[:item_id]
         @dn_id = params[:id]
+        itemall = PItem.find(params[:item_id])
         @dn = PDn.find(params[:id])
         if not @dn.blank?
+            itemall.dn_id = nil
+            itemall.save
             @dn.destroy
         end
     end

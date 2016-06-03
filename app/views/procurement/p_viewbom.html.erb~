@@ -157,7 +157,7 @@
                     <% else %>
                         <td style="padding: 0px;margin: 0px;">
                             <small> 
-                                <a class="glyphicon glyphicon-duplicate" ></a>
+                                <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
                                 <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
                             </small>
                         </td>

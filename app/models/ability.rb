@@ -24,6 +24,7 @@ class Ability
     alias_action :update, :to => :pcb_review      #PCB_R
     alias_action :update, :to => :pcb_dc          #PCB_DC
     alias_action :update, :to => :old_bom         #老bom匹配功能
+    alias_action :update, :to => :external_access         #外部访问21
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -113,6 +114,8 @@ class Ability
       can :pcb_review, :all
     elsif user.has_role?(:work_pcb_dc)
       can :pcb_dc, :all
+    elsif user.has_role?(:work_external)
+      can :external_access, :all
     else
       can :read, :all
     end

@@ -35,6 +35,8 @@ class Ability
       can :pcb_dc, :all
       can :work_up, :all
       can :old_bom, :all
+      can :work_g_all, :all
+      can :external_access, :all
     elsif user.has_role?(:manager)
       can :manage, :all
     elsif user.has_role?(:work_one)

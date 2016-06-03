@@ -71,8 +71,35 @@ Rails.application.routes.draw do
   match '/copy_data', to: 'procurement#copy_data',via: 'get'
   match '/p_del_bb', to: 'procurement#p_del_bb',via: 'get'
 
-
-
+#external_bom
+  match '/e_new', to: 'external_bom#p_create_bom', via: 'get' 
+  match '/e_new_bom', to: 'external_bom#p_upbom',via: 'post'
+  match '/e_new_bom', to: 'external_bom#p_upbom',via: 'get'
+  match '/e_select_column', to: 'external_bom#p_select_column',via: 'get' 
+  match '/e_search_part', to: 'external_bom#p_search_part',via: 'post'
+  match '/e_viewbom', to: 'external_bom#p_viewbom',via: 'get'
+  match '/e_viewbom', to: 'external_bom#p_viewbom',via: 'post'
+  match '/e_update_bom', to: 'external_bom#update_bom',via: 'post'
+  match '/e_get_bom', to: 'external_bom#p_get_bom',via: 'get'
+  match '/e_del_bom', to: 'external_bom#p_del_bom',via: 'post'
+  match '/e_add_bom', to: 'external_bom#p_add_bom',via: 'post'
+  match '/e_bomlist', to: 'external_bom#p_bomlist',via: 'get'
+  match '/e_search_m', to: 'external_bom#search_m',via: 'post'
+  match '/e_search_m', to: 'external_bom#search_m',via: 'get'
+  match '/e_update', to: 'external_bom#p_update',via: 'get'
+  match '/e_updateii', to: 'external_bom#p_updateii',via: 'get'
+  match '/e_edit', to: 'external_bom#p_edit',via: 'post'
+  match '/e_up_userdo', to: 'external_bom#p_up_userdo',via: 'get'
+  match '/e_del_dn', to: 'external_bom#del_dn',via: 'get'
+  match '/e_edit_dn', to: 'external_bom#p_edit_dn',via: 'post'
+  match '/e_up_check', to: 'external_bom#up_check',via: 'post'
+  match '/e_excel', to: 'external_bom#p_excel',via: 'get'
+  match '/e_profit', to: 'external_bom#p_profit',via: 'post'
+  match '/e_del_cost', to: 'external_bom#del_cost',via: 'get'
+  match '/e_up_check', to: 'external_bom#up_check',via: 'get'
+  match '/e_edit_mpn', to: 'external_bom#p_edit_mpn',via: 'post'
+  match '/e_copy_data', to: 'external_bom#copy_data',via: 'get'
+  match '/e_del_bb', to: 'external_bom#p_del_bb',via: 'get'
 
 
 

@@ -1,0 +1,7 @@
+document.getElementById('matched').innerHTML='<%= @match_str_nn %>';
+document.getElementById('total_price').innerHTML='<%=  number_with_precision(@total_price_nn, precision: 4)%>';
+document.getElementById('<%= @p_item.id.to_s + "d" %>').innerHTML='';
+$("#<%= @p_item.id.to_s + 'd' %>").attr("data-content","");
+document.getElementById('<%= @p_item.id.to_s + "p" %>').innerHTML='￥';
+document.getElementById('<%= @p_item.id.to_s + "p_t" %>').innerHTML='￥';
+document.getElementById('<%= @p_item.id.to_s + "_tr" %>').className="bg-danger";

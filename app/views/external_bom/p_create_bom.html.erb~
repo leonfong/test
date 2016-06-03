@@ -1,0 +1,64 @@
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+
+
+<div class="container-fluid" >
+  
+
+
+
+
+
+
+
+
+
+
+    <div class="row" style="margin-right: 0px;margin-left: 0px;">
+    
+          
+
+    <div class="row" style="padding: 0px;">
+        <h1><strong>Components Quote</strong></h1>
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= link_to "New BOM", e_new_path, data: { no_turbolink: true } ,class: "list-group-item active"%>
+            <%= link_to "BOM List", e_bomlist_path ,class: "list-group-item "%>
+        </div>
+        <div class="col-md-11" style="padding-left: 30px;">           
+            
+            <div class="row">
+
+
+        <div class="col-md-12 col-sm-12" style="padding: 0px;margin: 0px;">
+            <div class="">
+       		 <h1>BOM Upload <a href="/user/bom.html" id="estimate" style="display:none;" data-original-title="" title="">
+       		 	<i class="glyphicon icon-question m10"></i></a>
+       		 </h1>
+            </div>
+            <h3>The Easy Ways to Upload Your BOM!</h3>
+           
+            <dl style="font-size: 1.2em!important;padding: 10px 0px!important;">
+                <dd style="clear:both;height:20px;"></dd>
+                <dt style="margin-bottom: 20px!important;margin-top: 5px!important;">Choose one of the below options to start!</dt>
+                <dd>
+                    <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
+                        <h4>1.Upload BOM from EXCEL Spreadsheet</h4>
+                        <ul class="list-inline pt20 mt15">
+                            <li class="w50">
+                            	<a class="btn btn-danger" id="UploadButton" style="position: relative;">BROWSE
+<form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/p_new_bom"> 
+<input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls,.xlsx" style="display: block; overflow: hidden; width: 80px; height: 30px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
+</form></a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        </div></div></div>
+    </div>
+</div>

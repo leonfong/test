@@ -533,6 +533,9 @@ before_filter :authenticate_user!
             render "viewbom.js.erb"
             return false
         end
+        render "p_viewbom.html.erb"
+        return false
+=begin
         if @boms.p_name.blank?
             @bom = Bom.find(params[:bom_id])
             #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
@@ -552,6 +555,7 @@ before_filter :authenticate_user!
             render "submit_order.html.erb"
             return false
         end
+=end
     end
 
 

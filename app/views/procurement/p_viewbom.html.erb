@@ -180,7 +180,7 @@
                     <% if item.cost%>
                     <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
                     <% else %>
-                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"></a></small></td>
+                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
                     <% end %>
                     <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
                     <td style="padding: 0px;margin: 0px;" data-container="body"   data-toggle="popover"  data-placement="top" data-content="<%= item.other %>"><small><%= item.other[0,3]+"..." %></small></td>
@@ -235,9 +235,7 @@
 
 
 
-<!--
-                    <td style="padding: 0px;margin: 0px;"><a class="btn btn-link" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><span id="<%= item.id.to_s + 'but' %>" class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>             
--->
+
                     <td  style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + 'up' %>"><a type="button" class="btn btn-link glyphicon glyphicon-pencil" data-toggle="modal" data-target="#exampleModal" data-whatever="<%= item.id %>"></a></td>
                     <tr >
                         <td colSpan="19" style="padding: 0px;margin: 0px;">

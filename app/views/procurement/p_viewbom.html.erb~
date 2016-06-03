@@ -180,7 +180,7 @@
                     <% if item.cost%>
                     <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
                     <% else %>
-                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"></a></small></td>
+                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
                     <% end %>
                     <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
                     <td style="padding: 0px;margin: 0px;" data-container="body"   data-toggle="popover"  data-placement="top" data-content="<%= item.other %>"><small><%= item.other[0,3]+"..." %></small></td>
@@ -207,7 +207,7 @@
                                 </tr>
                             </thead>
 -->
-                            <tbody >
+                            <tbody  style="padding: 0px;margin: 0px;">
                             <% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
                             <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% end %> >
                                 
@@ -480,14 +480,14 @@
 <script>
 
 function check_edit(){
-    if($("#cost").val() == ""){
-        alert("Please enter your 价格.");                    
-　　      return false;    
-    }
-    if($("#dn").val() == ""){
-        alert("Please enter your 供应商.");                    
-　　      return false;    
-    }
+    //if($("#cost").val() == ""){
+        //alert("Please enter your 价格.");                    
+　　      //return false;    
+   // }
+    //if($("#dn").val() == ""){
+        //alert("Please enter your 供应商.");                    
+　　      //return false;    
+    //}
 }
 
 window.actionEvents = {

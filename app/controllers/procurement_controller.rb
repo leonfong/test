@@ -1100,7 +1100,8 @@ WHERE
     end
 
     def up_check
-        check_user_do = PItem.where(procurement_bom_id: params[:bom_id],user_do: params[:user_do],user_do_change: "c")
+        #check_user_do = PItem.where(procurement_bom_id: params[:bom_id],user_do: params[:user_do],user_do_change: "c")
+        check_user_do = PItem.where("`procurement_bom_id` = #{params[:bom_id]} AND `user_do` = #{params[:user_do]} AND (`user_do_change` = 'c' OR `check` IS NULL OR `cost` IS NULL)")
         if not check_user_do.blank?
             redirect_to :back 
             return false

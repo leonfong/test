@@ -36,6 +36,7 @@ class Ability
       can :work_up, :all
       can :old_bom, :all
       can :work_g_all, :all
+      can :work_g, :all
       can :external_access, :all
     elsif user.has_role?(:manager)
       can :manage, :all

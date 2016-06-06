@@ -131,7 +131,7 @@
                                         <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
                                     <% else %>
                                         <% if item.link =~ /http/i %>
-                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('http://')[-1].split('')[0] %>" target="_blank"></a></small></td>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
                                         <% else %>
                                             <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
                                         <% end %>
@@ -145,7 +145,7 @@
                                         <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
                                     <% else %>
                                         <% if item.link =~ /http/i %>
-                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="http://<%= item.link.split('http://')[-1].split('')[0] %>" target="_blank"></a></small></td>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
                                         <% else %>
                                             <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
                                         <% end %>
@@ -223,10 +223,9 @@
                                 </tr>
                             </thead>
 -->
-                            <tbody >
+                            <tbody id="dn_<%= item.id %>">
                             <% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
-                            <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% end %> >
-                                
+                            <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% end %> >                       
                                 <td width="25" id="<%= item.id.to_s + 'edit' %>"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="<%= dn.id %>" data-dn="<%= dn.dn %>" data-dnlong="<%= dn.dn_long %>" data-qty="<%= dn.qty %>" data-cost="<%= dn.cost %>" data-remark="<%= dn.remark %>" data-itemid="<%= item.id %>" ></a></small></td>
                                 <td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%y-%m') %></div></a></small></td>
                                 <td width="100" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %></div></a></small></td>

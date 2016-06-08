@@ -1295,10 +1295,10 @@ WHERE
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     if not item.dn_id.blank?
                         Rails.logger.info("111111111111111")
-                        Rails.logger.info(request.protocol)
-                        Rails.logger.info(request.host_with_port)
-                        Rails.logger.info(PDn.find(item.dn_id).info_url.inspect)
-                        Rails.logger.info("111111111111111")
+                        #Rails.logger.info(request.protocol)
+                        #Rails.logger.info(request.host_with_port)
+                        #Rails.logger.info(PDn.find(item.dn_id).info_url.inspect)
+                        #Rails.logger.info("111111111111111")
                         if not PDn.find(item.dn_id).info_url.blank?
                             #row.push(request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url)
                             row.push(Spreadsheet::Link.new request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url, '技术资料')

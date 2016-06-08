@@ -1279,10 +1279,14 @@ WHERE
                     if item.dn_id.blank?
                         row.push("")
                     else
-                        if PDn.find(item.dn_id).remark.blank?
+                        if PDn.find(item.dn_id).blank?
                             row.push("")
                         else
-                            row.push(PDn.find(item.dn_id).remark)
+                            if PDn.find(item.dn_id).remark.blank?
+                                row.push("")
+                            else
+                                row.push(PDn.find(item.dn_id).remark)
+                            end
                         end
                     end
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")

@@ -1299,10 +1299,14 @@ WHERE
                         #Rails.logger.info(request.host_with_port)
                         #Rails.logger.info(PDn.find(item.dn_id).info_url.inspect)
                         #Rails.logger.info("111111111111111")
-                        if not PDn.find(item.dn_id).info_url.blank?
-                            #row.push(request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url)
-                            row.push(Spreadsheet::Link.new request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url, '技术资料')
-                        else
+                        begin
+                            if not PDn.find(item.dn_id).info_url.blank?
+                                #row.push(request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url)
+                                row.push(Spreadsheet::Link.new request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url, '技术资料')
+                            else
+                                row.push("")
+                            end
+                        rescue
                             row.push("")
                         end
                     else

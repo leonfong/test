@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
     request.referrer
   end
 
+  #protect_from_forgery except: :index
   protect_from_forgery with: :exception
   #protect_from_forgery 
   

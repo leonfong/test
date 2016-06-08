@@ -1,10 +1,5 @@
-<% if user_signed_in? %>
-  <% if current_user.email == "web@mokotechnology.com" %>
-    var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><th width='200'>Name</th><th>Description</th><th>Price</th><th>Operate</th></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
-  <% else %>
-     var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><th>Description</th><th>Price</th><th>Operate</th></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
-  <% end %>
-<% end %>
+var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><th width='200'>Name</th><th>Description</th><th>MIN Price</th><th>Operate</th><th>Operate</th><th>Operate</th><th>Operate</th><th>Operate</th></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
+ 
 
 document.getElementById("<%= params[:id]+ 'tbody' %>").innerHTML = insertText; 
 var insertLab = '<%= raw @bom_lab %>';

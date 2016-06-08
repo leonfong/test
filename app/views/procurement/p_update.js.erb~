@@ -1,4 +1,4 @@
-document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw @view_dns %>';
+//document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw @view_dns %>';
 
 
 
@@ -29,7 +29,7 @@ document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-succes
 document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-danger"
 <% end %>
 
-
+document.getElementById('<%= @bom_item.id.to_s + "dow" %>').className="collapse"
 
 
 
@@ -38,7 +38,7 @@ document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-danger
 
 document.getElementById('<%= @bom_item.id.to_s %>').className="bg-success row table table-hover panel panel-success"
 document.getElementById('<%= @bom_item.id.to_s %>').style.backgroundColor="#dff0d8"
-document.getElementById('<%= @bom_item.id.to_s + "dow" %>').className="collapse"
+
 document.getElementById('<%= @bom_item.id.to_s + "but" %>').className="glyphicon glyphicon-plus"
 
 //document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw @view_dn %>';

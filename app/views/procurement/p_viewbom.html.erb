@@ -68,7 +68,7 @@
             <div class="row">
                 <div class="col-md-12">
             <small>
-            <table class="table table-hover  ">
+            <table class="table table-hover" > 
 
                 <thead >
                 <tr style="background-color: #eeeeee"> 
@@ -80,31 +80,33 @@
                     <th width="50">位号</th>
                     <th width="50">数量</th>
  
+                    <th width="25"></th>
+                    <th width="100">成本价</th>
                     
-                    <th width="60">成本价</th>
+                    
+
+                    <th width="90">成本价</th>
+                    <th width="100">供应商简称</th>
+                    <th width="100">供应商全称</th> 
+<!--
+                    <th width="50">数量</th>
+-->
+                    
+                    <th width="65">技术资料</th>
+                    <th>备注</th>
+
+
+
+                    <th width="40">提交</th>
                     <th width="65">小计</th>
                     <th width="60">报价</th>
                     <th width="60">Other</th>
-                    
-
-                    <th width="25"></th>
-                    <th width="50">日期</th>
-                    <th width="100">供应商</th> 
-                    <th width="50">数量</th>
-                    <th width="80">成本价</th>
-                    <th width="80">技术资料</th>
-                    <th>备注</th>
-                    <th width="30"></th>
-
-
-                    <th width="40">报价</th>
-
                 </tr>
                 </thead>
                
                 <% @bom_item.each_with_index do |item,index| %> 
-                <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %> >
-                    <td style="padding: 0px;margin: 0px;"><small>
+                <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77"><div >罗</div></a></small></td>
@@ -118,9 +120,9 @@
 
                     </small></td>
 <!--
-                    <td style="padding: 0px;margin: 0px;"><small><%= item.mpn %></small></td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.mpn %></small></td>
 -->
-                    <td style="padding: 0px;margin: 0px;"><small>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
                                 <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editMpn" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" ></a><%= item.mpn %></small></td>
@@ -161,9 +163,9 @@
 
 
                     </small></td>                    
-                    <td style="padding: 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  ><small><%= item.description %></small></td> 
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  ><small><%= item.description %></small></td> 
                     <% if item.product_id !=0 and item.product_id != nil%>
-                        <td style="padding: 0px;margin: 0px;">
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
                             <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
                             <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
@@ -171,7 +173,7 @@
                     </td>
                         
                     <% else %>
-                        <td style="padding: 0px;margin: 0px;">
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small> 
                                 <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
                                 <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
@@ -180,35 +182,103 @@
                         
                     <% end %>
                     <% if item.part_code.size > 5 %>
-                    <td style="padding: 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
                     <% else %>
-                    <td style="padding: 0px;margin: 0px;"><small><%= item.part_code %></small></td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
-                    <td style="padding: 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
 
                     
-                    <td style="padding: 0px;margin: 0px;">
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                      <small>                      
+                          <a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_cost?id=<%=item.id.to_s%>"></a>
+                      </small>
+                    </td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                         <small>
-                            <a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_cost?id=<%=item.id.to_s%>"></a>
+<!--
+                            <input type="text" class="form-control input-sm" id="<%= item.id.to_s + 'p' %>" name="<%= item.id.to_s + 'p' %>" value="<%= '￥' + item.cost.to_s %>">                      
+-->
                             <a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a>
+
                         </small>
                     </td>
-                    <% if item.cost%>
-                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
-                    <% else %>
-                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
-                    <% end %>
-                    <td style="padding: 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
-                    <td style="padding: 0px;margin: 0px;" data-container="body"   data-toggle="popover"  data-placement="top" data-content="<%= item.other %>"><small><%= item.other[0,3]+"..." %></small></td>
                     
+                
 
-
-
-                    
-                    <td colSpan="8" style="padding: 0px;margin: 0px;">
-                       <div class="col-md-12" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + "_dns" %>">  
     
-                        <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
+   <td colSpan="6" style="padding: 0px;margin: 0px;">
+     
+   <table class="table table-hover " style="padding: 0px;margin: 0px;">  
+<!--
+  <thead >
+   <tr > 
+     <th width="100">成本价</th>
+     <th width="100">供应商</th> 
+     <th width="100">供应商</th>
+     <th width="65">技术资料</th> 
+     <th>备注</th>
+     <th width="30">提交</th>
+   </tr>
+   </thead>
+-->      
+   <tbody>         
+   <tr style="padding: 0px;margin: 0px;"> 
+             
+        <%= form_tag({action: :p_edit},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
+
+          <td width="100" style="padding: 0px;margin: 0px;">
+         
+            <label for="item_id" class="control-label sr-only">id:</label>
+            <input type="text" class="form-control sr-only" id="item_id" name="item_id" value="<%= item.id.to_s %>">
+            <label for="cost" class="control-label sr-only">价格:</label>
+            <input type="text" class="form-control input-sm" id="cost" name="cost" placeholder="成本价" style="padding: 0px;margin: 0px;">
+
+          </td>
+          <td width="100" style="padding: 0px;margin: 0px;">
+          
+            <label for="dn" class="control-label sr-only">供应商简称:</label>
+           
+            <input id="dn" autocomplete="off" name="dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;">
+          
+          </td>
+          <td width="100" style="padding: 0px;margin: 0px;">
+          
+            <label for="dn_long" class="control-label sr-only">供应商全称:</label>
+            <input type="text" class="form-control input-sm" id="dn_long" name="dn_long" placeholder="供应商全称" style="padding: 0px;margin: 0px;">
+          
+          </td>
+<!--          
+          <td width="165" style="padding: 0px;margin: 0px;">
+          
+            <label for="info" class="control-label sr-only">技术资料:</label>
+
+            <input class="form-control input-sm" name="info[info]" id="info" type="file" accept=".xls" >
+
+            
+          </td>
+-->
+          <td style="padding: 0px;margin: 0px;">
+         
+            <label for="remark" class="control-label sr-only">备注:</label>
+            <input class="form-control input-sm" id="remark"  name="remark" placeholder="备注" style="padding: 0px;margin: 0px;">
+          
+          </td>
+          <td width="30" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + 'up' %>"><button type="submit" class="btn btn-link btn-sm glyphicon glyphicon-ok " ></button></td>
+      <% end %> 
+<!--  
+<%= form_for @pdn, :url => {:action => "p_edit"}, :html => {:multipart => "ture" }, :remote => "ture" do |f|%> 
+
+<%= f.file_field :info %>
+<%= f.submit "good" %>
+<% end %> 
+-->
+
+      </tr>
+      </tbody>
+      </table>
+      <div class="col-md-12" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + "_dns" %>">
+        <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
 <!--
                             <thead >
                                 <tr > 
@@ -237,23 +307,86 @@
                                     <td width="80"><small></small></td>
                                 <% end %>
                                 <td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.remark %></div></a></small></td>
+                                <td width="30"><small><a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>" data-confirm="确定要删除?"></a></small></td>
+                            </tr>
+                            <% end %>
+                            </tbody>
+                        </table>
+      </div>
+
+      </td>
+
+
+
+<!--  
+
+                    <td colSpan="5" style="padding: 0px;margin: 0px;">
+    
+                       <div class="col-md-12" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + "_dns" %>">  
+  
+                        <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
+
+                            <thead >
+                                <tr > 
+                                    <th width="30"></th>
+                                    <th width="70">日期</th> 
+                                    <th width="100">供应商</th> 
+                                    <th width="80">数量</th>
+                                    <th width="80">成本价</th>
+                                    <th width="80">技术资料</th> 
+                                    <th>备注</th>
+                                    <th width="30"></th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="dn_<%= item.id %>_dn">
+                            <% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
+                            <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% end %> >                       
+                                <td width="25" id="<%= item.id.to_s + 'edit' %>"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="<%= dn.id %>" data-dn="<%= dn.dn %>" data-dnlong="<%= dn.dn_long %>" data-qty="<%= dn.qty %>" data-cost="<%= dn.cost %>" data-remark="<%= dn.remark %>" data-itemid="<%= item.id %>" ></a></small></td>
+                                <td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%y-%m') %></div></a></small></td>
+                                <td width="100" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %></div></a></small></td>
+                                <td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.qty %></div></a></small></td>
+                                <td width="80"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div>￥<%= dn.cost %></div></a></small></td> 
+                                <% if not dn.info.blank? %>                 
+                                    <td width="80"><small><a href="<%= dn.info %>">下载</a></small></td>
+                                <% else %>
+                                    <td width="80"><small></small></td>
+                                <% end %>
+                                <td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.remark %></div></a></small></td>
                                 <td width="30"><small><a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>"></a></small></td>
                             </tr>
                             <% end %>
                             </tbody>
                         </table>
+
                         </div>
                     </td>
 
+-->
 
 
 
 
-
-
+<!--
                     <td  style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + 'up' %>"><a type="button" class="btn btn-link glyphicon glyphicon-pencil" data-toggle="modal" data-target="#exampleModal" data-whatever="<%= item.id %>"></a></td>
+-->
+                    <% if item.cost%>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
+                    <% else %>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
+                    <% end %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" data-container="body"   data-toggle="popover"  data-placement="top" data-content="<%= item.other %>"><small><%= item.other[0,3]+"..." %></small></td>
+
+
+
+
+
+
+
+
                     <tr >
-                        <td colSpan="19" style="padding: 0px;margin: 0px;">
+                        <td colSpan="17" style="padding: 0px;margin: 0px;">
                             <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
                               
                                 <%= form_tag('/search_m', remote: true, class:"form-inline") do %>

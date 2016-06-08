@@ -17,6 +17,7 @@
 
 
     <%= render 'layouts/shim' %>
+    <%= javascript_include_tag :defaults %>
    <style type="text/css">
 body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
 div.upul ul  
@@ -107,7 +108,7 @@ div.mpnul ul li a:active
   left: 0;
   z-index: 1060;
   display: none;
-  max-width: 400px;
+  max-width: 100%;
   padding: 1px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;

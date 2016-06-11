@@ -17,10 +17,10 @@ $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_
 
 
 
-
+<% if not @bom_item.cost.blank? %>
 document.getElementById('<%= @bom_item.id.to_s + "p" %>').innerHTML='<%= "￥"+@bom_item.cost.to_s %>';
 document.getElementById('<%= @bom_item.id.to_s + "p_t" %>').innerHTML='<%= "￥"+(@bom_item.cost*@bom.qty).to_s %>';
-
+<% end %>
 <% if @bom_item.color == "b" %>
 document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info"
 <% elsif @bom_item.color == "g" %>

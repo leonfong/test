@@ -619,7 +619,7 @@ before_filter :authenticate_user!
             find_ptype = " "
         end
         #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%#{des}%' " + find_ptype +  find_bom).to_ary
-        @match_products = Product.find_by_sql("SELECT products.*, min(`all_dns`.`price`) AS `min_price` FROM products INNER JOIN all_dns ON products.`name` = all_dns.part_code WHERE #{where_des} #{find_ptype} #{find_bom}  GROUP BY	`all_dns`.`part_code`").to_ary
+        @match_products = Product.find_by_sql("SELECT products.* FROM products LEFT JOIN all_dns ON products.`name` = all_dns.part_code WHERE #{where_des} #{find_ptype} #{find_bom} ").to_ary
         @counted = Hash.new(0)
         @match_products.each { |h| @counted[h[part_name_locale]] += 1 }
         @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
@@ -641,11 +641,11 @@ before_filter :authenticate_user!
                         @bom_html = @bom_html + "<td>"
                         @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
                         @bom_html = @bom_html + "</td>"
-
+=begin
                         @bom_html = @bom_html + "<td>"
                         @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{ActionController::Base.helpers.number_with_precision(item.min_price, precision: 4).to_s}</div></a>"
                         @bom_html = @bom_html + "</td>"
-                        
+=end                       
                         #part_code = Product.find(params[:product_id]).name
                         #all_dns = AllDn.where(part_code: part_code).order('date DESC')
                         all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{item.name}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
@@ -681,21 +681,38 @@ before_filter :authenticate_user!
                         @bom_html = @bom_html + "<td>"
                         @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
                         @bom_html = @bom_html + "</td>"
+=begin
                         @bom_html = @bom_html + "<td>"
                         @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{ActionController::Base.helpers.number_with_precision(item.min_price, precision: 4).to_s}</div></a>"
                         @bom_html = @bom_html + "</td>"
-
+=end
                         all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{item.name}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
                         if all_dns.blank?
                             all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{item.name}' ORDER BY all_dns.date DESC").first
+
+                            if all_dns.blank?
+                                @bom_html += "<td width='50'>无</td>"
+                                @bom_html += "<td width='100'>无</td>"
+                                @bom_html += "<td width='50'>无</td>"
+                                @bom_html += "<td width='80'>无</td>"
+                            else
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                
+                                @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+                            end
+                        else
+                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                
+                             @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                             @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                             @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+
                         end
                         
-
-                        @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
-                
-                        @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
-                        @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
-                        @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+                        
+                        
                         
                         
                         
@@ -869,13 +886,16 @@ before_filter :authenticate_user!
                 if @bom_item.product_id
 	            #@bom_item.product = Product.find(@bom_item.product_id)
                     @bom_item.warn = false
-                    @bom_item.cost = add_dns.cost
-                    @bom_item.dn_id = add_dns.id
+                    if not all_dns.blank?
+                        @bom_item.cost = add_dns.cost
+                        @bom_item.dn_id = add_dns.id
+                        @bom_item.color = "b"
+                    end
                     @bom_item.mark = false
                     @bom_item.manual = true
                     @bom_item.mpn_id = nil
                     #@bom_item.mpn = nil
-                    @bom_item.color = "b"
+                    
                     @bom_item.user_do_change = nil
 	            @bom_item.save!
   
@@ -1367,6 +1387,8 @@ WHERE
                 end                      
 	    end
         end
+        @bom.t_p = @total_price_nn
+        @bom.save
     end
 
     def p_edit_mpn
@@ -1375,8 +1397,7 @@ WHERE
         item.mpn = params[:item_mpn].strip
         use_mpn = Product.find_by_sql("SELECT * FROM products WHERE products.mpn LIKE '%#{item.mpn.strip}%'")
         if not use_mpn.blank?
-            item.product_id = use_mpn.id
-            
+            item.product_id = use_mpn.id          
             part_code = Product.find(item.product_id).name
             all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
             if all_dns.blank?
@@ -1420,6 +1441,43 @@ WHERE
                 end                      
 	    end
         end
+        @bom.t_p = @total_price_nn
+        @bom.save
+        @dn_info = ""
+        if DigikeysStock.find_by(manufacturer_part_number: item.mpn).blank?
+            if item.link.blank? or item.link == ""
+                @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords='+item.mpn+'" target="_blank"></a></small></td>'
+            else
+                if item.link =~ /http/i
+                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://' + item.link.split("http://")[-1].split(" ")[0] + '" target="_blank"></a></small></td>'
+                else
+                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=' + item.mpn + '" target="_blank"></a></small></td>'
+                end
+            end
+
+            @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>'
+                                            
+            @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>'
+        else
+            if item.link.blank? or item.link == ""
+                @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="http://www.digikey.com/product-search/en?keywords='+item.mpn+'" target="_blank"></a></small></td>'
+            else
+                if item.link =~ /https:/i
+                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="'+ DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="https://' + item.link.split('https://')[-1].split(' ')[0] + '" target="_blank"></a></small></td>'
+                elsif item.link =~ /http:/i
+                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="http://' + item.link.split('http://')[-1].split(' ')[0] + '" target="_blank"></a></small></td>'
+                else
+                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="http://www.digikey.com/product-search/en?keywords='+item.mpn+'" target="_blank"></a></small></td>'
+                end
+            end
+                            
+            @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii" data-placement="right" data_src="' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).image + '" href="' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).image + '"  target="_blank" ></a></small></td>'
+                                            
+            @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="' +  DigikeysStock.find_by(manufacturer_part_number: item.mpn).datasheets + '" target="_blank"></a></small></td>'
+        end
+        Rails.logger.info("--------------------------")
+        Rails.logger.info(@dn_info.inspect)             
+        Rails.logger.info("--------------------------")
         #redirect_to :back
     end
 

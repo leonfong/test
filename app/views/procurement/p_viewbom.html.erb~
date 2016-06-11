@@ -1,5 +1,5 @@
 <div class="container-fluid" >
-
+﻿
 
 
 
@@ -87,14 +87,14 @@
 
                     <th width="90">成本价</th>
                     <th width="100">供应商简称</th>
-                    <th width="100">供应商全称</th> 
+                    
 <!--
                     <th width="50">数量</th>
 -->
                     
                     <th width="65">技术资料</th>
                     <th>备注</th>
-
+                    <th width="100">供应商全称</th> 
 
 
                     <th width="40">提交</th>
@@ -125,9 +125,9 @@
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
-                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editMpn" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" ></a><%= item.mpn %></small></td>
+                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editMpn" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>" > <%= item.mpn %></a></small></td>
                             </tr>
-                            <tr>
+                            <tr id="<%= item.id.to_s + '_mpn_tr' %>">
                                 <% if Digikey.find_by(manufacturer_part_number: item.mpn).blank? %>
                                     <% if item.link.blank? or item.link == "" %>
                                         <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
@@ -146,8 +146,11 @@
                                     <% if item.link.blank? or item.link == "" %>
                                         <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
                                     <% else %>
-                                        <% if item.link =~ /http/i %>
+                                        <% if item.link =~ /https/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="https://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                        <% elsif item.link =~ /http/i %>
                                             <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+
                                         <% else %>
                                             <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= Digikey.find_by(manufacturer_part_number: item.mpn).description + " " + Digikey.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
                                         <% end %>
@@ -162,8 +165,15 @@
                         </table>
 
 
-                    </small></td>                    
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  ><small><%= item.description %></small></td> 
+                    </small></td>   
+<script>
+function change_<%= item.id.to_s %>(){
+    document.getElementById('input_<%= item.id.to_s %>').Value='<%= item.description %>';
+    }
+</script>
+                    
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><small><%= item.description %></small></td> 
+
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
@@ -222,10 +232,10 @@
    </tr>
    </thead>
 -->      
-   <tbody>         
-   <tr style="padding: 0px;margin: 0px;"> 
+   <tbody >         
+   <tr style="padding: 0px;margin: 0px;" > 
              
-        <%= form_tag({action: :p_edit},method:"post",multipart:"ture",class:"form-inline") do %>  
+        <%= form_tag({action: :p_edit},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
 
           <td width="100" style="padding: 0px;margin: 0px;">
          
@@ -242,12 +252,7 @@
             <input id="dn" autocomplete="off" name="dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;">
           
           </td>
-          <td width="100" style="padding: 0px;margin: 0px;">
-          
-            <label for="dn_long" class="control-label sr-only">供应商全称:</label>
-            <input type="text" class="form-control input-sm" id="dn_long" name="dn_long" placeholder="供应商全称" style="padding: 0px;margin: 0px;">
-          
-          </td>
+
 <!--          
           <td width="165" style="padding: 0px;margin: 0px;">
           
@@ -262,6 +267,12 @@
          
             <label for="remark" class="control-label sr-only">备注:</label>
             <input class="form-control input-sm" id="remark"  name="remark" placeholder="备注" style="padding: 0px;margin: 0px;">
+          
+          </td>
+          <td width="100" style="padding: 0px;margin: 0px;">
+          
+            <label for="dn_long" class="control-label sr-only">供应商全称:</label>
+            <input type="text" class="form-control input-sm" id="dn_long" name="dn_long" placeholder="供应商全称" style="padding: 0px;margin: 0px;">
           
           </td>
           <td width="30" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + 'up' %>"><button type="submit" class="btn btn-link btn-sm glyphicon glyphicon-ok " ></button></td>
@@ -391,7 +402,7 @@
                               
                                 <%= form_tag('/search_m', remote: true, class:"form-inline") do %>
                                 <div class="form-group">
-                                    <%= text_field_tag :q, params[:q], class:"form-control", size:30, value: item.description.to_s, placeholder:"Description"%>
+                                    <%= text_field_tag :q, params[:q], id:"input_"+item.id.to_s, class:"form-control", size:30, value: item.description.to_s, placeholder:"Description"%>
                                     <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2 , value: item.id.to_s %>
                                     <%= text_field_tag :id, params[:id], class:"sr-only", size:2 , value: item.id.to_s %>
                                     <%= submit_tag t(:search), class:"btn btn-primary" %>
@@ -461,7 +472,7 @@
             </div>
             <div class="modal-footer">
                 <%= link_to "BACK MODIFY BOM COLUMN", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-default pull-left"%>
-                <%= link_to "提交",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
+                <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
             </div>
         </div>
     </div>

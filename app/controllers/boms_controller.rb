@@ -1577,7 +1577,7 @@ WHERE
                         retry
                     end   
 =end                 
-                    mpn_data = Digikey.find_by(manufacturer_part_number: item.mpn)
+                    mpn_data = DigikeysStock.find_by(manufacturer_part_number: item.mpn)
                     if mpn_data.blank?
                         url = URI('http://api.findchips.com/v1/search?apiKey=RDQCwiQN4yhvRYKulcgw&part='+CGI::escape(mpn))
                         begin
@@ -1955,7 +1955,7 @@ WHERE
                 #retry
             #end
 
-            mpn_data = Digikey.find_by(manufacturer_part_number: mpn)
+            mpn_data = DigikeysStock.find_by(manufacturer_part_number: mpn)
             if mpn_data.blank?
                 url = URI('http://api.findchips.com/v1/search')
                 params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }
@@ -2086,7 +2086,7 @@ WHERE
             #rescue
                 #retry
             #end
-            mpn_data = Digikey.find_by(manufacturer_part_number: mpn)
+            mpn_data = DigikeysStock.find_by(manufacturer_part_number: mpn)
             if mpn_data.blank?
                 url = URI('http://api.findchips.com/v1/search')
                 params = { :apiKey => "RDQCwiQN4yhvRYKulcgw", :part => mpn }

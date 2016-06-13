@@ -624,7 +624,7 @@ before_filter :authenticate_user!
             find_ptype = " "
         end
         #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%#{des}%' " + find_ptype +  find_bom).to_ary
-        @match_products = Product.find_by_sql("SELECT products.* FROM products LEFT JOIN all_dns ON products.`name` = all_dns.part_code WHERE #{where_des} #{find_ptype} #{find_bom} ").to_ary
+        @match_products = Product.find_by_sql("SELECT DISTINCT products.name,products.* FROM products LEFT JOIN all_dns ON products.`name` = all_dns.part_code WHERE #{where_des} #{find_ptype} #{find_bom} ").to_ary
         @counted = Hash.new(0)
         @match_products.each { |h| @counted[h[part_name_locale]] += 1 }
         @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	

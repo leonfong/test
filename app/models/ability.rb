@@ -25,9 +25,11 @@ class Ability
     alias_action :update, :to => :pcb_dc          #PCB_DC
     alias_action :update, :to => :old_bom         #老bom匹配功能
     alias_action :update, :to => :external_access         #外部访问21
+    alias_action :update, :to => :work_top         #管理员
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
+      can :work_top, :all
       #can :work_b, :all
       #can :work_c, :all
       #can :work_d, :all

@@ -513,12 +513,17 @@ before_filter :authenticate_user!
     end
 
     def p_viewbom 
+        #if DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').blank?
+            #Rails.logger.info("--------------------------hahahahah")
+        #end
+        #wcwc=(DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'bb'
+        #wcwc=(DigikeysStock.find_by(manufacturer_part_number: 'ft230xs-r').others.include?"<name>Tolerance</name><value>")? "cc":"bb"
         @pdn = PDn.new
          @mpninfo = "SP1007-01WTG"
         #@mpninfo = Digikey.find(1)   
-        #Rails.logger.info("--------------------------")
-        #Rails.logger.info(@mpninfo.inspect)
-        #Rails.logger.info("--------------------------")  
+        Rails.logger.info("--------------------------")
+        #Rails.logger.info(wcwc)
+        Rails.logger.info("--------------------------")  
         @all_dn = "[&quot;"
         all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
         all_s_dn.each do |dn|

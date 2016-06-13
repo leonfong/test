@@ -1676,7 +1676,7 @@ WHERE
         @bom = Bom.new
         @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
         if can? :work_top, :all
-            @boms = Bom.find_by_sql("SELECT * FROM `boms` WHERE  ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
+            @boms = Bom.find_by_sql("SELECT * FROM `boms` ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
         end
     end
    
@@ -1684,7 +1684,7 @@ WHERE
         @bom = Bom.new
         @order = Bom.find_by_sql("SELECT * FROM `orders` WHERE `user_id` = '" + current_user.id.to_s + "' AND `name` IS NULL ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
         if can? :work_top, :all
-            @order = Bom.find_by_sql("SELECT * FROM `orders` WHERE ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
+            @order = Bom.find_by_sql("SELECT * FROM `orders` ORDER BY `id` DESC ").paginate(:page => params[:page], :per_page => 10)
         end
     end
    

@@ -339,8 +339,8 @@ before_filter :authenticate_user!
                         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                         Rails.logger.info(item_order.inspect)
                         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-=begin
-                        open_id = User.find_by(s_name: (work_history.order_date.split("-")[0])).open_id
+
+                        open_id = User.find_by(s_name: (work_history.order_no.split("-")[0].scan(/\D/).join("").chop.delete("mk").delete("MK"))).open_id
                         oauth = Oauth.find(1)
                         company_id = oauth.company_id
                         company_token = oauth.company_token
@@ -354,13 +354,14 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('亲爱的'+User.find_by(email: (Topic.find(self.topic_id).user_name)).full_name)
-                            url += '&tips_content='+URI.encode('你有新的回复，点击查看。')
-                            url += '&tips_url=www.fastbom.com/feedback?id='+self.topic_id.to_s 
+                            url += '&tips_title='+URI.encode('亲爱的'+User.find_by(s_name: (work_history.order_no.split("-")[0].scan(/\D/).join("").chop.delete("mk").delete("MK"))).full_name)
+                            url += '&tips_content='+URI.encode('你的订单入库数量有更新，点击查看。')
+                            #url += '&tips_url=www.fastbom.com/feedback?id='+self.topic_id.to_s 
+                            url += '&tips_url=www.fastbom.com/work_flow?utf8=%E2%9C%93%26order_s%5Border_s%5D=1%26order=' + work_history.order_no + '%26commit=%E6%90%9C%E7%B4%A2'
                             resp = Net::HTTP.get_response(URI(url))
                 
                         end                    
-=end     
+    
                     end
                 else
                     redirect_to work_flow_path, :flash => {:error => item+"--------入库数量更新失败，请检查上传数据格式！"}

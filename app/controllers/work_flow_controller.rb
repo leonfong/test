@@ -340,8 +340,9 @@ before_filter :authenticate_user!
                         Rails.logger.info(item_order.inspect)
                         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
 
-                        open_id = User.find_by(s_name: (checkorder.order_no.split("-")[0].scan(/\D/).join("").chop.delete("mk").delete("MK"))).open_id
-                        if not open_id.blank?
+                        user_open_id = User.find_by(s_name: (checkorder.order_no.split("-")[0].scan(/\D/).join("").chop.delete("mk").delete("MK")))
+                        if not user_open_id.open_id.blank?
+                            open_id = user_open_id.open_id
                             oauth = Oauth.find(1)
                             company_id = oauth.company_id
                             company_token = oauth.company_token

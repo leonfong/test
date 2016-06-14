@@ -341,7 +341,7 @@ before_filter :authenticate_user!
                         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
 
                         user_open_id = User.find_by(s_name: (checkorder.order_no.split("-")[0].scan(/\D/).join("").chop.delete("mk").delete("MK")))
-                        if not user_open_id.open_id.blank?
+                        if not user_open_id.blank?
                             open_id = user_open_id.open_id
                             oauth = Oauth.find(1)
                             company_id = oauth.company_id

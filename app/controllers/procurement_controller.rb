@@ -978,7 +978,11 @@ WHERE
                                 end                      
 		            end
                         end
-                        render "p_update.js.erb"
+                        if can? :work_d, :all
+                            render "bom_update.js.erb"
+                        else
+                            render "p_update.js.erb"
+                        end
                     end
                 else
 	            flash[:error] = t('error_d')

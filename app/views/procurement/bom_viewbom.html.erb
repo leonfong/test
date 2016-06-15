@@ -75,7 +75,7 @@
                     <th>MOKO 描述</th>
                     <th width="50">位号</th>
                     <th width="50">数量</th>
- 
+                    <th width="30"></th>
                    
                     <th >Other</th>
                 </tr>
@@ -190,7 +190,11 @@ function change_<%= item.id.to_s %>(){
                     <% end %>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
 
-                    
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                      <small>                      
+                          <a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_cost?id=<%=item.id.to_s%>"></a>
+                      </small>
+                    </td>
                   
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" data-container="body"   data-toggle="popover"  data-placement="top" data-content="<%= item.other %>"><small><%= item.other %></small></td>
 
@@ -202,7 +206,7 @@ function change_<%= item.id.to_s %>(){
 
 
                     <tr >
-                        <td colSpan="7" style="padding: 0px;margin: 0px;">
+                        <td colSpan="8" style="padding: 0px;margin: 0px;">
                             <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
                               
                                 <%= form_tag('/search_m', remote: true, class:"form-inline") do %>

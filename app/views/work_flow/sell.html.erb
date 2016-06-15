@@ -1,6 +1,11 @@
 <small>
 <div class="row" style="margin: 0px;padding: 0px;" >
-  <h2 ><p class="text-primary" >业务部问题跟踪&反馈</p></h2><hr>
+<br>
+  <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="/work_flow"><h2 ><p class="text-primary" >业务部问题跟踪&反馈</p></h2></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><h2 ><p class="text-primary" >报价列表</p></h2></a></li>
+  </ul>
+<br>
   <%= render 'layouts/flash_messages' %>
 </div>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
@@ -424,43 +429,6 @@ function postform<%= work.id.to_s %>() {
 
 <% end %>
 
-<div class="row " style="padding-top: 7px;">
-    <div class="col-md-12 " style="padding: 5px;" >
-        
-       <div class="panel panel-info " >
-                   <div class="panel-heading"><span class="text-primary"><strong>申请的报价</strong></span></div>
-                    
-                    <table class="table table-bordered">  
-                        <thead>
-                            <tr>
-                                <th width="150">Order No.</th>
-                                <th width="100">数量</th>
-                                <th width="150">价格</th>  
-                                <th width="140">国家</th>
-                                <th width="150">成功几率</th>
-                                <th>业务备注</th>
-                                <th>主管备注</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-<% if not @quate.blank?%>
-<% @quate.each do |q_order| %>
-                            <tr>
-                                <td><%= q_order.p_name %></td>
-                                <td><%= q_order.qty %></td>
-                                <td><%= "" %></td>
-                                <td><%= "" %></td>
-                                <td><%= "" %></td>
-                                <td><%= "" %></td>
-                                <td><%= "" %></td>
-                            </tr>
-<% end %> 
-<% end %>          
-                        </tbody>
-                    </table>
-        </div>
-    </div>
-</div>
 
 
 <% if @topic %>

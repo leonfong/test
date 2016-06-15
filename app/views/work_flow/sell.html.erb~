@@ -1,6 +1,11 @@
 <small>
 <div class="row" style="margin: 0px;padding: 0px;" >
-  <h2 ><p class="text-primary" >业务部问题跟踪&反馈</p></h2><hr>
+<br>
+  <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="/work_flow"><h2 ><p class="text-primary" >业务部问题跟踪&反馈</p></h2></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><h2 ><p class="text-primary" >报价列表</p></h2></a></li>
+  </ul>
+<br>
   <%= render 'layouts/flash_messages' %>
 </div>
 <div class="row panel panel-default" style="margin: 1px 0px;padding: 0px;background-color: #d9edf7;">
@@ -443,6 +448,7 @@ function postform<%= work.id.to_s %>() {
                             </tr>
                         </thead>
                         <tbody>
+<% if not @quate.blank?%>
 <% @quate.each do |q_order| %>
                             <tr>
                                 <td><%= q_order.p_name %></td>
@@ -453,7 +459,8 @@ function postform<%= work.id.to_s %>() {
                                 <td><%= "" %></td>
                                 <td><%= "" %></td>
                             </tr>
-<% end %>           
+<% end %> 
+<% end %>          
                         </tbody>
                     </table>
         </div>

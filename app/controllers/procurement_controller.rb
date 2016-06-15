@@ -1607,7 +1607,8 @@ WHERE
 
         def search_bom_use (query_str)
             if not query_str.blank?
-                result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
+                #result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
+                result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip.gsub(/['"]/,"") + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
             end
         end
 

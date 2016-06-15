@@ -177,25 +177,31 @@ before_filter :authenticate_user!
         elsif can? :work_e, :all
             where_o = ""
             where_o_a = ""
+            where_p = ""
             if not current_user.s_name.blank?
                 if current_user.s_name.size == 1
                     s_name = current_user.s_name
                     where_o = "  POSITION('" + s_name + "' IN RIGHT(LEFT(topics.order_no,9),7)) = 6 and RIGHT(LEFT(topics.order_no,9),1) REGEXP '^[0-9]+$' AND "
+                    where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name,9),1) REGEXP '^[0-9]+$' "
                     where_o_a = " WHERE POSITION('" + s_name + "' IN RIGHT(LEFT(a.order_no,9),7)) = 6 and RIGHT(LEFT(a.order_no,9),1) REGEXP '^[0-9]+$' "
                 elsif current_user.s_name.size == 2
                     s_name = current_user.s_name
                     where_o = "  POSITION('" + s_name + "' IN topics.order_no) = 8 AND "
+                    where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
                     where_o_a = " WHERE POSITION('" + s_name + "' IN a.order_no) = 8 "
                 elsif current_user.s_name.size > 2
                     where_o_a = " WHERE "
                     where_o = "("
+                    where_p = "("
                     current_user.s_name.split(",").each_with_index do |item,index|
                         s_name = item
                         if current_user.s_name.split(",").size > (index+1)
                             where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8 OR "
+                            where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
                             where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 OR"
                         else
                             where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8) AND"
+                            where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
                             where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 "
                         end
                     end
@@ -214,7 +220,7 @@ before_filter :authenticate_user!
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 end               
             end
-            
+            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE	#{where_p}")
             render "sell.html.erb"
 #跟单
         elsif can? :work_f, :all

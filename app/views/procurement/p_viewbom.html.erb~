@@ -232,7 +232,8 @@ function change_<%= item.id.to_s %>(){
                     
                 
 
-    
+                    <td></td>
+                    <td></td>
    <td colSpan="6" style="padding: 0px;margin: 0px;">
      
    <table class="table table-hover " style="padding: 0px;margin: 0px;">  

@@ -424,8 +424,41 @@ function postform<%= work.id.to_s %>() {
 
 <% end %>
 
-
-
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        
+       <div class="panel panel-info " >
+                   <div class="panel-heading"><span class="text-primary"><strong>申请的报价</strong></span></div>
+                    
+                    <table class="table table-bordered">  
+                        <thead>
+                            <tr>
+                                <th width="150">Order No.</th>
+                                <th width="100">数量</th>
+                                <th width="150">价格</th>  
+                                <th width="140">国家</th>
+                                <th width="150">成功几率</th>
+                                <th>业务备注</th>
+                                <th>主管备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<% @quate.each do |q_order| %>
+                            <tr>
+                                <td><%= q_order.p_name %></td>
+                                <td><%= q_order.qty %></td>
+                                <td><%= "" %></td>
+                                <td><%= "" %></td>
+                                <td><%= "" %></td>
+                                <td><%= "" %></td>
+                                <td><%= "" %></td>
+                            </tr>
+<% end %>           
+                        </tbody>
+                    </table>
+        </div>
+    </div>
+</div>
 
 
 <% if @topic %>

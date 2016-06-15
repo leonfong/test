@@ -433,8 +433,8 @@ function postform<%= work.id.to_s %>() {
                     <table class="table table-bordered">  
                         <thead>
                             <tr>
-                                <th width="100">Order No.</th>
-                                <th width="80">数量</th>
+                                <th width="150">Order No.</th>
+                                <th width="100">数量</th>
                                 <th width="150">价格</th>  
                                 <th width="140">国家</th>
                                 <th width="150">成功几率</th>

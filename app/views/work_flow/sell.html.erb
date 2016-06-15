@@ -443,6 +443,7 @@ function postform<%= work.id.to_s %>() {
                             </tr>
                         </thead>
                         <tbody>
+<% if not @quate.blank?%>
 <% @quate.each do |q_order| %>
                             <tr>
                                 <td><%= q_order.p_name %></td>
@@ -453,7 +454,8 @@ function postform<%= work.id.to_s %>() {
                                 <td><%= "" %></td>
                                 <td><%= "" %></td>
                             </tr>
-<% end %>           
+<% end %> 
+<% end %>          
                         </tbody>
                     </table>
         </div>

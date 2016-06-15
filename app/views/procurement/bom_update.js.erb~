@@ -1,20 +1,12 @@
-document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw @view_dns %>';
 
 
 
 document.getElementById('matched').innerHTML='<%= @match_str_nn %>';
+
 document.getElementById('total_price').innerHTML='<%=  number_with_precision(@total_price_nn, precision: 4)%>';
 
 document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= Product.find(@bom_item.product_id).description %>';
 $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_item.product_id).name %>");
-
-
-
-
-
-
-
-
 
 
 <% if not @bom_item.cost.blank? %>
@@ -28,8 +20,17 @@ document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-succes
 <% else %>
 document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-danger"
 <% end %>
-
 document.getElementById('<%= @bom_item.id.to_s + "dow" %>').className="collapse"
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -41,5 +42,4 @@ document.getElementById('<%= @bom_item.id.to_s %>').style.backgroundColor="#dff0
 
 document.getElementById('<%= @bom_item.id.to_s + "but" %>').className="glyphicon glyphicon-plus"
 
-//document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw @view_dn %>';
 

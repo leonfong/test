@@ -197,11 +197,11 @@ before_filter :authenticate_user!
                         s_name = item
                         if current_user.s_name.split(",").size > (index+1)
                             where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8 OR "
-                            where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
+                            where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 OR"
                             where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 OR"
                         else
                             where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8) AND"
-                            where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8) "
+                            where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8) AND"
                             where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 "
                         end
                     end

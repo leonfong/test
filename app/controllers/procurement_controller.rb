@@ -1324,8 +1324,13 @@ WHERE
                         row.push("")
                         row.push("")
                     end
-                    row.push("￥#{item.cost}")
-                    row.push("￥#{item.price}")
+                    if can? :work_d, :all
+                        row.push(" ")
+                        row.push(" ")
+                    else
+                        row.push("￥#{item.cost}")
+                        row.push("￥#{item.price}")
+                    end
                     if item.dn_id.blank?
                         row.push("")
                     else

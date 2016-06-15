@@ -5,4 +5,3 @@ $("#<%= @p_item.id.to_s + 'd' %>").attr("data-content","");
 document.getElementById('<%= @p_item.id.to_s + "p" %>').innerHTML='￥';
 document.getElementById('<%= @p_item.id.to_s + "p_t" %>').innerHTML='￥';
 document.getElementById('<%= @p_item.id.to_s + "_tr" %>').className="bg-danger";
-document.getElementById('<%= @p_item.id.to_s + "_" + @add_dns.id.to_s %>').className="bg-danger";

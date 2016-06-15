@@ -14,6 +14,7 @@ class Ability
     alias_action :update, :to => :work_e          #业务8
     alias_action :update, :to => :work_f          #跟单9
     alias_action :update, :to => :work_g          #采购10
+    alias_action :update, :to => :work_baojia          #报价
     alias_action :update, :to => :work_g_all      #采购主管16
     alias_action :update, :to => :work_g_a        #采购1 17
     alias_action :update, :to => :work_g_b        #采购2 18
@@ -37,6 +38,7 @@ class Ability
       can :pcb_dc, :all
       can :work_up, :all
       can :old_bom, :all
+      can :work_baojia, :all
       can :work_g_all, :all
       can :work_g, :all
       can :external_access, :all
@@ -59,6 +61,7 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_d, :all
+      can :work_baojia, :all
       can :old_bom, :all
     elsif user.has_role?(:work_five)
       #can :manage, :all
@@ -72,29 +75,34 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
+      can :work_baojia, :all
       can :old_bom, :all
     elsif user.has_role?(:work_seven_all)
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
+      can :work_baojia, :all
       can :work_g_all, :all
       can :old_bom, :all
     elsif user.has_role?(:work_seven_a)
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
+      can :work_baojia, :all
       can :work_g_a, :all
       can :old_bom, :all
     elsif user.has_role?(:work_seven_b)
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
+      can :work_baojia, :all
       can :work_g_b, :all
       can :old_bom, :all
     elsif user.has_role?(:work_seven_c)
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
+      can :work_baojia, :all
       can :work_g_c, :all
       can :old_bom, :all
     elsif user.has_role?(:work_seven_d)

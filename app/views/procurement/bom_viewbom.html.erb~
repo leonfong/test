@@ -1,0 +1,552 @@
+<div class="container-fluid" >
+﻿
+
+
+
+  
+    <div class="row" style="padding: 0px;">      
+        <h1><strong>权限-BOM工程师</strong></h1>
+<!--
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <% if can? :pcb_review, :all %>
+            <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
+            <% end %>
+            <% if can? :pcb_dc, :all %>
+            <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
+            <% end %>
+            <%= link_to "My Order", p_bomlist_path ,class: "list-group-item "%>
+            <%= link_to "New BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
+            <%= link_to "My BOM", p_bomlist_path ,class: "list-group-item active"%>
+        </div>
+-->
+        <div class="col-md-12">           
+            
+            <div class="row">
+                <div class="col-md-3 col-sm-3 " >
+                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>BOM No. <%= @boms.no %></strong></h4>
+                </div>
+<!--
+                <small><div class="col-md-9 col-sm-9 pull-right" style="color:#999;">
+                    PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>
+                </div></small>
+-->
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered">
+                       <tr>
+                           <td><strong><%= "Project name" %>：</strong><%= @boms.p_name %></td>
+                           <td><strong><%= "QTY" %>：</strong><%= @boms.qty %></td>
+<!--
+                           <td><strong><%= "Dellvery date" %>：</strong><% if @boms.d_day == '1' %>7~10 days<% else %>11~25 days<% end %></td>
+
+                           <td><strong><%= t(:bom_file) %>：</strong><%= @boms.excel_file_identifier %></td> 
+-->
+                           <td>
+                               <% if can? :work_g_all, :all%>
+                               <%= form_tag({action: :p_profit},method:"post",class:"form-inline") do %>
+                                   <div class="form-group">
+                                       <label for="profit">利润：</label>
+                                       <input type="number" class="form-control" id="profit" name="profit" >
+                                   </div>
+                                   <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
+                                  <button type="submit" class="btn btn-warning">提交</button>
+                               <% end %>
+                               <% end %> 
+                           </td> 
+                           <td><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
+                           <td><%= link_to "导出源文件", @boms.excel_file_url %></td> 
+                       </tr>
+                    </table>    
+                </div>
+            </div>
+<% if not @bom_item.blank? %> 
+            <div class="row">
+                <div class="col-md-12">
+            <small>
+            <table class="table table-hover" > 
+
+                <thead >
+                <tr style="background-color: #eeeeee"> 
+                    <th width="80">分配</th> 
+                    <th width="150">MPN</th> 
+                    <th>描述</th>
+
+                    <th>MOKO 描述</th>
+                    <th width="50">位号</th>
+                    <th width="50">数量</th>
+ 
+                   
+                    <th width="60">Other</th>
+                </tr>
+                </thead>
+               
+                <% @bom_item.each_with_index do |item,index| %> 
+                <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
+                        <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
+                            <tr>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77"><div >罗</div></a></small></td>
+                            
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75"><div >黄</div></a></small></td>
+                                            
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >马</div></a></small></td>
+                            </tr>
+                        </table>
+
+
+                    </small></td>
+<!--
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.mpn %></small></td>
+-->
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
+                        <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
+                            <tr>
+                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editMpn" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>" > <%= item.mpn %></a></small></td>
+                            </tr>
+                            <tr id="<%= item.id.to_s + '_mpn_tr' %>">
+                                <% if DigikeysStock.find_by(manufacturer_part_number: item.mpn).blank? %>
+                                    <% if item.link.blank? or item.link == "" %>
+                                        <% if item.mpn == nil or item.mpn == "" %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                        <% else %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                        <% end %>
+                                        
+                                    <% else %>
+                                        <% if item.link =~ /https/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                        <% elsif item.link =~ /http/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                        <% else %>
+                                            <% if item.mpn == nil or item.mpn == "" %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"  ></a></small></td>
+                                            <% else %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a  class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                            <% end %>
+                                        <% end %>
+                                    <% end %>
+                            
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-picture" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                            
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                <% else %>
+                                    <% if item.link.blank? or item.link == "" %>
+                                        <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                    <% else %>
+                                        <% if item.link =~ /https/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="https://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                        <% elsif item.link =~ /http/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+
+                                        <% else %>
+                                            <% if item.mpn == nil or item.mpn == "" %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s %>" ></a></small></td>
+                                            <% else %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                            <% end %>
+                                        <% end %>
+                                    <% end %>
+                                    
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).image %>" href="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).image %>"  target="_blank"></a></small></td>
+                                            
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).datasheets %>" target="_blank"></a></small></td>
+                                <% end %>
+                                
+                            </tr>
+                        </table>
+
+
+                    </small></td>   
+<script>
+function change_<%= item.id.to_s %>(){
+    $("#input_<%= item.id.to_s %>").val("<%= item.description %>");
+    }
+</script>
+                    
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><small><%= item.description %></small></td> 
+
+                    <% if item.product_id !=0 and item.product_id != nil%>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small>
+                            <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
+                            <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
+                            </small>
+                    </td>
+                        
+                    <% else %>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small> 
+                                <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
+                                <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
+                            </small>
+                        </td>
+                        
+                    <% end %>
+                    <% if item.part_code.size > 5 %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
+                    <% else %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
+                    <% end %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
+
+                    
+                  
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" data-container="body"   data-toggle="popover"  data-placement="top" data-content="<%= item.other %>"><small><%= item.other %></small></td>
+
+
+
+
+
+
+
+
+                    <tr >
+                        <td colSpan="7" style="padding: 0px;margin: 0px;">
+                            <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
+                              
+                                <%= form_tag('/search_m', remote: true, class:"form-inline") do %>
+                                <div class="form-group">
+                                    <%= text_field_tag :q, params[:q], id:"input_"+item.id.to_s, class:"form-control", size:30, value: item.description.to_s, placeholder:"Description"%>
+                                    <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2 , value: item.id.to_s %>
+                                    <%= text_field_tag :id, params[:id], class:"sr-only", size:2 , value: item.id.to_s %>
+                                    <%= submit_tag t(:search), class:"btn btn-primary" %>
+                                </div>
+                                <% end %>
+<div class="row">
+  <div class="col-md-12" id="<%= item.id.to_s + 'lab' %>">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12" id="<%= item.id.to_s + 'tbody' %>">  
+  </div>    
+</div>
+                            </div>
+                        </td>
+                    </tr>                
+                </tr>
+                <% end %>
+
+            </table></small>
+               </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+            <table class="table table-striped table-bordered">
+                <tr>               
+                    <td><strong><%= "The total part" %>：</strong><a class="text-muted" id="matched"><%= @bom_item.size %></a></td>
+                    <td><strong><%= "The total cost" %>：</strong><a class="text-muted" id="total_price">￥<%= @boms.t_p %></a></td>
+                    <td><strong><%= "The total price" %>：</strong><a class="text-muted" >￥<%= @boms.t_pp %></a></td>
+                </tr>
+            </table>
+                </div>
+            </div>
+            <% end %>
+            <div class="row" style="padding-bottom: 20px;">
+                <div class="col-md-12">
+            <script>
+            function change_p(){
+            if (document.getElementById('shipping').className=='collapse in')
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
+            else
+            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
+            }
+            </script>
+                    <button class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">ADD A NEW PART <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
+                </div>
+            </div>
+            <div class="collapse" id="shipping" style="padding-bottom: 20px;">
+                <%= form_tag({action: :p_add_bom},method:"post",class:"form-inline") do %>
+                    <div class="form-group">
+                        <label for="part">Part</label>
+                        <input type="text" class="form-control" id="part" name="part" placeholder="Part">
+                    </div>
+                    <div class="form-group">
+                        <label for="qty">QTY</label>
+                        <input type="text" class="form-control" id="qty" name="qty" placeholder="quantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="code">REF.DES.</label>
+                        <input type="text" class="form-control" id="code" name="code" placeholder="REF.DES.">
+                    </div>
+                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
+                    <button type="submit" class="btn btn-warning">SUBMIT</button>
+                <% end %> 
+            </div>
+            <div class="modal-footer">
+                <%= link_to "BACK MODIFY BOM COLUMN", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-default pull-left"%>
+                <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_edit},method:"post",multipart:"ture") do %>
+          <div class="form-group sr-only">
+            <label for="item_id" class="control-label">id:</label>
+            <input type="text" class="form-control" id="item_id" name="item_id">
+          </div>
+          <div class="form-group">
+            <label for="dn" class="control-label">供应商简称:</label>
+            <!--
+            <input id="dn" autocomplete="off" name="dn" type="text" class="form-control " data-provide="typeahead" data-items="8" data-source="[&quot;alpha&quot;,&quot;beta&quot;,&quot;charlie&quot;,&quot;delta&quot;,&quot;epsilon&quot;,&quot;frank&quot;,&quot;gamma&quot;,&quot;trot&quot;,&quot;zulu&quot;]">
+-->
+            <input id="dn" autocomplete="off" name="dn" type="text" class="form-control " data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>">
+          </div>
+          <div class="form-group">
+            <label for="dn_long" class="control-label">供应商全称:</label>
+            <input type="text" class="form-control" id="dn_long" name="dn_long">
+          </div>
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="qty" name="qty">
+          </div>
+          <div class="form-group">
+            <label for="cost" class="control-label">价格:</label>
+            <input type="text" class="form-control" id="cost" name="cost">
+          </div>
+          <div class="form-group">
+            <label for="info" class="control-label">技术资料:</label>
+            <input class="form-control" name="info[info]" id="info" type="file" accept=".xls"  >
+          </div>
+          <div class="form-group">
+            <label for="remark" class="control-label">备注:</label>
+            <textarea class="form-control" id="remark"  name="remark"></textarea>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick="return check_edit()">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">New message</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_edit_dn},method:"post",multipart:"true") do %>
+          <div class="form-group sr-only">
+            <label for="dn_id" class="control-label">id:</label>
+            <input type="text" class="form-control" id="dn_id" name="dn_id">
+          </div>
+          <div class="form-group sr-only">
+            <label for="dn_itemid" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="dn_itemid" name="dn_itemid">
+          </div>
+          <div class="form-group">
+            <label for="dn" class="control-label">供应商简称:</label>
+            <input id="dn_dn" autocomplete="off" name="dn_dn" type="text" class="form-control " data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>">
+          </div>
+          <div class="form-group">
+            <label for="dn_long" class="control-label">供应商全称:</label>
+            <input type="text" class="form-control" id="dnlong" name="dnlong">
+          </div>
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="dn_qty" name="dn_qty">
+          </div>
+          <div class="form-group">
+            <label for="cost" class="control-label">价格:</label>
+            <input type="text" class="form-control" id="dn_cost" name="dn_cost">
+          </div>       
+          <div class="form-group">
+            <label for="info" class="control-label">技术资料:</label>
+            <input class="form-control" name="dn_info[info]" id="dn_info" type="file" accept=".xls"  >
+          </div>
+          <div class="form-group">
+            <label for="remark" class="control-label">备注:</label>
+            <textarea class="form-control" id="dn_remark"  name="dn_remark"></textarea>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editMpn" tabindex="-1" role="dialog" aria-labelledby="editMpnLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">Update MPN</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_edit_mpn},method:"post",remote: true) do %>
+          <div class="form-group sr-only">
+            <label for="itemp_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="itemp_id" name="itemp_id">
+          </div>
+          
+          <div class="form-group">
+            <label for="item_mpn" class="control-label">MPN:</label>
+            <input type="text" class="form-control" id="item_mpn" name="item_mpn">
+          </div>       
+          
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+<%= form_tag('/p_viewbom', remote: true, method:"post", class:"form-inline") do %>
+        <%= text_field_tag :bom_id, params[:bom_id], class:"sr-only", size:2 , value: @boms.id %>
+        <%= text_field_tag :ajax, params[:ajax], class:"sr-only", size:2 , value: "" %>
+        <%= submit_tag t(:search), class:"btn-ajax  sr-only", id:"btn-ajax" %>
+<% end %>
+<%= form_tag('/p_del_bom', remote: true, method:"post", class:"form-inline") do %>
+        <%= text_field_tag :id, params[:id], class:"sr-only", size:200, value: "" %>
+        <%= submit_tag t(:search), class:"btn-del  sr-only", id:"btn-del" %>
+<% end %>
+<script>
+
+function check_edit(){
+    //if($("#cost").val() == ""){
+        //alert("Please enter your 价格.");                    
+　　      //return false;    
+   // }
+    //if($("#dn").val() == ""){
+        //alert("Please enter your 供应商.");                    
+　　      //return false;    
+    //}
+}
+
+window.actionEvents = {
+    'click .btn-d': function (e, value, row, index) {
+            $("#id").val(row.id);
+            $("#btn-del").click();
+            $table.bootstrapTable('remove', {
+                field: 'mpn',
+                values: [row.mpn]
+            });
+    }
+};
+$(document).ready(function() {
+    $(".del-btn").click(function(){
+        
+    });
+});
+
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New ' + recipient)
+  modal.find($("#item_id")).val(recipient)
+})
+$('#editMpn').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var mpn = button.data('mpn');
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find($("#itemp_id")).val(itempid);
+  modal.find($("#item_mpn")).val(mpn);
+})
+$('#editModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal;
+  var recipient = button.data('whatever'); // Extract info from data-* attributes
+  var cost = button.data('cost'); 
+  var dn = button.data('dn');
+  var dnlong = button.data('dnlong');
+  var qty = button.data('qty');
+  var remark = button.data('remark');
+  var itemid = button.data('itemid');
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  modal.find('.modal-title').text('Edit ' + recipient);
+  modal.find($("#dn_id")).val(recipient);
+  modal.find($("#dn_cost")).val(cost);
+  modal.find($("#dn_dn")).val(dn);
+  modal.find($("#dnlong")).val(dnlong);
+  modal.find($("#dn_qty")).val(qty);
+  modal.find($("#dn_remark")).val(remark);
+  modal.find($("#dn_itemid")).val(itemid);
+})
+</script>
+<script>$(function () 
+      { $("[data-toggle='popover']").popover();
+      });
+</script>
+<script>$(function () 
+      { $("[data-toggle='popoverii']").popover({
+       html: true,
+       trigger: 'hover',
+       content: function () {
+         return '<img src="'+$(this).attr('data_src') + '" />';
+       }
+      });
+      
+      });
+</script>
+
+<script>
+var localObjectData = [{ id: 1, name: 'beijing' }, { id: 2, name: 'shanghai' }, { id: 3, name: 'guangzhou' }, { id: 4, name: 'sz' }];
+var objMap = {};
+function parseLocalObjectData() {
+           
+            $("#local_object_data").typeahead({
+                source: function (query, process) {
+                    var names = [];
+                    $.each(localObjectData, function (index, ele) {
+                        objMap[ele.name] = ele.id;
+                        names.push(ele.name);
+                    });
+                    process(names);
+                },
+                afterSelect: function (item) {
+                    console.log(objMap[item]);
+                }
+            });
+        }
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

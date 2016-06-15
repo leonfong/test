@@ -540,6 +540,9 @@ before_filter :authenticate_user!
         elsif can? :work_g_b, :all
             @user_do = "75"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id],user_do: "75")
+        elsif can? :work_d, :all
+            @user_do = "7"
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
         end
         if  params[:ajax]
             @bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
@@ -558,7 +561,11 @@ before_filter :authenticate_user!
             redirect_to select_column_path(bom: @bom)
             return false
         elsif @boms.pcb_file.blank? or params[:bak]
-            render "p_viewbom.html.erb"
+            if can? :work_d, :all
+                render "bom_viewbom.html.erb"
+            else
+                render "p_viewbom.html.erb"
+            end
             return false  
         else
             @shipping_info = ShippingInfo.where(user_id: current_user.id)

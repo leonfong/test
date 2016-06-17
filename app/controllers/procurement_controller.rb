@@ -2,9 +2,22 @@
 require 'roo'
 require 'spreadsheet'
 require 'will_paginate/array'
+require 'rubygems'
+require 'json'
+require 'net/http'
 class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
+
+    def select_with_ajax    
+        @members = Product.find_by_sql("select part_name as name, part_name as value from products GROUP BY products.part_name")  
+        Rails.logger.info("-------------------------2222")
+        Rails.logger.info(@members.inspect)   
+        Rails.logger.info("----------------------------------22222")   
+        #@fengzhuang = Product.find_by_sql("SELECT products.part_name, products.package2 FROM products GROUP BY products.package2 HAVING products.part_name = '"+ params[:abc] + "'").collect { |product| [product.package2, product.package2] } 
+        render json: @members 
+    end
+
     def p_create_bom
         Rails.logger.info("-------------------------")
         Rails.logger.info(request.original_fullpath.inspect)   
@@ -44,10 +57,26 @@ before_filter :authenticate_user!
             #Rails.logger.info(params[:select_description].inspect)
             #Rails.logger.info("------------------------------------------------------------4")
             @file = params[:bom_file]
+            
             if params[:bom_file].split('.')[-1] == 'xls'
-	        @xls_file = Roo::Excel.new(params[:bom_path])
+                begin
+	            @xls_file = Roo::Excel.new(params[:bom_path])
+                rescue
+                    @xls_file = Roo::Excelx.new(params[:bom_path])
+                else
+                    redirect_to procurement_new_path(),  notice: "EXCEL文件错误!!!！"
+                    return false
+                end
             else
-                @xls_file = Roo::Excelx.new(params[:bom_path])
+                begin
+	            @xls_file = Roo::Excelx.new(params[:bom_path])
+                rescue
+                    @xls_file = Roo::Excel.new(params[:bom_path])
+                else
+                    redirect_to procurement_new_path(),  notice: "EXCEL文件错误!！"
+                    return false
+                end
+                
             end
             @sheet = @xls_file.sheet(0)
             row_n = 0
@@ -254,10 +283,29 @@ before_filter :authenticate_user!
     def p_select_column
         @sheet = params[:sheet]
         @bom = ProcurementBom.find(params[:bom])
+        
         if @bom.excel_file_identifier.split('.')[-1] == 'xls'
-	    @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            begin
+	        @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            rescue
+                @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+            else
+                redirect_to procurement_new_path(),  notice: "EXCEL文件错误！"
+                return false
+            end
         else
-            @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+            #begin
+	        @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+                Rails.logger.info("------------------------------------------------------------2222")
+            #rescue
+                Rails.logger.info("------------------------------------------------------------000000")
+                #@xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+            #else
+                #Rails.logger.info("------------------------------------------------------------111111")
+                #redirect_to procurement_new_path(),  notice: "EXCEL文件错误!!！1"
+                #return false
+            #end
+                
         end
         @sheet = @xls_file.sheet(0)
     end

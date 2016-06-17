@@ -70,6 +70,8 @@ Rails.application.routes.draw do
   match '/p_edit_mpn', to: 'procurement#p_edit_mpn',via: 'post'
   match '/copy_data', to: 'procurement#copy_data',via: 'get'
   match '/p_del_bb', to: 'procurement#p_del_bb',via: 'get'
+  match '/procurement/select_with_ajax', to: 'procurement#select_with_ajax', via: 'post'
+  match '/procurement/select_with_ajax', to: 'procurement#select_with_ajax', via: 'get'
 
 #external_bom
   match '/e_new', to: 'external_bom#p_create_bom', via: 'get' 

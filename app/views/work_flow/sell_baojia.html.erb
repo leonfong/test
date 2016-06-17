@@ -10,15 +10,52 @@
 </div>
 
 
+
+<div class="row"style="padding: 5px;">
+    <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
+       <div class="col-md-9 form-group  nav navbar-nav navbar-left">
+          <lable for="order" , class="sr-only">Qrder : </lable>
+          <div class="input-group input-group-sm"> 
+                <div class="input-group-addon " >开始 : </div>
+                <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                    <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                </script>
+                <div class="input-group-addon " >结束 : </div>
+                <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                    <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                </script>              
+            <div class="input-group-btn">
+              <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+</div>
+
+
+
+
+
 <div class="row " style="padding-top: 7px;">
     <div class="col-md-12 " style="padding: 5px;" >
         
        <div class="panel panel-info " >
-                   <div class="panel-heading"><span class="text-primary"><strong>申请的报价</strong></span></div>
                     
                     <table class="table table-bordered">  
-                        <thead>
-                            <tr>
+                        <thead class="bg-info">
+                            <tr class="text-primary">
                                 <th width="150">Order No.</th>
                                 <th width="100">数量</th>
                                 <th width="150">价格</th>  
@@ -36,7 +73,7 @@
                                 <td><%= q_order.qty %></td>
                                 <td>￥<%= q_order.t_p %></td>
                                 <td><%= "" %></td>
-                                <td><%= "" %></td>
+                                <td><star starrrr="1"></star></td>
                                 <td><%= "" %></td>
                                 <td><%= "" %></td>
                             </tr>
@@ -54,6 +91,11 @@
 
 </small>
 <script>
+  ﻿$('star').raty({
+  score: function() {
+    return $(this).attr('starrrr');
+  }
+  });
   $(function () {
   $('[data-toggle="popover"]').popover()
   });

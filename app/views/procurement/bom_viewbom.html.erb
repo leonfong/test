@@ -1,5 +1,24 @@
 <div class="container-fluid" >
-﻿
+
+
+﻿    <li class="list-group-item">
+     <fieldest id="wqwqwq">
+         <select class="province" name="province" data-url="/procurement/select_with_ajax"></select>
+        
+     </fieldest>
+<script>
+﻿$('#wqwqwq').cxSelect({
+  selects: ['province'],
+  jsonName: 'name',
+  jsonValue: 'value'
+});
+</script>
+
+
+
+          
+
+    </li>
 
 
 
@@ -71,7 +90,7 @@
                     <th width="80">分配</th> 
                     <th width="150">MPN</th> 
                     <th>描述</th>
-
+                    <th>MOKO 编码</th>
                     <th>MOKO 描述</th>
                     <th width="50">位号</th>
                     <th width="50">数量</th>
@@ -169,12 +188,26 @@ function change_<%= item.id.to_s %>(){
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
-                            <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
-                            <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
+                            <a class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#addmoko" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>"></a>
+                            <a class="text-muted" name="<%= item.id.to_s + 'n' %>"  id="<%= item.id.to_s + 'n' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus"><%= Product.find(item.product_id).name %></a>
                             </small>
-                    </td>
+                        </td>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small>
+                            <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
+                            <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body"><%= Product.find(item.product_id).description %></a>
+                            </small>
+                        </td>
                         
                     <% else %>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small> 
+                                <a class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#addmoko" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>"></a>
+                                <a class="text-muted" name="<%= item.id.to_s + 'n' %>"  id="<%= item.id.to_s + 'n' %>">bbb</a>
+                                
+                            </small>
+                            
+                        </td>
                         <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small> 
                                 <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
@@ -425,7 +458,39 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
+<div class="modal fade" id="addmoko" tabindex="-1" role="dialog" aria-labelledby="editMpnLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">Update MPN</h4>
+      </div>
+      <div class="modal-body">
 
+    
+
+
+        <%= form_tag({action: :p_edit_mpn},method:"post",remote: true) do %>
+          <div class="form-group sr-only">
+            <label for="itemp_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="itemp_id" name="itemp_id">
+          </div>
+          
+          <div class="form-group">
+            <label for="item_mpn" class="control-label">MPN:</label>
+            <input type="text" class="form-control" id="item_mpn" name="item_mpn">
+          </div>       
+          
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 </div>

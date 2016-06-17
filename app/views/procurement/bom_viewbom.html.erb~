@@ -2,13 +2,13 @@
 
 
 ﻿    <li class="list-group-item">
-     <div id="wqwqwq">
-         <select class="province" name="province" data-url="/procurement/select_with_ajax"></select>
-        
-     </div>
+     <fieldest id="wqwqwq">
+         <select class="first" name="first" data-url="/procurement/select_with_ajax"></select>
+         <select class="second" name="second" data-url="/procurement/select_with_ajax"></select>
+     </fieldest>
 <script>
 ﻿$('#wqwqwq').cxSelect({
-  selects: ['province'],
+  selects: ['first','second'],
   jsonName: 'name',
   jsonValue: 'value'
 });

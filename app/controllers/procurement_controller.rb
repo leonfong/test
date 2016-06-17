@@ -285,14 +285,14 @@ before_filter :authenticate_user!
         @bom = ProcurementBom.find(params[:bom])
         
         if @bom.excel_file_identifier.split('.')[-1] == 'xls'
-            begin
+            #begin
 	        @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
-            rescue
-                @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
-            else
-                redirect_to procurement_new_path(),  notice: "EXCEL文件错误！"
-                return false
-            end
+            #rescue
+                #@xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+            #else
+                #redirect_to procurement_new_path(),  notice: "EXCEL文件错误！"
+                #return false
+            #end
         else
             #begin
 	        @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)

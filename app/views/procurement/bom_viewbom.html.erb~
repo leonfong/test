@@ -1,24 +1,7 @@
 <div class="container-fluid" >
 
 
-﻿    <li class="list-group-item">
-     <fieldest id="wqwqwq">
-         <select class="first" name="first" data-url="/procurement/select_with_ajax"></select>
-         <select class="second" name="second" data-url="/procurement/select_with_ajax"></select>
-     </fieldest>
-<script>
-﻿$('#wqwqwq').cxSelect({
-  selects: ['first','second'],
-  jsonName: 'name',
-  jsonValue: 'value'
-});
-</script>
 
-
-
-          
-
-    </li>
 
 
 
@@ -463,36 +446,50 @@ function change_<%= item.id.to_s %>(){
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Update MPN</h4>
+        <h4 class="modal-title" id="editModalLabel">ADD MOKO PART</h4>
       </div>
       <div class="modal-body">
+<%= form_tag({action: :add_moko_part},method:"post",remote: true) do %>
 
-    
-
-
-        <%= form_tag({action: :p_edit_mpn},method:"post",remote: true) do %>
-          <div class="form-group sr-only">
-            <label for="itemp_id" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="itemp_id" name="itemp_id">
+          <div class="form-group">    
+              <lable for="类别" class="control-label">类别 : </lable><lable for="a" class="control-label">A.</lable><%= text_field_tag :part_a, params[:part_a], size:2  %>
+              <lable for="b" class="control-label">.</lable><%= text_field_tag :part_b, params[:part_b], size:2 %>
           </div>
-          
           <div class="form-group">
-            <label for="item_mpn" class="control-label">MPN:</label>
-            <input type="text" class="form-control" id="item_mpn" name="item_mpn">
-          </div>       
-          
+              <lable for="封装" class="control-label">封装 : </lable>
+              <% members = Product.find_by_sql("select * from products GROUP BY products.part_name").collect { |c| [c.part_name,c.part_name] }%>
+              <%= select  '', :abc,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)" } %>
+              <%= select_tag "package2", "<option value=\"0\">--请选择上级--</option>"%>  
+          </div>
+          <div class="form-group">
+            <label for="part_c" class="control-label">产品描述:</label>
+            <%= text_field_tag :part_c, params[:part_c], size:45 , class:"form-control" %>
+          </div>      
+     
         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Submit</button>
+        <button type="submit" class="btn btn-primary" >新增物料</button>
       </div>
      <% end %>
     </div>
   </div>
 </div>
 
-
+<script type="text/javascript">
+  function get_options(value){
+    $.ajax({
+      type: "POST",
+      url:'/procurement/select_with_ajax?id='+value,
+      data:'text',
+      success: function(data){
+        $("#package2").html(data);
+      }
+    }
+  )
+  }
+</script>
 </div>
 
 

@@ -10,12 +10,53 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
     def select_with_ajax    
-        @members = Product.find_by_sql("select part_name as name, part_name as value from products GROUP BY products.part_name")  
-        Rails.logger.info("-------------------------2222")
-        Rails.logger.info(@members.inspect)   
-        Rails.logger.info("----------------------------------22222")   
-        #@fengzhuang = Product.find_by_sql("SELECT products.part_name, products.package2 FROM products GROUP BY products.package2 HAVING products.part_name = '"+ params[:abc] + "'").collect { |product| [product.package2, product.package2] } 
-        render json: @members 
+        #@data = Product.find_by_sql("select part_name as name, part_name_en as value from products GROUP BY products.part_name")  
+        #Rails.logger.info("-------------------------212121")
+        #Rails.logger.info(@data.inspect)   
+        #Rails.logger.info("----------------------------------000000")   
+        #@fengzhuang = Product.find_by_sql("SELECT products.part_name, products.package2 FROM products GROUP BY products.package2 HAVING products.part_name = '"+ params[:id] + "'").collect { |product| [product.package2, product.package2] } 
+        options = ""
+        city = Product.find_by_sql("SELECT DISTINCT products.package2, products.part_name FROM products WHERE products.part_name = '"+ params[:id] + "'")
+        city.each do |s|
+            options << "<option value=#{s.package2}>#{s.package2}</option>"
+        end
+        render :text => options
+    end
+    
+    def add_moko_part
+        Rails.logger.info("add-------------------------------------add")
+        Rails.logger.info(params.inspect)
+        Rails.logger.info("add-------------------------------------add")
+        @item_id = params[:item_id]
+        if params[:part_a] == "" or params[:part_b] == "" or params[:part_c] == "" or params[:abc] == ""
+            #flash[:error] = "Part information can not be empty!!!"
+            #redirect_to :back
+            render "add_moko_part.js.erb" and return
+        else
+            name_a = "A." + params[:part_a].upcase + "." + params[:part_b].upcase + ".F."
+            part_name_find = Product.find_by_sql("SELECT LPAD((MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(products.`name`, '.' ,-1) , '-' ,1))+1 ) ,4,'0') AS part_n   FROM products WHERE `name` LIKE '%"+ name_a +"%'")
+            if part_name_find.first.part_n.blank?
+               part_name_find = "0001"
+            else
+               part_name_find = part_name_find.first.part_n.to_s
+            end
+            @new_part = Product.new
+            @new_part.name = name_a + part_name_find.to_s + "-" + params[:package2]
+            @new_part.description = params[:part_c]
+            @new_part.part_name = params[:part_c].split[0]
+            @new_part.ptype = params[:abc]
+            @new_part.package1 = params[:part_b].upcase
+            @new_part.package2 = params[:package2]
+            @new_part.value1 = params[:part_c].split[0]
+            @new_part.value2 = params[:part_c].split[1]
+            @new_part.value3 = params[:part_c].split[2]
+            @new_part.value4 = params[:part_c].split[3]
+            if @new_part.save
+                #flash[:success] = "New part success"
+                #redirect_to :back 
+                render "add_moko_part.js.erb" and return
+            end
+        end
     end
 
     def p_create_bom
@@ -62,8 +103,8 @@ before_filter :authenticate_user!
                 begin
 	            @xls_file = Roo::Excel.new(params[:bom_path])
                 rescue
-                    @xls_file = Roo::Excelx.new(params[:bom_path])
-                else
+                    #@xls_file = Roo::Excelx.new(params[:bom_path])
+                #else
                     redirect_to procurement_new_path(),  notice: "EXCEL文件错误!!!！"
                     return false
                 end
@@ -71,8 +112,8 @@ before_filter :authenticate_user!
                 begin
 	            @xls_file = Roo::Excelx.new(params[:bom_path])
                 rescue
-                    @xls_file = Roo::Excel.new(params[:bom_path])
-                else
+                    #@xls_file = Roo::Excel.new(params[:bom_path])
+                #else
                     redirect_to procurement_new_path(),  notice: "EXCEL文件错误!！"
                     return false
                 end

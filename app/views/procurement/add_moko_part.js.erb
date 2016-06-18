@@ -1,5 +1,3 @@
-
-document.getElementById('<%= @item_id.to_s + "n" %>').innerHTML='<%= @new_part.name.to_s %>';
-document.getElementById('<%= @item_id.to_s + "d" %>').innerHTML='<%= @new_part.description.to_s %>';
-
+$("#<%= @item_id.to_s + 'n' %>").text('<%= @new_part.name.to_s %>');
+$("#<%= @item_id.to_s + 'd' %>").text('<%= @new_part.description.to_s %>');
 $("#addmoko").modal('toggle');

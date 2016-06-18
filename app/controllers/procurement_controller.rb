@@ -30,8 +30,8 @@ before_filter :authenticate_user!
         @item_id = params[:item_id]
         if params[:part_a] == "" or params[:part_b] == "" or params[:part_c] == "" or params[:abc] == ""
             #flash[:error] = "Part information can not be empty!!!"
-            #redirect_to :back
-            render "add_moko_part.js.erb" and return
+            redirect_to :back
+            #render "add_moko_part.js.erb" and return
         else
             name_a = "A." + params[:part_a].upcase + "." + params[:part_b].upcase + ".F."
             part_name_find = Product.find_by_sql("SELECT LPAD((MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(products.`name`, '.' ,-1) , '-' ,1))+1 ) ,4,'0') AS part_n   FROM products WHERE `name` LIKE '%"+ name_a +"%'")
@@ -52,6 +52,9 @@ before_filter :authenticate_user!
             @new_part.value3 = params[:part_c].split[2]
             @new_part.value4 = params[:part_c].split[3]
             if @new_part.save
+                p_item = PItem.find(@item_id)
+                p_item.product_id = @new_part.id
+                p_item.save
                 #flash[:success] = "New part success"
                 #redirect_to :back 
                 render "add_moko_part.js.erb" and return

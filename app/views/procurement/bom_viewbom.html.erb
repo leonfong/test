@@ -171,7 +171,7 @@ function change_<%= item.id.to_s %>(){
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
-                            <a class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#addmoko" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>"></a>
+                            <a class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#addmoko" data-mpn="<%= item.mpn %>" data-itemaddid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>"></a>
                             <a class="text-muted" name="<%= item.id.to_s + 'n' %>"  id="<%= item.id.to_s + 'n' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus"><%= Product.find(item.product_id).name %></a>
                             </small>
                         </td>
@@ -222,7 +222,7 @@ function change_<%= item.id.to_s %>(){
 
 
                     <tr >
-                        <td colSpan="8" style="padding: 0px;margin: 0px;">
+                        <td colSpan="9" style="padding: 0px;margin: 0px;">
                             <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
                               
                                 <%= form_tag('/search_m', remote: true, class:"form-inline") do %>
@@ -452,7 +452,7 @@ function change_<%= item.id.to_s %>(){
 <%= form_tag({action: :add_moko_part},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="item_id" class="control-label">id:</label>
-            <input type="text" class="form-control" id="item_id" name="item_id">
+            <input type="text" class="form-control" id="itemadd_id" name="item_id" >
           </div>
           <div class="form-group">    
               <lable for="类别" class="control-label">类别 : </lable><lable for="a" class="control-label">A.</lable><%= text_field_tag :part_a, params[:part_a], size:2  %>
@@ -555,6 +555,16 @@ $('#editMpn').on('show.bs.modal', function (event) {
   var modal = $(this)
   modal.find($("#itemp_id")).val(itempid);
   modal.find($("#item_mpn")).val(mpn);
+})
+$('#addmoko').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itemaddid');
+ 
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find($("#itemadd_id")).val(itempid);
+
 })
 $('#editModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal;

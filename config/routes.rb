@@ -74,6 +74,7 @@ Rails.application.routes.draw do
   match '/procurement/select_with_ajax', to: 'procurement#select_with_ajax', via: 'get'
   match '/add_moko_part', to: 'procurement#add_moko_part', via: 'get'
   match '/add_moko_part', to: 'procurement#add_moko_part', via: 'post'
+  match '/pj_edit', to: 'procurement#pj_edit', via: 'post'
 
 #external_bom
   match '/e_new', to: 'external_bom#p_create_bom', via: 'get' 

@@ -1253,7 +1253,7 @@ WHERE
 
                 
                 @view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
-                @view_dns += dn.remark ? dn.remark[0..1]:''
+                @view_dns += dn.remark ? dn.remark[0]:''
                 @view_dns += '</div></a></small></td>'             
                 @view_dns += '<td width="30"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'" data-confirm="确定要删除?"></a></small></td>'
                 @view_dns += '</tr>'

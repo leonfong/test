@@ -53,7 +53,7 @@
                            <td>
                                <div class="form-inline">
                                    <label for="pj_remark">备注：</label>
-                                   <input type="text" class="form-control" id="pj_remark" name="pj_remark" style="width:85%" >
+                                   <input type="text" class="form-control" id="pj_remark" name="pj_remark" value="<%= @boms.remark %>" style="width:85%" >
                                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
                                    <button type="submit" class="btn btn-warning">提交</button>
                                </div>
@@ -64,7 +64,7 @@
                                <%= form_tag({action: :p_profit},method:"post",class:"form-inline") do %>
                                    <div class="form-group">
                                        <label for="profit">利润：</label>
-                                       <input type="number" class="form-control" id="profit" name="profit" style="width:60px" >
+                                       <input type="number" class="form-control" id="profit" name="profit" value="<%= @boms.profit %>" style="width:60px" >
                                    </div>
                                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
                                   <button type="submit" class="btn btn-warning">提交</button>

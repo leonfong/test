@@ -10,4 +10,6 @@ document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw 
 //document.getElementById("<%= @bom_item.id.to_s + 'info' %>").innerHTML = <%= @bom_item.info %>;
 //document.getElementById("<%= @bom_item.id.to_s + 'remark' %>").innerHTML = <%= @bom_item.remark %>;
 
-
+$(function () 
+{ $("[data-toggle='popover']").popover();
+});

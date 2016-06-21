@@ -49,7 +49,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   
 <script type="text/javascript">
       document.getElementById('startButton').onclick = function() {
-        introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
+        introJs().setOptions({'doneLabel':'Next page','disableInteraction':true}).start().oncomplete(function() {
           window.location.href = 'upload?multipage=true';
         });
       };

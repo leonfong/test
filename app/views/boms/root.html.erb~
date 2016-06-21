@@ -39,7 +39,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
       <% end %>
       </div>
       <div class="col-md-1 " >
-           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload" data-step="1" data-intro="点击上传按钮进入上传BOM页面" data-position="right">
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload" data-step="1" data-intro="<%= t('stepone') %>" data-position="right">
 	       <img src="/uploads/upbom.png" alt="search">
 	       BOM
            </a>
@@ -49,7 +49,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   
 <script type="text/javascript">
       document.getElementById('startButton').onclick = function() {
-        introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
+        introJs().setOptions({'doneLabel':'Next page','disableInteraction':false}).start().oncomplete(function() {
           window.location.href = 'upload?multipage=true';
         });
       };

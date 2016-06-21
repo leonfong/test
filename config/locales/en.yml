@@ -78,3 +78,8 @@ en:
   merchandiser: "跟单部"
   procurement: "采购部"
   sell: "业务部"
+  stepone: "Click the upload button, jump to upload the BOM page."
+  steptwo: "Click on the button to choose to upload the BOM file."
+  stepthree: "Enter your project name and  quantity."
+  stepfour: "Choose the Manufacturing Part Number, quantity and RefDes."
+  stepfive: "Click on the button in the system will automatically match the price."

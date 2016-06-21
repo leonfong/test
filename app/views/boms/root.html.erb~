@@ -9,7 +9,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
   <div class="row center-block" style="padding-top: 100px;margin: 0px;">
     
     <div class="col-md-12 " style="padding: 0px;margin: 0px;">
-      <h3 ><p class="text-center" style="color: #ffffff" ><strong>Your PCB Board Purcasing Platform. </strong></p></h3>
+      <h3 ><p class="text-center" style="color: #ffffff" ><strong>Your PCB Board Purchasing Platform. </strong></p></h3>
     </div>
     
   </div>
@@ -19,7 +19,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     <div class="col-md-7 ">
       <div class="row" >
       <div class="col-md-1 "></div>
-      <div class="col-md-9 ">
+      <div class="col-md-7 ">
       <%= form_tag('/search', method:"get", class:"form-inline") do %>
         <div class="form-group ">
           <lable for="mpn" , class="sr-only">Part : </lable>
@@ -38,27 +38,25 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
         
       <% end %>
       </div>
-      <div class="col-md-1 ">
-
-           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload">
+      <div class="col-md-1 " >
+           <a class="btn btn-lg" style="border-color: #ec971f;background-color: #ec971f;color: #fff;" href="/upload" data-step="1" data-intro="点击上传按钮进入上传BOM页面" data-position="right">
 	       <img src="/uploads/upbom.png" alt="search">
 	       BOM
            </a>
       </div>
       <div class="col-md-1 "></div>
+          <a id="startButton" class="btn btn-lg btn-success" href="javascript:void(0);">Show me how</a>
+  
+<script type="text/javascript">
+      document.getElementById('startButton').onclick = function() {
+        introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
+          window.location.href = 'upload?multipage=true';
+        });
+      };
+</script>
       </div>
     </div>
-    <div class=" col-md-2 form-group">
-    <%= form_for @bom, html: { multipart: true, class:"form-inline"} do |f| %>	
-        
-	
-                <%= f.file_field :excel_file,class:"text-muted sr-only",style:"padding: 11px;margin: 0px;background-color: #ffffff;" %>
-
-             
-                <%= f.submit "Upload BOM file", class: "btn btn-warning btn-lg sr-only" %>
-   
-    <% end %>
-    </div>
+    
     <div class="col-md-2"></div>
   </div>
     

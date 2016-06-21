@@ -740,7 +740,11 @@ WHERE
             #end
             #@sheet = @xls_file.sheet(0)
             #render "select_column.html.erb"
-            redirect_to select_column_path(bom: @bom)  
+            if params[:multipage]
+                redirect_to select_column_path(bom: @bom, multipage: true) 
+            else
+                redirect_to select_column_path(bom: @bom) 
+            end 
             return false
         end 
     end

@@ -128,9 +128,10 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                     <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
                         <h4>1.Upload BOM from EXCEL Spreadsheet</h4>
                         <ul class="list-inline pt20 mt15">
-                            <li class="w50">
+                            <li class="w50" data-step="2" data-intro="<%= t('steptwo') %>" data-position="right">
+
                             	<a class="btn btn-danger" id="UploadButton" style="position: relative;">BROWSE
-<form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/new_bom"> 
+<form id="up_bom" style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/new_bom" > 
 <input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls,.xlsx" style="display: block; overflow: hidden; width: 80px; height: 30px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
 </form></a>
                             </li>
@@ -235,3 +236,9 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
         </div>
     </div>
 </div>
+<script type="text/javascript">
+      if (RegExp('multipage', 'gi').test(window.location.search)) {
+        $("#up_bom").attr("action","/new_bom?multipage=true");
+        introJs().setOption('showButtons', false).start();
+      }
+</script>

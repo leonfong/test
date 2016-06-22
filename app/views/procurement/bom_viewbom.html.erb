@@ -463,6 +463,7 @@ function change_<%= item.id.to_s %>(){
           </div>
           <div class="form-inline" style="padding-bottom: 5px;">  
               <div class="form-inline">
+              <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
               <lable for="package2" class="control-label">封装 : </lable>
               <% members = Product.find_by_sql("select * from products GROUP BY products.part_name").collect { |c| [c.part_name,c.part_name] }%>
               <%= select  '', :abc,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)" ,class:"form-control"}  %>
@@ -531,15 +532,23 @@ thisobj.value = thisobj.value.toUpperCase();
 
 <script type="text/javascript">
   function get_options(value){
-    $.ajax({
-      type: "POST",
-      url:'/procurement/select_with_ajax?id='+value,
-      data:'text',
-      success: function(data){
-        $("#package2").html(data);
-      }
-    }
-  )
+    var urla='/procurement/select_with_ajax?id='+value;
+    $("#change_s").attr("href",urla);
+    $("#change_s").click(); 
+    //$.ajax({
+      //type: "POST",
+      //url:'/procurement/select_with_ajax?id='+value,
+      //data:'text',
+      //data:'<%= @options %>',
+      //data_a:'<%= @code_a %>',
+      //data_b:'<%= @code_b %>',
+      //success: function(data,data_a,data_b){
+        //$("#package2").html(data);
+        //$("#part_a").val(data_a);
+        //$("#part_b").val(data_b);
+      //}
+    //}
+  //)
   }
 </script>
 </div>

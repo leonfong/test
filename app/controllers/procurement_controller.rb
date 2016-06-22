@@ -24,12 +24,27 @@ before_filter :authenticate_user!
         #Rails.logger.info(@data.inspect)   
         #Rails.logger.info("----------------------------------000000")   
         #@fengzhuang = Product.find_by_sql("SELECT products.part_name, products.package2 FROM products GROUP BY products.package2 HAVING products.part_name = '"+ params[:id] + "'").collect { |product| [product.package2, product.package2] } 
-        options = ""
+        kind = Kind.find_by_sql("SELECT * FROM kinds WHERE kinds.des = '"+params[:id]+"'").first
+        if kind.blank?
+            @code_a = ""
+            @code_b = ""
+        else
+            @code_a = kind.code_a
+            @code_b = kind.code_b
+        end
+        
+        @options = ""
         city = Product.find_by_sql("SELECT DISTINCT products.package2, products.part_name FROM products WHERE products.part_name = '"+ params[:id] + "'")
         city.each do |s|
-            options << "<option value=#{s.package2}>#{s.package2}</option>"
+            @options << "<option value=#{s.package2}>#{s.package2}</option>"
         end
-        render :text => options
+        Rails.logger.info("-------------------------@code_a")
+        Rails.logger.info(@code_a.inspect)  
+        Rails.logger.info(@code_b.inspect)
+        Rails.logger.info(@options.inspect)   
+        Rails.logger.info("----------------------------------@code_a")  
+        #render "select_with_ajax.js.erb" and return
+        #render :text => @options
     end
     
     def add_moko_part

@@ -12,7 +12,7 @@
 
 
 <div class="row"style="padding: 5px;">
-    <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
+    <%= form_tag('/sell_baojia', method:"get", class:"form-inline") do %>
        <div class="col-md-9 form-group  nav navbar-nav navbar-left">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm"> 
@@ -73,7 +73,7 @@
                                 <td><%= q_order.qty %></td>
                                 <td>￥<%= q_order.t_p %></td>
                                 <td><%= "" %></td>
-                                <td><star starrrr="1"></star></td>
+                                <td><star ccc="1" id="<%= q_order.id %>"></star></td>
                                 <td><%= "" %></td>
                                 <td><%= "" %></td>
                             </tr>
@@ -91,11 +91,18 @@
 
 </small>
 <script>
-  ﻿$('star').raty({
-  score: function() {
-    return $(this).attr('starrrr');
-  }
-  });
+  $('star').raty({
+    
+    click: function(score, evt) {                                       
+      alert('ID: ' + this.id + "\nscore: " + score + "\nevent: " + evt);
+    }                                                                   
+  }); 
+  
+  //$('star').raty({
+   // score: function() {
+    //return $(this).attr('ccc');
+  //}  
+  //});
   $(function () {
   $('[data-toggle="popover"]').popover()
   });

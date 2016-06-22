@@ -139,7 +139,7 @@ $(document).ready(function() {
 
     <%= form_tag('/new_bom', method:"POST") do %> 
     <div class="row ">
-        <div class="col-sm-11 form-group" data-step="3" data-intro="<%= t('stepthree') %>" data-position="top">
+        <div class="col-sm-11 form-group" data-step="4" data-intro="<%= t('stepthree') %>" data-position="top">
                     <label for="p_name" class="col-sm-4 control-label form-inline">Project name:
                         <%= text_field_tag :p_name, @bom.p_name, class:"form-control", size:50  %>  
                     </label>
@@ -169,7 +169,7 @@ $(document).ready(function() {
                     </label>  
                 </div> 
         
-        <div class="col-sm-1 form-group pull-right" data-step="5" data-intro="123123123123" data-position="left">
+        <div class="col-sm-1 form-group pull-right" data-step="8" data-intro="<%= t('stepfive') %>" data-position="left">
             <%= text_field_tag :bom_id, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.id.to_s %>
             <%= text_field_tag :bom_path, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file.current_path %>
             <%= text_field_tag :bom_file, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file_identifier %> 
@@ -184,9 +184,9 @@ $(document).ready(function() {
     <div class="row " style="padding-top: 10px;padding-bottom: 40px;">
         <div class="col-md-12 ">
         <table class="table table-bordered">
-            <tr style="background-color: #32b0cc;" data-step="4" data-intro="<%= t('stepfour') %>" data-position="top">
+            <tr style="background-color: #32b0cc;" >
                 <% @sheet.row(1).each_with_index do |item,index| %>
-                <td>
+                <td data-step="<%= index+5 %>" data-intro="<%= t('stepfour') %>" data-position="top">
                     <div >
                     <select name="noselect[]" id="rowselect_<%= index %>"  class="changes form-control center-block" style="font-weight:bold;">
 		        <option value="0">

@@ -95,6 +95,10 @@ zh:
   procurement: 采购部
   stepone: "点击上传按钮进入上传BOM页面。"
   steptwo: "点击按钮选择要上传的BOM文件。"
+  steptwoa: "点击下载例子（BOM文件）。"
   stepthree: "输入项目名称和数量。"
   stepfour: "选择物料制造方编号，位号和数量。"
+  stepfour1: "选择物料制数量。"
+  stepfour2: "选择物料位号。"
+  stepfour3: "选择物料制造方编号。"
   stepfive: "点击按钮自动匹配价格。"

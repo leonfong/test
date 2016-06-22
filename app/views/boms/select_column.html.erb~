@@ -186,20 +186,20 @@ $(document).ready(function() {
         <table class="table table-bordered">
             <tr style="background-color: #32b0cc;" >
                 <% @sheet.row(1).each_with_index do |item,index| %>
-                <td data-step="<%= index+5 %>" data-intro="<%= t('stepfour') %>" data-position="top">
+                <td data-step="<%= index+5 %>" data-intro="<%= t('stepfour'+(index+1).to_s) %>" data-position="top">
                     <div >
                     <select name="noselect[]" id="rowselect_<%= index %>"  class="changes form-control center-block" style="font-weight:bold;">
 		        <option value="0">
 			    None
 		        </option>
 			<option value="1">
-			    Part# (eg: LM339DR)
+			    Part
 			</option>
 			<option value="2">
-		            Quantity
+		            QTY
 			</option>
                         <option value="3">
-		            RefDes (eg: R1,R2...)
+		            Reference
 			</option>
 		    </select>
                     </div>

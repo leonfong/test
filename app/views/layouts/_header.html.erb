@@ -16,7 +16,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
     
       <ul class="nav navbar-nav" >
-        <li id="a"><%= link_to 'HOME',root_path %></li>
+        <li id="a"><%= link_to 'HOME',root_path,id:"home" %></li>
 <!--
         <li id="b"><%= link_to t('bom_parser'),how_to_use_path %></li>
         <li id="c"><%= link_to t('all_boms'),boms_path %></li>
@@ -69,8 +69,9 @@
             <% end %>
         <% end %>
         <li id="d"><%= link_to t('about'),about_path %></li>
-        <li id="e"><%= link_to t('contact'),contact_path %></li>
+        <li id="e"><%= link_to t('contact'),contact_path %></li>     
       </ul>
+      <a id="startButton" style="margin-top: 10px;" href="/?multipage=true" class=" navbar-left btn btn-success">Try now</a>
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
            <% if can? :work_h, :all%>

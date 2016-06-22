@@ -12,7 +12,11 @@
     <%= stylesheet_link_tag "application", media: "all","data-turbolinks-track" => true %>
     
     
-    
+    <%= csrf_meta_tags %>
+
+
+
+    <%= render 'layouts/shim' %>
 
    <style type="text/css">
 body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}

@@ -19,7 +19,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
     <div class="col-md-7 ">
       <div class="row" >
       <div class="col-md-1 "></div>
-      <div class="col-md-6 ">
+      <div class="col-md-8 ">
       <%= form_tag('/search', method:"get", class:"form-inline") do %>
         <div class="form-group ">
           <lable for="mpn" , class="sr-only">Part : </lable>
@@ -45,15 +45,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
            </a>
       </div>
       <div class="col-md-1 "></div>
-          <a id="startButton" class="btn btn-lg btn-success" href="javascript:void(0);">Show me how</a>
-  
-<script type="text/javascript">
-      document.getElementById('startButton').onclick = function() {
-        introJs().setOptions({'doneLabel':'Next page','disableInteraction':true}).start().oncomplete(function() {
-          window.location.href = 'upload?multipage=true';
-        });
-      };
-</script>
+          
       </div>
     </div>
     
@@ -137,4 +129,11 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
    </div>
 </small>
 </div>
+<script type="text/javascript">
+      if (RegExp('multipage', 'gi').test(window.location.search)) {
+        introJs().setOptions({'doneLabel':'Next page','disableInteraction':true}).start().oncomplete(function() {
+          window.location.href = 'upload?multipage=true';
+        });
+      }
+</script>
 

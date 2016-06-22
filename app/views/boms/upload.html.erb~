@@ -137,7 +137,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                             </li>
                         </ul>
 
-                        <h4 >Download <a href="/samples.xlsx" class="yellow-l" target="_blank" data-step="2" data-intro="<%= t('steptwoa') %>" data-position="right">BOM Template</a></h4>
+                        <h4 >Download <a href="/samples.xlsx" class="yellow-l" target="_blank" data-step="2" data-intro="<%= t('steptwoa') %>" data-position="right"> BOM Template</a></h4>
                         <p style="height:19px;">&nbsp;</p>
 
                     </div>

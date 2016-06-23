@@ -50,7 +50,7 @@
 
 <div class="row " style="padding-top: 7px;">
     <div class="col-md-12 " style="padding: 5px;" >
-        
+       <%= will_paginate(@quate) %> 
        <div class="panel panel-info " >
                     
                     <table class="table table-bordered">  
@@ -154,6 +154,9 @@ $('#editOrder').on('show.bs.modal', function (event) {
   var modal = $(this)
   modal.find($("#itemp_id")).val(itempid);
   modal.find($("#star_val")).attr("ccc",star);
+  modal.find($("#order_country")).val(ocountry);
+  modal.find($("#sell_remark")).val(sellremark);
+  modal.find($("#sell_manager_remark")).val(sellmanagerremark);
   $('star').raty({                                                                    
    score: function() {
     return $(this).attr('ccc');

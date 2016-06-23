@@ -50,7 +50,7 @@ before_filter :authenticate_user!
             end
         end
         
-        @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ")
+        @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
     end
 
     def index

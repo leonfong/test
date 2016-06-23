@@ -1,9 +1,26 @@
 require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
+    
+    def edit_orderinfo
+        order_info = ProcurementBom.find(params[:itemp_id])
+        order_info.order_country = params[:order_country]
+        order_info.star = params[:hint]
+        order_info.sell_remark = params[:sell_remark]
+        order_info.sell_manager_remark = params[:sell_manager_remark]
+        order_info.save
+        redirect_to :back 
+    end
 
     def sell_baojia
         where_p = ""
+        where_date = ""
+        if params[:start_date] != "" 
+           where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
+        end
+        if params[:end_date] != "" 
+           where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
+        end
         if not current_user.s_name.blank?
             if current_user.s_name.size == 1
                 s_name = current_user.s_name
@@ -33,7 +50,7 @@ before_filter :authenticate_user!
             end
         end
         
-        @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE	#{where_p}")
+        @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ")
     end
 
     def index

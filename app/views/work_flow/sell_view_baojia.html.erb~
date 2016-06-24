@@ -197,7 +197,7 @@
                     </td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                         <small>
-                            <a class="text-muted"><%= "￥" + item.cost.to_s %></a>
+                            <a class="text-muted"><%= "￥" + item.price.to_s %></a>
                         </small>
                     </td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" data-container="body"   data-toggle="popover"  data-placement="top" data-content="<%= item.other %>"><small><%= item.other %></small></td>

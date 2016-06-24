@@ -362,20 +362,36 @@ before_filter :authenticate_user!
             render "engineering_feedback.html.erb"
         elsif can? :work_e, :all
             if current_user.s_name.blank?
-                @topic.mark += "lwork_" + "all" + "l"
+                if @topic.mark.blank?
+                    @topic.mark = "lwork_" + "all" + "l"
+                else
+                    @topic.mark += "lwork_" + "all" + "l"
+                end
             else
-                @topic.mark += "lwork_" + current_user.s_name + "l"
+                if @topic.mark.blank?
+                    @topic.mark = "lwork_" + current_user.s_name + "l"
+                else
+                    @topic.mark += "lwork_" + current_user.s_name + "l"
+                end
             end
             @topic.save
             render "sell_feedback.html.erb"
         elsif can? :work_f, :all
-            @topic.mark += "lwork_fl"
+            if @topic.mark.blank?
+                @topic.mark = "lwork_fl"
+            else
+                @topic.mark += "lwork_fl"
+            end
             @topic.save
             render "merchandiser_feedback.html.erb"
         elsif can? :work_g, :all
             render "procurement_feedback.html.erb"
         elsif can? :work_b, :all
-            @topic.mark += "lwork_bl"
+            if @topic.mark.blank?
+                @topic.mark = "lwork_bl"
+            else
+                @topic.mark += "lwork_bl"
+            end
             @topic.save
             #render "delivery_date_feedback.html.erb"
             render "production_feedback.html.erb"

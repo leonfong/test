@@ -2,6 +2,11 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def sell_view_baojia
+        @boms = ProcurementBom.find(params[:bom_id])
+        @baojia = PItem.where(procurement_bom_id: params[:bom_id])
+    end
+
     def edit_orderinfo
         order_info = ProcurementBom.find(params[:itemp_id])
         order_info.order_country = params[:order_country]

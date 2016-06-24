@@ -70,7 +70,7 @@
 <% if not @quate.blank?%>
 <% @quate.each do |q_order| %>
                             <tr>
-                                <td><%= q_order.p_name %></td>
+                                <td><%= link_to q_order.p_name, sell_view_baojia_path(:bom_id =>q_order.id) %></td>
                                 <td><%= q_order.qty %></td>
                                 <td>￥<%= q_order.t_p %></td>
                                 <td><%= q_order.order_country %></td>

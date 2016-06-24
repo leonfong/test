@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   match '/up_enddate', to: 'work_flow#up_enddate', via: 'post' 
   match '/sell_baojia', to: 'work_flow#sell_baojia', via: 'get' 
   match '/sell_baojia', to: 'work_flow#edit_orderinfo', via: 'post'
+  match '/sell_view_baojia', to: 'work_flow#sell_view_baojia', via: 'get'
 
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 

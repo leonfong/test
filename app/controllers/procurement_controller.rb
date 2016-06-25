@@ -434,7 +434,7 @@ before_filter :authenticate_user!
                             else
         #0.1.2如果自有物料不能匹配 
                                 Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
-                                match_product_old = search_bom_use(item.description) #根据历史记录查询产品
+                                match_product_old = search_bom_use(item.description,item.mpn) #根据历史记录查询产品
                                 Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
                                 Rails.logger.info(match_product_old.inspect)
                                 Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
@@ -506,7 +506,7 @@ before_filter :authenticate_user!
                         else
     #0.2如果没有mpn只有描述
                             Rails.logger.info("22-------------------------------------------------------22")
-                            match_product_old = search_bom_use(item.description) #根据历史记录查询产品
+                            match_product_old = search_bom_use(item.description,nil) #根据历史记录查询产品
                             Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
                             Rails.logger.info(match_product_old.inspect)
                             Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
@@ -1759,10 +1759,15 @@ WHERE
   	    params.require(:dn_info).permit(:info)
   	end
 
-        def search_bom_use (query_str)
-            if not query_str.blank?
-                #result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
-                result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip.gsub(/['"]/,"") + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
+        def search_bom_use (query_str,mpn_str)
+            if not mpn_str.blank?
+                result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.mpn = '" + mpn_str.to_s.strip + "' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
+            end
+            if result.blank?
+                if not query_str.blank?
+                    #result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
+                    result = PItem.find_by_sql("SELECT * FROM p_items WHERE p_items.description LIKE '%" + query_str.to_s.strip.gsub(/['"]/,"") + "%' AND p_items.dn_id IS NOT NULL ORDER BY p_items.created_at DESC").first
+                end
             end
         end
 

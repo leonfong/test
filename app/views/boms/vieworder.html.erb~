@@ -225,7 +225,7 @@ function change_bom(){
                             <table class="table">
                                 <thead class="bg-info">
                                     <tr>
-                                        <th>Part#</th>
+                                        <th width="100">Part#</th>
                                         <th>REF.DES.</th>
                                         <th>QTY</th>
                                         <th>Unit Price</th>
@@ -237,7 +237,7 @@ function change_bom(){
                                 <% @order_item.each do |item| %> 
                                     <tr <% if item.price.blank? %>class="danger"<% end %> >
                                         <td><small><%= item.mpn %></small></td>
-                                        <td><small><%= item.part_code %></small></td>
+                                        <td><small><%= item.part_code[0..3]+"..." %></small></td>
                                         <td><small><%= item.quantity %></small></td>
                                         <td><small><% if not item.price.blank? %>$<%= item.price %><% else %>NO price<% end %></small></td>
                                         <td><small><% if not item.price.blank? %>$<%= item.price*item.quantity %><% else %>NO price<% end %></small></td>

@@ -470,33 +470,34 @@ function change_<%= item.id.to_s %>(){
               <%= select_tag "package2", "<option value=\"0\">--请选择上级--</option>",  class:"form-control"%>  
               </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="all_attr">
+<!--
             <label for="part_c" class="control-label">产品描述:</label>
             <div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">
                 <label for="part_c" class="control-label">分类:</label> 
-                <%= text_field_tag :key1, params[:key1],  class:"form-control", onkeyup:"cdkeyInput(this,'key2');" %>
+                <%= text_field_tag :key1, params[:key1],  class:"form-control" %>
             </div>
             <div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">
                 <label for="part_c" class="control-label">值:&nbsp;&nbsp;&nbsp;</label> 
-                <%= text_field_tag :key2, params[:key2],  class:"form-control", onkeyup:"cdkeyInput(this,'key3');" %>
+                <%= text_field_tag :key2, params[:key2],  class:"form-control" %>
             </div>
             <div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">
                 <label for="part_c" class="control-label">电压:</label>
-                <%= text_field_tag :key3, params[:key3],  class:"form-control", onkeyup:"cdkeyInput(this,'key4');" %>
+                <%= text_field_tag :key3, params[:key3],  class:"form-control" %>
             </div>
             <div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">
                 <label for="part_c" class="control-label">容差:</label>
-                <%= text_field_tag :key4, params[:key4],  class:"form-control", onkeyup:"cdkeyInput(this,'key5');" %>
+                <%= text_field_tag :key4, params[:key4],  class:"form-control" %>
             </div>
             <div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">
                 <label for="part_c" class="control-label">封装:</label>
-                <%= text_field_tag :key5, params[:key5],  class:"form-control", onkeyup:"cdkeyInput(this,'key6');" %>
+                <%= text_field_tag :key5, params[:key5],  class:"form-control" %>
             </div>
             <div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">
                 <label for="part_c" class="control-label">品牌:</label>
-                <%= text_field_tag :key6, params[:key6],  class:"form-control", onkeyup:"cdkeyInput(this,'key7');" %>
-                <input type="text" name="key6" id="key6" max="8" size="8" onkeyup="cdkeyInput(this);"/> 
+                <%= text_field_tag :key6, params[:key6],  class:"form-control" %>
             </div>
+-->
           </div>      
 <script language="JavaScript" type="text/javascript"> 
 function cdkeyInput(thisobj) 

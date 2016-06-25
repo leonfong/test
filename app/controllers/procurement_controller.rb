@@ -28,9 +28,11 @@ before_filter :authenticate_user!
         if kind.blank?
             @code_a = ""
             @code_b = ""
+            kind_attr = ""
         else
             @code_a = kind.code_a
             @code_b = kind.code_b
+            kind_attr = kind.attr
         end
         
         @options = ""
@@ -43,6 +45,16 @@ before_filter :authenticate_user!
         Rails.logger.info(@code_b.inspect)
         Rails.logger.info(@options.inspect)   
         Rails.logger.info("----------------------------------@code_a")  
+        @all_attr = '<label class="control-label">产品描述:</label>'
+        if kind_attr != nil and kind_attr != ""
+            kind_attr.split(",").each_with_index do |item,index|                                           
+                @all_attr += '<div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">'  
+                @all_attr += '<label for="key'+(index+1).to_s+'" class="control-label">'+item.to_s+':</label>'                  
+                @all_attr += '<input type="text" name="key'+(index+1).to_s+'" id="key'+(index+1).to_s+'" class="form-control">'         
+                @all_attr += '</div>'
+            end
+        end
+
         #render "select_with_ajax.js.erb" and return
         #render :text => @options
     end

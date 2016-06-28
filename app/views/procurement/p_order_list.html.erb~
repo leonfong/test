@@ -10,7 +10,7 @@
 
   
     <div class="row" style="padding: 0px;">
-        <h1>My BOM</h1>
+        <h1>My ORDER</h1>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
@@ -18,9 +18,9 @@
             <% if can? :pcb_dc, :all %>
             <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
             <% end %>
-            <%= link_to "My Order", p_bomlist_path ,class: "list-group-item"%>
+            <%= link_to "My Order", p_bomlist_path(order_list: true) ,class: "list-group-item active"%>
             <%= link_to "New BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
-            <%= link_to "BOM List", p_bomlist_path ,class: "list-group-item active"%>           
+            <%= link_to "BOM List", p_bomlist_path ,class: "list-group-item "%>           
         </div>
         <div class="col-md-11">
         <div class="row">
@@ -45,7 +45,6 @@
 -->
       <th>Action</th>
       <th>ADD MOKO PART</th>
-      <th>ADD IN ORDER LIST</th>
     </tr>
   </thead>
   <tbody>

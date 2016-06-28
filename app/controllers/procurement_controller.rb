@@ -731,8 +731,10 @@ before_filter :authenticate_user!
             #render "select_column.html.erb"
             redirect_to select_column_path(bom: @bom)
             return false
-        elsif @boms.pcb_file.blank? or params[:bak]
-            if can? :work_d, :all
+        elsif @boms.pcb_file.blank? or params[:bak] or params[:add_bom]
+            
+            #if can? :work_d, :all
+            if not params[:add_bom].blank?
                 render "bom_viewbom.html.erb"
             else
                 render "p_viewbom.html.erb"
@@ -751,7 +753,12 @@ before_filter :authenticate_user!
 
 
     def p_bomlist
-        @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 10)
+        if params[:order_list]
+            @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` = 'do' ORDER BY `check` DESC,`updated_at` DESC ").paginate(:page => params[:page], :per_page => 10)
+            render "p_order_list.html.erb"
+        else
+            @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 10)
+        end
     end
 
     def search_m
@@ -1714,6 +1721,15 @@ WHERE
             end
         end
         redirect_to :back
+    end
+
+    def add_order
+        p_bom = ProcurementBom.find(params[:bom_id])
+        if can? :work_d, :all
+            p_bom.order_do = "do"
+            p_bom.save
+        end
+        redirect_to p_bomlist_path(order_list: true)
     end
 
     private

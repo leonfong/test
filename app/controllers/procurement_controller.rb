@@ -36,7 +36,7 @@ before_filter :authenticate_user!
         end
         
         @options = ""
-        city = Product.find_by_sql("SELECT DISTINCT products.package2, products.part_name FROM products WHERE products.part_name = '"+ params[:id] + "'")
+        city = Product.find_by_sql("SELECT DISTINCT products.package2, products.part_name,products.ptype,products.part_name_en FROM products WHERE products.part_name = '"+ params[:id] + "'")
         city.each do |s|
             @options << "<option value=#{s.package2}>#{s.package2}</option>"
         end
@@ -46,11 +46,23 @@ before_filter :authenticate_user!
         Rails.logger.info(@options.inspect)   
         Rails.logger.info("----------------------------------@code_a")  
         @all_attr = '<label class="control-label">产品描述:</label>'
+        @all_attr += '<div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">'  
+        @all_attr += '<label for="keyptype" class="control-label">Ptype:</label>'  
+        @all_attr += '<input type="text" name="keyptype" id="keyptype" class="form-control" value="'+city.first.ptype+'">'  
+        @all_attr += '</div>'
+        @all_attr += '<div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">'  
+        @all_attr += '<label for="key1en" class="control-label">英文名称:</label>'  
+        @all_attr += '<input type="text" name="key1en" id="key1en" class="form-control" value="'+city.first.part_name_en+'">'  
+        @all_attr += '</div>'
         if kind_attr != nil and kind_attr != ""
             kind_attr.split(",").each_with_index do |item,index|                                           
                 @all_attr += '<div class="form-inline" style="padding-bottom: 5px;padding-left: 15px;">'  
-                @all_attr += '<label for="key'+(index+1).to_s+'" class="control-label">'+item.to_s+':</label>'                  
-                @all_attr += '<input type="text" name="key'+(index+1).to_s+'" id="key'+(index+1).to_s+'" class="form-control">'         
+                @all_attr += '<label for="key'+(index+1).to_s+'" class="control-label">'+item.to_s+':</label>'  
+                if index == 0                
+                    @all_attr += '<input type="text" name="key'+(index+1).to_s+'" id="key'+(index+1).to_s+'" class="form-control" value="'+params[:id]+'">'  
+                else
+                    @all_attr += '<input type="text" name="key'+(index+1).to_s+'" id="key'+(index+1).to_s+'" class="form-control">'
+                end         
                 @all_attr += '</div>'
             end
         end
@@ -78,15 +90,46 @@ before_filter :authenticate_user!
             end
             @new_part = Product.new
             @new_part.name = name_a + part_name_find.to_s + "-" + params[:package2]
-            @new_part.description = params[:part_c]
-            @new_part.part_name = params[:part_c].split[0]
-            @new_part.ptype = params[:abc]
+            #@new_part.description = params[:part_c]
+            @new_part.part_name = params[:key1]
+            @new_part.part_name_en = params[:key1en]
+            @new_part.ptype = params[:keyptype]
             @new_part.package1 = params[:part_b].upcase
             @new_part.package2 = params[:package2]
-            @new_part.value1 = params[:key1].strip
-            @new_part.value2 = params[:key2].strip
-            @new_part.value3 = params[:key3].strip
-            @new_part.value4 = params[:key4].strip
+            des = ""
+            if not params[:key1].blank?
+                @new_part.value1 = params[:key1].strip
+                des += params[:key1].strip + " "
+            end
+            if not params[:key2].blank?
+                @new_part.value2 = params[:key2].strip
+                des += " " + params[:key2].strip
+            end
+            if not params[:key3].blank?
+                @new_part.value3 = params[:key3].strip
+                des += " " + params[:key3].strip
+            end
+            if not params[:key4].blank?
+                @new_part.value4 = params[:key4].strip
+                des += " " + params[:key4].strip
+            end
+            if not params[:key5].blank?
+                @new_part.value5 = params[:key5].strip
+                des += " " + params[:key5].strip
+            end
+            if not params[:key6].blank?
+                @new_part.value6 = params[:key6].strip
+                des += " " + params[:key6].strip
+            end
+            if not params[:key7].blank?
+                @new_part.value7 = params[:key7].strip
+                des += " " + params[:key7].strip
+            end
+            if not params[:key8].blank?
+                @new_part.value8 = params[:key8].strip
+                des += " " + params[:key8].strip
+            end
+            @new_part.description = des
             if @new_part.save
                 p_item = PItem.find(@item_id)
                 p_item.product_id = @new_part.id

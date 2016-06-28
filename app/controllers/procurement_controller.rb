@@ -83,10 +83,10 @@ before_filter :authenticate_user!
             @new_part.ptype = params[:abc]
             @new_part.package1 = params[:part_b].upcase
             @new_part.package2 = params[:package2]
-            @new_part.value1 = params[:part_c].split[0]
-            @new_part.value2 = params[:part_c].split[1]
-            @new_part.value3 = params[:part_c].split[2]
-            @new_part.value4 = params[:part_c].split[3]
+            @new_part.value1 = params[:key1].strip
+            @new_part.value2 = params[:key2].strip
+            @new_part.value3 = params[:key3].strip
+            @new_part.value4 = params[:key4].strip
             if @new_part.save
                 p_item = PItem.find(@item_id)
                 p_item.product_id = @new_part.id

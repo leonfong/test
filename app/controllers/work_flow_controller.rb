@@ -119,12 +119,18 @@ before_filter :authenticate_user!
                 @order_check_1 = false
                 @order_check_4 = false
             elsif params[:order_s][:order_s].to_i == 4 
-                where_def = " product_code = '#{params[:order].strip}'"
+                where_def = " work_flows.product_code = '#{params[:order].strip}'"
                 add_where = ""
                 @order_check_3 = false
                 @order_check_2 = false
                 @order_check_1 = false
                 @order_check_4 = true
+            elsif params[:order_s][:order_s].to_i == 5 
+                @order_check_3 = false
+                @order_check_2 = false
+                @order_check_1 = false
+                @order_check_1 = false
+                @order_check_5 = true
             end
         end
         if params[:empty_date] 
@@ -311,10 +317,28 @@ before_filter :authenticate_user!
             end
             
             render "merchandiser.html.erb"
+#采购
         elsif can? :work_g, :all
+            start_date = ""
+            start_date_a = ""
+            if params[:start_date] != ""
+                start_date = " AND topics.created_at > '#{params[:start_date]}'"
+                start_date_a = " AND A.created_at > '#{params[:start_date]}'"
+            end
+            end_date = ""
+            end_date_a = ""
+            if params[:end_date] != ""
+                end_date = " AND topics.created_at < '#{params[:end_date]}'"
+                end_date_a = " AND A.created_at < '#{params[:end_date]}'"
+            end
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
+                if params[:order_s][:order_s].to_i == 5 
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a).paginate(:page => params[:page], :per_page => 10)
+                else
+                    @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                    #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
+                end
                 if @work_flow.size == 1                
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end

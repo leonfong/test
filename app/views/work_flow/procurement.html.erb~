@@ -9,10 +9,30 @@
         <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
     </div>
     <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
-       <div class="col-md-6 form-group  nav navbar-nav navbar-right">
+       <div class="col-md-9 form-group  nav navbar-nav navbar-right">
           <lable for="order" , class="sr-only">Qrder : </lable>   
           <div class="input-group input-group-sm"> 
-             <span class="input-group-addon"> 
+             <div class="input-group-addon " >开始 : </div>
+                <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                    <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                </script>
+                <div class="input-group-addon " >结束 : </div>
+                <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                    <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                </script>
+             <div class="input-group-addon"> 
                 <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
                 <%=  '全部' %>
                 <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
@@ -20,11 +40,12 @@
                 <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
                 <%=  '未结单' %>
                 <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
-            </span>  
+                <%= radio_button :order_s, :order_s, '5', :checked => @order_check_5 %>已回复
+            </div>  
             <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"100%"%>     
+                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"30"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"100%"%>
+                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"30"%>
             <% end %>               
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
@@ -256,7 +277,7 @@ function postform<%= work.id.to_s %>() {
                    <div class="row" style="margin: 0px;padding: 0px;">
                    <div class="col-md-6" style="margin: 0px;">
                        <div class="panel panel-info" style="background-color: #d9edf7;">
-                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw fed.feedback %></strong></p></div>   
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw fed.feedback %></strong></p><%= link_to "处理",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %></div>   
                        
                              
                    </div>
@@ -298,7 +319,11 @@ function postform<%= work.id.to_s %>() {
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> 发到 
+<% feed.send_to.to_s.split(',').each do |rece| %>
+            <%= t(:"#{rece}") %>
+<% end %> 
+ <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
                 </div>
                 </div>
             <% end %>   
@@ -309,7 +334,11 @@ function postform<%= work.id.to_s %>() {
                 <div class="row" >
                 <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
                        <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
+                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name %></strong></span> 发到 
+<% feed.send_to.to_s.split(',').each do |rece| %>
+            <%= t(:"#{rece}") %>
+<% end %> 
+ <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
                 </div>
                 </div>
             <% end %>

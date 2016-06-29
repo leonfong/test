@@ -935,8 +935,10 @@ before_filter :authenticate_user!
         
         @bom_lab = '<table class="table table-bordered"><thead><tr><td><strong>' + t(:current_search) + '：</strong></td></tr></thead><tbody>'
         unless @package2 and @ptype
+            Rails.logger.info("--------------------------aaaa")
             @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "：" 
             unless @counted.nil?
+                Rails.logger.info("--------------------------bbbb")
                 @counted.each do |key, value|
                     #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %>
                     Rails.logger.info("--------------------------")
@@ -952,6 +954,7 @@ before_filter :authenticate_user!
         
             @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "： "
             unless @counted1.nil?
+                Rails.logger.info("--------------------------ccccc")
                 @counted1.each do |key, value| 
                     #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %>
                     #<a href="/bom_item/8315/edit?p=C6-1%2CC7-1%2CC67-1%2CC68-1&amp;package2=0402&amp;q=CAP+CER+10PF+16V+NP0+0402">0402</a>
@@ -961,33 +964,37 @@ before_filter :authenticate_user!
             end
             @bom_lab = @bom_lab + "</td></tr>"
         else
+            Rails.logger.info("--------------------------dddddd")
             @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "： "
             unless @counted.nil? 
+                Rails.logger.info("--------------------------eeeee")
                 @counted.each do |key, value| 
                     #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> 
                     Rails.logger.info("--------------------------")
                     Rails.logger.info(key.inspect)
                     Rails.logger.info(value.inspect)
                     Rails.logger.info("--------------------------")
-                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>" 
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>" 
                     @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
                 end
             end
             @bom_lab = @bom_lab + "</td></tr>"
             @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "："
             unless @counted1.nil?
+                Rails.logger.info("--------------------------fffff")
                 @counted1.each do |key, value|
                     #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %>
-                     @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                     @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
                     @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
                 end
             end
             @bom_lab = @bom_lab + "</td></tr>"
         end
         @bom_lab = @bom_lab + "</tbody></table>"
-        Rails.logger.info("--------------------------")
-        Rails.logger.info(@bom_html.inspect)
-        Rails.logger.info("--------------------------")
+        Rails.logger.info("--------------------------1111")
+        Rails.logger.info(@bom_lab.inspect)
+        #Rails.logger.info(@bom_html.inspect)
+        Rails.logger.info("--------------------------2222")
     end
 
     def p_update

@@ -1,7 +1,15 @@
 require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
-    
+
+    def moko_part_manage
+        if can? :work_baojia, :all
+            render "moko_part_manage.html.erb"
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+    end
+
     def sell_view_baojia
         @boms = ProcurementBom.find(params[:bom_id])
         @baojia = PItem.where(procurement_bom_id: params[:bom_id])

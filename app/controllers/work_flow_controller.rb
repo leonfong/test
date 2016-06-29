@@ -4,10 +4,77 @@ before_filter :authenticate_user!
 
     def moko_part_manage
         if can? :work_baojia, :all
+
+            @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`name` LIKE '%#{params[:part_name]}%'").paginate(:page => params[:page], :per_page => 10)
             render "moko_part_manage.html.erb"
         else
             render plain: "You don't have permission to view this page !"
         end
+    end
+
+    def moko_part_update
+        Rails.logger.info("add-------------------------------------add")
+        Rails.logger.info(params.inspect)
+        Rails.logger.info("add-------------------------------------add")
+        @item_id = params[:item_id]
+        if params[:part_a] == ""  or params[:part_c] == "" or params[:abc] == ""
+            #flash[:error] = "Part information can not be empty!!!"
+            redirect_to :back and return
+            #render "add_moko_part.js.erb" and return
+        else
+            name_a = "A." + params[:part_a].upcase + "." + params[:part_b].upcase + ".F."
+            part_name_find = Product.find_by_sql("SELECT LPAD((MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(products.`name`, '.' ,-1) , '-' ,1))+1 ) ,4,'0') AS part_n   FROM products WHERE `name` LIKE '%"+ name_a +"%'")
+            if part_name_find.first.part_n.blank?
+               part_name_find = "0001"
+            else
+               part_name_find = part_name_find.first.part_n.to_s
+            end
+            @new_part = Product.find(params[:item_id])
+            #@new_part.name = name_a + part_name_find.to_s + "-" + params[:package2]
+            @new_part.name = params[:mokopart_name]
+            #@new_part.description = params[:part_c]
+            @new_part.part_name = params[:key1]
+            @new_part.part_name_en = params[:key1en]
+            @new_part.ptype = params[:keyptype]
+            @new_part.package1 = params[:part_b].upcase
+            @new_part.package2 = params[:package2]
+            des = ""
+            if not params[:key1].blank?
+                @new_part.value1 = params[:key1].strip
+                des += params[:key1].strip + " "
+            end
+            if not params[:key2].blank?
+                @new_part.value2 = params[:key2].strip
+                des += " " + params[:key2].strip
+            end
+            if not params[:key3].blank?
+                @new_part.value3 = params[:key3].strip
+                des += " " + params[:key3].strip
+            end
+            if not params[:key4].blank?
+                @new_part.value4 = params[:key4].strip
+                des += " " + params[:key4].strip
+            end
+            if not params[:key5].blank?
+                @new_part.value5 = params[:key5].strip
+                des += " " + params[:key5].strip
+            end
+            if not params[:key6].blank?
+                @new_part.value6 = params[:key6].strip
+                des += " " + params[:key6].strip
+            end
+            if not params[:key7].blank?
+                @new_part.value7 = params[:key7].strip
+                des += " " + params[:key7].strip
+            end
+            if not params[:key8].blank?
+                @new_part.value8 = params[:key8].strip
+                des += " " + params[:key8].strip
+            end
+            @new_part.description = des
+            @new_part.save
+        end
+        redirect_to :back and return
     end
 
     def sell_view_baojia

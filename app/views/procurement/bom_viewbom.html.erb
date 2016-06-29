@@ -499,27 +499,7 @@ function change_<%= item.id.to_s %>(){
             </div>
 -->
           </div>      
-<script language="JavaScript" type="text/javascript"> 
-function cdkeyInput(thisobj) 
-{ 
-objResult = ""; 
-nextObjResult = ""; 
-if(thisobj.value.indexOf(' ') > 0) 
-{ 
-objResult = thisobj.value.substring(0,thisobj.value.indexOf(' ')); 
-nextObjResult = thisobj.value.substring(thisobj.value.indexOf(' ')+1); 
-thisobj.value = objResult.substring(0,thisobj.attributes["max"].nodeValue); 
-if(arguments[1] != undefined && arguments[1] != null) 
-{ 
-next = arguments[1]; 
-nextobj = document.getElementById(next); 
-nextobj.value = nextObjResult.toUpperCase(); 
-nextobj.onkeyup(); 
-} 
-} 
-thisobj.value = thisobj.value.toUpperCase(); 
-} 
-</script>      
+     
         
       </div>
       <div class="modal-footer">

@@ -1,20 +1,18 @@
 <small>
 <div class="container" >
-<div class="row" style="margin: 50px 0px 20px;padding-top: 0px;">
-  <ul class="nav nav-tabs">
+<div class="row" style="margin: 50px 0px 20px;padding: 0px;">
+  <ul class="nav nav-tabs" >
       <li role="presentation" ><a href="/work_flow"><h2 ><p class="text-primary" >工程部问题跟踪&反馈</p></h2></a></li>
       <li role="presentation" class="active"><a href="/moko_part_manage"><h2 ><p class="text-primary" >MOKO Part 维护</p></h2></a></li>
   </ul>
 </div>
-<div class="row"style="padding: 0px;">
-    <div class="col-md-3 nav navbar-nav" >
-        <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
-    </div>
-    <%= form_tag('/work_flow', method:"get", class:"form-inline") do %>
-       <div class="col-md-9 form-group  nav navbar-nav navbar-right">
+<div class="row">
+    
+    <%= form_tag('/moko_part_manage', method:"get", class:"form-inline") do %>
+       <div class="col-md-9 form-group  nav navbar-nav navbar-left">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm"> 
-                <div class="input-group-addon " >开始 : </div>
+                <span class="input-group-addon " >开始 : </span>
                 <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
                     <script type="text/javascript">
                           $(function () {
@@ -24,7 +22,7 @@
                             });    
                           });
                 </script>
-                <div class="input-group-addon " >结束 : </div>
+                <span class="input-group-addon " >结束 : </span>
                 <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
                     <script type="text/javascript">
                           $(function () {
@@ -34,20 +32,14 @@
                             });    
                           });
                 </script>
-            <div class="input-group-addon"> 
-                <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
-                <%=  '全部' %>
-                <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
-                <%= '已结单' %>
-                <%= radio_button :order_s, :order_s, '3', :checked => @order_check_3 %>
-                <%=  '未结单' %>
-                <%= radio_button :order_s, :order_s, '4', :checked => @order_check_4 %>产品代码
-            </div> 
+             
+                <span class="input-group-addon " >MOKO Part : </span>
+
             
-            <% if @order_no %>   
-                <%= text_field_tag :order, @order_no, class:"form-control  input-lg", size:"30"%>     
+            <% if @part_name %>   
+                <%= text_field_tag :part_name, @part_name, class:"form-control  input-lg", size:"30"%>     
             <% else %> 
-                <%= text_field_tag :order, params[:order], class:"form-control input-lg", size:"30"%>
+                <%= text_field_tag :part_name, params[:part_name], class:"form-control input-lg", size:"30"%>
             <% end %>               
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
@@ -63,428 +55,45 @@
 
 
 
-
-
-
-
-
-
-<% if not @work_flow.blank? %>
-<%= will_paginate(@work_flow) %>
-<% if user_signed_in? %>
-    <% if can? :work_d, :all %>
-<div class="row " style="padding-top: 10px;padding-right: 0px;padding-left: 0px;">
-    <div class="col-lg-12 " style="margin: 0px;padding: 0px;" >
-        
-        <div  style="margin: 2px;padding: 0px;">
-        
-        <table class="table table-bordered table-condensed table-hover" >
-            <thead >
-                <tr nowrap="nowrap">
-                    <th class="bg-primary" width="50">详细</th>
-                    
-
-                    <th class="bg-primary" width="80">下单日期</th>
-
-                    <th class="bg-primary" width="150">单号</th>
-                    <th class="bg-primary" width="50">数量</th>
-
-                    <th class="bg-primary" width="80">业务交期</th>
-                    <th class="bg-primary" width="150">产品代码</th>
-                   
-                    <th class="bg-primary" width="60">入库数量</th>
-                    
-                </tr>
-            </thead>
-            <tbody >
-                <% @work_flow.each do |work| %>
-                
-                <tr <% if work.order_state.to_i == 1 %>class="success"<% elsif work.order_state.to_i == 2 %>class="warning"<% elsif work.order_state.to_i == 3 %>class="danger"<% end %> nowrap="nowrap"> 
-                    <td> 
-                        <script>
-                            function change_<%= work.id.to_s %>(){
-                                if (document.getElementById('<%= work.id.to_s + work.order_no %>').className=='collapse in')
-                                    {document.getElementById('<%= work.id.to_s + "but" %>').className='glyphicon glyphicon-plus';}
-                                else
-                                    {document.getElementById('<%= work.id.to_s + "but" %>').className='glyphicon glyphicon-minus';}
-                                }
-                        </script>
-                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
-                            <span id="<%= work.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
-                        </button>
-                    </td> 
-
-                    <td>
-                        <%= work.order_date %>  
-                    </td>
-                    <td>
-                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>                         
-                        <%= work.order_no %>
-                    </td>
-                    <td>
-                        <%= work.order_quantity %>
-                    </td>
-
-                    <td>
-                        <%= work.salesman_end_date %>
-                    </td> 
-                    <td>
-                        <%= work.product_code %>
-                    </td> 
-                
-                    <td> 
-                        <%= work.warehouse_quantity %>
-                    </td>
-                    
-                </tr>
-                <tr> 
-                   <td colSpan="7" style="margin: 0px;padding: 0px;">
-                    <div  >
-                        <div class="<%= @open %>" id="<%= work.id.to_s + work.order_no %>" >
-                            <div class="row " style="margin: 0px;padding: 0px;">
-                                <div class="col-md-12 panel panel-default" style="margin: 0px;padding: 0px;">
-
-
-
-
+<% if @moko_part %>
+<%= will_paginate(@moko_part) %>
 <div class="row " style="padding-top: 7px;">
-    <div class="col-md-12 " >
-        
-        <div class="panel ">
-            <div class="panel-heading">
-                <button class="btn btn-primary btn-sm" data-toggle="modal"  data-target="#<%= work.id.to_s + 'modal' %>">发表新的问题</button>
-                <strong>反馈汇总--<%= work.order_no %></strong>
-            </div>
-<div class="modal fade" id="<%= work.id.to_s + 'modal' %>" tabindex="-1" role="dialog" aria-labelledby="<%= work.id.to_s + 'ModalLabel' %>">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="<%= work.id.to_s + 'ModalLabel' %>">工程部---新建问题</h4>
-      </div>
-
-      <%= form_tag('/edit_work', method:"post") do %>
-      <div class="modal-body">
-          <!--
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">标题:</label>
-            <input type="text" name="feedback_title" id="<%= work.id.to_s %>feedback_title" class="form-control" />
-          </div>
--->
-          <div class="form-group">
-              <label for="recipient-name" class="control-label">发送到:</label>
-                      <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="production" name="receive_feedback[]" id="receive_feedback_receive_feedback_production<%= work.id.to_s %>" />
-                               <strong>生产部</strong>
-                           </label>
-                       </div>
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="procurement" name="receive_feedback[]" id="receive_feedback_receive_feedback_procurement<%= work.id.to_s %>" /> 
-                               <strong>采购部</strong>
-                           </label>
-                       </div>
-                        
-                       <div class="checkbox-inline">
-                           <label>
-                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell<%= work.id.to_s %>" />
-                               <strong>业务部</strong>
-                           </label>
-                       </div> 
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">内容:</label>
-            <%= text_field_tag :topic_up, params[:topic_up], class:"sr-only", size:2 , value: work.id.to_s %>  
-            <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %> 
-
-            <textarea name="engineering_feedback" id="<%= work.id.to_s %>"></textarea>
-<script>
-KindEditor.ready(function(K){
-        	my_feedback<%= work.id.to_s %> = K.create('#<%= work.id.to_s %>', {"items":["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"],"width":"100%","height":300,"allowFileManager":true,"uploadJson":"http://www.fastbom.com/kindeditor/upload","fileManagerJson":"http://www.fastbom.com/kindeditor/filemanager","htmlTags":{
-		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
-		span : [
-			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',
-			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.line-height'
-		],
-		div : [
-			'id', 'class', 'align', '.border', '.margin', '.padding', '.text-align', '.color',
-			'.background-color', '.font-size', '.font-family', '.font-weight', '.background',
-			'.font-style', '.text-decoration', '.vertical-align', '.margin-left'
-		],
-		table: [
-			'id', 'class', 'border', 'cellspacing', 'cellpadding', 'width', 'height', 'align', 'bordercolor',
-			'.padding', '.margin', '.border', 'bgcolor', '.text-align', '.color', '.background-color',
-			'.font-size', '.font-family', '.font-weight', '.font-style', '.text-decoration', '.background',
-			'.width', '.height', '.border-collapse'
-		],
-		'td,th': [
-			'id', 'class', 'align', 'valign', 'width', 'height', 'colspan', 'rowspan', 'bgcolor',
-			'.text-align', '.color', '.background-color', '.font-size', '.font-family', '.font-weight',
-			'.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
-		],
-		a : ['id', 'class', 'href', 'target', 'name'],
-		embed : ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
-		img : ['id', 'class', 'src', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
-		'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6' : [
-			'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
-			'.font-weight', '.font-style', '.text-decoration', '.vertical-align', '.text-indent', '.margin-left'
-		],
-		pre : ['id', 'class'],
-		hr : ['id', 'class', '.page-break-after'],
-		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : ['id', 'class'],
-		iframe : ['id', 'class', 'src', 'frameborder', 'width', 'height', '.width', '.height']
-	}});
-        });
-</script>
-          </div>
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-         
-        <input type="submit" name="commit" value="提交" class="btn btn-primary" onclick="return postform<%= work.id.to_s %>()" />
-      </div>
-<script type="text/javascript">
-function postform<%= work.id.to_s %>() {  	 
-    //var TextVal = document.getElementById('<%= work.id.to_s %>feedback_title').value; 
-    html = my_feedback<%= work.id.to_s %>.html();     
-    if (document.getElementById('receive_feedback_receive_feedback_production<%= work.id.to_s %>').checked == false & document.getElementById('receive_feedback_receive_feedback_procurement<%= work.id.to_s %>').checked == false &  document.getElementById('receive_feedback_receive_feedback_sell<%= work.id.to_s %>').checked == false)
-      {                    
-　　    alert("请选择接收的部门！");                    
-　　    return false;                
-　     }            
-    else if (html == "")
-      {                    
-　　    alert("请填写内容！");                    
-　　    return false;                
-　     }        
-}    
-</script>  
-      <% end %>
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-<% Topic.where(order_no: work.order_no).order("updated_at DESC").each do |fed| %>
-<div class="well" style="margin: 2px;padding: 0px;">
-
-
-                   <div class="row" style="padding-top: 7px;padding-left: 5px;padding-right: 20px;">
-                   <div class="col-md-12" style="margin: 0px;padding: 0px;">
-                   <div class="row" style="margin: 0px;padding: 0px;">
-                   <div class="col-md-6" style="margin: 0px;">
-                       <div class="panel panel-info" style="background-color: #d9edf7;">
-                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw fed.feedback %></strong></p></div>    
-                       
-                             
-                   </div>
-
-
-
-                   </div>
-                   
-
-                   
-
-
-                          <div class="col-md-6  panel  " style="margin: 0px;">
-             <% answer = Feedback.where(topic_id: fed.id, feedback_level: '1').order("created_at ")%>
-             <% if not answer.blank? %>
-             <% answer.each do |feed| %>
-                <div class="row " >
-                <div class="col-md-12  panel panel-danger " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
-                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-
-                        <script>
-                            function change_<%= feed.id.to_s %>(){
-                                if (document.getElementById('<%= feed.id.to_s + feed.order_no %>').className=='collapse in')
-                                    {document.getElementById('<%= feed.id.to_s + "but" %>').className='glyphicon glyphicon-plus';}
-                                else
-                                    {document.getElementById('<%= feed.id.to_s + "but" %>').className='glyphicon glyphicon-minus';}
-                                }
-                        </script>
-                        
-
-                       <p class="text-right" style="margin: 0px;"><small><span class="text-danger" ><strong>跟单部反馈-解决方案</strong></span> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name.to_s %></strong></span> &raquo; <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %><button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#<%= feed.id.to_s + feed.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  onclick="change_<%= feed.id.to_s %>()">
-                            <span id="<%= feed.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
-                        </button></small></p></div>                     
-                </div>
-                </div>
-            
-<div class="collapse" id="<%= feed.id.to_s + feed.order_no %>" >
-             <% Feedback.where(topic_id: fed.id).order("created_at ").each do |feed| %>
-                <div class="row" >
-                <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
-                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name.to_s %></strong></span> 发到 
-<% feed.send_to.to_s.split(',').each do |rece| %>
-            <%= t(:"#{rece}") %>
-<% end %> 
- <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
-                </div>
-                </div>
-            <% end %>   
-</div>
-            <% end %>
-            <% else %> 
-             <% Feedback.where(topic_id: fed.id).order("created_at ").each do |feed| %>
-                <div class="row" >
-                <div class="col-md-12  panel panel-success " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
-                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw feed.feedback %></strong></p>
-                       <p class="text-right" style="margin: 0px;"><small><% if feed.feedback_type=="production" %><span class="text-warning" ><strong>生产部反馈</strong></span><% elsif feed.feedback_type=="engineering"%><span class="text-danger" ><strong>工程部反馈</strong></span><% elsif feed.feedback_type=="sell"%><span class="text-success" ><strong>业务部反馈</strong></span><% elsif feed.feedback_type=="merchandiser"%><span class="text-info" ><strong>跟单部反馈</strong></span><% elsif feed.feedback_type=="procurement"%><span class="text-muted" ><strong>采购部反馈</strong></span><% end %> 由 <span class="text-primary"><strong><%= User.where(email: feed.user_name).first.full_name.to_s %></strong></span> 发到 
-<% feed.send_to.to_s.split(',').each do |rece| %>
-            <%= t(:"#{rece}") %>
-<% end %> 
- <%= feed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></p></div>                   
-                </div>
-                </div>
-            <% end %>
-            <% end %>
-
-
-
-
-
-
-
-            </div>
-            </div>
-             <% receive = "" %>
-             <% fed.feedback_receive.split(',').each do |rece| %>
-             <% receive += " " + t(:"#{rece}") %>
-             <% end %>
-             <div style="padding-left: 15px;"><small><strong>问题编号 </strong> <span class="text-primary">No.<%= fed.id %></span><strong> 提问人 </strong><span class="text-primary"><%= User.where(email: fed.user_name).first.full_name.to_s %></span><strong> 部门 </strong><span class="text-primary"><%= t(:"#{fed.feedback_type}") %></span><strong> 当前状态 </strong><span class="text-primary"><%= receive %></span><strong> owner </strong><span class="text-primary"><%= fed.feedback_receive_user %></span><strong> 时间 </strong><span class="text-primary"><%= fed.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></span></small></div>
-            
-            </div>
-            </div>
-
-
-</div>    
-<% end %>
-
-
-
-
-
-
-
-
-
-        </div>
-        
-   
-    </div>
-</div>
-
-
-
-
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    </td>
-                </tr>
-                <% end %>
-                
-            </tbody>
-        </table>
-        </div>
-        
-   
-    </div>
-</div>
-        <% end %>
-        <% end %>
-
-<% end %>
-
-
-<script>
-  $(function () {
-  $('[data-toggle="popover"]').popover()
-  });
-  
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<% if @topic %>
-<%= will_paginate(@topic) %>
-<div class="row " style="padding-top: 7px;">
-    <div class="col-md-12 " style="padding: 5px;" >
+    <div class="col-md-12 " style="padding: 0px;" >
         
        <div class="panel panel-info " >
-                   <div class="panel-heading"><span class="text-primary"><strong>未处理的问题</strong></span></div>
+                   <div class="panel-heading"><span class="text-primary"><strong>MOKO Part</strong></span></div>
                     
                     <table class="table table-bordered">  
                         <thead>
                             <tr>
                                 <th width="55">操作</th>
-                                <th width="80">问题编号</th>
-                                <th width="150">单号</th>  
-                                <th width="140">产品代码</th>
-                                <th width="150">作者</th>
-                                <th width="140">状态</th>
-                                <th width="150">owner</th>
-                                <th>内容</th>
+                                <th width="150">创建日期</th>
+                                <th width="70">ID</th>
+                                <th width="150">编号</th>  
+                                <th >描述</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
-<% @topic.each do |work| %>
-                            <tr <% if work.mark == "mark" %>class="warning"<% end %>>
+<% @moko_part.each do |part| %>
+                            <tr>
                                 <td>
-                                    <%= link_to "处理",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %>
+                                    <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addmoko" data-name="<%= part.name %>" data-itemaddid="<%= part.id %>">Edit</a>
                                 </td>
                                 <td>
-                                    No.<%= work.id %>
+                                    <%= part.created_at %>
                                 </td>
                                 <td> 
-                                    <%= work.order_no %>
+                                    <%= part.id %>
+                                </td>
+                                <td> 
+                                    <%= part.name %>
                                 </td>
                                 <td>
-                                    <%= work.product_code %>
+                                    <%= part.description %>
                                 </td>
                                 
-                                <td>
-                                    <%= User.where(email: work.user_name).first.full_name.to_s %>
-                                </td>
-                                <td>
-                                    <% receive = "" %>
-                                    <% work.feedback_receive.split(',').each do |rece| %>
-                                        <% receive += " " + t(:"#{rece}") %>
-                                    <% end %>
-                                    <%= receive %>
-                                </td>
-                                <td>
-                                    <%= work.feedback_receive_user %>
-                                </td>
-                                <td>
-                                    <%= raw work.feedback %>
-                                </td> 
+                                
                             </tr>
 <% end %>
                         </tbody>
@@ -498,6 +107,90 @@ function postform<%= work.id.to_s %>() {
 
 
 <% end %>
+
+
+
+
+<div class="modal fade" id="addmoko" tabindex="-1" role="dialog" aria-labelledby="editMpnLabel">
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">EDIT MOKO PART</h4>
+      </div>
+      <div class="modal-body">
+<%= form_tag({action: :moko_part_update},method:"post", class: "form-inline") do %>
+          <div class="form-group sr-only">
+            <label for="item_id" class="control-label">id:</label>
+            <input type="text" class="form-control" id="itemadd_id" name="item_id" >
+          </div>
+          <div class="form-inline" style="padding-bottom: 5px;"> 
+              <div class="form-inline">   
+              <lable for="mokopart_name" class="control-label">MOKO Part : </lable><lable for="a" class="control-label"></lable><%= text_field_tag :mokopart_name, params[:mokopart_name], size:20  ,  class:"form-control"%>
+              
+              </div>
+          </div>
+          <div class="form-inline" style="padding-bottom: 5px;"> 
+              <div class="form-inline sr-only">   
+              <lable for="类别" class="control-label">类别 : </lable><lable for="a" class="control-label">A.</lable><%= text_field_tag :part_a, params[:part_a], size:2  ,  class:"form-control"%>
+              <lable for="b" class="control-label">.</lable><%= text_field_tag :part_b, params[:part_b], size:2 ,  class:"form-control" %>
+              </div>
+          </div>
+          <div class="form-inline" style="padding-bottom: 5px;">  
+              <div class="form-inline">
+              <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+              <lable for="package2" class="control-label">封装 : </lable>
+              <% members = Product.find_by_sql("select * from products GROUP BY products.part_name").collect { |c| [c.part_name,c.part_name] }%>
+              <%= select  '', :abc,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)" ,class:"form-control"}  %>
+              <%= select_tag "package2", "<option value=\"0\">--请选择上级--</option>",  class:"form-control"%>  
+              </div>
+          </div>
+          <div class="form-group" id="all_attr">
+
+          </div>      
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >更新物料</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+$('#addmoko').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itemaddid');
+  var mokopart = button.data('name');
+  var modal = $(this)
+  modal.find($("#itemadd_id")).val(itempid);
+  modal.find($("#mokopart_name")).val(mokopart);
+
+})
+function get_options(value){
+    var urla='/procurement/select_with_ajax?id='+value;
+    $("#change_s").attr("href",urla);
+    $("#change_s").click();    
+  }
+
+</script>
+
+
+
+
 </div>
 </small> 
 <%

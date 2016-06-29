@@ -76,7 +76,7 @@ before_filter :authenticate_user!
         Rails.logger.info(params.inspect)
         Rails.logger.info("add-------------------------------------add")
         @item_id = params[:item_id]
-        if params[:part_a] == "" or params[:part_b] == "" or params[:part_c] == "" or params[:abc] == ""
+        if params[:part_a] == "" or params[:part_c] == "" or params[:abc] == ""
             #flash[:error] = "Part information can not be empty!!!"
             redirect_to :back
             #render "add_moko_part.js.erb" and return

@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   match '/sell_baojia', to: 'work_flow#edit_orderinfo', via: 'post'
   match '/sell_view_baojia', to: 'work_flow#sell_view_baojia', via: 'get'
   match '/moko_part_manage', to: 'work_flow#moko_part_manage', via: 'get'
+  match '/moko_part_update', to: 'work_flow#moko_part_update', via: 'post'
 
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 

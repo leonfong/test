@@ -33,7 +33,6 @@
                           });
                 </script>
              
-                <span class="input-group-addon " >MOKO Part : </span>
             <div class="input-group-addon"> 
                 <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
                 <%=  'MOKO Part' %>

@@ -85,7 +85,7 @@
                                     <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addmoko" data-name="<%= part.name %>" data-itemaddid="<%= part.id %>">Edit</a>
                                 </td>
                                 <td>
-                                    <%= part.created_at %>
+                                    <%= part.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
                                 </td>
                                 <td> 
                                     <%= part.id %>

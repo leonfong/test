@@ -64,6 +64,9 @@
                         <li>
                             <%= link_to "BOM List", e_bomlist_path %>
                         </li>
+                        <li>
+                            <%= link_to "Price History", p_history_path %>
+                        </li>
                     </ul>
                 </li>
             <% end %>
@@ -71,7 +74,7 @@
         <li id="d"><%= link_to t('about'),about_path %></li>
         <li id="e"><%= link_to t('contact'),contact_path %></li>     
       </ul>
-      <a id="startButton" style="margin-top: 10px;" href="?multipage=true" class=" navbar-left btn btn-success">Try now</a>
+      <a id="startButton" style="margin-top: 10px;" href="/?multipage=true" class=" navbar-left btn btn-success">Try now</a>
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
            <% if can? :work_h, :all%>

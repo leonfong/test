@@ -34,7 +34,12 @@
                 </script>
              
                 <span class="input-group-addon " >MOKO Part : </span>
-
+            <div class="input-group-addon"> 
+                <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
+                <%=  'MOKO Part' %>
+                <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
+                <%= '描述' %>
+            </div> 
             
             <% if @part_name %>   
                 <%= text_field_tag :part_name, @part_name, class:"form-control  input-lg", size:"30"%>     
@@ -185,9 +190,7 @@ function get_options(value){
     $("#change_s").attr("href",urla);
     $("#change_s").click();    
   }
-function ordersub(){
-   $("#addmoko").modal('toggle');
- };
+
 </script>
 
 

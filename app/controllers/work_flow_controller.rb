@@ -4,8 +4,17 @@ before_filter :authenticate_user!
 
     def moko_part_manage
         if can? :work_baojia, :all
-
-            @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`name` LIKE '%#{params[:part_name]}%'").paginate(:page => params[:page], :per_page => 10)
+            if params[:order_s] 
+                if params[:order_s][:order_s].to_i == 1
+                    @order_check_1 = true
+                    @order_check_2 = false
+                    @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`name` LIKE '%#{params[:part_name]}%'").paginate(:page => params[:page], :per_page => 10)
+                elsif params[:order_s][:order_s].to_i == 2
+                    @order_check_1 = false
+                    @order_check_2 = true
+                    @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`description` LIKE '%#{params[:part_name]}%'").paginate(:page => params[:page], :per_page => 10)
+                end
+            end
             render "moko_part_manage.html.erb"
         else
             render plain: "You don't have permission to view this page !"

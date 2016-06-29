@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   match '/add_moko_part', to: 'procurement#add_moko_part', via: 'post'
   match '/pj_edit', to: 'procurement#pj_edit', via: 'post'
   match '/add_order', to: 'procurement#add_order', via: 'get'
+  match '/p_history', to: 'procurement#p_history', via: 'get'
  
 
 #external_bom

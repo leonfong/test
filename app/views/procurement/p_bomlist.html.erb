@@ -20,7 +20,8 @@
             <% end %>
             <%= link_to "My Order",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
             <%= link_to "New BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
-            <%= link_to "BOM List", p_bomlist_path ,class: "list-group-item active"%>           
+            <%= link_to "BOM List", p_bomlist_path ,class: "list-group-item active"%> 
+            <%= link_to "Price History", p_history_path ,class: "list-group-item"%>          
         </div>
         <div class="col-md-11">
         <div class="row">

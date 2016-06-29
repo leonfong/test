@@ -24,11 +24,11 @@ before_filter :authenticate_user!
                     @order_check_1 = true
                     @order_check_2 = false
                     #@moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`name` LIKE '%#{params[:part_name]}%'" + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
-                    @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%'" + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                    @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%'" + start_date + end_date + "ORDER BY a.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 elsif params[:order_s][:order_s].to_i == 2
                     @order_check_1 = false
                     @order_check_2 = true
-                    @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`description` LIKE '%#{params[:part_name]}%'" + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                    @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`description` LIKE '%#{params[:part_name]}%'" + start_date + end_date + "ORDER BY a.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             render "p_history.html.erb" and return

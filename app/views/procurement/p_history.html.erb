@@ -69,7 +69,6 @@
 <table class="table ">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th>BOM No.</th>
       <th>Created Date</th>
       <th>MPN</th>
       <th>DES</th>
@@ -80,7 +79,6 @@
   <tbody>
     <% @p_history.each do |bom| %>
         <tr>
-            <td><%= bom.mpn %></td>
             <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
             <td><%= bom.mpn %></td>
             <td><%= bom.description %></td>

@@ -79,7 +79,7 @@
   </thead>
   <tbody>
     <% @p_history.each do |bom| %>
-        <tr class="bg-success" >
+        <tr>
             <td><%= bom.mpn %></td>
             <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
             <td><%= bom.mpn %></td>

@@ -102,7 +102,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="editModalLabel">Update Order Info</h4>
       </div>
-      <%= form_tag({action: :edit_orderinfo},method:"post",id: "order_form",onsubmit: "ordersub()") do %>
+      <%= form_tag({action: :add_pcb_order},method:"post",id: "order_form") do %>
       <div class="modal-body">       
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
@@ -110,20 +110,24 @@
           </div>
           
           <div class="form-group">
-            <label for="order_country" class="control-label">国家:</label>
+            <label for="order_country" class="control-label">客户:</label>
             <input type="text" class="form-control" id="order_country" name="order_country">
           </div>       
           <div class="form-group">
-            <label for="hint" class="control-label">成功几率:</label>
-            <star id="star_val" ccc="" ></star><input id="hint" class="sr-only" name="hint"  type="text">
+            <label for="hint" class="control-label">邮箱:</label>
+            <input type="text" class="form-control" id="order_country" name="order_country">
           </div> 
           <div class="form-group">
-            <label for="sell_remark" class="control-label">业务备注:</label>
-            <textarea  class="form-control" id="sell_remark" name="sell_remark"></textarea>
+            <label for="sell_remark" class="control-label">业务:</label>
+            <input type="text" class="form-control" id="order_country" name="order_country">
           </div> 
           <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">主管备注:</label>
-            <textarea  class="form-control" id="sell_manager_remark" name="sell_manager_remark"></textarea>
+            <label for="sell_manager_remark" class="control-label">数量:</label>
+            <input type="text" class="form-control" id="order_country" name="order_country">
+          </div> 
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input type="text" class="form-control" id="order_country" name="order_country">
           </div> 
       </div>
       <div class="modal-footer">

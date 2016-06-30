@@ -2,6 +2,10 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def add_pcb_order
+        redirect_to :back
+    end
+
     def moko_part_manage
         if can? :work_baojia, :all
             start_date = ""

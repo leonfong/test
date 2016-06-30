@@ -12,7 +12,7 @@
 
 
 
-<div class="row"style="padding: 15px 15px 15px 15px;">
+<div class="row"style="padding: 5px 15px 15px 5px;">
 <!--
     <div class="col-md-3 nav navbar-nav" style="margin: 3px;padding: 0px;">
         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrder">新建订单</button>       
@@ -102,7 +102,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="editModalLabel">Update Order Info</h4>
       </div>
-      <%= form_tag({action: :edit_orderinfo},method:"post",id: "order_form",onsubmit: "ordersub()") do %>
+      <%= form_tag({action: :add_pcb_order},method:"post",id: "order_form") do %>
       <div class="modal-body">       
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>

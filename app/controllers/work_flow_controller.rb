@@ -1488,4 +1488,8 @@ before_filter :authenticate_user!
             redirect_to work_flow_path(), notice: "订单数据更新成功！"
         end
     end
+    private
+        def bom_params
+  	    params.require(:attachment).permit(:name, :attachment)
+  	end
 end

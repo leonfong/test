@@ -861,7 +861,8 @@ before_filter :authenticate_user!
             if current_user.email == "web@mokotechnology.com"
                 @bom_html = ""
                 unless @match_products.nil?
-                    @match_products[0..19].each do |item|
+                    #@match_products[0..19].each do |item|
+                    @match_products.each do |item|
                         @bom_html = @bom_html + "<tr>"
 
                         @bom_html = @bom_html + "<td>"
@@ -917,7 +918,8 @@ before_filter :authenticate_user!
             else
                 @bom_html = ""
                 unless @match_products.nil?
-                    @match_products[0..19].each do |item|
+                    #@match_products[0..19].each do |item|
+                    @match_products.each do |item|
                         @bom_html = @bom_html + "<tr>"
                         @bom_html = @bom_html + "<td>"
                         @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"

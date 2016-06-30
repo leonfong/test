@@ -1,5 +1,14 @@
 
 
+<% if @bom_item.color == "b" %>
+document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info"
+<% elsif @bom_item.color == "g" %>
+document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-success"
+<% else %>
+document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-danger"
+<% end %>
+document.getElementById('<%= @bom_item.id.to_s + "dow" %>').className="collapse"
+
 
 document.getElementById('matched').innerHTML='<%= @match_str_nn %>';
 
@@ -13,14 +22,7 @@ $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_
 document.getElementById('<%= @bom_item.id.to_s + "p" %>').innerHTML='<%= "￥"+@bom_item.cost.to_s %>';
 document.getElementById('<%= @bom_item.id.to_s + "p_t" %>').innerHTML='<%= "￥"+(@bom_item.cost*@bom.qty).to_s %>';
 <% end %>
-<% if @bom_item.color == "b" %>
-document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info"
-<% elsif @bom_item.color == "g" %>
-document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-success"
-<% else %>
-document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-danger"
-<% end %>
-document.getElementById('<%= @bom_item.id.to_s + "dow" %>').className="collapse"
+
 
 
 

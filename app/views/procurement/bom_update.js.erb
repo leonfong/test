@@ -1,5 +1,5 @@
 
-
+document.getElementById('<%= @bom_item.id.to_s + "_dns" %>').innerHTML='<%= raw @view_dns %>';
 <% if @bom_item.color == "b" %>
 document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info"
 <% elsif @bom_item.color == "g" %>

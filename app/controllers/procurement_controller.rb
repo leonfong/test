@@ -1054,10 +1054,12 @@ before_filter :authenticate_user!
             #all_dns = AllDn.where(part_code: part_code).order('date DESC')
             all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
             if all_dns.blank?
+                Rails.logger.info("ttttttttttttt--------------------------1111")
                 all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
             end
             #all_dns.each do |dns|
             if not all_dns.blank?
+                Rails.logger.info("ttttttttttttt--------------------------22222222222")
                 add_dns = PDn.new
                 add_dns.item_id = params[:id]
                 add_dns.dn = all_dns.dn
@@ -1133,9 +1135,9 @@ before_filter :authenticate_user!
             end
             @view_dns += '</tbody>'
             @view_dns += '</table>'
-            Rails.logger.info("----------------------")
-            #Rails.logger.info(@view_dns)
-            Rails.logger.info("----------------------")
+            Rails.logger.info("----------------------111")
+            Rails.logger.info(@view_dns)
+            Rails.logger.info("----------------------999")
             #@view_dns = "wwwww"
             @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
             @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
@@ -1209,11 +1211,11 @@ WHERE
                                 end                      
 		            end
                         end
-                        if can? :work_d, :all
-                            render "bom_update.js.erb"
-                        else
+                        #if can? :work_d, :all
+                           # render "bom_update.js.erb"
+                        #else
                             render "p_update.js.erb"
-                        end
+                        #end
                     end
                 else
 	            flash[:error] = t('error_d')
@@ -1222,7 +1224,6 @@ WHERE
             end  
             
 
-            
             
             #Rails.logger.info(@bom_item.id.to_s + '_dns')
         end

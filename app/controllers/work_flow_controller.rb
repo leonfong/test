@@ -3,6 +3,9 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def add_pcb_order
+        @pcb = PcbCustomer.new(pcb_params)#使用页面传进来的文件名字作为参数创建一个bom对象
+        #@pcb.user_id = current_user.id
+        @pcb.save
         redirect_to :back
     end
 
@@ -1489,7 +1492,7 @@ before_filter :authenticate_user!
         end
     end
     private
-        def bom_params
+        def pcb_params
   	    params.require(:attachment).permit(:name, :attachment)
   	end
 end

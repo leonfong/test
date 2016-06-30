@@ -3,8 +3,8 @@
 <br>
   <ul class="nav nav-tabs">
       <li role="presentation" ><a href="/work_flow"><h2 ><p class="text-primary"  >业务部问题跟踪&反馈</p></h2></a></li>
-      <li role="presentation" class="active"><a href="/sell_baojia"><h2 ><p class="text-primary" >PCBA报价列表</p></h2></a></li>
-      <li role="presentation" ><a href="/sell_baojia"><h2 ><p class="text-primary" >PCB报价列表</p></h2></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><h2 ><p class="text-primary" >PCBA报价列表</p></h2></a></li>
+      <li role="presentation" class="active"><a href="/sell_pcb_baojia"><h2 ><p class="text-primary" >PCB报价列表</p></h2></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>
@@ -12,11 +12,19 @@
 
 
 
-<div class="row"style="padding: 5px;">
-    <%= form_tag('/sell_baojia', method:"get", class:"form-inline") do %>
-       <div class="col-md-9 form-group  nav navbar-nav navbar-left">
+<div class="row"style="padding: 5px 15px 15px 5px;">
+<!--
+    <div class="col-md-3 nav navbar-nav" style="margin: 3px;padding: 0px;">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrder">新建订单</button>       
+    </div>
+-->
+    <%= form_tag('/sell_pcb_baojia', method:"get", class:"form-inline") do %>
+       <div class="col-md-9 form-group  nav navbar-nav ">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm"> 
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrder">新建订单</button>     
+                </div>
                 <div class="input-group-addon " >开始 : </div>
                 <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
                     <script type="text/javascript">
@@ -50,6 +58,7 @@
 
 
 <div class="row " style="padding-top: 7px;">
+<% if not @quate.blank?%>
     <div class="col-md-12 " style="padding: 5px;" >
        <%= will_paginate(@quate) %> 
        <div class="panel panel-info " >
@@ -57,46 +66,44 @@
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
-                                <th width="150">Order No.</th>
-                                <th width="100">数量</th>
-                                <th width="150">价格</th>  
-                                <th width="140">国家</th>
-                                <th width="150">成功几率</th>
-                                <th>业务备注</th>
-                                <th>主管备注</th>
-                                <th width="50">编辑</th>
+                                <th width="150">客户</th>
+                                <th width="100">邮箱</th>
+                                <th width="150">业务员</th>  
+                                <th width="140">数量</th>
+                                <th width="150">附件</th>
+                                <th>业务单号</th>
+                                <th>报价</th>
                             </tr>
                         </thead>
                         <tbody>
-<% if not @quate.blank?%>
+
 <% @quate.each do |q_order| %>
                             <tr>
-                                <td><%= link_to q_order.p_name, sell_view_baojia_path(:bom_id =>q_order.id) %></td>
+                                <td><%= q_order.customer %></td>
+                                <td><%= q_order.email %></td>
+                                <td><%= q_order.sell %></td>
                                 <td><%= q_order.qty %></td>
-                                <td>￥<%= q_order.t_p %></td>
-                                <td><%= q_order.order_country %></td>
-                                <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
-                                <td><%= q_order.sell_remark %></td>
-                                <td><%= q_order.sell_manager_remark %></td>
-                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.id %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.order_country %>" data-sellremark="<%= q_order.sell_remark %>" data-sellmanagerremark="<%= q_order.sell_manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
+                                <td><%= q_order.attachment %></td>
+                                <td><%= q_order.order_no %></td>
+                                <td><%= q_order.price %></td>
                             </tr>
 <% end %> 
-<% end %>          
+         
                         </tbody>
                     </table>
         </div>
     </div>
+<% end %> 
 
-
-<div class="modal fade" id="editOrder" tabindex="-1" role="dialog" aria-labelledby="editOrderLabel">
+<div class="modal fade" id="addOrder" tabindex="-1" role="dialog" aria-labelledby="addOrderLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="editModalLabel">Update Order Info</h4>
       </div>
-      <div class="modal-body">
-        <%= form_tag({action: :edit_orderinfo},method:"post",id: "order_form",onsubmit: "ordersub()") do %>
+      <%= form_tag({action: :edit_orderinfo},method:"post",id: "order_form",onsubmit: "ordersub()") do %>
+      <div class="modal-body">       
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">
@@ -142,94 +149,13 @@
 
 </small>
 <script>
-$('#editOrder').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var itempid = button.data('itempid');
-  var star = button.data('starval');
-  var ocountry = button.data('ocountry'); 
-  var sellremark = button.data('sellremark');  
-  var sellmanagerremark = button.data('sellmanagerremark'); 
-  //var mpn = button.data('mpn');
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find($("#itemp_id")).val(itempid);
-  modal.find($("#star_val")).attr("ccc",star);
-  modal.find($("#order_country")).val(ocountry);
-  modal.find($("#sell_remark")).val(sellremark);
-  modal.find($("#sell_manager_remark")).val(sellmanagerremark);
-  $('star').raty({                                                                    
-   score: function() {
-    return $(this).attr('ccc');
-    },                              
-   target: '#hint',
-
-   targetType: 'number',
-
-   targetKeep: true
-                 
-  });        
-})
-
-$('stardef').raty({                                                                    
-   score: function() {
-    return $(this).attr('ccc');
-    }, 
-   readOnly: true                            
- });        
-
-
-
-
-
-  //$('star').raty({
-    
-    //click: function(score, evt) {                                       
-      //alert('ID: ' + this.id + "\nscore: " + score + "\nevent: " + evt);
-    //}                                                                   
-  //}); 
-  
-  //$('star').raty({
-   // score: function() {
-    //return $(this).attr('ccc');
-  //}  
-  //});
   $(function () {
   $('[data-toggle="popover"]').popover()
   });
-  //$(document).ready(function(){            
-   //$("#order_form").submit(function(e){          
-     //$("#editOrder").modal('toggle');               
-   //});                                    
- //}); 
   function ordersub(){
    $("#editOrder").modal('toggle');
  };
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

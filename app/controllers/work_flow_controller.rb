@@ -122,14 +122,28 @@ before_filter :authenticate_user!
         redirect_to :back 
     end
 
+    def sell_pcb_baojia
+        where_date = ""
+        where_p = "pcb_customers.order_no LIKE '%%'"
+        if params[:start_date] != "" 
+            where_date += " AND pcb_customers.created_at > '#{params[:start_date]}'"
+        end
+        if params[:end_date] != "" 
+            where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
+        end
+        #if params[:order_s]
+            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
+        #end
+    end
+
     def sell_baojia
         where_p = ""
         where_date = ""
         if params[:start_date] != "" 
-           where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
+            where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
         end
         if params[:end_date] != "" 
-           where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
+            where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
         end
         if not current_user.s_name.blank?
             if current_user.s_name.size == 1
@@ -286,7 +300,7 @@ before_filter :authenticate_user!
             end
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
-                @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows LEFT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)

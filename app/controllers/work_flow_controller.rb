@@ -3,8 +3,27 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def add_pcb_order
-        @pcb = PcbCustomer.new(pcb_params)#使用页面传进来的文件名字作为参数创建一个bom对象
+        @pcb = PcbCustomer.new()#使用页面传进来的文件名字作为参数创建一个bom对象
         #@pcb.user_id = current_user.id
+        @pcb.customer = params[:customer]
+        @pcb.email = params[:email] 
+        @pcb.sell = params[:sell] 
+        @pcb.qty = params[:qty]
+        @pcb.att = params[:att]
+        @pcb.order_no = params[:order_no] 
+        @pcb.save
+        redirect_to :back
+    end
+
+    def edit_pcb_order
+        @pcb = PcbCustomer.find(params[:itemp_id])
+        #@pcb.user_id = current_user.id
+        @pcb.customer = params[:customer]
+        @pcb.email = params[:email] 
+        @pcb.sell = params[:sell] 
+        @pcb.qty = params[:qty]
+        @pcb.att = params[:att]
+        @pcb.order_no = params[:order_no] 
         @pcb.save
         redirect_to :back
     end
@@ -20,11 +39,10 @@ before_filter :authenticate_user!
                 end_date = " AND products.created_at < '#{params[:end_date]}'"
             end
             if params[:order_s]
-
                 if params[:order_s][:order_s].to_i == 1
                     @order_check_1 = true
                     @order_check_2 = false
-                    @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`name` LIKE '%#{params[:part_name]}%'" + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                    @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`name` LIKE '%#{params[:part_name]}%'" + start_date + end_date ).paginate(:page => params[:page], :per_page => 10)
                 elsif params[:order_s][:order_s].to_i == 2
                     where_des = ""
                     if params[:part_name] != ""
@@ -40,7 +58,7 @@ before_filter :authenticate_user!
                     end     
                     @order_check_1 = false
                     @order_check_2 = true
-                    @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE #{where_des}" + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                    @moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE #{where_des}" + start_date + end_date ).paginate(:page => params[:page], :per_page => 10)
                 end
             end
             render "moko_part_manage.html.erb"
@@ -139,7 +157,7 @@ before_filter :authenticate_user!
             where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
         end
         #if params[:order_s]
-            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
+            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
         #end
     end
 
@@ -1493,6 +1511,6 @@ before_filter :authenticate_user!
     end
     private
         def pcb_params
-  	    params.require(:attachment).permit(:name, :attachment)
+  	    params.require(:att).permit(:att)
   	end
 end

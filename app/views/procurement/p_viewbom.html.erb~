@@ -62,9 +62,13 @@
                            </td>
                            <td width="200">
                                <div class="form-inline">
-                                   <label for="pj_remark">附件：</label>
-                                   <%= @boms.remark %>
-                               </div>
+                                   <label for="pj_att">附件：</label>
+                                   <% if not @boms.att.blank? %>
+                                       <a href="<%= @boms.att.url %>">下载</a>
+                                   <% else %>
+                                       <a >无</a>
+                                   <% end %>
+                               </div>                          
                            </td>
                            <td width="200">
                                <% if can? :work_g_all, :all%>
@@ -618,19 +622,22 @@ function change_<%= item.id.to_s %>(){
           </div>
                  
           <div class="form-group">
-            <label for="pj_remark">Project name：</label>
+            <label for="pj_name">Project name：</label>
             <input type="text" class="form-control" id="pj_name" name="pj_name" value="<%= @boms.p_name %>" >
           </div>
           <div class="form-group">
-            <label for="pj_remark">QTY：</label>
+            <label for="pj_qty">QTY：</label>
             <input type="number" class="form-control" id="pj_qty" name="pj_qty" value="<%= @boms.qty %>" >
           </div>
           <div class="form-group">
             <label for="pj_remark">备注：</label>
-            <textarea type="text" class="form-control" id="pj_remark" name="pj_remark" value="<%= @boms.remark %>"  ></textarea>
+            <textarea type="text" class="form-control" id="pj_remark" name="pj_remark"  ><%= @boms.remark %></textarea>
             <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
           </div>
-        
+          <div class="form-group">
+            <label for="att" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

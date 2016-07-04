@@ -54,6 +54,7 @@ before_filter :authenticate_user!
         bom.p_name = params[:pj_name]
         bom.qty = params[:pj_qty]
         bom.remark = params[:pj_remark]
+        bom.att = params[:att]
         bom.save
         redirect_to :back  
     end

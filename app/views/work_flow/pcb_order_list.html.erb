@@ -1,0 +1,185 @@
+<div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <h1>PCB Order list ---等待报价 <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrder">新建PCB订单</button></h1>
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= link_to "等待报价", pcb_order_list_path ,class: "list-group-item active"%> 
+            <%= link_to "等待下单", pcb_order_list_path ,class: "list-group-item"%>  
+            <%= link_to "等待财务审批", pcb_order_list_path ,class: "list-group-item"%>
+            <%= link_to "等待采购下单", pcb_order_list_path ,class: "list-group-item"%>
+            <%= link_to "等待入库", pcb_order_list_path ,class: "list-group-item"%>       
+            <%= link_to "已经入库", pcb_order_list_path ,class: "list-group-item"%>  
+        </div>
+        <div class="col-md-11">
+        
+<%= will_paginate(@pcblist) %>            
+<table class="table ">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th>Order No.</th>
+      <th>Created Date</th>
+      <th>数量</th>
+      <th>附件</th>
+      <th>所属业务员</th>
+      <th>跟踪业务员</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pcblist.each do |pcb| %>   
+      <tr >
+        <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= pcb.pcb_customer_id %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" ><%= pcb.order_no %></a></td>
+        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= pcb.qty %></td>
+        <td>
+            <% if not pcb.att.blank? %>
+                <a href="<%= pcb.att.url %>">下载</a>
+            <% else %>
+                无
+            <% end %>
+        </td>
+        <td><%= pcb.sell %></td>
+        <td><%= pcb.order_sell %></td>
+        <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/add_pcb_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+        </div>
+    </div>
+
+
+
+
+
+
+<div class="modal fade" id="addOrder" tabindex="-1" role="dialog" aria-labelledby="addOrderLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">Add a new PCB Order</h4>
+      </div>
+      <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
+      <div class="modal-body">        
+          <div class="form-group">
+            <label for="customer" class="control-label">客户:</label>
+            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer,c.customer] }%>
+              <%= select  '', :customer,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
+          </div>       
+          <div class="form-group">
+            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="qty" name="qty">
+          </div> 
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+          <div class="form-group">
+            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+            <label for="qty" class="control-label">所属业务员:</label>
+            <input type="test" class="form-control" id="sell" name="sell" readonly>
+          </div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="updatePrice" tabindex="-1" role="dialog" aria-labelledby="updatePriceLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">Update PCB Order price</h4>
+      </div>
+      <%= form_tag({action: :update_pcb_price},method:"post",multipart:"true",id: "order_form") do %>
+      <div class="modal-body">        
+          <div class="form-group">
+            <label for="customer" class="control-label">Order NO.:</label>
+            <input type="text" class="form-control" id="order_no" name="order_no" readonly>
+          </div>
+          <div class="form-group">
+            <label for="customer" class="control-label">客户:</label>
+            <input type="text" class="form-control" id="customer" name="customer" readonly>
+          </div>       
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="qty" name="qty" readonly>
+          </div> 
+          <div class="form-group">
+            <label for="qty" class="control-label">所属业务员:</label>
+            <input type="text" class="form-control" id="sell" name="sell" readonly>
+          </div> 
+          <div class="form-group">
+            <label for="qty" class="control-label">跟踪业务员:</label>
+            <input type="text" class="form-control" id="order_sell" name="order_sell" readonly>
+          </div> 
+          <div class="form-group">
+            <label for="qty" class="control-label">报价:</label>
+            <input type="text" class="form-control" id="price" name="price" >
+          </div> 
+          <div class="form-group">
+            <label for="qty" class="control-label">备注:</label>
+            <input type="text" class="form-control" id="remark" name="remark" >
+          </div> 
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<script>
+function get_options(value){
+    var urla='/work_flow/select_pcbcustomer_ajax?id='+value;
+    $("#change_s").attr("href",urla);
+    $("#change_s").click(); 
+  }
+
+$('#updatePrice').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var order_no = button.data('order_no') 
+  var customer = button.data('customer')
+  var qty = button.data('qty')
+  var sell = button.data('sell')
+  var order_sell = button.data('order_sell')
+  var modal = $(this)
+  modal.find($("#order_no")).val(order_no)
+  modal.find($("#customer")).val(customer)
+  modal.find($("#qty")).val(qty)
+  modal.find($("#sell")).val(sell)
+  modal.find($("#order_sell")).val(order_sell)
+})
+</script>
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

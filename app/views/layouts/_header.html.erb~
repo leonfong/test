@@ -35,6 +35,11 @@
                 </li>
                 
             <% end %>
+            <% if can? :work_pcb_business, :all %>
+                <li id="k">
+                    <%= link_to "PCB business",work_flow_path, data: { no_turbolink: true } %>
+                </li>
+            <% end %>
             <% if can? :work_baojia, :all %>
 <!--              
                 <li id="l">
@@ -50,6 +55,9 @@
                         <li>
                             <%= link_to "BOM List", p_bomlist_path %>
                         </li>
+                        <li>
+                            <%= link_to "Price History", p_history_path %>
+                        </li>
                     </ul>
                 </li>
             <% end %>
@@ -64,9 +72,7 @@
                         <li>
                             <%= link_to "BOM List", e_bomlist_path %>
                         </li>
-                        <li>
-                            <%= link_to "Price History", p_history_path %>
-                        </li>
+                        
                     </ul>
                 </li>
             <% end %>

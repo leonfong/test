@@ -45,8 +45,15 @@ Rails.application.routes.draw do
   match '/moko_part_manage', to: 'work_flow#moko_part_manage', via: 'get'
   match '/moko_part_update', to: 'work_flow#moko_part_update', via: 'post'
   match '/sell_pcb_baojia', to: 'work_flow#sell_pcb_baojia', via: 'get'
+  match '/add_pcb_customer', to: 'work_flow#add_pcb_customer', via: 'post'
+  match '/edit_pcb_customer', to: 'work_flow#edit_pcb_customer', via: 'post'
+  match '/pcb_order_list', to: 'work_flow#pcb_order_list', via: 'get'
+  match '/new_pcb_order', to: 'work_flow#new_pcb_order', via: 'post'
   match '/add_pcb_order', to: 'work_flow#add_pcb_order', via: 'post'
   match '/edit_pcb_order', to: 'work_flow#edit_pcb_order', via: 'post'
+  match '/work_flow/select_pcbcustomer_ajax', to: 'work_flow#select_pcbcustomer_ajax', via: 'get'
+  match '/update_pcb_price', to: 'work_flow#update_pcb_price', via: 'post'
+
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 
   match '/p_new_bom', to: 'procurement#p_upbom',via: 'post'

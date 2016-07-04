@@ -2,28 +2,59 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def select_pcbcustomer_ajax
+        select_customer = PcbCustomer.find_by(customer: params[:id])
+        if select_customer
+            @sell = select_customer.sell
+        end
+    end
+
+    def new_pcb_order
+        
+    end
+
+    def update_pcb_price
+        
+    end    
+
+    def pcb_order_list
+        @pcblist = PcbOrder.all.order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+    end
+
     def add_pcb_order
-        @pcb = PcbCustomer.new()#使用页面传进来的文件名字作为参数创建一个bom对象
+        order_no = "MK" + Time.new.strftime("%y%m%d").to_s + User.find_by(email: params[:sell]).s_name + PcbOrder.find_by_sql("SELECT count(*)+1 AS a FROM `pcb_orders`").first.a.to_s + "W"
+        @pcb = PcbOrder.new()#使用页面传进来的文件名字作为参数创建一个bom对象
         #@pcb.user_id = current_user.id
-        @pcb.customer = params[:customer]
-        @pcb.email = params[:email] 
+        @pcb.pcb_customer_id = params[:pcb_customer_id]
+        @pcb.order_no = order_no
         @pcb.sell = params[:sell] 
+        @pcb.order_sell = current_user.email
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
-        @pcb.order_no = params[:order_no] 
         @pcb.save
         redirect_to :back
     end
 
-    def edit_pcb_order
+    def add_pcb_customer
+        @pcb = PcbCustomer.new()#使用页面传进来的文件名字作为参数创建一个bom对象
+        #@pcb.user_id = current_user.id
+        @pcb.customer = params[:customer]
+        @pcb.email = params[:email] 
+        @pcb.sell = current_user.email 
+        @pcb.qty = params[:qty]
+        @pcb.att = params[:att]
+        @pcb.save
+        redirect_to :back
+    end
+
+    def edit_pcb_customer
         @pcb = PcbCustomer.find(params[:itemp_id])
         #@pcb.user_id = current_user.id
         @pcb.customer = params[:customer]
         @pcb.email = params[:email] 
-        @pcb.sell = params[:sell] 
+        @pcb.sell = current_user.email 
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
-        @pcb.order_no = params[:order_no] 
         @pcb.save
         redirect_to :back
     end

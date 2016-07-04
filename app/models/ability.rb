@@ -11,7 +11,7 @@ class Ability
     alias_action :update, :to => :work_b          #交期5
     alias_action :update, :to => :work_c          #生产6
     alias_action :update, :to => :work_d          #工程7
-    alias_action :update, :to => :work_e          #业务8
+    alias_action :update, :to => :work_e          #业务8  
     alias_action :update, :to => :work_f          #跟单9
     alias_action :update, :to => :work_g          #采购10
     alias_action :update, :to => :work_baojia          #报价
@@ -27,6 +27,7 @@ class Ability
     alias_action :update, :to => :old_bom         #老bom匹配功能
     alias_action :update, :to => :external_access         #外部访问21
     alias_action :update, :to => :work_top         #管理员
+    alias_action :update, :to => :work_pcb_business          #PCB业务
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -135,6 +136,10 @@ class Ability
       can :pcb_dc, :all
     elsif user.has_role?(:work_external)
       can :external_access, :all
+    elsif user.has_role?(:work_pcb_business)
+      can :work_up, :all
+      can :work_e, :all
+      can :work_pcb_business, :all
     else
       can :read, :all
     end

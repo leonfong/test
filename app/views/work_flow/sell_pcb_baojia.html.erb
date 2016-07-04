@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs">
       <li role="presentation" ><a href="/work_flow"><h2 ><p class="text-primary"  >业务部问题跟踪&反馈</p></h2></a></li>
       <li role="presentation" ><a href="/sell_baojia"><h2 ><p class="text-primary" >PCBA报价列表</p></h2></a></li>
-      <li role="presentation" class="active"><a href="/sell_pcb_baojia"><h2 ><p class="text-primary" >PCB报价列表</p></h2></a></li>
+      <li role="presentation" class="active"><a href="/sell_pcb_baojia"><h2 ><p class="text-primary" >PCB客户信息表</p></h2></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>
@@ -19,7 +19,7 @@
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm"> 
                 <div class="input-group-btn">
-                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrder">新建订单</button>     
+                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrder">新建PCB客户</button>     
                 </div>
                 <div class="input-group-addon " >开始 : </div>
                 <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
@@ -67,7 +67,6 @@
                                 <th width="150">业务员</th>  
                                 <th width="140">数量</th>
                                 <th width="50">附件</th>
-                                <th>业务单号</th>
                                 <th width="150"> 报价</th>
                                 <th width="50"> 编辑</th>
                             </tr>
@@ -87,7 +86,6 @@
                                         无
                                     <% end %>
                                 </td>
-                                <td><%= q_order.order_no %></td>
                                 <td><%= q_order.price %></td>
                                 <td>
                                     <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder" data- data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-order_no="<%= q_order.order_no %>" >更新</button>
@@ -108,7 +106,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="editModalLabel">Add a new PCB Order</h4>
       </div>
-      <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
+      <%= form_tag({action: :add_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
       <div class="modal-body">        
           <div class="form-group">
             <label for="customer" class="control-label">客户:</label>
@@ -126,10 +124,7 @@
             <label for="qty" class="control-label">数量:</label>
             <input type="number" class="form-control" id="qty" name="qty">
           </div> 
-          <div class="form-group">
-            <label for="order_no" class="control-label">业务单号:</label>
-            <input type="text" class="form-control" id="order_no" name="order_no">
-          </div> 
+ 
           <div class="form-group">
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
@@ -152,7 +147,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="editModalLabel">Update PCB Order Info</h4>
       </div>
-      <%= form_tag({action: :edit_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
+      <%= form_tag({action: :edit_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
       <div class="modal-body">       
           <div class="form-group ">
             <label for="itemp_id" class="control-label">itemid:</label>
@@ -175,10 +170,7 @@
             <label for="qty" class="control-label">数量:</label>
             <input type="number" class="form-control" id="edit_qty" name="qty">
           </div> 
-          <div class="form-group">
-            <label for="order_no" class="control-label">业务单号:</label>
-            <input type="text" class="form-control" id="edit_order_no" name="order_no">
-          </div> 
+         
           <div class="form-group">
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
@@ -217,15 +209,13 @@ $('#editOrder').on('show.bs.modal', function (event) {
   var customer = button.data('customer');
   var email = button.data('email');
   var sell = button.data('sell');
-  var qty = button.data('qty');
-  var order_no = button.data('order_no');                            
+  var qty = button.data('qty');                          
   var modal = $(this);
   modal.find($("#edit_itemp_id")).val(itempid);
   modal.find($("#edit_customer")).val(customer);
   modal.find($("#edit_email")).val(email);
   modal.find($("#edit_sell")).val(sell);
   modal.find($("#edit_qty")).val(qty);
-  modal.find($("#edit_order_no")).val(order_no);
 
 })
 

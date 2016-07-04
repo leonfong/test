@@ -21,17 +21,35 @@
             <%= link_to "My Order",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
             <%= link_to "New BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
             <%= link_to "BOM List", p_bomlist_path ,class: "list-group-item active"%> 
-            <%= link_to "Price History", p_bomlist_path ,class: "list-group-item"%>          
+            <%= link_to "Price History", p_history_path ,class: "list-group-item"%>          
         </div>
         <div class="col-md-11">
         <div class="row">
-            <div class="col-md-12 col-sm-12 " >
-            <span class=" pull-right" style="color:#999;">
-                    PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>
-                </span>
+            <div class="col-md-12 col-sm-12 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/p_bomlist', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+            </div>
+            <% end %>                       
+            </span>
             </div>
         </div>
-<%= will_paginate(@boms) %>            
+            
 <table class="table ">
   <thead>
     <tr style="background-color: #eeeeee">
@@ -88,6 +106,7 @@
     <% end %>
   </tbody>
 </table>
+<%= will_paginate(@boms) %>
         </div>
     </div>
 </div>

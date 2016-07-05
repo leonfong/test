@@ -1408,8 +1408,7 @@ WHERE
 
     end
 
-    def p_edit_dn
-        
+    def p_edit_dn       
         dn = PDn.find(params[:dn_id])
         if not params[:dn_info].blank?
             dn.update(editbn_params)
@@ -1459,7 +1458,7 @@ WHERE
             if @bom_item.user_do != params[:user_do]
                 @bom_item.user_do = params[:user_do]
                 @bom_item.user_do_change = "c"
-                @bom_item.color = nil
+                #@bom_item.color = nil
                 @bom_item.save
                 open_id = User.find(params[:user_do]).open_id
                 oauth = Oauth.find(1)

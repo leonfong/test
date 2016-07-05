@@ -28,7 +28,7 @@
   <tbody>
     <% @pcblist.each do |pcb| %>   
       <tr >
-        <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= pcb.customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" ><%= pcb.order_no %></a></td>
+        <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= pcb.pcb_customer_id %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" ><%= pcb.order_no %></a></td>
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= pcb.qty %></td>
         <td>
@@ -64,7 +64,7 @@
       <div class="modal-body">        
           <div class="form-group">
             <label for="customer" class="control-label">客户:</label>
-            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer,c.customer] }%>
+            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer,c.id] }%>
               <%= select  '', :customer,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
           </div>       
           <div class="form-group">
@@ -108,19 +108,19 @@
           </div>
           <div class="form-group">
             <label for="customer" class="control-label">客户:</label>
-            <input type="text" class="form-control" id="customer" name="customer" readonly>
+            <input type="text" class="form-control" id="u_customer" name="customer" readonly>
           </div>       
           <div class="form-group">
             <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="qty" name="qty" readonly>
+            <input type="number" class="form-control" id="u_qty" name="qty" readonly>
           </div> 
           <div class="form-group">
             <label for="qty" class="control-label">所属业务员:</label>
-            <input type="text" class="form-control" id="sell" name="sell" readonly>
+            <input type="text" class="form-control" id="u_sell" name="sell" readonly>
           </div> 
           <div class="form-group">
             <label for="qty" class="control-label">跟踪业务员:</label>
-            <input type="text" class="form-control" id="order_sell" name="order_sell" readonly>
+            <input type="text" class="form-control" id="u_order_sell" name="order_sell" readonly>
           </div> 
           <div class="form-group">
             <label for="qty" class="control-label">报价:</label>
@@ -170,10 +170,10 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   var order_sell = button.data('order_sell')
   var modal = $(this)
   modal.find($("#order_no")).val(order_no)
-  modal.find($("#customer")).val(customer)
-  modal.find($("#qty")).val(qty)
-  modal.find($("#sell")).val(sell)
-  modal.find($("#order_sell")).val(order_sell)
+  modal.find($("#u_customer")).val(customer)
+  modal.find($("#u_qty")).val(qty)
+  modal.find($("#u_sell")).val(sell)
+  modal.find($("#u_order_sell")).val(order_sell)
 })
 </script>
 

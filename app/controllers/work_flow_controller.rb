@@ -3,7 +3,7 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def select_pcbcustomer_ajax
-        select_customer = PcbCustomer.find_by(customer: params[:id])
+        select_customer = PcbCustomer.find_by(params[:id])
         if select_customer
             @sell = select_customer.sell
         end
@@ -25,7 +25,7 @@ before_filter :authenticate_user!
         order_no = "MK" + Time.new.strftime("%y%m%d").to_s + User.find_by(email: params[:sell]).s_name + PcbOrder.find_by_sql("SELECT count(*)+1 AS a FROM `pcb_orders`").first.a.to_s + "W"
         @pcb = PcbOrder.new()#使用页面传进来的文件名字作为参数创建一个bom对象
         #@pcb.user_id = current_user.id
-        @pcb.pcb_customer_id = params[:pcb_customer_id]
+        @pcb.pcb_customer_id = params[:customer]
         @pcb.order_no = order_no
         @pcb.sell = params[:sell] 
         @pcb.order_sell = current_user.email

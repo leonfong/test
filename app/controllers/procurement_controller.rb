@@ -1458,7 +1458,7 @@ WHERE
         @view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
                 
         if dn.remark
-            @view_dns += dn.remark
+            @view_dns += dn.remark[0]
         else
             @view_dns += ''
         end

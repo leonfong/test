@@ -69,6 +69,7 @@ class Ability
       can :work_up, :all
       can :work_d, :all
       can :work_baojia, :all
+      can :work_g_all, :all
       can :old_bom, :all
     elsif user.has_role?(:work_five)
       #can :manage, :all

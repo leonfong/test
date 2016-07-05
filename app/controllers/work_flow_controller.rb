@@ -18,7 +18,12 @@ before_filter :authenticate_user!
     end    
 
     def pcb_order_list
-        @pcblist = PcbOrder.all.order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+        if params[:place_an_order]
+            @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            render "pcb_order_list_order.html.erb" and return
+        else
+            @pcblist = PcbOrder.all.order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+        end
     end
 
     def add_pcb_order

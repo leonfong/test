@@ -28,6 +28,7 @@ class Ability
     alias_action :update, :to => :external_access         #外部访问21
     alias_action :update, :to => :work_top         #管理员
     alias_action :update, :to => :work_pcb_business          #PCB业务
+    alias_action :update, :to => :work_suppliers    #供应商
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -141,6 +142,9 @@ class Ability
       can :work_up, :all
       can :work_e, :all
       can :work_pcb_business, :all
+    elsif user.has_role?(:work_suppliers)
+      can :work_suppliers, :all
+      can :read, :all
     else
       can :read, :all
     end

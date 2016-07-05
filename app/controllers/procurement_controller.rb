@@ -1564,7 +1564,7 @@ WHERE
                 set_color = 0  
                 while set_color < all_title.size do         
                     sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
-                    sheet1.column(set_color).width = 20
+                    sheet1.column(set_color).width = 15
                     set_color += 1
                 end
 		@bom.p_items.each_with_index do |item,index|

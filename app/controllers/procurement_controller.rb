@@ -2357,6 +2357,9 @@ WHERE
                 if query_str.include?"Ω"
                     query_str = query_str.gsub("Ω","r")
                 end
+                if query_str.include?"Ω"
+                    query_str = query_str.gsub("Ω","r")
+                end
                 if query_str.include?"e"
                     query_str = query_str.gsub("e","r")
                 end
@@ -2365,23 +2368,23 @@ WHERE
                 end
                 #ary_all = query_str.to_s.scan(/([0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 
-                ary_all = query_str.to_s.scan(/[0-9]\.?[0-9]*[mMkKuUrRΩ][0-9]\.?[0-9]*/)
+                ary_all = query_str.to_s.scan(/[0-9]\.?[0-9]*[mMkKuUrRΩΩ][0-9]\.?[0-9]*/)
                 if not ary_all.blank?
-                    value2 = ary_all.join("").scan(/[mMkKuUrRΩ]/)
+                    value2 = ary_all.join("").scan(/[mMkKuUrRΩΩ]/)
                 end
                 ary_all = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                 #获取阻值
                 ary_q = []
-                value2_test = query_str.to_s.scan(/[0-9]*[mMkKuUrRΩ][0-9]/)
+                value2_test = query_str.to_s.scan(/[0-9]*[mMkKuUrRΩΩ][0-9]/)
                 Rails.logger.info("value2_test!!!!!!!!!!!!!!!!!!!!!!!!!!!value2_test")
                 Rails.logger.info(query_str.inspect)
                 Rails.logger.info(value2_test.inspect)
                 Rails.logger.info("value2_test!!!!!!!!!!!!!!!!!!!!!!!!!!!value2_test")
                 value2_use = "nothing"
                 if value2_test != []
-                    value2_use = value2_test[0].to_s.sub(/[mMkKuUrRΩ]/, ".") + value2_test[0].to_s.scan(/[mMkKuUrRΩ]/)[0]
+                    value2_use = value2_test[0].to_s.sub(/[mMkKuUrRΩΩ]/, ".") + value2_test[0].to_s.scan(/[mMkKuUrRΩΩ]/)[0]
                 else
-                    value2_all = ary_all.join(" ").to_s.split(" ").grep(/[mMkKuUrRΩ]/)
+                    value2_all = ary_all.join(" ").to_s.split(" ").grep(/[mMkKuUrRΩΩ]/)
                     Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
                     Rails.logger.info(query_str.inspect)
                     Rails.logger.info(ary_all.inspect)
@@ -2562,6 +2565,9 @@ WHERE
                 if query_str.include?"Ω"
                     query_str = query_str.gsub("Ω","r")
                 end
+                if query_str.include?"Ω"
+                    query_str = query_str.gsub("Ω","r")
+                end
                 if query_str.include?"e"
                     query_str = query_str.gsub("e","r")
                 end
@@ -2588,14 +2594,14 @@ WHERE
                     ary_q[2] = "nothing"
                 end
                 #获取阻值
-                value2_test = query_str.to_s.scan(/[0-9]+[mMkKuUrRΩ][0-9]/)
+                value2_test = query_str.to_s.scan(/[0-9]+[mMkKuUrRΩΩ][0-9]/)
                 Rails.logger.info("value2_test!!!!!!!!!!!!!!!!!!!!!!!!!!!value2_test")
                 Rails.logger.info(query_str.inspect)
                 Rails.logger.info(value2_test.inspect)
                 Rails.logger.info("value2_test!!!!!!!!!!!!!!!!!!!!!!!!!!!value2_test")
                 value2_use = "nothing"
                 if value2_test != []
-                    value2_use = value2_test[0].to_s.sub(/[mMkKuUrRΩ]/, ".") + value2_test[0].to_s.scan(/[mMkKuUrRΩ]/)[0]
+                    value2_use = value2_test[0].to_s.sub(/[mMkKuUrRΩ﻿Ω]/, ".") + value2_test[0].to_s.scan(/[mMkKuUrRΩ﻿Ω]/)[0]
                 else
                     value2_all = ary_all.join(" ").to_s.split(" ").grep(/[mMkKuUrRΩ]/)
                     Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")

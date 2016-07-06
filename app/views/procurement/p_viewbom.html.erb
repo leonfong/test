@@ -550,8 +550,8 @@ function change_<%= item.id.to_s %>(){
             <input type="text" class="form-control" id="dn_id" name="dn_id">
           </div>
           <div class="form-group sr-only">
-            <label for="dn_itemid" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="dn_itemid" name="dn_itemid">
+            <label for="dn_item_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="dn_item_id" name="dn_item_id">
           </div>
           <div class="form-group">
             <label for="dn" class="control-label">供应商简称:</label>
@@ -625,7 +625,7 @@ function change_<%= item.id.to_s %>(){
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Update Order Info</h4>
+        <h4 class="modal-title" id="editPrderLabel">Update Order Info</h4>
       </div>
       <div class="modal-body">
         <%= form_tag({action: :pj_edit},method:"post",multipart:"true") do %>
@@ -745,7 +745,7 @@ $('#editModal').on('show.bs.modal', function (event) {
   modal.find($("#dnlong")).val(dnlong);
   modal.find($("#dn_qty")).val(qty);
   modal.find($("#dn_remark")).val(remark);
-  modal.find($("#dn_itemid")).val(itemid);
+  modal.find($("#dn_item_id")).val(itemid);
 })
 </script>
 <script>$(function () 

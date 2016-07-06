@@ -544,7 +544,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_dn},method:"post",multipart: true) do %>
+        <%= form_tag({action: :p_edit_dn},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="dn_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="dn_id" name="dn_id">
@@ -625,7 +625,7 @@ function change_<%= item.id.to_s %>(){
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Update Order Info</h4>
+        <h4 class="modal-title" id="editPrderLabel">Update Order Info</h4>
       </div>
       <div class="modal-body">
         <%= form_tag({action: :pj_edit},method:"post",multipart:"true") do %>

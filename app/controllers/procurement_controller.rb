@@ -1487,12 +1487,14 @@ WHERE
              
         @pitem = PItem.find(params[:dn_itemid])
         @pitem.cost = params["#{params[:dn_itemid]}p"]
+        @pitem.color = "b"
         @pitem.save
         @itemid = params[:dn_itemid]
         @dnid = @pitem.dn_id
         dn = PDn.find(@dnid)  
         if not params["#{params[:dn_itemid]}p"].blank?
             dn.cost = params["#{params[:dn_itemid]}p"]
+            dn.color = "b"
         end
 
         dn.save

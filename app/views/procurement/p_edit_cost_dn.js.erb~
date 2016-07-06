@@ -1,4 +1,7 @@
-document.getElementById('<%= @itemid.to_s + "_" + @dnid.to_s %>').innerHTML='<%= raw @view_dns %>';
+document.getElementById('<%= @itemid.to_s + "_" + @dnid.to_s %>').innerHTML='<%= raw @view_dn %>';
+document.getElementById('<%= @itemid.to_s + "_dns" %>').innerHTML='<%= raw @view_dns %>';
+document.getElementById('<%= @itemid.to_s + "_tr" %>').className="bg-info";
+document.getElementById('<%= @itemid.to_s + "_" + @dnid.to_s %>').className="bg-info";
 $('#editModal').modal('hide')
 $(function () 
       { $("[data-toggle='popover']").popover();

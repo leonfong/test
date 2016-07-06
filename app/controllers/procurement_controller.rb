@@ -1534,6 +1534,7 @@ WHERE
                 dn.item_id = @pitem.id
                 dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
                 dn.color = "b"
+                dn.tag = "a"
                 dn.date = Time.new
                 dn.save
                 @dnid = dn.id

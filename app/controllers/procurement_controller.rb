@@ -1568,8 +1568,10 @@ WHERE
                 set_color = 0  
                 while set_color < all_title.size do         
                     sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
-                    if all_title[set_color] =~ /Quantity/i
-                        sheet1.column(set_color).width = 9
+                    if all_title[set_color] =~ /Quantity/i or all_title[set_color] =~ /qty/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /成本价/i or all_title[set_color] =~ /报价/i
+                        sheet1.column(set_color).width = 8
                     else
                         sheet1.column(set_color).width = 15
                     end

@@ -1471,13 +1471,13 @@ WHERE
 
         @view_dns += '<td width="30"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+@itemid.to_s+'" data-confirm="确定要删除?"></a></small></td>'
 
-        redirect_to :back
-        return false    
+        #redirect_to :back
+        #return false    
         
         #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         #Rails.logger.info(@view_dns.inspect)
         #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-        #render "p_edit_dn.js.erb"
+        render "p_edit_dn.js.erb"
     end
 
     def p_edit_cost_dn 

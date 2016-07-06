@@ -105,8 +105,7 @@
                     <th width="50">数量</th>
  
                     <th width="25"></th>
-                    <th width="100">成本价</th>
-                    
+                    <th width="110">成本价￥</th>
                     
                     <th>Other</th>
                     <th width="90">成本价</th>
@@ -243,13 +242,25 @@ function change_<%= item.id.to_s %>(){
                     </td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                         <small>
-<!--
-                            <input type="text" class="form-control input-sm" id="<%= item.id.to_s + 'p' %>" name="<%= item.id.to_s + 'p' %>" value="<%= '￥' + item.cost.to_s %>">                      
--->
-                            <a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a>
+                            <%= form_tag({action: :p_edit_cost_dn},method:"post",remote:"ture",class:"form-inline") do %>
+          <div class="form-group sr-only">
+            <label for="dn_itemid" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="dn_itemid" name="dn_itemid" value="<%= item.id.to_s %>">
+          </div>
 
+                            <div class="input-group input-group-sm">
+                              <input type="number" class="form-control " id="<%= item.id.to_s + 'p' %>" name="<%= item.id.to_s + 'p' %>" value="<%= item.cost.to_s %>">                      
+
+<!--
+                            <a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a>
+-->                           <span class="input-group-btn ">
+                               <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
+                              </span>
+                            </div>
+                            <% end %>
                         </small>
                     </td>
+
                     
                 
 
@@ -533,7 +544,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_dn},method:"post",multipart:"ture") do %>
+        <%= form_tag({action: :p_edit_dn},method:"post",multipart: true) do %>
           <div class="form-group sr-only">
             <label for="dn_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="dn_id" name="dn_id">
@@ -558,7 +569,7 @@ function change_<%= item.id.to_s %>(){
             <label for="cost" class="control-label">价格:</label>
             <input type="text" class="form-control" id="dn_cost" name="dn_cost">
           </div> 
-      
+     
           <div class="form-group">
             <label for="info" class="control-label">技术资料:</label>
             <input class="form-control" name="dn_info[info]" id="dn_info" type="file" accept=".xls"  >

@@ -90,6 +90,8 @@ Rails.application.routes.draw do
   match '/pj_edit', to: 'procurement#pj_edit', via: 'post'
   match '/add_order', to: 'procurement#add_order', via: 'get'
   match '/p_history', to: 'procurement#p_history', via: 'get'
+  match '/p_edit_cost_dn', to: 'procurement#p_edit_cost_dn', via: 'post'
+
  
 
 #external_bom

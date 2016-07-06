@@ -366,9 +366,13 @@ before_filter :authenticate_user!
 	        all_info = ""
                 all_info_n.each do |info|                    
                     #if item["#{info}"].blank?
-                        #all_info += ""
+                        #all_info += " "+ "|"
                     #else
+                    if item["#{info}"].to_s[-2..-1] == ".0"
+                        all_info += item["#{info}"].to_s.chop.chop + "|"
+                    else
                         all_info += item["#{info}"].to_s + "|"
+                    end
                     #end
                 end
 		Rails.logger.info("------------------------------------------------------------des")
@@ -1564,7 +1568,11 @@ WHERE
                 set_color = 0  
                 while set_color < all_title.size do         
                     sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
-                    sheet1.column(set_color).width = 15
+                    if all_title[set_color] =~ /Quantity/i
+                        sheet1.column(set_color).width = 9
+                    else
+                        sheet1.column(set_color).width = 15
+                    end
                     set_color += 1
                 end
 		@bom.p_items.each_with_index do |item,index|
@@ -1587,7 +1595,7 @@ WHERE
                     #end
                     
                     item.all_info.split("|",-1).each do |info|
-                        row.push(info)
+                        row.push(info.to_s)
                     end
 		    #row.push(rowNum)
 		    #row.push(item.description)

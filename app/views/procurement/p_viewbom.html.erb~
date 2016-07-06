@@ -150,30 +150,58 @@
                             </tr>
                             <tr id="<%= item.id.to_s + '_mpn_tr' %>">
                                 <% if DigikeysStock.find_by(manufacturer_part_number: item.mpn).blank? %>
-                                    <% if item.link.blank? or item.link == "" %>
-                                        <% if item.mpn == nil or item.mpn == "" %>
-                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
-                                        <% else %>
-                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
-                                        <% end %>
+                                    <% if MousersStock.find_by(manufacturer_part_number: item.mpn).blank? %>
+                                       <% if item.link.blank? or item.link == "" %>
+                                           <% if item.mpn == nil or item.mpn == "" %>
+                                               <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                           <% else %>
+                                               <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                           <% end %>
                                         
-                                    <% else %>
-                                        <% if item.link =~ /https/i %>
-                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
-                                        <% elsif item.link =~ /http/i %>
-                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
-                                        <% else %>
-                                            <% if item.mpn == nil or item.mpn == "" %>
-                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"  ></a></small></td>
-                                            <% else %>
-                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a  class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
-                                            <% end %>
-                                        <% end %>
-                                    <% end %>
+                                       <% else %>
+                                           <% if item.link =~ /https/i %>
+                                               <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                           <% elsif item.link =~ /http/i %>
+                                               <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                           <% else %>
+                                               <% if item.mpn == nil or item.mpn == "" %>
+                                                   <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"  ></a></small></td>
+                                               <% else %>
+                                                   <td class="text-center" style="padding: 0px;margin: 0px;"><small><a  class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                               <% end %>
+                                           <% end %>
+                                       <% end %>
                             
-                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-picture" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                       <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-picture" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
                                             
-                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                       <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                   <% else %>
+
+
+                                      <% if item.link.blank? or item.link == "" %>
+                                          <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((MousersStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (MousersStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                      <% else %>
+                                          <% if item.link =~ /https/i %>
+                                              <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((MousersStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (MousersStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="https://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                          <% elsif item.link =~ /http/i %>
+                                              <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((MousersStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (MousersStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+
+                                          <% else %>
+                                              <% if item.mpn == nil or item.mpn == "" %>
+                                                  <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).description + " " + MousersStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s %>" ></a></small></td>
+                                              <% else %>
+                                                  <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).description + " " + MousersStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                              <% end %>
+                                          <% end %>
+                                      <% end %>
+                                    
+                                      <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).image %>" href="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).image %>"  target="_blank"></a></small></td>
+                                            
+                                      <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="<%= MousersStock.find_by(manufacturer_part_number: item.mpn).datasheets %>" target="_blank"></a></small></td>                                      
+
+
+
+                                   <% end %>
                                 <% else %>
                                     <% if item.link.blank? or item.link == "" %>
                                         <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
@@ -550,8 +578,8 @@ function change_<%= item.id.to_s %>(){
             <input type="text" class="form-control" id="dn_id" name="dn_id">
           </div>
           <div class="form-group sr-only">
-            <label for="dn_itemid" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="dn_itemid" name="dn_itemid">
+            <label for="dn_item_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="dn_item_id" name="dn_item_id">
           </div>
           <div class="form-group">
             <label for="dn" class="control-label">供应商简称:</label>
@@ -745,7 +773,7 @@ $('#editModal').on('show.bs.modal', function (event) {
   modal.find($("#dnlong")).val(dnlong);
   modal.find($("#dn_qty")).val(qty);
   modal.find($("#dn_remark")).val(remark);
-  modal.find($("#dn_itemid")).val(itemid);
+  modal.find($("#dn_item_id")).val(itemid);
 })
 </script>
 <script>$(function () 

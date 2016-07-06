@@ -1687,6 +1687,10 @@ WHERE
                         sheet1.column(set_color).width = 8
                     elsif all_title[set_color] =~ /成本价/i or all_title[set_color] =~ /报价/i
                         sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /MOKO物料描述/i
+                        sheet1.column(set_color).width = 35
+                    elsif all_title[set_color] =~ /part/i
+                        sheet1.column(set_color).width = 22
                     else
                         sheet1.column(set_color).width = 15
                     end
@@ -1695,7 +1699,7 @@ WHERE
 		@bom.p_items.each_with_index do |item,index|
 		    rowNum = index+1
                     title_format = Spreadsheet::Format.new({
-                    :text_wrap => 1
+                    :text_wrap => 1,:size => 8
                     })
 		    row = sheet1.row(rowNum)
                     row.set_format(2,title_format)
@@ -1880,19 +1884,41 @@ WHERE
         @bom.save
         @dn_info = ""
         if DigikeysStock.find_by(manufacturer_part_number: item.mpn).blank?
-            if item.link.blank? or item.link == ""
-                @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords='+item.mpn+'" target="_blank"></a></small></td>'
-            else
-                if item.link =~ /http/i
-                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://' + item.link.split("http://")[-1].split(" ")[0] + '" target="_blank"></a></small></td>'
+            if MousersStock.find_by(manufacturer_part_number: item.mpn).blank?
+                if item.link.blank? or item.link == ""
+                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords='+item.mpn+'" target="_blank"></a></small></td>'
                 else
-                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=' + item.mpn + '" target="_blank"></a></small></td>'
+                    if item.link =~ /http/i
+                        @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://' + item.link.split("http://")[-1].split(" ")[0] + '" target="_blank"></a></small></td>'
+                    else
+                        @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=' + item.mpn + '" target="_blank"></a></small></td>'
+                    end
                 end
-            end
 
-            @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>'
+                @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>'
                                             
-            @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>'
+                @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>'
+            else
+#MousersStock
+                if item.link.blank? or item.link == ""
+                    @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="' + MousersStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + MousersStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" ﻿http://www.mouser.com/Search/Refine.aspx?Keyword='+item.mpn+'" target="_blank"></a></small></td>'
+                else
+                    if item.link =~ /https:/i
+                        @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="'+ MousersStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + MousersStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="https://' + item.link.split('https://')[-1].split(' ')[0] + '" target="_blank"></a></small></td>'
+                    elsif item.link =~ /http:/i
+                        @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + MousersStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + MousersStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="http://' + item.link.split('http://')[-1].split(' ')[0] + '" target="_blank"></a></small></td>'
+                    else
+                        @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="' + MousersStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + MousersStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="﻿http://www.mouser.com/Search/Refine.aspx?Keyword='+item.mpn+'" target="_blank"></a></small></td>'
+                    end
+                end
+                            
+                @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii" data-placement="right" data_src="' + MousersStock.find_by(manufacturer_part_number: item.mpn).image + '" href="' + MousersStock.find_by(manufacturer_part_number: item.mpn).image + '"  target="_blank" ></a></small></td>'
+                                            
+                @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="' +  MousersStock.find_by(manufacturer_part_number: item.mpn).datasheets + '" target="_blank"></a></small></td>'
+
+#MousersStock
+
+            end
         else
             if item.link.blank? or item.link == ""
                 @dn_info += '<td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + ' ' + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split("<name>Tolerance</name><value>")[-1].split("</value>")[0].to_s + '" href="http://www.digikey.com/product-search/en?keywords='+item.mpn+'" target="_blank"></a></small></td>'

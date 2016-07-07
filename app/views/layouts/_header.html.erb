@@ -42,7 +42,7 @@
             <% end %>
             <% if can? :work_suppliers, :all %>
                 <li id="n">
-                    <%= link_to "Supplier Offer",supplier_offer_path, data: { no_turbolink: true } %>
+                    <%= link_to t('supplier_offer'),supplier_offer_path, data: { no_turbolink: true } %>
                 </li>
             <% end %>
             <% if can? :work_baojia, :all %>

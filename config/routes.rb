@@ -91,7 +91,9 @@ Rails.application.routes.draw do
   match '/add_order', to: 'procurement#add_order', via: 'get'
   match '/p_history', to: 'procurement#p_history', via: 'get'
   match '/p_edit_cost_dn', to: 'procurement#p_edit_cost_dn', via: 'post'
+  match '/p_edit_supplier_dn', to: 'procurement#p_edit_supplier_dn', via: 'post'
   match '/supplier_offer', to: 'procurement#supplier_offer', via: 'get'
+  match '/supplier_dn_excel', to: 'procurement#supplier_dn_excel', via: 'get'
 
  
 

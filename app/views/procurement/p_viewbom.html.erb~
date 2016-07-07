@@ -135,7 +135,7 @@
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75"><div >黄</div></a></small></td>
                                             
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >马</div></a></small></td>
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >马</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
                             </tr>
                         </table>
 
@@ -379,7 +379,7 @@ function change_<%= item.id.to_s %>(){
 -->
                             <tbody id="dn_<%= item.id %>_dn">
                             <% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
-                            <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% end %> >                       
+                            <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% elsif dn.color == "y" %>class="bg-primary"<% end %> >                       
                                 <td width="25" id="<%= item.id.to_s + 'edit' %>"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="<%= dn.id %>" data-dn="<%= dn.dn %>" data-dnlong="<%= dn.dn_long %>" data-qty="<%= dn.qty %>" data-cost="<%= dn.cost %>" data-remark="<%= dn.remark %>" data-itemid="<%= item.id %>" > </a>
                                 <% if not dn.info.blank? %>                 
                                     <a href="<%= dn.info %>">下载</a></small></td>

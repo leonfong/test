@@ -5,32 +5,26 @@
   <%= render 'layouts/flash_messages' %>
 </div>
 
-<% if @topic %>
+<% if @part %>
+<div>
+<%= link_to "导出EXCEL", supplier_dn_excel_path() %>
+</div>
 <%= will_paginate(@part) %>
 <div class="row " style="padding-top: 7px;">
-    <div class="col-md-12 " style="padding: 5px;" >
-        
-       <div class="panel panel-info " >
-                   <div class="panel-heading"><span class="text-primary"><strong>供应商报价列表</strong></span></div>
-                    
-                    <table class="table table-bordered">  
-                        <thead>
-                            <tr>
+    <div class="col-md-12 " style="padding: 5px;" >   
+                  <table class="table table-hover table-bordered" > 
+                      <thead >
+                            <tr style="background-color: #eeeeee"> 
                                 <th width="100">MPN</th>
                                 <th width="200">描述</th>
-                                <th width="90">数量</th>  
-                                <th width="90">价格</th>
-                                <th width="50"></th>
+                                <th width="50">数量</th>  
+                                <th width="50">单价￥</th>
+                                <th width="80">操作</th>
                             </tr>
                         </thead>
                         <tbody>
 <% @part.each do |part| %>
                             <tr >
-<!--
-                                <td>
-                                    <%= link_to "处理",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %>
-                                </td>
--->
                                 <td> 
                                     <%= part.mpn %>
                                 </td>
@@ -41,20 +35,33 @@
                                 <td>
                                     <%= part.quantity * ProcurementBom.find(part.procurement_bom_id).qty %>
                                 </td>
-                                <td>
-                                    <%= part.cost %>
+                                <td id="<%= part.id.to_s %>cost">
+                                    <% if not PDn.find_by(item_id: part.id,color: "y").blank? %>
+                                        <%= PDn.where(item_id: part.id,color: "y").last!.cost %>
+                                    <% end %>
                                 </td>
                                 <td>
-                                    <%= part.mpn %>
+                                    <small>
+                                    <%= form_tag({action: :p_edit_supplier_dn},method:"post",remote:"ture",class:"form-inline") do %>
+                                        <div class="form-group sr-only">
+                                            <label for="dn_itemid" class="control-label">itemid:</label>
+                                            <input type="text" class="form-control" id="dn_itemid" name="dn_itemid" value="<%= part.id.to_s %>">
+                                        </div>
+
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control " id="<%= part.id.to_s + 'p' %>" name="<%= part.id.to_s + 'p' %>" >                      
+
+                                            <span class="input-group-btn ">
+                                                <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
+                                           </span>
+                                       </div>
+                                   <% end %>
+                                   </small>
                                 </td> 
                             </tr>
 <% end %>
                         </tbody>
                     </table>
-                    
-                </div>
-        
-   
     </div>
 </div>
 

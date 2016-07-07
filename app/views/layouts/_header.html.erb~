@@ -36,12 +36,12 @@
                 
             <% end %>
             <% if can? :work_pcb_business, :all %>
-                <li id="k">
+                <li id="m">
                     <%= link_to "PCB Business",pcb_order_list_path, data: { no_turbolink: true } %>
                 </li>
             <% end %>
             <% if can? :work_suppliers, :all %>
-                <li id="k">
+                <li id="n">
                     <%= link_to "Supplier Offer",supplier_offer_path, data: { no_turbolink: true } %>
                 </li>
             <% end %>
@@ -170,6 +170,24 @@ $(document).ready(function () {
     });
     $("#k").mouseenter(function () {                     
             $("#k").addClass('active');            
+    });
+    $("#l").mouseenter(function () {                     
+            $("#l").addClass('active');        
+    });
+    $("#l").mouseleave(function () {             
+            $("#l").removeClass('active');          
+    });
+    $("#m").mouseenter(function () {                     
+            $("#m").addClass('active');        
+    });
+    $("#m").mouseleave(function () {             
+            $("#m").removeClass('active');          
+    });
+    $("#n").mouseenter(function () {                     
+            $("#n").addClass('active');        
+    });
+    $("#n").mouseleave(function () {             
+            $("#n").removeClass('active');          
     });
    
 

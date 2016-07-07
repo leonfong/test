@@ -10,7 +10,160 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
     
     def supplier_offer
-        @part = PItem.where(user_do: '999')
+        if can? :work_suppliers, :all
+            @part = PItem.where(user_do: '999').paginate(:page => params[:page], :per_page => 10)
+            Rails.logger.info("-------------------------@part")
+            Rails.logger.info(@part.inspect)   
+            Rails.logger.info("----------------------------------@part")   
+            render "supplier_offer.html.erb" and return
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+    end
+
+    def supplier_dn_excel
+        if can? :work_suppliers, :all
+            @bom = PItem.where(user_do: '999')
+            file_name = "supplier_out.xls"
+            path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+            #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+            #Rails.logger.info(file_name.inspect)
+            #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
+                all_title = []
+                all_title << "MPN"
+                all_title << "描述"
+                all_title << "数量"
+                all_title << "报价"
+                sheet1.row(0).concat all_title
+                #sheet1.column(1).width = 50
+                set_color = 0  
+                while set_color < all_title.size do         
+                    sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
+                    if all_title[set_color] =~ /数量/i 
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /报价/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /描述/i
+                        sheet1.column(set_color).width = 35  
+                    elsif all_title[set_color] =~ /MPN/i
+                        sheet1.column(set_color).width = 20                   
+                    else
+                        sheet1.column(set_color).width = 15
+                    end
+                    set_color += 1
+                end
+		@bom.each_with_index do |item,index|
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :text_wrap => 1,:size => 8
+                    })
+		    row = sheet1.row(rowNum)
+                    row.set_format(2,title_format)
+                    set_f = 0  
+                    while set_f < all_title.size do         
+                        row.set_format(set_f,title_format)
+                        set_f += 1
+                    end
+                    row.push(item.mpn)
+		    row.push(item.description)
+                    row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
+                    if not PDn.find_by(item_id: item.id,color: "y").blank?
+                        row.push(PDn.where(item_id: item.id,color: "y").last!.cost)
+                    else
+                        row.push("")
+                    end
+                end
+
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('UTF-8'), filename: file_name)
+                              
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel") and return
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+                #send_file(path,filename: file_name, type: "application/vnd.ms-excel")    
+    end
+
+    def p_edit_supplier_dn 
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(params["#{params[:dn_itemid]}p"].inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        @itemid = params[:dn_itemid]
+        @pitem = PItem.find(params[:dn_itemid])
+        if params["#{params[:dn_itemid]}p"] != "" 
+            @dn = PDn.new
+            @dn.cost = params["#{params[:dn_itemid]}p"]
+            @dn.item_id = @pitem.id
+            @dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
+            @dn.color = "y"
+            @dn.tag = "a"
+            @dn.date = Time.new
+            @dn.save
+
+=begin
+
+            @dn = PDn.find_by(item_id: params[:dn_itemid],color: "y") 
+            if not @dn.blank?
+                @dn.cost = params["#{params[:dn_itemid]}p"]
+                @dn.save
+            else
+                @dn = PDn.new
+                @dn.cost = params["#{params[:dn_itemid]}p"]
+                @dn.item_id = @pitem.id
+                @dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
+                @dn.color = "y"
+                @dn.tag = "a"
+                @dn.date = Time.new
+                @dn.save
+            end
+=end
+=begin
+    
+            @pitem = PItem.find(params[:dn_itemid])
+            @pitem.cost = params["#{params[:dn_itemid]}p"]
+            @pitem.color = "b"
+            @pitem.save
+            @itemid = params[:dn_itemid]
+            @dnid = @pitem.dn_id
+            if not @dnid.blank?
+                dn = PDn.find(@dnid)  
+                if not params["#{params[:dn_itemid]}p"].blank?
+                    dn.cost = params["#{params[:dn_itemid]}p"]
+                    dn.color = "y"
+                end
+                dn.save      
+            else
+                dn = PDn.new
+                dn.cost = params["#{params[:dn_itemid]}p"]
+                dn.item_id = @pitem.id
+                dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
+                dn.color = "y"
+                dn.tag = "a"
+                dn.date = Time.new
+                dn.save
+                @dnid = dn.id
+                @pitem.dn_id = dn.id
+                @pitem.save 
+            end
+=end
+
+
+        end
+        #redirect_to :back
+        #return false     
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(@pitem.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        render "p_edit_supplier_dn.js.erb"
     end
 
     def p_history
@@ -1246,10 +1399,14 @@ WHERE
     def p_updateii
         dell_dns_color = PDn.where(item_id: params[:id])
         c_color = nil
-        dell_dns_color = PDn.where(item_id: params[:id]).update_all "color = '#{c_color}'"
+        dell_dns_color = PDn.where("item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
         if not params[:product_name].blank?
             @add_dns = PDn.find(params[:dn_id])
-            @add_dns.color = "b"
+            if @add_dns.color == "y"
+                @add_dns.color = "y"
+            else
+                @add_dns.color = "b"
+            end
             @add_dns.save
             @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
             @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
@@ -1300,7 +1457,12 @@ WHERE
             #Rails.logger.info(@bom_item.id.to_s + '_dns')
         else
             @add_dns = PDn.find(params[:dn_id])
-            @add_dns.color = "b"
+            if @add_dns.color == "y"
+                @add_dns.color = "y"
+            else
+                @add_dns.color = "b"
+            end
+            #@add_dns.color = "b"
             @add_dns.save
             @bom_item = PItem.find(params[:id]) 
             @bom_item.cost = @add_dns.cost

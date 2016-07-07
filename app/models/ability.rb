@@ -92,6 +92,7 @@ class Ability
       can :work_g, :all
       can :work_baojia, :all
       can :work_g_all, :all
+      can :work_suppliers, :all
       can :old_bom, :all
     elsif user.has_role?(:work_seven_a)
       #can :manage, :all

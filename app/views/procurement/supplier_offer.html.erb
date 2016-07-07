@@ -1,0 +1,70 @@
+<small>
+<div class="container" >
+<div class="row" style="padding: 0px;">
+  <h2><p class="text-primary">供应商报价</p></h2><hr>
+  <%= render 'layouts/flash_messages' %>
+</div>
+
+<% if @topic %>
+<%= will_paginate(@part) %>
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+        
+       <div class="panel panel-info " >
+                   <div class="panel-heading"><span class="text-primary"><strong>供应商报价列表</strong></span></div>
+                    
+                    <table class="table table-bordered">  
+                        <thead>
+                            <tr>
+                                <th width="100">MPN</th>
+                                <th width="200">描述</th>
+                                <th width="90">数量</th>  
+                                <th width="90">价格</th>
+                                <th width="50"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<% @part.each do |part| %>
+                            <tr >
+<!--
+                                <td>
+                                    <%= link_to "处理",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %>
+                                </td>
+-->
+                                <td> 
+                                    <%= part.mpn %>
+                                </td>
+                                <td>
+                                    <%= part.description %>
+                                </td>
+                                
+                                <td>
+                                    <%= part.quantity * ProcurementBom.find(part.procurement_bom_id).qty %>
+                                </td>
+                                <td>
+                                    <%= part.cost %>
+                                </td>
+                                <td>
+                                    <%= part.mpn %>
+                                </td> 
+                            </tr>
+<% end %>
+                        </tbody>
+                    </table>
+                    
+                </div>
+        
+   
+    </div>
+</div>
+
+
+<% end %>
+</div>
+</small> 
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

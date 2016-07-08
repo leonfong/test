@@ -573,7 +573,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_dn},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_edit_dn},method:"post",remote: true,multipart:"ture") do %>
           <div class="form-group sr-only">
             <label for="dn_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="dn_id" name="dn_id">
@@ -598,12 +598,12 @@ function change_<%= item.id.to_s %>(){
             <label for="cost" class="control-label">价格:</label>
             <input type="text" class="form-control" id="dn_cost" name="dn_cost">
           </div> 
-<!--     
+     
           <div class="form-group">
             <label for="info" class="control-label">技术资料:</label>
             <input class="form-control" name="dn_info[info]" id="dn_info" type="file" accept=".xls"  >
           </div>
--->
+
           <div class="form-group">
             <label for="remark" class="control-label">备注:</label>
             <textarea class="form-control" id="dn_remark"  name="dn_remark"></textarea>

@@ -327,6 +327,7 @@ DEPENDENCIES
   rails_admin
   rails_kindeditor
   react-rails (~> 1.0)
+  remotipart (~> 1.2.1)
   rolify
   roo (~> 2.0.0)
   roo-xls

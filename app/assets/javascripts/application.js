@@ -16,6 +16,7 @@
 //= require bootstrap-datetimepicker
 //= require bootstrap-table
 //= require jquery_ujs
+//= require jquery.remotipart
 //= require turbolinks
 //= require react
 //= require react_ujs

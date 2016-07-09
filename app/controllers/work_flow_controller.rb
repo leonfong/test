@@ -223,7 +223,7 @@ before_filter :authenticate_user!
             where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
         end
         #if params[:order_s]
-            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date} AND pcb_customers.sell = '#{current_user.email}'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
         #end
     end
 

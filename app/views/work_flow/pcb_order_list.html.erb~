@@ -1,10 +1,15 @@
 <div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
-        <h1>PCB Order list ---等待报价 <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrder">新建PCB订单</button></h1>
+        <h1>PCB Order list ---等待报价 
+        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
+            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrder">新建PCB订单</button>
+        <% end %>
+        </h1>
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= link_to "等待报价", pcb_order_list_path ,class: "list-group-item active"%> 
-            <%= link_to "等待下单", pcb_order_list_path(place_an_order: "place_an_order" ) ,class: "list-group-item"%>  
+            <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item"%>
+            <%= link_to "等待报价", pcb_order_list_path(quote: true) ,class: "list-group-item active"%> 
+            <%= link_to "等待下单", pcb_order_list_path(place_an_order: true) ,class: "list-group-item"%>  
             <%= link_to "等待财务审批", pcb_order_list_path ,class: "list-group-item"%>
             <%= link_to "等待采购下单", pcb_order_list_path ,class: "list-group-item"%>
             <%= link_to "等待入库", pcb_order_list_path ,class: "list-group-item"%>       
@@ -19,6 +24,7 @@
       <th>Order No.</th>
       <th>Created Date</th>
       <th>数量</th>
+      <th>价格￥</th>
       <th>附件</th>
       <th>所属业务员</th>
       <th>跟踪业务员</th>
@@ -28,9 +34,14 @@
   <tbody>
     <% @pcblist.each do |pcb| %>   
       <tr >
-        <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" ><%= pcb.order_no %></a></td>
+        <% if can? :work_pcb_business, :all and can? :work_g, :all %>
+            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" ><%= pcb.order_no %></a></td>
+        <% else %>
+            <td><%= pcb.order_no %></td>
+        <% end %>
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= pcb.qty %></td>
+        <td><%= pcb.price %></td>
         <td>
             <% if not pcb.att.blank? %>
                 <a href="<%= pcb.att.url %>">下载</a>
@@ -40,7 +51,11 @@
         </td>
         <td><%= pcb.sell %></td>
         <td><%= pcb.order_sell %></td>
-        <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/add_pcb_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
+        <% if can? :work_pcb_business, :all and can? :work_g, :all %>
+            <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
+        <% else %>
+            <td><td><div class="btn-group"><a class="btn btn-danger disabled" >确认报价</a></div></td></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

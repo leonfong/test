@@ -13,16 +13,45 @@ before_filter :authenticate_user!
         
     end
 
+
     def update_pcb_price
-        
+        pcb = PcbOrder.find_by(order_no: params[:order_no])
+        if not params[:price].blank?
+            pcb.price = params[:price]
+        end
+        if not params[:remark].blank?
+            pcb.remark = params[:remark]
+        end
+        pcb.save
+        redirect_to :back
     end    
 
+    def release_pcb_to_order
+        pcb = PcbOrder.find(params[:bom_id])
+        pcb.state = "order"
+        pcb.save
+        redirect_to pcb_order_list_path(place_an_order: true)
+    end
+
+    def release_pcb_to_quote
+        pcb = PcbOrder.find(params[:bom_id])
+        pcb.state = "quote"
+        pcb.save
+        redirect_to pcb_order_list_path(quote: true)
+    end
+
     def pcb_order_list
-        if params[:place_an_order]
+        if params[:new]
+            @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            render "new_pcb_order_list.html.erb" and return
+        elsif params[:quote]
+            @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            render "pcb_order_list.html.erb" and return
+        elsif params[:place_an_order]
             @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             render "pcb_order_list_order.html.erb" and return
         else
-            @pcblist = PcbOrder.all.order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            @pcblist = PcbOrder.where("state IS NULL").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
         end
     end
 
@@ -36,8 +65,9 @@ before_filter :authenticate_user!
         @pcb.order_sell = current_user.email
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
+        @pcb.state = "new"
         @pcb.save
-        redirect_to :back
+        redirect_to pcb_order_list_path(new: true)
     end
 
     def add_pcb_customer

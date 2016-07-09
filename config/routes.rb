@@ -53,7 +53,8 @@ Rails.application.routes.draw do
   match '/edit_pcb_order', to: 'work_flow#edit_pcb_order', via: 'post'
   match '/work_flow/select_pcbcustomer_ajax', to: 'work_flow#select_pcbcustomer_ajax', via: 'get'
   match '/update_pcb_price', to: 'work_flow#update_pcb_price', via: 'post'
-
+  match '/release_pcb_to_order', to: 'work_flow#release_pcb_to_order', via: 'get'
+  match '/release_pcb_to_quote', to: 'work_flow#release_pcb_to_quote', via: 'get'
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 
   match '/p_new_bom', to: 'procurement#p_upbom',via: 'post'

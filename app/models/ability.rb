@@ -86,6 +86,7 @@ class Ability
       can :work_g, :all
       can :work_baojia, :all
       can :old_bom, :all
+      can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_all)
       #can :manage, :all
       can :work_up, :all
@@ -94,6 +95,7 @@ class Ability
       can :work_g_all, :all
       can :work_suppliers, :all
       can :old_bom, :all
+      can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_a)
       #can :manage, :all
       can :work_up, :all
@@ -101,6 +103,7 @@ class Ability
       can :work_baojia, :all
       can :work_g_a, :all
       can :old_bom, :all
+      can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_b)
       #can :manage, :all
       can :work_up, :all
@@ -108,6 +111,7 @@ class Ability
       can :work_baojia, :all
       can :work_g_b, :all
       can :old_bom, :all
+      can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_c)
       #can :manage, :all
       can :work_up, :all
@@ -115,12 +119,14 @@ class Ability
       can :work_baojia, :all
       can :work_g_c, :all
       can :old_bom, :all
+      can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_d)
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all
       can :work_g_d, :all
       can :old_bom, :all
+      can :work_pcb_business, :all
     elsif user.has_role?(:work_eight)
       #can :manage, :all
       can :work_up, :all

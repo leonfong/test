@@ -62,8 +62,9 @@
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
-                                <th >客户(公司名称等)</th>
-                                <th >联系方式（邮箱，qq，skype，等）</th>
+                                <th >客户代码</th>
+                                <th >客户和公司名称等</th>
+                                <th >联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
                                 <th width="150">业务员</th>  
                                 <th width="140">数量</th>
                                 <th width="50">附件</th>
@@ -75,6 +76,7 @@
 
 <% @quate.each do |q_order| %>
                             <tr>
+                                <td><%= q_order.c_no %></td>
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.email %></td>
                                 <td><%= q_order.sell %></td>
@@ -109,11 +111,11 @@
       <%= form_tag({action: :add_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
       <div class="modal-body">        
           <div class="form-group">
-            <label for="customer" class="control-label">客户(公司名称等):</label>
+            <label for="customer" class="control-label">客户和公司名称等:</label>
             <input type="text" class="form-control" id="customer" name="customer">
           </div>       
           <div class="form-group">
-            <label for="email" class="control-label">联系方式（邮箱，qq，skype，等）:</label>
+            <label for="email" class="control-label">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）:</label>
             <input type="text" class="form-control" id="email" name="email">
           </div> 
 <!--
@@ -157,11 +159,11 @@
           </div>
           
           <div class="form-group">
-            <label for="customer" class="control-label">客户(公司名称等):</label>
+            <label for="customer" class="control-label">客户和公司名称等:</label>
             <input type="text" class="form-control" id="edit_customer" name="customer">
           </div>       
           <div class="form-group">
-            <label for="email" class="control-label">联系方式（邮箱，qq，skype，等）:</label>
+            <label for="email" class="control-label">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）:</label>
             <input type="text" class="form-control" id="edit_email" name="email">
           </div> 
 <!--

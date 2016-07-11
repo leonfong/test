@@ -62,6 +62,7 @@
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
+                                <th width="150">客户代码</th>
                                 <th >客户和公司名称等</th>
                                 <th >联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
                                 <th width="150">业务员</th>  
@@ -75,6 +76,7 @@
 
 <% @quate.each do |q_order| %>
                             <tr>
+                                <td><%= q_order.c_no %></td>
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.email %></td>
                                 <td><%= q_order.sell %></td>

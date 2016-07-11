@@ -103,6 +103,7 @@ before_filter :authenticate_user!
             @dn = PDn.new
             @dn.cost = params["#{params[:dn_itemid]}p"]
             @dn.item_id = @pitem.id
+            @dn.remark = params[:dn_remark]
             @dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
             @dn.color = "y"
             @dn.tag = "a"

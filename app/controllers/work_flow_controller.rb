@@ -6,6 +6,7 @@ before_filter :authenticate_user!
         select_customer = PcbCustomer.find_by(params[:id])
         if select_customer
             @sell = select_customer.sell
+            @c_no = select_customer.c_no
         end
     end
 
@@ -57,7 +58,7 @@ before_filter :authenticate_user!
 
     def add_pcb_order
         order_no = "MK" + Time.new.strftime("%y%m%d").to_s + User.find_by(email: params[:sell]).s_name + PcbOrder.find_by_sql("SELECT count(*)+1 AS a FROM `pcb_orders`").first.a.to_s + "W"
-        @pcb = PcbOrder.new()#使用页面传进来的文件名字作为参数创建一个bom对象
+        @pcb = PcbOrder.new()
         #@pcb.user_id = current_user.id
         @pcb.pcb_customer_id = params[:customer]
         @pcb.order_no = order_no
@@ -71,8 +72,9 @@ before_filter :authenticate_user!
     end
 
     def add_pcb_customer
-        @pcb = PcbCustomer.new()#使用页面传进来的文件名字作为参数创建一个bom对象
+        @pcb = PcbCustomer.new()
         #@pcb.user_id = current_user.id
+        @pcb.c_no = "pcb" + (PcbCustomer.maximum("id") + 1).to_s
         @pcb.customer = params[:customer]
         @pcb.email = params[:email] 
         @pcb.sell = current_user.email 

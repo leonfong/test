@@ -79,7 +79,7 @@
       <div class="modal-body">        
           <div class="form-group">
             <label for="customer" class="control-label">客户（公司）:</label>
-            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer,c.id] }%>
+            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer+ " "+ User.find_by(email: c.sell).full_name + " " + c.c_no,c.id] }%>
               <%= select  '', :customer,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
           </div>       
           <div class="form-group">

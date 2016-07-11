@@ -223,28 +223,30 @@ before_filter :authenticate_user!
     end
 
     def sell_pcb_baojia
-        where_date = ""
-        where_p = "pcb_customers.order_no LIKE '%%'"
-        if params[:start_date] != "" 
-            where_date += " AND pcb_customers.created_at > '#{params[:start_date]}'"
+        if can? :work_e, :all
+            where_date = ""
+            where_p = "pcb_customers.order_no LIKE '%%'"
+            if params[:start_date] != "" 
+                where_date += " AND pcb_customers.created_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" 
+                where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
+            end
+            if can? :work_top, :all
+                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+            else
+                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date} AND pcb_customers.sell = '#{current_user.email}'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+            end
+            render "sell_pcb_baojia.html.erb"
+        else
+            render plain: "You don't have permission to view this page !"
         end
-        if params[:end_date] != "" 
-            where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
-        end
-        #if params[:order_s]
-            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date} AND pcb_customers.sell = '#{current_user.email}'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
-        #end
     end
 
     def sell_baojia
         where_p = ""
         where_date = ""
-        if params[:start_date] != "" 
-            where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
-        end
-        if params[:end_date] != "" 
-            where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
-        end
+        
         if not current_user.s_name.blank?
             if current_user.s_name.size == 1
                 s_name = current_user.s_name
@@ -272,9 +274,28 @@ before_filter :authenticate_user!
                     end
                 end
             end
+            if params[:start_date] != "" 
+                where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" 
+                where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
+            end
+            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
+        else
+            if params[:start_date] != "" 
+                where_date += " procurement_boms.created_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" 
+                where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
+            end
+            if where_date != ""
+                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_date}  ").paginate(:page => params[:page], :per_page => 10)
+            else
+                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`   ").paginate(:page => params[:page], :per_page => 10)
+            end
         end
         
-        @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
+        #@quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
     end
 
     def index

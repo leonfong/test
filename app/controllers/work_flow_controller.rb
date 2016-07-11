@@ -7,6 +7,9 @@ before_filter :authenticate_user!
         if select_customer
             @sell = select_customer.sell
             @c_no = select_customer.c_no
+            Rails.logger.info("add-------------------------------------add")
+            Rails.logger.info(@c_no.inspect)
+            Rails.logger.info("add-------------------------------------add")
         end
     end
 
@@ -74,7 +77,11 @@ before_filter :authenticate_user!
     def add_pcb_customer
         @pcb = PcbCustomer.new()
         #@pcb.user_id = current_user.id
-        @pcb.c_no = "pcb" + (PcbCustomer.maximum("id") + 1).to_s
+        if PcbCustomer.maximum("id").blank?
+            @pcb.c_no = "pcb1"
+        else
+            @pcb.c_no = "pcb" + (PcbCustomer.maximum("id") + 1).to_s
+        end
         @pcb.customer = params[:customer]
         @pcb.email = params[:email] 
         @pcb.sell = current_user.email 

@@ -55,7 +55,7 @@
                                         </div>
 
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control " id="<%= part.id.to_s + 'p' %>"  name="<%= part.id.to_s + 'p' %>" >                      
+                                            <input type="text" class="form-control " id="<%= part.id.to_s + 'p' %>"  name="<%= part.id.to_s + 'p' %>" size="10">                      
                                         </div>
                                         <div class="input-group input-group-sm">
                                             <input type="text" class="form-control " id="dn_remark" name="dn_remark" size="40">                      

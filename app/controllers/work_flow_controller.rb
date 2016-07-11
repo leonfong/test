@@ -83,6 +83,7 @@ before_filter :authenticate_user!
             @pcb.c_no = "pcb" + (PcbCustomer.maximum("id") + 1).to_s
         end
         @pcb.customer = params[:customer]
+        @pcb.customer_com = params[:customer_com]
         @pcb.email = params[:email] 
         @pcb.sell = current_user.email 
         @pcb.qty = params[:qty]

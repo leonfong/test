@@ -44,7 +44,9 @@
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
+            
           </div>
+          <a type="button" class="btn btn-danger btn-sm">查询正在跟踪的客户</a>
         </div>
       <% end %>
 </div>
@@ -71,6 +73,9 @@
                                 <th width="50">附件</th>
                                 <th width="150"> 报价</th>
                                 <th width="50"> 编辑</th>
+                                <% if can? :work_pcb_business, :all %>
+                                <th width="50"> 跟踪</th>
+                                <% end %>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,7 +86,7 @@
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.customer_com %></td>
                                 <td><%= q_order.email %></td>
-                                <td><%= q_order.sell %></td>
+                                <td><%= User.find_by(email: q_order.sell).full_name %></td>
                                 <td><%= q_order.qty %></td>
                                 <td>
                                     <% if not q_order.att.blank? %>
@@ -94,6 +99,11 @@
                                 <td>
                                     <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder" data- data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-order_no="<%= q_order.order_no %>" >更新</button>
                                 </td>
+                                <% if can? :work_pcb_business, :all %>
+                                <td>
+                                    <a type="button" class="btn btn-info btn-xs" href="/follow?id=<%=q_order.id.to_s%>" >跟踪</a>
+                                </td>
+                                <% end %>
                             </tr>
 <% end %> 
          

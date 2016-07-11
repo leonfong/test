@@ -44,9 +44,8 @@
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
-            
           </div>
-          <a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">查询正在跟踪的客户</a>
+<a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">查询正在跟踪的客户</a>
         </div>
       <% end %>
 </div>
@@ -59,8 +58,8 @@
 <% if not @quate.blank?%>
     <div class="col-md-12 " style="padding: 5px;" >
        <%= will_paginate(@quate) %> 
-       <div class="panel panel-info " >
-                    
+       <div class="panel panel-primary " >
+                    <div class="panel-heading">正在跟踪的客户</div>
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
@@ -74,7 +73,7 @@
                                 <th width="150"> 报价</th>
                                 <th width="50"> 编辑</th>
                                 <% if can? :work_pcb_business, :all %>
-                                <th width="50"> 跟踪</th>
+                                <th width="90"> 取消跟踪</th>
                                 <% end %>
                             </tr>
                         </thead>
@@ -101,7 +100,7 @@
                                 </td>
                                 <% if can? :work_pcb_business, :all %>
                                 <td>
-                                    <a type="button" class="btn btn-info btn-xs" href="/follow?id=<%=q_order.id.to_s%>" >跟踪</a>
+                                    <a type="button" class="btn btn-info btn-xs" href="/follow?id=<%=q_order.id.to_s%>&cancel=true" >取消跟踪</a>
                                 </td>
                                 <% end %>
                             </tr>

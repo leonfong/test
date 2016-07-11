@@ -2,6 +2,45 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def follow
+        select_customer = PcbCustomer.find(params[:id])
+        if select_customer
+            if params[:cancel]
+                select_customer.follow = nil
+            else
+                select_customer.follow = current_user.email
+            end
+            select_customer.save
+        end
+        redirect_to sell_pcb_baojia_path(follow: true)
+    end
+
+    def sell_pcb_baojia
+        if can? :work_e, :all
+            if params[:follow]
+                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE follow LIKE '%#{current_user.email}%'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                render "sell_pcb_baojia_follow.html.erb"
+            else
+                where_date = ""
+                where_p = "pcb_customers.order_no LIKE '%%'"
+                if params[:start_date] != "" 
+                    where_date += " AND pcb_customers.created_at > '#{params[:start_date]}'"
+                end
+                if params[:end_date] != "" 
+                    where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
+                end
+                if can? :work_top, :all
+                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                else
+                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date} AND pcb_customers.sell = '#{current_user.email}'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                end
+                render "sell_pcb_baojia.html.erb"
+            end
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+    end
+
     def select_pcbcustomer_ajax
         select_customer = PcbCustomer.find(params[:id])
         if select_customer
@@ -221,27 +260,6 @@ before_filter :authenticate_user!
         order_info.sell_manager_remark = params[:sell_manager_remark]
         order_info.save
         redirect_to :back 
-    end
-
-    def sell_pcb_baojia
-        if can? :work_e, :all
-            where_date = ""
-            where_p = "pcb_customers.order_no LIKE '%%'"
-            if params[:start_date] != "" 
-                where_date += " AND pcb_customers.created_at > '#{params[:start_date]}'"
-            end
-            if params[:end_date] != "" 
-                where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
-            end
-            if can? :work_top, :all
-                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
-            else
-                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date} AND pcb_customers.sell = '#{current_user.email}'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
-            end
-            render "sell_pcb_baojia.html.erb"
-        else
-            render plain: "You don't have permission to view this page !"
-        end
     end
 
     def sell_baojia

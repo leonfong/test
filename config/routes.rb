@@ -55,6 +55,9 @@ Rails.application.routes.draw do
   match '/update_pcb_price', to: 'work_flow#update_pcb_price', via: 'post'
   match '/release_pcb_to_order', to: 'work_flow#release_pcb_to_order', via: 'get'
   match '/release_pcb_to_quote', to: 'work_flow#release_pcb_to_quote', via: 'get'
+  match '/follow', to: 'work_flow#follow', via: 'get'
+
+
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 
   match '/p_new_bom', to: 'procurement#p_upbom',via: 'post'
@@ -95,7 +98,7 @@ Rails.application.routes.draw do
   match '/p_edit_supplier_dn', to: 'procurement#p_edit_supplier_dn', via: 'post'
   match '/supplier_offer', to: 'procurement#supplier_offer', via: 'get'
   match '/supplier_dn_excel', to: 'procurement#supplier_dn_excel', via: 'get'
-
+  match '/part_list', to: 'procurement#part_list', via: 'get'
  
 
 #external_bom

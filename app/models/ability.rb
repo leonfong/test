@@ -46,6 +46,7 @@ class Ability
       can :work_e, :all
       can :external_access, :all
       can :work_pcb_business, :all
+      can :work_suppliers, :all
     elsif user.has_role?(:manager)
       can :manage, :all
     elsif user.has_role?(:work_one)

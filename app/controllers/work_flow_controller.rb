@@ -3,13 +3,13 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def select_pcbcustomer_ajax
-        select_customer = PcbCustomer.find_by(params[:id])
+        select_customer = PcbCustomer.find(params[:id])
         if select_customer
             @sell = select_customer.sell
             @c_no = select_customer.c_no
-            Rails.logger.info("add-------------------------------------add")
+            Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_no.inspect)
-            Rails.logger.info("add-------------------------------------add")
+            Rails.logger.info("add-------------------------------------12")
         end
     end
 

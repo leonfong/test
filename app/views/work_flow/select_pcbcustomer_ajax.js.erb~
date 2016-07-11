@@ -1,1 +1,2 @@
-$("#sell").val("<%= @sell %>");
+$("#sell").val("<%= User.find_by(email: @sell).full_name %>");
+$("#c_no").val("@c_no %>");

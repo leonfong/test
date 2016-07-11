@@ -54,7 +54,7 @@
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
             <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
         <% else %>
-            <td><td><div class="btn-group"><a class="btn btn-danger disabled" >确认报价</a></div></td></td>
+            <td><div class="btn-group"><a class="btn btn-danger disabled" >确认报价</a></div></td>
         <% end %>
       </tr>
     <% end %>

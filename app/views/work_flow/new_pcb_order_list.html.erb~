@@ -93,12 +93,12 @@
           </div> 
           <div class="form-group">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">客户代码:</label>
+            <label for="c_no" class="control-label">客户代码:</label>
             <input type="test" class="form-control" id="c_no" name="c_no" readonly>
           </div>
           <div class="form-group">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">所属业务员:</label>
+            <label for="sell" class="control-label">所属业务员:</label>
             <input type="test" class="form-control" id="sell" name="sell" readonly>
           </div> 
       </div>

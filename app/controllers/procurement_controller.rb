@@ -76,7 +76,7 @@ before_filter :authenticate_user!
     def supplier_offer
         if can? :work_suppliers, :all
             if params[:complete]
-                @part = PItem.find_by_sql("﻿SELECT `p_items`.* FROM `p_items` INNER JOIN `p_dns` ON `p_items`.`id` = `p_dns`.`item_id` WHERE `p_items`.`user_do` = '999' AND `p_dns`.`color` = 'y' GROUP BY `p_item`s.`id`").paginate(:page => params[:page], :per_page => 10)
+                @part = PItem.find_by_sql("﻿﻿SELECT p_items.* FROM p_items INNER JOIN p_dns ON p_items.id = p_dns.item_id WHERE p_items.user_do = '999' AND p_dns.color = 'y' GROUP BY p_items.id").paginate(:page => params[:page], :per_page => 10)
             elsif params[:undone]
                 @part = PItem.where(user_do: '999',dn_id: nil).paginate(:page => params[:page], :per_page => 10)
             else

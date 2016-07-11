@@ -8,6 +8,8 @@
 <% if @part %>
 <div>
 <%= link_to "导出EXCEL", supplier_dn_excel_path() %>
+<a type="button" class="btn btn-success btn-sm" href="/sell_pcb_baojia?follow=true">已经报价的物料</a>
+<a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">等待报价的物料</a>
 </div>
 <%= will_paginate(@part) %>
 <div class="row " style="padding-top: 7px;">
@@ -55,10 +57,10 @@
                                         </div>
 
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control " id="<%= part.id.to_s + 'p' %>"  name="<%= part.id.to_s + 'p' %>" size="10">                      
+                                            <input type="text" class="form-control " id="<%= part.id.to_s + 'p' %>"  name="<%= part.id.to_s + 'p' %>" size="10" placeholder="单价">                      
                                         </div>
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control " id="dn_remark" name="dn_remark" size="40">                      
+                                            <input type="text" class="form-control " id="dn_remark" name="dn_remark" size="40" placeholder="备注">                      
 
                                             <span class="input-group-btn ">
                                                 <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>

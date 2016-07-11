@@ -151,6 +151,7 @@ class Ability
       can :work_up, :all
       can :work_e, :all
       can :work_pcb_business, :all
+      can :work_top, :all
     elsif user.has_role?(:work_suppliers)
       can :work_suppliers, :all
       can :read, :all

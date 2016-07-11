@@ -46,7 +46,7 @@
             </div>
             
           </div>
-          <a type="button" class="btn btn-danger btn-sm">查询正在跟踪的客户</a>
+          <a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">查询正在跟踪的客户</a>
         </div>
       <% end %>
 </div>

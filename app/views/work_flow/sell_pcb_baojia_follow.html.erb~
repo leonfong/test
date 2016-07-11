@@ -44,7 +44,8 @@
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
-          </div><a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">查询正在跟踪的客户</a>
+          </div>
+<a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">查询正在跟踪的客户</a>
         </div>
       <% end %>
 </div>

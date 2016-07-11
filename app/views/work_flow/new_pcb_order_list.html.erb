@@ -49,8 +49,8 @@
                 无
             <% end %>
         </td>
-        <td><%= pcb.sell %></td>
-        <td><%= pcb.order_sell %></td>
+        <td><%= User.find_by(email: pcb.sell).full_name %></td>
+        <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
             <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
         <% else %>

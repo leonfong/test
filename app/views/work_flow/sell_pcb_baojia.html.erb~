@@ -79,6 +79,7 @@
                             <tr>
                                 <td><%= q_order.c_no %></td>
                                 <td><%= q_order.customer %></td>
+                                <td><%= q_order.customer_com %></td>
                                 <td><%= q_order.email %></td>
                                 <td><%= q_order.sell %></td>
                                 <td><%= q_order.qty %></td>

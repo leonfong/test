@@ -2,9 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <h1>PCB Order list ---等待报价 
-        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrder">新建PCB订单</button>
-        <% end %>
+        
         </h1>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item"%>

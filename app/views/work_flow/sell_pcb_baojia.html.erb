@@ -81,7 +81,7 @@
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.customer_com %></td>
                                 <td><%= q_order.email %></td>
-                                <td><%= q_order.sell %></td>
+                                <td><%= User.find_by(email: q_order.sell).full_name %></td>
                                 <td><%= q_order.qty %></td>
                                 <td>
                                     <% if not q_order.att.blank? %>

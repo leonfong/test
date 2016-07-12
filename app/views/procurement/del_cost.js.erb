@@ -1,5 +1,5 @@
-document.getElementById('<%= @p_item.id.to_s + "p" %>').innerHTML='￥';
-document.getElementById('<%= @p_item.id.to_s + "p_t" %>').innerHTML='￥';
+document.getElementById('<%= @p_item.id.to_s + "p" %>').value='';
+document.getElementById('<%= @p_item.id.to_s + "p_t" %>').innerHTML='';
 
 document.getElementById('<%= @p_item.id.to_s + "d" %>').innerHTML='';
 $("#<%= @p_item.id.to_s + 'd' %>").attr("data-content","");

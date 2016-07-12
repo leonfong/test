@@ -127,6 +127,7 @@ before_filter :authenticate_user!
         @pcb.sell = current_user.email 
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
+        @pcb.remark= params[:remark]
         @pcb.save
         redirect_to :back
     end
@@ -139,6 +140,7 @@ before_filter :authenticate_user!
         @pcb.sell = current_user.email 
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
+        @pcb.remark = params[:remark]
         @pcb.save
         redirect_to :back
     end

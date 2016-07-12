@@ -46,7 +46,9 @@
             </div>
             
           </div>
-          <a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">查询正在跟踪的客户</a>
+<% if can? :work_pcb_business, :all %>
+<a type="button" class="btn btn-danger btn-sm" href="/sell_pcb_baojia?follow=true">查询正在跟踪的客户</a>
+<% end %>
         </div>
       <% end %>
 </div>
@@ -65,13 +67,13 @@
                         <thead class="bg-info">
                             <tr class="text-primary">
                                 <th width="150">客户代码</th>
-                                <th >客户名</th>
-                                <th >客户公司名</th>
-                                <th >联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
-                                <th width="150">业务员</th>  
-                                <th width="140">数量</th>
+                                <th width="150">客户名</th>
+                                <th width="200">客户公司名</th>
+                                <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
+                                <th width="100">业务员</th>  
+                                <th width="100">数量</th>
                                 <th width="50">附件</th>
-                                <th width="150"> 报价</th>
+                                <th > 备注</th>
                                 <th width="50"> 编辑</th>
                                 <% if can? :work_pcb_business, :all %>
                                 <th width="50"> 跟踪</th>
@@ -95,9 +97,9 @@
                                         无
                                     <% end %>
                                 </td>
-                                <td><%= q_order.price %></td>
+                                <td><%= q_order.remark %></td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder" data- data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-order_no="<%= q_order.order_no %>" >更新</button>
+                                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder" data- data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-order_no="<%= q_order.order_no %>" >更新</button>
                                 </td>
                                 <% if can? :work_pcb_business, :all %>
                                 <td>
@@ -143,11 +145,15 @@
           <div class="form-group">
             <label for="qty" class="control-label">数量:</label>
             <input type="number" class="form-control" id="qty" name="qty">
-          </div> 
+          </div>         
  
           <div class="form-group">
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+          <div class="form-group">
+            <label for="qty" class="control-label">备注:</label>
+            <textarea  class="form-control" id="remark" name="remark"></textarea>
           </div> 
       </div>
       <div class="modal-footer">
@@ -169,7 +175,7 @@
       </div>
       <%= form_tag({action: :edit_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
       <div class="modal-body">       
-          <div class="form-group ">
+          <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="edit_itemp_id" name="itemp_id">
           </div>
@@ -196,6 +202,10 @@
           <div class="form-group">
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+          <div class="form-group">
+            <label for="qty" class="control-label">备注:</label>
+            <textarea  class="form-control" id="edit_remark" name="remark"></textarea>
           </div> 
       </div>
       <div class="modal-footer">

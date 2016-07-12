@@ -10,13 +10,8 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
     def part_list
-        #if DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').blank?
-            #Rails.logger.info("--------------------------hahahahah")
-        #end
-        #wcwc=(DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'bb'
-        #wcwc=(DigikeysStock.find_by(manufacturer_part_number: 'ft230xs-r').others.include?"<name>Tolerance</name><value>")? "cc":"bb"
         @pdn = PDn.new
-        @mpninfo = "SP1007-01WTG"
+        #@mpninfo = "SP1007-01WTG"
         #@mpninfo = Digikey.find(1)   
         Rails.logger.info("--------------------------")
         #Rails.logger.info(wcwc)
@@ -27,7 +22,7 @@ before_filter :authenticate_user!
             @all_dn += "&quot;,&quot;" + dn.dn.to_s
         end
         @all_dn += "&quot;]"
-        @boms = ProcurementBom.find(params[:bom_id])
+        #@boms = ProcurementBom.find(params[:bom_id])
         if can? :work_g_all, :all
             @user_do = "7"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
@@ -45,32 +40,7 @@ before_filter :authenticate_user!
             @bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
             render "viewbom.js.erb"
             return false
-        end
-        if @boms.p_name.blank?
-            @bom = Bom.find(params[:bom_id])
-            #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
-	        #@xls_file = Roo::Excel.new(@bom.excel_file.current_path)
-            #else
-                #@xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
-            #end
-            #@sheet = @xls_file.sheet(0)
-            #render "select_column.html.erb"
-            redirect_to select_column_path(bom: @bom)
-            return false
-        elsif @boms.pcb_file.blank? or params[:bak] or params[:add_bom]
-            
-            #if can? :work_d, :all
-            if not params[:add_bom].blank?
-                render "bom_viewbom.html.erb"
-            else
-                render "p_viewbom.html.erb"
-            end
-            return false  
-        else
-            @shipping_info = ShippingInfo.where(user_id: current_user.id)
-            render "submit_order.html.erb"
-            return false
-        end
+        end       
     end    
 
     def supplier_offer

@@ -1713,7 +1713,8 @@ WHERE
             @pitem.save
             @itemid = params[:dn_itemid]
             @dnid = @pitem.dn_id
-            if not @dnid.blank?
+            begin
+            #if not @dnid.blank?
                 dn = PDn.find(@dnid)  
                 if not params["#{params[:dn_itemid]}p"].blank?
                     dn.cost = params["#{params[:dn_itemid]}p"]
@@ -1750,7 +1751,8 @@ WHERE
 
 
                 @view_dn += '<td width="30"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+@itemid.to_s+'" data-confirm="确定要删除?"></a></small></td>'
-            else
+            #else
+            rescue
                 dn = PDn.new
                 dn.cost = params["#{params[:dn_itemid]}p"]
                 dn.item_id = @pitem.id

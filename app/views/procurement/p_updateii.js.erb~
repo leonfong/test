@@ -2,8 +2,6 @@
 
 
 
-document.getElementById('matched').innerHTML='<%= @match_str_nn %>';
-document.getElementById('total_price').innerHTML='<%=  number_with_precision(@total_price_nn, precision: 4)%>';
 
 
 
@@ -20,11 +18,11 @@ $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
 
 <% PDn.where(item_id: @bom_item.id).each do |ppp| %>
     <% if ppp.color == "g" %>
-        document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="";
+        document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="bg-success";
     <% elsif ppp.color == "b"  %>
         document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="bg-info";
     <% elsif ppp.color == "y"  %>
-        document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="";
+        document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="bg-warning";
     <% else %>
         document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="";
     <% end %> 
@@ -37,6 +35,8 @@ document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info";
 
 
 
+document.getElementById('matched').innerHTML='<%= @match_str_nn %>';
+document.getElementById('total_price').innerHTML='<%=  number_with_precision(@total_price_nn, precision: 4)%>';
 
 
 document.getElementById('<%= @bom_item.id.to_s + "p" %>').value='<%= @bom_item.cost.to_s %>';

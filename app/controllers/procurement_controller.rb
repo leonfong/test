@@ -77,7 +77,7 @@ before_filter :authenticate_user!
 
     def supplier_dn_excel
         if can? :work_suppliers, :all
-            @bom = PItem.where(user_do: '999')
+            @bom = PItem.where(user_do: '999',supplier_tag: nil)
             file_name = "supplier_out.xls"
             path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
             #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")

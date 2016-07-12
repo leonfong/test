@@ -99,7 +99,11 @@ Rails.application.routes.draw do
   match '/supplier_offer', to: 'procurement#supplier_offer', via: 'get'
   match '/supplier_dn_excel', to: 'procurement#supplier_dn_excel', via: 'get'
   match '/part_list', to: 'procurement#part_list', via: 'get'
- 
+  match '/send_order_to_p', to: 'procurement#send_order_to_p', via: 'get'
+
+
+
+
 
 #external_bom
   match '/e_new', to: 'external_bom#p_create_bom', via: 'get' 

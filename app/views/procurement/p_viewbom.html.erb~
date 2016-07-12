@@ -503,7 +503,10 @@ function change_<%= item.id.to_s %>(){
             </div>
             <div class="modal-footer">
                 <%= link_to "BACK MODIFY BOM COLUMN", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-default pull-left"%>
+<!--                
                 <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
+-->
+                <%= link_to "发送到采购部",  up_check_path(bom_id: @boms.id), class: "btn btn-danger" %>
             </div>
         </div>
     </div>
@@ -573,7 +576,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_dn},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_edit_dn},method:"post",remote: true,multipart:"ture") do %>
           <div class="form-group sr-only">
             <label for="dn_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="dn_id" name="dn_id">

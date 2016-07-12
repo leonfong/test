@@ -23,25 +23,37 @@ before_filter :authenticate_user!
         end
         @all_dn += "&quot;]"
         #@boms = ProcurementBom.find(params[:bom_id])
+        if params[:key_order]
+            key = " AND procurement_boms.p_name LIKE '%#{params[:key_order]}%'"
+            @key_order = params[:key_order]
+        end
         if can? :work_g_all, :all
             @user_do = "7"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+            #@bom_item = PItem.where(user_do: "7")
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND procurement_boms.bom_team_ck = 'do' AND (p_items.color <> 'b' OR p_items.color IS NULL)#{key}").paginate(:page => params[:page], :per_page => 15)
         elsif can? :work_g_a, :all
             @user_do = "77"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],user_do: "77")
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '77' AND procurement_boms.bom_team_ck = 'do' AND (p_items.color <> 'b' OR p_items.color IS NULL)#{key}").paginate(:page => params[:page], :per_page => 15)
         elsif can? :work_g_b, :all
             @user_do = "75"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],user_do: "75")
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '75' AND procurement_boms.bom_team_ck = 'do' AND (p_items.color <> 'b' OR p_items.color IS NULL)#{key}").paginate(:page => params[:page], :per_page => 15)
         elsif can? :work_d, :all
             @user_do = "7"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND procurement_boms.bom_team_ck = 'do' AND (p_items.color <> 'b' OR p_items.color IS NULL)#{key}").paginate(:page => params[:page], :per_page => 15)
         end
-        if  params[:ajax]
-            @bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
-            render "viewbom.js.erb"
-            return false
-        end       
+        #if  params[:ajax]
+            #@bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
+            #render "viewbom.js.erb"
+            #return false
+        #end       
     end    
+
+    def send_order_to_p
+        check = ProcurementBom.find(params[:bom_id])
+        check.bom_team_ck = "do"
+        check.save
+        redirect_to p_bomlist_path() 
+    end
 
     def supplier_offer
         if can? :work_suppliers, :all

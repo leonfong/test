@@ -1,14 +1,5 @@
 <div class="container-fluid" >
  
-
-
-
-
-
-
-
-
-  
     <div class="row" style="padding: 0px;">
         <h1>My BOM</h1>
         <div class="col-md-1 list-group" style="padding: 0px;">
@@ -53,36 +44,42 @@
 <table class="table ">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th>BOM No.</th>
+      <th width="110">BOM No.</th>
       <th>Created Date</th>
       <th>Project name</th>
-      <th>QTY</th>
+      <th width="110">QTY</th>
 <!--
       <th>BOM File</th>
 
       <th>Action</th>
 -->
-      <th>Action</th>
-      <th>ADD MOKO PART</th>
-      <th>ADD IN ORDER LIST</th>
+      <th width="110">Action</th>
+      <th width="150">ADD MOKO PART</th>
+      <th width="180">ADD IN ORDER LIST</th>
     </tr>
   </thead>
   <tbody>
     <% @itemall = "" %>
     <% @boms.each do |bom| %>
     <% @itemall = @itemall + " " + bom.excel_file_identifier %>
-    <% if bom.check == "do" %>
-        <tr class="bg-success" >
-    <% else %>
+
       <% if can? :work_g_all, :all %>
-          <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil).blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
       <% elsif can? :work_g_a, :all %>
-          <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil,user_do: "77").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
       <% elsif can? :work_g_b, :all %>
-          <tr <% if PItem.where(procurement_bom_id: bom.id,check: nil,user_do: "75").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+      <% else %>
+          <tr>
       <% end %>
+
+    <% if bom.bom_team_ck == "do" %>
+        <td class="bg-success" >
+    <% else %>
+        <td>
     <% end %>
-        <td><%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %></td>
+            <%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %>
+        </td>
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= bom.p_name %></td>
         <td><%= bom.qty %></td>

@@ -503,7 +503,10 @@ function change_<%= item.id.to_s %>(){
             </div>
             <div class="modal-footer">
                 <%= link_to "BACK MODIFY BOM COLUMN", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-default pull-left"%>
+<!--                
                 <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
+-->
+                <%= link_to "发送到采购部",  send_order_to_p_path(bom_id: @boms.id), class: "btn btn-danger" %>
             </div>
         </div>
     </div>

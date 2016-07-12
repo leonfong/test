@@ -1,15 +1,35 @@
 <div class="container-fluid" >
 ﻿
 
+<div class="row" style="padding-bottom: 10px;">
+   <div class="col-md-12">     
 
+            <h3><strong>权限-采购工程师</strong></h3>
 
+            <span  style="color:#999;">
+               <%= form_tag('/part_list', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+            </div>
+            <% end %>                       
+            </span>               
+            
+    </div>
+</div>
   
     <div class="row" style="padding: 0px;">
-        <% if can? :work_g_all, :all%>
-        <h1><strong>权限-采购主管</strong></h1>
-        <% else %>
-        <h1><strong>权限-采购工程师</strong></h1>
-        <% end %>
 
         <div class="col-md-12">           
 <% if not @bom_item.blank? %> 
@@ -385,40 +405,10 @@ function change_<%= item.id.to_s %>(){
             
             <% end %>
             <div class="row" style="padding-bottom: 20px;">
-                <div class="col-md-12">
-            <script>
-            function change_p(){
-            if (document.getElementById('shipping').className=='collapse in')
-            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
-            else
-            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
-            }
-            </script>
-                    <button class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">ADD A NEW PART <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
-                </div>
+                
             </div>
-            <div class="collapse" id="shipping" style="padding-bottom: 20px;">
-                <%= form_tag({action: :p_add_bom},method:"post",class:"form-inline") do %>
-                    <div class="form-group">
-                        <label for="part">Part</label>
-                        <input type="text" class="form-control" id="part" name="part" placeholder="Part">
-                    </div>
-                    <div class="form-group">
-                        <label for="qty">QTY</label>
-                        <input type="text" class="form-control" id="qty" name="qty" placeholder="quantity">
-                    </div>
-                    <div class="form-group">
-                        <label for="code">REF.DES.</label>
-                        <input type="text" class="form-control" id="code" name="code" placeholder="REF.DES.">
-                    </div>
-                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-                    <button type="submit" class="btn btn-warning">SUBMIT</button>
-                <% end %> 
-            </div>
-            <div class="modal-footer">
-                <%= link_to "BACK MODIFY BOM COLUMN", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-default pull-left"%>
-                <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
-            </div>
+            
+
         </div>
     </div>
 
@@ -563,48 +553,9 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
-<div class="modal fade" id="remarkOrder" tabindex="-1" role="dialog" aria-labelledby="remarkOrderLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editPrderLabel">Update Order Info</h4>
-      </div>
-      <div class="modal-body">
-        <%= form_tag({action: :pj_edit},method:"post",multipart:"true") do %>
-          <div class="form-group sr-only">
-            <label for="itemp_id" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="itemp_id" name="itemp_id">
-          </div>
-                 
-          <div class="form-group">
-            <label for="pj_name">Project name：</label>
-            <input type="text" class="form-control" id="pj_name" name="pj_name" value="<%= @boms.p_name %>" >
-          </div>
-          <div class="form-group">
-            <label for="pj_qty">QTY：</label>
-            <input type="number" class="form-control" id="pj_qty" name="pj_qty" value="<%= @boms.qty %>" >
-          </div>
-          <div class="form-group">
-            <label for="pj_remark">备注：</label>
-            <textarea type="text" class="form-control" id="pj_remark" name="pj_remark"  ><%= @boms.remark %></textarea>
-            <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-          </div>
-          <div class="form-group">
-            <label for="att" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
-          </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
 
 
+<%= will_paginate(@bom_item) %>
 
 </div>
 
@@ -612,11 +563,7 @@ function change_<%= item.id.to_s %>(){
 
 
 
-<%= form_tag('/p_viewbom', remote: true, method:"post", class:"form-inline") do %>
-        <%= text_field_tag :bom_id, params[:bom_id], class:"sr-only", size:2 , value: @boms.id %>
-        <%= text_field_tag :ajax, params[:ajax], class:"sr-only", size:2 , value: "" %>
-        <%= submit_tag t(:search), class:"btn-ajax  sr-only", id:"btn-ajax" %>
-<% end %>
+
 <%= form_tag('/p_del_bom', remote: true, method:"post", class:"form-inline") do %>
         <%= text_field_tag :id, params[:id], class:"sr-only", size:200, value: "" %>
         <%= submit_tag t(:search), class:"btn-del  sr-only", id:"btn-del" %>

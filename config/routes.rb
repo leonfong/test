@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   match '/release_pcb_to_order', to: 'work_flow#release_pcb_to_order', via: 'get'
   match '/release_pcb_to_quote', to: 'work_flow#release_pcb_to_quote', via: 'get'
   match '/follow', to: 'work_flow#follow', via: 'get'
+  match '/find_c', to: 'work_flow#find_c', via: 'get'
 
 
 

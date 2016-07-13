@@ -4,6 +4,7 @@
         <h1>PCB Order list ---新建订单列表
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
             <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrder">新建PCB订单</button>
+            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrdert">新建PCB订单</button>
         <% end %>
         </h1>
         <div class="col-md-1 list-group" style="padding: 0px;">
@@ -79,7 +80,7 @@
       <div class="modal-body">        
           <div class="form-group">
             <label for="customer" class="control-label">客户（公司）:</label>
-            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer+ " "+ User.find_by(email: c.sell) + " " + c.c_no,c.id] }%>
+            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer+ " "+ User.find_by(email: c.sell).full_name + " " + c.c_no,c.id] }%>
               <%= select  '', :customer,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
           </div>       
           <div class="form-group">
@@ -110,6 +111,72 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="addOrdert" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">Add a new PCB Order</h4>
+      </div>
+      
+      <div class="modal-body">        
+          <div class="form-inline">
+             <%= form_tag('/find_c', method:"get", class:"form-inline",remote: true) do %>
+               <div class="form-group ">
+                  <lable for="order" , class="control-label"><strong>客户代码: </strong></lable>
+                  <div class="input-group input-group-sm">              
+                    <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"30"%>               
+                    <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                    </div>
+                  </div>
+              </div>
+            <% end %>             
+          </div> 
+          <div class="form-group" id="table_code">
+
+
+          </div>
+      
+      <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
+          <div class="form-group">
+            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="qty" name="qty">
+          </div> 
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+          
+          <div class="form-group sr-only">
+            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+            <label for="customerd" class="control-label">客户代码id:</label>
+            <input type="test" class="form-control" id="customerd" name="customer" readonly>
+          </div>
+          <div class="form-group">
+            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+            <label for="c_no" class="control-label">客户代码:</label>
+            <input type="test" class="form-control" id="c_nod" name="c_no" readonly>
+          </div>
+          <div class="form-group">
+            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+            <label for="sell" class="control-label">所属业务员:</label>
+            <input type="test" class="form-control" id="selld" name="sell" readonly>
+          </div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
 
 
 

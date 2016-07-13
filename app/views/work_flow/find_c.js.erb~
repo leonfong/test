@@ -1,0 +1,5 @@
+//alert('<%= raw @c_table %>');
+
+$("#table_code").html('<%= raw @c_table %>');
+$("#selld").val("<%= @c_info.sell %>");
+$("#c_nod").val("<%= @c_info.c_no %>");

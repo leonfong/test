@@ -2,6 +2,40 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def find_c
+        if params[:c_code] != ""
+            @c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@c_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @c_info.blank?
+                 Rails.logger.info("add-------------------------------------12")
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th>客户代码</th>'
+                @c_table += '<th>客户名</th>'
+                @c_table += '<th>所属业务员</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_table += '<tr>'
+                @c_table += '<td>' + @c_info.c_no + '</td>'
+                @c_table += '<td>' + @c_info.customer.to_s + '</td>'
+                @c_table += '<td>' + User.find_by(email: @c_info.sell).full_name.to_s + '</td>'
+                @c_table += '</tr>'
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@c_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
     def follow
         select_customer = PcbCustomer.find(params[:id])
         if select_customer

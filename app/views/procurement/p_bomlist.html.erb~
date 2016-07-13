@@ -1,14 +1,5 @@
 <div class="container-fluid" >
  
-
-
-
-
-
-
-
-
-  
     <div class="row" style="padding: 0px;">
         <h1>My BOM</h1>
         <div class="col-md-1 list-group" style="padding: 0px;">
@@ -38,12 +29,14 @@
                   <% if @key_order %>   
                       <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
                   <% else %> 
-                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30"%>
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号"%>
                   <% end %>               
                   <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
+                <a type="button" class="btn btn-success btn-sm" href="/p_bomlist?complete=true">已经报价的BOM</a>
+                <a type="button" class="btn btn-danger btn-sm" href="/p_bomlist?undone=true">等待报价的BOM</a>
             </div>
             <% end %>                       
             </span>
@@ -54,9 +47,10 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="110">BOM No.</th>
-      <th>Created Date</th>
-      <th>Project name</th>
+      <th width="150">Created Date</th>
+      <th width="130">Project Name</th>
       <th width="110">QTY</th>
+      <th >Remark</th>
 <!--
       <th>BOM File</th>
 
@@ -92,6 +86,7 @@
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= bom.p_name %></td>
         <td><%= bom.qty %></td>
+        <td><%= bom.remark %></td>
 <!--
         <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
 

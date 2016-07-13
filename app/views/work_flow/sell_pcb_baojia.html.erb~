@@ -241,14 +241,15 @@ $('#editOrder').on('show.bs.modal', function (event) {
   var customer = button.data('customer');
   var email = button.data('email');
   var sell = button.data('sell');
-  var qty = button.data('qty');                          
+  var qty = button.data('qty');
+  var remark = button.data('remark');                       
   var modal = $(this);
   modal.find($("#edit_itemp_id")).val(itempid);
   modal.find($("#edit_customer")).val(customer);
   modal.find($("#edit_email")).val(email);
   modal.find($("#edit_sell")).val(sell);
   modal.find($("#edit_qty")).val(qty);
-
+  modal.find($("#edit_remark")).html(remark);
 })
 
 

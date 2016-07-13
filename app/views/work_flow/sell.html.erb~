@@ -2,9 +2,9 @@
 <div class="row" style="margin: 0px;padding: 0px;" >
 <br>
   <ul class="nav nav-tabs">
-      <li role="presentation" class="active"><a href="/work_flow"><h2 ><p class="text-primary" >业务部问题跟踪&反馈</p></h2></a></li>
-      <li role="presentation" ><a href="/sell_baojia"><h2 ><p class="text-primary" >PCBA报价列表</p></h2></a></li>
-      <li role="presentation" ><a href="/sell_pcb_baojia"><h2 ><p class="text-primary" >PCB报价列表</p></h2></a></li>
+      <li role="presentation" class="active"><a href="/work_flow"><h3 ><p class="text-primary" >业务部问题跟踪&反馈</p></h3></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><h3 ><p class="text-primary" >PCBA报价列表</p></h3></a></li>
+      <li role="presentation" ><a href="/sell_pcb_baojia"><h3 ><p class="text-primary" >PCB客户信息表</p></h3></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>

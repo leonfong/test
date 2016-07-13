@@ -23,8 +23,8 @@
                   </div>
                   
                 </div>
-                <a type="button" class="btn btn-success btn-sm" href="/supplier_offer?complete=true">已经报价的物料</a>
-                  <a type="button" class="btn btn-danger btn-sm" href="/supplier_offer?undone=true">等待报价的物料</a>
+                <a type="button" class="btn btn-success btn-sm" href="/part_list?complete=true">已经报价的物料</a>
+                <a type="button" class="btn btn-danger btn-sm" href="/part_list?undone=true">等待报价的物料</a>
             </div>
             <% end %>                       
             </span>               
@@ -190,7 +190,7 @@ function change_<%= item.id.to_s %>(){
                         <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
                             <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
-                            <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
+                            <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %> <%= ProcurementBom.find(item.procurement_bom_id).p_name %></a>
                             </small>
                     </td>
                         
@@ -198,7 +198,7 @@ function change_<%= item.id.to_s %>(){
                         <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small> 
                                 <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
-                                <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
+                                <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"> (单号<%= ProcurementBom.find(item.procurement_bom_id).p_name %>)</a>
                             </small>
                         </td>
                         

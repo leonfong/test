@@ -35,8 +35,9 @@
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
-                <a type="button" class="btn btn-success btn-sm" href="/p_bomlist?complete=true">已经报价的BOM</a>
+                <a type="button" class="btn btn-info btn-sm" href="/p_bomlist?complete=true">已经报价的BOM</a>
                 <a type="button" class="btn btn-danger btn-sm" href="/p_bomlist?undone=true">等待报价的BOM</a>
+                <a type="button" class="btn btn-success btn-sm" href="/p_bomlist?sent_to_sell=true">已经发给业务部的BOM</a>
             </div>
             <% end %>                       
             </span>
@@ -63,7 +64,7 @@
       <th width="180">ADD IN ORDER LIST</th>
 -->
       <% if can? :work_send_to_sell, :all %>
-      <th width="180">Remark To Sell</th>
+      <th width="140">Remark To Sell</th>
       <% end %>
     </tr>
   </thead>
@@ -113,7 +114,13 @@
         <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/add_order?bom_id=<%= bom.id.to_s %>" data-confirm="确定要下单?">下单</a></div></td>
 -->
       <% if can? :work_send_to_sell, :all %>
-      <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/remark_to_sell?bom_id=<%= bom.id.to_s %>" data-confirm="确定要标记?">标记</a></div></td>
+      <% if bom.remark_to_sell == "mark" %>
+        <td class="bg-success" >
+      <% else %>
+        <td>
+      <% end %>
+          <div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/remark_to_sell?bom_id=<%= bom.id.to_s %>" data-confirm="确定要标记?">标记</a></div>
+      </td>
       <% end %>
       </tr>
     <% end %>

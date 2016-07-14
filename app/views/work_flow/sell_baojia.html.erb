@@ -41,6 +41,7 @@
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
           </div>
+          <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia?complete=true">已经下单的order</a>
         </div>
       <% end %>
 </div>
@@ -57,6 +58,7 @@
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
+                                <th width="70">日期</th>
                                 <th width="150">Order No.</th>
                                 <th width="100">数量</th>
                                 <th width="150">价格</th>  
@@ -71,6 +73,7 @@
 <% if not @quate.blank?%>
 <% @quate.each do |q_order| %>
                             <tr>
+                                <td><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
                                 <td><%= link_to q_order.p_name, sell_view_baojia_path(:bom_id =>q_order.id) %></td>
                                 <td><%= q_order.qty %></td>
                                 <td>￥<%= q_order.t_p %></td>

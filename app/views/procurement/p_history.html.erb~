@@ -73,6 +73,7 @@
       <th>MPN</th>
       <th>DES</th>
       <th>QTY</th>
+      <th>Order No.</th>
       <th>Price</th>
     </tr>
   </thead>
@@ -83,6 +84,7 @@
             <td><%= bom.mpn %></td>
             <td><%= bom.description %></td>
             <td><%= bom.quantity %></td>
+            <td><%= ProcurementBom.find(bom.procurement_bom_id).p_name %></td>
             <td><%= bom.price %></td>
       </tr>
     <% end %>

@@ -301,7 +301,10 @@ before_filter :authenticate_user!
     def sell_baojia
         where_p = ""
         where_date = ""
-        
+        where_5star = ""
+        if params[:complete]
+            where_5star = " AND procurement_boms.star = 5"
+        end
         if not current_user.s_name.blank?
             if current_user.s_name.size == 1
                 s_name = current_user.s_name
@@ -329,24 +332,28 @@ before_filter :authenticate_user!
                     end
                 end
             end
-            if params[:start_date] != "" 
+            if params[:start_date] != "" and  params[:start_date] != nil
                 where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
             end
-            if params[:end_date] != "" 
+            if params[:end_date] != "" and  params[:end_date] != nil
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
-            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
+            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  ").paginate(:page => params[:page], :per_page => 10)
         else
-            if params[:start_date] != "" 
+            if params[:start_date] != "" and  params[:start_date] != nil
                 where_date += " procurement_boms.created_at > '#{params[:start_date]}'"
             end
-            if params[:end_date] != "" 
+            if params[:end_date] != "" and  params[:start_date] != nil
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
             if where_date != ""
-                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_date}  ").paginate(:page => params[:page], :per_page => 10)
+                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_date + where_5star}  ").paginate(:page => params[:page], :per_page => 10)
             else
-                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`   ").paginate(:page => params[:page], :per_page => 10)
+                if params[:complete]
+                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE procurement_boms.star = 5   ").paginate(:page => params[:page], :per_page => 10)
+                else
+                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`   ").paginate(:page => params[:page], :per_page => 10)
+                end
             end
         end
         

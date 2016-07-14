@@ -14,7 +14,9 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 
 
 
-
+<% flash.each do |key, value| %>
+        <div class= "<%= "alert #{flash_class_for(key)}"%>"><%= value %></div>
+<% end %>
 
 
     <div class="row" style="margin-right: 0px;margin-left: 0px;">
@@ -22,7 +24,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
           
 
     <div class="row" style="padding: 0px;">
-        <h1><strong>Components Quote</strong></h1>
+        <h3><strong>Components Quote</strong></h3>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>

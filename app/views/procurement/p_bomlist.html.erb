@@ -1,7 +1,7 @@
 <div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
-        <h1>My BOM</h1>
+        <h3><strong>PCBA BOM LIST</strong></h3>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
@@ -96,13 +96,13 @@
             <% if bom.check == "do" %>
                 <td><div class="btn-group"><a class="btn btn-default">无权限删除</a></div></td>
             <% else %>
-                <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/p_del_bb?bom_id=<%= bom.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>  
+                <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/p_del_bb?bom_id=<%= bom.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>  
             <% end %>
         <% else %> 
-           <td><div class="btn-group"><a class="btn btn-default">无权限删除</a></div></td>
+           <td><div class="btn-group"><a class="btn btn-default btn-xs">无权限删除</a></div></td>
         <% end %>
-        <td><%= link_to "编码",  p_viewbom_path(bom_id: bom.id,add_bom: "add_bom"),class:"btn btn-success" %></td>
-        <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/add_order?bom_id=<%= bom.id.to_s %>" data-confirm="确定要下单?">下单</a></div></td>
+        <td><%= link_to "编码",  p_viewbom_path(bom_id: bom.id,add_bom: "add_bom"),class:"btn btn-success btn-xs" %></td>
+        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/add_order?bom_id=<%= bom.id.to_s %>" data-confirm="确定要下单?">下单</a></div></td>
       </tr>
     <% end %>
   </tbody>

@@ -506,7 +506,7 @@ function change_<%= item.id.to_s %>(){
 <!--                
                 <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
 -->
-                <%= link_to "发送到采购部",  up_check_path(bom_id: @boms.id), class: "btn btn-danger" %>
+                <%= link_to "发送到采购部",  send_order_to_p_path(bom_id: @boms.id), class: "btn btn-danger" %>
             </div>
         </div>
     </div>

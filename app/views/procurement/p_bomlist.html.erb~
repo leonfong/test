@@ -35,9 +35,9 @@
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
-                <a type="button" class="btn btn-success btn-sm" href="/p_bomlist?complete=true">已经报价的BOM</a>
+                <a type="button" class="btn btn-info btn-sm" href="/p_bomlist?complete=true">已经报价的BOM</a>
                 <a type="button" class="btn btn-danger btn-sm" href="/p_bomlist?undone=true">等待报价的BOM</a>
-                <a type="button" class="btn btn-danger btn-sm" href="/p_bomlist?sent_to_sell=true">已经发给业务部的BOM</a>
+                <a type="button" class="btn btn-success btn-sm" href="/p_bomlist?sent_to_sell=true">已经发给业务部的BOM</a>
             </div>
             <% end %>                       
             </span>
@@ -51,7 +51,8 @@
       <th width="150">Created Date</th>
       <th width="200">Project Name</th>
       <th width="100">QTY</th>
-      <th width="100">Engineer</th>
+      <th width="100">BOM工程师</th>
+      <th width="100">采购工程师</th>
       <th >Remark</th>
 <!--
       <th>BOM File</th>

@@ -304,6 +304,8 @@ before_filter :authenticate_user!
         where_5star = ""
         if params[:complete]
             where_5star = " AND procurement_boms.star = 5"
+        else
+            where_5star = " AND procurement_boms.star <> 5"
         end
         if not current_user.s_name.blank?
             if current_user.s_name.size == 1

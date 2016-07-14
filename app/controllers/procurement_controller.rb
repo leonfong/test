@@ -84,6 +84,7 @@ before_filter :authenticate_user!
     def send_order_to_p
         check = ProcurementBom.find(params[:bom_id])
         check.bom_team_ck = "do"
+        check.bom_eng = current_user.full_name
         check.save
         redirect_to p_bomlist_path() 
     end

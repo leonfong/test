@@ -51,7 +51,8 @@
       <th width="150">Created Date</th>
       <th width="200">Project Name</th>
       <th width="100">QTY</th>
-      <th width="100">Engineer</th>
+      <th width="100">BOM工程师</th>
+      <th width="100">采购工程师</th>
       <th >Remark</th>
 <!--
       <th>BOM File</th>
@@ -93,6 +94,7 @@
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= bom.p_name %></td>
         <td><%= bom.qty %></td>
+        <td><%= bom.bom_eng %></td>
         <td><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL)) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
         <td><%= bom.remark %></td>
 <!--

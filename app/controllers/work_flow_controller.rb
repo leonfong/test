@@ -46,7 +46,8 @@ before_filter :authenticate_user!
             end
             select_customer.save
         end
-        redirect_to sell_pcb_baojia_path(follow: true)
+        #redirect_to sell_pcb_baojia_path(follow: true)
+        redirect_to :back
     end
 
     def sell_pcb_baojia

@@ -681,7 +681,7 @@ before_filter :authenticate_user!
         @bom = ProcurementBom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         @file = @bom.excel_file_identifier
-        @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Bom.find_by_sql('SELECT Count(procurement_boms.id)+1 AS all_no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').first.all_no.to_s + "B"
+        @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Bom.find_by_sql('SELECT max(procurement_boms.id)+1 AS all_no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').first.all_no.to_s + "B"
         #如果上传成功
 	if @bom.save
             #if @bom.excel_file_identifier.split('.')[-1] == 'xls'

@@ -101,7 +101,7 @@ Rails.application.routes.draw do
   match '/supplier_dn_excel', to: 'procurement#supplier_dn_excel', via: 'get'
   match '/part_list', to: 'procurement#part_list', via: 'get'
   match '/send_order_to_p', to: 'procurement#send_order_to_p', via: 'get'
-
+  match '/remark_to_sell', to: 'procurement#remark_to_sell', via: 'get'
 
 
 

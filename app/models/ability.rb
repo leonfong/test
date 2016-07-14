@@ -29,6 +29,7 @@ class Ability
     alias_action :update, :to => :work_top         #管理员
     alias_action :update, :to => :work_pcb_business          #PCB业务
     alias_action :update, :to => :work_suppliers    #供应商
+    alias_action :update, :to => :work_send_to_sell    #发给业务    
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -47,6 +48,7 @@ class Ability
       can :external_access, :all
       can :work_pcb_business, :all
       can :work_suppliers, :all
+      can :work_send_to_sell, :all
     elsif user.has_role?(:manager)
       can :manage, :all
     elsif user.has_role?(:work_one)
@@ -91,6 +93,7 @@ class Ability
       can :old_bom, :all
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_all)
+      can :work_send_to_sell, :all
       #can :manage, :all
       can :work_up, :all
       can :work_g, :all

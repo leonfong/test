@@ -9,6 +9,10 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def remark_to_sell
+        
+    end
+
     def part_list
         if params[:complete]
             part_ctl = " AND p_items.color = 'b'" 
@@ -627,7 +631,8 @@ before_filter :authenticate_user!
                         bom_item.user_do = 7
                     else
                         if refa =~ /r/i or refa =~ /c/i or refa =~ /d/i or refa =~ /v/i or refa =~ /q/i or refa =~ /lcd/i or refa =~ /led/i
-                            bom_item.user_do = 77
+                            #bom_item.user_do = 77
+                            bom_item.user_do = 7
                         elsif refa =~ /l/i or refa =~ /x/i or refa =~ /w/i
                             bom_item.user_do = 75
                         else

@@ -1038,7 +1038,7 @@ before_filter :authenticate_user!
 
 
 
-    def p_bomlist
+    def p_bomlist        
         if params[:order_list]
             @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` = 'do' ORDER BY `check` DESC,`updated_at` DESC ").paginate(:page => params[:page], :per_page => 10)
             render "p_order_list.html.erb"

@@ -1,7 +1,7 @@
 <div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
-        <h3><strong>My BOM</strong></h3>
+        <h3><strong>PCBA BOM LIST</strong></h3>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
@@ -50,6 +50,7 @@
       <th width="150">Created Date</th>
       <th width="200">Project Name</th>
       <th width="100">QTY</th>
+      <th width="100">Engineer</th>
       <th >Remark</th>
 <!--
       <th>BOM File</th>
@@ -86,6 +87,7 @@
         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= bom.p_name %></td>
         <td><%= bom.qty %></td>
+        <td><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' ELSE '' END FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL)) GROUP BY p_items.user_do").join(" ") %></td>
         <td><%= bom.remark %></td>
 <!--
         <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>

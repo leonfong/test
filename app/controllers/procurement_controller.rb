@@ -1059,7 +1059,7 @@ before_filter :authenticate_user!
                 @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `p_name` LIKE '%#{params[:key_order]}%' AND `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 12)
             else
                 if params[:complete]
-                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE remark_to_sell IS NULL ORDER BY `check` DESC,`created_at` DESC ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND (color <> 'b' OR color IS NULL)").blank? }
+                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC,`created_at` DESC ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND (color <> 'b' OR color IS NULL)").blank? }
                     @boms = boms.paginate(:page => params[:page], :per_page => 12)
                 elsif params[:undone]
                     boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC,`created_at` DESC ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND (color <> 'b' OR color IS NULL)").blank?  }

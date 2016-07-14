@@ -502,11 +502,15 @@ function change_<%= item.id.to_s %>(){
                 <% end %> 
             </div>
             <div class="modal-footer">
-                <%= link_to "BACK MODIFY BOM COLUMN", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-default pull-left"%>
+                <%= link_to "返回上一步", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-danger pull-left"%>
 <!--                
                 <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
 -->
-                <%= link_to "发送到采购部",  send_order_to_p_path(bom_id: @boms.id), class: "btn btn-danger" %>
+                <% if @boms.bom_eng.blank? %>
+                    <%= link_to "发送到采购部",  send_order_to_p_path(bom_id: @boms.id), class: "btn btn-info" %>
+                <% else %>
+                    <a type="button" class="btn btn-default disabled"  >已发送</a>
+                <% end %>
             </div>
         </div>
     </div>

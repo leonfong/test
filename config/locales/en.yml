@@ -87,3 +87,5 @@ en:
   stepfour3: "Choose the Manufacturing Part Number(MPN)."
   stepfive: "Click on the button in the system will automatically match the price."
   supplier_offer: "Supplier Offer"
+  PCB_Business: "PCB Business"
+  PCBA_Business: "PCBA Business"

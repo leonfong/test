@@ -35,7 +35,7 @@
     <% @pcblist.each do |pcb| %>   
       <tr >
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" > data-remark="<%= pcb.remark %>" ></a></td>
+            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>"  data-remark="<%= pcb.remark %>" ><%= pcb.order_no %></a></td>
         <% else %>
             <td><%= pcb.order_no %></td>
         <% end %>

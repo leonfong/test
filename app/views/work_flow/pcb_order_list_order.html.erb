@@ -49,7 +49,7 @@
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
-        <td><div class="btn-group"><a class="btn btn-danger disabled" data-method='get'  href="/add_pcb_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要下单?" >确认下单</a></div></td>
+        <td><div class="btn-group"><a class="btn btn-danger btn-xs disabled" data-method='get'  href="/add_pcb_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要下单?" >确认下单</a></div></td>
       </tr>
     <% end %>
   </tbody>

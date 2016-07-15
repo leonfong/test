@@ -36,10 +36,12 @@
                               format: 'YYYY-MM-DD'
                             });    
                           });
-                </script>     
+                </script>  
+              <% if current_user.s_name.size > 2 %>   
                 <div class="input-group-addon " >业务员 : </div>         
-                <% members = current_user.s_name..split(",").collect { |c| [User.find_by(s_name_self: c).full_name,c] }%>
+                <% members = current_user.s_name.split(",").collect { |c| [User.find_by(s_name_self: c).full_name,c] }%>
                 <%= select  '', :sell,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
+              <% end %>
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>

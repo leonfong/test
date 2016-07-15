@@ -111,7 +111,11 @@ before_filter :authenticate_user!
 
     def supplier_dn_excel
         if can? :work_suppliers, :all
-            @bom = PItem.where(user_do: '999',supplier_tag: nil)
+            if params[:out_tag]
+                @bom = PItem.where(user_do: '999',supplier_tag: nil,supplier_out_tag: nil)
+            else
+                @bom = PItem.where(user_do: '999',supplier_tag: nil)
+            end
             file_name = "supplier_out.xls"
             path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
             #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
@@ -148,6 +152,10 @@ before_filter :authenticate_user!
                     set_color += 1
                 end
 		@bom.each_with_index do |item,index|
+                    if params[:out_tag]
+                        item.supplier_out_tag = "do"
+                        item.save
+                    end
 		    rowNum = index+1
                     title_format = Spreadsheet::Format.new({
                     :text_wrap => 1,:size => 8

@@ -7,9 +7,10 @@
 
 <% if @part %>
 <div>
-<%= link_to "导出EXCEL", supplier_dn_excel_path() %>
+<%= link_to "导出全部未报价的物料", supplier_dn_excel_path() %>
 <a type="button" class="btn btn-success btn-sm" href="/supplier_offer?complete=true">已经报价的物料</a>
 <a type="button" class="btn btn-danger btn-sm" href="/supplier_offer?undone=true">等待报价的物料</a>
+<%= link_to "导出最新未报价的物料", supplier_dn_excel_path(out_tag: true) %>
 </div>
 <%= will_paginate(@part) %>
 <div class="row " style="padding-top: 7px;">

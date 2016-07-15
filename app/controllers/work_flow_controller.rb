@@ -91,14 +91,30 @@ before_filter :authenticate_user!
         
     end
 
+    def del_pcb_order
+        pcb_order = PcbOrder.find(params[:order_id])
+        if can? :work_pcb_business, :all
+            pcb_order.destroy
+        end
+        redirect_to :back
+    end
 
     def update_pcb_price
         pcb = PcbOrder.find_by(order_no: params[:order_no])
         if not params[:price].blank?
             pcb.price = params[:price]
         end
+        if not params[:qty].blank?
+            pcb.qty = params[:qty]
+        end
         if not params[:remark].blank?
             pcb.remark = params[:remark]
+        end
+        if not params[:att].blank?
+            pcb.att = params[:att]
+        end
+        if not params[:follow_remark].blank?
+            pcb.follow_remark = params[:follow_remark]
         end
         pcb.save
         redirect_to :back
@@ -143,6 +159,7 @@ before_filter :authenticate_user!
         @pcb.order_sell = current_user.email
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
+        @pcb.follow_remark = params[:follow_remark]
         @pcb.state = "new"
         @pcb.save
         redirect_to pcb_order_list_path(new: true)
@@ -170,12 +187,16 @@ before_filter :authenticate_user!
     def edit_pcb_customer
         @pcb = PcbCustomer.find(params[:itemp_id])
         #@pcb.user_id = current_user.id
-        @pcb.customer = params[:customer]
-        @pcb.email = params[:email] 
-        @pcb.sell = current_user.email 
-        @pcb.qty = params[:qty]
-        @pcb.att = params[:att]
-        @pcb.remark = params[:remark]
+        if params[:follow_remark]
+            @pcb.follow_remark = params[:follow_remark]
+        else
+            @pcb.customer = params[:customer]
+            @pcb.email = params[:email] 
+            @pcb.sell = current_user.email 
+            @pcb.qty = params[:qty]
+            @pcb.att = params[:att]
+            @pcb.remark = params[:remark]
+        end
         @pcb.save
         redirect_to :back
     end

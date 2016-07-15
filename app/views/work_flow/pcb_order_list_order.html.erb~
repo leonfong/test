@@ -1,9 +1,9 @@
 <div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
-        <h1>PCB Order list ---等待下单 
+        <h3><strong>PCB Order list ---等待下单 </strong>
        
-        </h1>
+        </h3>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item"%>
             <%= link_to "等待报价", pcb_order_list_path(quote: true) ,class: "list-group-item "%> 
@@ -24,10 +24,11 @@
       <th width="100">数量</th>
       <th width="100">报价￥</th>
       <th width="50">附件</th>
-      <th width="200">所属业务员</th>
-      <th width="200">跟踪业务员</th>
-      <th>备注</th>
-      <th width="90">Action</th>
+      <th width="100">所属业务员</th>
+      <th width="100">跟踪业务员</th>
+      <th>采购备注</th>
+      <th>跟踪备注</th>
+      <th width="90">操作</th>
     </tr>
   </thead>
   <tbody>

@@ -19,21 +19,23 @@
 <table class="table ">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th>Order No.</th>
-      <th>Created Date</th>
-      <th>数量</th>
-      <th>价格￥</th>
-      <th>附件</th>
-      <th>所属业务员</th>
-      <th>跟踪业务员</th>
-      <th>Action</th>
+      <th width="120">Order No.</th>
+      <th width="150">Created Date</th>
+      <th width="80">数量</th>
+      <th width="120">价格￥</th>
+      <th width="50">附件</th>
+      <th width="100">所属业务员</th>
+      <th width="100">跟踪业务员</th>
+      <th >采购备注</th>
+      <th >跟踪备注</th>
+      <th width="100">操作</th>
     </tr>
   </thead>
   <tbody>
     <% @pcblist.each do |pcb| %>   
       <tr >
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" ><%= pcb.order_no %></a></td>
+            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>"  data-remark="<%= pcb.remark %>" ><%= pcb.order_no %></a></td>
         <% else %>
             <td><%= pcb.order_no %></td>
         <% end %>
@@ -49,6 +51,8 @@
         </td>
         <td><%= User.find_by(email: pcb.sell).full_name %></td>
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
+        <td><%= pcb.remark %></td>
+        <td><%= pcb.follow_remark %></td>
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
             <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
         <% else %>
@@ -141,7 +145,7 @@
           </div> 
           <div class="form-group">
             <label for="qty" class="control-label">备注:</label>
-            <input type="text" class="form-control" id="remark" name="remark" >
+            <textarea  class="form-control" id="remark" name="remark"></textarea>
           </div> 
 
       </div>
@@ -180,12 +184,14 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   var customer = button.data('customer')
   var qty = button.data('qty')
   var sell = button.data('sell')
+  var remark = button.data('remark')
   var order_sell = button.data('order_sell')
   var modal = $(this)
   modal.find($("#order_no")).val(order_no)
   modal.find($("#u_customer")).val(customer)
   modal.find($("#u_qty")).val(qty)
   modal.find($("#u_sell")).val(sell)
+  modal.find($("#remark")).html(remark)
   modal.find($("#u_order_sell")).val(order_sell)
 })
 </script>

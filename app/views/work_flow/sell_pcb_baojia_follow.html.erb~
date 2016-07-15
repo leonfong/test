@@ -2,9 +2,9 @@
 <div class="row" style="margin: 0px;padding: 0px;" >
 <br>
   <ul class="nav nav-tabs">
-      <li role="presentation" ><a href="/work_flow"><h3 ><p class="text-primary"  >业务部问题跟踪&反馈</p></h3></a></li>
-      <li role="presentation" ><a href="/sell_baojia"><h3 ><p class="text-primary" >PCBA报价列表</p></h3></a></li>
-      <li role="presentation" class="active"><a href="/sell_pcb_baojia"><h3 ><p class="text-primary" >PCB客户信息表</p></h3></a></li>
+      <li role="presentation" ><a href="/work_flow"><h4 ><p class="text-primary"  >业务部问题跟踪&反馈</p></h4></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><h4 ><p class="text-primary" >PCBA报价列表</p></h4></a></li>
+      <li role="presentation" class="active"><a href="/sell_pcb_baojia"><h4 ><p class="text-primary" >PCB客户信息表</p></h4></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>
@@ -65,14 +65,14 @@
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
-                                <th width="150">客户代码</th>
-                                <th >客户名</th>
-                                <th >客户公司名</th>
+                                <th width="70">客户代码</th>
+                                <th width="150">客户名</th>
+                                <th width="200">客户公司名</th>
                                 <th >联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
                                 <th width="150">业务员</th>  
-                                <th width="140">数量</th>
                                 <th width="50">附件</th>
-                                <th width="150"> 报价</th>
+                                <th > 备注</th>
+                                <th >跟进备注</th>
                                 <th width="50"> 编辑</th>
                                 <% if can? :work_pcb_business, :all %>
                                 <th width="90"> 取消跟踪</th>
@@ -88,7 +88,6 @@
                                 <td><%= q_order.customer_com %></td>
                                 <td><%= q_order.email %></td>
                                 <td><%= User.find_by(email: q_order.sell).full_name %></td>
-                                <td><%= q_order.qty %></td>
                                 <td>
                                     <% if not q_order.att.blank? %>
                                         <a href="<%= q_order.att.url %>">下载</a>
@@ -96,9 +95,10 @@
                                         无
                                     <% end %>
                                 </td>
-                                <td><%= q_order.price %></td>
+                                <td><%= q_order.remark %></td>
+                                <td><%= q_order.follow_remark %></td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder" data- data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-order_no="<%= q_order.order_no %>" >更新</button>
+                                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder_follow"  data-itempid="<%= q_order.id %>"  >更新</button>
                                 </td>
                                 <% if can? :work_pcb_business, :all %>
                                 <td>

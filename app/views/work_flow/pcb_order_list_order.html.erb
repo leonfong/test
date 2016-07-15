@@ -24,10 +24,11 @@
       <th width="100">数量</th>
       <th width="100">报价￥</th>
       <th width="50">附件</th>
-      <th width="200">所属业务员</th>
-      <th width="200">跟踪业务员</th>
-      <th>备注</th>
-      <th width="90">Action</th>
+      <th width="100">所属业务员</th>
+      <th width="100">跟踪业务员</th>
+      <th>采购备注</th>
+      <th>跟踪备注</th>
+      <th width="90">操作</th>
     </tr>
   </thead>
   <tbody>
@@ -47,6 +48,7 @@
         <td><%= User.find_by(email: pcb.sell).full_name %></td>
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td><%= pcb.remark %></td>
+        <td><%= pcb.follow_remark %></td>
         <td><div class="btn-group"><a class="btn btn-danger disabled" data-method='get'  href="/add_pcb_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要下单?" >确认下单</a></div></td>
       </tr>
     <% end %>

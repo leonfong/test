@@ -29,16 +29,20 @@
       <th width="150">Created Date</th>
       <th width="80">数量</th>
       <th width="50">附件</th>
-      <th>所属业务员</th>
-      <th>跟踪业务员</th>
-      <th>Action</th>
+      <th width="100">所属业务员</th>
+      <th width="100">跟踪业务员</th>
+      <th >跟踪备注</th>
+<% if can? :work_pcb_business, :all %>
+      <th width="50">删除</th>
+<% end %>
+      <th width="150">发送到采购报价</th>
     </tr>
   </thead>
   <tbody>
     <% @pcblist.each do |pcb| %>   
       <tr >
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" ><%= pcb.order_no %></a></td>
+            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" data-followedit_remark="<%= pcb.follow_remark %>"><%= pcb.order_no %></a></td>
         <% else %>
             <td><%= pcb.order_no %></td>
         <% end %>
@@ -54,8 +58,12 @@
         </td>
         <td><%= User.find_by(email: pcb.sell).full_name %></td>
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
+        <td><%= pcb.follow_remark %></td>
+<% if can? :work_pcb_business, :all %>
+        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
+<% end %>
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
+            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
         <% else %>
             <td><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
         <% end %>
@@ -152,7 +160,10 @@
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
           </div> 
-          
+          <div class="form-group">
+            <label for="followedit_remark" class="control-label">跟踪备注:</label>
+            <textarea  class="form-control" id="followedit_remark" name="follow_remark"></textarea>
+          </div>
           <div class="form-group sr-only">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
             <label for="customerd" class="control-label">客户代码id:</label>
@@ -203,6 +214,14 @@
             <label for="qty" class="control-label">数量:</label>
             <input type="number" class="form-control" id="u_qty" name="qty" >
           </div> 
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+          <div class="form-group">
+            <label for="followedit_remark" class="control-label">跟踪备注:</label>
+            <textarea  class="form-control" id="followedit_remark_up" name="follow_remark"></textarea>
+          </div>
           <div class="form-group">
             <label for="qty" class="control-label">所属业务员:</label>
             <input type="text" class="form-control" id="u_sell" name="sell" readonly>
@@ -258,12 +277,14 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   var qty = button.data('qty')
   var sell = button.data('sell')
   var order_sell = button.data('order_sell')
+  var followedit_remark = button.data('followedit_remark')
   var modal = $(this)
   modal.find($("#order_no")).val(order_no)
   modal.find($("#u_customer")).val(customer)
   modal.find($("#u_qty")).val(qty)
   modal.find($("#u_sell")).val(sell)
   modal.find($("#u_order_sell")).val(order_sell)
+  modal.find($("#followedit_remark_up")).html(followedit_remark)
 })
 </script>
 

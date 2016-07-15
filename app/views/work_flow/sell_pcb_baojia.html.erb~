@@ -72,8 +72,10 @@
                                 <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
                                 <th width="100">业务员</th>  
                                 <th width="100">数量</th>
+                                
                                 <th width="50">附件</th>
                                 <th > 备注</th>
+                                <th >跟进备注</th>
                                 <th width="50"> 编辑</th>
                                 <% if can? :work_pcb_business, :all %>
                                 <th width="50"> 跟踪</th>
@@ -98,12 +100,17 @@
                                     <% end %>
                                 </td>
                                 <td><%= q_order.remark %></td>
+                                <td><%= q_order.follow_remark %></td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder" data- data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-order_no="<%= q_order.order_no %>" >更新</button>
+                                    <% if can? :work_pcb_business, :all %>
+                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder_follow"  data-itempid="<%= q_order.id %>"  >更新</button>
+                                    <% else %>
+                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-order_no="<%= q_order.order_no %>" >更新</button>
+                                    <% end %>
                                 </td>
                                 <% if can? :work_pcb_business, :all %>
                                 <td>
-                                    <% if q_order.follow != nil %>
+                                    <% if q_order.follow.blank? %>
                                         <a type="button" class="btn btn-info btn-xs" href="/follow?id=<%=q_order.id.to_s%>" >跟踪</a>
                                     <% else %>
                                         <a type="button" class="btn btn-default btn-xs disabled"  >跟踪</a>
@@ -222,6 +229,37 @@
 </div>
 
 
+<div class="modal fade" id="editOrder_follow" tabindex="-1" role="dialog" aria-labelledby="editOrder_followLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">Update PCB Order Info</h4>
+      </div>
+      <%= form_tag({action: :edit_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
+      <div class="modal-body">       
+          <div class="form-group sr-only">
+            <label for="itemp_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="followedit_itemp_id" name="itemp_id">
+          </div>
+
+          <div class="form-group">
+            <label for="qty" class="control-label">跟踪备注:</label>
+            <textarea  class="form-control" id="followedit_remark" name="follow_remark"></textarea>
+          </div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
 </div>
@@ -255,7 +293,22 @@ $('#editOrder').on('show.bs.modal', function (event) {
   modal.find($("#edit_qty")).val(qty);
   modal.find($("#edit_remark")).html(remark);
 })
-
+$('#editOrder_follow').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var customer = button.data('customer');
+  var email = button.data('email');
+  var sell = button.data('sell');
+  var qty = button.data('qty');
+  var remark = button.data('followremark');                       
+  var modal = $(this);
+  modal.find($("#followedit_itemp_id")).val(itempid);
+  modal.find($("#followedit_customer")).val(customer);
+  modal.find($("#followedit_email")).val(email);
+  modal.find($("#followedit_sell")).val(sell);
+  modal.find($("#followedit_qty")).val(qty);
+  modal.find($("#followedit_remark")).html(remark);
+})
 
 </script>
 

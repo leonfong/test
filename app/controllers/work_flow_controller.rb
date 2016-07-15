@@ -341,18 +341,30 @@ before_filter :authenticate_user!
                 where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
                
             elsif current_user.s_name.size > 2
+                if params[:sell] == ""
+                    where_p = "("
+                    current_user.s_name.split(",").each_with_index do |item,index|
+                        s_name = item
+                        if current_user.s_name.split(",").size > (index+1)
+                        
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8 OR"
+                       
+                        else
+                       
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8)"
+                        
+                        end
+                    end
+                else
+                    if params[:sell].size == 1
+                        s_name = params[:sell]
+               
+                        where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name,9),1) REGEXP '^[0-9]+$' "
                 
-                where_p = "("
-                current_user.s_name.split(",").each_with_index do |item,index|
-                    s_name = item
-                    if current_user.s_name.split(",").size > (index+1)
-                        
-                        where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8 OR"
-                       
-                    else
-                       
-                        where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8)"
-                        
+                    elsif params[:sell].size == 2
+                        s_name = params[:sell]
+               
+                        where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
                     end
                 end
             end

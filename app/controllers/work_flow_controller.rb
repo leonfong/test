@@ -326,11 +326,11 @@ before_filter :authenticate_user!
                     s_name = item
                     if current_user.s_name.split(",").size > (index+1)
                         
-                        where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 OR"
+                        where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8 OR"
                        
                     else
                        
-                        where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8)"
+                        where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8)"
                         
                     end
                 end
@@ -564,22 +564,24 @@ before_filter :authenticate_user!
                     current_user.s_name.split(",").each_with_index do |item,index|
                         s_name = item
                         if current_user.s_name.split(",").size > (index+1)
-                            where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8 OR "
+                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8 OR "
                             #where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 OR"
-                            where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 OR"
+                            where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 OR"
                         else
-                            where_o += "  POSITION('" + s_name + "' IN topics.order_no) = 8) AND"
+                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8) AND"
                             #where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8)"
-                            where_o_a += " POSITION('" + s_name + "' IN a.order_no) = 8 "
+                            where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 "
                         end
                     end
                 end
             end
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE #{where_o}  topics.topic_state = 'open' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order]
-                #if not params[:order] == ""
+                if params[:order].size == 1 or params[:order].size == 2
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + "ORDER BY updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+                else
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
-                #end
+                end
                 if @work_flow.size == 1 and params[:order].size > 2               
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end

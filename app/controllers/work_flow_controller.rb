@@ -341,7 +341,7 @@ before_filter :authenticate_user!
                 where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
                
             elsif current_user.s_name.size > 2
-                if params[:sell] == ""
+                if params[:sell] == "" or params[:sell] == nil
                     where_p = "("
                     current_user.s_name.split(",").each_with_index do |item,index|
                         s_name = item

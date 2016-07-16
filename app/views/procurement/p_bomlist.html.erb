@@ -1,8 +1,11 @@
 <div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
+<!--
         <h3><strong>PCBA BOM LIST</strong></h3>
+-->
         <div class="col-md-1 list-group" style="padding: 0px;">
+            <div class="alert alert-info" role="alert"><h3><strong>PCBA业务</strong></h3></div>
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
             <% end %>
@@ -14,7 +17,7 @@
             <%= link_to "BOM List", p_bomlist_path ,class: "list-group-item active"%> 
             <%= link_to "Price History", p_history_path ,class: "list-group-item"%>          
         </div>
-        <div class="col-md-11">
+        <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
             

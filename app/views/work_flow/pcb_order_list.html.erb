@@ -1,6 +1,6 @@
 <div class="container-fluid" >
  
-    <div class="row" style="padding: 10px;">
+    <div class="row" style="padding: 0px;">
 <!--
         <h3><strong>PCB Order list ---等待报价</strong> 
 -->        
@@ -15,7 +15,7 @@
             <%= link_to "等待入库", pcb_order_list_path ,class: "list-group-item"%>       
             <%= link_to "已经入库", pcb_order_list_path ,class: "list-group-item"%>  
         </div>
-        <div class="col-md-11">
+        <div class="col-md-11" style="padding-top: 10px;">
         
 <%= will_paginate(@pcblist) %>            
 <table class="table ">

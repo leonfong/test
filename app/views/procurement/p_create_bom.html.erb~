@@ -24,8 +24,11 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
           
 
     <div class="row" style="padding: 0px;">
-        <h3><strong>Components Quote</strong></h3>
+<!--
+        <h3><strong>NEW PCBA BOM</strong></h3>
+-->
         <div class="col-md-1 list-group" style="padding: 0px;">
+            <div class="alert alert-info" role="alert"><h3><strong>PCB业务</strong></h3></div>
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
             <% end %>

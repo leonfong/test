@@ -221,10 +221,12 @@ footer {
 <!--
       <%= render 'layouts/flash_messages' %>
 -->
-        <%= yield %>
+    <%= yield %>
 
+
+    <% if can? :read, :all%>
         <%= render 'layouts/footer' %>
-
+    <% end %>
         
       
     </div>

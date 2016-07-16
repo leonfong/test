@@ -136,16 +136,16 @@ before_filter :authenticate_user!
 
     def pcb_order_list
         if params[:new]
-            @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             render "new_pcb_order_list.html.erb" and return
         elsif params[:quote]
-            @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             render "pcb_order_list.html.erb" and return
         elsif params[:place_an_order]
-            @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             render "pcb_order_list_order.html.erb" and return
         else
-            @pcblist = PcbOrder.where("state IS NULL").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            @pcblist = PcbOrder.where("state IS NULL").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         end
     end
 

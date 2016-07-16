@@ -161,7 +161,7 @@
 </div>
 
 
-<div class="modal fade" id="editOrder" tabindex="-1" role="dialog" aria-labelledby="editOrderLabel">
+<div class="modal fade" id="editOrder_follow" tabindex="-1" role="dialog" aria-labelledby="editOrder_followLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -170,33 +170,14 @@
       </div>
       <%= form_tag({action: :edit_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
       <div class="modal-body">       
-          <div class="form-group ">
+          <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="edit_itemp_id" name="itemp_id">
+            <input type="text" class="form-control" id="followedit_itemp_id" name="itemp_id">
           </div>
-          
+
           <div class="form-group">
-            <label for="customer" class="control-label">客户和公司名称等:</label>
-            <input type="text" class="form-control" id="edit_customer" name="customer">
-          </div>       
-          <div class="form-group">
-            <label for="email" class="control-label">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）:</label>
-            <input type="text" class="form-control" id="edit_email" name="email">
-          </div> 
-<!--
-          <div class="form-group">
-            <label for="sell" class="control-label">业务:</label>
-            <input type="text" class="form-control" id="edit_sell" name="sell">
-          </div> 
--->
-          <div class="form-group">
-            <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="edit_qty" name="qty">
-          </div> 
-         
-          <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+            <label for="qty" class="control-label">跟踪备注:</label>
+            <textarea  class="form-control" id="followedit_remark" name="follow_remark"></textarea>
           </div> 
       </div>
       <div class="modal-footer">
@@ -207,6 +188,7 @@
     </div>
   </div>
 </div>
+
 
 
 

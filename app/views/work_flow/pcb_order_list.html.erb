@@ -101,7 +101,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
       </div>
      <% end %>
     </div>
@@ -151,7 +151,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()">Submit</button>
       </div>
      <% end %>
     </div>
@@ -196,7 +196,16 @@ $('#updatePrice').on('show.bs.modal', function (event) {
 })
 </script>
 
+<script type="text/javascript">
+function postform() {  	           
+      if ($("#price").val() == "")
+      {                    
+　　    alert("请选填写报价！");                    
+　　    return false;                
+　     }
 
+}    
+</script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

@@ -54,9 +54,9 @@
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-            <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
+            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
         <% else %>
-            <td><div class="btn-group"><a class="btn btn-danger disabled" >确认报价</a></div></td>
+            <td><div class="btn-group"><a class="btn btn-danger btn-xs disabled" >确认报价</a></div></td>
         <% end %>
       </tr>
     <% end %>
@@ -101,7 +101,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
       </div>
      <% end %>
     </div>
@@ -151,7 +151,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()">Submit</button>
       </div>
      <% end %>
     </div>
@@ -196,7 +196,16 @@ $('#updatePrice').on('show.bs.modal', function (event) {
 })
 </script>
 
+<script type="text/javascript">
+function postform() {  	           
+      if ($("#price").val() == "")
+      {                    
+　　    alert("请选填写数量！");                    
+　　    return false;                
+　     }
 
+}    
+</script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

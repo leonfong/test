@@ -63,7 +63,7 @@
         <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
 <% end %>
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <td><div class="btn-group"><a class="btn btn-danger" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
+            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
         <% else %>
             <td><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
         <% end %>
@@ -79,48 +79,7 @@
 
 
 
-<div class="modal fade" id="addOrder" tabindex="-1" role="dialog" aria-labelledby="addOrderLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Add a new PCB Order</h4>
-      </div>
-      <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
-      <div class="modal-body">        
-          <div class="form-group">
-            <label for="customer" class="control-label">客户（公司）:</label>
-            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer+ " "+ User.find_by(email: c.sell).full_name + " " + c.c_no,c.id] }%>
-              <%= select  '', :customer,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
-          </div>       
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="qty" name="qty">
-          </div> 
-          <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
-          </div> 
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="c_no" class="control-label">客户代码:</label>
-            <input type="test" class="form-control" id="c_no" name="c_no" readonly>
-          </div>
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="sell" class="control-label">所属业务员:</label>
-            <input type="test" class="form-control" id="sell" name="sell" readonly>
-          </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
+
 
 
 <div class="modal fade" id="addOrdert" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
@@ -182,7 +141,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform()">
       </div>
      <% end %>
     </div>
@@ -287,7 +246,18 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   modal.find($("#followedit_remark_up")).html(followedit_remark)
 })
 </script>
+<script type="text/javascript">
+function postform() {  	         
+      html = $("#c_nod").val();     
+      //alert(html);
+      if (html == "")
+      {                    
+　　    alert("请选择客户代码！");                    
+　　    return false;                
+　     }
 
+}    
+</script>
 
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

@@ -200,7 +200,7 @@ $('#updatePrice').on('show.bs.modal', function (event) {
 function postform() {  	           
       if ($("#price").val() == "")
       {                    
-　　    alert("请选填写数量！");                    
+　　    alert("请选填写报价！");                    
 　　    return false;                
 　     }
 

@@ -1,14 +1,11 @@
 <div class="container-fluid" >
  
-    <div class="row" style="padding: 0px;">
-        <h3><strong>PCB Order list ---新建订单列表</strong>
-        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
+    <div class="row" style="padding: 10px;">
 <!--
-            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrder">新建PCB订单</button>
+        <h3><strong>PCB Order list ---新建订单列表</strong>
 -->
-            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrdert">新建PCB订单</button>
-        <% end %>
-        </h1>
+        
+        </h3>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item active"%>
             <%= link_to "等待报价", pcb_order_list_path(quote: true) ,class: "list-group-item "%> 
@@ -19,7 +16,9 @@
             <%= link_to "已经入库", pcb_order_list_path ,class: "list-group-item"%>  
         </div>
         <div class="col-md-11">
-        
+        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
+            <button style="padding: 10px;" type="button" class="btn btn-primary " data-toggle="modal" data-target="#addOrdert">新建PCB订单</button>
+        <% end %>
 <%= will_paginate(@pcblist) %>            
 <table class="table ">
   <thead>
@@ -253,6 +252,11 @@ function postform() {
       if (html == "")
       {                    
 　　    alert("请选择客户代码！");                    
+　　    return false;                
+　     }
+      if ($("#qty").val() == "")
+      {                    
+　　    alert("请选填写数量！");                    
 　　    return false;                
 　     }
 

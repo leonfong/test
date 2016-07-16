@@ -1,8 +1,9 @@
 <div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
+<!--
         <h3><strong>PCB Order list ---等待下单 </strong>
-       
+-->       
         </h3>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item"%>
@@ -49,7 +50,7 @@
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
-        <td><div class="btn-group"><a class="btn btn-danger disabled" data-method='get'  href="/add_pcb_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要下单?" >确认下单</a></div></td>
+        <td><div class="btn-group"><a class="btn btn-danger btn-xs disabled" data-method='get'  href="/add_pcb_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要下单?" >确认下单</a></div></td>
       </tr>
     <% end %>
   </tbody>

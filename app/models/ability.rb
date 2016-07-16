@@ -158,7 +158,7 @@ class Ability
       can :work_top, :all
     elsif user.has_role?(:work_suppliers)
       can :work_suppliers, :all
-      #can :read, :all
+      can :read, :all
     else
       can :read, :all
     end

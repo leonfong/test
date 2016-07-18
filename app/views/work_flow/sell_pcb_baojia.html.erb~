@@ -69,11 +69,11 @@
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
-                                <th width="150">客户代码</th>
+                                <th width="70">客户代码</th>
                                 <th width="150">客户名</th>
                                 <th width="200">客户公司名</th>
                                 <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
-                                <th width="100">业务员</th>  
+                                <th width="60">业务员</th>  
                                 <th width="100">数量</th>
                                 
                                 <th width="50">附件</th>

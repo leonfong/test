@@ -7,9 +7,10 @@
 
 <% if @part %>
 <div>
-<%= link_to "导出EXCEL", supplier_dn_excel_path() %>
+<%= link_to "导出全部未报价的物料", supplier_dn_excel_path() %>
 <a type="button" class="btn btn-success btn-sm" href="/supplier_offer?complete=true">已经报价的物料</a>
 <a type="button" class="btn btn-danger btn-sm" href="/supplier_offer?undone=true">等待报价的物料</a>
+<%= link_to "导出最新未报价的物料", supplier_dn_excel_path(out_tag: true) %>
 </div>
 <%= will_paginate(@part) %>
 <div class="row " style="padding-top: 7px;">
@@ -17,12 +18,12 @@
                   <table class="table table-hover table-bordered" > 
                       <thead >
                             <tr style="background-color: #eeeeee"> 
-                                <th width="200">MPN</th>
-                                <th width="300">描述</th>
-                                <th width="90">数量</th>  
+                                <th width="190">MPN</th>
+                                <th width="200">描述</th>
+                                <th width="80">数量</th>  
                                 <th width="90">单价￥</th>
                                 <th >备注</th>
-                                <th >操作</th>
+                                <th width="420">操作</th>
                             </tr>
                         </thead>
                         <tbody>

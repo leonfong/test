@@ -57,11 +57,11 @@ before_filter :authenticate_user!
                 render "sell_pcb_baojia_follow.html.erb"
             else
                 where_date = ""
-                where_p = "pcb_customers.order_no LIKE '%%'"
-                if params[:start_date] != "" 
+                where_p = "pcb_customers.c_no LIKE '%%'"
+                if params[:start_date] != "" and params[:start_date] != nil
                     where_date += " AND pcb_customers.created_at > '#{params[:start_date]}'"
                 end
-                if params[:end_date] != "" 
+                if params[:end_date] != "" and params[:end_date] != nil
                     where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
                 end
                 if can? :work_top, :all

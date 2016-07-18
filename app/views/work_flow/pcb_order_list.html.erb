@@ -6,7 +6,7 @@
 -->        
         </h3>
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <div class="alert alert-info" role="alert"><h2><strong>PCB业务</strong></h2></div>
+           <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCB业务</strong></h4></div>
             <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item"%>
             <%= link_to "等待报价", pcb_order_list_path(quote: true) ,class: "list-group-item active"%> 
             <%= link_to "等待下单", pcb_order_list_path(place_an_order: true) ,class: "list-group-item"%>  

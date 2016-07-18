@@ -502,7 +502,7 @@ function change_<%= item.id.to_s %>(){
                 <% end %> 
             </div>
             <div class="modal-footer">
-                <%= link_to "返回上一步", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-danger pull-left"%>
+                <%= link_to "返回上一步", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-danger pull-left",data:{confirm: "返回上一步会删除这个BOM所有已经匹配的数据，确定要返回上一步吗？"}%>
 <!--                
                 <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
 -->

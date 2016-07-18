@@ -785,25 +785,27 @@ before_filter :authenticate_user!
                                 if match_product_old.blank?
                                     match_product = search_bom(item.description,item.part_code) #根据关键字和位号查询产品
                                 elsif not match_product_old.dn_id.blank?
-                                   
-                                    match_dn = PDn.find(match_product_old.dn_id)
-                                    add_dns = PDn.new
-                                    add_dns.item_id = item.id
-                                    add_dns.date = match_dn.date
-                                    add_dns.part_code = match_dn.part_code
-                                    add_dns.dn = match_dn.dn
-                                    add_dns.dn_long = match_dn.dn_long
-                                    add_dns.cost = match_dn.cost
-                                    add_dns.qty = match_dn.qty
-                                    add_dns.color = "g"
-                                    add_dns.save
-                                    item.cost = add_dns.cost
-                                    item.color = "g"
-                                    item.product_id = match_product_old.product_id
-                                    item.dn_id = add_dns.id
-                                    item.save
-                                    @item = item
-                                    render "p_search_part.js.erb" and return 
+                                    begin
+                                        match_dn = PDn.find(match_product_old.dn_id)
+                                        add_dns = PDn.new
+                                        add_dns.item_id = item.id
+                                        add_dns.date = match_dn.date
+                                        add_dns.part_code = match_dn.part_code
+                                        add_dns.dn = match_dn.dn
+                                        add_dns.dn_long = match_dn.dn_long
+                                        add_dns.cost = match_dn.cost
+                                        add_dns.qty = match_dn.qty
+                                        add_dns.color = "g"
+                                        add_dns.save
+                                        item.cost = add_dns.cost
+                                        item.color = "g"
+                                        item.product_id = match_product_old.product_id
+                                        item.dn_id = add_dns.id
+                                        item.save
+                                        @item = item
+                                        render "p_search_part.js.erb" and return 
+                                    rescue
+                                    end
                                 end
                                 if not match_product.blank?
                                     item.product_id = match_product.first.id if match_product.count > 0

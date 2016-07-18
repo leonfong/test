@@ -37,11 +37,11 @@
             </div>
         <% end %>
 <%= will_paginate(@pcblist) %>            
-<table class="table ">
+<table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="120">Order No.</th>
-      <th width="120">客户代码</th>
+      <th width="80">客户代码</th>
       <th width="150">Created Date</th>
       <th width="80">数量</th>
       <th width="50">附件</th>
@@ -51,7 +51,7 @@
 <% if can? :work_pcb_business, :all %>
       <th width="50">删除</th>
 <% end %>
-      <th width="150">发送到采购报价</th>
+      <th width="120">发送到采购报价</th>
     </tr>
   </thead>
   <tbody>

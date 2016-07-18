@@ -68,7 +68,7 @@
                     <table class="table table-bordered">  
                         <thead class="bg-info">
                             <tr class="text-primary">
-                                <th width="70">客户代码</th>
+                                <th width="65">客户代码</th>
                                 <th width="150">客户名</th>
                                 <th width="200">客户公司名</th>
                                 <th >联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
@@ -211,19 +211,13 @@
    $("#editOrder").modal('toggle');
  };
 
-$('#editOrder').on('show.bs.modal', function (event) {
+$('#editOrder_follow').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var itempid = button.data('itempid');
-  var customer = button.data('customer');
-  var email = button.data('email');
-  var sell = button.data('sell');
-  var qty = button.data('qty');                          
+             
   var modal = $(this);
   modal.find($("#edit_itemp_id")).val(itempid);
-  modal.find($("#edit_customer")).val(customer);
-  modal.find($("#edit_email")).val(email);
-  modal.find($("#edit_sell")).val(sell);
-  modal.find($("#edit_qty")).val(qty);
+
 
 })
 

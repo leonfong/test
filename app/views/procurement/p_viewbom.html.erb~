@@ -98,30 +98,21 @@
                 <tr style="background-color: #eeeeee"> 
                     <th width="80">分配</th> 
                     <th width="150">MPN</th> 
-                    <th>描述</th>
-
-                    <th>MOKO 描述</th>
+                    <th width="150">描述</th>
+                    <th width="250">MOKO 描述</th>
                     <th width="50">位号</th>
                     <th width="50">数量</th>
- 
                     <th width="25"></th>
                     <th width="110">成本价￥</th>
-                    
+                    <th width="65">小计</th>
+                    <th width="60">报价</th>                    
                     <th>Other</th>
+
+<!--
                     <th width="90">成本价</th>
                     <th width="100">供应商简称</th>
-                    
-<!--
-                    <th width="50">数量</th>
-
-                    
-                    <th width="65">技术资料</th>
--->                  
-
-
                     <th width="40">提交</th>
-                    <th width="65">小计</th>
-                    <th width="60">报价</th>
+-->
                 </tr>
                 </thead>
                
@@ -290,25 +281,25 @@ function change_<%= item.id.to_s %>(){
                         </small>
                     </td>
 
-                    
+<!-- 小计 报价 -->
+                    <% if item.cost%>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
+                    <% else %>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
+                    <% end %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
                 
 
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.other %></small></td>
-   <td colSpan="3" style="padding: 0px;margin: 0px;">
-     
+
+
+
+                  <tr>
+                      <td colSpan="11" style="padding: 0px;margin: 0px;">
+                          <div class="row">
+                              <div class="col-md-6">                         
+<!-- 操作 -->
    <table class="table table-hover " style="padding: 0px;margin: 0px;">  
-<!--
-  <thead >
-   <tr > 
-     <th width="100">成本价</th>
-     <th width="100">供应商</th> 
-     <th width="100">供应商</th>
-     <th width="65">技术资料</th> 
-     <th>备注</th>
-     <th width="30">提交</th>
-   </tr>
-   </thead>
--->      
    <tbody >         
     
              
@@ -330,6 +321,18 @@ function change_<%= item.id.to_s %>(){
           
           </td>
 
+          <td width="100" style="padding: 0px;margin: 0px;">
+          
+            <label for="dn_long" class="control-label sr-only">供应商全称:</label>
+            <input type="text" class="form-control input-sm" id="dn_long" name="dn_long" placeholder="供应商全称" style="padding: 0px;margin: 0px;">
+          
+          </td>
+          <td  style="padding: 0px;margin: 0px;">
+         
+            <label for="remark" class="control-label sr-only">采购备注:</label>
+            <input class="form-control input-sm" id="remark"  name="remark" placeholder="采购备注" style="padding: 0px;margin: 0px;">
+          
+          </td>
 <!--          
           <td width="165" style="padding: 0px;margin: 0px;">
           
@@ -342,23 +345,9 @@ function change_<%= item.id.to_s %>(){
 -->
           <td width="30" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + 'up' %>"><button type="submit" class="btn btn-link btn-sm glyphicon glyphicon-ok " ></button></td>
           
-          </tr>
-          <tr style="padding: 0px;margin: 0px;" >
-          <td style="padding: 0px;margin: 0px;">
-         
-            <label for="remark" class="control-label sr-only">备注:</label>
-            <input class="form-control input-sm" id="remark"  name="remark" placeholder="备注" style="padding: 0px;margin: 0px;">
-          
-          </td>
-          <td width="100" style="padding: 0px;margin: 0px;">
-          
-            <label for="dn_long" class="control-label sr-only">供应商全称:</label>
-            <input type="text" class="form-control input-sm" id="dn_long" name="dn_long" placeholder="供应商全称" style="padding: 0px;margin: 0px;">
-          
-          </td>
       </tr>    
       <% end %> 
-      
+          
       </tbody>
       </table>
       <div class="col-md-12" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + "_dns" %>">
@@ -380,7 +369,7 @@ function change_<%= item.id.to_s %>(){
                             <tbody id="dn_<%= item.id %>_dn">
                             <% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
                             <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% elsif dn.color == "y" %>class="bg-warning"<% end %> >                       
-                                <td width="25" id="<%= item.id.to_s + 'edit' %>"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="<%= dn.id %>" data-dn="<%= dn.dn %>" data-dnlong="<%= dn.dn_long %>" data-qty="<%= dn.qty %>" data-cost="<%= dn.cost %>" data-remark="<%= dn.remark %>" data-itemid="<%= item.id %>" > </a>
+                                <td width="40" id="<%= item.id.to_s + 'edit' %>"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="<%= dn.id %>" data-dn="<%= dn.dn %>" data-dnlong="<%= dn.dn_long %>" data-qty="<%= dn.qty %>" data-cost="<%= dn.cost %>" data-remark="<%= dn.remark %>" data-itemid="<%= item.id %>" > </a>
                                 <% if not dn.info.blank? %>                 
                                     <a href="<%= dn.info %>">下载</a></small></td>
                                 <% else %>
@@ -389,7 +378,7 @@ function change_<%= item.id.to_s %>(){
 
                                 <td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%y-%m') %></div></a></small></td>
 
-                                <td width="100" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> <%= dn.qty %> ￥<%= dn.cost %></div></a></small></td> 
+                                <td width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> <%= dn.qty %> ￥<%= dn.cost %></div></a></small></td> 
                               
                                 
                                 <td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= dn.remark %>" ><div><%= dn.remark ? dn.remark[0]:"" %></div></a></small></td>
@@ -397,27 +386,17 @@ function change_<%= item.id.to_s %>(){
                             </tr>
                             <% end %>
                             </tbody>
-                        </table>
-      </div>
-
-      </td>
-
-
-
-
-
-
+                        </table>       
+<!-- 操作 -->
+                              </div>
+                              <div class="col-md-6">
+                              </div>
+                          </div>
+                      </td>
+                  </tr>
 
 
-<!--
-                    <td  style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + 'up' %>"><a type="button" class="btn btn-link glyphicon glyphicon-pencil" data-toggle="modal" data-target="#exampleModal" data-whatever="<%= item.id %>"></a></td>
--->
-                    <% if item.cost%>
-                        <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
-                    <% else %>
-                        <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
-                    <% end %>
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
+                    
                     
 
 
@@ -428,7 +407,7 @@ function change_<%= item.id.to_s %>(){
 
 
                     <tr >
-                        <td colSpan="14" style="padding: 0px;margin: 0px;">
+                        <td colSpan="11" style="padding: 0px;margin: 0px;">
                             <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
                               
                                 <%= form_tag('/search_m', remote: true, class:"form-inline") do %>

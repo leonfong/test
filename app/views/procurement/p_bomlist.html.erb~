@@ -5,7 +5,7 @@
         <h3><strong>PCBA BOM LIST</strong></h3>
 -->
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;"><h4 ><strong>PCBA业务</strong></h4></div>
+            <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCBA业务</strong></h4></div>
             <% if can? :pcb_review, :all %>
             <%= link_to "订单检查", order_review_list_path ,class: "list-group-item"%>
             <% end %>
@@ -51,7 +51,7 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="110">BOM No.</th>
-      <th width="150">Created Date</th>
+      <th width="160">Created Date</th>
       <th width="200">Project Name</th>
       <th width="100">QTY</th>
       <th width="100">BOM工程师</th>

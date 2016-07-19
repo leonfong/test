@@ -1743,7 +1743,7 @@ WHERE
         @view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
                 
         if not dn.remark.blank?
-            @view_dns += dn.remark[0]
+            @view_dns += dn.remark
         else
             @view_dns += ''
         end
@@ -1802,7 +1802,7 @@ WHERE
                 @view_dn += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
                 
                 if not dn.remark.blank?
-                    @view_dn += dn.remark[0]
+                    @view_dn += dn.remark
                 else
                     @view_dn += ''
                 end

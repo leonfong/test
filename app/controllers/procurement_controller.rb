@@ -1960,6 +1960,7 @@ WHERE
 
 		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
                 all_title = @bom.all_title.split("|",-1)
+                all_title << "MPN"
                 all_title << "MOKO物料名称"
                 all_title << "MOKO物料描述"
                 all_title << "成本价"
@@ -2008,6 +2009,7 @@ WHERE
 		    #row.push(rowNum)
 		    #row.push(item.description)
 		    #row.push(item.quantity)
+                    row.push("#{item.mpn}")
                     if item.product_id != 0 and item.product_id != nil
                         row.push(Product.find(item.product_id).name)
                         row.push(Product.find(item.product_id).description)

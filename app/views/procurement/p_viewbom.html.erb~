@@ -390,9 +390,9 @@ function change_<%= item.id.to_s %>(){
 
                   <tr>
                       <td colSpan="11" style="padding: 0px;margin: 0px;">
-                          <div class="row">
-                              <div class="col-md-6">
-                              <small><%= item.other %></small>
+                          <div class="row" >
+                              <div  class="col-md-6">
+                              <p style="padding: 0px;margin: 0px;" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class=" bg-success"<% else %>class=" bg-danger"<% end %>><small style="padding: 0px;margin: 0px;"><%= item.other %></small></p>
                               </div>
                               <div class="col-md-6">                         
 

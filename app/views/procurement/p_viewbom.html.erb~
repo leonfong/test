@@ -381,7 +381,7 @@ function change_<%= item.id.to_s %>(){
                                 <td width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> <%= dn.qty %> ￥<%= dn.cost %></div></a></small></td> 
                               
                                 
-                                <td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= dn.remark %>" ><div><%= dn.remark %></div></a></small></td>
+                                <td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.remark %></div></a></small></td>
                                 <td width="30"><small><a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>" data-confirm="确定要删除?"></a></small></td>
                             </tr>
                             <% end %>

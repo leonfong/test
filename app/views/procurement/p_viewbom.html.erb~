@@ -106,7 +106,7 @@
                     <th width="110">成本价￥</th>
                     <th width="65">小计</th>
                     <th width="60">报价</th>                    
-                    <th>Other</th>
+                    <th>操作</th>
 
 <!--
                     <th width="90">成本价</th>
@@ -289,22 +289,21 @@ function change_<%= item.id.to_s %>(){
                     <% end %>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
                 
-
+<!--
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.other %></small></td>
+-->
 
 
 
-                  <tr>
-                      <td colSpan="11" style="padding: 0px;margin: 0px;">
-                          <div class="row">
-                              <div class="col-md-6">
-                              </div>
-                              <div class="col-md-6">                         
-<!-- 操作 -->
+
+
+
+
+
+
+                   <td style="padding: 0px;margin: 0px;">
    <table class="table table-hover table-bordered " style="padding: 0px;margin: 0px;">  
-   <tbody >         
-    
-             
+   <tbody >             
         <%= form_tag({action: :p_edit},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
         <tr style="padding: 0px;margin: 0px;" >
           <td width="100" style="padding: 0px;margin: 0px;">
@@ -354,20 +353,7 @@ function change_<%= item.id.to_s %>(){
       </table>
       <div class="col-md-12" style="padding: 0px;margin: 0px;" id="<%= item.id.to_s + "_dns" %>">
         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
-<!--
-                            <thead >
-                                <tr > 
-                                    <th width="30"></th>
-                                    <th width="70">日期</th> 
-                                    <th width="100">供应商</th> 
-                                    <th width="80">数量</th>
-                                    <th width="80">成本价</th>
-                                    <th width="80">技术资料</th> 
-                                    <th>备注</th>
-                                    <th width="30"></th>
-                                </tr>
-                            </thead>
--->
+
                             <tbody id="dn_<%= item.id %>_dn">
                             <% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
                             <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% elsif dn.color == "y" %>class="bg-warning"<% end %> >                       
@@ -378,7 +364,7 @@ function change_<%= item.id.to_s %>(){
                                     </small></td>
                                 <% end %>
 
-                                <td width="50"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%y-%m') %></div></a></small></td>
+                                <td width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%y-%m') %></div></a></small></td>
 
                                 <td width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> <%= dn.qty %> ￥<%= dn.cost %></div></a></small></td> 
                               
@@ -388,8 +374,28 @@ function change_<%= item.id.to_s %>(){
                             </tr>
                             <% end %>
                             </tbody>
-                        </table>       
-<!-- 操作 -->
+                        </table> 
+                   </td>
+
+
+
+
+
+
+
+
+
+
+
+
+                  <tr>
+                      <td colSpan="11" style="padding: 0px;margin: 0px;">
+                          <div class="row">
+                              <div class="col-md-6">
+                              <small><%= item.other %></small>
+                              </div>
+                              <div class="col-md-6">                         
+
                               </div>
                               
                           </div>

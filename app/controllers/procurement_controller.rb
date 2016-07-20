@@ -557,6 +557,9 @@ before_filter :authenticate_user!
             other_all.delete(@sheet.row(row_use)[params[:partCol].to_i])
             other_all.delete(@sheet.row(row_use)[params[:quantityCol].to_i])
             other_all.delete(@sheet.row(row_use)[params[:refdesCol].to_i])
+            if params[:linkCol]
+                other_all.delete(@sheet.row(row_use)[params[:linkCol].to_i])
+            end
             params[:desCol].strip.split(" ").sort!.each do |des|
                 other_all.delete(@sheet.row(row_use)[des.to_i])
             end
@@ -1794,7 +1797,7 @@ WHERE
             end
             dn.save
             @view_dn = ""
-            @view_dn += '<td width="25"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:dn_itemid].to_s + '" ></small></a>'
+            @view_dn += '<td width="40"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:dn_itemid].to_s + '" ></small></a>'
             if not dn.info.blank?                
                 @view_dn += ' <a href="'+dn.info.to_s+'">下载</a></small></td>'
             else
@@ -1849,7 +1852,7 @@ WHERE
                     @view_dns += ' >'
                 end
                 #@view_dns += '<td width="25"><small><a class="glyphicon glyphicon-edit" data-method="get" data-remote="true" href=""></a></small></td>'
-                @view_dns += '<td width="25"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + @itemid.to_s + '" ></small></a> '
+                @view_dns += '<td width="40"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + @itemid.to_s + '" ></small></a> '
                 if not dn.info.blank?                
                     @view_dns += ' <a href="'+dn.info.to_s+'">下载</a></small></td>'
                 else

@@ -712,7 +712,7 @@ function change_<%= item.id.to_s %>(){
       </div>
       <div class="modal-body">
         <%= form_tag({action: :p_item_remark},method:"post",remote: true) do %>
-          <div class="form-group ">
+          <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
           </div>

@@ -300,8 +300,8 @@ function change_<%= item.id.to_s %>(){
                     <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>
                    </tr></table></small>
 
-<div class="row" style="margin: 0px;" id="<%= item.id %>_item_remark">
-<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" id="<%= item.id %>_item_remark">
 <% PItemRemark.where(p_item_id: item.id).each do |remark_item| %>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">

@@ -22,7 +22,7 @@ before_filter :authenticate_user!
         elsif can? :work_g, :all
             remark.user_team = "procurement"
         end
-        remark.remark = params[:item_remark]
+        remark.remark = params[:item_remark].chomp
         remark.save
         @remark_all = ""
         PItemRemark.where(p_item_id: @item_id).each do |remark_item|

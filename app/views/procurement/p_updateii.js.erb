@@ -33,6 +33,7 @@ $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
     <% end %> 
 <% end %>
 document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info";
+document.getElementById('<%= @bom_item.id.to_s + "_other" %>').className="col-md-12 bg-info";
 //document.getElementById('<%= @bom_item.id.to_s + "_" + @add_dns.id.to_s %>').className="bg-info";
 
 

@@ -1,9 +1,9 @@
-
-document.getElementById('<%= @bom_item.id.to_s + "p" %>').value='<%= @bom_item.cost.to_s %>';
 <% if @bom_item.cost.blank? %>
-    document.getElementById('<%= @bom_item.id.to_s + "p_t" %>').innerHTML='<%= "￥0" %>';
+    document.getElementById('<%= @bom_item.id.to_s + "p" %>').value='0';
+    document.getElementById('<%= @bom_item.id.to_s + "p_t" %>').innerHTML='￥0';
 <% else %>
     document.getElementById('<%= @bom_item.id.to_s + "p_t" %>').innerHTML='<%= "￥"+(@bom_item.cost*@bom.qty*@bom_item.quantity).to_s %>';
+    document.getElementById('<%= @bom_item.id.to_s + "p" %>').value='<%= @bom_item.cost.to_s %>';
 <% end %>
 
 
@@ -33,6 +33,7 @@ $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
     <% end %> 
 <% end %>
 document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info";
+document.getElementById('<%= @bom_item.id.to_s + "_other" %>').className="col-md-12 bg-info";
 //document.getElementById('<%= @bom_item.id.to_s + "_" + @add_dns.id.to_s %>').className="bg-info";
 
 

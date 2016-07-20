@@ -6,4 +6,5 @@ class PItem < ActiveRecord::Base
 
 
 	validates :procurement_bom_id , presence: true
+        has_many :p_item_remarks, dependent: :destroy
 end

@@ -9,6 +9,37 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def p_item_remark
+        @item_id = params[:itemp_id]
+        remark = PItemRemark.new()
+        remark.p_item_id = params[:itemp_id]
+        remark.user_id = current_user.id
+        remark.user_name = current_user.full_name
+        if can? :work_e, :all
+            remark.user_team = "sell"
+        elsif can? :work_d, :all
+            remark.user_team = "bom"
+        elsif can? :work_g, :all
+            remark.user_team = "procurement"
+        end
+        remark.remark = params[:item_remark]
+        remark.save
+        @remark_all = ""
+        PItemRemark.where(p_item_id: @item_id).each do |remark_item|
+            @remark_all += '<div class="row" style="margin: 0px;" >'
+            @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+            @remark_all += '<table style="margin: 0px;" >'
+            @remark_all += '<tr>'
+            @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><strong>' + remark_item.user_name + ': </strong>' +  remark_item.remark + '</small></p>'
+            @remark_all += '</td>'
+            @remark_all += '</tr>'
+            @remark_all += '</table>'
+            @remark_all += '</div>'
+            @remark_all += '</div>'
+        end
+    end
+
     def remark_to_sell
         p_bom = ProcurementBom.find(params[:bom_id])
         if can? :work_send_to_sell, :all

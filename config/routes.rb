@@ -103,7 +103,7 @@ Rails.application.routes.draw do
   match '/part_list', to: 'procurement#part_list', via: 'get'
   match '/send_order_to_p', to: 'procurement#send_order_to_p', via: 'get'
   match '/remark_to_sell', to: 'procurement#remark_to_sell', via: 'get'
-
+  match '/p_item_remark', to: 'procurement#p_item_remark', via: 'post'
 
 
 

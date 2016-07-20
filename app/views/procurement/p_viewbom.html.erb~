@@ -105,7 +105,8 @@
                     <th width="25"></th>
                     <th width="110">成本价￥</th>
                     <th width="65">小计</th>
-                    <th width="60">报价</th>                    
+                    <th width="60">报价</th>   
+                    <th width="30"></th>                 
                 </tr>
                 </thead>
             </table>  </small> 
@@ -296,10 +297,29 @@ function change_<%= item.id.to_s %>(){
                         <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
                     <% end %>
                     <td width="60" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.price.to_s %></a></small></td>
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>
                    </tr></table></small>
 
+<div class="row" style="margin: 0px;" id="<%= item.id %>_item_remark">
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<% PItemRemark.where(p_item_id: item.id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" ><small ><strong><%= remark_item.user_name %>: </strong><%= remark_item.remark %></small></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+</div>
+</div>
+
 <div class="row" style="margin: 0px;">
-<div   <% if item.color == "b" %>class="col-md-12 bg-info"<% elsif item.color == "g" %>class="col-md-12 bg-success"<% else %>class="col-md-12 bg-danger"<% end %> >
+<div   <% if item.color == "b" %>class="col-md-12 bg-info"<% elsif item.color == "g" %>class="col-md-12 bg-success"<% else %>class="col-md-12 bg-danger"<% end %> id="<%=item.id%>_other">
 <table style="margin: 0px;" >
 <tr>
 <td style="padding: 0px;margin: 0px;">
@@ -683,6 +703,35 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
+<div class="modal fade" id="remarkitem" tabindex="-1" role="dialog" aria-labelledby="remarkitemLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="remarkitemLabel">备注</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_item_remark},method:"post",remote: true) do %>
+          <div class="form-group ">
+            <label for="itemp_id_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
+          </div>
+          
+          <div class="form-group">
+            <label for="pj_remark">备注：</label>
+            <textarea type="text" class="form-control" id="item_remark" name="item_remark"  ></textarea>
+          </div>             
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
 
 
 </div>
@@ -747,6 +796,12 @@ $('#editMpn').on('show.bs.modal', function (event) {
   var modal = $(this);
   modal.find($("#itemp_id")).val(itempid);
   modal.find($("#item_mpn")).val(mpn);
+})
+$('#remarkitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var modal = $(this);
+  modal.find($("#itemp_id_remark")).val(itempid);
 })
 $('#editModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal;

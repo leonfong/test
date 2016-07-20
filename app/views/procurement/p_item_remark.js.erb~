@@ -1,0 +1,1 @@
+document.getElementById('<%= @item_id.to_s + "_item_remark" %>').innerHTML='<%= raw @remark_all %>';

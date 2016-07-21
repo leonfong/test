@@ -197,7 +197,7 @@ before_filter :authenticate_user!
         @pcb = PcbCustomer.find(params[:itemp_id])
         #@pcb.user_id = current_user.id
         if params[:follow_remark]
-            @pcb.follow_remark = params[:follow_remark]
+            @pcb.follow_remark = @pcb.follow_remark + params[:follow_remark]
         else
             @pcb.customer = params[:customer]
             @pcb.email = params[:email] 

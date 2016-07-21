@@ -30,7 +30,10 @@
       <th width="90">跟踪业务员</th>
       <th >采购备注</th>
       <th >跟踪备注</th>
+      <% if can? :work_pcb_business, :all and can? :work_g, :all %>
+      <th width="75">退回</th>
       <th width="75">操作</th>
+      <% end %>
     </tr>
   </thead>
   <tbody>
@@ -56,9 +59,9 @@
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
+            <td><div class="btn-group"><a class="btn btn-warning btn-xs" data-method='get'  href="/back_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要退回给业务?">退回</a></div></td>
             <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
-        <% else %>
-            <td><div class="btn-group"><a class="btn btn-danger btn-xs disabled" >确认报价</a></div></td>
+        
         <% end %>
       </tr>
     <% end %>

@@ -2,6 +2,15 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+
+    def back_pcb_to_order
+        pcb = PcbOrder.find(params[:bom_id])
+        pcb.state = "new"
+        pcb.save
+        redirect_to pcb_order_list_path(new: true)
+    end
+
+
     def find_c
         if params[:c_code] != ""
             @c_info = PcbCustomer.find_by(c_no: params[:c_code])

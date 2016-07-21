@@ -45,10 +45,11 @@
                       </script>
              
                   <div class="input-group-addon"> 
-                      <%= radio_button :order_s, :order_s, '1'  , :checked => @order_check_1 %>
-                      <%=  'MOKO Part' %>
+                      <%= radio_button :order_s, :order_s, '1' , :checked => @order_check_1 %>
+                      <%=  'MPN' %>
                       <%= radio_button :order_s, :order_s, '2' , :checked => @order_check_2 %> 
                       <%= '描述' %>
+                      
                   </div> 
             
                   <% if @part_name %>   

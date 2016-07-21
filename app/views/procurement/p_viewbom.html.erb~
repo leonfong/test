@@ -147,7 +147,7 @@
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="150"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
-                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a type="button"  data-toggle="modal" data-target="#editMpn" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>" > <%= item.mpn %></a></small></td>
+                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editMpn" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>" > <%= item.mpn %></a></small></td>
                             </tr>
                             <tr id="<%= item.id.to_s + '_mpn_tr' %>">
                                 <% if DigikeysStock.find_by(manufacturer_part_number: item.mpn).blank? %>
@@ -308,7 +308,13 @@ function change_<%= item.id.to_s %>(){
 <table style="margin: 0px;" >
 <tr>
 <td style="padding: 0px;margin: 0px;" >
-<p style="padding: 0px;margin: 0px;" ><small ><strong><%= remark_item.user_name %>: </strong><%= remark_item.remark %></small></p>
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="<%= item.id %>" data-remark_id="<%= remark_item.id %>" data-remark="<%= remark_item.remark %>" > </a>
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
 </td>
 </tr>
 </table>
@@ -732,6 +738,39 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
+<div class="modal fade" id="remarkupdate" tabindex="-1" role="dialog" aria-labelledby="remarkupdateLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="remarkupdateLabel">备注更新</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_item_remark_up},method:"post",remote: true) do %>
+          <div class="form-group sr-only">
+            <label for="itemp_id_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="itemp_id_remark_up" name="itemp_id">
+          </div>
+          <div class="form-group sr-only">
+            <label for="itemp_id_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="remark_id_up" name="remark_id">
+          </div>
+          
+          <div class="form-group">
+            <label for="pj_remark">备注：</label>
+            <textarea type="text" class="form-control" id="item_remark_up" name="item_remark"  ></textarea>
+          </div>             
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
 
 
 </div>
@@ -802,6 +841,14 @@ $('#remarkitem').on('show.bs.modal', function (event) {
   var itempid = button.data('itempid');
   var modal = $(this);
   modal.find($("#itemp_id_remark")).val(itempid);
+})
+$('#remarkupdate').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var remark_up = button.data('remark');
+  var modal = $(this);
+  modal.find($("#itemp_id_remark_up")).val(itempid);
+  modal.find($("#item_remark_up")).val(remark_up);
 })
 $('#editModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal;

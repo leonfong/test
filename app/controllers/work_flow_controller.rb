@@ -2,6 +2,16 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def del_pcb_follow
+        followd = PcbCustomerRemark.find(params[:id])
+        followd.destroy
+        @c_id = params[:itemp_id]
+        @follow_remark = ""
+        PcbCustomerRemark.where(pcb_c_id: @c_id).order("created_at DESC").each do |follow|
+            @follow_remark += '<div><p class="bg-warning"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_pcb_follow?id='+follow.id.to_s+'&itemp_id='+ follow.pcb_c_id.to_s+'" data-confirm="确定要删除?"></a></small>'+follow.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')+' <strong>'+follow.user_name.to_s+': </strong>'+follow.remark.to_s+'</p></div>'
+        end
+        render "edit_pcb_customer.js.erb" and return
+    end
 
     def back_pcb_to_order
         pcb = PcbOrder.find(params[:bom_id])

@@ -115,7 +115,7 @@
   
     <% PcbCustomerRemark.where(pcb_c_id: q_order.id).order("created_at DESC").each do |follow| %>
     <div > 
-       <p class="bg-warning"><%= follow.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %> <strong><%= follow.user_name %>: </strong><%= follow.remark %></p>
+       <p class="bg-warning"><small><a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_pcb_follow?id=<%=follow.id.to_s%>&itemp_id=<%= follow.pcb_c_id.to_s %>" data-confirm="确定要删除?"></a></small><%= follow.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %> <strong><%= follow.user_name %>: </strong><%= follow.remark %></p>
     </div>
     <% end %>
   

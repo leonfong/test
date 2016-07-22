@@ -86,7 +86,7 @@
 
 <% @quate.each do |q_order| %>
                             <tr>
-                                <td><%= q_order.c_no %></td>
+                                <td  data-toggle="collapse" data-target="#ramark_<%= q_order.id %>_h" aria-expanded="false" aria-controls="ramark_<%= q_order.id %>_h"><%= q_order.c_no %></td>
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.customer_com %></td>
                                 <td><%= q_order.email %></td>
@@ -109,6 +109,19 @@
                                 </td>
                                 <% end %>
                             </tr>
+<tr>
+<td colSpan="10" style="padding: 0px;margin: 0px;">
+<div class="collapse" id="ramark_<%= q_order.id %>_h">
+  
+    <% PcbCustomerRemark.where(pcb_c_id: q_order.id).each do |follow| %>
+    <div > 
+       <p class="bg-warning"><strong><%= follow.user_name %>: </strong><%= follow.remark %></p>
+    </div>
+    <% end %>
+  
+</div>
+</td>
+</tr>
 <% end %> 
          
                         </tbody>

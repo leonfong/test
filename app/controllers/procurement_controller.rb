@@ -334,29 +334,30 @@ before_filter :authenticate_user!
         if can? :work_g_all, :all
             @user_do = "7"
             #@bom_item = PItem.where(user_do: "7")
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
             if @bom_item.blank?
-                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
+                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
             end
         elsif can? :work_g_a, :all
             @user_do = "77"
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '77' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '77' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
             if @bom_item.blank?
-                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '77' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
+                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '77' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
             end
         elsif can? :work_g_b, :all
             @user_do = "75"
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '75' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '75' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
             if @bom_item.blank?
-                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '75' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
+                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '75' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
             end
         elsif can? :work_d, :all
             @user_do = "7"
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
             if @bom_item.blank?
-                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
+                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
             end
         end
+        #@bom_item = @bom_item.select {|item| item.quantity != 0 }
         #if  params[:ajax]
             #@bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
             #render "viewbom.js.erb"
@@ -1331,6 +1332,7 @@ before_filter :authenticate_user!
             if not params[:add_bom].blank?
                 render "bom_viewbom.html.erb"
             else
+                @bom_item = @bom_item.select {|item| item.quantity != 0 }
                 render "p_viewbom.html.erb"
             end
             return false  
@@ -1356,10 +1358,10 @@ before_filter :authenticate_user!
                 @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `p_name` LIKE '%#{params[:key_order]}%' AND `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 15)
             else
                 if params[:complete]
-                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC,`created_at` DESC ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND (color <> 'b' OR color IS NULL)").blank? }
+                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC,`created_at` DESC ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? }
                     @boms = boms.paginate(:page => params[:page], :per_page => 15)
                 elsif params[:undone]
-                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC,`created_at` DESC ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND (color <> 'b' OR color IS NULL)").blank?  }
+                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC,`created_at` DESC ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank?  }
                     @boms = boms.paginate(:page => params[:page], :per_page => 15)
                 elsif params[:sent_to_sell]
                     @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `remark_to_sell` = 'mark' ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 15)

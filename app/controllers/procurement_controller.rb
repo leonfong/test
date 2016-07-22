@@ -824,7 +824,7 @@ before_filter :authenticate_user!
             Rails.logger.info("------------------------------------------------------------qq2") 
             all_use = @sheet.row(row_use)[params[:partCol].to_i].split("")+@sheet.row(row_use)[params[:quantityCol].to_i].split("")+@sheet.row(row_use)[params[:refdesCol].to_i].split("")
             #params[:select_part].each do |use|
-	    @parse_result.select! {|item| !item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank? } #选择非空行
+	    #@parse_result.select! {|item| !item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank? } #选择非空行
             #end
             Rails.logger.info("------------------------------------------------------------qq1")
             Rails.logger.info(all_item.inspect)

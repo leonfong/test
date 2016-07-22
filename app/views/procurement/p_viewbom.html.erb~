@@ -82,6 +82,9 @@
                                <% end %>
                                <% end %> 
                            </td> 
+                           <% if not @boms.row_use.blank? %>
+                           <td width="100"><%= link_to "导出测试", p_excel_add_path(:bom_id =>@boms.id) %></td>
+                           <% end %>
                            <td width="100"><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
                            <td width="100"><%= link_to "导出源文件", @boms.excel_file_url %></td> 
                        </tr>
@@ -845,9 +848,11 @@ $('#remarkitem').on('show.bs.modal', function (event) {
 $('#remarkupdate').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var itempid = button.data('itempid');
+  var remark_id = button.data('remark_id');
   var remark_up = button.data('remark');
   var modal = $(this);
   modal.find($("#itemp_id_remark_up")).val(itempid);
+  modal.find($("#remark_id_up")).val(remark_id);
   modal.find($("#item_remark_up")).val(remark_up);
 })
 $('#editModal').on('show.bs.modal', function (event) {

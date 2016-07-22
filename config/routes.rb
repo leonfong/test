@@ -106,7 +106,7 @@ Rails.application.routes.draw do
   match '/remark_to_sell', to: 'procurement#remark_to_sell', via: 'get'
   match '/p_item_remark', to: 'procurement#p_item_remark', via: 'post'
   match '/p_item_remark_up', to: 'procurement#p_item_remark_up', via: 'post'
-
+  match '/p_excel_add', to: 'procurement#p_excel_add', via: 'get'
 
 
 #external_bom

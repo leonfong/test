@@ -82,6 +82,9 @@
                                <% end %>
                                <% end %> 
                            </td> 
+                           <% if @boms.row_use != nil %>
+                           <td width="100"><%= link_to "导出测试", p_excel_add_path(:bom_id =>@boms.id) %></td>
+                           <% end %>
                            <td width="100"><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
                            <td width="100"><%= link_to "导出源文件", @boms.excel_file_url %></td> 
                        </tr>

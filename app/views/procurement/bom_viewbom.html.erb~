@@ -185,8 +185,8 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                         <td style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small> 
-                                <a class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#addmoko" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>"></a>
-                                <a class="text-muted" name="<%= item.id.to_s + 'n' %>"  id="<%= item.id.to_s + 'n' %>">bbb</a>
+                                <a class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#addmoko" data-mpn="<%= item.mpn %>" data-itemaddid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>"></a>
+                                <a class="text-muted" name="<%= item.id.to_s + 'n' %>"  id="<%= item.id.to_s + 'n' %>"> </a>
                                 
                             </small>
                             
@@ -451,7 +451,7 @@ function change_<%= item.id.to_s %>(){
       </div>
       <div class="modal-body">
 <%= form_tag({action: :add_moko_part},method:"post",remote: true , class: "form-inline") do %>
-          <div class="form-group sr-only">
+          <div class="form-group ">
             <label for="item_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="itemadd_id" name="item_id" >
           </div>
@@ -499,27 +499,7 @@ function change_<%= item.id.to_s %>(){
             </div>
 -->
           </div>      
-<script language="JavaScript" type="text/javascript"> 
-function cdkeyInput(thisobj) 
-{ 
-objResult = ""; 
-nextObjResult = ""; 
-if(thisobj.value.indexOf(' ') > 0) 
-{ 
-objResult = thisobj.value.substring(0,thisobj.value.indexOf(' ')); 
-nextObjResult = thisobj.value.substring(thisobj.value.indexOf(' ')+1); 
-thisobj.value = objResult.substring(0,thisobj.attributes["max"].nodeValue); 
-if(arguments[1] != undefined && arguments[1] != null) 
-{ 
-next = arguments[1]; 
-nextobj = document.getElementById(next); 
-nextobj.value = nextObjResult.toUpperCase(); 
-nextobj.onkeyup(); 
-} 
-} 
-thisobj.value = thisobj.value.toUpperCase(); 
-} 
-</script>      
+     
         
       </div>
       <div class="modal-footer">

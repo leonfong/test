@@ -72,7 +72,11 @@ before_filter :authenticate_user!
     def sell_pcb_baojia
         if can? :work_e, :all
             if params[:follow]
-                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE follow LIKE '%#{current_user.email}%'  ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                if can? :work_a, :all
+                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`   ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                else
+                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE follow LIKE '%#{current_user.email}%'  ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                end
                 render "sell_pcb_baojia_follow.html.erb"
             else
                 where_date = ""

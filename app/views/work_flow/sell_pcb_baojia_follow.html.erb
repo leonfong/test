@@ -113,9 +113,9 @@
 <td colSpan="10" style="padding: 0px;margin: 0px;">
 <div class="collapse" id="ramark_<%= q_order.id %>_h">
   
-    <% PcbCustomerRemark.where(pcb_c_id: q_order.id).each do |follow| %>
+    <% PcbCustomerRemark.where(pcb_c_id: q_order.id).order("created_at DESC").each do |follow| %>
     <div > 
-       <p class="bg-warning"><strong><%= follow.user_name %>: </strong><%= follow.remark %></p>
+       <p class="bg-warning"><%= follow.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %> <strong><%= follow.user_name %>: </strong><%= follow.remark %></p>
     </div>
     <% end %>
   
@@ -184,7 +184,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="editModalLabel">Update PCB Order Info</h4>
       </div>
-      <%= form_tag({action: :edit_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
+      <%= form_tag({action: :edit_pcb_customer},method:"post",remote:"true",id: "order_form") do %>
       <div class="modal-body">       
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>

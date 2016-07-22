@@ -62,7 +62,7 @@ before_filter :authenticate_user!
     def sell_pcb_baojia
         if can? :work_e, :all
             if params[:follow]
-                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE follow LIKE '%#{current_user.email}%'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE follow LIKE '%#{current_user.email}%'  ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
                 render "sell_pcb_baojia_follow.html.erb"
             else
                 where_date = ""
@@ -74,9 +74,9 @@ before_filter :authenticate_user!
                     where_date += " AND pcb_customers.created_at < '#{params[:end_date]}'"
                 end
                 if can? :work_top, :all
-                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date}  ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
                 else
-                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date} AND pcb_customers.sell = '#{current_user.email}'  ORDER BY pcb_customers.updated_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE #{where_p + where_date} AND pcb_customers.sell = '#{current_user.email}'  ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
                 end
                 render "sell_pcb_baojia.html.erb"
             end
@@ -203,6 +203,12 @@ before_filter :authenticate_user!
             follow.user_name = current_user.full_name
             follow.remark = params[:follow_remark].chomp
             follow.save
+            @c_id = params[:itemp_id]
+            @follow_remark = ""
+            PcbCustomerRemark.where(pcb_c_id: @c_id).order("created_at DESC").each do |follow|
+                @follow_remark += '<div><p class="bg-warning">'+follow.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')+' <strong>'+follow.user_name.to_s+': </strong>'+follow.remark.to_s+'</p></div>'
+            end
+            render "edit_pcb_customer.js.erb" and return
         else
             @pcb.customer = params[:customer]
             @pcb.email = params[:email] 

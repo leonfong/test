@@ -110,7 +110,7 @@
 -->
                                 <td>
                                     <% if can? :work_pcb_business, :all %>
-                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder_follow"  data-itempid="<%= q_order.id %>"  >更新</button>
+                                        <button type="button" class="btn btn-default btn-xs disabled"  >更新</button>
                                     <% else %>
                                         <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-order_no="<%= q_order.order_no %>" >更新</button>
                                     <% end %>

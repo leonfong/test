@@ -70,8 +70,8 @@
                         <thead class="bg-info">
                             <tr class="text-primary">
                                 <th width="65">客户代码</th>
-                                <th width="150">客户名</th>
-                                <th width="300">客户公司名</th>
+                                <th width="250">客户名</th>
+                                <th width="350">客户公司名</th>
                                 <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
                                 <th width="60">业务员</th>  
                                 <th width="100">数量</th>
@@ -110,7 +110,7 @@
 -->
                                 <td>
                                     <% if can? :work_pcb_business, :all %>
-                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder_follow"  data-itempid="<%= q_order.id %>"  >更新</button>
+                                        <button type="button" class="btn btn-success btn-xs"  >更新</button>
                                     <% else %>
                                         <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-order_no="<%= q_order.order_no %>" >更新</button>
                                     <% end %>

@@ -661,7 +661,11 @@ before_filter :authenticate_user!
             redirect_to :back
             #render "add_moko_part.js.erb" and return
         else
-            name_a = "A." + params[:part_a].upcase + "." + params[:part_b].upcase + ".F."
+            name_a = "A." + params[:part_a].upcase
+            if params[:part_b] != ""
+                name_a += "." + params[:part_b].upcase
+            end
+            name_a += ".F."
             part_name_find = Product.find_by_sql("SELECT LPAD((MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(products.`name`, '.' ,-1) , '-' ,1))+1 ) ,4,'0') AS part_n   FROM products WHERE `name` LIKE '%"+ name_a +"%'")
             if part_name_find.first.part_n.blank?
                part_name_find = "0001"

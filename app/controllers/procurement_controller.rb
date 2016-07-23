@@ -28,13 +28,17 @@ before_filter :authenticate_user!
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "MOKO物料描述"
         sheet.column(col_i.to_i).width =35 
         col_i += 1
-        sheet.rows[row_use.to_i - 1][col_i.to_i] = "成本价"
+        sheet.rows[row_use.to_i - 1][col_i.to_i] = "成本价￥"
         sheet.column(col_i.to_i).width =8 
         col_i += 1
-        sheet.rows[row_use.to_i - 1][col_i.to_i] = "报价"
+        sheet.rows[row_use.to_i - 1][col_i.to_i] = "报价￥"
         sheet.column(col_i.to_i).width =8
         col_i += 1
-        sheet.rows[row_use.to_i - 1][col_i.to_i] = "备注"
+        sheet.rows[row_use.to_i - 1][col_i.to_i] = "备注1"
+        col_i += 1
+        sheet.rows[row_use.to_i - 1][col_i.to_i] = "备注2"
+        col_i += 1
+        sheet.rows[row_use.to_i - 1][col_i.to_i] = "总数量#{@bom.qty}"
         col_i += 1
         row_i = row_use
         #c_i = col_use
@@ -53,9 +57,9 @@ before_filter :authenticate_user!
                 sheet.rows[row_i.to_i][c_i.to_i] = ""
                 c_i += 1
             end
-            sheet.rows[row_i.to_i][c_i.to_i] = "￥#{item.cost}"
+            sheet.rows[row_i.to_i][c_i.to_i] = "#{item.cost}"
             c_i += 1
-            sheet.rows[row_i.to_i][c_i.to_i] = "￥#{item.price}"
+            sheet.rows[row_i.to_i][c_i.to_i] = "#{item.price}"
             c_i += 1
             if item.dn_id.blank?
                 sheet.rows[row_i.to_i][c_i.to_i] = ""
@@ -73,6 +77,17 @@ before_filter :authenticate_user!
                     sheet.rows[row_i.to_i][c_i.to_i] = ""
                     c_i += 1
                 end
+            end
+            if PItemRemark.where(p_item_id: item.id).blank?
+                sheet.rows[row_i.to_i][c_i.to_i] = ""
+                c_i += 1
+            else
+                allitem_remark = ""
+                PItemRemark.where(p_item_id: item.id).each do |remark_i|
+                    allitem_remark += "【#{remark_i.user_name}】:#{remark_i.remark}\n\r"
+                end
+                sheet.rows[row_i.to_i][c_i.to_i] = allitem_remark
+                c_i += 1
             end
             if not item.dn_id.blank?
                 begin

@@ -1,5 +1,5 @@
 
-var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><th width='200'>Name</th><th>Description</th><th>Date</th><th>供应商</th><th>数量</th><th>成本价</th><th>Operate</th></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
+var insertText = "<table class='table table-bordered table-striped table-hover'><thead><tr><th width='200'>Name</th><th>Description</th><th width='100'>Date</th><th width='150'>供应商</th><th width='90'>数量</th><th width='90'>成本价</th><th width='80'>Operate</th></tr></thead><tbody><%= raw @bom_html %></tbody></table>";
  
 
 document.getElementById("<%= params[:id]+ '_tbody' %>").innerHTML = insertText; 

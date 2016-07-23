@@ -73,7 +73,7 @@ before_filter :authenticate_user!
         if can? :work_e, :all
             if params[:follow]
                 if can? :work_a, :all
-                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`   ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
+                    @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE follow IS NOT NULL ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
                 else
                     @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers` WHERE follow LIKE '%#{current_user.email}%'  ORDER BY pcb_customers.created_at DESC").paginate(:page => params[:page], :per_page => 10) 
                 end
@@ -139,6 +139,7 @@ before_filter :authenticate_user!
         if not params[:follow_remark].blank?
             pcb.follow_remark = params[:follow_remark]
         end
+        pcb.price_eng = current_user.full_name
         pcb.save
         redirect_to :back
     end    

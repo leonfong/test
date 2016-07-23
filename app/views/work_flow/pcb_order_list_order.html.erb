@@ -26,6 +26,7 @@
       <th width="80">数量</th>
       <th width="80">报价￥</th>
       <th width="50">附件</th>
+      <th width="90">报价工程师</th>
       <th width="90">所属业务员</th>
       <th width="90">跟踪业务员</th>
       <th>采购备注</th>
@@ -50,6 +51,7 @@
                 无
             <% end %>
         </td>
+        <td><%= pcb.price_eng %></td>
         <td><%= User.find_by(email: pcb.sell).full_name %></td>
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td><%= pcb.remark %></td>

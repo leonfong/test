@@ -46,7 +46,7 @@
 -->
                            <td>
                                <% if can? :work_g_all, :all%>
-                               <%= form_tag({action: :p_profit},method:"post",class:"form-inline") do %>
+                               <%= form_tag({controller: :procurement,action: :p_profit},method:"post",class:"form-inline") do %>
                                    <div class="form-group">
                                        <label for="profit">利润：</label>
                                        <input type="number" class="form-control" id="profit" name="profit" >

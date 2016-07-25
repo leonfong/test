@@ -2462,6 +2462,12 @@ WHERE
         item = PItem.find(params[:itemp_id])
         @p_item = item
         item.mpn = params[:item_mpn].strip
+        item.save
+
+=begin
+        item = PItem.find(params[:itemp_id])
+        @p_item = item
+        item.mpn = params[:item_mpn].strip
         use_mpn = Product.find_by_sql("SELECT * FROM products WHERE products.mpn LIKE '%#{item.mpn.strip}%'")
         if not use_mpn.blank?
             item.product_id = use_mpn.id          
@@ -2568,6 +2574,7 @@ WHERE
         Rails.logger.info(@dn_info.inspect)             
         Rails.logger.info("--------------------------")
         #redirect_to :back
+=end
     end
 
     def copy_data

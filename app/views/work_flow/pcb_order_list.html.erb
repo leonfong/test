@@ -23,7 +23,9 @@
     <tr style="background-color: #eeeeee">
       <th width="130">Order No.</th>
       <th width="150">Created Date</th>
+<!--
       <th width="80">数量</th>
+-->
       <th width="80">价格￥</th>
       <th width="50">附件</th>
       <th width="90">所属业务员</th>
@@ -45,7 +47,9 @@
             <td><%= pcb.order_no %></td>
         <% end %>
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+<!--
         <td><%= pcb.qty %></td>
+-->
         <td><%= pcb.price %></td>
         <td>
             <% if not pcb.att.blank? %>

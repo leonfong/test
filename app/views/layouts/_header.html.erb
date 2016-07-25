@@ -84,6 +84,11 @@
                     </ul>
                 </li>
             <% end %>
+            <% if can? :work_top, :all %>
+                <li id="o">
+                    <%= link_to "供应商扣款列表",supplier_d_list_path, data: { no_turbolink: true } %>
+                </li>
+            <% end %>
         <% end %>
         <li id="d"><%= link_to t('about'),about_path %></li>
         <li id="e"><%= link_to t('contact'),contact_path %></li>     
@@ -191,6 +196,12 @@ $(document).ready(function () {
     });
     $("#n").mouseleave(function () {             
             $("#n").removeClass('active');          
+    });
+    $("#o").mouseenter(function () {                     
+            $("#o").addClass('active');        
+    });
+    $("#o").mouseleave(function () {             
+            $("#o").removeClass('active');          
     });
    
 

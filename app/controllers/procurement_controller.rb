@@ -9,6 +9,10 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def supplier_d_list
+        @data_all = SupplierDList.all
+    end
+
     def p_excel_add
         @bom = ProcurementBom.find(params[:bom_id])
         file_name = @bom.no.to_s+"_out.xls"
@@ -790,6 +794,9 @@ before_filter :authenticate_user!
                     return false
                 end
             else
+                redirect_to procurement_new_path(),  notice: "EXCEL文件错误!！"
+                return false
+=begin
                 begin
 	            @xls_file = Roo::Excelx.new(params[:bom_path])
                 rescue
@@ -798,7 +805,7 @@ before_filter :authenticate_user!
                     redirect_to procurement_new_path(),  notice: "EXCEL文件错误!！"
                     return false
                 end
-                
+=end                
             end
             @sheet = @xls_file.sheet(0)
             row_n = 0
@@ -1033,11 +1040,14 @@ before_filter :authenticate_user!
                 #return false
             #end
         else
+            @bom.destroy
+            redirect_to procurement_new_path(),  notice: "EXCEL文件错误!!！"
+            return false
             #begin
-	        @xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
-                Rails.logger.info("------------------------------------------------------------2222")
+	        #@xls_file = Roo::Excelx.new(@bom.excel_file.current_path)
+                #Rails.logger.info("------------------------------------------------------------2222")
             #rescue
-                Rails.logger.info("------------------------------------------------------------000000")
+                #Rails.logger.info("------------------------------------------------------------000000")
                 #@xls_file = Roo::Excel.new(@bom.excel_file.current_path)
             #else
                 #Rails.logger.info("------------------------------------------------------------111111")

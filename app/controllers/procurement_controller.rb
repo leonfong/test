@@ -996,7 +996,15 @@ before_filter :authenticate_user!
         @bom = ProcurementBom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         @file = @bom.excel_file_identifier
-        @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + Bom.find_by_sql('SELECT COUNT(procurement_boms.id)+1 AS all_no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').first.all_no.to_s + "B"
+        if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?
+            order_n =1
+        else
+             #Rails.logger.info("qqqqqq-----------------------order_n-------------qqqqqq")
+             #Rails.logger.info(ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').last.no.split("B")[-1].inspect)
+             #Rails.logger.info("qqqqqq------------------------order_n--------------qqqqqq")
+            order_n = ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').last.no.split("B")[-1].to_i + 1
+        end
+        @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
         #如果上传成功
 	if @bom.save
             #if @bom.excel_file_identifier.split('.')[-1] == 'xls'

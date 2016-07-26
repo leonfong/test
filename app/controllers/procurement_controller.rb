@@ -1100,6 +1100,7 @@ before_filter :authenticate_user!
 
         @bom = ProcurementBom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
+        @bom.bom_eng_up = current_user.full_name
         @file = @bom.excel_file_identifier
         if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?
             order_n =1

@@ -1922,6 +1922,8 @@ WHERE
                                 end                      
 		            end
                         end
+                        @bom.t_p = @total_price_nn.to_f.round(4)
+                        @bom.save
                         #if can? :work_d, :all
                            # render "bom_update.js.erb"
                         #else
@@ -1987,6 +1989,8 @@ WHERE
                                 end                      
 		            end
                         end
+                        @bom.t_p = @total_price_nn.to_f.round(4)
+                        @bom.save
                         render "p_updateii.js.erb"
                     end
                 else
@@ -2029,6 +2033,8 @@ WHERE
                     end                      
 		end
             end
+            @bom.t_p = @total_price_nn.to_f.round(4)
+            @bom.save
             render "p_updateii.js.erb"    
         end
     end
@@ -2557,7 +2563,10 @@ WHERE
                 end                      
 	    end
         end
-        @bom.t_p = @total_price_nn
+        Rails.logger.info("--------------------------")
+        Rails.logger.info(@total_price_nn.to_f.round(4))
+        Rails.logger.info("--------------------------")
+        @bom.t_p = @total_price_nn.to_f.round(4)
         @bom.save
     end
 

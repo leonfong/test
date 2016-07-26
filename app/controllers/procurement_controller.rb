@@ -1165,7 +1165,7 @@ before_filter :authenticate_user!
 #0如果有描述 
                     if not item.description.blank?
     #0.1如果有mpn
-                        if not item.mpn.blank?
+                        if item.mpn != ""
         #0.1.1先从自有物料中匹配mpn
                             use_mpn = Product.find_by_sql("SELECT * FROM products WHERE products.mpn LIKE '%#{item.mpn.strip}%'")
                             if not use_mpn.blank?

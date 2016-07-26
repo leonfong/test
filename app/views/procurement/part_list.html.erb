@@ -291,7 +291,17 @@ function change_<%= item.id.to_s %>(){
 </div>
 </div>
 
-
+<div class="row" style="margin: 0px;">
+<div style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;">
+<p style="padding: 0px;margin: 0px;" ><small ><%= ProcurementBom.find(item.procurement_bom_id).remark %></small></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
 
 
 
@@ -342,7 +352,7 @@ function change_<%= item.id.to_s %>(){
           <td  style="padding: 0px;margin: 0px;">
          
             <label for="remark" class="control-label sr-only">采购备注:</label>
-            <input class="form-control input-sm" id="remark"  name="remark" placeholder="采购备注" style="padding: 0px;margin: 0px;">
+            <input class="form-control input-sm" autocomplete="off" id="remark"  name="remark" placeholder="采购备注" data-provide="typeahead" data-items="8" data-source="[&quot;原装订货 交期12-15天&quot;,&quot;定做 交期15-20天&quot;]" style="padding: 0px;margin: 0px;">
           
           </td>
 <!--          

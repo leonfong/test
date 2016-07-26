@@ -9,9 +9,106 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
-    def supplier_d_list
-        @data_all = SupplierDList.all
+    def sd_flow
+        @flow = SupplierDList.find(params[:sd_id])
+        if @flow.state == ""
+            @flow.state = "check"
+        elsif @flow.state == "check"
+            @flow.state = "checked"
+            @flow.back = "" 
+        elsif @flow.state == "checked"
+            @flow.state = "done"
+            @flow.back = "" 
+        end
+        @flow.save
+        redirect_to :back
     end
+
+    def sd_back
+        @flow = SupplierDList.find(params[:sd_id])
+        if @flow.state == "check"
+            @flow.state = "" 
+            @flow.back = "fail"  
+        end
+        @flow.save
+        redirect_to :back
+    end
+
+    def supplier_d_list
+        where_sd = "aaaaa" 
+        user_id = current_user.id
+        if (user_id==7)
+            where_sd = "" 
+        elsif (user_id==7777)
+            where_sd = "check" 
+        elsif (user_id == 1212)
+            where_sd = "checked"
+        end
+
+        @data_all = SupplierDList.where(state: "#{where_sd}").paginate(:page => params[:page], :per_page => 15)
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+        end
+        @all_dn += "&quot;]"
+    end
+
+    def add_sd
+        new_sd = SupplierDList.new
+        new_sd.dn_name = AllDn.find(params[:sd_id]).dn
+        new_sd.dn_all_name = AllDn.find(params[:sd_id]).dn_long
+        new_sd.money = params[:sd_money]
+        new_sd.remark = params[:sd_remark]
+        new_sd.save
+        redirect_to :back
+    end
+
+    def update_sd
+        new_sd = SupplierDList.find(params[:sd_id])
+        new_sd.dn_name = AllDn.find(params[:sd_dn_id]).dn
+        new_sd.dn_all_name = AllDn.find(params[:sd_dn_id]).dn_long
+        new_sd.money = params[:sd_money]
+        new_sd.remark = params[:sd_remark]
+        new_sd.save
+        redirect_to :back
+    end
+
+    def find_sd
+        if params[:sd_update]
+            @sd_update = true
+        end
+        if params[:c_code] != ""
+            @c_info = AllDn.find_by(dn: params[:c_code])
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@c_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @c_info.blank?
+                 Rails.logger.info("add-------------------------------------12")
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th width="200">供应商代码</th>'
+                @c_table += '<th>供应商全称</th>'             
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_table += '<tr>'
+                @c_table += '<td>' + @c_info.dn + '</td>'
+                @c_table += '<td>' + @c_info.dn_long + '</td>'
+                @c_table += '</tr>'
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@c_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
 
     def p_excel_add
         @bom = ProcurementBom.find(params[:bom_id])
@@ -381,7 +478,8 @@ before_filter :authenticate_user!
             #@bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
             #render "viewbom.js.erb"
             #return false
-        #end       
+        #end  
+        Rails.logger.info(@bom_item.inspect)        
     end    
 
     def send_order_to_p
@@ -1120,6 +1218,8 @@ before_filter :authenticate_user!
                                         add_dns.dn_long = match_dn.dn_long
                                         add_dns.cost = match_dn.cost
                                         add_dns.qty = match_dn.qty
+                                        add_dns.info = match_dn.info
+                                        add_dns.remark = match_dn.remark
                                         add_dns.color = "g"
                                         add_dns.save
                                         item.cost = add_dns.cost
@@ -1194,6 +1294,8 @@ before_filter :authenticate_user!
                                     add_dns.dn_long = match_dn.dn_long
                                     add_dns.cost = match_dn.cost
                                     add_dns.qty = match_dn.qty
+                                    add_dns.info = match_dn.info
+                                    add_dns.remark = match_dn.remark
                                     add_dns.color = "g"
                                     add_dns.save
                                     item.cost = add_dns.cost

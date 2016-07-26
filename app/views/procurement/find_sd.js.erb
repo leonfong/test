@@ -1,0 +1,11 @@
+//alert('<%= raw @c_table %>');
+<% if @sd_update %>
+$("#table_sd_up").html('<%= raw @c_table %>');
+$("#sd_id_up").val("<%= @c_info.id %>");
+$("#sd_name_up").val("<%= @c_info.dn %>");
+<% else %>
+$("#table_sd").html('<%= raw @c_table %>');
+$("#sd_id").val("<%= @c_info.id %>");
+$("#sd_name").val("<%= @c_info.dn %>");
+<% end %>
+

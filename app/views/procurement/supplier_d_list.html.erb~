@@ -216,13 +216,12 @@ $('#updatesd').on('show.bs.modal', function (event) {
   var remark = button.data('remark')
   var dn_name = button.data('dn_name')
   var dn_id = button.data('dn_id')
-  var sd_id = button.data('sd_id')
+
   var modal = $(this)
   modal.find($("#sd_money_up")).val(money)
   modal.find($("#sd_remark_up")).html(remark)
   modal.find($("#sd_name_up")).val(dn_name)
   modal.find($("#sd_id_dn_up")).val(dn_id)
-  modal.find($("#sd_id_up")).val(sd_id)
 })
 </script>
 <script type="text/javascript">

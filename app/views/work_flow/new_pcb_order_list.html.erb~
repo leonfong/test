@@ -275,9 +275,9 @@ function postform() {
 　　    alert("请选择客户代码！");                    
 　　    return false;                
 　     }
-      if ($("#qty").val() == "")
+      if ($("#followedit_remark").val() == "")
       {                    
-　　    alert("请选填写数量！");                    
+　　    alert("请填写备注，备注中应包含数量！");                    
 　　    return false;                
 　     }
 

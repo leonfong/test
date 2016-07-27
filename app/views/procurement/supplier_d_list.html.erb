@@ -6,7 +6,7 @@
 </div>
 
 <% if @data_all %>
-<% if current_user.id == 34%>
+<% if current_user.id == 34 or can? :work_top, :all%>
 <div>
 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsd">新建扣款</button>
 </div>
@@ -45,12 +45,12 @@
                                 <td>
                                     <%= part.remark %>
                                 </td>
-                                <% if current_user.id == 34%>
+                                <% if current_user.id == 34  or can? :work_top, :all%>
                                 <td>
                                 <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#updatesd" data-money="<%= part.money %>" data-remark="<%= part.remark %>" data-dn_name="<%= part.dn_name %>" data-sd_id="<%= part.id %>" data-dn_id="<%= AllDn.find_by(dn: part.dn_name).id.to_s %>" >更改</button>
                                 </td>
                                 <% end %>
-                                <% if current_user.id == 7%>
+                                <% if current_user.id == 7  or can? :work_top, :all%>
                                 <td>
                                 <a class="btn btn-danger btn-xs" data-method='get'  href="/sd_back?sd_id=<%= part.id.to_s %>" data-confirm="确定要退回给生产部?">退回</a>
                                 </td>

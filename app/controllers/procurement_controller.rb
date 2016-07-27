@@ -23,7 +23,7 @@ before_filter :authenticate_user!
             url += '&client_ip=120.25.151.208'
             url += '&oauth_version=2'
             url += '&to_all=0'  
-            url += '&receivers=6ab2628d9a320296032f6a6f5495582b'
+            url += '&receivers=6ab2628d9a320296032f6a6f5495582b'                            
             url += '&window_title=Fastbom-PCB AND PCBA'
             url += '&tips_title='+URI.encode('供应商扣款需要审核')
             url += '&tips_content='+URI.encode('马风华 宝宝你有一个供应商扣款需要审核，点击查看。')

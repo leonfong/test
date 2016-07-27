@@ -6,9 +6,11 @@
 </div>
 
 <% if @data_all %>
+<% if current_user.id == 34%>
 <div>
 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsd">新建扣款</button>
 </div>
+<% end %>
 <%= will_paginate(@data_all) %>
 <div class="row " style="padding-top: 7px;">
     <div class="col-md-12 " style="padding: 5px;" >   
@@ -19,7 +21,7 @@
                                 <th width="500">供应商全称</th>
                                 <th width="100">扣款金额￥</th>
                                 <th  >备注</th>  
-                                <% if current_user.id == 7%>
+                                <% if current_user.id == 34%>
                                 <th width="60">更改</th>
                                 <% end %>
                                 <% if current_user.id == 7%>
@@ -43,7 +45,7 @@
                                 <td>
                                     <%= part.remark %>
                                 </td>
-                                <% if current_user.id == 7%>
+                                <% if current_user.id == 34%>
                                 <td>
                                 <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#updatesd" data-money="<%= part.money %>" data-remark="<%= part.remark %>" data-dn_name="<%= part.dn_name %>" data-sd_id="<%= part.id %>" data-dn_id="<%= AllDn.find_by(dn: part.dn_name).id.to_s %>" >更改</button>
                                 </td>

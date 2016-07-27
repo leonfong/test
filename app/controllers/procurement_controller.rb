@@ -37,11 +37,11 @@ before_filter :authenticate_user!
     def supplier_d_list
         where_sd = "aaaaa" 
         user_id = current_user.id
-        if (user_id==7)
+        if (user_id==34)
             where_sd = "" 
-        elsif (user_id==7777)
+        elsif (user_id==7)
             where_sd = "check" 
-        elsif (user_id == 1212)
+        elsif (user_id == 112)
             where_sd = "checked"
         end
 

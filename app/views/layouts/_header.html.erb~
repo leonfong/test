@@ -197,6 +197,12 @@ $(document).ready(function () {
     $("#n").mouseleave(function () {             
             $("#n").removeClass('active');          
     });
+    $("#o").mouseenter(function () {                     
+            $("#o").addClass('active');        
+    });
+    $("#o").mouseleave(function () {             
+            $("#o").removeClass('active');          
+    });
    
 
 });

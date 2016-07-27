@@ -21,10 +21,10 @@
                                 <th width="500">供应商全称</th>
                                 <th width="100">扣款金额￥</th>
                                 <th  >备注</th>  
-                                <% if current_user.id == 34%>
+                                <% if current_user.id == 34 or current_user.id == 6 %>
                                 <th width="60">更改</th>
                                 <% end %>
-                                <% if current_user.id == 7%>
+                                <% if current_user.id == 7 or current_user.id == 6 %>
                                 <th width="60">退回</th>
                                 <% end %>
                                 <th width="80">操作</th>

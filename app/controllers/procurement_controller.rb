@@ -99,9 +99,9 @@ before_filter :authenticate_user!
             @data_all = SupplierDList.where(state: "#{where_sd}").paginate(:page => params[:page], :per_page => 15)
         end
         @all_dn = "[&quot;"
-        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long FROM all_dns GROUP BY all_dns.dn_long")
         all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+            @all_dn += "&quot;,&quot;" + dn.dn_long.to_s
         end
         @all_dn += "&quot;]"
     end
@@ -131,7 +131,7 @@ before_filter :authenticate_user!
             @sd_update = true
         end
         if params[:c_code] != ""
-            @c_info = AllDn.find_by(dn: params[:c_code])
+            @c_info = AllDn.find_by(dn_long: params[:c_code])
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_info.inspect)
             Rails.logger.info("add-------------------------------------12")

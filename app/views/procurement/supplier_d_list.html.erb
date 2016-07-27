@@ -89,10 +89,10 @@
              <%= form_tag('/find_sd', method:"get", class:"form-inline",remote: true) do %>
                
                <div class="form-group ">
-                  <lable for="order" , class="control-label"><strong>供应商代码: </strong></lable>
+                  <lable for="order" , class="control-label"><strong>供应商: </strong></lable>
                   <div class="input-group input-group-sm">              
                     
-                    <input id="c_code" autocomplete="off" name="c_code" type="text" class="form-control input-lg" data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>" placeholder="供应商简称" size="30">            
+                    <input id="c_code" autocomplete="off" name="c_code" type="text" class="form-control input-lg" data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>" placeholder="供应商全称" size="30">            
                     <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                     </div>

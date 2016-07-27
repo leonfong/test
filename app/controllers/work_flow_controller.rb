@@ -151,6 +151,13 @@ before_filter :authenticate_user!
         redirect_to pcb_order_list_path(place_an_order: true)
     end
 
+    def release_pcb_to_quotechk
+        pcb = PcbOrder.find(params[:bom_id])
+        pcb.state = "quotechk"
+        pcb.save
+        redirect_to pcb_order_list_path(quotechk: true)
+    end
+
     def release_pcb_to_quote
         pcb = PcbOrder.find(params[:bom_id])
         pcb.state = "quote"
@@ -168,6 +175,9 @@ before_filter :authenticate_user!
         elsif params[:place_an_order]
             @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             render "pcb_order_list_order.html.erb" and return
+        elsif params[:quotechk]
+            @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            render "pcb_order_list_quotechk.html.erb" and return
         else
             @pcblist = PcbOrder.where("state IS NULL").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         end

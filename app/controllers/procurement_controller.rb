@@ -16,6 +16,22 @@ before_filter :authenticate_user!
         elsif @flow.state == "check"
             @flow.state = "checked"
             @flow.back = "" 
+            oauth = Oauth.find(1)
+            company_id = oauth.company_id
+            company_token = oauth.company_token
+            url = 'https://openapi.b.qq.com/api/tips/send' 
+            url += '?company_id='+company_id
+            url += '&company_token='+company_token
+            url += '&app_id=200710667'
+            url += '&client_ip=120.25.151.208'
+            url += '&oauth_version=2'
+            url += '&to_all=0'  
+            url += '&receivers=3f524f1d9f3baa7bd7894cce35ae5f39'
+            url += '&window_title=Fastbom-PCB AND PCBA'
+            url += '&tips_title='+URI.encode('供应商扣款需要审核')
+            url += '&tips_content='+URI.encode('王萍 宝宝你有一个供应商扣款需要确认，点击查看。')
+            url += '&tips_url=www.fastbom.com/supplier_d_list'
+            resp = Net::HTTP.get_response(URI(url)) 
         elsif @flow.state == "checked"
             @flow.state = "done"
             @flow.back = "" 
@@ -31,6 +47,22 @@ before_filter :authenticate_user!
             @flow.back = "fail"  
         end
         @flow.save
+        oauth = Oauth.find(1)
+        company_id = oauth.company_id
+        company_token = oauth.company_token
+        url = 'https://openapi.b.qq.com/api/tips/send'
+        url += '?company_id='+company_id
+        url += '&company_token='+company_token
+        url += '&app_id=200710667'
+        url += '&client_ip=120.25.151.208'
+        url += '&oauth_version=2'
+        url += '&to_all=0'  
+        url += '&receivers=77844aaffe24c9e4e6f1b2d851fc44cb'
+        url += '&window_title=Fastbom-PCB AND PCBA'
+        url += '&tips_title='+URI.encode('供应商扣款需要审核')
+        url += '&tips_content='+URI.encode('邓友素 宝宝你有一个供应商扣款被马风华宝宝退回，点击查看。')
+        url += '&tips_url=www.fastbom.com/supplier_d_list'
+        resp = Net::HTTP.get_response(URI(url))
         redirect_to :back
     end
 
@@ -61,6 +93,22 @@ before_filter :authenticate_user!
         new_sd.money = params[:sd_money]
         new_sd.remark = params[:sd_remark]
         new_sd.save
+        oauth = Oauth.find(1)
+        company_id = oauth.company_id
+        company_token = oauth.company_token
+        url = 'https://openapi.b.qq.com/api/tips/send' 
+        url += '?company_id='+company_id
+        url += '&company_token='+company_token
+        url += '&app_id=200710667'
+        url += '&client_ip=120.25.151.208'
+        url += '&oauth_version=2'
+        url += '&to_all=0'  
+        url += '&receivers=6ab2628d9a320296032f6a6f5495582b'
+        url += '&window_title=Fastbom-PCB AND PCBA'
+        url += '&tips_title='+URI.encode('供应商扣款需要审核')
+        url += '&tips_content='+URI.encode('马风华 宝宝你有一个供应商扣款需要审核，点击查看。')
+        url += '&tips_url=www.fastbom.com/supplier_d_list'
+        resp = Net::HTTP.get_response(URI(url)) 
         redirect_to :back
     end
 

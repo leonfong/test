@@ -9,7 +9,8 @@
         <div class="col-md-1 list-group" style="padding: 0px;">
             <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCB业务</strong></h4></div>
             <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item active"%>
-            <%= link_to "等待报价", pcb_order_list_path(quote: true) ,class: "list-group-item "%> 
+            <%= link_to "已报价", pcb_order_list_path(quotechk: true) ,class: "list-group-item"%> 
+            <%= link_to "等待报价", pcb_order_list_path(quote: true) ,class: "list-group-item"%>  
             <%= link_to "等待下单", pcb_order_list_path(place_an_order: true) ,class: "list-group-item"%>  
             <%= link_to "等待财务审批", pcb_order_list_path ,class: "list-group-item"%>
             <%= link_to "等待采购下单", pcb_order_list_path ,class: "list-group-item"%>
@@ -144,17 +145,17 @@
           <div class="form-group sr-only">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
             <label for="customerd" class="control-label">客户代码id:</label>
-            <input type="test" class="form-control" id="customerd" name="customer" readonly>
+            <input type="text" class="form-control" id="customerd" name="customer" readonly>
           </div>
           <div class="form-group">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
             <label for="c_no" class="control-label">客户代码:</label>
-            <input type="test" class="form-control" id="c_nod" name="c_no" readonly>
+            <input type="text" class="form-control" id="c_nod" name="c_no" readonly>
           </div>
           <div class="form-group">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
             <label for="sell" class="control-label">所属业务员:</label>
-            <input type="test" class="form-control" id="selld" name="sell" readonly>
+            <input type="text" class="form-control" id="selld" name="sell" readonly>
           </div> 
       </div>
       <div class="modal-footer">

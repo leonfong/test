@@ -24,7 +24,6 @@
     <tr style="background-color: #eeeeee">
       <th width="130">Order No.</th>
       <th width="180">Created Date</th>
-      <th width="80">数量</th>
       <th width="80">报价￥</th>
       <th width="50">附件</th>
       <th width="90">报价工程师</th>
@@ -42,7 +41,6 @@
       <tr >
         <td><%= pcb.order_no %></td>
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td><%= pcb.qty %></td>
         <td><%= pcb.price %></td>
         <td>
             <% if not pcb.att.blank? %>
@@ -57,9 +55,14 @@
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
         
-        <% if can? :work_pcb_business, :all and can? :work_g, :all %>   
-            <td><div class="btn-group"><a class="btn btn-danger btn-xs " data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要下单?" >确认下单</a></div></td>
-        
+        <% if can? :work_pcb_business, :all and can? :work_e, :all %>   
+            <td>
+<!--
+                <div class="btn-group"><a class="btn btn-danger btn-xs " data-method='get'  href="/release_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要下单?" >确认下单</a>
+                </div>
+-->
+            <a class="btn btn-danger btn-xs " data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>"  data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" data-followedit_remark="<%= pcb.follow_remark %>">确认下单</a>
+            </td>
         <% end %>
       </tr>
     <% end %>
@@ -73,43 +76,7 @@
 
 
 
-<div class="modal fade" id="addOrder" tabindex="-1" role="dialog" aria-labelledby="addOrderLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Add a new PCB Order</h4>
-      </div>
-      <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
-      <div class="modal-body">        
-          <div class="form-group">
-            <label for="customer" class="control-label">客户:</label>
-            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer,c.id] }%>
-              <%= select  '', :customer,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
-          </div>       
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="qty" name="qty">
-          </div> 
-          <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
-          </div> 
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">所属业务员:</label>
-            <input type="test" class="form-control" id="sell" name="sell" readonly>
-          </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
+
 
 
 
@@ -118,7 +85,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Update PCB Order price</h4>
+        <h4 class="modal-title" id="editModalLabel">Update PCB Order QTY</h4>
       </div>
       <%= form_tag({action: :update_pcb_price},method:"post",multipart:"true",id: "order_form") do %>
       <div class="modal-body">        
@@ -132,7 +99,7 @@
           </div>       
           <div class="form-group">
             <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="u_qty" name="qty" readonly>
+            <input type="number" class="form-control" id="u_qty" name="qty" >
           </div> 
           <div class="form-group">
             <label for="qty" class="control-label">所属业务员:</label>
@@ -144,11 +111,11 @@
           </div> 
           <div class="form-group">
             <label for="qty" class="control-label">报价:</label>
-            <input type="text" class="form-control" id="price" name="price" >
+            <input type="text" class="form-control" id="price" name="price" readonly>
           </div> 
           <div class="form-group">
-            <label for="qty" class="control-label">备注:</label>
-            <input type="text" class="form-control" id="remark" name="remark" >
+            <label for="qty" class="control-label">跟踪备注:</label>
+            <textarea  class="form-control" id="f_remark" name="f_remark"></textarea>
           </div> 
 
       </div>
@@ -185,15 +152,15 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var order_no = button.data('order_no') 
   var customer = button.data('customer')
-  var qty = button.data('qty')
   var sell = button.data('sell')
   var order_sell = button.data('order_sell')
+  var followedit_remark = button.data('followedit_remark')
   var modal = $(this)
   modal.find($("#order_no")).val(order_no)
   modal.find($("#u_customer")).val(customer)
-  modal.find($("#u_qty")).val(qty)
   modal.find($("#u_sell")).val(sell)
   modal.find($("#u_order_sell")).val(order_sell)
+  modal.find($("#f_remark")).html(followedit_remark)
 })
 </script>
 

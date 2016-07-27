@@ -145,8 +145,10 @@ before_filter :authenticate_user!
     end    
 
     def release_pcb_to_order
-        pcb = PcbOrder.find(params[:bom_id])
+        pcb = PcbOrder.find_by(order_no: params[:order_no])
         pcb.state = "order"
+        pcb.follow_remark = params[:f_remark]
+        pcb.qty = params[:qty]
         pcb.save
         redirect_to pcb_order_list_path(place_an_order: true)
     end
@@ -184,7 +186,13 @@ before_filter :authenticate_user!
     end
 
     def add_pcb_order
-        order_no = "MK" + Time.new.strftime("%y%m%d").to_s + User.find_by(email: params[:sell]).s_name + PcbOrder.find_by_sql("SELECT count(*)+1 AS a FROM `pcb_orders`").first.a.to_s + "W"
+        if PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').blank?
+            order_n =1
+        else
+             
+            order_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.split("W")[-1].to_i + 1
+        end
+        order_no = "MK" + Time.new.strftime("%y%m%d").to_s + User.find_by(email: params[:sell]).s_name_self + "W" + order_n.to_s + "W"
         @pcb = PcbOrder.new()
         #@pcb.user_id = current_user.id
         @pcb.pcb_customer_id = params[:customer]

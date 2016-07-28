@@ -11,8 +11,16 @@ before_filter :authenticate_user!
 
     def update_p_data
         ProductsUItem.all.each do |new_data|
-            
+=begin            
             old_data = Product.find_by(name: new_data.name)
+            if not old_data.blank?
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(new_data.id.inspect)
+                Rails.logger.info("add-------------------------------------12")
+                old_data.description = new_data.description
+                old_data.save
+            end
+
             if old_data.blank?
                 Rails.logger.info("add-------------------------------------12")
                 Rails.logger.info(new_data.id.inspect)
@@ -38,6 +46,7 @@ before_filter :authenticate_user!
                 old_data_new.value8 = new_data.value8
                 old_data_new.save
             end
+=end
         end
         redirect_to procurement_new_path()
     end

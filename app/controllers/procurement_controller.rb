@@ -9,6 +9,39 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def update_p_data
+        ProductsUItem.all.each do |new_data|
+            
+            old_data = Product.find_by(name: new_data.name)
+            if old_data.blank?
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(new_data.id.inspect)
+                Rails.logger.info("add-------------------------------------12")
+                old_data_new = Product.new()
+                old_data_new.name = new_data.name
+                old_data_new.description = new_data.description
+                old_data_new.part_name = new_data.part_name
+                if Product.where("description LIKE '%#{new_data.value1}%'").blank?
+                    old_data_new.ptype = "other"
+                else
+                    old_data_new.ptype = Product.where("description LIKE '%#{new_data.value1}%'").first.ptype
+                end
+                old_data_new.package1 = new_data.package1
+                old_data_new.package2 = new_data.package2
+                old_data_new.value1 = new_data.value1
+                old_data_new.value2 = new_data.value2
+                old_data_new.value3 = new_data.value3
+                old_data_new.value4 = new_data.value4
+                old_data_new.value5 = new_data.value5
+                old_data_new.value6 = new_data.value6
+                old_data_new.value7 = new_data.value7
+                old_data_new.value8 = new_data.value8
+                old_data_new.save
+            end
+        end
+        redirect_to procurement_new_path()
+    end
+
     def sd_flow
         @flow = SupplierDList.find(params[:sd_id])
         if @flow.state == ""
@@ -2521,8 +2554,8 @@ WHERE
                         row.push(" ")
                         row.push(" ")
                     else
-                        row.push("￥#{item.cost}")
-                        row.push("￥#{item.price}")
+                        row.push("#{item.cost}")
+                        row.push("#{item.price}")
                     end
                     if item.dn_id.blank?
                         row.push("")

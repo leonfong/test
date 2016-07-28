@@ -852,7 +852,7 @@ before_filter :authenticate_user!
                                 url += '&to_all=0'  
                                 url += '&receivers='+open_id
                                 url += '&window_title=Fastbom-PCB AND PCBA'
-                                url += '&tips_title='+URI.encode('亲爱的'+User.find_by(s_name_self: (checkorder.order_no.split("-")[0].scan(/\D/).join("").chop.delete("mk").delete("MK"))).full_name)
+                                url += '&tips_title='+URI.encode(User.find_by(s_name_self: (checkorder.order_no.split("-")[0].scan(/\D/).join("").chop.delete("mk").delete("MK"))).full_name+'宝宝')
                                 url += '&tips_content='+URI.encode('你的订单入库数量有更新，点击查看。')
                             #url += '&tips_url=www.fastbom.com/feedback?id='+self.topic_id.to_s 
                                 url += '&tips_url=www.fastbom.com/work_flow?utf8=%E2%9C%93%26order_s%5Border_s%5D=1%26order=' + checkorder.order_no + '%26commit=%E6%90%9C%E7%B4%A2'
@@ -1275,7 +1275,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('生产部的亲们')
+                            url += '&tips_title='+URI.encode('生产部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))
@@ -1302,7 +1302,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('工程部的亲们')
+                            url += '&tips_title='+URI.encode('工程部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))
@@ -1329,7 +1329,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('跟单部的亲们')
+                            url += '&tips_title='+URI.encode('跟单部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))
@@ -1356,7 +1356,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('采购部的亲们')
+                            url += '&tips_title='+URI.encode('采购部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))
@@ -1436,7 +1436,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('生产部的亲们')
+                            url += '&tips_title='+URI.encode('生产部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))
@@ -1463,7 +1463,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('工程部的亲们')
+                            url += '&tips_title='+URI.encode('工程部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))
@@ -1490,7 +1490,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('跟单部的亲们')
+                            url += '&tips_title='+URI.encode('跟单部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))
@@ -1517,7 +1517,7 @@ before_filter :authenticate_user!
                             url += '&to_all=0'  
                             url += '&receivers='+open_id.chop
                             url += '&window_title=Fastbom-PCB AND PCBA'
-                            url += '&tips_title='+URI.encode('采购部的亲们')
+                            url += '&tips_title='+URI.encode('采购部的宝宝们')
                             url += '&tips_content='+URI.encode('有新的回复，点击查看。')
                             url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
                             resp = Net::HTTP.get_response(URI(url))

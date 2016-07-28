@@ -114,7 +114,7 @@ Rails.application.routes.draw do
   match '/find_sd', to: 'procurement#find_sd', via: 'get'
   match '/sd_flow', to: 'procurement#sd_flow', via: 'get'
   match '/sd_back', to: 'procurement#sd_back', via: 'get'
-
+  match '/update_p_data', to: 'procurement#update_p_data', via: 'get'
 
 
 

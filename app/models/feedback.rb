@@ -20,7 +20,7 @@ class Feedback < ActiveRecord::Base
                 url += '&to_all=0'  
                 url += '&receivers='+open_id
                 url += '&window_title=Fastbom-PCB AND PCBA'
-                url += '&tips_title='+URI.encode('亲爱的'+User.find_by(email: (Topic.find(self.topic_id).user_name)).full_name)
+                url += '&tips_title='+URI.encode(User.find_by(email: (Topic.find(self.topic_id).user_name)).full_name+'宝宝')
                 url += '&tips_content='+URI.encode('你有新的回复，点击查看。')
                 url += '&tips_url=www.fastbom.com/feedback?id='+self.topic_id.to_s 
                 resp = Net::HTTP.get_response(URI(url))

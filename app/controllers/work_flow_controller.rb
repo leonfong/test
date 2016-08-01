@@ -387,7 +387,7 @@ before_filter :authenticate_user!
                 url += '&client_ip=120.25.151.208'
                 url += '&oauth_version=2'
                 url += '&to_all=0'  
-                url += '&receivers='+open_id.chop
+                url += '&receivers='+open_id
                 url += '&window_title=Fastbom-PCB AND PCBA'
                 url += '&tips_title='+URI.encode('黄朝锐宝宝，马凤华宝宝，'+current_user.full_name+'宝宝回复了你们的报价请查看')
                 url += '&tips_content='+URI.encode('有新的回复，点击查看。')

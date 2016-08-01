@@ -120,7 +120,7 @@ before_filter :authenticate_user!
     end
 
     def other_baojia_out
-        if can? :work_suppliers, :all
+        if can? :work_g, :all
             @bom = PItem.where(user_do: '9999',supplier_tag: nil)
 
             file_name = "other_out.xls"

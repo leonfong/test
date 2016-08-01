@@ -37,7 +37,7 @@
                   
                 </div>
                 <a type="button" class="btn btn-success btn-sm" href="/part_list?complete=true">已经报价的物料</a>
-                <a type="button" class="btn btn-danger btn-sm" href="/part_list?undone=true">等待报价的物料</a>
+                <a type="button" class="btn btn-warning btn-sm" href="/part_list?undone=true">等待报价的物料</a>
             </div>
             <% end %>                       
             </span>               

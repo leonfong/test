@@ -4,7 +4,7 @@
 <br>
   <ul class="nav nav-tabs">
       <li role="presentation"  ><a href="/part_list"><h4><strong><p class="text-primary"  >采购部报价列表</p></strong></h4></a></li>
-      <li role="presentation" class="active"><a href="/other_baojia"><h4><strong><p class="text-primary" >不固定供应商报价列表</p></strong></h4></a></li>     
+      <li role="presentation" class="active"><a href="/other_baojia"><h4><strong><p class="text-primary" >供应商报价工具</p></strong></h4></a></li>     
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>
@@ -46,7 +46,7 @@
                   <a type="button" class="btn btn-danger btn-sm" href="/other_baojia_clean" data-confirm="确定要清空列表?">清空</a>
                   </div>
                   <div style="margin: 0px;padding: 0px 0px 0px 10px;float: left;" >
-                  <a type="button" class="btn btn-success btn-sm" id="UploadButton" style="position: relative;">导入报价<form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/other_baoji_up"> <input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls" style="display: block; overflow: hidden; width: 80px; height: 28px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
+                  <a type="button" class="btn btn-success btn-sm" id="UploadButton" style="position: relative;">导入报价<form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/other_baojia_up"> <input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls" style="display: block; overflow: hidden; width: 80px; height: 28px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
 </form></a>
                   </div>
                    

@@ -72,13 +72,14 @@
                 <tr style="background-color: #eeeeee">  
                     <th width="150">MPN</th> 
                     <th>描述</th>
-                    <th>MOKO 编码</th>
+                    <th width="150">MOKO 编码</th>
                     <th>MOKO 描述</th>
                     <th width="50">位号</th>
                     <th width="50">数量</th> 
                     <th width="100">成本价</th>
                     <th width="60">报价</th>                 
                     <th >Other</th>
+                    <th >工程师备注</th>
                 </tr>
                 </thead>
                
@@ -201,6 +202,47 @@
                         </small>
                     </td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.other %></small></td>
+                    <td>
+<% PItemRemark.where(p_item_id: item.id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
+<% if not dn.remark.blank? %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<strong>采购工程师: </strong>
+<%= dn.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% end %>
+                    </td>
                 </tr>
                 <% end %>
 

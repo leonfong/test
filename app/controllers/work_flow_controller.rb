@@ -370,14 +370,9 @@ before_filter :authenticate_user!
         order_info.sell_remark = params[:sell_remark]
         order_info.sell_manager_remark = params[:sell_manager_remark]
         order_info.save
-=begin
+
         if params[:sell_remark] != ""
-            open_id = ""
-            all_open_id.each do |item|
-                if not item.open_id.blank?
-                    open_id += item.open_id + ","
-                end
-            end
+            open_id = "6ab2628d9a320296032f6a6f5495582b,5c1c9ba5ef315dcaac48cb9c1fb9731a"
             Rails.logger.info("oauth-------------------------")
             Rails.logger.info(open_id.inspect)   
             Rails.logger.info("oauth----------------------------------")
@@ -394,13 +389,13 @@ before_filter :authenticate_user!
                 url += '&to_all=0'  
                 url += '&receivers='+open_id.chop
                 url += '&window_title=Fastbom-PCB AND PCBA'
-                url += '&tips_title='+URI.encode('黄朝锐')
+                url += '&tips_title='+URI.encode('黄朝锐宝宝，马凤华宝宝，'+current_user.full_name+'宝宝回复了你们的报价请查看')
                 url += '&tips_content='+URI.encode('有新的回复，点击查看。')
-                url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                url += '&tips_url=www.fastbom.com/p_bomlist?key_order='+order_info.p_name.to_s 
                 resp = Net::HTTP.get_response(URI(url))
             end 
         end
-=end
+
         redirect_to :back 
     end
 

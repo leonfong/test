@@ -57,7 +57,8 @@
       <th width="100">上传</th>
       <th width="100">审核</th>
       <th width="100">采购工程师</th>
-      <th >Remark</th>
+      <th >工程师备注</th>
+      <th >业务备注</th>
 <!--
       <th>BOM File</th>
 
@@ -108,6 +109,7 @@
         <td><%= bom.bom_eng %></td>
         <td><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
         <td><%= bom.remark %></td>
+        <td><%= bom.sell_remark %></td>
 <!--
         <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
 

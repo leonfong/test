@@ -51,6 +51,189 @@ before_filter :authenticate_user!
         redirect_to procurement_new_path()
     end
 
+    def other_baojia_clean
+        PItem.where(user_do: '9999').update_all "user_do = 10000"
+        redirect_to other_baojia_path()
+    end
+
+    def other_baojia_up
+        @bom = OtherBaojiaBom.new(other_baojia_params)#使用页面传进来的文件名字作为参数创建一个bom对象
+        @bom.user_id = current_user.id
+        @bom.bom_eng_up = current_user.full_name
+        @file = @bom.excel_file_identifier
+        #如果上传成功
+	if @bom.save
+
+
+            if @bom.excel_file.current_path.split('.')[-1] == 'xls'
+                begin
+	            @xls_file = Roo::Excel.new(@bom.excel_file.current_path)
+                rescue
+                  
+                    redirect_to other_baojia_path(),  notice: "EXCEL文件错误!!!！"
+                    return false
+                end
+            else
+                redirect_to other_baojia_path(),  notice: "EXCEL文件错误!！"
+                return false
+
+            end
+            @sheet = @xls_file.sheet(0)
+
+	    @parse_result = @sheet.parse(header_search: [/MOKO_ID/,/MPN/,/描述/,/数量/,/报价/,/供应商简称/,/供应商全称/],clean:true)
+
+	    #remove first row 
+	    @parse_result.shift
+	    @parse_result.select! {|item| !item["报价"].blank? } #选择非空行
+            #行号
+            row_num = 0
+	    @parse_result.each do |item| #处理每一行的数据
+                other_baojia = PDn.new()
+                other_baojia.item_id = item["MOKO_ID"]
+                other_baojia.date = Time.new
+	        #other_baojia.part_code = item["Ref"]
+		#other_baojia.desc = item["描述"]
+	        other_baojia.qty = item["数量"]
+                other_baojia.cost = item["报价"]
+                other_baojia.dn = item["供应商简称"]
+                other_baojia.dn_long = item["供应商全称"]
+                other_baojia.color = "y"
+		if other_baojia.save
+                    other_item = PItem.find(item["MOKO_ID"])
+                    other_item.user_do = 10000
+                    other_item.save
+                    #Rails.logger.info(bom_item.part_code.inspect) 
+                    Rails.logger.info("bom item save -------------------------------------------------bom item save")
+                else
+                    #Rails.logger.info(bom_item.part_code.inspect) 
+                    Rails.logger.info("bom item bad -------------------------------------------------bom item bad")
+                end
+				
+	    end
+			
+
+
+            redirect_to other_baojia_path()
+            return false
+        end 
+        redirect_to other_baojia_path()
+    end
+
+    def other_baojia_out
+        if can? :work_suppliers, :all
+            @bom = PItem.where(user_do: '9999',supplier_tag: nil)
+
+            file_name = "other_out.xls"
+            path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+
+
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
+                all_title = []
+                all_title << "MOKO_ID"
+                all_title << "MPN"
+                all_title << "描述"
+                all_title << "数量"
+                all_title << "报价"
+                all_title << "供应商简称"
+                all_title << "供应商全称"
+                sheet1.row(0).concat all_title
+                #sheet1.column(1).width = 50
+                set_color = 0  
+                while set_color < all_title.size do         
+                    sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
+                    if all_title[set_color] =~ /数量/i 
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /报价/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /描述/i
+                        sheet1.column(set_color).width = 35  
+                    elsif all_title[set_color] =~ /MPN/i
+                        sheet1.column(set_color).width = 20                   
+                    else
+                        sheet1.column(set_color).width = 15
+                    end
+                    set_color += 1
+                end
+		@bom.each_with_index do |item,index| 
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :text_wrap => 1,:size => 8
+                    })
+		    row = sheet1.row(rowNum)
+                    row.set_format(2,title_format)
+                    set_f = 0  
+                    while set_f < all_title.size do         
+                        row.set_format(set_f,title_format)
+                        set_f += 1
+                    end
+                    row.push(item.id)
+                    row.push(item.mpn)
+		    row.push(item.description)
+                    row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
+                    if not PDn.find_by(item_id: item.id,color: "y").blank?
+                        row.push(PDn.where(item_id: item.id,color: "y").last!.cost)
+                    else
+                        row.push("")
+                    end
+                end
+
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('UTF-8'), filename: file_name)
+                              
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel") and return
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+    end
+
+    def other_baojia
+        if params[:complete]
+            part_ctl = " AND p_items.color = 'b'" 
+        else
+            part_ctl = " AND (p_items.color <> 'b' OR p_items.color IS NULL)"
+        end
+        @pdn = PDn.new
+        #@mpninfo = "SP1007-01WTG"
+        #@mpninfo = Digikey.find(1)   
+        Rails.logger.info("--------------------------")
+        #Rails.logger.info(wcwc)
+        Rails.logger.info("--------------------------")  
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+        end
+        @all_dn += "&quot;]"
+        #@boms = ProcurementBom.find(params[:bom_id])
+        if params[:key_order]
+            key = " AND procurement_boms.p_name LIKE '%#{params[:key_order]}%'"
+            #key_des = " AND p_items.description LIKE '%#{params[:key_order]}%'"
+            des = params[:key_order].strip.split(" ")
+            key_des = ""
+            des.each_with_index do |de,index|
+                key_des += " AND p_items.description LIKE '%#{de}%'"
+            end      
+            part_ctl = ""
+            @key_order = params[:key_order]
+        end
+        if can? :work_g_all, :all
+            @user_do = "7"
+            #@bom_item = PItem.where(user_do: "7")
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do > '9998' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").paginate(:page => params[:page], :per_page => 15)
+            if @bom_item.blank?
+                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do > '9998' AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").paginate(:page => params[:page], :per_page => 15)
+            end
+        
+        end
+    end
+
     def sd_flow
         @flow = SupplierDList.find(params[:sd_id])
         if @flow.state == ""
@@ -2886,6 +3069,10 @@ WHERE
 
 
         def bom_params
+  	    params.require(:bom).permit(:name, :excel_file)
+  	end
+
+        def other_baojia_params
   	    params.require(:bom).permit(:name, :excel_file)
   	end
 

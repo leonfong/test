@@ -145,6 +145,9 @@
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >马</div></a></small></td>
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
                             </tr>
+                            <tr>                                
+                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% elsif item.user_do == 10000  %>class="text-center bg-info"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
+                            </tr>
                         </table>
 
 

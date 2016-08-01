@@ -223,11 +223,13 @@ footer {
 -->
     <%= yield %>
 
-
-    
+<% if user_signed_in? %>
+    <% if can? :read, :all%>
         <%= render 'layouts/footer' %>
-    
-        
+    <% end %>
+<% else %>
+    <%= render 'layouts/footer' %>
+<% end %>       
       
     </div>
    

@@ -115,8 +115,11 @@ Rails.application.routes.draw do
   match '/sd_flow', to: 'procurement#sd_flow', via: 'get'
   match '/sd_back', to: 'procurement#sd_back', via: 'get'
   match '/update_p_data', to: 'procurement#update_p_data', via: 'get'
-
-
+  match '/other_baojia', to: 'procurement#other_baojia', via: 'get'
+  match '/other_baojia_out', to: 'procurement#other_baojia_out', via: 'get'
+  match '/other_baojia_clean', to: 'procurement#other_baojia_clean', via: 'get'
+  match '/other_baojia_up', to: 'procurement#other_baojia_up', via: 'get'
+  match '/other_baojia_up', to: 'procurement#other_baojia_up', via: 'post'
 
 #external_bom
   match '/e_new', to: 'external_bom#p_create_bom', via: 'get' 

@@ -1,11 +1,24 @@
 <div class="container-fluid" >
 ﻿
+<div class="row" style="margin: 0px;padding: 0px;" >
+<br>
+  <ul class="nav nav-tabs">
+      <li role="presentation" class="active" ><a href="/part_list"><h4><strong><p class="text-primary"  >采购部报价列表</p></strong></h4></a></li>
+      <li role="presentation" ><a href="/other_baojia"><h4><strong><p class="text-primary" >不固定供应商报价列表</p></strong></h4></a></li>     
+  </ul>
+<br>
+  <%= render 'layouts/flash_messages' %>
+</div>
+
+
+
+
 
 <div class="row" style="padding-bottom: 10px;">
    <div class="col-md-12">     
-
+<!--
             <h3><strong>权限-采购工程师</strong></h3>
-
+-->
             <span  style="color:#999;">
                <%= form_tag('/part_list', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
@@ -90,6 +103,9 @@
                                             
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >马</div></a></small></td>
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
+                            </tr>
+                            <tr>                                
+                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
                             </tr>
                         </table>
 
@@ -352,7 +368,7 @@ function change_<%= item.id.to_s %>(){
           <td  style="padding: 0px;margin: 0px;">
          
             <label for="remark" class="control-label sr-only">采购备注:</label>
-            <input class="form-control input-sm" id="remark"  name="remark" placeholder="采购备注" data-provide="typeahead" data-items="8" data-source="[&quot;原装订货 交期12-15天&quot;,&quot;定做 交期15-20天&quot;]" style="padding: 0px;margin: 0px;">
+            <input class="form-control input-sm" autocomplete="off" id="remark"  name="remark" placeholder="采购备注" data-provide="typeahead" data-items="8" data-source="[&quot;原装订货 交期12-15天&quot;,&quot;定做 交期15-20天&quot;]" style="padding: 0px;margin: 0px;">
           
           </td>
 <!--          

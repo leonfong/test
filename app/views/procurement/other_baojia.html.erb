@@ -1,99 +1,75 @@
 <div class="container-fluid" >
 ﻿
+<div class="row" style="margin: 0px;padding: 0px;" >
+<br>
+  <ul class="nav nav-tabs">
+      <li role="presentation"  ><a href="/part_list"><h4><strong><p class="text-primary"  >采购部报价列表</p></strong></h4></a></li>
+      <li role="presentation" class="active"><a href="/other_baojia"><h4><strong><p class="text-primary" >不固定供应商报价列表</p></strong></h4></a></li>     
+  </ul>
+<br>
+  <%= render 'layouts/flash_messages' %>
+</div>
 
 
-
-  
-    <div class="row" style="padding: 0px;">
-        <% if can? :work_g_all, :all%>
-        <h3><strong>权限-采购主管</h3></strong>
-        <% else %>
-        <h3><strong>权限-采购工程师</strong></h3>
-        <% end %>
+<div class="row" style="padding-bottom: 10px;">
+   <div class="col-md-12">     
 <!--
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <% if can? :pcb_review, :all %>
-            <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
-            <% end %>
-            <% if can? :pcb_dc, :all %>
-            <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
-            <% end %>
-            <%= link_to "My Order", p_bomlist_path ,class: "list-group-item "%>
-            <%= link_to "New BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
-            <%= link_to "My BOM", p_bomlist_path ,class: "list-group-item active"%>
-        </div>
+            <h3><strong>权限-采购工程师</strong></h3>
 -->
-        <div class="col-md-12">           
             
-            <div class="row">
-                <div class="col-md-3 col-sm-3 " >
-                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>BOM No. <%= @boms.no %></strong></h4>
-                </div>
-<!--
-                <small><div class="col-md-9 col-sm-9 pull-right" style="color:#999;">
-                    PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>
-                </div></small>
--->
-            </div>
+               
+               <div ﻿class="nav navbar-nav navbar-left">
+                  <div style="margin: 0px;padding: 0px;float: left;" >
+                  <%= form_tag('/other_baojia', method:"get", class:"form-inline") do %>
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号/描述"%>
+                  <% end %>               
+                      <div class="input-group-btn">
+                          <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                      </div>
+                  
+                  </div>
+                  
+                  
 
-            <div class="row">
-                <div class="col-md-12">
-                    <table class="table table-striped table-bordered">
-                       <tr>
-                           
-                           
-                           <td width="400">
-                               <div class="form-inline">
-                                   <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#remarkOrder">备注</button>
-                                   <label for="pj_remark">Project name：</label>
-                                   <%= @boms.p_name %>
-                               </div>
-                           </td>
-                           <td width="200">
-                               <div class="form-inline">
-                                   <label for="pj_remark">QTY：</label>
-                                  <%= @boms.qty %>
-                               </div>
-                           </td>
-                           <td>
-                               <div class="form-inline">
-                                   <label for="pj_remark">备注：</label>
-                                   <%= @boms.remark %>
-                               </div>
-                           </td>
-                           <td width="200">
-                               <div class="form-inline">
-                                   <label for="pj_att">附件：</label>
-                                   <% if not @boms.att.blank? %>
-                                       <a href="<%= @boms.att.url %>">下载</a>
-                                   <% else %>
-                                       <a >无</a>
-                                   <% end %>
-                               </div>                          
-                           </td>
-                           <td width="200">
-                               <% if can? :work_g_all, :all%>
-                               <%= form_tag({action: :p_profit},method:"post",class:"form-inline") do %>
-                                   <div class="form-group">
-                                       <label for="profit">利润：</label>
-                                       <input type="number" class="form-control" id="profit" name="profit" value="<%= @boms.profit %>" style="width:60px" >
-                                   </div>
-                                   <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-                                  <button type="submit" class="btn btn-warning">提交</button>
-                               <% end %>
-                               <% end %> 
-                           </td> 
-                           <% if @boms.row_use != nil %>
-                           <td width="100"><%= link_to "导出测试", p_excel_add_path(:bom_id =>@boms.id) %></td>
-                           <% end %>
-                           <td width="100"><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
-                           <td width="100"><%= link_to "导出源文件", @boms.excel_file_url %></td> 
-                       </tr>
-                    </table>    
-                </div>
-            </div>
+                  <% end %>
+                  </div>
+                  <div style="margin: 0px;padding: 0px 0px 0px 10px;float: left;" >
+                  <a type="button" class="btn btn-info btn-sm" href="/other_baojia_out?undone=true">导出excel</a>
+                  </div>
+                  <div style="margin: 0px;padding: 0px 0px 0px 10px;float: left;" >
+                  <a type="button" class="btn btn-danger btn-sm" href="/other_baojia_clean" data-confirm="确定要清空列表?">清空</a>
+                  </div>
+                  <div style="margin: 0px;padding: 0px 0px 0px 10px;float: left;" >
+                  <a type="button" class="btn btn-success btn-sm" id="UploadButton" style="position: relative;">导入报价<form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/other_baojia_up"> <input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls" style="display: block; overflow: hidden; width: 80px; height: 28px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
+</form></a>
+                  </div>
+                   
+               </div>
+                                  
+
+                            	
+                         
+
+                   
+               
+          
+    </div>
+</div>
+  
 
 
+
+    <div class="row" style="padding: 0px;">
+
+        <div class="col-md-12">
+
+           
 <% if not @bom_item.blank? %> 
             <div class="row" style="padding: 0px;">
                 <div class="col-md-7" style="padding-right: 0px;">
@@ -146,7 +122,7 @@
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
                             </tr>
                             <tr>                                
-                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
+                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% elsif item.user_do == 10000  %>class="text-center bg-info"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
                             </tr>
                         </table>
 
@@ -236,6 +212,9 @@
                                 <% end %>
                                 
                             </tr>
+                            <tr>
+                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a><%= ProcurementBom.find(item.procurement_bom_id).p_name %></a></small></td>
+                            </tr>
                         </table>
 
 
@@ -270,7 +249,7 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*ProcurementBom.find(item.procurement_bom_id).qty %></small></td> 
 
                     
                     <td width="25" style="padding: 5px 0px 5px 0px;margin: 0px;">
@@ -301,7 +280,7 @@ function change_<%= item.id.to_s %>(){
 
 <!-- 小计 报价 -->
                     <% if item.cost%>
-                        <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
+                        <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*ProcurementBom.find(item.procurement_bom_id).qty*item.quantity).to_s %></a></small></td>
                     <% else %>
                         <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
                     <% end %>
@@ -345,7 +324,17 @@ function change_<%= item.id.to_s %>(){
 </div>
 </div>
 
-
+<div class="row" style="margin: 0px;">
+<div style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;">
+<p style="padding: 0px;margin: 0px;" ><small ><%= ProcurementBom.find(item.procurement_bom_id).remark %></small></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
 
 
 
@@ -396,8 +385,8 @@ function change_<%= item.id.to_s %>(){
           <td  style="padding: 0px;margin: 0px;">
          
             <label for="remark" class="control-label sr-only">采购备注:</label>
-            
             <input class="form-control input-sm" autocomplete="off" id="remark"  name="remark" placeholder="采购备注" data-provide="typeahead" data-items="8" data-source="[&quot;原装订货 交期12-15天&quot;,&quot;定做 交期15-20天&quot;]" style="padding: 0px;margin: 0px;">
+          
           </td>
 <!--          
           <td width="165" style="padding: 0px;margin: 0px;">
@@ -479,60 +468,11 @@ function change_<%= item.id.to_s %>(){
 
 
 
-            <div class="row">
-                <div class="col-md-12">
-            <table class="table table-striped table-bordered">
-                <tr>               
-                    <td><strong><%= "The total part" %>：</strong><a class="text-muted" id="matched"><%= @bom_item.size %></a></td>
-                    <td><strong><%= "The total cost" %>：</strong><a class="text-muted" id="total_price">￥<%= @boms.t_p %></a></td>
-                    <td><strong><%= "The total price" %>：</strong><a class="text-muted" >￥<%= @boms.t_pp %></a></td>
-                </tr>
-            </table>
-                </div>
-            </div>
+
             <% end %>
-            <div class="row" style="padding-bottom: 20px;">
-                <div class="col-md-12">
-            <script>
-            function change_p(){
-            if (document.getElementById('shipping').className=='collapse in')
-            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
-            else
-            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
-            }
-            </script>
-                    <button class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">ADD A NEW PART <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
-                </div>
-            </div>
-            <div class="collapse" id="shipping" style="padding-bottom: 20px;">
-                <%= form_tag({action: :p_add_bom},method:"post",class:"form-inline") do %>
-                    <div class="form-group">
-                        <label for="part">Part</label>
-                        <input type="text" class="form-control" id="part" name="part" placeholder="Part">
-                    </div>
-                    <div class="form-group">
-                        <label for="qty">QTY</label>
-                        <input type="text" class="form-control" id="qty" name="qty" placeholder="quantity">
-                    </div>
-                    <div class="form-group">
-                        <label for="code">REF.DES.</label>
-                        <input type="text" class="form-control" id="code" name="code" placeholder="REF.DES.">
-                    </div>
-                    <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-                    <button type="submit" class="btn btn-warning">SUBMIT</button>
-                <% end %> 
-            </div>
-            <div class="modal-footer">
-                <%= link_to "返回上一步", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-danger pull-left",data:{confirm: "返回上一步会删除这个BOM所有已经匹配的数据，确定要返回上一步吗？"}%>
-<!--                
-                <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
--->
-                <% if @boms.bom_eng.blank? %>
-                    <%= link_to "发送到采购部",  send_order_to_p_path(bom_id: @boms.id), class: "btn btn-info",data:{confirm: "确定要发送到采购部?"} %>
-                <% else %>
-                    <a type="button" class="btn btn-default disabled"  >已发送</a>
-                <% end %>
-            </div>
+
+           
+
         </div>
     </div>
 
@@ -677,46 +617,7 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
-<div class="modal fade" id="remarkOrder" tabindex="-1" role="dialog" aria-labelledby="remarkOrderLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editPrderLabel">Update Order Info</h4>
-      </div>
-      <div class="modal-body">
-        <%= form_tag({action: :pj_edit},method:"post",multipart:"true") do %>
-          <div class="form-group sr-only">
-            <label for="itemp_id" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="itemp_id" name="itemp_id">
-          </div>
-                 
-          <div class="form-group">
-            <label for="pj_name">Project name：</label>
-            <input type="text" class="form-control" id="pj_name" name="pj_name" value="<%= @boms.p_name %>" >
-          </div>
-          <div class="form-group">
-            <label for="pj_qty">QTY：</label>
-            <input type="number" class="form-control" id="pj_qty" name="pj_qty" value="<%= @boms.qty %>" >
-          </div>
-          <div class="form-group">
-            <label for="pj_remark">备注：</label>
-            <textarea type="text" class="form-control" id="pj_remark" name="pj_remark"  ><%= @boms.remark %></textarea>
-            <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-          </div>
-          <div class="form-group">
-            <label for="att" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
-          </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
+
 
 <div class="modal fade" id="remarkitem" tabindex="-1" role="dialog" aria-labelledby="remarkitemLabel">
   <div class="modal-dialog" role="document">
@@ -780,7 +681,7 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
-
+<%= will_paginate(@bom_item) %>
 
 </div>
 
@@ -788,11 +689,7 @@ function change_<%= item.id.to_s %>(){
 
 
 
-<%= form_tag('/p_viewbom', remote: true, method:"post", class:"form-inline") do %>
-        <%= text_field_tag :bom_id, params[:bom_id], class:"sr-only", size:2 , value: @boms.id %>
-        <%= text_field_tag :ajax, params[:ajax], class:"sr-only", size:2 , value: "" %>
-        <%= submit_tag t(:search), class:"btn-ajax  sr-only", id:"btn-ajax" %>
-<% end %>
+
 <%= form_tag('/p_del_bom', remote: true, method:"post", class:"form-inline") do %>
         <%= text_field_tag :id, params[:id], class:"sr-only", size:200, value: "" %>
         <%= submit_tag t(:search), class:"btn-del  sr-only", id:"btn-del" %>

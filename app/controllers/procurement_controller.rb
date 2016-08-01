@@ -437,9 +437,9 @@ before_filter :authenticate_user!
                 sheet.rows[row_i.to_i][c_i.to_i] = ""
                 c_i += 1
             end
-            sheet.rows[row_i.to_i][c_i.to_i] = "#{item.cost}"
+            sheet.rows[row_i.to_i][c_i.to_i] = item.cost
             c_i += 1
-            sheet.rows[row_i.to_i][c_i.to_i] = "#{item.price}"
+            sheet.rows[row_i.to_i][c_i.to_i] = item.price
             c_i += 1
             if item.dn_id.blank?
                 sheet.rows[row_i.to_i][c_i.to_i] = ""

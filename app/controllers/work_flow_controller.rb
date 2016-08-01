@@ -370,6 +370,37 @@ before_filter :authenticate_user!
         order_info.sell_remark = params[:sell_remark]
         order_info.sell_manager_remark = params[:sell_manager_remark]
         order_info.save
+=begin
+        if params[:sell_remark] != ""
+            open_id = ""
+            all_open_id.each do |item|
+                if not item.open_id.blank?
+                    open_id += item.open_id + ","
+                end
+            end
+            Rails.logger.info("oauth-------------------------")
+            Rails.logger.info(open_id.inspect)   
+            Rails.logger.info("oauth----------------------------------")
+            oauth = Oauth.find(1)
+            company_id = oauth.company_id
+            company_token = oauth.company_token
+            url = 'https://openapi.b.qq.com/api/tips/send'
+            if not open_id.blank? 
+                url += '?company_id='+company_id
+                url += '&company_token='+company_token
+                url += '&app_id=200710667'
+                url += '&client_ip=120.25.151.208'
+                url += '&oauth_version=2'
+                url += '&to_all=0'  
+                url += '&receivers='+open_id.chop
+                url += '&window_title=Fastbom-PCB AND PCBA'
+                url += '&tips_title='+URI.encode('黄朝锐')
+                url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                url += '&tips_url=www.fastbom.com/feedback?id='+topic_up.id.to_s 
+                resp = Net::HTTP.get_response(URI(url))
+            end 
+        end
+=end
         redirect_to :back 
     end
 

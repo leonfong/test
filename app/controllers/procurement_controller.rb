@@ -80,7 +80,7 @@ before_filter :authenticate_user!
             end
             @sheet = @xls_file.sheet(0)
 
-	    @parse_result = @sheet.parse(header_search: [/MOKO_ID/,/MPN/,/描述/,/数量/,/报价/,/供应商简称/,/供应商全称/],clean:true)
+	    @parse_result = @sheet.parse(header_search: [/MOKO_ID/,/MPN/,/描述/,/数量/,/报价/,/备注/,/供应商简称/,/供应商全称/],clean:true)
 
 	    #remove first row 
 	    @parse_result.shift
@@ -95,6 +95,7 @@ before_filter :authenticate_user!
 		#other_baojia.desc = item["描述"]
 	        other_baojia.qty = item["数量"]
                 other_baojia.cost = item["报价"]
+                other_baojia.remark = item["备注"]
                 other_baojia.dn = item["供应商简称"]
                 other_baojia.dn_long = item["供应商全称"]
                 other_baojia.color = "y"
@@ -139,6 +140,7 @@ before_filter :authenticate_user!
                 all_title << "描述"
                 all_title << "数量"
                 all_title << "报价"
+                all_title << "备注"
                 all_title << "供应商简称"
                 all_title << "供应商全称"
                 sheet1.row(0).concat all_title

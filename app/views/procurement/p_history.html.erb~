@@ -90,7 +90,7 @@
                         <td><%= bom.mpn %></td>
                         <td><%= bom.description %></td>
                         <td><%= bom.quantity %></td>
-                        <td><%= ProcurementBom.find(bom.procurement_bom_id).p_name %></td>
+                        <td><%= link_to ProcurementBom.find(bom.procurement_bom_id).p_name,  p_viewbom_path(bom_id: bom.procurement_bom_id,bak: "bak") %></td>
                         <td><%= bom.price %></td>
                     </tr>
                 <% end %>

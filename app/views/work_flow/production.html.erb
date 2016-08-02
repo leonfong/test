@@ -65,7 +65,7 @@
                     <th class="bg-primary" width="80">入库数量</th>
                     <th class="bg-primary" width="60">SMT</th>
                     <th class="bg-primary" width="60">DIP</th>
-                    <th class="bg-primary" width="100">贴片通知生产</th>
+                    <th class="bg-info" width="100"><%= link_to "贴片通知生产",  {action: "index", sort_date: "smd_start"} %><span class="caret"></span></th>
                     <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></span></th>
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="110"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    

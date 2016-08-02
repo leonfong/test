@@ -576,7 +576,36 @@ before_filter :authenticate_user!
                 #add_where = ""
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             #end
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state = 0) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state = 0) ").paginate(:page => params[:page], :per_page => 10)
+            add_orderby = ""
+            if params[:sort_date]
+                if params[:sort_date] == "smd"
+                    empty_date = ""
+                    add_where = "AND smd_end_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.smd_end_date "
+                elsif params[:sort_date] == "dip"
+                    empty_date = ""
+                    add_where = "AND dip_end_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.dip_end_date "
+                elsif params[:sort_date] == "clear"
+                    empty_date = ""
+                    add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.clear_date " 
+                elsif params[:sort_date] == "state"
+                    empty_date = ""
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.feed_state DESC" 
+                elsif params[:sort_date] == "smd_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.smd_start_date DESC" 
+                elsif params[:sort_date] == "dip_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.dip_start_date DESC" 
+                end
+            end
+            Rails.logger.info("--------------------------------------add_orderby")
+            Rails.logger.info(add_orderby)
+            Rails.logger.info("--------------------------------------add_orderby") 
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state = 0) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state = 0) " + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where ).paginate(:page => params[:page], :per_page => 10)
@@ -649,7 +678,10 @@ before_filter :authenticate_user!
             if params[:order_s] 
                 empty_date = ""  
             end
-            limit = ""            
+            limit = "" 
+            Rails.logger.info("--------------------------------------add_orderby")
+            Rails.logger.info(add_orderby)
+            Rails.logger.info("--------------------------------------add_orderby")           
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)   
             @topic = Topic.find_by_sql("SELECT *, POSITION('work_b' IN topics.mark) AS mark_chk FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY mark_chk" ).paginate(:page => params[:page], :per_page => 10)   
             render "delivery_date.html.erb"

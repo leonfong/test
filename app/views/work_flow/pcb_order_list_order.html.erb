@@ -3,10 +3,13 @@
     <div class="row" style="padding: 0px;">
 <!--
         <h3><strong>PCB Order list ---等待下单 </strong>
--->       
+       
         </h3>
+-->
         <div class="col-md-1 list-group" style="padding: 0px;">
+<!--
             <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCB业务</strong></h4></div>
+
             <%= link_to "新建订单列表", pcb_order_list_path(new: true) ,class: "list-group-item"%>
             <%= link_to "已报价", pcb_order_list_path(quotechk: true) ,class: "list-group-item"%> 
             <%= link_to "等待报价", pcb_order_list_path(quote: true) ,class: "list-group-item "%> 
@@ -15,6 +18,37 @@
             <%= link_to "等待采购下单", pcb_order_list_path ,class: "list-group-item"%>
             <%= link_to "等待入库", pcb_order_list_path ,class: "list-group-item"%>       
             <%= link_to "已经入库", pcb_order_list_path ,class: "list-group-item"%>  
+
+
+-->
+
+
+
+
+
+					<div class="sidebar-menu">
+						<a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
+						<ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
+							<li><a href="/pcb_order_list?new=true"><i class="icon-user"></i> 新建询价</a></li>
+							<li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 等待报价</a></li>
+							<li><a href="/pcb_order_list?quotechk=true"><i class="icon-edit"></i> 已经报价</a></li>
+ 
+							
+						</ul>
+						<a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
+						<ul id="articleMenu" class="nav nav-list collapse menu-second">
+							<li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
+							<li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
+							<li><a href="#"><i class="icon-list-alt"></i> 等待采购下单</a></li>
+							<li><a href="#"><i class="icon-list-alt"></i> 等待入库</a></li>
+							<li><a href="#"><i class="icon-list-alt"></i> 已经入库</a></li>
+						</ul>
+					</div>
+
+
+
+
+
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         
@@ -197,6 +231,12 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   modal.find($("#u_sell")).val(sell)
   modal.find($("#u_order_sell")).val(order_sell)
 })
+
+
+$(".menu-first").click(function(){
+  $('#userMeun').collapse('hide');
+  $('#articleMenu').collapse('hide');
+});
 </script>
 
 

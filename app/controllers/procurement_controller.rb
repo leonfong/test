@@ -946,38 +946,23 @@ before_filter :authenticate_user!
 
     def p_history
         if can? :work_baojia, :all
-            start_date = ""
-            if params[:start_date] != ""
-                start_date = " AND p_items.created_at > '#{params[:start_date]}'"
-            end
-            end_date = ""
-            if params[:end_date] != ""
-                end_date = " AND p_items.created_at < '#{params[:end_date]}'"
-            end
-            if params[:order_s] 
-                if params[:order_s][:order_s].to_i == 1
-                    @order_check_1 = true
-                    @order_check_2 = false
-                    #@moko_part = Product.find_by_sql("SELECT * FROM `products` WHERE `products`.`name` LIKE '%#{params[:part_name]}%'" + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
-                    @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%'" + start_date + end_date + " ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
-                elsif params[:order_s][:order_s].to_i == 2
-                    where_des = ""
-                    if params[:part_name] != ""
-                        des = params[:part_name].strip.split(" ")
-                        des.each_with_index do |de,index|
-                            where_des += "p_items.description LIKE '%#{de}%'"
-                            if des.size > (index + 1)
-                                where_des += " AND "
-                            end
-                        end 
-                    else
-                        where_des = "p_items.description LIKE '%%'"
-                    end     
-                    @order_check_1 = false
-                    @order_check_2 = true
-                    @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE #{where_des}" + start_date + end_date + " ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
-                end
-            end
+            where_des = ""
+            if not params[:part_name].blank? 
+                des = params[:part_name].strip.split(" ")
+                des.each_with_index do |de,index|
+                    where_des += "p_items.description LIKE '%#{de}%'"
+                    if des.size > (index + 1)
+                        where_des += " AND "
+                    end
+                end 
+                @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%' or (#{where_des})  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            else
+                where_des = "p_items.description LIKE '%%'"
+                @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%' or (#{where_des})  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            end     
+
+            
+
             render "p_history.html.erb" and return
         else
             render plain: "You don't have permission to view this page !"

@@ -15,11 +15,13 @@
             <%= link_to "订单列表",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
             <%= link_to "新建BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
             <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%> 
-            <%= link_to "历史报价", p_history_path ,class: "list-group-item"%>          
+<!--
+            <%= link_to "历史报价", p_history_path ,class: "list-group-item"%>     
+-->     
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
-            <div class="col-md-12 col-sm-12 form-inline" >
+            <div class="col-md-6 col-sm-6 form-inline" >
             
             
             <span  style="color:#999;">
@@ -45,6 +47,28 @@
             <% end %>                       
             </span>
             </div>
+
+
+            <div class="col-md-6 col-sm-6 " >
+                <%= form_tag('/p_history', method:"get", class:"form-inline") do %>
+                <div class="col-md-9 form-group  nav navbar-nav navbar-left">
+                    <lable for="order" , class="sr-only">Qrder : </lable>
+                    <div class="input-group input-group-sm"> 
+                        <% if @part_name %>   
+                            <%= text_field_tag :part_name, @part_name, class:"form-control  input-lg", size:"30", placeholder:"MPN/描述"%>     
+                        <% else %> 
+                            <%= text_field_tag :part_name, params[:part_name], class:"form-control input-lg", size:"30", placeholder:"MPN/描述"%>
+                        <% end %>               
+                        <div class="input-group-btn">
+                            <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                        </div>
+                    </div>
+                </div>
+                <% end %>
+            </div>
+
+
+
         </div>
           <br>  
 <table class="table ">
@@ -109,6 +133,7 @@
         <td><%= bom.bom_eng %></td>
         <td><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
         <td><%= bom.remark %></td>
+        <td><%= bom.sell_remark %></td>
 <!--
         <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
 

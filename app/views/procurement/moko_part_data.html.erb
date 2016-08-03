@@ -51,7 +51,7 @@
                         <th width="300">供应商全称</th>
                         <th width="150">MOKO part</th>
                         <th>MOKO描述</th>
-                        <th width="80">数量</th>
+                        <th width="80"><%= link_to "数量",  {action: "moko_part_data", sort_by: "qty", des: @des} %><span class="caret"></span></th>
                         <th width="120">价格￥</th>
                         <th width="80">操作</th>
                     </tr>

@@ -32,14 +32,19 @@ before_filter :authenticate_user!
         if can? :work_baojia, :all
             where_des = ""
             if not params[:des].blank? 
-                @des = params[:des].strip.split(" ")
-                @des.each_with_index do |de,index|
+                @des = params[:des]
+                des = params[:des].strip.split(" ")
+                des.each_with_index do |de,index|
                     where_des += "all_dns.des LIKE '%#{de}%'"
-                    if @des.size > (index + 1)
+                    if des.size > (index + 1)
                         where_des += " AND "
                     end
                 end 
-                @parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY all_dns.date DESC").paginate(:page => params[:page], :per_page => 15)
+                sort_by = "all_dns.date"
+                if params[:sort_by] == "qty"
+                    sort_by = "all_dns.qty"
+                end
+                @parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY #{sort_by} DESC").paginate(:page => params[:page], :per_page => 15)
             #else
                 #where_des = "all_dns.des LIKE '%%'"
                 #@parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY all_dns.date DESC").paginate(:page => params[:page], :per_page => 10)

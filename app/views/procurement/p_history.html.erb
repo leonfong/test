@@ -14,6 +14,7 @@
             <%= link_to "订单列表",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
             <%= link_to "新建BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
             <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%>          
+            <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item "%>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -75,23 +76,32 @@
             <table class="table ">
                 <thead>
                     <tr style="background-color: #eeeeee">
-                        <th>Created Date</th>
+                        <th width="100">日期</th>
                         <th>MPN</th>
                         <th>DES</th>
-                        <th>QTY</th>
-                        <th>Order No.</th>
-                        <th>Price</th>
+                        <th width="90">QTY</th>
+                        <th width="120">Order No.</th>
+                        <th width="90">Price</th>
+                        <th>供应商</th>
+                        <th>备注</th>
                     </tr>
                 </thead>
                 <tbody>
                 <% @p_history.each do |bom| %>
                     <tr>
-                        <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+                        <td><%= bom.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
                         <td><%= bom.mpn %></td>
                         <td><%= bom.description %></td>
                         <td><%= bom.quantity*ProcurementBom.find(bom.procurement_bom_id).qty %></td>
                         <td><%= link_to ProcurementBom.find(bom.procurement_bom_id).p_name,  p_viewbom_path(bom_id: bom.procurement_bom_id,bak: "bak") %></td>
                         <td><%= bom.cost %></td>
+                        <% if not bom.dn_id.blank? %>
+                            <td><%= PDn.find(bom.dn_id).dn_long %></td>
+                            <td><%= PDn.find(bom.dn_id).remark %></td>
+                        <% else %>
+                            <td> </td>
+                            <td> </td>
+                        <% end %>
                     </tr>
                 <% end %>
                 </tbody>

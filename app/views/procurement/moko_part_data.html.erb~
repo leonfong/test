@@ -51,7 +51,7 @@
                         <th width="300">供应商全称</th>
                         <th width="150">MOKO part</th>
                         <th>MOKO描述</th>
-                        <th width="80">数量</th>
+                        <th width="80"><%= link_to "数量",  {action: "moko_part_data", sort_by: "qty"} %><span class="caret"></span></th>
                         <th width="120">价格￥</th>
                         <th width="80">操作</th>
                     </tr>
@@ -128,11 +128,11 @@
 
           <div class="form-group">
             <label for="sd_name" class="control-label">供应商简称:</label>
-            <input type="text" class="form-control" id="sd_name" name="sd_name" >
+            <input autocomplete="off" type="text" class="form-control" id="sd_name" name="sd_name" >
           </div>
           <div class="form-group">
             <label for="sd_name_long" class="control-label">供应商全称:</label>
-            <input type="text" class="form-control" id="sd_name_long" name="sd_name_long" >
+            <input autocomplete="off" type="text" class="form-control" id="sd_name_long" name="sd_name_long" >
           </div>
           <div class="form-group">
             <label for="qty" class="control-label">数量:</label><code>注意：数量如果小于100,此报价在匹配时为低优先级。</code>

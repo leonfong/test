@@ -1,0 +1,175 @@
+<div class="container-fluid" >  
+    <div class="row" style="padding: 0px;">
+<!--
+        <h3><strong>Price History</strong></h3>
+-->
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCBA业务</strong></h4></div>
+            <% if can? :pcb_review, :all %>
+            <%= link_to "订单检查", order_review_list_path ,class: "list-group-item"%>
+            <% end %>
+            <% if can? :pcb_dc, :all %>
+            <%= link_to "订单复查", order_dc_list_path ,class: "list-group-item"%>
+            <% end %>
+            <%= link_to "订单列表",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
+            <%= link_to "新建BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
+            <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item "%>  
+            <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item active"%>        
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+        <div class="row">
+
+            <div class="col-md-6 col-sm-6 " >
+                <%= form_tag('/moko_part_data', method:"get", class:"form-inline") do %>
+                <div class="col-md-9 form-group  nav navbar-nav navbar-left">
+                    <lable for="order" , class="sr-only">Qrder : </lable>
+                    <div class="input-group input-group-sm"> 
+                        <% if @parts %>   
+                            <%= text_field_tag :des, @des, class:"form-control  input-lg", size:"30", placeholder:"MOKO描述"%>
+                        <% else %> 
+                            <%= text_field_tag :des, params[:des], class:"form-control input-lg", size:"30", placeholder:"MOKO描述"%>
+                        <% end %>               
+                        <div class="input-group-btn">
+                            <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                        </div>
+                    </div>
+                </div>
+                <% end %>
+            </div>
+        </div>
+
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-12 col-sm-12 " >
+            <% if @parts %>
+            <%= will_paginate(@parts) %>            
+            <table class="table table-hover">
+                <thead>
+                    <tr style="background-color: #eeeeee">
+                        <th width="100">日期时间</th>
+                        <th width="130">供应商简称</th>
+                        <th width="300">供应商全称</th>
+                        <th width="150">MOKO part</th>
+                        <th>MOKO描述</th>
+                        <th width="80">数量</th>
+                        <th width="120">价格￥</th>
+                        <th width="80">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% @parts.each do |part| %>
+                    <tr>
+                        <td><%= part.date.localtime.strftime('%Y-%m-%d').to_s %></td>
+                        <td><%= part.dn %></td>
+                        <td><%= part.dn_long %></td>
+                        <td><%= part.part_code %></td>
+                        <td><%= part.des %></td>
+                        <td><%= part.qty %></td>
+                        <td><%= part.price %></td>
+                        <td><button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add_dn" data-part_code="<%= part.part_code %>" data-des="<%= part.des %>" >报价</button></td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+            <% end %>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+
+
+
+<div class="modal fade" id="add_dn" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
+
+  <div class="modal-dialog modal-lg" role="document">
+  <small>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel"><strong>新增报价</strong></h4>
+      </div>
+      
+      <div class="modal-body">        
+          <div class="form-inline">
+             <%= form_tag('/find_sd', method:"get", class:"form-inline",remote: true) do %>
+               
+               <div class="form-group ">
+                  <lable for="order" , class="control-label"><strong>供应商: </strong></lable>
+                  <div class="input-group input-group-sm">              
+                    
+                    <input id="c_code" autocomplete="off" name="c_code" type="text" class="form-control input-lg" data-provide="typeahead" data-items="200" data-source="<%= raw @all_dn %>" placeholder="供应商全称" size="30">            
+                    <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                    </div>
+                  </div>
+              </div>
+            <% end %>             
+          </div> 
+          <div class="form-group" id="table_sd">
+
+
+          </div>     
+
+
+
+
+
+      <%= form_tag({action: :add_dn},method:"post",multipart:"true",id: "order_form") do %>
+          <div class="form-group">
+            <label for="part_code" class="control-label">MOKO part:</label>
+            <input type="text" class="form-control" id="part_code" name="part_code" readonly>
+          </div> 
+          <div class="form-group">
+            <label for="des" class="control-label">MOKO描述:</label>
+            <input type="text" class="form-control" id="dn_des" name="des" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="sd_name" class="control-label">供应商简称:</label>
+            <input autocomplete="off" type="text" class="form-control" id="sd_name" name="sd_name" >
+          </div>
+          <div class="form-group">
+            <label for="sd_name_long" class="control-label">供应商全称:</label>
+            <input autocomplete="off" type="text" class="form-control" id="sd_name_long" name="sd_name_long" >
+          </div>
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label><code>注意：数量如果小于100,此报价在匹配时为低优先级。</code>
+            <input autocomplete="off" type="number" class="form-control" id="qty" name="qty" >
+          </div>
+          <div class="form-group">
+            <label for="price" class="control-label">价格:</label>
+            <input autocomplete="off" type="text" class="form-control" id="price" name="price" >
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <input type="submit" class="btn btn-primary" value="提交" onclick="return postform()">
+      </div>
+     <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+</div>
+<script>
+
+$('#add_dn').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var part_code = button.data('part_code') 
+  var des = button.data('des')
+  
+  var modal = $(this)
+  modal.find($("#part_code")).val(part_code)
+  modal.find($("#dn_des")).val(des)
+
+})
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

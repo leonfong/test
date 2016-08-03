@@ -9,8 +9,46 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
-    def moko_part_data
+    def add_dn
+        add_dn = AllDn.new()
+        add_dn.date = Time.new()
+        add_dn.dn = params[:sd_name]
+        add_dn.dn_long = params[:sd_name_long]
+        add_dn.part_code = params[:part_code]
+        add_dn.des = params[:des]
+        add_dn.qty = params[:qty]
+        add_dn.price = params[:price]
+        add_dn.save
+        redirect_to :back
+    end
 
+    def moko_part_data
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long FROM all_dns GROUP BY all_dns.dn_long")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn_long.to_s
+        end
+        @all_dn += "&quot;]"
+        if can? :work_baojia, :all
+            where_des = ""
+            if not params[:des].blank? 
+                @des = params[:des].strip.split(" ")
+                @des.each_with_index do |de,index|
+                    where_des += "all_dns.des LIKE '%#{de}%'"
+                    if @des.size > (index + 1)
+                        where_des += " AND "
+                    end
+                end 
+                @parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY all_dns.date DESC").paginate(:page => params[:page], :per_page => 15)
+            #else
+                #where_des = "all_dns.des LIKE '%%'"
+                #@parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY all_dns.date DESC").paginate(:page => params[:page], :per_page => 10)
+            end     
+
+            render "moko_part_data.html.erb" and return
+        else
+            render plain: "You don't have permission to view this page !"
+        end             
     end
 
     def update_p_data

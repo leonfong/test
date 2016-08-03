@@ -121,8 +121,8 @@ Rails.application.routes.draw do
   match '/other_baojia_clean', to: 'procurement#other_baojia_clean', via: 'get'
   match '/other_baojia_up', to: 'procurement#other_baojia_up', via: 'get'
   match '/other_baojia_up', to: 'procurement#other_baojia_up', via: 'post'
-  match '/moko_part_data', to: 'procurement#moko_part_data', via: 'post'
-
+  match '/moko_part_data', to: 'procurement#moko_part_data', via: 'get'
+  match '/add_dn', to: 'procurement#add_dn', via: 'post'
 
 #external_bom
   match '/e_new', to: 'external_bom#p_create_bom', via: 'get' 

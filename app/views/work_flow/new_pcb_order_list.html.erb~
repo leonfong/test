@@ -37,7 +37,7 @@
 						</ul>
 						<a style="background-color: #ddd;" href="#articleMenu" data-parent="#accordion" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 						<ul id="articleMenu" class="nav nav-list panel-collapse collapse menu-second">
-							<li><a href="/pcb_order_list?quotechk=true"><i class="icon-pencil"></i> 下单审批</a></li>
+							<li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待采购下单</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待入库</a></li>
@@ -53,8 +53,8 @@
 <div class="row" style="margin: 0px;padding: 0px;" >
 <br>
   <ul class="nav nav-tabs" >
-      <li role="presentation" ><a href="/sell_pcb_baojia"><h4 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
-      <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
+      <li role="presentation" ><a href="/sell_pcb_baojia"><h5 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h5></a></li>
+      <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h5></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>
@@ -65,7 +65,8 @@
 
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
             <div style="padding: 10px;">
-            <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert">新建PCB订单</button>
+            <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >新建PCB询价</button>
+            
             </div>
         <% end %>
 <%= will_paginate(@pcblist) %>            
@@ -131,20 +132,22 @@
 
 
 <div class="modal fade" id="addOrdert" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
-  <div class="modal-dialog" role="document">
+
+  <div class="modal-dialog modal-lg" role="document">
+  <small>
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Add a new PCB Order</h4>
+        <h4 class="modal-title" id="editModalLabel"><strong>新建PCB询价</strong></h4>
       </div>
       
       <div class="modal-body">        
           <div class="form-inline">
              <%= form_tag('/find_c', method:"get", class:"form-inline",remote: true) do %>
                <div class="form-group ">
-                  <lable for="order" , class="control-label"><strong>客户代码: </strong></lable>
+                  <lable for="order" , class="control-label"><strong>客户: </strong></lable>
                   <div class="input-group input-group-sm">              
-                    <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"30"%>               
+                    <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"客户代码/客户名/客户公司名/客户联系方式"%>               
                     <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                     </div>
@@ -158,19 +161,20 @@
           </div>
       
       <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
-<!--
+
+          
+
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
+          </div> 
           <div class="form-group">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
             <label for="qty" class="control-label">数量:</label>
             <input type="number" class="form-control" id="qty" name="qty">
           </div> 
--->
           <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
-          </div> 
-          <div class="form-group">
-            <label for="followedit_remark" class="control-label">跟踪备注:</label><code>注意：请包含要报价的数量。</code>
+            <label for="followedit_remark" class="control-label">跟踪备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
             <textarea  class="form-control" id="followedit_remark" name="follow_remark"></textarea>
           </div>
           <div class="form-group sr-only">
@@ -194,7 +198,7 @@
         <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform()">
       </div>
      <% end %>
-    </div>
+    </div></small>
   </div>
 </div>
 
@@ -253,8 +257,8 @@
 -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">提交</button>
       </div>
      <% end %>
     </div>
@@ -310,6 +314,11 @@ function postform() {
       if ($("#followedit_remark").val() == "")
       {                    
 　　    alert("请填写备注，备注中应包含数量！");                    
+　　    return false;                
+　     }
+      if ($("#qty").val() == "")
+      {                    
+　　    alert("请填写数量！");                    
 　　    return false;                
 　     }
 

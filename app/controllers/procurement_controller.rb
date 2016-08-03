@@ -9,6 +9,10 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def moko_part_data
+
+    end
+
     def update_p_data
         ProductsUItem.all.each do |new_data|
 =begin            

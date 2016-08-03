@@ -15,13 +15,14 @@
             <%= link_to "订单列表",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
             <%= link_to "新建BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
             <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%> 
+            <%= link_to "MOKO物料维护", p_bomlist_path ,class: "list-group-item active"%>
 <!--
             <%= link_to "历史报价", p_history_path ,class: "list-group-item"%>     
 -->     
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
-            <div class="col-md-5 col-sm-5 form-inline" >
+            <div class="col-md-6 col-sm-6 form-inline" >
             
             
             <span  style="color:#999;">

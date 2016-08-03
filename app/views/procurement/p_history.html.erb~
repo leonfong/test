@@ -19,7 +19,7 @@
         <div class="row">
 
 
-            <div class="col-md-5 col-sm-5 form-inline" > 
+            <div class="col-md-6 col-sm-6 form-inline" > 
             <span  style="color:#999;">
                <%= form_tag('/p_bomlist', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
@@ -91,7 +91,7 @@
                         <td><%= bom.description %></td>
                         <td><%= bom.quantity %></td>
                         <td><%= link_to ProcurementBom.find(bom.procurement_bom_id).p_name,  p_viewbom_path(bom_id: bom.procurement_bom_id,bak: "bak") %></td>
-                        <td><%= bom.price %></td>
+                        <td><%= bom.cost %></td>
                     </tr>
                 <% end %>
                 </tbody>

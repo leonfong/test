@@ -20,31 +20,41 @@ before_filter :authenticate_user!
         redirect_to pcb_order_list_path(new: true)
     end
 
+    def find_c_ch
+        @c_info = PcbCustomer.find(params[:id])
+    end
 
     def find_c
         if params[:c_code] != ""
-            @c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_info.inspect)
             Rails.logger.info("add-------------------------------------12")
             if not @c_info.blank?
-                 Rails.logger.info("add-------------------------------------12")
+                
+                Rails.logger.info("add-------------------------------------12")
                 @c_table = '<br>'
                 @c_table += '<small>'
                 @c_table += '<table class="table table-bordered">'
                 @c_table += '<thead>'
                 @c_table += '<tr class="active">'
-                @c_table += '<th>客户代码</th>'
+                @c_table += '<th width="70">客户代码</th>'
                 @c_table += '<th>客户名</th>'
-                @c_table += '<th>所属业务员</th>'
+                @c_table += '<th>客户公司名</th>'
+                @c_table += '<th width="70">所属</th>'
                 @c_table += '<tr>'
                 @c_table += '</thead>'
                 @c_table += '<tbody>'
-                @c_table += '<tr>'
-                @c_table += '<td>' + @c_info.c_no + '</td>'
-                @c_table += '<td>' + @c_info.customer.to_s + '</td>'
-                @c_table += '<td>' + User.find_by(email: @c_info.sell).full_name.to_s + '</td>'
-                @c_table += '</tr>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.c_no + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.customer.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '</tr>'
+                end
                 @c_table += '</tbody>'
                 @c_table += '</table>'
                 @c_table += '</small>'

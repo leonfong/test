@@ -46,12 +46,12 @@
             <table class="table table-hover">
                 <thead>
                     <tr style="background-color: #eeeeee">
-                        <th width="100">日期时间</th>
+                        <th width="100"><%= link_to "日期时间",  {action: "moko_part_data", sort_by: "date", des: @des, order_by: @order_by} %><span <% if @order_by == "ASC"%>class="glyphicon glyphicon-triangle-top"><% else %>class="glyphicon glyphicon-triangle-bottom"><% end %></span></th>
                         <th width="130">供应商简称</th>
                         <th width="300">供应商全称</th>
                         <th width="150">MOKO part</th>
                         <th>MOKO描述</th>
-                        <th width="80"><%= link_to "数量",  {action: "moko_part_data", sort_by: "qty", des: @des} %><span class="caret"></span></th>
+                        <th width="80"><%= link_to "数量",  {action: "moko_part_data", sort_by: "qty", des: @des, order_by: @order_by} %><span <% if @order_by == "ASC"%>class="glyphicon glyphicon-triangle-top"><% else %>class="glyphicon glyphicon-triangle-bottom"><% end %></span></th>
                         <th width="120">价格￥</th>
                         <th width="80">操作</th>
                     </tr>

@@ -43,8 +43,16 @@ before_filter :authenticate_user!
                 sort_by = "all_dns.date"
                 if params[:sort_by] == "qty"
                     sort_by = "all_dns.qty"
+                elsif params[:sort_by] == "date"
+                    sort_by = "all_dns.date"
                 end
-                @parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY #{sort_by} DESC").paginate(:page => params[:page], :per_page => 15)
+                
+                if params[:order_by] == "DESC"
+                    @order_by = "ASC"
+                else
+                    @order_by = "DESC"
+                end
+                @parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY #{sort_by} #{@order_by}").paginate(:page => params[:page], :per_page => 15)
             #else
                 #where_des = "all_dns.des LIKE '%%'"
                 #@parts = AllDn.find_by_sql("SELECT * FROM `all_dns` WHERE #{where_des} ORDER BY all_dns.date DESC").paginate(:page => params[:page], :per_page => 10)
@@ -1007,9 +1015,7 @@ before_filter :authenticate_user!
                 where_des = "p_items.description LIKE '%%'"
                 @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%' or (#{where_des})  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             end     
-
-            
-
+           
             render "p_history.html.erb" and return
         else
             render plain: "You don't have permission to view this page !"

@@ -91,7 +91,7 @@
                                 <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
                                 <td><%= q_order.sell_remark %></td>
                                 <td><%= q_order.sell_manager_remark %></td>
-                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.id %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.order_country %>" data-sellremark="<%= q_order.sell_remark %>" data-sellmanagerremark="<%= q_order.sell_manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
+                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.p_name_mom %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.order_country %>" data-sellremark="<%= q_order.sell_remark %>" data-sellmanagerremark="<%= q_order.sell_manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
                             </tr>
 
                             <tr>

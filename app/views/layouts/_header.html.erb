@@ -86,7 +86,7 @@
             <% end %>
             <% if can? :work_top, :all or current_user.id == 7 or current_user.id == 34 or current_user.id == 112 %>
                 <li id="o">
-                    <%= link_to "供应商扣款列表",supplier_d_list_path, data: { no_turbolink: true } %>
+                    <%= link_to "供应商扣款",supplier_d_list_path, data: { no_turbolink: true } %>
                 </li>
             <% end %>
         <% end %>

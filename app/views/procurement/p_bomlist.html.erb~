@@ -15,7 +15,7 @@
             <%= link_to "订单列表",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
             <%= link_to "新建BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
             <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%> 
-            <%= link_to "MOKO物料维护", p_bomlist_path ,class: "list-group-item "%>
+            <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item "%>
 <!--
             <%= link_to "历史报价", p_history_path ,class: "list-group-item"%>     
 -->     
@@ -76,8 +76,8 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="110">BOM No.</th>
-      <th width="170">Created Date</th>
-      <th width="200">Project Name</th>
+      <th width="170">创建日期</th>
+      <th width="200">子项目名称</th>
       <th width="100">QTY</th>
       <th width="100">上传</th>
       <th width="100">审核</th>

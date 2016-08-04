@@ -42,14 +42,16 @@
                        <tr>
                            
                            
-                           <td width="400">
+                           <td width="450">
                                <div class="form-inline">
                                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#remarkOrder">备注</button>
-                                   <label for="pj_remark">Project name：</label>
+                                   <label for="pj_remark">项目名：</label>
+                                   <%= @boms.p_name_mom %>
+                                   <label for="pj_remark">子项目名：</label>
                                    <%= @boms.p_name %>
                                </div>
                            </td>
-                           <td width="200">
+                           <td width="120">
                                <div class="form-inline">
                                    <label for="pj_remark">QTY：</label>
                                   <%= @boms.qty %>
@@ -61,7 +63,7 @@
                                    <%= @boms.remark %>
                                </div>
                            </td>
-                           <td width="200">
+                           <td width="100">
                                <div class="form-inline">
                                    <label for="pj_att">附件：</label>
                                    <% if not @boms.att.blank? %>
@@ -146,7 +148,7 @@
                                 <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
                             </tr>
                             <tr>                                
-                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
+                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% elsif item.user_do == 10000  %>class="text-center bg-info"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
                             </tr>
                         </table>
 
@@ -692,8 +694,12 @@ function change_<%= item.id.to_s %>(){
           </div>
                  
           <div class="form-group">
-            <label for="pj_name">Project name：</label>
-            <input type="text" class="form-control" id="pj_name" name="pj_name" value="<%= @boms.p_name %>" >
+            <label for="pj_name_mom">项目名称：</label>
+            <input type="text" class="form-control" id="pj_name_mom" name="pj_name_mom" value="<%= @boms.p_name_mom %>" >
+          </div>
+          <div class="form-group">
+            <label for="pj_name">子项目名称：</label>
+            <input type="text" class="form-control" id="pj_name_mom" name="pj_name" value="<%= @boms.p_name %>" >
           </div>
           <div class="form-group">
             <label for="pj_qty">QTY：</label>

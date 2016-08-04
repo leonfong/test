@@ -258,13 +258,13 @@ $(document).ready(function() {
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-11 pull-left">
-                <p>Correct "Part", "Quantity"and "RefDes" should be selected and then click "SUBMIT". Current page shows 10 items as examples at most but no any effect on real quantity.</p>
+                <p><code>选择 "MPN(可选)","LINK(可选)", "数量(必选)"，"描述(必选)" 和 "位号(必选)" 然后点击 "提交". 当前页面只现实10项，不影响实际bom数量.</code></p>
             </div>
             <%= form_tag('/up_order_info', remote: true, class:"form-horizontal",id:"f1") do %>
                <fieldset id="set">
                 <%= text_field_tag :bom_id, params[:bom_id], class:"sr-only", size:2 , value: @bom.id.to_s %>
                 
-                </fieldset>
+               </fieldset>
             <% end %>
         </div>
     </div>
@@ -278,12 +278,14 @@ $(document).ready(function() {
     <%= form_tag('/p_new_bom', method:"POST") do %> 
     <div class="row ">
         <div class="col-sm-11 form-group">
-                    <label for="p_name" class="col-sm-4 control-label form-inline">Project name:
-                        <%= text_field_tag :p_name, @bom.p_name, class:"form-control", size:50  %>  
+                    <label for="p_name" class="col-sm-3 control-label form-inline">子项目名称:
+                        <%= text_field_tag :p_name, @bom.p_name, class:"form-control", size:25  %>  
+                    </label>
+                    <label for="p_name_mom" class="col-sm-3 control-label form-inline">项目名称:
+                        <%= text_field_tag :p_name_mom, @bom.p_name, class:"form-control", size:25  %>  
                     </label>
                     <div class="col-sm-1 form-inline"></div> 
-                    <label for="qty"  class="col-sm-6 control-label  form-inline">Quantity:
-                    
+                    <label for="qty"  class="col-sm-5 control-label  form-inline">数量:                   
                         <%= number_field_tag :qty, @bom.qty, class:"form-control", size:2  %>
 
                         <div class="checkbox-inline">
@@ -305,8 +307,7 @@ $(document).ready(function() {
                            </label>
                        </div> 
                     </label>  
-                </div> 
-        
+                </div>         
         <div class="col-sm-1 form-group pull-right" >
             <%= text_field_tag :bom_id, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.id.to_s %>
             <%= text_field_tag :bom_path, @bom.id.to_s, class:"sr-only", size:2 , value: @bom.excel_file.current_path %>
@@ -315,10 +316,10 @@ $(document).ready(function() {
             <%= text_field_tag :partCol, @bom.id.to_s, class:"sr-only", size:2 , value:""  %>
             <%= text_field_tag :quantityCol, @bom.id.to_s, class:"sr-only", size:20 , value:"" %>
             <%= text_field_tag :refdesCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
-            <%= text_field_tag :desCol, @bom.id.to_s, class:"", size:10 , value:"" %>
+            <%= text_field_tag :desCol, @bom.id.to_s, class:"sr-only", size:10 , value:"" %>
             <%= text_field_tag :packageCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
             <%= text_field_tag :linkCol, @bom.id.to_s, class:"sr-only", size:2 , value:"" %>
-            <%= submit_tag t("ok"), class:"btn btn-danger", :onclick => "return _step2_submit()" %>
+            <%= submit_tag "提交", class:"btn btn-danger", :onclick => "return _step2_submit()" %>
         </div>
         
     </div>

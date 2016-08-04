@@ -1025,6 +1025,7 @@ before_filter :authenticate_user!
     def pj_edit
         bom = ProcurementBom.find(params[:bom_id])              
         bom.p_name = params[:pj_name]
+        bom.p_name_mom = params[:pj_name_mom]
         bom.qty = params[:pj_qty]
         bom.remark = params[:pj_remark]
         bom.att = params[:att]
@@ -1178,6 +1179,7 @@ before_filter :authenticate_user!
             end
             @bom = ProcurementBom.find(params[:bom_id]) 
             @bom.p_name = params[:p_name]
+            @bom.p_name_mom = params[:p_name_mom]
             @bom.qty = params[:qty]
             @bom.d_day = params[:day]  
             #@bom.save   

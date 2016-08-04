@@ -187,7 +187,9 @@
             <thead>
                 <tr>
                     <th class="bg-primary" width="50">详细</th>
-                    <th class="bg-primary" width="60">操作</th>
+                    <% if current_user.id != 76 %>
+                        <th class="bg-primary" width="60">操作</th>
+                    <% end %>
                     <th class="bg-primary" width="140">单号</th>
                     <th class="bg-primary" width="55">数量</th>
                     <th class="bg-primary" width="80">业务交期</th>
@@ -227,8 +229,10 @@
                         <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
                             <span id="<%= work.id.to_s + 'but' %>" class="<%= @pic %>" aria-hidden="true"></span>
                         </button>
-                    </td>              
+                    </td>   
+                    <% if current_user.id != 76 %>           
                     <td class="bbg-success"><%= submit_tag "提交", class:"btn btn-primary btn-sm" %></td>
+                    <% end %>
                     <td class="bbg-success">
                         <%= text_field_tag :work_id, params[:work_id], class:"sr-only", size:2 , value: work.id.to_s %>
                         <%= work.order_no %>

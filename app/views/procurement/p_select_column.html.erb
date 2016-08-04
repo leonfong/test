@@ -279,12 +279,12 @@ $(document).ready(function() {
     <div class="row ">
         <div class="col-sm-11 form-group">
                     <label for="p_name_mom" class="col-sm-3 control-label form-inline">项目名称:
-                        <%= text_field_tag :p_name_mom, @bom.p_name, class:"form-control", size:25  %>  
+                        <%= text_field_tag :p_name_mom, @bom.p_name, class:"form-control", size:20  %>  
                     </label>
                     <label for="p_name" class="col-sm-3 control-label form-inline">子项目名称:
-                        <%= text_field_tag :p_name, @bom.p_name, class:"form-control", size:25  %>  
+                        <%= text_field_tag :p_name, @bom.p_name, class:"form-control", size:20  %>  
                     </label>                  
-                    <div class="col-sm-1 form-inline"></div> 
+ 
                     <label for="qty"  class="col-sm-5 control-label  form-inline">数量:                   
                         <%= number_field_tag :qty, @bom.qty, class:"form-control", size:2  %>
 

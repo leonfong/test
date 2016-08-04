@@ -374,12 +374,8 @@ before_filter :authenticate_user!
     end
 
     def edit_orderinfo
-        order_info = ProcurementBom.find(params[:itemp_id])
-        order_info.order_country = params[:order_country]
-        order_info.star = params[:hint]
-        order_info.sell_remark = params[:sell_remark]
-        order_info.sell_manager_remark = params[:sell_manager_remark]
-        order_info.save
+        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{params[:hint]}', sell_remark = '#{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
+        
 
         if params[:sell_remark] != ""
             open_id = "6ab2628d9a320296032f6a6f5495582b,5c1c9ba5ef315dcaac48cb9c1fb9731a"
@@ -401,7 +397,7 @@ before_filter :authenticate_user!
                 url += '&window_title=Fastbom-PCB AND PCBA'
                 url += '&tips_title='+URI.encode('黄朝锐宝宝，马凤华宝宝，'+current_user.full_name+'宝宝回复了你们的报价请查看')
                 url += '&tips_content='+URI.encode('有新的回复，点击查看。')
-                url += '&tips_url=www.fastbom.com/p_bomlist?key_order='+order_info.p_name.to_s 
+                url += '&tips_url=www.fastbom.com/p_bomlist?key_order='+params[:itemp_id].to_s 
                 resp = Net::HTTP.get_response(URI(url))
             end 
         end
@@ -422,12 +418,12 @@ before_filter :authenticate_user!
             if current_user.s_name.size == 1
                 s_name = current_user.s_name
                
-                where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name,9),1) REGEXP '^[0-9]+$' "
+                where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
                 
             elsif current_user.s_name.size == 2
                 s_name = current_user.s_name
                
-                where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
+                where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
                
             elsif current_user.s_name.size > 2
                 if params[:sell] == "" or params[:sell] == nil
@@ -436,11 +432,11 @@ before_filter :authenticate_user!
                         s_name = item
                         if current_user.s_name.split(",").size > (index+1)
                         
-                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8 OR"
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 OR"
                        
                         else
                        
-                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name,3) = 8)"
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8)"
                         
                         end
                     end
@@ -448,12 +444,12 @@ before_filter :authenticate_user!
                     if params[:sell].size == 1
                         s_name = params[:sell]
                
-                        where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name,9),1) REGEXP '^[0-9]+$' "
+                        where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
                 
                     elsif params[:sell].size == 2
                         s_name = params[:sell]
                
-                        where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
+                        where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
                     end
                 end
             end
@@ -463,7 +459,7 @@ before_filter :authenticate_user!
             if params[:end_date] != "" and  params[:end_date] != nil
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
-            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  ").paginate(:page => params[:page], :per_page => 10)
+            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
         else
             if params[:start_date] != "" and  params[:start_date] != nil
                 where_date += " procurement_boms.created_at > '#{params[:start_date]}'"
@@ -472,12 +468,12 @@ before_filter :authenticate_user!
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
             if where_date != ""
-                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_date + where_5star}  ").paginate(:page => params[:page], :per_page => 10)
+                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_date + where_5star}  GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
             else
                 if params[:complete]
-                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE procurement_boms.star = 5   ").paginate(:page => params[:page], :per_page => 10)
+                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE procurement_boms.star = 5   GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`   ").paginate(:page => params[:page], :per_page => 10)
+                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`   GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
                 end
             end
         end

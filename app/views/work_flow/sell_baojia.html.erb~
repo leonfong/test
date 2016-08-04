@@ -6,7 +6,7 @@
       <li role="presentation" class="active"><a href="/sell_baojia"><h4 ><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_pcb_baojia"><h4 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
       <% if can? :work_pcb_business, :all %>
-      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建订单列表</p></strong></h4></a></li>
+      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
       <% end %>
   </ul>
 <br>
@@ -82,9 +82,9 @@
                         <tbody>
 <% if not @quate.blank?%>
 <% @quate.each do |q_order| %>
-                            <tr>
-                                <td><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
-                                <td><%= link_to q_order.p_name, sell_view_baojia_path(:bom_id =>q_order.id) %></td>
+                            <tr data-toggle="collapse" href="#order_son_<%= q_order.id.to_s %>" aria-expanded="false" aria-controls="order_son_<%= q_order.id %>">
+                                <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
+                                <td><%=  q_order.p_name_mom %></td>
                                 <td><%= q_order.qty %></td>
                                 <td>￥<%= q_order.t_p %></td>
                                 <td><%= q_order.order_country %></td>
@@ -93,10 +93,37 @@
                                 <td><%= q_order.sell_manager_remark %></td>
                                 <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.id %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.order_country %>" data-sellremark="<%= q_order.sell_remark %>" data-sellmanagerremark="<%= q_order.sell_manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
                             </tr>
+
+                            <tr>
+                                <td colSpan="9" style="padding: 0px;margin: 0px;">
+                                    <div class="collapse" id="order_son_<%= q_order.id.to_s %>">
+                                    <div  style="padding: 0px;margin: 0px;">
+                                    
+                                    <table class="table table-bordered" style="padding: 0px;margin: 0px;">  
+                                    <% ProcurementBom.where(p_name_mom: q_order.p_name_mom).each do |order_son| %>
+                                        <tr class="bg-success">
+                                            <td width="70"><%= order_son.created_at.localtime.strftime('%y-%m-%d') %></td>
+                                            <td width="150"><%= link_to order_son.p_name, sell_view_baojia_path(:bom_id =>order_son.id) %></td>
+                                            <td width="100"><%= order_son.qty %></td>
+                                            <td width="150">￥<%= order_son.t_p %></td>
+                                            <td width="140"><%= order_son.order_country %></td>
+                                            <td width="150"><stardef ccc="<%= order_son.star %>" id="<%= order_son.id %>"></stardef>
+                                            <td><%= order_son.sell_remark %></td>
+                                            <td><%= order_son.sell_manager_remark %></td>
+                                            <td width="50"></td>
+                                        </tr>
+                                    <% end %>
+                                    </table>
+                                    </div>
+                                    </div>
+                                </td>
+                            </tr>
+
 <% end %> 
 <% end %>          
                         </tbody>
                     </table>
+
         </div>
     </div>
 
@@ -171,6 +198,8 @@ $('#editOrder').on('show.bs.modal', function (event) {
   modal.find($("#order_country")).val(ocountry);
   modal.find($("#sell_remark")).val(sellremark);
   modal.find($("#sell_manager_remark")).val(sellmanagerremark);
+
+
   $('star').raty({                                                                    
    score: function() {
     return $(this).attr('ccc');

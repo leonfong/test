@@ -31,7 +31,7 @@
 						</ul>
 						<a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 						<ul id="articleMenu" class="nav nav-list collapse menu-second">
-							<li><a href="/pcb_order_list?quotechk=true"><i class="icon-pencil"></i> 下单审批</a></li>
+							<li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待采购下单</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待入库</a></li>

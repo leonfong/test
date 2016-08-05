@@ -374,7 +374,7 @@ before_filter :authenticate_user!
     end
 
     def edit_orderinfo
-        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{params[:hint]}', sell_remark = '#{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
+        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{params[:hint]}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
         
 
         if params[:sell_remark] != ""

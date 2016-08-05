@@ -236,6 +236,7 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   var qty = button.data('qty')
   var sell = button.data('sell')
   var remark = button.data('remark')
+  var follow_remark = button.data('follow_remark')
   var order_sell = button.data('order_sell')
   var modal = $(this)
   modal.find($("#order_no")).val(order_no)
@@ -243,6 +244,7 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   modal.find($("#u_qty")).val(qty)
   modal.find($("#u_sell")).val(sell)
   modal.find($("#remark")).html(remark)
+  modal.find($("#follow_remark")).html(follow_remark)
   modal.find($("#u_order_sell")).val(order_sell)
 })
 </script>

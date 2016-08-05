@@ -62,6 +62,14 @@ Rails.application.routes.draw do
   match '/back_pcb_to_order', to: 'work_flow#back_pcb_to_order', via: 'get'
   match '/del_pcb_follow', to: 'work_flow#del_pcb_follow', via: 'get'
   match '/find_c_ch', to: 'work_flow#find_c_ch', via: 'get'
+  match '/new_pcb_pi', to: 'work_flow#new_pcb_pi', via: 'get'
+  match '/find_order', to: 'work_flow#find_order', via: 'get'
+
+
+
+
+
+
 
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 
@@ -123,6 +131,10 @@ Rails.application.routes.draw do
   match '/other_baojia_up', to: 'procurement#other_baojia_up', via: 'post'
   match '/moko_part_data', to: 'procurement#moko_part_data', via: 'get'
   match '/add_dn', to: 'procurement#add_dn', via: 'post'
+
+
+
+
 
 #external_bom
   match '/e_new', to: 'external_bom#p_create_bom', via: 'get' 

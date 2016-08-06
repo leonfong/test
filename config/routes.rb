@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   match '/find_c_ch', to: 'work_flow#find_c_ch', via: 'get'
   match '/new_pcb_pi', to: 'work_flow#new_pcb_pi', via: 'get'
   match '/find_order', to: 'work_flow#find_order', via: 'get'
+  match '/find_order_check', to: 'work_flow#find_order_check', via: 'get'
 
 
 

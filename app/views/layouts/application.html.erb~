@@ -219,7 +219,7 @@ footer {
 .menu-first{
     height:45px;
     line-height:45px;
-    background-color: #e9e9e9;
+    background-color: #eeeeee;
     border-top: 1px solid #efefef;
     border-bottom: 1px solid #e1e1e1;
     padding: 0;
@@ -230,9 +230,9 @@ footer {
 		/*一级菜单鼠标划过状态*/
 .menu-first:hover{
 			text-decoration: none;
-			background-color: #d6d4d5;
+			background-color: #eeeeee;
 			border-top: 1px solid #b7b7b7;
-			border-bottom: 1px solid #acacac;
+			border-bottom: 1px solid #eeeeee;
 }
 
 		/*二级菜单*/
@@ -248,7 +248,7 @@ footer {
 		/*二级菜单鼠标划过样式*/
 .menu-second li a:hover {
 			text-decoration: none;
-			background-color: #66c3ec;
+			background-color: #d9edf7;
 			border-top: 1px solid #83ceed;
 			border-bottom: 1px solid #83ceed;
 			border-right: 3px solid #f8881c;
@@ -284,7 +284,7 @@ footer {
   </head>
 <% if request.original_fullpath =~ /work_flow/i or request.original_fullpath =~ /feedback/i or request.original_fullpath =~ /sell_baojia/i or request.original_fullpath =~ /moko_part_manage/i or request.original_fullpath =~ /sell_pcb_baojia/i %>
   <body style="padding-bottom: 70px;padding-top: 50px;margin-left: 15px;margin-right: 15px;" data-no-turbolink>
-<% elsif request.original_fullpath =~ /new_bom/i or request.original_fullpath =~ /viewbom/i or request.original_fullpath =~ /bomlist/i or request.original_fullpath =~ /up_pcb_info/i or request.original_fullpath =~ /procurement/i or request.original_fullpath =~ /sell_view_baojia/i or request.original_fullpath =~ /p_history/i or request.original_fullpath =~ /pcb_order_list/i or request.original_fullpath =~ /supplier_offer/i or request.original_fullpath =~ /part_list/i or request.original_fullpath =~ /other_baojia/i or request.original_fullpath =~ /moko_part_data/i %>
+<% elsif request.original_fullpath =~ /new_bom/i or request.original_fullpath =~ /viewbom/i or request.original_fullpath =~ /bomlist/i or request.original_fullpath =~ /up_pcb_info/i or request.original_fullpath =~ /procurement/i or request.original_fullpath =~ /sell_view_baojia/i or request.original_fullpath =~ /p_history/i or request.original_fullpath =~ /pcb_order_list/i or request.original_fullpath =~ /supplier_offer/i or request.original_fullpath =~ /part_list/i or request.original_fullpath =~ /other_baojia/i or request.original_fullpath =~ /moko_part_data/i or request.original_fullpath =~ /new_pcb_pi/i%>
   <body style="padding-bottom: 70px;padding-top: 50px;" data-no-turbolink>
 <% elsif request.original_fullpath == "/" or request.original_fullpath == "/?multipage=true" %>
   <body style="padding-bottom: 70px;padding-top: 50px;" >

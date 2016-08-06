@@ -5,8 +5,8 @@ before_filter :authenticate_user!
     def find_order
         if params[:c_code] != ""
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @c_info_t = PcbOrder.find_by_sql("SELECT * FROM `pcb_orders` WHERE ()  AND `pcb_orders`.`state` = 'quotechk'")
-            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
+            @c_info = PcbOrder.find_by_sql("SELECT pcb_orders.*,pcb_customers.c_no,pcb_customers.customer,pcb_customers.customer_com FROM  `pcb_customers` INNER JOIN `pcb_orders` ON pcb_orders.pcb_customer_id = pcb_customers.id WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%' OR `pcb_orders`.`order_no` LIKE '%#{params[:c_code]}%' )  AND `pcb_orders`.`state` = 'quotechk' AND `pcb_orders`.`order_sell` = '#{current_user.email}'")
+            #@c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_info.inspect)
             Rails.logger.info("add-------------------------------------12")
@@ -21,17 +21,26 @@ before_filter :authenticate_user!
                 @c_table += '<th width="70">客户代码</th>'
                 @c_table += '<th>客户名</th>'
                 @c_table += '<th>客户公司名</th>'
-                @c_table += '<th width="70">所属</th>'
+
+                @c_table += '<th  width="110">Order NO.</th>'
+                @c_table += '<th  width="70">报价</th>'
+                @c_table += '<th >采购备注</th>'
+                @c_table += '<th >跟踪备注</th>'
+                @c_table += '<th width="45">操作</th>'
                 @c_table += '<tr>'
                 @c_table += '</thead>'
                 @c_table += '<tbody>'
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.c_no + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.customer.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '<td><div>' + cu.c_no + '</div></td>'
+                    @c_table += '<td><div>' + cu.customer.to_s + '</div></td>'
+                    @c_table += '<td><div>' + cu.customer_com.to_s + '</div></td>'
+                    @c_table += '<td><div>' + cu.order_no.to_s + '</div></td>'
+                    @c_table += '<td><div>' + cu.price.to_s + '</div></td>'
+                    @c_table += '<td><div>' + cu.remark.to_s + '</div></td>'
+                    @c_table += '<td><div>' + cu.follow_remark.to_s + '</div></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_order_check?id='+ cu.id.to_s + '"><div>确认</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'
@@ -42,6 +51,10 @@ before_filter :authenticate_user!
                 Rails.logger.info("add-------------------------------------12")
             end
         end
+    end
+
+    def find_order_check
+        @c_info = PcbOrder.find(params[:id])
     end
 
     def new_pcb_pi

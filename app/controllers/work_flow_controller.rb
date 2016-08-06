@@ -22,7 +22,7 @@ before_filter :authenticate_user!
                 @c_table += '<th>客户名</th>'
                 @c_table += '<th>客户公司名</th>'
 
-                @c_table += '<th  width="110">Order NO.</th>'
+                @c_table += '<th  width="120">Order NO.</th>'
                 @c_table += '<th  width="70">报价</th>'
                 @c_table += '<th >采购备注</th>'
                 @c_table += '<th >跟踪备注</th>'

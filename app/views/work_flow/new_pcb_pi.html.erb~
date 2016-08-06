@@ -94,6 +94,12 @@
                     </div>
                 </div>
                 <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><strong>备注</strong></div>
+                        <div class="panel-body ">                     
+                            
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                 </div>

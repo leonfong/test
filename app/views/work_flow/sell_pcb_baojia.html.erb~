@@ -6,7 +6,7 @@
       <li role="presentation" ><a href="/sell_baojia"><h4><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
       <li role="presentation" class="active"><a href="/sell_pcb_baojia"><h4><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
       <% if can? :work_pcb_business, :all %>
-      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
+      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h4></a></li>
       <% end %>
   </ul>
 <br>
@@ -72,7 +72,9 @@
                                 <th width="65">客户代码</th>
                                 <th width="250">客户名</th>
                                 <th width="350">客户公司名</th>
+                                <th width="65">国家</th>
                                 <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
+                                <th >收货地址</th>
                                 <th width="60">业务员</th>  
                                 <th width="100">数量</th>
                                 
@@ -94,6 +96,7 @@
                                 <td><%= q_order.c_no %></td>
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.customer_com %></td>
+                                <td><%= q_order.customer_country %></td>
                                 <td><%= q_order.email %></td>
                                 <td><%= User.find_by(email: q_order.sell).full_name %></td>
                                 <td><%= q_order.qty %></td>
@@ -109,11 +112,11 @@
                                 <td><%= q_order.follow_remark %></td>
 -->
                                 <td>
-                                    <% if can? :work_pcb_business, :all %>
+<!--
                                         <button type="button" class="btn btn-default btn-xs disabled"  >更新</button>
-                                    <% else %>
+-->
                                         <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-order_no="<%= q_order.order_no %>" >更新</button>
-                                    <% end %>
+
                                 </td>
                                 <% if can? :work_pcb_business, :all %>
                                 <td>
@@ -147,12 +150,20 @@
             <input type="text" class="form-control" id="customer" name="customer">
           </div>   
           <div class="form-group">
-            <label for="customer" class="control-label">客户公司名:</label>
+            <label for="customer_com" class="control-label">客户公司名:</label>
             <input type="text" class="form-control" id="customer_com" name="customer_com">
           </div>       
           <div class="form-group">
+            <label for="customer_country" class="control-label">国家:</label>
+            <input type="text" class="form-control" id="customer_country" name="customer_country">
+          </div>       
+          <div class="form-group">
             <label for="email" class="control-label">联系方式（邮箱必填)，(﻿whatsapp,line,skype,facebook，等）:</label>
-            <input type="text" class="form-control" id="email" name="email">
+            <textarea class="form-control" id="email" name="email"></textarea>
+          </div> 
+          <div class="form-group">
+            <label for="shipping_address" class="control-label">收货地址:</label>
+            <textarea  class="form-control" id="shipping_address" name="shipping_address"></textarea>
           </div> 
 <!--
           <div class="form-group">
@@ -203,8 +214,16 @@
             <input type="text" class="form-control" id="edit_customer" name="customer">
           </div>       
           <div class="form-group">
+            <label for="edit_customer_country" class="control-label">国家:</label>
+            <input type="text" class="form-control" id="edit_customer_country" name="customer_country">
+          </div>       
+          <div class="form-group">
             <label for="email" class="control-label">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）:</label>
             <input type="text" class="form-control" id="edit_email" name="email">
+          </div> 
+          <div class="form-group">
+            <label for="edit_shipping_address" class="control-label">收货地址:</label>
+            <textarea  class="form-control" id="edit_shipping_address" name="shipping_address"></textarea>
           </div> 
 <!--
           <div class="form-group">

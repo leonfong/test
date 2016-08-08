@@ -54,7 +54,7 @@ before_filter :authenticate_user!
     end
 
     def find_order_check
-        @c_info = PcbOrder.find(params[:id])
+        @pi_info = PcbOrder.find(params[:id])
     end
 
     def new_pcb_pi
@@ -292,6 +292,8 @@ before_filter :authenticate_user!
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
         @pcb.remark= params[:remark]
+        @pcb.customer_country= params[:customer_country]
+        @pcb.shipping_address= params[:shipping_address]
         @pcb.save
         redirect_to :back
     end
@@ -305,6 +307,8 @@ before_filter :authenticate_user!
             follow.user_id = current_user.id
             follow.user_name = current_user.full_name
             follow.remark = params[:follow_remark].chomp
+            follow.customer_country= params[:customer_country]
+            follow.shipping_address= params[:shipping_address]
             follow.save
             @c_id = params[:itemp_id]
             @follow_remark = ""
@@ -434,7 +438,12 @@ before_filter :authenticate_user!
     end
 
     def edit_orderinfo
-        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{params[:hint]}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
+        if params[:hint] == ""
+           hint = 1
+        else
+           hint = params[:hint]
+        end
+        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{hint}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
         
 
         if params[:sell_remark] != ""
@@ -519,7 +528,7 @@ before_filter :authenticate_user!
             if params[:end_date] != "" and  params[:end_date] != nil
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
-            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
+            @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
         else
             if params[:start_date] != "" and  params[:start_date] != nil
                 where_date += " procurement_boms.created_at > '#{params[:start_date]}'"
@@ -528,12 +537,12 @@ before_filter :authenticate_user!
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
             if where_date != ""
-                @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_date + where_5star}  GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
+                @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_date + where_5star}  GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
             else
                 if params[:complete]
-                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE procurement_boms.star = 5   GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
+                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE procurement_boms.star = 5   GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`   GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
+                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms`   GROUP BY procurement_boms.p_name_mom").paginate(:page => params[:page], :per_page => 10)
                 end
             end
         end

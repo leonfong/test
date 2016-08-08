@@ -86,7 +86,7 @@
                                 <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
                                 <td><%=  q_order.p_name_mom %></td>
                                 <td><%= q_order.qty %></td>
-                                <td>￥<%= q_order.t_p %></td>
+                                <td>￥<%= sum_t_p %></td>
                                 <td><%= q_order.order_country %></td>
                                 <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
                                 <td><%= q_order.sell_remark %></td>

@@ -41,17 +41,17 @@
                 <div class="panel-heading"><strong>客户信息</strong> <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#addOrdert" style="margin-right: 5px;" >选择询价信息</button></div>
                 <div class="panel-body ">                     
                     <div class="row ">
-                        <div class="col-md-2">代码：</div> 
-                        <div class="col-md-4">客户：</div> 
-                         <div class="col-md-2">国家</div> 
-                         <div class="col-md-2">部门</div> 
-                         <div class="col-md-2">职员</div>  
+                        <div class="col-md-2">代码：<input type="text" class="input-sm" style="width:80%" id="daima" name="daima" readonly></div>
+                        <div class="col-md-4">客户：<input type="text" class="input-sm" style="width:80%" id="kehu" name="kehu" readonly></div> 
+                         <div class="col-md-2">国家：<input type="text" class="input-sm" style="width:80%" id="guojia" name="guojia" readonly></div> 
+                         <div class="col-md-2">部门：<input type="text" class="input-sm" style="width:80%" id="bumen" name="bumen" readonly></div> 
+                         <div class="col-md-2">职员：<input type="text" class="input-sm" style="width:80%" id="zhiyuan" name="zhiyuan" readonly></div>  
                     </div>
                     <div class="row " style="padding-top: 10px;">
-                         <div class="col-md-6">客户要求：</div> 
-                         <div class="col-md-2">制单人：</div> 
-                         <div class="col-md-2">日期：</div> 
-                         <div class="col-md-2">比别：</div>  
+                         <div class="col-md-6">客户要求：<input type="text" class="input-sm" style="width:90%" id="kehuyaoqiu" name="kehuyaoqiu" readonly></div> 
+                         <div class="col-md-2">制单人：<input type="text" class="input-sm" style="width:80%" id="zhidanren" name="zhidanren" readonly></div> 
+                         <div class="col-md-2">日期：<input type="text" class="input-sm" style="width:80%" id="riqi" name="riqi" readonly></div> 
+                         <div class="col-md-2">币别：<input type="text" class="input-sm" style="width:80%" id="bibie" name="bibie" readonly></div>  
                     </div>
                 </div>
             </div>

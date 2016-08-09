@@ -1,10 +1,12 @@
+$("#p_name").html('<%= @pi_info.p_name %>');
 $("#daima").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).c_no %>');
 $("#kehu").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).customer %>');
 $("#guojia").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).customer_country %>');
 $("#bumen").val('<%= current_user.team %>');
-$("#zhiyuan").val('<%= current_user.full_name %>');
-$("#kehuyaoqiu").val('<%= @pi_info.pcb_customer_id %>');
+
+$("#fahuodizhi").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).shipping_address %>');
 $("#zhidanren").val('<%= current_user.full_name %>');
 $("#riqi").val('<%= Time.new.strftime("%Y-%m-%d") %>');
 $("#bibie").val('<%= @pi_info.pcb_customer_id %>');
 $('#addOrdert').modal('toggle');
+$("#biaoge").html('<%= raw @table %>');

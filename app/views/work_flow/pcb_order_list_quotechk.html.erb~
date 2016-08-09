@@ -25,7 +25,7 @@
 						<ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
 							<li><a href="/pcb_order_list?new=true"><i class="icon-user"></i> 新建询价</a></li>
 							<li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 等待报价</a></li>
-							<li><a style="background-color: #66c3ec;" href="/pcb_order_list?quotechk=true"><i class="icon-edit"></i> 已经报价</a></li>
+							<li><a style="background-color: #d9edf7;" href="/pcb_order_list?quotechk=true"><i class="icon-edit"></i> 已经报价</a></li>
  
 							
 						</ul>

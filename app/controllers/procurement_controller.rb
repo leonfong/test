@@ -2088,6 +2088,7 @@ before_filter :authenticate_user!
                 all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
             end
             #all_dns.each do |dns|
+            PDn.where(item_id: params[:id]).update_all "color=NULL"
             if not all_dns.blank?
                 Rails.logger.info("ttttttttttttt--------------------------22222222222")
                 add_dns = PDn.new
@@ -2870,6 +2871,7 @@ WHERE
             @p_item.color = nil
             @p_item.save
         end 
+        PDn.where(item_id: params[:id]).update_all "color=NULL"
         @bom = ProcurementBom.find(@p_item.procurement_bom_id)
         @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
         @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)      

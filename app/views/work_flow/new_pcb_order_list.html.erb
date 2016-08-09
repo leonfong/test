@@ -37,7 +37,7 @@
 						</ul>
 						<a style="background-color: #ddd;" href="#articleMenu" data-parent="#accordion" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 						<ul id="articleMenu" class="nav nav-list panel-collapse collapse menu-second">
-                                                        <li><a href="/new_pcb_pi"><i class="icon-edit"></i> 新建订单</a></li>
+                                                        <li><a href="/new_pcb_pi"><i class="icon-edit"></i> 新建PI</a></li>
 							<li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待采购下单</a></li>
@@ -75,6 +75,9 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="130">Order No.</th>
+      <th width="80">项目名称</th>
+      <th >英文描述</th>
+      <th >中文描述</th>
       <th width="80">客户代码</th>
       <th width="150">Created Date</th>
       <th width="80">数量</th>
@@ -92,10 +95,13 @@
     <% @pcblist.each do |pcb| %>   
       <tr >
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" data-followedit_remark="<%= pcb.follow_remark %>"><%= pcb.order_no %></a></td>
+            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-p_name="<%= pcb.p_name %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" data-des_en="<%= pcb.des_en %>" data-des_cn="<%= pcb.des_cn %>" data-followedit_remark="<%= pcb.follow_remark %>"><%= pcb.order_no %></a></td>
         <% else %>
             <td><%= pcb.order_no %></td>
         <% end %>
+        <td><%= pcb.p_name %></td>
+        <td><%= pcb.des_en %></td>
+        <td><%= pcb.des_cn %></td>
         <td><%= PcbCustomer.find(pcb.pcb_customer_id).c_no %></td>
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td><%= pcb.qty %></td>
@@ -169,6 +175,18 @@
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
           </div> 
+          <div class="form-group">         
+            <label for="p_name" class="control-label">项目名称:</label>
+            <input type="text" class="form-control" id="p_name" name="p_name">
+          </div> 
+          <div class="form-group">         
+            <label for="des_en" class="control-label">英文描述:</label>
+            <input type="text" class="form-control" id="des_en" name="des_en">
+          </div> 
+          <div class="form-group">         
+            <label for="des_cn" class="control-label">中文描述:</label>
+            <input type="text" class="form-control" id="des_cn" name="des_cn">
+          </div> 
           <div class="form-group">
             <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
             <label for="qty" class="control-label">数量:</label>
@@ -224,12 +242,23 @@
             <label for="customer" class="control-label">客户:</label>
             <input type="text" class="form-control" id="u_customer" name="customer" readonly>
           </div>       
-<!--
+
+          <div class="form-group">
+            <label for="u_p_name" class="control-label">项目名称:</label>
+            <input type="text" class="form-control" id="u_p_name" name="p_name" >
+          </div> 
+          <div class="form-group">         
+            <label for="u_des_en" class="control-label">英文描述:</label>
+            <input type="text" class="form-control" id="u_des_en" name="des_en">
+          </div> 
+          <div class="form-group">         
+            <label for="u_des_cn" class="control-label">中文描述:</label>
+            <input type="text" class="form-control" id="u_des_cn" name="des_cn">
+          </div>
           <div class="form-group">
             <label for="qty" class="control-label">数量:</label>
             <input type="number" class="form-control" id="u_qty" name="qty" >
           </div> 
--->
           <div class="form-group">
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
@@ -291,6 +320,9 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   var order_no = button.data('order_no') 
   var customer = button.data('customer')
   var qty = button.data('qty')
+  var p_name = button.data('p_name')
+  var des_en = button.data('des_en')
+  var des_cn = button.data('des_cn')
   var sell = button.data('sell')
   var order_sell = button.data('order_sell')
   var followedit_remark = button.data('followedit_remark')
@@ -298,6 +330,9 @@ $('#updatePrice').on('show.bs.modal', function (event) {
   modal.find($("#order_no")).val(order_no)
   modal.find($("#u_customer")).val(customer)
   modal.find($("#u_qty")).val(qty)
+  modal.find($("#u_p_name")).val(p_name)
+  modal.find($("#u_des_en")).val(des_en)
+  modal.find($("#u_des_cn")).val(des_cn)
   modal.find($("#u_sell")).val(sell)
   modal.find($("#u_order_sell")).val(order_sell)
   modal.find($("#followedit_remark_up")).html(followedit_remark)

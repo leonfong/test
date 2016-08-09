@@ -5,7 +5,7 @@ before_filter :authenticate_user!
     def find_order
         if params[:c_code] != ""
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @c_info = PcbOrder.find_by_sql("SELECT pcb_orders.*,pcb_customers.c_no,pcb_customers.customer,pcb_customers.customer_com FROM  `pcb_customers` INNER JOIN `pcb_orders` ON pcb_orders.pcb_customer_id = pcb_customers.id WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%' OR `pcb_orders`.`order_no` LIKE '%#{params[:c_code]}%' )  AND `pcb_orders`.`state` = 'quotechk' AND `pcb_orders`.`order_sell` = '#{current_user.email}'")
+            @c_info = PcbOrder.find_by_sql("SELECT pcb_orders.*,pcb_customers.c_no,pcb_customers.customer,pcb_customers.customer_com FROM  `pcb_customers` INNER JOIN `pcb_orders` ON pcb_orders.pcb_customer_id = pcb_customers.id WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%' OR `pcb_orders`.`order_no` LIKE '%#{params[:c_code]}%' OR `pcb_orders`.`p_name` LIKE '%#{params[:c_code]}%')  AND `pcb_orders`.`state` = 'quotechk' AND `pcb_orders`.`order_sell` = '#{current_user.email}'")
             #@c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_info.inspect)
@@ -18,6 +18,7 @@ before_filter :authenticate_user!
                 @c_table += '<table class="table table-bordered">'
                 @c_table += '<thead>'
                 @c_table += '<tr class="active">'
+                @c_table += '<th width="70">项目名称</th>'
                 @c_table += '<th width="70">客户代码</th>'
                 @c_table += '<th>客户名</th>'
                 @c_table += '<th>客户公司名</th>'
@@ -33,6 +34,7 @@ before_filter :authenticate_user!
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><div>' + cu.p_name + '</div></td>'
                     @c_table += '<td><div>' + cu.c_no + '</div></td>'
                     @c_table += '<td><div>' + cu.customer.to_s + '</div></td>'
                     @c_table += '<td><div>' + cu.customer_com.to_s + '</div></td>'
@@ -55,6 +57,20 @@ before_filter :authenticate_user!
 
     def find_order_check
         @pi_info = PcbOrder.find(params[:id])
+        @table = '<tr>'
+        @table += '<td>物料编码</td>'
+        @table += '<td>物料名称</td>'
+        #@table += '<td>'+@pi_info.p_name.to_s+'</td>'
+        @table += '<td>'+@pi_info.qty.to_s+'</td>'
+        @table += '<td>'+@pi_info.des_en.to_s+'</td>'
+        @table += '<td>'+@pi_info.des_cn.to_s+'</td>'
+        @table += '<td>pcb</td>'
+        @table += '<td>PCBA</td>'
+        @table += '<td>COM</td>'
+        @table += '<td>总价</td>'
+        @table += '<td>单价</td>'
+        @table += '<td>备注</td>'
+        @table += '</tr>'
     end
 
     def new_pcb_pi
@@ -82,6 +98,7 @@ before_filter :authenticate_user!
 
     def find_c_ch
         @c_info = PcbCustomer.find(params[:id])
+        
     end
 
     def find_c
@@ -197,6 +214,18 @@ before_filter :authenticate_user!
         if not params[:price].blank?
             pcb.price = params[:price]
         end
+        if not params[:p_name].blank?
+            pcb.p_name = params[:p_name]
+        end
+        if not params[:des_en].blank?
+            pcb.des_en = params[:des_en]
+        end
+        if not params[:des_cn].blank?
+            pcb.des_cn = params[:des_cn]
+        end
+        if not params[:p_name].blank?
+            pcb.p_name = params[:p_name]
+        end
         if not params[:qty].blank?
             pcb.qty = params[:qty]
         end
@@ -265,6 +294,9 @@ before_filter :authenticate_user!
         order_no = "MK" + Time.new.strftime("%y%m%d").to_s + User.find_by(email: params[:sell]).s_name_self + "W" + order_n.to_s + "W"
         @pcb = PcbOrder.new()
         #@pcb.user_id = current_user.id
+        @pcb.p_name = params[:p_name]
+        @pcb.des_en = params[:des_en]
+        @pcb.des_cn = params[:des_cn]
         @pcb.pcb_customer_id = params[:customer]
         @pcb.order_no = order_no
         @pcb.sell = params[:sell] 
@@ -307,8 +339,7 @@ before_filter :authenticate_user!
             follow.user_id = current_user.id
             follow.user_name = current_user.full_name
             follow.remark = params[:follow_remark].chomp
-            follow.customer_country= params[:customer_country]
-            follow.shipping_address= params[:shipping_address]
+            
             follow.save
             @c_id = params[:itemp_id]
             @follow_remark = ""
@@ -323,6 +354,8 @@ before_filter :authenticate_user!
             @pcb.qty = params[:qty]
             @pcb.att = params[:att]
             @pcb.remark = params[:remark]
+            @pcb.customer_country= params[:customer_country]
+            @pcb.shipping_address= params[:shipping_address]
         end
         @pcb.save
         redirect_to :back

@@ -116,7 +116,7 @@
 <!--
                                         <button type="button" class="btn btn-default btn-xs disabled"  >更新</button>
 -->
-                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-order_no="<%= q_order.order_no %>" >更新</button>
+                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-customer_country="<%= q_order.customer_country %>" data-shipping_address="<%= q_order.shipping_address %>" data-order_no="<%= q_order.order_no %>" >更新</button>
 
                                 </td>
                                 <% if can? :work_pcb_business, :all %>
@@ -311,14 +311,18 @@ $('#editOrder').on('show.bs.modal', function (event) {
   var email = button.data('email');
   var sell = button.data('sell');
   var qty = button.data('qty');
-  var remark = button.data('remark');                       
+  var remark = button.data('remark');  
+  var customer_country = button.data('customer_country'); 
+  var shipping_address = button.data('shipping_address');                       
   var modal = $(this);
   modal.find($("#edit_itemp_id")).val(itempid);
   modal.find($("#edit_customer")).val(customer);
   modal.find($("#edit_email")).val(email);
   modal.find($("#edit_sell")).val(sell);
   modal.find($("#edit_qty")).val(qty);
+  modal.find($("#edit_customer_country")).val(customer_country);
   modal.find($("#edit_remark")).html(remark);
+  modal.find($("#edit_shipping_address")).html(shipping_address);
 })
 $('#editOrder_follow').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal

@@ -80,6 +80,7 @@
                     <th width="60">报价</th>                 
                     <th >Other</th>
                     <th >工程师备注</th>
+                    <th width="30"></th>
                 </tr>
                 </thead>
                
@@ -203,6 +204,8 @@
                     </td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.other %></small></td>
                     <td>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" id="<%= item.id %>_item_remark">
 <% PItemRemark.where(p_item_id: item.id).each do |remark_item| %>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
@@ -222,6 +225,8 @@
 </div>
 </div>
 <% end %>
+</div>
+
 <% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
 <% if not dn.remark.blank? %>
 <div class="row" style="margin: 0px;" >
@@ -242,7 +247,10 @@
 </div>
 <% end %>
 <% end %>
+</div>
                     </td>
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>
+
                 </tr>
                 <% end %>
 
@@ -270,7 +278,37 @@
     </div>
 
 
-
+<div class="modal fade" id="remarkitem" tabindex="-1" role="dialog" aria-labelledby="remarkitemLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="remarkitemLabel">备注</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_item_remark,controller: :procurement},method:"post",remote: true) do %>
+          <div class="form-group sr-only">
+            <label for="itemp_id_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
+          </div>
+          <div class="form-group sr-only">
+            <label for="sell_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="sell_remark" name="sell_remark" value="sell_remark">
+          </div>
+          <div class="form-group">
+            <label for="pj_remark">备注：</label>
+            <textarea type="text" class="form-control" id="item_remark" name="item_remark"  ></textarea>
+          </div>             
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 
@@ -293,6 +331,13 @@
       });
       
       });
+$('#remarkitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var modal = $(this);
+  modal.find($("#itemp_id_remark")).val(itempid);
+})
+
 </script>
 
 

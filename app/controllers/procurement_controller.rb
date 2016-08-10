@@ -733,7 +733,11 @@ before_filter :authenticate_user!
             @remark_all += '<table style="margin: 0px;" >'
             @remark_all += '<tr>'
             @remark_all += '<td style="padding: 0px;margin: 0px;" >'
-            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            if params[:sell_remark] != "sell_remark"
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            else
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            end
             @remark_all += '</td>'
             @remark_all += '</tr>'
             @remark_all += '</table>'

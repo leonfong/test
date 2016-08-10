@@ -2,6 +2,37 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pi_draft
+        pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
+        pi_draft.pi_p_name = params[:p_name]
+        pi_draft.pi_p_date = params[:p_riqi]
+        pi_draft.pi_customer_code = params[:daima]
+        pi_draft.pi_customer_name = params[:kehu]
+        pi_draft.pi_customer_country = params[:guojia]
+        pi_draft.pi_customer_shipping_address = params[:fahuodizhi]
+        pi_draft.pi_owner_name = params[:zhidanren]
+        pi_draft.pi_owner_team = params[:bumen]
+        pi_draft.pi_owner_contact = params[:lianxifangshi]
+        pi_draft.pi_p_name = params[:p_name]
+        pi_draft.pi_p_name = params[:p_name]
+
+        pi_draft.save
+        if params[:commit] == "保存到草稿"
+        
+
+
+        end
+        #redirect_to :back
+    end
+
+    def pi_draft_list
+        #redirect_to :back
+    end
+
+    def pi_save
+        redirect_to :back
+    end
+
     def find_order
         if params[:c_code] != ""
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
@@ -42,34 +73,53 @@ before_filter :authenticate_user!
                     @c_table += '<td><div>' + cu.price.to_s + '</div></td>'
                     @c_table += '<td><div>' + cu.remark.to_s + '</div></td>'
                     @c_table += '<td><div>' + cu.follow_remark.to_s + '</div></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_order_check?id='+ cu.id.to_s + '"><div>确认</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_order_check?id='+ cu.id.to_s + '&pi='+params[:pi].to_s+'"><div>确认</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'
                 @c_table += '</table>'
                 @c_table += '</small>'
-                Rails.logger.info("add-------------------------------------12")
-                Rails.logger.info(@c_table.inspect)
-                Rails.logger.info("add-------------------------------------12")
+                @c_table = @c_table.gsub(/\r\n/, " ")
+                Rails.logger.info("add-------------------------------------33")
+                Rails.logger.info(@c_table)
+                Rails.logger.info("add-------------------------------------33")
+                
             end
         end
     end
 
     def find_order_check
+        if params[:pi] == "" or params[:pi] == nil
+            if PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW())').last.pi_no.split("PI")[-1].to_i + 1
+            end
+            @pi_no = "MOKO-"+current_user.s_name_self.to_s.upcase + "-" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "-PI"+ pi_n.to_s
+            pi_new = PiInfo.new()
+            pi_new.pi_no = @pi_no
+            pi_new.pi_owner = current_user.email
+            pi_new.save
+        else
+            @pi_no = params[:pi]
+        end
+        
+
+
         @pi_info = PcbOrder.find(params[:id])
         @table = '<tr>'
         @table += '<td>物料编码</td>'
         @table += '<td>物料名称</td>'
         #@table += '<td>'+@pi_info.p_name.to_s+'</td>'
-        @table += '<td>'+@pi_info.qty.to_s+'</td>'
-        @table += '<td>'+@pi_info.des_en.to_s+'</td>'
-        @table += '<td>'+@pi_info.des_cn.to_s+'</td>'
-        @table += '<td>pcb</td>'
-        @table += '<td>PCBA</td>'
-        @table += '<td>COM</td>'
-        @table += '<td>总价</td>'
-        @table += '<td>单价</td>'
-        @table += '<td>备注</td>'
+        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_qty" name="pi_item_qty" value="'+@pi_info.qty.to_s+'"></td>'
+        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_des_en" name="pi_item_des_en" value="'+@pi_info.des_en.to_s+'"></td>'
+        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_des_cn" name="pi_item_des_cn" value="'+@pi_info.des_cn.to_s+'"></td>'
+        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_price" name="pi_item_price" value="'+@pi_info.price.to_s+'"></td>'
+        @table += '<td></td>'
+        @table += '<td></td>'
+        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_tp" name="pi_item_tp" ></td>'
+        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_op" name="pi_item_op" ></td>'
+        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_remark" name="pi_item_remark" ></td>'
         @table += '</tr>'
     end
 

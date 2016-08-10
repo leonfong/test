@@ -1,12 +1,40 @@
-$("#p_name").html('<%= @pi_info.p_name %>');
+$("#pi").val('<%= @pi_no %>');
+
+
+
+
+$("#p_pi_show").html('<%= @pi_no %>');
+$("#p_name_show").html('<%= @pi_info.p_name %>');
+$("#p_riqi_show").html('<%= Time.new.strftime("%Y-%m-%d") %>');
+
+
+$("#p_pi").val('<%= @pi_no %>');
+$("#p_name").val('<%= @pi_info.p_name %>');
+$("#p_riqi").val('<%= Time.new.strftime("%Y-%m-%d") %>');
+
+
+
+$("#daima_show").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).c_no %>');
+$("#kehu_show").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).customer %>');
+$("#guojia_show").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).customer_country %>');
+$("#zhidanren_show").val('<%= current_user.full_name %>');
+$("#bumen_show").val('<%= current_user.team %>');
+$("#lianxifangshi_show").val('<%= current_user.phone %>');
+$("#fahuodizhi_show").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).shipping_address %>');
+
+
+
 $("#daima").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).c_no %>');
 $("#kehu").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).customer %>');
 $("#guojia").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).customer_country %>');
-$("#bumen").val('<%= current_user.team %>');
-
-$("#fahuodizhi").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).shipping_address %>');
 $("#zhidanren").val('<%= current_user.full_name %>');
-$("#riqi").val('<%= Time.new.strftime("%Y-%m-%d") %>');
-$("#bibie").val('<%= @pi_info.pcb_customer_id %>');
+$("#bumen").val('<%= current_user.team %>');
+$("#lianxifangshi").val('<%= current_user.phone %>');
+$("#fahuodizhi").val('<%= PcbCustomer.find(@pi_info.pcb_customer_id).shipping_address %>');
+
+
+
+
+$("#table_code").html('');
 $('#addOrdert').modal('toggle');
 $("#biaoge").html('<%= raw @table %>');

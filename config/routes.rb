@@ -65,7 +65,9 @@ Rails.application.routes.draw do
   match '/new_pcb_pi', to: 'work_flow#new_pcb_pi', via: 'get'
   match '/find_order', to: 'work_flow#find_order', via: 'get'
   match '/find_order_check', to: 'work_flow#find_order_check', via: 'get'
-
+  match '/pi_draft', to: 'work_flow#pi_draft', via: 'post'
+  match '/pi_draft_list', to: 'work_flow#pi_draft_list', via: 'get'
+  match '/pi_save', to: 'work_flow#pi_save', via: 'get'
 
 
 

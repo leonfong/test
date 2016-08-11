@@ -717,13 +717,22 @@ before_filter :authenticate_user!
         remark.p_item_id = params[:itemp_id]
         remark.user_id = current_user.id
         remark.user_name = current_user.full_name
+        p_c = PItem.find(params[:itemp_id])
+        p_bom = ProcurementBom.find(p_c.procurement_bom_id)
         if can? :work_e, :all
             remark.user_team = "sell"
+            
+            p_c.color = nil
+            p_bom.sell_feed_back_tag = nil
         elsif can? :work_d, :all
             remark.user_team = "bom"
+            p_bom.sell_feed_back_tag = "sell"           
         elsif can? :work_g, :all
             remark.user_team = "procurement"
+            p_bom.sell_feed_back_tag = "sell" 
         end
+        p_c.save
+        p_bom.save
         remark.remark = params[:item_remark].chomp
         remark.save
         @remark_all = ""
@@ -733,11 +742,11 @@ before_filter :authenticate_user!
             @remark_all += '<table style="margin: 0px;" >'
             @remark_all += '<tr>'
             @remark_all += '<td style="padding: 0px;margin: 0px;" >'
-            if params[:sell_remark] != "sell_remark"
-                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
-            else
+            #if params[:sell_remark] != "sell_remark"
+                #@remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            #else
                 @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
-            end
+            #end
             @remark_all += '</td>'
             @remark_all += '</tr>'
             @remark_all += '</table>'

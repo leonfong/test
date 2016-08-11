@@ -514,6 +514,13 @@ before_filter :authenticate_user!
         end
         redirect_to :back and return
     end
+    
+    def unfollow_bom
+        @boms = ProcurementBom.find(params[:bom_id])
+        @boms.sell_feed_back_tag = nil
+        @boms.save
+        redirect_to :back and return
+    end
 
     def sell_view_baojia
         @boms = ProcurementBom.find(params[:bom_id])
@@ -555,6 +562,59 @@ before_filter :authenticate_user!
         end
 
         redirect_to :back 
+    end
+    
+    def sell_baojia_q
+        where_p = ""
+        if not current_user.s_name.blank?
+            if current_user.s_name.size == 1
+                s_name = current_user.s_name
+               
+                where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
+                
+            elsif current_user.s_name.size == 2
+                s_name = current_user.s_name
+               
+                where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
+               
+            elsif current_user.s_name.size > 2
+                if params[:sell] == "" or params[:sell] == nil
+                    where_p = "("
+                    current_user.s_name.split(",").each_with_index do |item,index|
+                        s_name = item
+                        if current_user.s_name.split(",").size > (index+1)
+                        
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 OR"
+                       
+                        else
+                       
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8)"
+                        
+                        end
+                    end
+                else
+                    if params[:sell].size == 1
+                        s_name = params[:sell]
+               
+                        where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
+                
+                    elsif params[:sell].size == 2
+                        s_name = params[:sell]
+               
+                        where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
+                    end
+                end
+            end
+            if params[:start_date] != "" and  params[:start_date] != nil
+                where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" and  params[:end_date] != nil
+                where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
+            end
+            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p} AND procurement_boms.sell_feed_back_tag = 'sell' ").paginate(:page => params[:page], :per_page => 10)
+        else
+            @quate = ProcurementBom.find_by_sql("SELECT *  FROM `procurement_boms` WHERE procurement_boms.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 10)
+        end    
     end
 
     def sell_baojia

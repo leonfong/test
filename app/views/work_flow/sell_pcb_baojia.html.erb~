@@ -312,7 +312,8 @@ $('#editOrder').on('show.bs.modal', function (event) {
   var sell = button.data('sell');
   var qty = button.data('qty');
   var remark = button.data('remark');  
-  var customer_country = button.data('customer_country');                       
+  var customer_country = button.data('customer_country'); 
+  var shipping_address = button.data('shipping_address');                       
   var modal = $(this);
   modal.find($("#edit_itemp_id")).val(itempid);
   modal.find($("#edit_customer")).val(customer);
@@ -321,6 +322,7 @@ $('#editOrder').on('show.bs.modal', function (event) {
   modal.find($("#edit_qty")).val(qty);
   modal.find($("#edit_customer_country")).val(customer_country);
   modal.find($("#edit_remark")).html(remark);
+  modal.find($("#edit_shipping_address")).html(shipping_address);
 })
 $('#editOrder_follow').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal

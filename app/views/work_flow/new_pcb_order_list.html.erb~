@@ -29,7 +29,8 @@
 					<div class="sidebar-menu panel-group" id="accordion">
 						<a style="background-color: #ddd;" href="#userMeun" data-parent="#accordion" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
 						<ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
-							<li  ><a style="background-color: #d9edf7;" href="/pcb_order_list?new=true">新建询价</a></li>
+							<li><a href="/new_pcb_order_?new=true"><i ></i> 新建询价</a></li>
+							<li><a style="background-color: #d9edf7;" href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
 							<li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 等待报价</a></li>
 							<li><a href="/pcb_order_list?quotechk=true"><i class="icon-edit"></i> 已经报价</a></li>
  
@@ -38,6 +39,7 @@
 						<a style="background-color: #ddd;" href="#articleMenu" data-parent="#accordion" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 						<ul id="articleMenu" class="nav nav-list panel-collapse collapse menu-second">
                                                         <li><a href="/new_pcb_pi"><i class="icon-edit"></i> 新建PI</a></li>
+                                                        <li><a  href="/pi_draft_list"><i></i> PI草稿箱</a></li>
 							<li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待采购下单</a></li>
@@ -55,7 +57,7 @@
 <br>
   <ul class="nav nav-tabs" >
       <li role="presentation" ><a href="/sell_pcb_baojia"><h5 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h5></a></li>
-      <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h5></a></li>
+      <li role="presentation" class="active"><a href="/new_pcb_order"><h5 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h5></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>

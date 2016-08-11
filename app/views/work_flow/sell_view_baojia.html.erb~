@@ -58,9 +58,7 @@
                            </td> 
                            <td><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
                            <td><%= link_to "导出源文件", @boms.excel_file_url %></td> 
-                           <% if @boms.sell_feed_back_tag == "sell"%>
-                           <td><%= link_to "取消关注", unfollow_bom_item_path(:bom_id =>@boms.id),class:"btn btn-danger", data:{confirm: "确定要取消关注?"} %></td> 
-                           <% end %>
+                           
                        </tr>
                     </table>    
                 </div>
@@ -239,6 +237,9 @@
 <td style="padding: 0px;margin: 0px;" >
 <p style="padding: 0px;margin: 0px;" >
 <small >
+<% if not dn.info.blank? %>                 
+<a href="<%= dn.info %>">下载</a>
+<% end %>
 <strong>采购工程师: </strong>
 <%= dn.remark %>
 </small>

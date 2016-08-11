@@ -237,6 +237,9 @@
 <td style="padding: 0px;margin: 0px;" >
 <p style="padding: 0px;margin: 0px;" >
 <small >
+<% if not dn.info.blank? %>                 
+<a href="<%= dn.info %>">下载</a>
+<% end %>
 <strong>采购工程师: </strong>
 <%= dn.remark %>
 </small>

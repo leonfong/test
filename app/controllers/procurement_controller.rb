@@ -2404,6 +2404,11 @@ WHERE
             p_dn.qty = params[:qty]
             p_dn.date = Time.new
             p_dn.remark = params[:remark]
+            if params[:remark] != ""
+                p_bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+                p_bom.sell_feed_back_tag = "sell"
+                p_bom.save
+            end 
             p_dn.tag = "a"
             p_dn.save
             #Rails.logger.info("--------------------------")

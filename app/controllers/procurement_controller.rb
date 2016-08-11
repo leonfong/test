@@ -717,22 +717,20 @@ before_filter :authenticate_user!
         remark.p_item_id = params[:itemp_id]
         remark.user_id = current_user.id
         remark.user_name = current_user.full_name
-        p_c = PItem.find(params[:itemp_id])
-        p_bom = ProcurementBom.find(p_c.procurement_bom_id)
+        p_c = PItem.find(params[:itemp_id])       
         if can? :work_e, :all
             remark.user_team = "sell"
             
             p_c.color = nil
-            p_bom.sell_feed_back_tag = nil
+            p_c.sell_feed_back_tag = nil
         elsif can? :work_d, :all
             remark.user_team = "bom"
-            p_bom.sell_feed_back_tag = "sell"           
+            p_c.sell_feed_back_tag = "sell"           
         elsif can? :work_g, :all
             remark.user_team = "procurement"
-            p_bom.sell_feed_back_tag = "sell" 
+            p_c.sell_feed_back_tag = "sell" 
         end
         p_c.save
-        p_bom.save
         remark.remark = params[:item_remark].chomp
         remark.save
         @remark_all = ""
@@ -2405,9 +2403,8 @@ WHERE
             p_dn.date = Time.new
             p_dn.remark = params[:remark]
             if params[:remark] != ""
-                p_bom = ProcurementBom.find(@bom_item.procurement_bom_id)
-                p_bom.sell_feed_back_tag = "sell"
-                p_bom.save
+                @bom_item.sell_feed_back_tag = "sell"
+                @bom_item.save
             end 
             p_dn.tag = "a"
             p_dn.save
@@ -2487,6 +2484,9 @@ WHERE
         
         if not params[:dn_remark].blank?
             dn.remark = params[:dn_remark]
+            @bom_item = PItem.find(dn.item_id)
+            @bom_item.sell_feed_back_tag = "sell"
+            @bom_item.save
         end
         dn.save
         @itemid = params[:dn_item_id]

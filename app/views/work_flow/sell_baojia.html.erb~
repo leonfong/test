@@ -52,7 +52,7 @@
             </div>
           </div>
           <a type="button" class="btn btn-success btn-sm" href="/sell_baojia?complete=true">已经下单的order</a>
-          <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia_q">有疑问的Order</a>
+          <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia_q">需要关注的Order</a>
         </div>
       <% end %>
 </div>

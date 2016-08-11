@@ -69,7 +69,7 @@ Rails.application.routes.draw do
   match '/pi_draft_list', to: 'work_flow#pi_draft_list', via: 'get'
   match '/pi_save', to: 'work_flow#pi_save', via: 'get'
   match '/sell_baojia_q', to: 'work_flow#sell_baojia_q', via: 'get'
-  match '/unfollow_bom', to: 'work_flow#unfollow_bom', via: 'get'
+  match '/unfollow_bom_item', to: 'work_flow#unfollow_bom_item', via: 'get'
 
 
 

@@ -515,10 +515,10 @@ before_filter :authenticate_user!
         redirect_to :back and return
     end
     
-    def unfollow_bom
-        @boms = ProcurementBom.find(params[:bom_id])
-        @boms.sell_feed_back_tag = nil
-        @boms.save
+    def unfollow_bom_item
+        item = PItem.find(params[:id])
+        item.sell_feed_back_tag = nil
+        item.save
         redirect_to :back and return
     end
 
@@ -611,9 +611,9 @@ before_filter :authenticate_user!
             if params[:end_date] != "" and  params[:end_date] != nil
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
-            @quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p} AND procurement_boms.sell_feed_back_tag = 'sell' ").paginate(:page => params[:page], :per_page => 10)
+            @quate = ProcurementBom.find_by_sql("SELECT procurement_boms.`p_name`,p_items.* FROM procurement_boms INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id WHERE #{where_p} AND p_items.sell_feed_back_tag = 'sell' ").paginate(:page => params[:page], :per_page => 10)
         else
-            @quate = ProcurementBom.find_by_sql("SELECT *  FROM `procurement_boms` WHERE procurement_boms.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 10)
+            @quate = ProcurementBom.find_by_sql("SELECT procurement_boms.`p_name`,p_items.*  FROM procurement_boms INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id WHERE p_items.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 10)
         end    
     end
 

@@ -52,7 +52,7 @@
             </div>
           </div>
           <a type="button" class="btn btn-success btn-sm" href="/sell_baojia?complete=true">已经下单的order</a>
-          <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia_q">需要关注的Order</a>
+          <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia_q">需要关注的物料</a>
         </div>
       <% end %>
 </div>
@@ -66,85 +66,223 @@
        <%= will_paginate(@quate) %> 
        <div class="panel panel-info " >
                     
-                    <table class="table table-bordered">  
-                        <thead class="bg-info">
-                            <tr class="text-primary">
-                                <th width="70">日期</th>
-                                <th width="150">Order No.</th>
-                                <th width="100">数量</th>
-                                <th width="150">价格</th>  
-                                <th width="140">国家</th>
-                                <th width="150">成功几率</th>
-                                <th>业务备注</th>
-                                <th>主管备注</th>
-                                <th width="50">编辑</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-<% if not @quate.blank?%>
-<% @quate.each do |q_order| %>
+
+
+
+
+
+            <table class="table table-hover" > 
+
+                <thead >
+                <tr style="background-color: #eeeeee"> 
+                    <th width="150">Order No.</th>  
+                    <th width="150">MPN</th> 
+                    <th>描述</th>
+                    <th width="150">MOKO 编码</th>
+                    <th>MOKO 描述</th>
+                    <th width="50">位号</th>
+                    <th width="50">数量</th> 
+                    <th width="100">成本价</th>
+                    <th width="60">报价</th>                 
+                    <th >Other</th>
+                    <th >工程师备注</th>
+                    <th width="30"></th>
+                    <th width="30"></th>
+                </tr>
+                </thead>
+               
+                <% @quate.each_with_index do |item,index| %> 
+                <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
+
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= link_to item.p_name, sell_view_baojia_path(:bom_id =>item.procurement_bom_id) %></small></td>
+
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
+                        <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
-                                <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
-                                <td><%= link_to q_order.p_name, sell_view_baojia_path(:bom_id =>q_order.id) %></td>
-                                <td><%= q_order.qty %></td>
-                                <td>￥<%= q_order.t_p %></td>
-                                <td><%= q_order.order_country %></td>
-                                <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
-                                <td><%= q_order.sell_remark %></td>
-                                <td><%= q_order.sell_manager_remark %></td>
-                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.p_name_mom %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.order_country %>" data-sellremark="<%= q_order.sell_remark %>" data-sellmanagerremark="<%= q_order.sell_manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
+                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><%= item.mpn %></small></td>
                             </tr>
+                            <tr id="<%= item.id.to_s + '_mpn_tr' %>">
+                                <% if DigikeysStock.find_by(manufacturer_part_number: item.mpn).blank? %>
+                                    <% if item.link.blank? or item.link == "" %>
+                                        <% if item.mpn == nil or item.mpn == "" %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                        <% else %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                        <% end %>
+                                        
+                                    <% else %>
+                                        <% if item.link =~ /https/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                        <% elsif item.link =~ /http/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                        <% else %>
+                                            <% if item.mpn == nil or item.mpn == "" %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"  ></a></small></td>
+                                            <% else %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a  class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                            <% end %>
+                                        <% end %>
+                                    <% end %>
+                            
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-picture" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                            
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-file" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
+                                <% else %>
+                                    <% if item.link.blank? or item.link == "" %>
+                                        <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                    <% else %>
+                                        <% if item.link =~ /https/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="https://<%= item.link.split('https://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
+                                        <% elsif item.link =~ /http/i %>
+                                            <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#FF00FF" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + ((DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'') %>" href="http://<%= item.link.split('http://')[-1].split(' ')[0] %>" target="_blank"></a></small></td>
 
-                           
+                                        <% else %>
+                                            <% if item.mpn == nil or item.mpn == "" %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s %>" ></a></small></td>
+                                            <% else %>
+                                                <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top"  data-content="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).description + " " + DigikeysStock.find_by(manufacturer_part_number: item.mpn).others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s %>" href="http://www.digikey.com/product-search/en?keywords=<%= item.mpn %>" target="_blank"></a></small></td>
+                                            <% end %>
+                                        <% end %>
+                                    <% end %>
+                                    
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-picture" data-toggle="popoverii"  data-placement="right" data_src="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).image %>" href="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).image %>"  target="_blank"></a></small></td>
+                                            
+                                    <td class="text-center" style="padding: 0px;margin: 0px;"><small><a class="glyphicon glyphicon-file" href="<%= DigikeysStock.find_by(manufacturer_part_number: item.mpn).datasheets %>" target="_blank"></a></small></td>
+                                <% end %>
+                                
+                            </tr>
+                        </table>
 
-<% end %> 
-<% end %>          
-                        </tbody>
-                    </table>
+
+                    </small></td>   
+
+                    
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  ><small><%= item.description %></small></td> 
+
+                    <% if item.product_id !=0 and item.product_id != nil%>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small>
+                            
+                            <a class="text-muted" name="<%= item.id.to_s + 'n' %>"  id="<%= item.id.to_s + 'n' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus"><%= Product.find(item.product_id).name %></a>
+                            </small>
+                        </td>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small>
+                            
+                            <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body"><%= Product.find(item.product_id).description %></a>
+                            </small>
+                        </td>
+                        
+                    <% else %>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small> 
+                                
+                                <a class="text-muted" name="<%= item.id.to_s + 'n' %>"  id="<%= item.id.to_s + 'n' %>"></a>
+                                
+                            </small>
+                            
+                        </td>
+                        <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small> 
+                                
+                                <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
+                            </small>
+                        </td>
+                        
+                    <% end %>
+                    <% if item.part_code.size > 5 %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
+                    <% else %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
+                    <% end %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*ProcurementBom.find(item.procurement_bom_id).qty %></small></td> 
+
+                  
+                    
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                        <small>
+                            <a class="text-muted"><%= "￥" + item.cost.to_s %></a>
+                        </small>
+                    </td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;">
+                        <small>
+                            <a class="text-muted"><%= "￥" + item.price.to_s %></a>
+                        </small>
+                    </td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.other %></small></td>
+                    <td>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" id="<%= item.id %>_item_remark">
+<% PItemRemark.where(p_item_id: item.id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+</div>
+
+<% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
+<% if not dn.remark.blank? %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<strong>采购工程师: </strong>
+<%= dn.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% end %>
+</div>
+                    </td>
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-danger btn-xs" data-confirm="确定要取消关注?" href="/unfollow_bom_item?id=<%= item.id.to_s %>">取<br>消<br>关<br>注</a></small></td>
+                </tr>
+                <% end %>
+
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         </div>
     </div>
 
 
-<div class="modal fade" id="editOrder" tabindex="-1" role="dialog" aria-labelledby="editOrderLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Update Order Info</h4>
-      </div>
-      <div class="modal-body">
-        <%= form_tag({action: :edit_orderinfo},method:"post",id: "order_form",onsubmit: "ordersub()") do %>
-          <div class="form-group sr-only">
-            <label for="itemp_id" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="itemp_id" name="itemp_id">
-          </div>
-          
-          <div class="form-group">
-            <label for="order_country" class="control-label">国家:</label>
-            <input type="text" class="form-control" id="order_country" name="order_country">
-          </div>       
-          <div class="form-group">
-            <label for="hint" class="control-label">成功几率:</label>
-            <star id="star_val" ccc="" ></star><input id="hint" class="sr-only" name="hint"  type="text">
-          </div> 
-          <div class="form-group">
-            <label for="sell_remark" class="control-label">业务备注:</label>
-            <textarea  class="form-control" id="sell_remark" name="sell_remark"></textarea>
-          </div> 
-          <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">主管备注:</label>
-            <textarea  class="form-control" id="sell_manager_remark" name="sell_manager_remark"></textarea>
-          </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
+
+
 
 
 
@@ -160,95 +298,8 @@
 
 </small>
 <script>
-$('#editOrder').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var itempid = button.data('itempid');
-  var star = button.data('starval');
-  var ocountry = button.data('ocountry'); 
-  var sellremark = button.data('sellremark');  
-  var sellmanagerremark = button.data('sellmanagerremark'); 
-  //var mpn = button.data('mpn');
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find($("#itemp_id")).val(itempid);
-  modal.find($("#star_val")).attr("ccc",star);
-  modal.find($("#order_country")).val(ocountry);
-  modal.find($("#sell_remark")).val(sellremark);
-  modal.find($("#sell_manager_remark")).val(sellmanagerremark);
 
-
-  $('star').raty({                                                                    
-   score: function() {
-    return $(this).attr('ccc');
-    },                              
-   target: '#hint',
-
-   targetType: 'number',
-
-   targetKeep: true
-                 
-  });        
-})
-
-$('stardef').raty({                                                                    
-   score: function() {
-    return $(this).attr('ccc');
-    }, 
-   readOnly: true                            
- });        
-
-
-
-
-
-  //$('star').raty({
-    
-    //click: function(score, evt) {                                       
-      //alert('ID: ' + this.id + "\nscore: " + score + "\nevent: " + evt);
-    //}                                                                   
-  //}); 
-  
-  //$('star').raty({
-   // score: function() {
-    //return $(this).attr('ccc');
-  //}  
-  //});
-  $(function () {
-  $('[data-toggle="popover"]').popover()
-  });
-  //$(document).ready(function(){            
-   //$("#order_form").submit(function(e){          
-     //$("#editOrder").modal('toggle');               
-   //});                                    
- //}); 
-  function ordersub(){
-   $("#editOrder").modal('toggle');
- };
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

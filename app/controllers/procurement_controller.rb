@@ -531,8 +531,10 @@ before_filter :authenticate_user!
                         Rails.logger.info("----------------------------------------------------------------link_dn")
                         Rails.logger.info(link_dn.inspect)
                         Rails.logger.info("----------------------------------------------------------------link_dn")
-                        #sheet.rows[row_i.to_i][c_i.to_i] = Spreadsheet::Link.new link_dn, '技术资料'
-                        sheet[row_i.to_i,c_i.to_i] = Spreadsheet::Link.new 'www.fastbom.com', '技术资料'
+                        sheet.rows[row_i.to_i][c_i.to_i] = Spreadsheet::Link.new link_dn, '技术资料'
+                        #sheet[row_i.to_i,c_i.to_i] = Spreadsheet::Link.new 'www.fastbom.com', '技术资料'
+                        c_i += 1
+                        sheet.rows[row_i.to_i][c_i.to_i] = link_dn
                         c_i += 1
                     else
                         sheet.rows[row_i.to_i][c_i.to_i] = ""

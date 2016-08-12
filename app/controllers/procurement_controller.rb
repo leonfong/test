@@ -446,126 +446,142 @@ before_filter :authenticate_user!
 
     def p_excel_add
         @bom = ProcurementBom.find(params[:bom_id])
+        Rails.logger.info("----------------------------------------------------------------a1")
         file_name = @bom.no.to_s+"_out.xls"
         path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
         col_use = @bom.all_title.split("|").size
         row_use = @bom.row_use
- 
+        Rails.logger.info("----------------------------------------------------------------a2")
         book = Spreadsheet.open @bom.excel_file.current_path
         sheet = book.worksheet 0
         col_i = col_use
+        Rails.logger.info("----------------------------------------------------------------a3")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "MPN"
         sheet.column(col_i.to_i).width =20  
         col_i += 1
+        Rails.logger.info("----------------------------------------------------------------a4")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "MOKO物料名称"
         sheet.column(col_i.to_i).width =15
         col_i += 1
+        Rails.logger.info("----------------------------------------------------------------a5")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "MOKO物料描述"
         sheet.column(col_i.to_i).width =35 
         col_i += 1
+        Rails.logger.info("----------------------------------------------------------------a6")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "成本价￥"
         sheet.column(col_i.to_i).width =8 
         col_i += 1
+        Rails.logger.info("----------------------------------------------------------------a7")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "报价￥"
         sheet.column(col_i.to_i).width =8
         col_i += 1
+        Rails.logger.info("----------------------------------------------------------------a8")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "备注1"
         col_i += 1
+        Rails.logger.info("----------------------------------------------------------------a9")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "备注2"
         col_i += 1
+        Rails.logger.info("----------------------------------------------------------------a10")
         sheet.rows[row_use.to_i - 1][col_i.to_i] = "总数量#{@bom.qty}"
         col_i += 1
         row_i = row_use
+        Rails.logger.info("----------------------------------------------------------------a11")
         #c_i = col_use
-        PItem.where("procurement_bom_id = #{params[:bom_id]}  AND quantity <> 0").each do |item|
-            #Rails.logger.info("----------------------------------------------------------------ggga")
-            c_i = col_use
-            sheet.rows[row_i.to_i][c_i.to_i] = item.mpn
-            c_i += 1
-            if item.product_id != 0 and item.product_id != nil
-                sheet.rows[row_i.to_i][c_i.to_i] = Product.find(item.product_id).name
-                c_i += 1
-                sheet.rows[row_i.to_i][c_i.to_i] = Product.find(item.product_id).description
-                c_i += 1
+        #PItem.where("procurement_bom_id = #{params[:bom_id]}  AND quantity <> 0").each do |item|
+        PItem.where(procurement_bom_id: params[:bom_id]).each do |item|
+            if item.quantity == 0
+                row_i += 1
             else
-                sheet.rows[row_i.to_i][c_i.to_i] = ""
+                Rails.logger.info("----------------------------------------------------------------ggga")
+                c_i = col_use
+                sheet.rows[row_i.to_i][c_i.to_i] = item.mpn
                 c_i += 1
-                sheet.rows[row_i.to_i][c_i.to_i] = ""
-                c_i += 1
-            end
-            #Rails.logger.info("----------------------------------------------------------------gggb")
-            sheet.rows[row_i.to_i][c_i.to_i] = item.cost
-            c_i += 1
-            sheet.rows[row_i.to_i][c_i.to_i] = item.price
-            c_i += 1
-            if item.dn_id.blank?
-                sheet.rows[row_i.to_i][c_i.to_i] = ""
-                c_i += 1
-            else
-                #Rails.logger.info("----------------------------------------------------------------gggc")
-                begin
-                    if PDn.find(item.dn_id).remark.blank?
-                        sheet.rows[row_i.to_i][c_i.to_i] = ""
-                        c_i += 1
-                    else
-                        sheet.rows[row_i.to_i][c_i.to_i] = PDn.find(item.dn_id).remark
-                        c_i += 1
-                    end
-                rescue
-                    sheet.rows[row_i.to_i][c_i.to_i] = ""
+                if item.product_id != 0 and item.product_id != nil
+                    sheet.rows[row_i.to_i][c_i.to_i] = Product.find(item.product_id).name
+                    c_i += 1
+                    sheet.rows[row_i.to_i][c_i.to_i] = Product.find(item.product_id).description
+                    c_i += 1
+                else
+                    #sheet.rows[row_i.to_i][c_i.to_i] = ""
+                    c_i += 1
+                    #sheet.rows[row_i.to_i][c_i.to_i] = ""
                     c_i += 1
                 end
-            end
-            #Rails.logger.info("----------------------------------------------------------------ggg1")
-            if PItemRemark.where(p_item_id: item.id).blank?
-                #Rails.logger.info("----------------------------------------------------------------ggg2")
-                sheet.rows[row_i.to_i][c_i.to_i] = ""
+                Rails.logger.info("----------------------------------------------------------------gggb")
+                sheet.rows[row_i.to_i][c_i.to_i] = item.cost
                 c_i += 1
-            else
-                allitem_remark = ""
-                #Rails.logger.info("----------------------------------------------------------------ggg3")
-                PItemRemark.where(p_item_id: item.id).each do |remark_i|
-                    allitem_remark += "【#{remark_i.user_name}】:#{remark_i.remark}\n\r"
+                sheet.rows[row_i.to_i][c_i.to_i] = item.price
+                c_i += 1
+                if item.dn_id.blank?
+                    #sheet.rows[row_i.to_i][c_i.to_i] = ""
+                    c_i += 1
+                else
+                    Rails.logger.info("----------------------------------------------------------------gggc")
+                    begin
+                        if PDn.find(item.dn_id).remark.blank?
+                            #sheet.rows[row_i.to_i][c_i.to_i] = ""
+                            c_i += 1
+                        else
+                            sheet.rows[row_i.to_i][c_i.to_i] = PDn.find(item.dn_id).remark
+                            c_i += 1
+                        end
+                    rescue
+                        #sheet.rows[row_i.to_i][c_i.to_i] = ""
+                        c_i += 1
+                    end
                 end
-                sheet.rows[row_i.to_i][c_i.to_i] = allitem_remark
-                c_i += 1
-            end
-            #Rails.logger.info("----------------------------------------------------------------ggg4")
-            if not item.dn_id.blank?
-                #Rails.logger.info("----------------------------------------------------------------ggg5")
-                begin
-                    if not PDn.find(item.dn_id).info_url.blank?
-                        #Rails.logger.info("----------------------------------------------------------------ggg6")
-                        link_dn = request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url
-                        #Rails.logger.info("----------------------------------------------------------------ggg7")
+                Rails.logger.info("----------------------------------------------------------------ggg1")
+                if PItemRemark.where(p_item_id: item.id).blank?
+                    Rails.logger.info("----------------------------------------------------------------ggg2")
+                    #sheet.rows[row_i.to_i][c_i.to_i] = ""
+                    c_i += 1
+                else
+                    allitem_remark = ""
+                    Rails.logger.info("----------------------------------------------------------------ggg3")
+                    PItemRemark.where(p_item_id: item.id).each do |remark_i|
+                        allitem_remark += "【#{remark_i.user_name}】:#{remark_i.remark}\n\r"
+                    end
+                    sheet.rows[row_i.to_i][c_i.to_i] = allitem_remark
+                    c_i += 1
+                end
+                Rails.logger.info("----------------------------------------------------------------ggg4")
+                if not item.dn_id.blank?
+                    Rails.logger.info("----------------------------------------------------------------ggg5")
+                    begin
+                        if not PDn.find(item.dn_id).info_url.blank?
+                            Rails.logger.info("----------------------------------------------------------------ggg6")
+                            link_dn = request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url
+                            Rails.logger.info("----------------------------------------------------------------ggg7")
                         #Rails.logger.info("----------------------------------------------------------------link_dn")
                         #Rails.logger.info(link_dn.inspect)
                         #Rails.logger.info("----------------------------------------------------------------link_dn")
                         #sheet.rows[row_i.to_i][c_i.to_i] = Spreadsheet::Link.new link_dn, '技术资料'
                         #sheet[row_i.to_i,c_i.to_i] = Spreadsheet::Link.new 'www.fastbom.com', '技术资料'
                         #c_i += 1
-                        sheet.rows[row_i.to_i][c_i.to_i] = link_dn
+                            sheet.rows[row_i.to_i][c_i.to_i] = link_dn
+                            c_i += 1
+                            Rails.logger.info("----------------------------------------------------------------ggg8")
+                        else
+                            #sheet.rows[row_i.to_i][c_i.to_i] = ""
+                            c_i += 1
+                            Rails.logger.info("----------------------------------------------------------------ggg9")
+                        end
+                    rescue
+                        #sheet.rows[row_i.to_i][c_i.to_i] = ""
                         c_i += 1
-                        #Rails.logger.info("----------------------------------------------------------------ggg8")
-                    else
-                        sheet.rows[row_i.to_i][c_i.to_i] = ""
-                        c_i += 1
-                        #Rails.logger.info("----------------------------------------------------------------ggg9")
+                        Rails.logger.info("----------------------------------------------------------------ggg10")
                     end
-                rescue
-                    sheet.rows[row_i.to_i][c_i.to_i] = ""
+                else
+                    Rails.logger.info("----------------------------------------------------------------ggg11")
+                    #sheet.rows[row_i.to_i][c_i.to_i] = ""
                     c_i += 1
-                    #Rails.logger.info("----------------------------------------------------------------ggg10")
-                end
-            else
-                #Rails.logger.info("----------------------------------------------------------------ggg11")
-                sheet.rows[row_i.to_i][c_i.to_i] = ""
-                c_i += 1
-            end		
-            row_i += 1
+                end		
+                row_i += 1
+            end
         end
-        
+        Rails.logger.info("----------------------------------------------------------------ggg12")
         book.write path+file_name
+        Rails.logger.info("----------------------------------------------------------------ggg13")
         send_file(path+file_name, type: "application/vnd.ms-excel")
 
 =begin

@@ -5,9 +5,9 @@ before_filter :authenticate_user!
     def find_moko_part
         if params[:moko_part] != ""
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') AND all_dns.qty >= 100 ORDER BY all_dns.date DESC")
+            @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
             if @moko_part.blank?
-                @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') ORDER BY all_dns.date DESC")
+                @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') ORDER BY all_dns.date DESC").first
             end
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@moko_part.inspect)
@@ -26,15 +26,15 @@ before_filter :authenticate_user!
                 @table_moko_part += '<tr>'
                 @table_moko_part += '</thead>'
                 @table_moko_part += '<tbody>'
-                @moko_part.each do |cu|
+                #@moko_part.each do |cu|
                     @table_moko_part += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.part_code.to_s + '</div></a></td>'
-                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.des.to_s + '</div></a></td>'
-                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.qty.to_s + '</div></a></td>'
-                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.price.to_s + '</div></a></td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ @moko_part.id.to_s + '"><div>' + @moko_part.part_code.to_s + '</div></a></td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ @moko_part.id.to_s + '"><div>' + @moko_part.des.to_s + '</div></a></td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ @moko_part.id.to_s + '"><div>' + @moko_part.qty.to_s + '</div></a></td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ @moko_part.id.to_s + '"><div>' + @moko_part.price.to_s + '</div></a></td>'
                     @table_moko_part += '</tr>'
-                end
+                #end
                 @table_moko_part += '</tbody>'
                 @table_moko_part += '</table>'
                 @table_moko_part += '</small>'

@@ -284,7 +284,37 @@
     </div>
 
 
-
+<div class="modal fade" id="remarkitem" tabindex="-1" role="dialog" aria-labelledby="remarkitemLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="remarkitemLabel">备注</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_item_remark,controller: :procurement},method:"post",remote: true) do %>
+          <div class="form-group sr-only">
+            <label for="itemp_id_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
+          </div>
+          <div class="form-group sr-only">
+            <label for="sell_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="sell_remark" name="sell_remark" value="sell_remark">
+          </div>
+          <div class="form-group">
+            <label for="pj_remark">备注：</label>
+            <textarea type="text" class="form-control" id="item_remark" name="item_remark"  ></textarea>
+          </div>             
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 
@@ -301,7 +331,12 @@
 
 </small>
 <script>
-
+$('#remarkitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var modal = $(this);
+  modal.find($("#itemp_id_remark")).val(itempid);
+})
 </script>
 
 

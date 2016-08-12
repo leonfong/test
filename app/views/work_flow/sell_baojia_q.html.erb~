@@ -244,7 +244,7 @@
 <p style="padding: 0px;margin: 0px;" >
 <small >
 <% if not dn.info.blank? %>                 
-<a class="btn btn-info" href="<%= dn.info %>" target="_blank">下载</a>
+<a class="btn btn-info btn-xs" href="<%= dn.info %>" target="_blank">下载</a>
 <% end %>
 <strong>采购工程师: </strong>
 <%= dn.remark %>
@@ -301,7 +301,12 @@
 
 </small>
 <script>
-
+$('#remarkitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var modal = $(this);
+  modal.find($("#itemp_id_remark")).val(itempid);
+})
 </script>
 
 

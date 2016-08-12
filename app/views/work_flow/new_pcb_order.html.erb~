@@ -108,9 +108,11 @@
                             <th >总价</th>
                             <th >单价</th>
                             <th >备注</th>
+                            <th >附件</th>
                         </tr>
                     </thead>
                     <tbody id="biaoge">
+
                     </tbody>
                 </table>             
             </div>
@@ -178,7 +180,7 @@
               </div>
             <% end %>             
           </div> 
-          <div class="form-group" id="table_moko">
+          <div class="form-group" id="table_moko_part">
 
 
           </div>   
@@ -188,8 +190,12 @@
               <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
             </div> 
             <div class="form-group">         
-              <label for="p_name" class="control-label">项目名称:</label>
-              <input type="text" class="form-control" id="p_name" name="p_name">
+              <label for="p_name" class="control-label">物料代码:</label>
+              <input type="text" class="form-control" id="moko_code" name="moko_code">
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">物料名称:</label>
+              <input type="text" class="form-control" id="moko_des" name="moko_des">
             </div> 
             <div class="form-group">         
               <label for="des_en" class="control-label">英文描述:</label>
@@ -205,24 +211,9 @@
               <input type="number" class="form-control" id="qty" name="qty">
             </div> 
             <div class="form-group">
-              <label for="followedit_remark" class="control-label">跟踪备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
-              <textarea  class="form-control" id="followedit_remark" name="follow_remark"></textarea>
+              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
+              <textarea  class="form-control" id="follow_remark" name="follow_remark"></textarea>
             </div>
-            <div class="form-group sr-only">
-              <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-              <label for="customerd" class="control-label">客户代码id:</label>
-              <input type="text" class="form-control" id="customerd" name="customer" readonly>
-            </div>
-            <div class="form-group">
-              <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-              <label for="c_no" class="control-label">客户代码:</label>
-              <input type="text" class="form-control" id="c_nod" name="c_no" readonly>
-            </div>
-            <div class="form-group">
-              <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-              <label for="sell" class="control-label">所属业务员:</label>
-              <input type="text" class="form-control" id="selld" name="sell" readonly>
-            </div> 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -310,6 +301,27 @@
 
 
 <script>
+function postform() {  	         
+      html = $("#moko_code").val();     
+      //alert(html);
+      if (html == "")
+      {                    
+　　    alert("请选择物料！");                    
+　　    return false;                
+　     }
+      if ($("#qty").val() == "")
+      {                    
+　　    alert("请填写数量！");                    
+　　    return false;                
+　     }
+      if ($("#follow_remark").html() == "")
+      {                    
+　　    alert("请填写备注，备注中应包含数量！");                    
+　　    return false;                
+　     }
+}  
+
+
 $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');
   $('#articleMenu').collapse('hide');

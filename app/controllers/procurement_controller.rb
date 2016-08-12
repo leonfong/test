@@ -477,7 +477,8 @@ before_filter :authenticate_user!
         col_i += 1
         row_i = row_use
         #c_i = col_use
-        PItem.where(procurement_bom_id: params[:bom_id]).each do |item|
+        PItem.where("procurement_bom_id = #{params[:bom_id]}  AND quantity <> 0").each do |item|
+            #Rails.logger.info("----------------------------------------------------------------ggga")
             c_i = col_use
             sheet.rows[row_i.to_i][c_i.to_i] = item.mpn
             c_i += 1
@@ -492,6 +493,7 @@ before_filter :authenticate_user!
                 sheet.rows[row_i.to_i][c_i.to_i] = ""
                 c_i += 1
             end
+            #Rails.logger.info("----------------------------------------------------------------gggb")
             sheet.rows[row_i.to_i][c_i.to_i] = item.cost
             c_i += 1
             sheet.rows[row_i.to_i][c_i.to_i] = item.price
@@ -500,6 +502,7 @@ before_filter :authenticate_user!
                 sheet.rows[row_i.to_i][c_i.to_i] = ""
                 c_i += 1
             else
+                #Rails.logger.info("----------------------------------------------------------------gggc")
                 begin
                     if PDn.find(item.dn_id).remark.blank?
                         sheet.rows[row_i.to_i][c_i.to_i] = ""
@@ -513,21 +516,28 @@ before_filter :authenticate_user!
                     c_i += 1
                 end
             end
+            #Rails.logger.info("----------------------------------------------------------------ggg1")
             if PItemRemark.where(p_item_id: item.id).blank?
+                #Rails.logger.info("----------------------------------------------------------------ggg2")
                 sheet.rows[row_i.to_i][c_i.to_i] = ""
                 c_i += 1
             else
                 allitem_remark = ""
+                #Rails.logger.info("----------------------------------------------------------------ggg3")
                 PItemRemark.where(p_item_id: item.id).each do |remark_i|
                     allitem_remark += "【#{remark_i.user_name}】:#{remark_i.remark}\n\r"
                 end
                 sheet.rows[row_i.to_i][c_i.to_i] = allitem_remark
                 c_i += 1
             end
+            #Rails.logger.info("----------------------------------------------------------------ggg4")
             if not item.dn_id.blank?
+                #Rails.logger.info("----------------------------------------------------------------ggg5")
                 begin
                     if not PDn.find(item.dn_id).info_url.blank?
+                        #Rails.logger.info("----------------------------------------------------------------ggg6")
                         link_dn = request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url
+                        #Rails.logger.info("----------------------------------------------------------------ggg7")
                         #Rails.logger.info("----------------------------------------------------------------link_dn")
                         #Rails.logger.info(link_dn.inspect)
                         #Rails.logger.info("----------------------------------------------------------------link_dn")
@@ -536,15 +546,19 @@ before_filter :authenticate_user!
                         #c_i += 1
                         sheet.rows[row_i.to_i][c_i.to_i] = link_dn
                         c_i += 1
+                        #Rails.logger.info("----------------------------------------------------------------ggg8")
                     else
                         sheet.rows[row_i.to_i][c_i.to_i] = ""
                         c_i += 1
+                        #Rails.logger.info("----------------------------------------------------------------ggg9")
                     end
                 rescue
                     sheet.rows[row_i.to_i][c_i.to_i] = ""
                     c_i += 1
+                    #Rails.logger.info("----------------------------------------------------------------ggg10")
                 end
             else
+                #Rails.logger.info("----------------------------------------------------------------ggg11")
                 sheet.rows[row_i.to_i][c_i.to_i] = ""
                 c_i += 1
             end		

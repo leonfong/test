@@ -16,3 +16,5 @@ $("#kehu").val('<%= @c_info.customer %>');
 $("#guojia").val('<%= @c_info.customer_country %>');
 $("#fahuodizhi").val('<%= @c_info.shipping_address %>');
 
+
+$('#find_c').modal('hide')

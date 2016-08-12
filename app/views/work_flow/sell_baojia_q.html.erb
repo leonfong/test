@@ -234,8 +234,8 @@
 <% end %>
 </div>
 
-<% PDn.where(item_id: item.id).order('date DESC').each do |dn| %>
-<% if not dn.remark.blank? %>
+<% if not item.dn_id.blank? %>
+<% if not PDn.find(item.dn_id).remark.blank? %>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
 <table style="margin: 0px;" >
@@ -243,11 +243,11 @@
 <td style="padding: 0px;margin: 0px;" >
 <p style="padding: 0px;margin: 0px;" >
 <small >
-<% if not dn.info.blank? %>                 
-<a class="btn btn-info btn-xs" href="<%= dn.info %>" target="_blank">下载</a>
+<% if not PDn.find(item.dn_id).info.blank? %>                 
+<a class="btn btn-info btn-xs" href="<%= PDn.find(item.dn_id).info %>" target="_blank">下载</a>
 <% end %>
 <strong>采购工程师: </strong>
-<%= dn.remark %>
+<%= PDn.find(item.dn_id).remark %>
 </small>
 </p>
 </td>

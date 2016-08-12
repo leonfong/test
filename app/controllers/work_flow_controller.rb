@@ -45,6 +45,10 @@ before_filter :authenticate_user!
         end
     end
 
+    def find_moko_part_ch
+
+    end
+
     def pi_draft
         pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
         pi_draft.pi_p_name = params[:p_name]
@@ -191,7 +195,13 @@ before_filter :authenticate_user!
 
     def find_c_ch
         @c_info = PcbCustomer.find(params[:id])
-        
+        up_c = PcbOrder.find_by(order_no: params[:c_order_no])
+        up_c.pcb_customer_id = @c_info.id
+        up_c.c_code = @c_info.c_no
+        up_c.c_des = @c_info.customer
+        up_c.c_country = @c_info.customer_country
+        up_c.c_shipping_address = @c_info.shipping_address
+        up_c.save
     end
 
     def find_c
@@ -219,10 +229,10 @@ before_filter :authenticate_user!
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.c_no + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.customer.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'
@@ -291,8 +301,30 @@ before_filter :authenticate_user!
     end
 
     def new_pcb_order
-        
+       if params[:new]
+           if PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').blank?
+                p_n =1
+           else
+                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.p_no.split("ENQUIRY")[-1].to_i + 1
+           end
+           @p_no = "MOKO-"+current_user.s_name_self.to_s.upcase + "-" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "-ENQUIRY"+ p_n.to_s
+           @pcb = PcbOrder.new()        
+           @pcb.order_no = @p_no
+           @pcb.order_sell = current_user.email
+           @pcb.team = current_user.team
+           @pcb.phone = current_user.phone
+           @pcb.state = "new"
+           @pcb.save
+           redirect_to edit_pcb_order_path(order_no: @p_no) and return
+       else
+           redirect_to :back and return
+       end 
     end
+
+    def edit_pcb_order
+        @q_order = PcbOrder.find_by(order_no: params[:order_no])
+    end
+
 
     def del_pcb_order
         pcb_order = PcbOrder.find(params[:order_id])

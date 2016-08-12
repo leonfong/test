@@ -27,10 +27,10 @@
                 <div class="panel panel-info">
                     <div class="panel-heading"><strong>询价基本信息:</strong></div>
                     <div class="panel-body ">  
-<!--                   
-                        <div class="col-md-2"><p><strong>PI NO. : </strong><ins id="p_pi_show" name="p_pi_show"></ins></p><input type="text" class="form-control sr-only" id="p_pi" name="p_pi" >
+                   
+                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"></ins></p><input type="text" class="form-control sr-only" id="p_pi" name="p_pi" >
                         </div>
--->
+
                         <div class="col-md-2 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" >
                         </div>
                         <div class="col-md-2 form-inline"><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins>
@@ -184,7 +184,7 @@
 
 
           </div>   
-            <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>     
+            <%= form_tag({action: :add_pcb_order},method:"post",remote: true,multipart:"ture",id: "order_form") do %>     
             <div class="form-group">
               <label for="sell_manager_remark" class="control-label">附件:</label>
               <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>

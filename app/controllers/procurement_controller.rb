@@ -2335,6 +2335,9 @@ WHERE
                     @bom_item.mpn_id = nil
                     #@bom_item.mpn = nil
                     @bom_item.color = "b"
+                    if @add_dns.remark != nil or @add_dns.remark != ""
+                        @bom_item.sell_feed_back_tag = "sell"
+                    end
                     @bom_item.user_do_change = nil
 	            @bom_item.save!
   
@@ -2385,6 +2388,9 @@ WHERE
             @bom_item.dn_id = @add_dns.id
             #@bom_item.product_id = 0
             @bom_item.color = "b"
+            if @add_dns.remark != nil or @add_dns.remark != ""
+                @bom_item.sell_feed_back_tag = "sell"
+            end
             @bom_item.user_do_change = nil
             @bom_item.save
 
@@ -2439,10 +2445,10 @@ WHERE
             p_dn.qty = params[:qty]
             p_dn.date = Time.new
             p_dn.remark = params[:remark]
-            if params[:remark] != ""
-                @bom_item.sell_feed_back_tag = "sell"
-                @bom_item.save
-            end 
+            #if params[:remark] != ""
+                #@bom_item.sell_feed_back_tag = "sell"
+                #@bom_item.save
+           # end 
             p_dn.tag = "a"
             p_dn.save
             #Rails.logger.info("--------------------------")
@@ -2522,8 +2528,8 @@ WHERE
         if not params[:dn_remark].blank?
             dn.remark = params[:dn_remark]
             @bom_item = PItem.find(dn.item_id)
-            @bom_item.sell_feed_back_tag = "sell"
-            @bom_item.save
+            #@bom_item.sell_feed_back_tag = "sell"
+            #@bom_item.save
         end
         dn.save
         @itemid = params[:dn_item_id]

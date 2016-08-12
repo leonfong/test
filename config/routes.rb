@@ -71,6 +71,7 @@ Rails.application.routes.draw do
   match '/sell_baojia_q', to: 'work_flow#sell_baojia_q', via: 'get'
   match '/unfollow_bom_item', to: 'work_flow#unfollow_bom_item', via: 'get'
   match '/find_moko_part', to: 'work_flow#find_moko_part', via: 'get'
+  match '/edit_pcb_order', to: 'work_flow#edit_pcb_order', via: 'get'
 
 
 

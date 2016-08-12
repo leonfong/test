@@ -28,12 +28,12 @@
                     <div class="panel-heading"><strong>询价基本信息:</strong></div>
                     <div class="panel-body ">  
                    
-                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"></ins></p><input type="text" class="form-control sr-only" id="p_no" name="p_no" >
+                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"><%= @q_order.order_no %></ins></p><input type="text" class="form-control sr-only" id="p_no" name="p_no" value="<%= @q_order.order_no %>">
                         </div>
 
-                        <div class="col-md-2 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" >
+                        <div class="col-md-4 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" >
                         </div>
-                        <div class="col-md-2 form-inline"><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins>
+                        <div class="col-md-2 form-inline"><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= Time.new.strftime("%Y-%m-%d")%></ins>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
                         </div> 
                         <div class="col-md-2 form-inline"><strong>交货日期 : </strong><ins></ins>
@@ -56,9 +56,9 @@
                     <div class="panel-heading"><strong>业务员信息</strong></div>
                     <div class="panel-body ">                     
                         <div class="row ">
-                            <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="zhidanren" name="zhidanren" readonly></div> 
-                            <div class="col-md-2"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="bumen" name="bumen" readonly></div> 
-                            <div class="col-md-2"><strong>制单人电话：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"></ins><input type="text" class="input-sm sr-only" style="width:70%" id="lianxifangshi" name="lianxifangshi" readonly></div> 
+                            <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= User.find_by(email: @q_order.order_sell).full_name %></ins></div> 
+                            <div class="col-md-2"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= @q_order.team %></ins></div> 
+                            <div class="col-md-2"><strong>制单人电话：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= @q_order.phone %></ins></div> 
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料代码:</label>
-              <input type="text" class="form-control" id="moko_code" name="moko_code">
+              <input type="text" class="form-control" id="moko_code" name="moko_code" readonly>
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料名称:</label>
@@ -206,7 +206,6 @@
               <input type="text" class="form-control" id="des_cn" name="des_cn">
             </div> 
             <div class="form-group">
-              <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
               <label for="qty" class="control-label">数量:</label>
               <input type="number" class="form-control" id="qty" name="qty">
             </div> 
@@ -241,6 +240,10 @@
             <div class="modal-body">        
                 <div class="form-inline">
                 <%= form_tag('/find_c', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group sr-only">         
+                        <label for="c_order_no" class="control-label">询价单号:</label>
+                        <input type="text" class="form-control" id="c_order_no" name="c_order_no" value="<%= @q_order.order_no %>">
+                    </div>
                     <div class="form-group ">
                         <lable for="order" , class="control-label"><strong>客户: </strong></lable>
                         <div class="input-group input-group-sm">              

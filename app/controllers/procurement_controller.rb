@@ -528,12 +528,12 @@ before_filter :authenticate_user!
                 begin
                     if not PDn.find(item.dn_id).info_url.blank?
                         link_dn = request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url
-                        Rails.logger.info("----------------------------------------------------------------link_dn")
-                        Rails.logger.info(link_dn.inspect)
-                        Rails.logger.info("----------------------------------------------------------------link_dn")
-                        sheet.rows[row_i.to_i][c_i.to_i] = Spreadsheet::Link.new link_dn, '技术资料'
+                        #Rails.logger.info("----------------------------------------------------------------link_dn")
+                        #Rails.logger.info(link_dn.inspect)
+                        #Rails.logger.info("----------------------------------------------------------------link_dn")
+                        #sheet.rows[row_i.to_i][c_i.to_i] = Spreadsheet::Link.new link_dn, '技术资料'
                         #sheet[row_i.to_i,c_i.to_i] = Spreadsheet::Link.new 'www.fastbom.com', '技术资料'
-                        c_i += 1
+                        #c_i += 1
                         sheet.rows[row_i.to_i][c_i.to_i] = link_dn
                         c_i += 1
                     else

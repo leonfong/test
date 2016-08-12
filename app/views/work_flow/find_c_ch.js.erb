@@ -1,3 +1,20 @@
-$("#selld").val("<%= @c_info.sell %>");
-$("#c_nod").val("<%= @c_info.c_no %>");
-$("#customerd").val("<%= @c_info.id %>");
+//$("#selld").val("<%= @c_info.sell %>");
+//$("#c_nod").val("<%= @c_info.c_no %>");
+//$("#customerd").val("<%= @c_info.id %>");
+
+
+
+$("#daima_show").html('<%= @c_info.c_no %>');
+$("#kehu_show").html('<%= @c_info.customer %>');
+$("#guojia_show").html('<%= @c_info.customer_country %>');
+$("#fahuodizhi_show").html('<%= @c_info.shipping_address %>');
+
+
+
+$("#daima").val('<%= @c_info.c_no %>');
+$("#kehu").val('<%= @c_info.customer %>');
+$("#guojia").val('<%= @c_info.customer_country %>');
+$("#fahuodizhi").val('<%= @c_info.shipping_address %>');
+
+
+$('#addOrdert').modal('hide')

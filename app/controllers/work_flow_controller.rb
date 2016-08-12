@@ -2,6 +2,49 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def find_moko_part
+        if params[:moko_part] != ""
+            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') AND all_dns.qty >= 100 ORDER BY all_dns.date DESC")
+            if @moko_part.blank?
+                @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') ORDER BY all_dns.date DESC")
+            end
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@moko_part.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @moko_part.blank?  
+                Rails.logger.info("add-------------------------------------12")
+                @table_moko_part = '<br>'
+                @table_moko_part += '<small>'
+                @table_moko_part += '<table class="table table-bordered">'
+                @table_moko_part += '<thead>'
+                @table_moko_part += '<tr class="active">'
+                @table_moko_part += '<th width="100">物料代码</th>'
+                @table_moko_part += '<th>描述</th>'
+                @table_moko_part += '<th width="70">数量</th>'
+                @table_moko_part += '<th width="70">价格</th>'
+                @table_moko_part += '<tr>'
+                @table_moko_part += '</thead>'
+                @table_moko_part += '<tbody>'
+                @moko_part.each do |cu|
+                    @table_moko_part += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.part_code.to_s + '</div></a></td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.des.to_s + '</div></a></td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.qty.to_s + '</div></a></td>'
+                    @table_moko_part += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_moko_part_ch?id='+ cu.id.to_s + '"><div>' + cu.price.to_s + '</div></a></td>'
+                    @table_moko_part += '</tr>'
+                end
+                @table_moko_part += '</tbody>'
+                @table_moko_part += '</table>'
+                @table_moko_part += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@table_moko_part.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
     def pi_draft
         pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
         pi_draft.pi_p_name = params[:p_name]

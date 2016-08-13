@@ -4,8 +4,10 @@
             <div class="sidebar-menu">
 	        <a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
 		    <ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
+<!--
 		        <li><a style="background-color: #d9edf7;" href="/new_pcb_order?new=true"><i ></i> 新建询价</a></li>
-			<li><a href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
+-->
+			<li><a style="background-color: #d9edf7;" href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
 			<li><a href="/pcb_order_list?quote=true"><i ></i> 等待报价</a></li>
 			<li><a href="/pcb_order_list?quotechk=true"><i ></i> 已经报价</a></li>
                     </ul>
@@ -70,13 +72,13 @@
                 <div class="panel-heading"><strong>客户信息</strong> <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button></div>
                 <div class="panel-body ">                     
                     <div class="row ">
-                        <div class="col-md-2"><strong>客户代码：</strong><ins id="daima_show" name="daima_show"></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
-                        <div class="col-md-4"><strong>客户信息：</strong><ins id="kehu_show" name="kehu_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div> 
-                         <div class="col-md-2"><strong>国家：</strong><ins id="guojia_show" name="guojia_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="guojia" name="guojia" readonly></div>   
+                        <div class="col-md-2"><strong>客户代码：</strong><ins id="daima_show" name="daima_show"><%= @q_order.c_code %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
+                        <div class="col-md-4"><strong>客户信息：</strong><ins id="kehu_show" name="kehu_show"><%= @q_order.c_des %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div> 
+                         <div class="col-md-2"><strong>国家：</strong><ins id="guojia_show" name="guojia_show"><%= @q_order.c_country %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="guojia" name="guojia" readonly></div>   
                         
                     </div>
                     <div class="row " style="padding-top: 10px;">
-                         <div class="col-md-12"><strong>客户收货地址：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"></ins><input type="text" class="input-sm sr-only" style="width:90%" id="fahuodizhi" name="fahuodizhi" readonly></div> 
+                         <div class="col-md-12"><strong>客户收货地址：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @q_order.c_shipping_address %></ins><input type="text" class="input-sm sr-only" style="width:90%" id="fahuodizhi" name="fahuodizhi" readonly></div> 
   
                     </div>
                 </div>
@@ -97,22 +99,45 @@
                 <table class="table table-hover">
                     <thead>
                         <tr style="background-color: #eeeeee">
-                            <th >物料编码</th>
+                            <th width="40">操作</th>
+                            <th width="150">物料编码</th>
                             <th >物料名称</th>
-                            <th >数量</th>
+                            <th width="70">数量</th>
                             <th >英文描述</th>
                             <th >中文描述</th>
-                            <th >PCB</th>
-                            <th >PCBA</th>
-                            <th >COMPONENTS</th>
-                            <th >总价</th>
-                            <th >单价</th>
+                            <th width="100">类别</th>
+                            <th width="100">总价</th>
+                            <th width="100">单价</th>
+                            <th width="50">附件</th>
                             <th >备注</th>
-                            <th >附件</th>
+                            <th width="40">删除</th>
                         </tr>
                     </thead>
                     <tbody id="biaoge">
-
+                        <% if @q_order_item %>
+                        <% @q_order_item.each do |q_item| %>
+                        <tr>
+                            <td>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= q_item.id %>"  data-edit_moko_code="<%= q_item.moko_code %>" data-edit_moko_des="<%= q_item.moko_des %>" data-edit_p_type="<%= q_item.p_type %>" data-edit_des_en="<%= q_item.des_en %>" data-edit_des_cn="<%= q_item.des_cn %>" data-edit_qty="<%= q_item.qty %>" data-edit_follow_remark="<%= q_item.remark %>"></a>
+                            </td>
+                            <td><%= q_item.moko_code %></td>
+                            <td><%= q_item.moko_des %></td>
+                            <td><%= q_item.qty %></td>
+                            <td><%= q_item.des_en %></td>
+                            <td><%= q_item.des_cn %></td>
+                            <td><%= q_item.p_type %></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <% if not q_item.att.blank? %>                 
+                                    <a class="btn btn-info btn-xs" href="<%= q_item.att %>" target="_blank">下载</a>
+                                <% end %>
+                            </td>
+                            <td><%= q_item.remark %></td>
+                            <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_item?edit_c_item_id=<%= q_item.id %>" data-confirm="确定要删除?"></a></td>
+                        </tr>
+                        <% end %>
+                        <% end %>
                     </tbody>
                 </table>             
             </div>
@@ -132,7 +157,7 @@
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
-                    <%= link_to "提交",  pi_save_path, class: "btn btn-info",data:{confirm: "确定要提交PI?"} %>
+                    <%= link_to "提交",  pi_save_path, class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
                 </div>
             </div></div>
        <% end %>
@@ -149,6 +174,95 @@
 
 
 
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="edititem" tabindex="-1" role="dialog" aria-labelledby="edititemLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edititemLabel"><strong>修改询价物料</strong></h4>
+        </div>
+        
+        <div class="modal-body">
+            <div class="form-inline">
+             <%= form_tag('/find_moko_part', method:"get", class:"form-inline",remote: true) do %>
+               <div class="form-group ">
+                  <lable for="order" , class="control-label"><strong>搜索物料: </strong></lable>
+                  <div class="input-group input-group-sm">              
+                    <%= text_field_tag :moko_part, params[:moko_part], class:"form-control input-lg", size:"60", placeholder:"物料代码/物料名称/物料描述/"%>               
+                    <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                    </div>
+                  </div>
+              </div>
+            <% end %>             
+          </div> 
+          <div class="form-group" id="edit_table_moko_part">
+
+
+          </div>   
+            <%= form_tag({action: :edit_pcb_order_item},method:"post",multipart:"ture",id: "order_form") do %>   
+            <div class="form-group sr-only">         
+                <label for="c_order_id" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="edit_c_item_id" name="edit_c_item_id">
+            </div>  
+            
+            <div class="form-group">
+              <label for="sell_manager_remark" class="control-label">附件:</label>
+              <input name="edit_att" id="edit_att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">物料代码:</label>
+              <input type="text" class="form-control" id="edit_moko_code" name="edit_moko_code" readonly>
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">物料名称:</label>
+              <input type="text" class="form-control" id="edit_moko_des" name="edit_moko_des" readonly>
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">类别:</label>
+              <select class="form-control" id="edit_p_type" name="edit_p_type">
+                  <option value="">----请选择----</option>
+                  <option value="PCB">PCB</option>
+                  <option value="PCBA">PCBA</option>
+                  <option value="COMPONENTS">COMPONENTS</option>
+              </select>
+            </div> 
+            
+            <div class="form-group">         
+              <label for="des_en" class="control-label">英文描述:</label>
+              <input type="text" class="form-control" id="edit_des_en" name="edit_des_en">
+            </div> 
+            <div class="form-group">         
+              <label for="des_cn" class="control-label">中文描述:</label>
+              <input type="text" class="form-control" id="edit_des_cn" name="edit_des_cn">
+            </div> 
+            <div class="form-group">
+              <label for="qty" class="control-label">数量:</label>
+              <input type="number" class="form-control" id="edit_qty" name="edit_qty">
+            </div> 
+            <div class="form-group">
+              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
+              <textarea  class="form-control" id="edit_follow_remark" name="edit_follow_remark"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_edit()">
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+    
 
 
 
@@ -184,7 +298,15 @@
 
 
           </div>   
-            <%= form_tag({action: :add_pcb_order},method:"post",remote: true,multipart:"ture",id: "order_form") do %>     
+            <%= form_tag({action: :add_pcb_order_item},method:"post",multipart:"ture",id: "order_form") do %>   
+            <div class="form-group sr-only">         
+                <label for="c_order_id" class="control-label">询价id:</label>
+                <input type="text" class="form-control" id="c_order_id" name="c_order_id" value="<%= @q_order.id %>">
+            </div>  
+            <div class="form-group sr-only">         
+                <label for="c_order_no" class="control-label">询价单号:</label>
+                <input type="text" class="form-control" id="c_order_no" name="c_order_no" value="<%= @q_order.order_no %>">
+            </div>  
             <div class="form-group">
               <label for="sell_manager_remark" class="control-label">附件:</label>
               <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
@@ -197,6 +319,16 @@
               <label for="p_name" class="control-label">物料名称:</label>
               <input type="text" class="form-control" id="moko_des" name="moko_des" readonly>
             </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">类别:</label>
+              <select class="form-control" id="p_type" name="p_type">
+                  <option value="">----请选择----</option>
+                  <option value="PCB">PCB</option>
+                  <option value="PCBA">PCBA</option>
+                  <option value="COMPONENTS">COMPONENTS</option>
+              </select>
+            </div> 
+            
             <div class="form-group">         
               <label for="des_en" class="control-label">英文描述:</label>
               <input type="text" class="form-control" id="des_en" name="des_en">
@@ -222,7 +354,19 @@
     </div></small>
   </div>
 </div>
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -304,24 +448,58 @@
 
 
 <script>
-function postform() {  	         
-      html = $("#moko_code").val();     
-      //alert(html);
-      if (html == "")
+$('#edititem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var edit_c_item_id = button.data('edit_c_item_id');
+  var edit_moko_code = button.data('edit_moko_code');
+  var edit_moko_des = button.data('edit_moko_des');
+  var edit_p_type = button.data('edit_p_type');
+  var edit_des_en = button.data('edit_des_en');
+  var edit_des_cn = button.data('edit_des_cn');  
+  var edit_qty = button.data('edit_qty'); 
+  var edit_follow_remark = button.data('edit_follow_remark');                       
+  var modal = $(this);
+  modal.find($("#edit_c_item_id")).val(edit_c_item_id);
+  modal.find($("#edit_moko_code")).val(edit_moko_code);
+  modal.find($("#edit_moko_des")).val(edit_moko_des);
+  modal.find($("#edit_p_type")).val(edit_p_type);
+  modal.find($("#edit_des_en")).val(edit_des_en);
+  modal.find($("#edit_des_cn")).val(edit_des_cn);
+  modal.find($("#edit_qty")).val(edit_qty);
+  modal.find($("#edit_follow_remark")).html(edit_follow_remark);
+})
+
+
+
+
+function postform_edit() {  	         
+      if ($("#edit_p_type").val() == "")
       {                    
-　　    alert("请选择物料！");                    
+　　    alert("请选择类别！");                    
+　　    return false;                
+　     }
+      if ($("#edit_qty").val() == "")
+      {                    
+　　    alert("请填写数量！");                    
+　　    return false;                
+　     }  
+}  
+
+
+
+
+
+function postform() {  	         
+      if ($("#p_type").val() == "")
+      {                    
+　　    alert("请选择类别！");                    
 　　    return false;                
 　     }
       if ($("#qty").val() == "")
       {                    
 　　    alert("请填写数量！");                    
 　　    return false;                
-　     }
-      if ($("#follow_remark").html() == "")
-      {                    
-　　    alert("请填写备注，备注中应包含数量！");                    
-　　    return false;                
-　     }
+　     }  
 }  
 
 

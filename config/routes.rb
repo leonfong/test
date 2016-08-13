@@ -49,7 +49,8 @@ Rails.application.routes.draw do
   match '/edit_pcb_customer', to: 'work_flow#edit_pcb_customer', via: 'post'
   match '/pcb_order_list', to: 'work_flow#pcb_order_list', via: 'get'
   match '/new_pcb_order', to: 'work_flow#new_pcb_order', via: 'get'
-  match '/add_pcb_order', to: 'work_flow#add_pcb_order', via: 'post'
+  match '/add_pcb_order_item', to: 'work_flow#add_pcb_order_item', via: 'post'
+  match '/edit_pcb_order_item', to: 'work_flow#edit_pcb_order_item', via: 'post'
   match '/edit_pcb_order', to: 'work_flow#edit_pcb_order', via: 'post'
   match '/work_flow/select_pcbcustomer_ajax', to: 'work_flow#select_pcbcustomer_ajax', via: 'get'
   match '/update_pcb_price', to: 'work_flow#update_pcb_price', via: 'post'
@@ -72,7 +73,8 @@ Rails.application.routes.draw do
   match '/unfollow_bom_item', to: 'work_flow#unfollow_bom_item', via: 'get'
   match '/find_moko_part', to: 'work_flow#find_moko_part', via: 'get'
   match '/edit_pcb_order', to: 'work_flow#edit_pcb_order', via: 'get'
-
+  match '/find_moko_part_ch', to: 'work_flow#find_moko_part_ch', via: 'get'
+  match '/del_pcb_order_item', to: 'work_flow#del_pcb_order_item', via: 'get'
 
 
 

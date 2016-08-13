@@ -46,7 +46,7 @@ before_filter :authenticate_user!
     end
 
     def find_moko_part_ch
-
+        @moko_part = AllDn.find(params[:id])
     end
 
     def pi_draft
@@ -305,9 +305,9 @@ before_filter :authenticate_user!
            if PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').blank?
                 p_n =1
            else
-                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.p_no.split("ENQUIRY")[-1].to_i + 1
+                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.split("EQ")[-1].to_i + 1
            end
-           @p_no = "MOKO-"+current_user.s_name_self.to_s.upcase + "-" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "-ENQUIRY"+ p_n.to_s
+           @p_no = "M"+current_user.s_name_self.to_s.upcase + Time.new.strftime('%y%m%d').to_s + "EQ"+ p_n.to_s
            @pcb = PcbOrder.new()        
            @pcb.order_no = @p_no
            @pcb.order_sell = current_user.email
@@ -323,6 +323,7 @@ before_filter :authenticate_user!
 
     def edit_pcb_order
         @q_order = PcbOrder.find_by(order_no: params[:order_no])
+        @q_order_item = PcbOrderItem.where(pcb_order_id: @q_order.id)
     end
 
 
@@ -409,29 +410,42 @@ before_filter :authenticate_user!
         end
     end
 
-    def add_pcb_order
-        if PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').blank?
-            order_n =1
-        else
-             
-            order_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.split("W")[-1].to_i + 1
-        end
-        order_no = "MK" + Time.new.strftime("%y%m%d").to_s + User.find_by(email: params[:sell]).s_name_self + "W" + order_n.to_s + "W"
-        @pcb = PcbOrder.new()
-        #@pcb.user_id = current_user.id
-        @pcb.p_name = params[:p_name]
-        @pcb.des_en = params[:des_en]
+    def add_pcb_order_item
+        @pcb = PcbOrderItem.new()
+        @pcb.pcb_order_id = params[:c_order_id]
+        @pcb.pcb_order_no = params[:c_order_no]
+        @pcb.moko_code = params[:moko_code]
+        @pcb.moko_des = params[:moko_des]
+        @pcb.des_en = params[:des_en] 
         @pcb.des_cn = params[:des_cn]
-        @pcb.pcb_customer_id = params[:customer]
-        @pcb.order_no = order_no
-        @pcb.sell = params[:sell] 
-        @pcb.order_sell = current_user.email
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
-        @pcb.follow_remark = params[:follow_remark]
-        @pcb.state = "new"
+        @pcb.p_type = params[:p_type]    
+        @pcb.remark = params[:follow_remark]
         @pcb.save
-        redirect_to pcb_order_list_path(new: true)
+        redirect_to :back
+    end
+
+    def edit_pcb_order_item
+        @pcb = PcbOrderItem.find(params[:edit_c_item_id])
+        @pcb.moko_code = params[:edit_moko_code]
+        @pcb.moko_des = params[:edit_moko_des]
+        @pcb.des_en = params[:edit_des_en] 
+        @pcb.des_cn = params[:edit_des_cn]
+        @pcb.qty = params[:edit_qty]
+        if not params[:edit_att].blank?
+            @pcb.att = params[:edit_att]
+        end
+        @pcb.p_type = params[:edit_p_type]    
+        @pcb.remark = params[:edit_follow_remark]
+        @pcb.save
+        redirect_to :back
+    end
+
+    def del_pcb_order_item
+        pcb = PcbOrderItem.find(params[:edit_c_item_id])
+        pcb.destroy
+        redirect_to :back
     end
 
     def add_pcb_customer

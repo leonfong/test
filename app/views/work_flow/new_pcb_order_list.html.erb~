@@ -29,7 +29,9 @@
 					<div class="sidebar-menu panel-group" id="accordion">
 						<a style="background-color: #ddd;" href="#userMeun" data-parent="#accordion" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
 						<ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
-							<li><a href="/new_pcb_order_?new=true"><i ></i> 新建询价</a></li>
+<!--
+							<li><a href="/new_pcb_order?new=true"><i ></i> 新建询价</a></li>
+-->
 							<li><a style="background-color: #d9edf7;" href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
 							<li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 等待报价</a></li>
 							<li><a href="/pcb_order_list?quotechk=true"><i class="icon-edit"></i> 已经报价</a></li>
@@ -57,7 +59,7 @@
 <br>
   <ul class="nav nav-tabs" >
       <li role="presentation" ><a href="/sell_pcb_baojia"><h5 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h5></a></li>
-      <li role="presentation" class="active"><a href="/new_pcb_order"><h5 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h5></a></li>
+      <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h5></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>
@@ -68,7 +70,7 @@
 
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
             <div style="padding: 10px;">
-            <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >新建PCB询价</button>
+            <a  type="button" class="btn btn-primary btn-sm"  href="/new_pcb_order?new=true">新建询价</a>
             
             </div>
         <% end %>
@@ -76,14 +78,11 @@
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="130">Order No.</th>
-      <th width="80">项目名称</th>
-      <th >英文描述</th>
-      <th >中文描述</th>
+      <th width="220">询价单号</th>
+      <th width="200">项目名称</th>
       <th width="80">客户代码</th>
-      <th width="150">Created Date</th>
-      <th width="80">数量</th>
-      <th width="50">附件</th>
+      <th >客户</th>
+      <th width="150">日期</th>
       <th width="100">所属业务员</th>
       <th width="100">跟踪业务员</th>
       <th >跟踪备注</th>
@@ -93,28 +92,15 @@
       <th width="120">发送到采购报价</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody><small>
     <% @pcblist.each do |pcb| %>   
       <tr >
-        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-p_name="<%= pcb.p_name %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>" data-des_en="<%= pcb.des_en %>" data-des_cn="<%= pcb.des_cn %>" data-followedit_remark="<%= pcb.follow_remark %>"><%= pcb.order_no %></a></td>
-        <% else %>
-            <td><%= pcb.order_no %></td>
-        <% end %>
+        <td>  <%= pcb.order_no %></td>
         <td><%= pcb.p_name %></td>
-        <td><%= pcb.des_en %></td>
-        <td><%= pcb.des_cn %></td>
-        <td><%= PcbCustomer.find(pcb.pcb_customer_id).c_no %></td>
+        <td><%= pcb.c_code %></td>
+        <td><%= pcb.c_des %></td>
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td><%= pcb.qty %></td>
-        <td>
-            <% if not pcb.att.blank? %>
-                <a href="<%= pcb.att.url %>">下载</a>
-            <% else %>
-                无
-            <% end %>
-        </td>
-        <td><%= User.find_by(email: pcb.sell).full_name %></td>
+        <td></td>
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td><%= pcb.follow_remark %></td>
 <% if can? :work_pcb_business, :all %>
@@ -127,6 +113,7 @@
         <% end %>
       </tr>
     <% end %>
+  </small>
   </tbody>
 </table>
         </div>
@@ -140,162 +127,12 @@
 
 
 
-<div class="modal fade" id="addOrdert" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
-
-  <div class="modal-dialog modal-lg" role="document">
-  <small>
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel"><strong>新建PCB询价</strong></h4>
-      </div>
-      
-      <div class="modal-body">        
-          <div class="form-inline">
-             <%= form_tag('/find_c', method:"get", class:"form-inline",remote: true) do %>
-               <div class="form-group ">
-                  <lable for="order" , class="control-label"><strong>客户: </strong></lable>
-                  <div class="input-group input-group-sm">              
-                    <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"客户代码/客户名/客户公司名/客户联系方式"%>               
-                    <div class="input-group-btn">
-                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                    </div>
-                  </div>
-              </div>
-            <% end %>             
-          </div> 
-          <div class="form-group" id="table_code">
-
-
-          </div>
-      
-      <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
-
-          
-
-          <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
-          </div> 
-          <div class="form-group">         
-            <label for="p_name" class="control-label">项目名称:</label>
-            <input type="text" class="form-control" id="p_name" name="p_name">
-          </div> 
-          <div class="form-group">         
-            <label for="des_en" class="control-label">英文描述:</label>
-            <input type="text" class="form-control" id="des_en" name="des_en">
-          </div> 
-          <div class="form-group">         
-            <label for="des_cn" class="control-label">中文描述:</label>
-            <input type="text" class="form-control" id="des_cn" name="des_cn">
-          </div> 
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="qty" name="qty">
-          </div> 
-          <div class="form-group">
-            <label for="followedit_remark" class="control-label">跟踪备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
-            <textarea  class="form-control" id="followedit_remark" name="follow_remark"></textarea>
-          </div>
-          <div class="form-group sr-only">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="customerd" class="control-label">客户代码id:</label>
-            <input type="text" class="form-control" id="customerd" name="customer" readonly>
-          </div>
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="c_no" class="control-label">客户代码:</label>
-            <input type="text" class="form-control" id="c_nod" name="c_no" readonly>
-          </div>
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="sell" class="control-label">所属业务员:</label>
-            <input type="text" class="form-control" id="selld" name="sell" readonly>
-          </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform()">
-      </div>
-     <% end %>
-    </div></small>
-  </div>
-</div>
 
 
 
 
 
-<div class="modal fade" id="updatePrice" tabindex="-1" role="dialog" aria-labelledby="updatePriceLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Update PCB Order price</h4>
-      </div>
-      <%= form_tag({action: :update_pcb_price},method:"post",multipart:"true",id: "order_form") do %>
-      <div class="modal-body">        
-          <div class="form-group">
-            <label for="customer" class="control-label">Order NO.:</label>
-            <input type="text" class="form-control" id="order_no" name="order_no" readonly>
-          </div>
-          <div class="form-group">
-            <label for="customer" class="control-label">客户:</label>
-            <input type="text" class="form-control" id="u_customer" name="customer" readonly>
-          </div>       
 
-          <div class="form-group">
-            <label for="u_p_name" class="control-label">项目名称:</label>
-            <input type="text" class="form-control" id="u_p_name" name="p_name" >
-          </div> 
-          <div class="form-group">         
-            <label for="u_des_en" class="control-label">英文描述:</label>
-            <input type="text" class="form-control" id="u_des_en" name="des_en">
-          </div> 
-          <div class="form-group">         
-            <label for="u_des_cn" class="control-label">中文描述:</label>
-            <input type="text" class="form-control" id="u_des_cn" name="des_cn">
-          </div>
-          <div class="form-group">
-            <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="u_qty" name="qty" >
-          </div> 
-          <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
-          </div> 
-          <div class="form-group">
-            <label for="followedit_remark" class="control-label">跟踪备注:</label><code>注意：请包含要报价的数量。</code>
-            <textarea  class="form-control" id="followedit_remark_up" name="follow_remark"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="qty" class="control-label">所属业务员:</label>
-            <input type="text" class="form-control" id="u_sell" name="sell" readonly>
-          </div> 
-          <div class="form-group">
-            <label for="qty" class="control-label">跟踪业务员:</label>
-            <input type="text" class="form-control" id="u_order_sell" name="order_sell" readonly>
-          </div> 
-<!--
-          <div class="form-group">
-            <label for="qty" class="control-label">报价:</label>
-            <input type="text" class="form-control" id="price" name="price" >
-          </div> 
-          <div class="form-group">
-            <label for="qty" class="control-label">备注:</label>
-            <input type="text" class="form-control" id="remark" name="remark" >
-          </div> 
--->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary">提交</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
 
 
 
@@ -308,58 +145,7 @@
 </div>
 
 
-
-
-<script>
-function get_options(value){
-    var urla='/work_flow/select_pcbcustomer_ajax?id='+value;
-    $("#change_s").attr("href",urla);
-    $("#change_s").click(); 
-  }
-
-$('#updatePrice').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var order_no = button.data('order_no') 
-  var customer = button.data('customer')
-  var qty = button.data('qty')
-  var p_name = button.data('p_name')
-  var des_en = button.data('des_en')
-  var des_cn = button.data('des_cn')
-  var sell = button.data('sell')
-  var order_sell = button.data('order_sell')
-  var followedit_remark = button.data('followedit_remark')
-  var modal = $(this)
-  modal.find($("#order_no")).val(order_no)
-  modal.find($("#u_customer")).val(customer)
-  modal.find($("#u_qty")).val(qty)
-  modal.find($("#u_p_name")).val(p_name)
-  modal.find($("#u_des_en")).val(des_en)
-  modal.find($("#u_des_cn")).val(des_cn)
-  modal.find($("#u_sell")).val(sell)
-  modal.find($("#u_order_sell")).val(order_sell)
-  modal.find($("#followedit_remark_up")).html(followedit_remark)
-})
-</script>
 <script type="text/javascript">
-function postform() {  	         
-      html = $("#c_nod").val();     
-      //alert(html);
-      if (html == "")
-      {                    
-　　    alert("请选择客户代码！");                    
-　　    return false;                
-　     }
-      if ($("#qty").val() == "")
-      {                    
-　　    alert("请填写数量！");                    
-　　    return false;                
-　     }
-      if ($("#followedit_remark").val() == "")
-      {                    
-　　    alert("请填写备注，备注中应包含数量！");                    
-　　    return false;                
-　     }
-}  
 
 $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');

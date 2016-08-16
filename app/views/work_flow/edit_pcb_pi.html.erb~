@@ -20,8 +20,7 @@
 							
 						</ul>
 						<a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
-						<ul id="articleMenu" class="nav nav-list menu-second panel-collapse collapse in">
-                                                        <li><a style="background-color: #d9edf7;" href="/new_pcb_pi"><i class="icon-edit"></i> 新建PI</a></li>
+						<ul id="articleMenu" class="nav nav-list menu-second panel-collapse collapse in">                                                        
                                                         <li><a href="/pi_draft_list"><i></i> PI草稿箱</a></li>
 							<li><a href="/pcb_order_list?place_an_order=true"><i></i> 下单审批</a></li>
 							<li><a href="#"><i></i> 等待财务审批</a></li>
@@ -39,7 +38,7 @@
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-        <%= form_tag('/pi_draft', method:"post",remote: true) do %>
+        <%= form_tag('/pi_draft', method:"post") do %>
             <div class="row "><div class="col-md-12">
                 
                 <div class="panel panel-info">
@@ -48,7 +47,7 @@
                             <div class="col-md-2"><p><strong>PI NO. : </strong><ins id="p_pi_show" name="p_pi_show"><%= @pi_info.pi_no.to_s %></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" >
                             </div>
-                            <div class="col-md-2"><p><strong>项目名称 : </strong><ins id="p_name_show" name="p_name_show"></ins></p>
+                            <div class="col-md-2"><p><strong>项目名称 : </strong><ins id="p_name_show" name="p_name_show"><%= @pi_info.p_name.to_s %></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_name" name="p_name" >
                             </div>
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
@@ -70,19 +69,33 @@
 
 
             <div class="row "><div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><strong>业务员信息</strong></div>
+                    <div class="panel-body ">                     
+                        <div class="row ">
+                            <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= User.find_by(email: @pi_info.pi_sell).full_name %></ins></div> 
+                            <div class="col-md-2"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= @pi_info.team %></ins></div> 
+                            <div class="col-md-2"><strong>制单人电话：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= @pi_info.phone %></ins></div> 
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+
+
+
+
+            <div class="row "><div class="col-md-12">
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>客户信息</strong> <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#addOrdert" style="margin-right: 5px;" >选择询价结果</button></div>
                 <div class="panel-body ">                     
                     <div class="row ">
-                        <div class="col-md-1">代码：<ins id="daima_show" name="daima_show"></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
-                        <div class="col-md-3">客户：<ins id="kehu_show" name="kehu_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div> 
-                         <div class="col-md-2">国家：<ins id="guojia_show" name="guojia_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="guojia" name="guojia" readonly></div>   
-                         <div class="col-md-2">制单人：<ins id="zhidanren_show" name="zhidanren_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="zhidanren" name="zhidanren" readonly></div> 
-                         <div class="col-md-2">部门：<ins id="bumen_show" name="bumen_show"></ins><input type="text" class="input-sm sr-only" style="width:80%" id="bumen" name="bumen" readonly></div> 
-                         <div class="col-md-2">制单人电话：<ins id="lianxifangshi_show" name="lianxifangshi_show"></ins><input type="text" class="input-sm sr-only" style="width:70%" id="lianxifangshi" name="lianxifangshi" readonly></div> 
+                        <div class="col-md-1">代码：<ins id="daima_show" name="daima_show"><%= @pi_info.c_code.to_s %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
+                        <div class="col-md-3">客户：<ins id="kehu_show" name="kehu_show"><%= @pi_info.c_des.to_s %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div> 
+                         <div class="col-md-2">国家：<ins id="guojia_show" name="guojia_show"><%= @pi_info.c_country.to_s %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="guojia" name="guojia" readonly></div>   
+                         
                     </div>
                     <div class="row " style="padding-top: 10px;">
-                         <div class="col-md-12">客户收货地址：<ins id="fahuodizhi_show" name="fahuodizhi_show"></ins><input type="text" class="input-sm sr-only" style="width:90%" id="fahuodizhi" name="fahuodizhi" readonly></div> 
+                         <div class="col-md-12">客户收货地址：<ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info.c_shipping_address.to_s %></ins><input type="text" class="input-sm sr-only" style="width:90%" id="fahuodizhi" name="fahuodizhi" readonly></div> 
                          
                          
                          
@@ -112,13 +125,30 @@
                         </tr>
                     </thead>
                     <tbody id="biaoge">
-                    
-
-
-
-
-
-
+                        <% if @pi_item %>
+                        <% @pi_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>" data-edit_qty="<%= pi_item.qty %>" data-edit_follow_remark="<%= pi_item.remark %>"></a>
+                            </td>
+                            <td><%= pi_item.moko_code %></td>
+                            <td><%= pi_item.moko_des %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.des_en %></td>
+                            <td><%= pi_item.des_cn %></td>
+                            <td><%= pi_item.p_type %></td>
+                            <td><%= pi_item.t_p %></td>
+                            <td><%= pi_item.price %></td>
+                            <td>
+                                <% if not pi_item.att.blank? %>                 
+                                    <a class="btn btn-info btn-xs" href="<%= pi_item.att %>" target="_blank">下载</a>
+                                <% end %>
+                            </td>
+                            <td><%= pi_item.remark %></td>
+                            <td><a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a></td>
+                        </tr>
+                        <% end %>
+                        <% end %>                    
                     </tbody>
                 </table>             
             </div>
@@ -144,7 +174,7 @@
                     <div class="panel panel-info" >
                         <div class="panel-heading" ><strong>特殊备注</strong></div>                          
                         <div class="panel-body " style="margin: 0px;padding: 0px;">                     
-                            <textarea rows="7" class="form-control" id="teshu_remark" name="teshu_remark"></textarea>
+                            <textarea rows="7" class="form-control" id="teshu_remark" name="teshu_remark"><%= @pi_info.follow_remark.to_s %></textarea>
                         </div>
                     </div>
                 </div>
@@ -159,7 +189,7 @@
                 <div class="modal-footer">
                     
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
-                    <%= link_to "提交",  pi_save_path, class: "btn btn-info",data:{confirm: "确定要提交PI?"} %>
+                    <%= submit_tag "提交", class:"btn btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
                 </div>
             </div></div>
 
@@ -170,13 +200,11 @@
 
 
 
-
-
 <div class="modal fade" id="addOrdert" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
-
   <div class="modal-dialog modal-lg" role="document">
   <small>
-    <div class="modal-content">
+      <div class="modal-content">
+
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="editModalLabel"><strong>查找询价信息</strong></h4>
@@ -187,7 +215,7 @@
              <%= form_tag('/find_order', method:"get", class:"form-inline",remote: true) do %>
                <div class="form-group sr-only"> 
                    <label for="pi" class="control-label">pi:</label>
-                   <input type="text" class="form-control" id="pi" name="pi" >
+                   <input type="text" class="form-control" id="pi" name="pi" value="<%= @pi_info.pi_no.to_s %>">
                </div>
                <div class="form-group ">
                   <lable for="order" , class="control-label"><strong>客户: </strong></lable>
@@ -201,19 +229,107 @@
             <% end %>             
           </div> 
           <div class="form-group" id="table_code">
-
-
           </div>
       
-
+        </div>
         </div></small>
     </div>
 </div>
 
 
+
+<div class="modal fade" id="edititem" tabindex="-1" role="dialog" aria-labelledby="edititemLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edititemLabel"><strong>修改PI物料</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :edit_pi_item},method:"post",multipart:"ture",id: "order_form") do %>   
+            <div class="form-group sr-only">         
+                <label for="c_order_id" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="edit_c_item_id" name="edit_c_item_id">
+            </div>   
+            <div class="form-group">         
+              <label for="p_name" class="control-label">物料代码:</label>
+              <input type="text" class="form-control" id="edit_moko_code" name="edit_moko_code" <% if can? :work_e, :all %>readonly<% end %>>
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">物料名称:</label>
+              <input type="text" class="form-control" id="edit_moko_des" name="edit_moko_des" <% if can? :work_e, :all %>readonly<% end %>>
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">类别:</label>
+              <select class="form-control" id="edit_p_type" name="edit_p_type">
+                  <option value="">----请选择----</option>
+                  <option value="PCB">PCB</option>
+                  <option value="PCBA">PCBA</option>
+                  <option value="COMPONENTS">COMPONENTS</option>
+              </select>
+            </div> 
+            
+            <div class="form-group">         
+              <label for="des_en" class="control-label">英文描述:</label>
+              <input type="text" class="form-control" id="edit_des_en" name="edit_des_en">
+            </div> 
+            <div class="form-group">         
+              <label for="des_cn" class="control-label">中文描述:</label>
+              <input type="text" class="form-control" id="edit_des_cn" name="edit_des_cn">
+            </div> 
+            <div class="form-group">
+              <label for="qty" class="control-label">数量:</label>
+              <input type="number" class="form-control" id="edit_qty" name="edit_qty">
+            </div> 
+            <div class="form-group">
+              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
+              <textarea  class="form-control" id="edit_follow_remark" name="edit_follow_remark"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_edit()">
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+
+
 </div>
 
 <script>
+$('#edititem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var edit_c_item_id = button.data('edit_c_item_id');
+  var edit_moko_code = button.data('edit_moko_code');
+  var edit_moko_des = button.data('edit_moko_des');
+  var edit_p_type = button.data('edit_p_type');
+  var edit_des_en = button.data('edit_des_en');
+  var edit_des_cn = button.data('edit_des_cn');  
+  var edit_qty = button.data('edit_qty'); 
+  var edit_follow_remark = button.data('edit_follow_remark');                       
+  var modal = $(this);
+  modal.find($("#edit_c_item_id")).val(edit_c_item_id);
+  modal.find($("#edit_moko_code")).val(edit_moko_code);
+  modal.find($("#edit_moko_des")).val(edit_moko_des);
+  modal.find($("#edit_p_type")).val(edit_p_type);
+  modal.find($("#edit_des_en")).val(edit_des_en);
+  modal.find($("#edit_des_cn")).val(edit_des_cn);
+  modal.find($("#edit_qty")).val(edit_qty);
+  modal.find($("#edit_follow_remark")).html(edit_follow_remark);
+})
+
+
+
+
+
+
+
+
 $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');
   $('#articleMenu').collapse('hide');

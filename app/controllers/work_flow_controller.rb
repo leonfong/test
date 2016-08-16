@@ -49,31 +49,26 @@ before_filter :authenticate_user!
         @moko_part = AllDn.find(params[:id])
     end
 
-    def pi_draft
-        pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
-        pi_draft.pi_p_name = params[:p_name]
-        pi_draft.pi_p_date = params[:p_riqi]
-        pi_draft.pi_customer_code = params[:daima]
-        pi_draft.pi_customer_name = params[:kehu]
-        pi_draft.pi_customer_country = params[:guojia]
-        pi_draft.pi_customer_shipping_address = params[:fahuodizhi]
-        pi_draft.pi_owner_name = params[:zhidanren]
-        pi_draft.pi_owner_team = params[:bumen]
-        pi_draft.pi_owner_contact = params[:lianxifangshi]
-        pi_draft.pi_p_name = params[:p_name]
-        pi_draft.pi_p_name = params[:p_name]
-
-        pi_draft.save
+    def pi_draft  
         if params[:commit] == "保存到草稿"
-        
-
-
+            #pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
+            #pi_draft.p_name = params[:p_name]    
+            #pi_draft.pi_p_name = params[:p_name]
+            #pi_draft.save
         end
-        #redirect_to :back
+        redirect_to :back
     end
 
     def pi_draft_list
-        #redirect_to :back
+        @pilist = PiInfo.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+    end
+    
+    def del_pcb_pi
+        pcb_pi = PiInfo.find(params[:pi_id])
+        if can? :work_pcb_business, :all
+            pcb_pi.destroy
+        end
+        redirect_to :back
     end
 
     def pi_save
@@ -120,7 +115,7 @@ before_filter :authenticate_user!
                     @c_table += '<td><div>' + cu.price.to_s + '</div></td>'
                     @c_table += '<td><div>' + cu.remark.to_s + '</div></td>'
                     @c_table += '<td><div>' + cu.follow_remark.to_s + '</div></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_order_check?id='+ cu.id.to_s + '&pi='+params[:pi].to_s+'"><div>确认</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_order_check?id='+ cu.id.to_s + '&pi='+params[:pi].to_s+'"><div>确认</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'
@@ -135,44 +130,113 @@ before_filter :authenticate_user!
         end
     end
 
+    def del_pi_item
+        del_item = PiItem.find(params[:del_pi_item_id])
+        del_item.destroy
+        redirect_to :back
+    end
+
+
     def find_order_check
-        if params[:pi] == "" or params[:pi] == nil
+        @find_order_info = PcbOrder.find(params[:id])
+        @find_pi_info = PiInfo.find_by(pi_no: params[:pi])
+        @find_pi_info.pcb_customer_id = @find_order_info.pcb_customer_id
+        @find_pi_info.c_code = @find_order_info.c_code
+        @find_pi_info.c_des = @find_order_info.c_des
+        @find_pi_info.c_country = @find_order_info.c_country
+        @find_pi_info.c_shipping_address = @find_order_info.c_shipping_address
+        @find_pi_info.p_name = @find_order_info.p_name
+        @find_pi_info.remark = @find_order_info.remark
+        @find_pi_info.follow_remark = @find_order_info.follow_remark
+        @find_pi_info.save
+        find_pi_item = PiItem.where(pi_no: params[:pi])
+        if not find_pi_item.blank?
+            #find_pi_item.destroy
+            find_pi_item.each do |del_item|
+                del_item.destroy
+            end
+        end
+        
+        @table = ''
+        PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
+            pi_item = PiItem.new
+            pi_item.pi_info_id = @find_pi_info.id
+            pi_item.pi_no = @find_pi_info.pi_no
+            pi_item.moko_code = q_item.moko_code
+            pi_item.moko_des = q_item.moko_des
+            pi_item.des_en = q_item.des_en
+            pi_item.des_cn = q_item.des_cn
+            pi_item.qty = q_item.qty
+            pi_item.p_type = q_item.p_type
+            pi_item.att = q_item.att
+            pi_item.remark =  q_item.remark    
+            pi_item.save
+=begin
+            @table += '<tr>'
+            @table += '<td><a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="'
+            @table += q_item.id.to_s
+            @table += '" data-edit_moko_code="'
+            @table += q_item.moko_code.to_s
+            @table += '" data-edit_moko_des="'
+            @table += q_item.moko_des.to_s
+            @table += '" data-edit_p_type="'
+            @table += q_item.p_type.to_s
+            @table += '" data-edit_des_en="'
+            @table += q_item.des_en.to_s
+            @table += '" data-edit_des_cn="'
+            @table += q_item.des_cn.to_s
+            @table += '" data-edit_qty="'
+            @table +=  q_item.qty.to_s 
+            @table += '" data-edit_follow_remark="'
+            @table += q_item.remark.to_s
+            @table += '"></a></td>'
+            @table += '<td>'+q_item.moko_code.to_s+'</td>'
+            @table += '<td>'+q_item.moko_des.to_s+'</td>'
+            @table += '<td>'+q_item.qty.to_s+'</td>'
+            @table += '<td>'+q_item.des_en.to_s+'</td>'
+            @table += '<td>'+q_item.des_cn.to_s+'</td>'
+            @table += '<td>'+q_item.p_type.to_s+'</td>'
+            @table += '<td>'+q_item.t_p.to_s+'</td>'
+            @table += '<td>'+q_item.price.to_s+'</td>'
+            @table += '<td>'
+            if not q_item.att.blank?                
+                @table += '<a class="btn btn-info btn-xs" href="'+q_item.att+'" target="_blank">下载</a>'
+            end
+            @table += '</td>'
+            @table += '<td>'+q_item.remark.to_s+'</td>'
+            @table += '<td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_item?edit_c_item_id='+q_item.id.to_s+'"  data-confirm="确定要删除?"></a></td>'
+            @table += '</tr>'
+=end
+        end
+        redirect_to :back
+    end
+
+    def new_pcb_pi
+        if params[:pi_no] == "" or params[:pi_no] == nil
             if PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW())').blank?
                 pi_n =1
             else
                 pi_n = PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW())').last.pi_no.split("PI")[-1].to_i + 1
             end
-            @pi_no = "MOKO-"+current_user.s_name_self.to_s.upcase + "-" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "-PI"+ pi_n.to_s
-            pi_new = PiInfo.new()
-            pi_new.pi_no = @pi_no
-            pi_new.pi_owner = current_user.email
-            pi_new.save
+            @pi_no = "M"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PI"+ pi_n.to_s
+            pi_info = PiInfo.new()
+            pi_info.pi_no = @pi_no
+            pi_info.pi_sell = current_user.email
+            pi_info.team = current_user.team
+            pi_info.phone = current_user.phone
+            pi_info.state = "new"
+            pi_info.save
+            pi_no = pi_info.pi_no
         else
-            @pi_no = params[:pi]
+            pi_no = params[:pi_no]
         end
-        
-
-
-        @pi_info = PcbOrder.find(params[:id])
-        @table = '<tr>'
-        @table += '<td>物料编码</td>'
-        @table += '<td>物料名称</td>'
-        #@table += '<td>'+@pi_info.p_name.to_s+'</td>'
-        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_qty" name="pi_item_qty" value="'+@pi_info.qty.to_s+'"></td>'
-        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_des_en" name="pi_item_des_en" value="'+@pi_info.des_en.to_s+'"></td>'
-        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_des_cn" name="pi_item_des_cn" value="'+@pi_info.des_cn.to_s+'"></td>'
-        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_price" name="pi_item_price" value="'+@pi_info.price.to_s+'"></td>'
-        @table += '<td></td>'
-        @table += '<td></td>'
-        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_tp" name="pi_item_tp" ></td>'
-        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_op" name="pi_item_op" ></td>'
-        @table += '<td><input type="text" class="input-sm" style="width:99%" id="pi_item_remark" name="pi_item_remark" ></td>'
-        @table += '</tr>'
+        #@pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        redirect_to edit_pcb_pi_path(pi_no: pi_no) and return    
     end
 
-    def new_pcb_pi
-        @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-            
+    def edit_pcb_pi
+        @pi_info = PiInfo.find_by(pi_no: params[:pi_no])
+        @pi_item = PiItem.where(pi_no: params[:pi_no])
     end
 
     def del_pcb_follow
@@ -326,6 +390,28 @@ before_filter :authenticate_user!
         @q_order_item = PcbOrderItem.where(pcb_order_id: @q_order.id)
     end
 
+    def update_pcb_order
+        if params[:commit] == "保存到草稿"
+            q_order = PcbOrder.find_by(order_no: params[:p_no])
+            q_order.p_name = params[:p_name]
+            q_order.follow_remark = params[:teshu_remark]
+            q_order.save
+            redirect_to :back and return
+        elsif params[:commit] == "提交"
+            q_order = PcbOrder.find_by(order_no: params[:p_no])
+            q_order.p_name = params[:p_name]
+            q_order.follow_remark = params[:teshu_remark]
+            if can? :work_e, :all
+                q_order.state = "bom_chk"
+            elsif can? :work_d, :all
+                q_order.state = "quote"
+            elsif can? :work_g, :all
+                q_order.state = "quotechk"
+            end
+            q_order.save
+            redirect_to pcb_order_list_path(quote: true) and return
+        end
+    end
 
     def del_pcb_order
         pcb_order = PcbOrder.find(params[:order_id])
@@ -393,21 +479,33 @@ before_filter :authenticate_user!
     end
 
     def pcb_order_list
-        if params[:new]
-            @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-            render "new_pcb_order_list.html.erb" and return
-        elsif params[:quote]
-            @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-            render "pcb_order_list.html.erb" and return
-        elsif params[:place_an_order]
-            @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-            render "pcb_order_list_order.html.erb" and return
-        elsif params[:quotechk]
-            @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-            render "pcb_order_list_quotechk.html.erb" and return
+        if params[:key_order]
+            @pcblist = PcbOrder.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR order_sell LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         else
-            @pcblist = PcbOrder.where("state IS NULL").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            if params[:new]
+                @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "new_pcb_order_list.html.erb" and return
+            elsif params[:quote]
+                @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "pcb_order_list.html.erb" and return
+            elsif params[:bom_chk]
+                @pcblist = PcbOrder.where(state: "bom_chk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "pcb_order_list.html.erb" and return
+            elsif params[:place_an_order]
+                @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "pcb_order_list.html.erb" and return
+            elsif params[:quotechk]
+                @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "pcb_order_list.html.erb" and return
+            else
+                @pcblist = PcbOrder.where("state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            end
+
         end
+
+        #else
+         #   @pcblist = PcbOrder.where("state IS NULL").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        #end
     end
 
     def add_pcb_order_item
@@ -438,8 +536,15 @@ before_filter :authenticate_user!
         end
         @pcb.p_type = params[:edit_p_type]    
         @pcb.remark = params[:edit_follow_remark]
+        if params[:edit_price]
+            @pcb.t_p = params[:edit_price]
+            @pcb.price = BigDecimal.new(params[:edit_price])/@pcb.qty
+        end
         @pcb.save
         redirect_to :back
+    end
+
+    def edit_pi_item
     end
 
     def del_pcb_order_item

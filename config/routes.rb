@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   match '/del_pcb_follow', to: 'work_flow#del_pcb_follow', via: 'get'
   match '/find_c_ch', to: 'work_flow#find_c_ch', via: 'get'
   match '/new_pcb_pi', to: 'work_flow#new_pcb_pi', via: 'get'
+  match '/edit_pcb_pi', to: 'work_flow#edit_pcb_pi', via: 'get'
   match '/find_order', to: 'work_flow#find_order', via: 'get'
   match '/find_order_check', to: 'work_flow#find_order_check', via: 'get'
   match '/pi_draft', to: 'work_flow#pi_draft', via: 'post'
@@ -75,6 +76,10 @@ Rails.application.routes.draw do
   match '/edit_pcb_order', to: 'work_flow#edit_pcb_order', via: 'get'
   match '/find_moko_part_ch', to: 'work_flow#find_moko_part_ch', via: 'get'
   match '/del_pcb_order_item', to: 'work_flow#del_pcb_order_item', via: 'get'
+  match '/update_pcb_order', to: 'work_flow#update_pcb_order', via: 'post'
+  match '/del_pi_item', to: 'work_flow#del_pi_item', via: 'get'
+  match '/del_pcb_pi', to: 'work_flow#del_pcb_pi', via: 'get'
+  match '/edit_pi_item', to: 'work_flow#edit_pi_item', via: 'post'
 
 
 

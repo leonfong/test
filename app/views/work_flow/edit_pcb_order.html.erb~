@@ -5,11 +5,16 @@
 	        <a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
 		    <ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
 <!--
-		        <li><a style="background-color: #d9edf7;" href="/new_pcb_order?new=true"><i ></i> 新建询价</a></li>
+		        <li><a  href="/new_pcb_order?new=true"><i ></i> 新建询价</a></li>
 -->
-			<li><a style="background-color: #d9edf7;" href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
-			<li><a href="/pcb_order_list?quote=true"><i ></i> 等待报价</a></li>
-			<li><a href="/pcb_order_list?quotechk=true"><i ></i> 已经报价</a></li>
+			<li><a  href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
+                        <% if can? :work_d, :all %>
+			<li><a href="/pcb_order_list?bom_chk=true"><i class="icon-edit"></i> 询价结果</a></li>
+                        <% elsif can? :work_g, :all %>
+                        <li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 询价结果</a></li>
+                        <% elsif can? :work_g, :all %>
+                        <li><a href="/pcb_order_list"><i class="icon-edit"></i> 询价结果</a></li>
+                        <% end %>
                     </ul>
 		<a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 		    <ul id="articleMenu" class="nav nav-list menu-second panel-collapse collapse">
@@ -24,7 +29,7 @@
             </div>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-        <%= form_tag('/pi_draft', method:"post",remote: true) do %>
+        <%= form_tag('/update_pcb_order', method:"post") do %>
             <div class="row "><div class="col-md-12">                
                 <div class="panel panel-info">
                     <div class="panel-heading"><strong>询价基本信息:</strong></div>
@@ -33,7 +38,7 @@
                         <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"><%= @q_order.order_no %></ins></p><input type="text" class="form-control sr-only" id="p_no" name="p_no" value="<%= @q_order.order_no %>">
                         </div>
 
-                        <div class="col-md-4 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" >
+                        <div class="col-md-4 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @q_order.p_name %>">
                         </div>
                         <div class="col-md-2 form-inline"><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= Time.new.strftime("%Y-%m-%d")%></ins>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
@@ -148,7 +153,7 @@
                     <div class="panel panel-info" >
                         <div class="panel-heading" ><strong>特殊备注</strong></div>                          
                         <div class="panel-body " style="margin: 0px;padding: 0px;">                     
-                            <textarea rows="7" class="form-control" id="teshu_remark" name="teshu_remark"></textarea>
+                            <textarea rows="7" class="form-control" id="teshu_remark" name="teshu_remark"><%= @q_order.follow_remark %></textarea>
                         </div>
                     </div>
                 </div> 
@@ -157,7 +162,13 @@
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
-                    <%= link_to "提交",  pi_save_path, class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
+                    <% if can? :work_e, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
+                    <% elsif can? :work_d, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到采购工程师?"} %>
+                    <% elsif can? :work_g, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定已经完成报价?"} %>
+                    <% end %>
                 </div>
             </div></div>
        <% end %>
@@ -192,6 +203,58 @@
         </div>
         
         <div class="modal-body">
+<% if can? :work_g, :all %>
+            <%= form_tag({action: :edit_pcb_order_item},method:"post",multipart:"ture",id: "order_form") do %>   
+            <div class="form-group sr-only">         
+                <label for="c_order_id" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="edit_c_item_id" name="edit_c_item_id" >
+            </div>  
+            
+            <div class="form-group">         
+              <label for="p_name" class="control-label">物料代码:</label>
+              <input type="text" class="form-control" id="edit_moko_code" name="edit_moko_code" readonly>
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">物料名称:</label>
+              <input type="text" class="form-control" id="edit_moko_des" name="edit_moko_des" readonly>
+            </div> 
+            <div class="form-group">         
+              <label for="p_name" class="control-label">类别:</label>
+              <select class="form-control" id="edit_p_type" name="edit_p_type" readonly>
+                  <option value="">----请选择----</option>
+                  <option value="PCB">PCB</option>
+                  <option value="PCBA">PCBA</option>
+                  <option value="COMPONENTS">COMPONENTS</option>
+              </select>
+            </div> 
+            
+            <div class="form-group">         
+              <label for="des_en" class="control-label">英文描述:</label>
+              <input type="text" class="form-control" id="edit_des_en" name="edit_des_en" readonly>
+            </div> 
+            <div class="form-group">         
+              <label for="des_cn" class="control-label">中文描述:</label>
+              <input type="text" class="form-control" id="edit_des_cn" name="edit_des_cn" readonly>
+            </div> 
+            <div class="form-group">
+              <label for="qty" class="control-label">数量:</label>
+              <input type="number" class="form-control" id="edit_qty" name="edit_qty" readonly>
+            </div> 
+            <div class="form-group">
+              <label for="qty" class="control-label">价格￥:</label>
+              <input type="text" class="form-control" id="edit_price" name="edit_price" >
+            </div> 
+            <div class="form-group">
+              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
+              <textarea  class="form-control" id="edit_follow_remark" name="edit_follow_remark" readonly></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_edit()">
+        </div>
+        <% end %>
+<% else %>
             <div class="form-inline">
              <%= form_tag('/find_moko_part', method:"get", class:"form-inline",remote: true) do %>
                <div class="form-group ">
@@ -221,11 +284,11 @@
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料代码:</label>
-              <input type="text" class="form-control" id="edit_moko_code" name="edit_moko_code" readonly>
+              <input type="text" class="form-control" id="edit_moko_code" name="edit_moko_code" <% if can? :work_e, :all %>readonly<% end %>>
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料名称:</label>
-              <input type="text" class="form-control" id="edit_moko_des" name="edit_moko_des" readonly>
+              <input type="text" class="form-control" id="edit_moko_des" name="edit_moko_des" <% if can? :work_e, :all %>readonly<% end %>>
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">类别:</label>
@@ -259,6 +322,7 @@
           <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_edit()">
         </div>
         <% end %>
+<% end %>
     </div></small>
   </div>
 </div>

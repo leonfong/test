@@ -33,14 +33,21 @@
 							<li><a href="/new_pcb_order?new=true"><i ></i> 新建询价</a></li>
 -->
 							<li><a style="background-color: #d9edf7;" href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
-							<li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 等待报价</a></li>
-							<li><a href="/pcb_order_list?quotechk=true"><i class="icon-edit"></i> 已经报价</a></li>
+							<% if can? :work_d, :all %>
+							    <li><a href="/pcb_order_list?bom_chk=true"><i class="icon-edit"></i> 询价结果</a></li>
+                                                        <% elsif can? :work_g, :all %>
+                                                            <li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 询价结果</a></li>
+                                                        <% elsif can? :work_g, :all %>
+                                                            <li><a href="/pcb_order_list"><i class="icon-edit"></i> 询价结果</a></li>
+                                                        <% end %>
  
 							
 						</ul>
 						<a style="background-color: #ddd;" href="#articleMenu" data-parent="#accordion" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 						<ul id="articleMenu" class="nav nav-list panel-collapse collapse menu-second">
+<!--
                                                         <li><a href="/new_pcb_pi"><i class="icon-edit"></i> 新建PI</a></li>
+-->
                                                         <li><a  href="/pi_draft_list"><i></i> PI草稿箱</a></li>
 							<li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
 							<li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
@@ -89,13 +96,15 @@
 <% if can? :work_pcb_business, :all %>
       <th width="50">删除</th>
 <% end %>
+<!--
       <th width="120">发送到采购报价</th>
+-->
     </tr>
   </thead>
   <tbody><small>
     <% @pcblist.each do |pcb| %>   
       <tr >
-        <td>  <%= pcb.order_no %></td>
+        <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <td><%= pcb.p_name %></td>
         <td><%= pcb.c_code %></td>
         <td><%= pcb.c_des %></td>
@@ -106,11 +115,13 @@
 <% if can? :work_pcb_business, :all %>
         <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
 <% end %>
+<!--
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
             <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
         <% else %>
             <td><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
         <% end %>
+-->
       </tr>
     <% end %>
   </small>
@@ -118,29 +129,6 @@
 </table>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </div>
 

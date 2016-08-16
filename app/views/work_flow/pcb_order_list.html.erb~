@@ -30,9 +30,19 @@
 					<div class="sidebar-menu">
 						<a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
 						<ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
-							<li><a href="/pcb_order_list?new=true"><i class="icon-user"></i> 新建询价</a></li>
-							<li><a style="background-color: #d9edf7;" href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 等待报价</a></li>
+                                                        
+							<li><a href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
+                                                        
+                                                        <% if can? :work_d, :all %>
+							    <li><a style="background-color: #d9edf7;" href="/pcb_order_list?bom_chk=true"><i class="icon-edit"></i> 询价结果</a></li>
+                                                        <% elsif can? :work_g, :all %>
+                                                            <li><a style="background-color: #d9edf7;" href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 询价结果</a></li>
+                                                        <% elsif can? :work_g, :all %>
+                                                            <li><a style="background-color: #d9edf7;" href="/pcb_order_list"><i class="icon-edit"></i> 询价结果</a></li>
+                                                        <% end %>
+<!--
 							<li><a href="/pcb_order_list?quotechk=true"><i class="icon-edit"></i> 已经报价</a></li>
+-->
  
 							
 						</ul>
@@ -56,6 +66,55 @@
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/pcb_order_list', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"询价单号，项目名称，项目描述，客户代码，客户名，业务邮箱，备注"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+                <a type="button" class="btn btn-info btn-sm" href="/pcb_order_list?bom_chk=true">等待BOM检查</a>
+                <a type="button" class="btn btn-danger btn-sm" href="/pcb_order_list?quote=true">等待报价</a>
+                <a type="button" class="btn btn-success btn-sm" href="/pcb_order_list?quotechk=true">已经报价</a>
+            </div>
+            <% end %>                       
+            </span>
+            </div>
+        </div>
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
         
 <%= will_paginate(@pcblist) %>            
 <table class="table table-hover">
@@ -63,54 +122,53 @@
     <tr style="background-color: #eeeeee">
       <th width="130">Order No.</th>
       <th width="150">Created Date</th>
-<!--
+      <th width="80">进度</th>
       <th width="80">数量</th>
--->
       <th width="80">价格￥</th>
-      <th width="50">附件</th>
       <th width="90">所属业务员</th>
       <th width="90">跟踪业务员</th>
       <th >采购备注</th>
       <th >跟踪备注</th>
       <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-      <th width="75">退回</th>
+      <th width="60">退回</th>
+<!--
       <th width="75">操作</th>
+-->
       <% end %>
     </tr>
   </thead>
   <tbody>
     <% @pcblist.each do |pcb| %>   
       <tr >
-        <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-            <td><a data-toggle="modal" data-target="#updatePrice" data-customer="<%= PcbCustomer.find(pcb.pcb_customer_id).customer %>" data-qty="<%= pcb.qty %>" data-sell="<%= pcb.sell %>" data-order_sell="<%= pcb.order_sell %>" data-order_no="<%= pcb.order_no %>"  data-remark="<%= pcb.remark %>" data-follow_remark="<%= pcb.follow_remark %>"><%= pcb.order_no %></a></td>
-        <% else %>
-            <td><%= pcb.order_no %></td>
-        <% end %>
+        <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-<!--
-        <td><%= pcb.qty %></td>
--->
-        <td><%= pcb.price %></td>
         <td>
-            <% if not pcb.att.blank? %>
-                <a href="<%= pcb.att.url %>">下载</a>
-            <% else %>
-                无
+            <% if pcb.state == "bom_chk" %>
+                BOM检查
+            <% elsif pcb.state == "quote" %>
+                等待报价
+            <% elsif pcb.state == "quotechk" %>
+                报价完成
             <% end %>
         </td>
-        <td><%= User.find_by(email: pcb.sell).full_name %></td>
+        <td><%= pcb.qty %></td>
+        <td><%= pcb.price %></td>
+        <td></td>
         <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
             <td><div class="btn-group"><a class="btn btn-warning btn-xs" data-method='get'  href="/back_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要退回给业务?">退回</a></div></td>
+<!--
             <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quotechk?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
+-->
         
         <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
+        </div></div>
         </div>
     </div>
 
@@ -119,43 +177,7 @@
 
 
 
-<div class="modal fade" id="addOrder" tabindex="-1" role="dialog" aria-labelledby="addOrderLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel">Add a new PCB Order</h4>
-      </div>
-      <%= form_tag({action: :add_pcb_order},method:"post",multipart:"true",id: "order_form") do %>
-      <div class="modal-body">        
-          <div class="form-group">
-            <label for="customer" class="control-label">客户:</label>
-            <% members = Product.find_by_sql("select * from pcb_customers GROUP BY pcb_customers.customer").collect { |c| [c.customer,c.id] }%>
-              <%= select  '', :customer,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
-          </div>       
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">数量:</label>
-            <input type="number" class="form-control" id="qty" name="qty">
-          </div> 
-          <div class="form-group">
-            <label for="sell_manager_remark" class="control-label">附件:</label>
-            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
-          </div> 
-          <div class="form-group">
-            <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
-            <label for="qty" class="control-label">所属业务员:</label>
-            <input type="test" class="form-control" id="sell" name="sell" readonly>
-          </div> 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
+
 
 
 

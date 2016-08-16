@@ -15,7 +15,9 @@
 						</ul>
 						<a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 						<ul id="articleMenu" class="nav nav-list menu-second panel-collapse collapse in">
+<!--
                                                         <li><a href="/new_pcb_pi"><i class="icon-edit"></i> 新建PI</a></li>
+-->
                                                         <li><a style="background-color: #d9edf7;" href="/pi_draft_list"><i></i> PI草稿箱</a></li>
 							<li><a href="/pcb_order_list?place_an_order=true"><i></i> 下单审批</a></li>
 							<li><a href="#"><i></i> 等待财务审批</a></li>
@@ -33,20 +35,58 @@
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-            <div class="row "><div class="col-md-12">
-                
-                <div class="panel panel-info">
-                        <div class="panel-heading"><strong>PI 信息:</strong></div>
-                        <div class="panel-body ">                     
-                            <div class="col-md-2"><p><strong>PI NO. : </strong><ins></ins></p></div>
-                            <div class="col-md-2"><p><strong>项目名称 : </strong><ins id="p_name" name="p_name"></ins></p></div>
-                            <div class="col-md-2"><p><strong>日期 : </strong><ins id="riqi" name="riqi"></ins></p></div> 
-                            <div class="col-md-2"><p><strong>交货日期 : </strong><ins></ins></p></div>
-                            <div class="col-md-1"><p><strong>美金汇率 : </strong><ins></ins></p></div>  
-                            <div class="col-md-1"><p><strong>修改次数 : </strong><ins></ins></p></div>  
-                        </div>
-                    </div>
-            </div></div>
+        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
+            <div style="padding: 10px;">
+            <a  type="button" class="btn btn-primary btn-sm"  href="/new_pcb_pi">新建PI</a>
+            
+            </div>
+        <% end %>
+<%= will_paginate(@pilist) %>            
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="220">询价单号</th>
+      <th width="200">项目名称</th>
+      <th width="80">客户代码</th>
+      <th >客户</th>
+      <th width="150">日期</th>
+      <th width="100">所属业务员</th>
+      <th width="100">跟踪业务员</th>
+      <th >跟踪备注</th>
+<% if can? :work_pcb_business, :all %>
+      <th width="50">删除</th>
+<% end %>
+<!--
+      <th width="120">发送到采购报价</th>
+-->
+    </tr>
+  </thead>
+  <tbody><small>
+    <% @pilist.each do |pcb| %>   
+      <tr >
+        <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no) %></td>
+        <td><%= pcb.p_name %></td>
+        <td><%= pcb.c_code %></td>
+        <td><%= pcb.c_des %></td>
+        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td></td>
+        <td><%= User.find_by(email: pcb.pi_sell).full_name %></td>
+        <td><%= pcb.follow_remark %></td>
+<% if can? :work_pcb_business, :all %>
+        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_pi?pi_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
+<% end %>
+<!--
+        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
+            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
+        <% else %>
+            <td><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
+        <% end %>
+-->
+      </tr>
+    <% end %>
+  </small>
+  </tbody>
+</table>
 
 
        </small></div>

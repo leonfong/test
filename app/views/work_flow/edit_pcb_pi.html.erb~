@@ -86,7 +86,7 @@
 
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading"><strong>客户信息</strong> <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#addOrdert" style="margin-right: 5px;" >选择询价结果</button></div>
+                <div class="panel-heading"><strong>客户信息</strong> <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button></div>
                 <div class="panel-body ">                     
                     <div class="row ">
                         <div class="col-md-1">代码：<ins id="daima_show" name="daima_show"><%= @pi_info.c_code.to_s %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
@@ -104,6 +104,16 @@
                 </div>
             </div>
             </div></div>
+
+
+<% if params[:c_id]%>
+            <div class="row "><div class="col-md-12">
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
+            </div></div>
+<% end %>
+
+
+
 
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">                
@@ -200,6 +210,47 @@
 
 
 
+<div class="modal fade" id="find_c" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
+    <div class="modal-dialog modal-lg" role="document"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择客户</strong></h4>
+            </div>
+      
+            <div class="modal-body">        
+                <div class="form-inline">
+                <%= form_tag('/find_c_pi', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group sr-only">         
+                        <label for="c_order_no" class="control-label">询价单号:</label>
+                        <input type="text" class="form-control" id="c_pi_no" name="c_pi_no" value="<%= @pi_info.pi_no %>">
+                    </div>
+                    <div class="form-group ">
+                        <lable for="order" , class="control-label"><strong>客户: </strong></lable>
+                        <div class="input-group input-group-sm">              
+                            <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"客户代码/客户名/客户公司名/客户联系方式"%>               
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>             
+                </div> 
+                <div class="form-group" id="table_code">
+
+
+                </div>
+            </div>
+        </div></small>
+    </div>
+</div>
+
+
+
+
+
+
+
 <div class="modal fade" id="addOrdert" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
   <div class="modal-dialog modal-lg" role="document">
   <small>
@@ -229,6 +280,37 @@
             <% end %>             
           </div> 
           <div class="form-group" id="table_code">
+          <% if params[:c_id]%>
+              <br>
+              <small>
+              <table class="table table-bordered">
+              <thead>
+              <tr class="active">
+              <th width="70">客户代码</th>
+              <th>客户名</th>
+              <th>客户公司名</th>
+              <th  width="120">Order NO.</th>
+              <th  width="70">报价</th>
+              <th >备注</th>
+              <th width="45">操作</th>
+              <tr>
+              </thead>
+              <tbody>
+              <% PcbOrderItem.where(c_id: params[:c_id]).each do |pi_item_f| %>
+                    <tr>
+                    <td><div><%= PcbCustomer.find(pi_item_f.c_id).c_no %></div></td>
+                    <td><div><%= PcbCustomer.find(pi_item_f.c_id).customer.to_s %></div></td>
+                    <td><div><%= PcbCustomer.find(pi_item_f.c_id).customer_com.to_s %></div></td>
+                    <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
+                    <td><div><%= pi_item_f.price.to_s %></div></td>
+                    <td><div><%= pi_item_f.remark.to_s %></div></td>
+                    <td><a rel="nofollow" data-method="get"  href="/find_order_check?id=<%= pi_item_f.id.to_s %>&pi=<%= params[:pi_no].to_s %>"><div>确认</div></a></td>
+                    </tr>
+              <% end %>
+              </tbody>
+              </table>
+              </small>
+          <% end %>
           </div>
       
         </div>
@@ -262,12 +344,7 @@
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">类别:</label>
-              <select class="form-control" id="edit_p_type" name="edit_p_type">
-                  <option value="">----请选择----</option>
-                  <option value="PCB">PCB</option>
-                  <option value="PCBA">PCBA</option>
-                  <option value="COMPONENTS">COMPONENTS</option>
-              </select>
+              <input type="text" class="form-control" id="edit_p_type" name="edit_p_type" <% if can? :work_e, :all %>readonly<% end %>>           
             </div> 
             
             <div class="form-group">         

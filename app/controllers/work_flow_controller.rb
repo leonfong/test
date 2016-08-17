@@ -60,7 +60,7 @@ before_filter :authenticate_user!
     end
 
     def pi_draft_list
-        @pilist = PiInfo.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        @pilist = PiInfo.where(state: "new",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
     end
     
     def del_pcb_pi
@@ -266,6 +266,30 @@ before_filter :authenticate_user!
         up_c.c_country = @c_info.customer_country
         up_c.c_shipping_address = @c_info.shipping_address
         up_c.save
+        up_item_c = PcbOrderItem.where(pcb_order_no: params[:c_order_no]).update_all "c_id = '#{params[:id]}'"
+        #if not up_item_c.blank?
+            #up_item_c
+        #end
+        redirect_to edit_pcb_order_path(order_no: params[:c_order_no],c_id: params[:id])
+    end
+
+    def find_c_pi_ch
+        @c_info = PcbCustomer.find(params[:id])
+        up_c = PiInfo.find_by(pi_no: params[:c_pi_no])
+        up_c.pcb_customer_id = @c_info.id
+        up_c.c_code = @c_info.c_no
+        up_c.c_des = @c_info.customer
+        up_c.c_country = @c_info.customer_country
+        up_c.c_shipping_address = @c_info.shipping_address
+        up_c.save
+        find_pi_item = PiItem.where(pi_no: params[:c_pi_no])
+        if not find_pi_item.blank?
+            #find_pi_item.destroy
+            find_pi_item.each do |del_item|
+                del_item.destroy
+            end
+        end
+        redirect_to edit_pcb_pi_path(pi_no: params[:c_pi_no],c_id: params[:id])
     end
 
     def find_c
@@ -293,10 +317,10 @@ before_filter :authenticate_user!
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get" data-remote="true" href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'
@@ -308,6 +332,48 @@ before_filter :authenticate_user!
             end
         end
     end
+
+    def find_c_pi
+        if params[:c_code] != ""
+            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@c_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @c_info.blank?
+                
+                Rails.logger.info("add-------------------------------------12")
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th width="70">客户代码</th>'
+                @c_table += '<th>客户名</th>'
+                @c_table += '<th>客户公司名</th>'
+                @c_table += '<th width="70">所属</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.c_no + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '</tr>'
+                end
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@c_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
 
     def follow
         select_customer = PcbCustomer.find(params[:id])
@@ -480,25 +546,25 @@ before_filter :authenticate_user!
 
     def pcb_order_list
         if params[:key_order]
-            @pcblist = PcbOrder.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR order_sell LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            @pcblist = PcbOrder.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         else
             if params[:new]
-                @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 render "new_pcb_order_list.html.erb" and return
             elsif params[:quote]
-                @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where(state: "quote",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 render "pcb_order_list.html.erb" and return
             elsif params[:bom_chk]
-                @pcblist = PcbOrder.where(state: "bom_chk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 render "pcb_order_list.html.erb" and return
             elsif params[:place_an_order]
-                @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where(state: "order",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 render "pcb_order_list.html.erb" and return
             elsif params[:quotechk]
-                @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where(state: "quotechk",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 render "pcb_order_list.html.erb" and return
             else
-                @pcblist = PcbOrder.where("state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("state <> 'new',order_sell: current_user.email").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             end
 
         end
@@ -512,6 +578,7 @@ before_filter :authenticate_user!
         @pcb = PcbOrderItem.new()
         @pcb.pcb_order_id = params[:c_order_id]
         @pcb.pcb_order_no = params[:c_order_no]
+        @pcb.c_id = params[:c_id]
         @pcb.moko_code = params[:moko_code]
         @pcb.moko_des = params[:moko_des]
         @pcb.des_en = params[:des_en] 

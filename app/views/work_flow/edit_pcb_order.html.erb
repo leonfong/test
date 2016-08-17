@@ -18,7 +18,6 @@
                     </ul>
 		<a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
 		    <ul id="articleMenu" class="nav nav-list menu-second panel-collapse collapse">
-                        <li><a href="/new_pcb_pi"><i class="icon-edit"></i> 新建PI</a></li>
                         <li><a href="/pi_draft_list"><i></i> PI草稿箱</a></li>
 			<li><a href="/pcb_order_list?place_an_order=true"><i></i> 下单审批</a></li>
 			<li><a href="#"><i></i> 等待财务审批</a></li>
@@ -91,11 +90,11 @@
 
             </div></div>
 
-
+<% if params[:c_id]%>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#additem" >添加询价物料</button>
             </div></div>
-
+<% end %>
 
 
 
@@ -366,6 +365,10 @@
             <div class="form-group sr-only">         
                 <label for="c_order_id" class="control-label">询价id:</label>
                 <input type="text" class="form-control" id="c_order_id" name="c_order_id" value="<%= @q_order.id %>">
+            </div>  
+            <div class="form-group sr-only">         
+                <label for="c_id" class="control-label">客户id:</label>
+                <input type="text" class="form-control" id="c_id" name="c_id" value="<%= params[:c_id] %>">
             </div>  
             <div class="form-group sr-only">         
                 <label for="c_order_no" class="control-label">询价单号:</label>

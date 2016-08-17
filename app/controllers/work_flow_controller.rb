@@ -613,6 +613,15 @@ before_filter :authenticate_user!
     end
 
     def edit_pi_item
+        edit_pi_item = PiItem.find(params[:edit_c_item_id])
+        edit_pi_item.t_p = params[:edit_t_p]
+        edit_pi_item.price = params[:edit_price]
+        edit_pi_item.des_en = params[:edit_des_en]
+        edit_pi_item.des_cn = params[:edit_des_cn]
+        edit_pi_item.qty = params[:edit_qty]
+        edit_pi_item.remark = params[:edit_follow_remark]
+        edit_pi_item.save
+        redirect_to :back
     end
 
     def del_pcb_order_item

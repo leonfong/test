@@ -139,7 +139,7 @@
                         <% @pi_item.each do |pi_item| %>
                         <tr>
                             <td>
-                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>" data-edit_qty="<%= pi_item.qty %>" data-edit_follow_remark="<%= pi_item.remark %>"></a>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>" data-edit_qty="<%= pi_item.qty %>" data-edit_follow_remark="<%= pi_item.remark %>" data-edit_t_p="<%= pi_item.t_p %>" data-edit_price="<%= pi_item.price %>"></a>
                             </td>
                             <td><%= pi_item.moko_code %></td>
                             <td><%= pi_item.moko_des %></td>
@@ -261,7 +261,8 @@
         <h4 class="modal-title" id="editModalLabel"><strong>查找询价信息</strong></h4>
       </div>
       
-      <div class="modal-body">        
+      <div class="modal-body">  
+<!--      
           <div class="form-inline">
              <%= form_tag('/find_order', method:"get", class:"form-inline",remote: true) do %>
                <div class="form-group sr-only"> 
@@ -279,6 +280,7 @@
               </div>
             <% end %>             
           </div> 
+-->
           <div class="form-group" id="table_code">
           <% if params[:c_id]%>
               <br>
@@ -346,7 +348,14 @@
               <label for="p_name" class="control-label">类别:</label>
               <input type="text" class="form-control" id="edit_p_type" name="edit_p_type" <% if can? :work_e, :all %>readonly<% end %>>           
             </div> 
-            
+            <div class="form-group">
+              <label for="edit_t_p" class="control-label">总价￥:</label>
+              <input type="text" class="form-control" id="edit_t_p" name="edit_t_p" >
+            </div>
+            <div class="form-group">
+              <label for="edit_price" class="control-label">单价￥:</label>
+              <input type="text" class="form-control" id="edit_price" name="edit_price" >
+            </div>
             <div class="form-group">         
               <label for="des_en" class="control-label">英文描述:</label>
               <input type="text" class="form-control" id="edit_des_en" name="edit_des_en">
@@ -388,6 +397,8 @@ $('#edititem').on('show.bs.modal', function (event) {
   var edit_des_en = button.data('edit_des_en');
   var edit_des_cn = button.data('edit_des_cn');  
   var edit_qty = button.data('edit_qty'); 
+  var edit_t_p = button.data('edit_t_p'); 
+  var edit_price = button.data('edit_price'); 
   var edit_follow_remark = button.data('edit_follow_remark');                       
   var modal = $(this);
   modal.find($("#edit_c_item_id")).val(edit_c_item_id);

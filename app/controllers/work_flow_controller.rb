@@ -149,6 +149,7 @@ before_filter :authenticate_user!
         @find_pi_info.remark = @find_order_info.remark
         @find_pi_info.follow_remark = @find_order_info.follow_remark
         @find_pi_info.save
+=begin
         find_pi_item = PiItem.where(pi_no: params[:pi])
         if not find_pi_item.blank?
             #find_pi_item.destroy
@@ -156,7 +157,7 @@ before_filter :authenticate_user!
                 del_item.destroy
             end
         end
-        
+=end      
         @table = ''
         PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
             pi_item = PiItem.new

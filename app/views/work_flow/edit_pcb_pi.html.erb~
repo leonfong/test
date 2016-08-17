@@ -45,9 +45,9 @@
                         <div class="panel-heading"><strong>PI 信息:</strong></div>
                         <div class="panel-body ">                     
                             <div class="col-md-2"><p><strong>PI NO. : </strong><ins id="p_pi_show" name="p_pi_show"><%= @pi_info.pi_no.to_s %></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" >
+                                <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
                             </div>
-                            <div class="col-md-2"><p><strong>项目名称 : </strong><ins id="p_name_show" name="p_name_show"><%= @pi_info.p_name.to_s %></ins></p>
+                            <div class="col-md-4 form-inline"><p><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @pi_info.p_name %>">
                                 <input type="text" class="form-control sr-only" id="p_name" name="p_name" >
                             </div>
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
@@ -408,6 +408,8 @@ $('#edititem').on('show.bs.modal', function (event) {
   modal.find($("#edit_des_en")).val(edit_des_en);
   modal.find($("#edit_des_cn")).val(edit_des_cn);
   modal.find($("#edit_qty")).val(edit_qty);
+  modal.find($("#edit_t_p")).val(edit_t_p);
+  modal.find($("#edit_price")).val(edit_price);
   modal.find($("#edit_follow_remark")).html(edit_follow_remark);
 })
 

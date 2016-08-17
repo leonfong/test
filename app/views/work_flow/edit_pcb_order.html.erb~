@@ -367,8 +367,8 @@
                 <input type="text" class="form-control" id="c_order_id" name="c_order_id" value="<%= @q_order.id %>">
             </div>  
             <div class="form-group sr-only">         
-                <label for="c_order_id" class="control-label">客户id:</label>
-                <input type="text" class="form-control" id="c_order_id" name="c_order_id" value="<%= @q_order.id %>">
+                <label for="c_id" class="control-label">客户id:</label>
+                <input type="text" class="form-control" id="c_id" name="c_id" value="<%= params[:c_id] %>">
             </div>  
             <div class="form-group sr-only">         
                 <label for="c_order_no" class="control-label">询价单号:</label>

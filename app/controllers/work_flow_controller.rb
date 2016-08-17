@@ -51,10 +51,13 @@ before_filter :authenticate_user!
 
     def pi_draft  
         if params[:commit] == "保存到草稿"
-            #pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
-            #pi_draft.p_name = params[:p_name]    
-            #pi_draft.pi_p_name = params[:p_name]
-            #pi_draft.save
+            pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
+            pi_draft.p_name = params[:p_name]    
+            pi_draft.follow_remark = params[:teshu_remark]
+            pi_draft.save
+            
+            redirect_to :back and return
+        elsif params[:commit] == "提交"
         end
         redirect_to :back
     end

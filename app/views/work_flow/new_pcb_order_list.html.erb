@@ -104,7 +104,11 @@
   <tbody><small>
     <% @pcblist.each do |pcb| %>   
       <tr >
-        <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+        <% if not pcb.pcb_customer_id.blank? %>
+            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+        <% else %>
+            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+        <% end %>
         <td><%= pcb.p_name %></td>
         <td><%= pcb.c_code %></td>
         <td><%= pcb.c_des %></td>

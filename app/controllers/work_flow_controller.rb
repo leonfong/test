@@ -597,6 +597,12 @@ before_filter :authenticate_user!
     end
 
     def add_pcb_order_sell_item
+        find_sell_item = PcbOrderSellItem.where(pcb_order_no: params[:c_order_no_sell])
+        if not find_sell_item.blank?
+            find_sell_item.each do |del_item|
+                del_item.destroy
+            end
+        end
         @pcb = PcbOrderSellItem.new
         @pcb.pcb_order_id = params[:c_order_id_sell]
         @pcb.pcb_order_no = params[:c_order_no_sell]

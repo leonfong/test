@@ -73,7 +73,11 @@
 
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading"><strong>客户信息</strong> <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button></div>
+                <div class="panel-heading"><strong>客户信息</strong> 
+                <% if can? :work_e, :all%>
+                <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button>
+                <% end %>
+                </div>
                 <div class="panel-body ">                     
                     <div class="row ">
                         <div class="col-md-2"><strong>客户代码：</strong><ins id="daima_show" name="daima_show"><%= @q_order.c_code %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
@@ -95,7 +99,7 @@
 
 
 
-<% if params[:c_id]%>
+<% if params[:c_id] and can? :work_e, :all%>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsellitem" >添加询价信息</button>
             </div></div>
@@ -110,7 +114,7 @@
                         <tr style="background-color: #eeeeee">
                             <th width="40">操作</th>                           
                             <th width="70">数量</th>
-                            <th >英文描述</th>
+                            <th >PI英文描述</th>
                             <th >中文描述</th>
                             <th width="50">附件</th>
                             <th >备注</th>
@@ -121,9 +125,13 @@
                         <% if @q_order_sell_item %>
                         <% @q_order_sell_item.each do |q_item_sell| %>
                         <tr>
+                            <% if can? :work_e, :all%>
                             <td>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editsellitem" data-edit_c_item_id="<%= q_item_sell.id %>"   data-edit_des_en="<%= q_item_sell.des_en %>" data-edit_des_cn="<%= q_item_sell.des_cn %>" data-edit_qty="<%= q_item_sell.qty %>" data-edit_follow_remark="<%= q_item_sell.remark %>"></a>
                             </td>
+                            <% else %>
+                            <td></td>
+                            <% end %>
                             <td><%= q_item_sell.qty %></td>
                             <td><%= q_item_sell.des_en %></td>
                             <td><%= q_item_sell.des_cn %></td>
@@ -133,7 +141,11 @@
                                 <% end %>
                             </td>
                             <td><%= q_item_sell.remark %></td>
-                            <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_sell_item?id=<%= q_item_sell.id %>" data-confirm="确定要删除?"></a></td>
+                            <% if can? :work_e, :all%>
+                                <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_sell_item?id=<%= q_item_sell.id %>" data-confirm="确定要删除?"></a></td>
+                            <% else %>
+                                <td></td>
+                            <% end %>
                         </tr>
                         <% end %>
                         <% end %>
@@ -319,7 +331,7 @@
             </div> 
             <div class="form-group">
               <label for="qty" class="control-label">数量:</label>
-              <input type="number" class="form-control" id="edit_qty" name="edit_qty" readonly>
+              <input  autocomplete="off" type="number" class="form-control" id="edit_qty" name="edit_qty" readonly>
             </div> 
             <div class="form-group">
               <label for="qty" class="control-label">价格￥:</label>
@@ -391,7 +403,7 @@
             </div> 
             <div class="form-group">
               <label for="qty" class="control-label">数量:</label>
-              <input type="number" class="form-control" id="edit_qty" name="edit_qty">
+              <input autocomplete="off" type="number" class="form-control" id="edit_qty" name="edit_qty">
             </div> 
             <div class="form-group">
               <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
@@ -462,11 +474,11 @@
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料代码:</label>
-              <input type="text" class="form-control" id="moko_code" name="moko_code" readonly>
+              <input type="text" class="form-control" id="moko_code" name="moko_code" >
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料名称:</label>
-              <input type="text" class="form-control" id="moko_des" name="moko_des" readonly>
+              <input type="text" class="form-control" id="moko_des" name="moko_des" >
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">类别:</label>
@@ -488,7 +500,7 @@
             </div> 
             <div class="form-group">
               <label for="qty" class="control-label">数量:</label>
-              <input type="number" class="form-control" id="qty" name="qty">
+              <input autocomplete="off" type="number" class="form-control" id="qty" name="qty">
             </div> 
             <div class="form-group">
               <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
@@ -554,7 +566,7 @@
             </div> 
             <div class="form-group">
               <label for="qty" class="control-label">数量:</label>
-              <input type="number" class="form-control" id="qty_sell" name="qty_sell">
+              <input autocomplete="off" type="number" class="form-control" id="qty_sell" name="qty_sell">
             </div> 
             <div class="form-group">
               <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
@@ -615,7 +627,7 @@
             </div> 
             <div class="form-group">
               <label for="qty" class="control-label">数量:</label>
-              <input type="number" class="form-control" id="edit_qty_sell" name="edit_qty_sell">
+              <input autocomplete="off" type="number" class="form-control" id="edit_qty_sell" name="edit_qty_sell">
             </div> 
             <div class="form-group">
               <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>

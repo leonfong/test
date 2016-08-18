@@ -1816,10 +1816,10 @@ before_filter :authenticate_user!
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
         elsif can? :work_g_a, :all
             @user_do = "77"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],user_do: "77")
+            @bom_item = PItem.where("procurement_bom_id = {params[:bom_id]} AND (user_do = '77' OR user_do = '9999')")
         elsif can? :work_g_b, :all
             @user_do = "75"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],user_do: "75")
+            @bom_item = PItem.where("procurement_bom_id = {params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
         elsif can? :work_d, :all
             @user_do = "7"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id])

@@ -90,6 +90,65 @@
 
             </div></div>
 
+
+
+
+
+
+<% if params[:c_id]%>
+            <div class="row "><div class="col-md-12">
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsellitem" >添加询价信息</button>
+            </div></div>
+<% end %>
+
+
+
+            <div class="row "><div class="col-md-12">
+            <div class="panel panel-info">                
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th width="40">操作</th>                           
+                            <th width="70">数量</th>
+                            <th >英文描述</th>
+                            <th >中文描述</th>
+                            <th width="50">附件</th>
+                            <th >备注</th>
+                            <th width="40">删除</th>
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @q_order_sell_item %>
+                        <% @q_order_sell_item.each do |q_item_sell| %>
+                        <tr>
+                            <td>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editsellitem" data-edit_c_item_id="<%= q_item_sell.id %>"   data-edit_des_en="<%= q_item_sell.des_en %>" data-edit_des_cn="<%= q_item_sell.des_cn %>" data-edit_qty="<%= q_item_sell.qty %>" data-edit_follow_remark="<%= q_item_sell.remark %>"></a>
+                            </td>
+                            <td><%= q_item_sell.qty %></td>
+                            <td><%= q_item_sell.des_en %></td>
+                            <td><%= q_item_sell.des_cn %></td>
+                            <td>
+                                <% if not q_item_sell.att.blank? %>                 
+                                    <a class="btn btn-info btn-xs" href="<%= q_item_sell.att %>" target="_blank">下载</a>
+                                <% end %>
+                            </td>
+                            <td><%= q_item_sell.remark %></td>
+                            <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_item?edit_c_item_id=<%= q_item_sell.id %>" data-confirm="确定要删除?"></a></td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+
+
+
+
+
+
+
+<% if can? :work_d, :all %>
 <% if params[:c_id]%>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#additem" >添加询价物料</button>
@@ -146,7 +205,30 @@
                 </table>             
             </div>
             </div></div>
+<% end %>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
             <div class="row ">             
                 <div class="col-md-4" >
                     <div class="panel panel-info" >
@@ -157,7 +239,7 @@
                     </div>
                 </div> 
             </div> 
-
+-->
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
@@ -435,6 +517,150 @@
 
 
 
+<div class="modal fade" id="addsellitem" tabindex="-1" role="dialog" aria-labelledby="addsellitemLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="editsellModalLabel"><strong>添加询价信息 </strong></h4>
+        </div>
+        
+        <div class="modal-body">
+            
+            <%= form_tag({action: :add_pcb_order_sell_item},method:"post",multipart:"ture",id: "order_form") do %>   
+            <div class="form-group sr-only">         
+                <label for="c_order_id" class="control-label">询价id:</label>
+                <input type="text" class="form-control" id="c_order_id_sell" name="c_order_id_sell" value="<%= @q_order.id %>">
+            </div>  
+            <div class="form-group sr-only">         
+                <label for="c_id" class="control-label">客户id:</label>
+                <input type="text" class="form-control" id="c_id_sell" name="c_id_sell" value="<%= params[:c_id] %>">
+            </div>  
+            <div class="form-group sr-only">         
+                <label for="c_order_no" class="control-label">询价单号:</label>
+                <input type="text" class="form-control" id="c_order_no_sell" name="c_order_no_sell" value="<%= @q_order.order_no %>">
+            </div>  
+            <div class="form-group">
+              <label for="sell_manager_remark" class="control-label">附件:</label>
+              <input name="att_sell" id="att_sell" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
+            </div> 
+            <div class="form-group">         
+              <label for="des_en" class="control-label">PI英文描述:</label>
+              <input type="text" class="form-control" id="des_en_sell" name="des_en_sell">
+            </div> 
+            <div class="form-group">         
+              <label for="des_cn" class="control-label">中文描述:</label>
+              <input type="text" class="form-control" id="des_cn_sell" name="des_cn_sell">
+            </div> 
+            <div class="form-group">
+              <label for="qty" class="control-label">数量:</label>
+              <input type="number" class="form-control" id="qty_sell" name="qty_sell">
+            </div> 
+            <div class="form-group">
+              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
+              <textarea  class="form-control" id="follow_remark_sell" name="follow_remark_sell"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_sell()">
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="editsellitem" tabindex="-1" role="dialog" aria-labelledby="editsellitemLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="editsellModalLabel"><strong>修改询价信息 </strong></h4>
+        </div>
+        
+        <div class="modal-body">
+            
+            <%= form_tag({action: :edit_pcb_order_sell_item},method:"post",multipart:"ture",id: "order_form") do %>  
+            <div class="form-group sr-only">         
+                <label for="edit_c_item_id_sell" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="edit_c_item_id_sell" name="edit_c_item_id_sell">
+            </div> 
+            
+            <div class="form-group">
+              <label for="sell_manager_remark" class="control-label">附件:</label>
+              <input name="edit_att_sell" id="edit_att_sell" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
+            </div> 
+            <div class="form-group">         
+              <label for="des_en" class="control-label">PI英文描述:</label>
+              <input type="text" class="form-control" id="edit_des_en_sell" name="edit_des_en_sell">
+            </div> 
+            <div class="form-group">         
+              <label for="des_cn" class="control-label">中文描述:</label>
+              <input type="text" class="form-control" id="edit_des_cn_sell" name="edit_des_cn_sell">
+            </div> 
+            <div class="form-group">
+              <label for="qty" class="control-label">数量:</label>
+              <input type="number" class="form-control" id="edit_qty_sell" name="edit_qty_sell">
+            </div> 
+            <div class="form-group">
+              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
+              <textarea  class="form-control" id="edit_follow_remark_sell" name="edit_follow_remark_sell"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_edit_sell()">
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -536,7 +762,20 @@ $('#edititem').on('show.bs.modal', function (event) {
   modal.find($("#edit_follow_remark")).html(edit_follow_remark);
 })
 
-
+$('#editsellitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var edit_c_item_id_sell = button.data('edit_c_item_id');
+  var edit_des_en_sell = button.data('edit_des_en');
+  var edit_des_cn_sell = button.data('edit_des_cn');  
+  var edit_qty_sell = button.data('edit_qty'); 
+  var edit_follow_remark_sell = button.data('edit_follow_remark');                       
+  var modal = $(this);
+  modal.find($("#edit_c_item_id_sell")).val(edit_c_item_id_sell);
+  modal.find($("#edit_des_en_sell")).val(edit_des_en_sell);
+  modal.find($("#edit_des_cn_sell")).val(edit_des_cn_sell);
+  modal.find($("#edit_qty_sell")).val(edit_qty_sell);
+  modal.find($("#edit_follow_remark_sell")).html(edit_follow_remark_sell);
+})
 
 
 function postform_edit() {  	         
@@ -552,7 +791,13 @@ function postform_edit() {
 　     }  
 }  
 
-
+function postform_edit_sell() {  	         
+      if ($("#edit_qty_sell").val() == "")
+      {                    
+　　    alert("请填写数量！");                    
+　　    return false;                
+　     }  
+}  
 
 
 
@@ -568,6 +813,17 @@ function postform() {
 　　    return false;                
 　     }  
 }  
+
+
+
+function postform_sell() {  	         
+      if ($("#qty_sell").val() == "")
+      {                    
+　　    alert("请填写数量！");                    
+　　    return false;                
+　     }  
+}  
+
 
 
 $(".menu-first").click(function(){

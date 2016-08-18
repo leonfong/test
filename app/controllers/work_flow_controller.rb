@@ -458,6 +458,7 @@ before_filter :authenticate_user!
     def edit_pcb_order
         @q_order = PcbOrder.find_by(order_no: params[:order_no])
         @q_order_item = PcbOrderItem.where(pcb_order_id: @q_order.id)
+        @q_order_sell_item = PcbOrderSellItem.where(pcb_order_id: @q_order.id)
     end
 
     def update_pcb_order
@@ -592,6 +593,40 @@ before_filter :authenticate_user!
         @pcb.p_type = params[:p_type]    
         @pcb.remark = params[:follow_remark]
         @pcb.save
+        redirect_to :back
+    end
+
+    def add_pcb_order_sell_item
+        @pcb = PcbOrderSellItem.new
+        @pcb.pcb_order_id = params[:c_order_id_sell]
+        @pcb.pcb_order_no = params[:c_order_no_sell]
+        @pcb.c_id = params[:c_id_sell]
+        @pcb.des_en = params[:des_en_sell] 
+        @pcb.des_cn = params[:des_cn_sell]
+        @pcb.qty = params[:qty_sell]
+        @pcb.att = params[:att_sell]   
+        @pcb.remark = params[:follow_remark_sell]
+        @pcb.save
+        redirect_to :back
+    end
+
+    def edit_pcb_order_sell_item
+        @pcb = PcbOrderSellItem.find(params[:edit_c_item_id_sell])
+        @pcb.des_en = params[:edit_des_en_sell] 
+        @pcb.des_cn = params[:edit_des_cn_sell]
+        @pcb.qty = params[:edit_qty_sell]
+        @pcb.att = params[:edit_att_sell] 
+        if not params[:edit_att_sell].blank?
+            @pcb.att = params[:edit_att_sell]
+        end  
+        @pcb.remark = params[:edit_follow_remark_sell]
+        @pcb.save
+        redirect_to :back
+    end
+
+    def del_pcb_order_sell_item
+        pcb = PcbOrderSellItem.find(params[:id])
+        pcb.destroy
         redirect_to :back
     end
 

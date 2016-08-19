@@ -185,6 +185,7 @@
                             <th width="100">单价</th>
                             <th width="50">附件</th>
                             <th >备注</th>
+                            <th ></th>
                             <th width="40">删除</th>
                         </tr>
                     </thead>
@@ -209,6 +210,16 @@
                                 <% end %>
                             </td>
                             <td><%= q_item.remark %></td>
+                            <td>
+                                
+                                <a class="btn btn-danger btn-xs" id="UploadButton_<%= q_item.id.to_s %>" style="position: relative;display: inline-block;background: #D0EEFF;border: 1px solid #99D3F5;border-radius: 4px;padding: 4px 12px;overflow: hidden;color: #1E88C7;text-decoration: none;text-indent: 0;line-height: 20px;">BROWSE
+                                    
+                                       
+                                       <input name="<%= q_item.id.to_s %>" id="<%= q_item.id.to_s %>" type="file" accept=".xls" style="position: absolute;font-size: 100px;right: 0;top: 0;opacity: 0;" onchange='upatt(this.id,this.value)'>
+                                    
+                                </a>
+                                
+                            </td>
                             <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_item?edit_c_item_id=<%= q_item.id %>" data-confirm="确定要删除?"></a></td>
                         </tr>
                         <% end %>
@@ -275,7 +286,13 @@
 
 
 
-
+<div>
+<form id="upattform" method="POST" enctype="multipart/form-data" action="/p_new_bom"> 
+    <input  name="erp_id" id="erp_id" type="text" >
+    <input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls"  >
+    
+</form>
+</div>
 
 
 
@@ -474,11 +491,11 @@
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料代码:</label>
-              <input type="text" class="form-control" id="moko_code" name="moko_code" readonly>
+              <input type="text" class="form-control" id="moko_code" name="moko_code" >
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">物料名称:</label>
-              <input type="text" class="form-control" id="moko_des" name="moko_des" readonly>
+              <input type="text" class="form-control" id="moko_des" name="moko_des" >
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">类别:</label>
@@ -842,7 +859,18 @@ $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');
   $('#articleMenu').collapse('hide');
 });
-   
+  
+function upatt(x,y) 
+{
+//alert(y);
+w = y
+document.getElementById("erp_id").value = x;
+//document.getElementById(x).value = null;
+document.getElementById("bom_excel_file").value = null;
+document.getElementById("bom_excel_file").value = w;
+$("#upattform").submit();
+//alert(document.getElementById("bom_excel_file").value);
+}
 </script>
 
 

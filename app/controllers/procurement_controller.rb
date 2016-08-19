@@ -1475,10 +1475,10 @@ before_filter :authenticate_user!
         @bom = ProcurementBom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         @bom.bom_eng_up = current_user.full_name
-        if params[:erp_id]
+        if params[:erp_id] != ""
             @bom.erp_id = params[:erp_id]
         end
-        if params[:erp_no]
+        if params[:erp_no] != ""
             @bom.erp_no = params[:erp_no]
         end
         @file = @bom.excel_file_identifier

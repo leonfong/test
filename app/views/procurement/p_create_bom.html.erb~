@@ -62,10 +62,12 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                 <dd>
                     <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
                         <h4>1.Upload BOM from EXCEL Spreadsheet</h4>
+                        <h6>params[:erp_id] 询价单号: <%= params[:erp_no] %></h6>
                         <ul class="list-inline pt20 mt15">
                             <li class="w50">
                             	<a class="btn btn-danger" id="UploadButton" style="position: relative;">BROWSE
 <form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/p_new_bom"> 
+<input name="erp_id" id="erp_id" type="text" class="sr-only" value="<%= params[:erp_id] %>"><input name="erp_no" id="erp_no" type="text" class="sr-only" value="<%= params[:erp_no] %>">
 <input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls" style="display: block; overflow: hidden; width: 80px; height: 30px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
 </form></a>
                             </li>

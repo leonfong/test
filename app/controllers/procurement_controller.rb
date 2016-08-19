@@ -1478,6 +1478,9 @@ before_filter :authenticate_user!
         if params[:erp_id]
             @bom.erp_id = params[:erp_id]
         end
+        if params[:erp_no]
+            @bom.erp_no = params[:erp_no]
+        end
         @file = @bom.excel_file_identifier
         if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?
             order_n =1

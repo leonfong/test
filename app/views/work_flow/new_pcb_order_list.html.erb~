@@ -66,7 +66,7 @@
 <br>
   <ul class="nav nav-tabs" >
       <li role="presentation" ><a href="/sell_pcb_baojia"><h5 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h5></a></li>
-      <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h5></a></li>
+      <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >询价草稿列表</p></strong></h5></a></li>
   </ul>
 <br>
   <%= render 'layouts/flash_messages' %>
@@ -104,7 +104,11 @@
   <tbody><small>
     <% @pcblist.each do |pcb| %>   
       <tr >
-        <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+        <% if not pcb.pcb_customer_id.blank? %>
+            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+        <% else %>
+            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+        <% end %>
         <td><%= pcb.p_name %></td>
         <td><%= pcb.c_code %></td>
         <td><%= pcb.c_des %></td>

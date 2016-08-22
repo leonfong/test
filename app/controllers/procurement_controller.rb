@@ -1205,12 +1205,20 @@ before_filter :authenticate_user!
             end
             @new_part.description = des
             if @new_part.save
-                p_item = PItem.find(@item_id)
-                p_item.product_id = @new_part.id
-                p_item.save
+                if params[:item_tag] == "edit"
+                    p_item = PcbOrderItem.find(@item_id)
+                    p_item.moko_code = @new_part.name
+                    p_item.moko_des = @new_part.description
+                    p_item.save
+                    redirect_to :back and return
+                else
+                    p_item = PItem.find(@item_id)
+                    p_item.product_id = @new_part.id
+                    p_item.save
                 #flash[:success] = "New part success"
-                #redirect_to :back 
-                render "add_moko_part.js.erb" and return
+                
+                    render "add_moko_part.js.erb" and return
+                end
             end
         end
     end

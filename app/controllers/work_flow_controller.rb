@@ -2,6 +2,29 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def bom_edit_order_item
+        find_data = PcbOrderItem.find(params[:bom_edit_id])
+        find_data.moko_code = params[:bom_edit_moko_code]
+        find_data.moko_des = params[:bom_edit_moko_des]
+        find_data.save
+        redirect_to :back
+    end
+
+    def copy_order_item
+        find_data = PcbOrderSellItem.find(params[:id])
+        copy_data = PcbOrderItem.new
+        copy_data.c_id = find_data.c_id
+        copy_data.pcb_order_id = find_data.pcb_order_id
+        copy_data.pcb_order_no = find_data.pcb_order_no
+        copy_data.des_en = find_data.des_en
+        copy_data.des_cn = find_data.des_cn
+        copy_data.qty = find_data.qty
+        copy_data.att = find_data.att
+        copy_data.remark = find_data.remark
+        copy_data.save
+        redirect_to :back
+    end
+
     def find_moko_part
         if params[:moko_part] != ""
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
@@ -598,11 +621,13 @@ before_filter :authenticate_user!
 
     def add_pcb_order_sell_item
         find_sell_item = PcbOrderSellItem.where(pcb_order_no: params[:c_order_no_sell])
+=begin
         if not find_sell_item.blank?
             find_sell_item.each do |del_item|
                 del_item.destroy
             end
         end
+=end
         @pcb = PcbOrderSellItem.new
         @pcb.pcb_order_id = params[:c_order_id_sell]
         @pcb.pcb_order_no = params[:c_order_no_sell]

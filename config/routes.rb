@@ -85,8 +85,8 @@ Rails.application.routes.draw do
   match '/add_pcb_order_sell_item', to: 'work_flow#add_pcb_order_sell_item', via: 'post'
   match '/edit_pcb_order_sell_item', to: 'work_flow#edit_pcb_order_sell_item', via: 'post'
   match '/del_pcb_order_sell_item', to: 'work_flow#del_pcb_order_sell_item', via: 'get'
-
-
+  match '/copy_order_item', to: 'work_flow#copy_order_item', via: 'get'
+  match '/bom_edit_order_item', to: 'work_flow#bom_edit_order_item', via: 'post'
 
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 

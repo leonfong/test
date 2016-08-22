@@ -28,17 +28,18 @@
             </div>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-        <%= form_tag('/update_pcb_order', method:"post",id:"upatt") do %>
+        
             <div class="row "><div class="col-md-12">                
                 <div class="panel panel-info">
                     <div class="panel-heading"><strong>询价基本信息:</strong></div>
                     <div class="panel-body ">  
                    
-                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"><%= @q_order.order_no %></ins></p><input type="text" class="form-control sr-only" id="p_no" name="p_no" value="<%= @q_order.order_no %>">
+                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"><%= @q_order.order_no %></ins></p>
                         </div>
-
+<!--
                         <div class="col-md-4 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @q_order.p_name %>">
                         </div>
+-->
                         <div class="col-md-2 form-inline"><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= Time.new.strftime("%Y-%m-%d")%></ins>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
                         </div> 
@@ -129,8 +130,10 @@
                             <td>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editsellitem" data-edit_c_item_id="<%= q_item_sell.id %>"   data-edit_des_en="<%= q_item_sell.des_en %>" data-edit_des_cn="<%= q_item_sell.des_cn %>" data-edit_qty="<%= q_item_sell.qty %>" data-edit_follow_remark="<%= q_item_sell.remark %>"></a>
                             </td>
-                            <% else %>
-                            <td></td>
+                            <% elsif can? :work_d, :all %>
+                            <td>
+                                <a rel="nofollow" data-method="get" href="/copy_order_item?id=<%= q_item_sell.id.to_s %>">复制</a>
+                            </td>
                             <% end %>
                             <td><%= q_item_sell.qty %></td>
                             <td><%= q_item_sell.des_en %></td>
@@ -174,7 +177,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr style="background-color: #eeeeee">
-                            <th width="40">操作</th>
+                            <th width="60">操作</th>
                             <th width="150">物料编码</th>
                             <th >物料名称</th>
                             <th width="70">数量</th>
@@ -185,7 +188,7 @@
                             <th width="100">单价</th>
                             <th width="50">附件</th>
                             <th >备注</th>
-                            <th ></th>
+                            <th width="80"></th>
                             <th width="40">删除</th>
                         </tr>
                     </thead>
@@ -195,9 +198,16 @@
                         <tr>
                             <td>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= q_item.id %>"  data-edit_moko_code="<%= q_item.moko_code %>" data-edit_moko_des="<%= q_item.moko_des %>" data-edit_p_type="<%= q_item.p_type %>" data-edit_des_en="<%= q_item.des_en %>" data-edit_des_cn="<%= q_item.des_cn %>" data-edit_qty="<%= q_item.qty %>" data-edit_follow_remark="<%= q_item.remark %>"></a>
+                                <a class="glyphicon glyphicon-plus-sign" data-toggle="modal" data-target="#addmoko"  data-itemaddid="<%= q_item.id %>" id="<%= q_item.id.to_s + '_mpn' %>"></a>
                             </td>
+<!--
                             <td><%= q_item.moko_code %></td>
                             <td><%= q_item.moko_des %></td>
+-->
+                        <%= form_tag({action: :bom_edit_order_item},method:"post",multipart:"ture") do %>  
+                            <td><input class="sr-only" id="bom_edit_id" name="bom_edit_id" value="<%= q_item.id %>"><input id="bom_edit_moko_code" name="bom_edit_moko_code" value="<%= q_item.moko_code %>"></td>
+                            <td><input id="bom_edit_moko_des" name="bom_edit_moko_des" value="<%= q_item.moko_des %>"><button type="submit" class="btn btn-link btn-sm glyphicon glyphicon-ok " ></button></td>
+                        <% end %>
                             <td><%= q_item.qty %></td>
                             <td><%= q_item.des_en %></td>
                             <td><%= q_item.des_cn %></td>
@@ -256,9 +266,13 @@
                 </div> 
             </div> 
 -->
+         <%= form_tag('/update_pcb_order', method:"post",id:"upatt") do %>
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">                    
+                    <input type="text" class="form-control sr-only" id="p_no" name="p_no" value="<%= @q_order.order_no %>">
+<!--
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
+-->
                     <% if can? :work_e, :all %>
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
                     <% elsif can? :work_d, :all %>
@@ -468,6 +482,7 @@
               <label for="sell_manager_remark" class="control-label">附件:</label>
               <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
             </div> 
+
             <div class="form-group">         
               <label for="p_name" class="control-label">物料代码:</label>
               <input type="text" class="form-control" id="moko_code" name="moko_code" >
@@ -713,7 +728,52 @@
 
 
 
+<div class="modal fade" id="addmoko" tabindex="-1" role="dialog" aria-labelledby="editMpnLabel">
 
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">ADD MOKO PART</h4>
+      </div>
+      <div class="modal-body">
+<%= form_tag({action: :add_moko_part,controller: :procurement},method:"post", class: "form-inline") do %>
+          <div class="form-group sr-only">
+            <label for="item_id" class="control-label">id:</label>
+            <input type="text" class="form-control" id="itemadd_id" name="item_id" >
+          </div>
+          <div class="form-group sr-only">
+            <label for="item_tag" class="control-label">id:</label>
+            <input type="text" class="form-control" id="item_tag" name="item_tag" value="edit">
+          </div>
+          <div class="form-inline" style="padding-bottom: 5px;"> 
+              <div class="form-inline">   
+              <lable for="类别" class="control-label">类别 : </lable><lable for="a" class="control-label">A.</lable><%= text_field_tag :part_a, params[:part_a], size:2  ,  class:"form-control"%>
+              <lable for="b" class="control-label">.</lable><%= text_field_tag :part_b, params[:part_b], size:2 ,  class:"form-control" %>
+              </div>
+          </div>
+          <div class="form-inline" style="padding-bottom: 5px;">  
+              <div class="form-inline">
+              <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
+              <lable for="package2" class="control-label">封装 : </lable>
+              <% members = Product.find_by_sql("select * from products GROUP BY products.part_name").collect { |c| [c.part_name,c.part_name] }%>
+              <%= select  '', :abc,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)" ,class:"form-control"}  %>
+              <%= select_tag "package2", "<option value=\"0\">--请选择上级--</option>",  class:"form-control"%>  
+              </div>
+          </div>
+          <div class="form-group" id="all_attr">
+          </div>      
+     
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >新增物料</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 
@@ -748,6 +808,14 @@
 
 
 <script>
+
+$('#addmoko').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itemaddid'); 
+  var modal = $(this)
+  modal.find($("#itemadd_id")).val(itempid);
+})
+
 
 $('#edititem').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
@@ -838,6 +906,27 @@ $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');
   $('#articleMenu').collapse('hide');
 });
+
+
+  function get_options(value){
+    var urla='/procurement/select_with_ajax?id='+value;
+    $("#change_s").attr("href",urla);
+    $("#change_s").click(); 
+    //$.ajax({
+      //type: "POST",
+      //url:'/procurement/select_with_ajax?id='+value,
+      //data:'text',
+      //data:'<%= @options %>',
+      //data_a:'<%= @code_a %>',
+      //data_b:'<%= @code_b %>',
+      //success: function(data,data_a,data_b){
+        //$("#package2").html(data);
+        //$("#part_a").val(data_a);
+        //$("#part_b").val(data_b);
+      //}
+    //}
+  //)
+  }
   
 </script>
 

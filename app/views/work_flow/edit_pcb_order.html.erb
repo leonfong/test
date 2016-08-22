@@ -113,7 +113,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr style="background-color: #eeeeee">
-                            <th width="40">操作</th>                           
+                            <th width="60">操作</th>                           
                             <th width="70">数量</th>
                             <th >PI英文描述</th>
                             <th >中文描述</th>
@@ -126,15 +126,17 @@
                         <% if @q_order_sell_item %>
                         <% @q_order_sell_item.each do |q_item_sell| %>
                         <tr>
+                            
+                            <td>
                             <% if can? :work_e, :all%>
-                            <td>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editsellitem" data-edit_c_item_id="<%= q_item_sell.id %>"   data-edit_des_en="<%= q_item_sell.des_en %>" data-edit_des_cn="<%= q_item_sell.des_cn %>" data-edit_qty="<%= q_item_sell.qty %>" data-edit_follow_remark="<%= q_item_sell.remark %>"></a>
-                            </td>
-                            <% elsif can? :work_d, :all %>
-                            <td>
-                                <a rel="nofollow" data-method="get" href="/copy_order_item?id=<%= q_item_sell.id.to_s %>">复制</a>
-                            </td>
                             <% end %>
+                            <% if can? :work_d, :all or can? :work_top, :all %>
+                                <a rel="nofollow" data-method="get" href="/copy_order_item?id=<%= q_item_sell.id.to_s %>">复制</a>
+
+                            <% end %>
+                            </td>
+                            
                             <td><%= q_item_sell.qty %></td>
                             <td><%= q_item_sell.des_en %></td>
                             <td><%= q_item_sell.des_cn %></td>
@@ -163,7 +165,7 @@
 
 
 
-<% if can? :work_d, :all %>
+<% if can? :work_d, :all or can? :work_top, :all %>
 <% if params[:c_id]%>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#additem" >添加询价物料</button>

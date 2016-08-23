@@ -1,0 +1,1 @@
+$("#table_moko_part").html('<%= raw @table_moko_part %>');

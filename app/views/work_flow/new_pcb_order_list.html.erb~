@@ -37,7 +37,7 @@
 							    <li><a href="/pcb_order_list?bom_chk=true"><i class="icon-edit"></i> 询价结果</a></li>
                                                         <% elsif can? :work_g, :all %>
                                                             <li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 询价结果</a></li>
-                                                        <% elsif can? :work_g, :all %>
+                                                        <% else %>
                                                             <li><a href="/pcb_order_list"><i class="icon-edit"></i> 询价结果</a></li>
                                                         <% end %>
  
@@ -75,7 +75,7 @@
 
 
 
-        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
+        <% if can? :work_e, :all %>
             <div style="padding: 10px;">
             <a  type="button" class="btn btn-primary btn-sm"  href="/new_pcb_order?new=true">新建询价</a>
             
@@ -93,7 +93,7 @@
       <th width="100">所属业务员</th>
       <th width="100">跟踪业务员</th>
       <th >跟踪备注</th>
-<% if can? :work_pcb_business, :all %>
+<% if can? :work_e, :all %>
       <th width="50">删除</th>
 <% end %>
 <!--

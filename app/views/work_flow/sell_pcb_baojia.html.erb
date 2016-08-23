@@ -73,7 +73,9 @@
                                 <th width="250">客户名</th>
                                 <th width="350">客户公司名</th>
                                 <th width="65">国家</th>
+<!--
                                 <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
+-->
                                 <th >收货地址</th>
                                 <th width="60">业务员</th>  
                                 <th width="100">数量</th>
@@ -97,7 +99,9 @@
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.customer_com %></td>
                                 <td><%= q_order.customer_country %></td>
+<!--
                                 <td><%= q_order.email %></td>
+-->
                                 <td><%= q_order.shipping_address %></td>
                                 <td><%= User.find_by(email: q_order.sell).full_name %></td>
                                 <td><%= q_order.qty %></td>
@@ -217,13 +221,15 @@
           <div class="form-group">
             <label for="edit_customer_country" class="control-label">国家:</label>
             <input type="text" class="form-control" id="edit_customer_country" name="customer_country">
-          </div>       
+          </div> 
+<!--      
           <div class="form-group">
             <label for="email" class="control-label">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）:</label>
             <input type="text" class="form-control" id="edit_email" name="email">
           </div> 
+-->
           <div class="form-group">
-            <label for="edit_shipping_address" class="control-label">收货地址:</label>
+            <label for="edit_shipping_address" class="control-label">收货地址和电话:</label>
             <textarea  class="form-control" id="edit_shipping_address" name="shipping_address"></textarea>
           </div> 
 <!--

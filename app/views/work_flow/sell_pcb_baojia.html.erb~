@@ -6,7 +6,7 @@
       <li role="presentation" ><a href="/sell_baojia"><h4><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
       <li role="presentation" class="active"><a href="/sell_pcb_baojia"><h4><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
       <% if can? :work_pcb_business, :all %>
-      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB询价列表</p></strong></h4></a></li>
+      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >询价草稿列表</p></strong></h4></a></li>
       <% end %>
   </ul>
 <br>
@@ -217,13 +217,15 @@
           <div class="form-group">
             <label for="edit_customer_country" class="control-label">国家:</label>
             <input type="text" class="form-control" id="edit_customer_country" name="customer_country">
-          </div>       
+          </div> 
+<!--      
           <div class="form-group">
             <label for="email" class="control-label">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）:</label>
             <input type="text" class="form-control" id="edit_email" name="email">
           </div> 
+-->
           <div class="form-group">
-            <label for="edit_shipping_address" class="control-label">收货地址:</label>
+            <label for="edit_shipping_address" class="control-label">收货地址和电话:</label>
             <textarea  class="form-control" id="edit_shipping_address" name="shipping_address"></textarea>
           </div> 
 <!--

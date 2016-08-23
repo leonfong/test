@@ -38,9 +38,9 @@ before_filter :authenticate_user!
                 end      
             end
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR (#{where_des})) AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+            @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR (#{where_des})) AND all_dns.qty >= 100 AND all_dns.dn <> '客供' ORDER BY all_dns.date DESC").first
             if @moko_part.blank?
-                @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') ORDER BY all_dns.date DESC").first
+                @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') AND all_dns.dn <> '客供' ORDER BY all_dns.date DESC").first
             end
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@moko_part.inspect)
@@ -525,7 +525,7 @@ before_filter :authenticate_user!
 
     def del_pcb_order
         pcb_order = PcbOrder.find(params[:order_id])
-        if can? :work_pcb_business, :all
+        if can? :work_e, :all
             pcb_order.destroy
         end
         redirect_to :back
@@ -608,7 +608,7 @@ before_filter :authenticate_user!
                 @pcblist = PcbOrder.where(state: "quotechk",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 render "pcb_order_list.html.erb" and return
             else
-                @pcblist = PcbOrder.where("state <> 'new',order_sell: current_user.email").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             end
 
         end
@@ -730,8 +730,18 @@ before_filter :authenticate_user!
         @pcb.qty = params[:qty]
         @pcb.att = params[:att]
         @pcb.remark= params[:remark]
-        @pcb.customer_country= params[:customer_country]
-        @pcb.shipping_address= params[:shipping_address]
+        @pcb.customer_country = params[:customer_country]
+        @pcb.shipping_address = params[:shipping_address]      
+        if not params[:c_order_no].blank?
+            @pcb.follow = current_user.email
+            up_c = PcbOrder.find_by(order_no: params[:c_order_no])
+            up_c.pcb_customer_id = @pcb.id
+            up_c.c_code = @pcb.c_no
+            up_c.c_des = @pcb.customer
+            up_c.c_country = @pcb.customer_country
+            up_c.c_shipping_address = @pcb.shipping_address
+            up_c.save
+        end
         @pcb.save
         redirect_to :back
     end

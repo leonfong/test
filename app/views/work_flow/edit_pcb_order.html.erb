@@ -12,7 +12,7 @@
 			<li><a href="/pcb_order_list?bom_chk=true"><i class="icon-edit"></i> 询价结果</a></li>
                         <% elsif can? :work_g, :all %>
                         <li><a href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 询价结果</a></li>
-                        <% elsif can? :work_g, :all %>
+                        <% else %>
                         <li><a href="/pcb_order_list"><i class="icon-edit"></i> 询价结果</a></li>
                         <% end %>
                     </ul>
@@ -75,7 +75,7 @@
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>客户信息</strong> 
-                <% if can? :work_e, :all%>
+                <% if can? :work_e, :all and @q_order.state == "new"%>
                 <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button>
                 <% end %>
                 </div>
@@ -87,7 +87,7 @@
                         
                     </div>
                     <div class="row " style="padding-top: 10px;">
-                         <div class="col-md-12"><strong>客户收货地址：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @q_order.c_shipping_address %></ins><input type="text" class="input-sm sr-only" style="width:90%" id="fahuodizhi" name="fahuodizhi" readonly></div> 
+                         <div class="col-md-12"><strong>客户收货地址和电话：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @q_order.c_shipping_address %></ins><input type="text" class="input-sm sr-only" style="width:90%" id="fahuodizhi" name="fahuodizhi" readonly></div> 
   
                     </div>
                 </div>
@@ -100,7 +100,7 @@
 
 
 
-<% if params[:c_id] and can? :work_e, :all%>
+<% if params[:c_id] and can? :work_e, :all and @q_order.state == "new"%>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsellitem" >添加询价信息</button>
             </div></div>
@@ -128,7 +128,7 @@
                         <tr>
                             
                             <td>
-                            <% if can? :work_e, :all%>
+                            <% if can? :work_e, :all and @q_order.state == "new"%>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editsellitem" data-edit_c_item_id="<%= q_item_sell.id %>"   data-edit_des_en="<%= q_item_sell.des_en %>" data-edit_des_cn="<%= q_item_sell.des_cn %>" data-edit_qty="<%= q_item_sell.qty %>" data-edit_follow_remark="<%= q_item_sell.remark %>"></a>
                             <% end %>
                             <% if can? :work_d, :all or can? :work_top, :all %>
@@ -146,7 +146,7 @@
                                 <% end %>
                             </td>
                             <td><%= q_item_sell.remark %></td>
-                            <% if can? :work_e, :all%>
+                            <% if can? :work_e, :all and @q_order.state == "new"%>
                                 <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_sell_item?id=<%= q_item_sell.id %>" data-confirm="确定要删除?"></a></td>
                             <% else %>
                                 <td></td>
@@ -275,7 +275,7 @@
 <!--
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
-                    <% if can? :work_e, :all %>
+                    <% if can? :work_e, :all and @q_order.state == "new"%>
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
                     <% elsif can? :work_d, :all %>
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到采购工程师?"} %>
@@ -711,10 +711,12 @@
                         <div class="input-group input-group-sm">              
                             <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"客户代码/客户名/客户公司名/客户联系方式"%>               
                             <div class="input-group-btn">
-                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
                             </div>
+                            
                         </div>
                     </div>
+                    <a class="btn btn-success btn-sm" id="new_customer">新建客户</a>
                 <% end %>             
                 </div> 
                 <div class="form-group" id="table_code">
@@ -783,7 +785,69 @@
 
 
 
-
+<div class="modal fade" id="addcustomer" tabindex="-1" role="dialog" aria-labelledby="addcustomerLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addcustomerLabel">新建客户信息</h4>
+      </div>
+      <%= form_tag({action: :add_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
+      <div class="modal-body">       
+          <div class="form-group sr-only">         
+            <label for="c_order_no" class="control-label"> 询价单号:</label>
+            <input type="text" class="form-control" id="c_order_no" name="c_order_no" value="<%= @q_order.order_no %>">
+          </div> 
+          <div class="form-group">
+            <label for="customer" class="control-label">客户名:</label>
+            <input type="text" class="form-control" id="customer" name="customer">
+          </div>   
+          <div class="form-group">
+            <label for="customer_com" class="control-label">客户公司名:</label>
+            <input type="text" class="form-control" id="customer_com" name="customer_com">
+          </div>       
+          <div class="form-group">
+            <label for="customer_country" class="control-label">国家:</label>
+            <input type="text" class="form-control" id="customer_country" name="customer_country">
+          </div> 
+<!--      
+          <div class="form-group">
+            <label for="email" class="control-label">联系方式（邮箱必填)，(﻿whatsapp,line,skype,facebook，等）:</label>
+            <textarea class="form-control" id="email" name="email"></textarea>
+          </div> 
+-->
+          <div class="form-group">
+            <label for="shipping_address" class="control-label">收货地址和电话:</label>
+            <textarea  class="form-control" id="shipping_address" name="shipping_address"></textarea>
+          </div> 
+<!--
+          <div class="form-group">
+            <label for="sell" class="control-label">业务:</label>
+            <input type="text" class="form-control" id="sell" name="sell">
+          </div> 
+-->
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="qty" name="qty">
+          </div>         
+ 
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+          <div class="form-group">
+            <label for="qty" class="control-label">备注:</label>
+            <textarea  class="form-control" id="remark" name="remark"></textarea>
+          </div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 
@@ -932,7 +996,13 @@ $(".menu-first").click(function(){
     //}
   //)
   }
-  
+
+$(document).ready(function(){
+  $("#new_customer").click(function(){
+  $("#find_c").modal('toggle');
+  $("#addcustomer").modal('toggle');
+  }); 
+});
 </script>
 
 

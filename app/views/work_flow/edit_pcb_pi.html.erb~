@@ -48,7 +48,6 @@
                                 <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
                             </div>
                             <div class="col-md-4 form-inline"><p><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @pi_info.p_name %>">
-                                <input type="text" class="form-control sr-only" id="p_name" name="p_name" >
                             </div>
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >

@@ -245,7 +245,7 @@ before_filter :authenticate_user!
             else
                 pi_n = PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW())').last.pi_no.split("PI")[-1].to_i + 1
             end
-            @pi_no = "M"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PI"+ pi_n.to_s
+            @pi_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PI"+ pi_n.to_s
             pi_info = PiInfo.new()
             pi_info.pi_no = @pi_no
             pi_info.pi_sell = current_user.email
@@ -464,7 +464,7 @@ before_filter :authenticate_user!
            else
                 p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.split("EQ")[-1].to_i + 1
            end
-           @p_no = "M"+current_user.s_name_self.to_s.upcase + Time.new.strftime('%y%m%d').to_s + "EQ"+ p_n.to_s
+           @p_no = "ME"+current_user.s_name_self.to_s.upcase + Time.new.strftime('%y%m%d').to_s + "EQ"+ p_n.to_s
            @pcb = PcbOrder.new()        
            @pcb.order_no = @p_no
            @pcb.order_sell = current_user.email

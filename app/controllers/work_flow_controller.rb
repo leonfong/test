@@ -27,8 +27,18 @@ before_filter :authenticate_user!
 
     def find_moko_part
         if params[:moko_part] != ""
+            if not params[:moko_part].blank?
+                des = params[:moko_part].strip.split(" ")
+                where_des = ""
+                des.each_with_index do |de,index|
+                    where_des += "all_dns.des LIKE '%#{de}%'"
+                    if des.size > (index + 1)
+                        where_des += " AND "
+                    end
+                end      
+            end
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+            @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR (#{where_des})) AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
             if @moko_part.blank?
                 @moko_part = AllDn.find_by_sql("SELECT * FROM all_dns WHERE (all_dns.part_code LIKE '%#{params[:moko_part]}%' OR all_dns.des LIKE '%#{params[:moko_part]}%') ORDER BY all_dns.date DESC").first
             end

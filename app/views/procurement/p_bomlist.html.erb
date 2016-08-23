@@ -142,12 +142,12 @@
 -->
         <% if can? :work_g_all, :all %>
             <% if bom.check == "do" %>
-                <td><div class="btn-group"><a class="btn btn-default">无权限删除</a></div></td>
+                <td><div class="btn-group"><a class="btn btn-default">删除</a></div></td>
             <% else %>
                 <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/p_del_bb?bom_id=<%= bom.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>  
             <% end %>
         <% else %> 
-           <td><div class="btn-group"><a class="btn btn-default btn-xs">无权限删除</a></div></td>
+           <td><div class="btn-group"><a class="btn btn-default btn-xs">删除</a></div></td>
         <% end %>
         <td><%= link_to "编码",  p_viewbom_path(bom_id: bom.id,add_bom: "add_bom"),class:"btn btn-success btn-xs" %></td>
 <!--

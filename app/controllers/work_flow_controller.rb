@@ -479,6 +479,12 @@ before_filter :authenticate_user!
     end
 
     def edit_pcb_order
+        @all_dn = "[&quot;"
+        all_s_dn = Product.find_by_sql("SELECT DISTINCT products.part_name FROM products GROUP BY products.part_name")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.part_name.to_s
+        end
+        @all_dn += "&quot;]"
         @q_order = PcbOrder.find_by(order_no: params[:order_no])
         @q_order_item = PcbOrderItem.where(pcb_order_id: @q_order.id)
         @q_order_sell_item = PcbOrderSellItem.where(pcb_order_id: @q_order.id)

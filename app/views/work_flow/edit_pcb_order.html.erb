@@ -758,8 +758,11 @@
               <div class="form-inline">
               <a id="change_s" class="" data-method="get" data-remote="true" href=""></a>
               <lable for="package2" class="control-label">封装 : </lable>
+              <input id="c_code" autocomplete="off" name="c_code" type="text" class="form-control input-xs" data-provide="typeahead" data-items="200" data-source="<%= raw @all_dn %>" placeholder="物料" size="30" onchange="get_options(this.value)">   
+<!--
               <% members = Product.find_by_sql("select * from products GROUP BY products.part_name").collect { |c| [c.part_name,c.part_name] }%>
               <%= select  '', :abc,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)" ,class:"form-control"}  %>
+-->
               <%= select_tag "package2", "<option value=\"0\">--请选择上级--</option>",  class:"form-control"%>  
               </div>
           </div>

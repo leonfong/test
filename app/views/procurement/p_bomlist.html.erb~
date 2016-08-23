@@ -78,7 +78,7 @@
       <th width="110">BOM No.</th>
       <th width="170">创建日期</th>
       <th width="200">子项目名称</th>
-      <th width="100">QTY</th>
+      <th width="100">数量</th>
       <th width="100">上传</th>
       <th width="100">审核</th>
       <th width="100">采购工程师</th>
@@ -142,7 +142,7 @@
 -->
         <% if can? :work_g_all, :all %>
             <% if bom.check == "do" %>
-                <td><div class="btn-group"><a class="btn btn-default">无权限删除</a></div></td>
+                <td><div class="btn-group"><a class="btn btn-default">删除</a></div></td>
             <% else %>
                 <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/p_del_bb?bom_id=<%= bom.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>  
             <% end %>

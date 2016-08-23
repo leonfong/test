@@ -146,7 +146,7 @@
                                 <% end %>
                             </td>
                             <td><%= q_item_sell.remark %></td>
-                            <% if can? :work_e, :all%>
+                            <% if can? :work_e, :all and @q_order.state == "new"%>
                                 <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_sell_item?id=<%= q_item_sell.id %>" data-confirm="确定要删除?"></a></td>
                             <% else %>
                                 <td></td>

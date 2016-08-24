@@ -733,7 +733,10 @@ before_filter :authenticate_user!
         @pcb.customer_country = params[:customer_country]
         @pcb.shipping_address = params[:shipping_address]      
         if not params[:c_order_no].blank?
-            @pcb.follow = current_user.email
+            @pcb.follow = current_user.email           
+        end
+        @pcb.save
+        if not params[:c_order_no].blank?
             up_c = PcbOrder.find_by(order_no: params[:c_order_no])
             up_c.pcb_customer_id = @pcb.id
             up_c.c_code = @pcb.c_no
@@ -742,7 +745,6 @@ before_filter :authenticate_user!
             up_c.c_shipping_address = @pcb.shipping_address
             up_c.save
         end
-        @pcb.save
         redirect_to :back
     end
 

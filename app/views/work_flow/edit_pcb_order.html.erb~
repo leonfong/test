@@ -165,7 +165,7 @@
 
 
 
-<% if can? :work_d, :all or can? :work_top, :all %>
+<% if can? :work_d, :all or can? :work_top, :all or can? :work_g, :all %>
 <% if params[:c_id]%>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#additem" >添加询价物料</button>
@@ -825,12 +825,12 @@
             <label for="sell" class="control-label">业务:</label>
             <input type="text" class="form-control" id="sell" name="sell">
           </div> 
--->
+
           <div class="form-group">
             <label for="qty" class="control-label">数量:</label>
             <input type="number" class="form-control" id="qty" name="qty">
           </div>         
- 
+-->
           <div class="form-group">
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>

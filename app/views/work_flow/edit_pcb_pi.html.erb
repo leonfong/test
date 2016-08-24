@@ -47,8 +47,10 @@
                             <div class="col-md-2"><p><strong>PI NO. : </strong><ins id="p_pi_show" name="p_pi_show"><%= @pi_info.pi_no.to_s %></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
                             </div>
+<!--
                             <div class="col-md-4 form-inline"><p><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @pi_info.p_name %>">
                             </div>
+-->
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
                             </div> 
@@ -179,6 +181,7 @@
                         </div>
                     </div>
                 </div>
+<!--
                 <div class="col-md-4" >
                     <div class="panel panel-info" >
                         <div class="panel-heading" ><strong>特殊备注</strong></div>                          
@@ -187,6 +190,7 @@
                         </div>
                     </div>
                 </div>
+-->
                 <div class="col-md-4">
                    <li><p>费用:</p></li>
                    <li><p>PI佣金:</p></li>
@@ -196,8 +200,9 @@
             </div> 
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
-                    
+<!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
+-->
                     <%= submit_tag "提交", class:"btn btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
                 </div>
             </div></div>
@@ -348,11 +353,11 @@
               <input type="text" class="form-control" id="edit_p_type" name="edit_p_type" <% if can? :work_e, :all %>readonly<% end %>>           
             </div> 
             <div class="form-group">
-              <label for="edit_t_p" class="control-label">总价￥:</label>
+              <label for="edit_t_p" class="control-label">报价(美金):</label>
               <input type="text" class="form-control" id="edit_t_p" name="edit_t_p" >
             </div>
             <div class="form-group">
-              <label for="edit_price" class="control-label">单价￥:</label>
+              <label for="edit_price" class="control-label">单价(美金):</label>
               <input type="text" class="form-control" id="edit_price" name="edit_price" >
             </div>
             <div class="form-group">         

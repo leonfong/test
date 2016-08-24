@@ -884,11 +884,11 @@ before_filter :authenticate_user!
                 #@part = PItem.joins("JOIN p_dns ON p_items.id = p_dns.item_id").where("p_items.user_do = '999' AND p_dns.color = 'y'").group("p_items.id").paginate(:page => params[:page], :per_page => 10)
                 #@part = PItem.find_by_sql("﻿SELECT p_items.* FROM p_items INNER JOIN p_dns ON p_items.id = p_dns.item_id WHERE p_items.user_do = '999' AND p_dns.color = 'y' GROUP BY p_items.id").paginate(:page => params[:page], :per_page => 10)
             elsif params[:undone]
-                @part = PItem.where(user_do: '999',supplier_tag: nil).paginate(:page => params[:page], :per_page => 10)
+                @part = PItem.where(user_do: '999',supplier_tag: nil).order("mpn").paginate(:page => params[:page], :per_page => 10)
             elsif params[:key_mpn]
-                @part = PItem.where("(mpn LIKE '%#{params[:key_mpn]}%' OR description LIKE '%#{params[:key_mpn]}%') AND user_do = '999' AND supplier_tag = 'done'").paginate(:page => params[:page], :per_page => 10)
+                @part = PItem.where("(mpn LIKE '%#{params[:key_mpn]}%' OR description LIKE '%#{params[:key_mpn]}%') AND user_do = '999' AND supplier_tag = 'done'").order("mpn").paginate(:page => params[:page], :per_page => 10)
             else
-                @part = PItem.where(user_do: '999').paginate(:page => params[:page], :per_page => 10)
+                @part = PItem.where(user_do: '999').order("mpn").paginate(:page => params[:page], :per_page => 10)
             end
             Rails.logger.info("-------------------------@part")
             #Rails.logger.info(@part.inspect)   
@@ -902,9 +902,9 @@ before_filter :authenticate_user!
     def supplier_dn_excel
         if can? :work_suppliers, :all
             if params[:out_tag]
-                @bom = PItem.where(user_do: '999',supplier_tag: nil,supplier_out_tag: nil)
+                @bom = PItem.where(user_do: '999',supplier_tag: nil,supplier_out_tag: nil).order("mpn")
             else
-                @bom = PItem.where(user_do: '999',supplier_tag: nil)
+                @bom = PItem.where(user_do: '999',supplier_tag: nil).order("mpn")
             end
             file_name = "supplier_out.xls"
             path = Rails.root.to_s+"/public/uploads/bom/excel_file/"

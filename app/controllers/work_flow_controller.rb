@@ -172,6 +172,11 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def del_pi_other_item
+        del_item = PiOtherItem.find(params[:del_pi_other_item_id])
+        del_item.destroy
+        redirect_to :back
+    end
 
     def find_order_check
         @find_order_info = PcbOrder.find(params[:id])
@@ -274,6 +279,8 @@ before_filter :authenticate_user!
     def edit_pcb_pi
         @pi_info = PiInfo.find_by(pi_no: params[:pi_no])
         @pi_item = PiItem.where(pi_no: params[:pi_no])
+        @pi_other_item = PiOtherItem.where(pi_no: params[:pi_no])
+        @total_p = PiItem.where(pi_no: params[:pi_no]).sum("t_p") + PiOtherItem.where(pi_no: params[:pi_no]).sum("t_p")
     end
 
     def del_pcb_follow
@@ -706,6 +713,26 @@ before_filter :authenticate_user!
         edit_pi_item.qty = params[:edit_qty]
         edit_pi_item.remark = params[:edit_follow_remark]
         edit_pi_item.save
+        redirect_to :back
+    end
+
+    def add_pi_other_item
+        add_item = PiOtherItem.new
+        add_item.c_id = params[:add_c_id_other]
+        add_item.pi_no = params[:add_pi_no_other]
+        add_item.p_type = params[:add_type_other]
+        add_item.remark = params[:add_remark_other]
+        add_item.t_p = params[:add_t_p_other]
+        add_item.save
+        redirect_to :back
+    end
+
+    def edit_pi_other_item
+        add_item = PiOtherItem.find(params[:edit_item_id_other])     
+        add_item.p_type = params[:edit_p_type_other]
+        add_item.remark = params[:edit_remark_other]
+        add_item.t_p = params[:edit_t_p_other]
+        add_item.save
         redirect_to :back
     end
 

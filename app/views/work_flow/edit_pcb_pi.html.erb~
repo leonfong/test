@@ -110,6 +110,7 @@
 <% if params[:c_id]%>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addother" >添加其他费用</button>
             </div></div>
 <% end %>
 
@@ -128,7 +129,7 @@
                             <th >英文描述</th>
                             <th >中文描述</th>
                             <th width="100">类别</th>
-                            <th width="100">总价</th>
+                            <th width="100">总价(报价)</th>
                             <th width="100">单价</th>
                             <th width="50">附件</th>
                             <th >备注</th>
@@ -159,7 +160,25 @@
                             <td><a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a></td>
                         </tr>
                         <% end %>
-                        <% end %>                    
+                        <% end %> 
+
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+                            <td><a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                            </td>
+                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
+                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td>金额: <%= pi_item.t_p %></td>
+                            <td colSpan="3"></td>
+                            <td><a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a></td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                        <tr>
+                            <td colSpan="7"></td>
+                            <td colSpan="5"><strong>总计: <%= @total_p %></strong></td>
+                        </tr>                     
                     </tbody>
                 </table>             
             </div>
@@ -190,13 +209,14 @@
                         </div>
                     </div>
                 </div>
--->
+
                 <div class="col-md-4">
                    <li><p>费用:</p></li>
                    <li><p>PI佣金:</p></li>
                    <li><p>佣金:</p></li>
                    <li><p>PI净金额:</p></li>
                 </div>
+-->
             </div> 
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
@@ -310,7 +330,7 @@
                     <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
                     <td><div><%= pi_item_f.price.to_s %></div></td>
                     <td><div><%= pi_item_f.remark.to_s %></div></td>
-                    <td><a rel="nofollow" data-method="get"  href="/find_order_check?id=<%= pi_item_f.id.to_s %>&pi=<%= params[:pi_no].to_s %>"><div>确认</div></a></td>
+                    <td><a rel="nofollow" data-method="get"  href="/find_order_check?id=<%= pi_item_f.pcb_order_id.to_s %>&pi=<%= params[:pi_no].to_s %>"><div>确认</div></a></td>
                     </tr>
               <% end %>
               </tbody>
@@ -353,11 +373,11 @@
               <input type="text" class="form-control" id="edit_p_type" name="edit_p_type" <% if can? :work_e, :all %>readonly<% end %>>           
             </div> 
             <div class="form-group">
-              <label for="edit_t_p" class="control-label">总价￥:</label>
+              <label for="edit_t_p" class="control-label">报价(美金):</label>
               <input type="text" class="form-control" id="edit_t_p" name="edit_t_p" >
             </div>
             <div class="form-group">
-              <label for="edit_price" class="control-label">单价￥:</label>
+              <label for="edit_price" class="control-label">单价(美金):</label>
               <input type="text" class="form-control" id="edit_price" name="edit_price" >
             </div>
             <div class="form-group">         
@@ -389,6 +409,90 @@
 
 
 
+
+
+<div class="modal fade" id="addother" tabindex="-1" role="dialog" aria-labelledby="addotherLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="addotherLabel"><strong>添加其他费用</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :add_pi_other_item},method:"post") do %>   
+            <div class="form-group sr-only">         
+                <label for="add_c_id_other" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="add_c_id_other" name="add_c_id_other" value="<%= params[:c_id] %>">
+            </div>   
+            <div class="form-group sr-only">         
+                <label for="add_pi_no_other" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="add_pi_no_other" name="add_pi_no_other" value="<%= params[:pi_no] %>">
+            </div>   
+            <div class="form-group">         
+              <label for="add_type_other" class="control-label">费用种类:</label>
+              <input type="text" class="form-control" id="add_type_other" name="add_type_other" >
+            </div> 
+            <div class="form-group">         
+              <label for="add_remark_other" class="control-label">备注:</label>
+              <textarea  class="form-control" id="add_remark_other" name="add_remark_other"></textarea>
+            </div> 
+            <div class="form-group">
+              <label for="add_t_p_other" class="control-label">报价(美金):</label>
+              <input type="text" class="form-control" id="add_t_p_other" name="add_t_p_other" >
+            </div>         
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" >
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+<div class="modal fade" id="editotheritem" tabindex="-1" role="dialog" aria-labelledby="editotheritemLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="editotheritemLabel"><strong>修改其他费用</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :edit_pi_other_item},method:"post") do %>   
+            <div class="form-group sr-only">         
+                <label for="add_item_id_other" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="edit_item_id_other" name="edit_item_id_other" >
+            </div>    
+            <div class="form-group">         
+              <label for="add_p_type_other" class="control-label">费用种类:</label>
+              <input type="text" class="form-control" id="edit_p_type_other" name="edit_p_type_other" >
+            </div> 
+            <div class="form-group">         
+              <label for="add_remark_other" class="control-label">备注:</label>
+              <textarea  class="form-control" id="edit_remark_other" name="edit_remark_other"></textarea>
+            </div> 
+            <div class="form-group">
+              <label for="add_t_p_other" class="control-label">报价(美金):</label>
+              <input type="text" class="form-control" id="edit_t_p_other" name="edit_t_p_other" >
+            </div>         
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" >
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+
+
+
+
+
 </div>
 
 <script>
@@ -415,6 +519,19 @@ $('#edititem').on('show.bs.modal', function (event) {
   modal.find($("#edit_t_p")).val(edit_t_p);
   modal.find($("#edit_price")).val(edit_price);
   modal.find($("#edit_follow_remark")).html(edit_follow_remark);
+})
+
+$('#editotheritem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var edit_item_id_other = button.data('edit_item_id_other');
+  var edit_p_type_other = button.data('edit_p_type_other'); 
+  var edit_t_p_other = button.data('edit_t_p_other');  
+  var edit_remark_other = button.data('edit_remark_other');                       
+  var modal = $(this);
+  modal.find($("#edit_item_id_other")).val(edit_item_id_other);
+  modal.find($("#edit_p_type_other")).val(edit_p_type_other);
+  modal.find($("#edit_t_p_other")).val(edit_t_p_other);
+  modal.find($("#edit_remark_other")).html(edit_remark_other);
 })
 
 

@@ -439,7 +439,7 @@
             </div> 
             <div class="form-group">
               <label for="add_t_p_other" class="control-label">报价(美金):</label>
-              <input type="number" class="form-control" id="add_t_p_other" name="add_t_p_other" >
+              <input type="text" class="form-control" id="add_t_p_other" name="add_t_p_other" >
             </div>         
         </div>
         <div class="modal-footer">
@@ -475,7 +475,7 @@
             </div> 
             <div class="form-group">
               <label for="add_t_p_other" class="control-label">报价(美金):</label>
-              <input type="number" class="form-control" id="edit_t_p_other" name="edit_t_p_other" >
+              <input type="text" class="form-control" id="edit_t_p_other" name="edit_t_p_other" >
             </div>         
         </div>
         <div class="modal-footer">

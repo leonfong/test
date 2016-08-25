@@ -1,0 +1,23 @@
+<div class="sidebar-menu">
+    <a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
+    <ul id="userMeun" class="nav nav-list menu-second panel-collapse <% if selected =~ /pcb/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "pcb_order_list" %>style="background-color: #d9edf7;"<% end %>href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
+        <% if can? :work_d, :all %>
+	    <li><a <% if selected == "bom_chk" %>style="background-color: #d9edf7;"<% end %>href="/pcb_order_list?bom_chk=true"><i class="icon-edit"></i> 询价结果</a></li>
+        <% elsif can? :work_g, :all %>
+            <li><a <% if selected == "quote" %>style="background-color: #d9edf7;"<% end %>href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 询价结果</a></li>
+        <% else %>
+            <li><a <% if selected == "other" %>style="background-color: #d9edf7;"<% end %>href="/pcb_order_list"><i class="icon-edit"></i> 询价结果</a></li>
+        <% end %>
+    </ul>
+    <a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
+    <ul id="articleMenu" class="nav nav-list  menu-second <% if selected =~ /pi/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "pi_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_draft_list"><i></i> PI草稿箱</a></li>
+        <li><a <% if selected == "pi_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_list" ><i></i>PI查询</a></li>
+        <li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
+        <li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
+        <li><a href="#"><i class="icon-list-alt"></i> 等待采购下单</a></li>
+        <li><a href="#"><i class="icon-list-alt"></i> 等待入库</a></li>
+        <li><a href="#"><i class="icon-list-alt"></i> 已经入库</a></li>
+    <ul>
+</div>

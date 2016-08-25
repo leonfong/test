@@ -510,7 +510,7 @@ function change_<%= item.id.to_s %>(){
             </div>
             <div class="collapse" id="shipping" style="padding-bottom: 20px;">
                 <%= form_tag({action: :p_add_bom},method:"post",class:"form-inline") do %>
-                    <div class="form-group sr_only">
+                    <div class="form-group sr-only">
                         <label for="part">p_id</label>
                         <input type="text" class="form-control" id="p_id" name="p_id" placeholder="p_id" value="<%= @boms.id %>">
                     </div>

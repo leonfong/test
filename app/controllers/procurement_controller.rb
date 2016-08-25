@@ -2868,9 +2868,10 @@ WHERE
                         #row.default_format = color
                         #}
                     #end
-                    
-                    item.all_info.split("|",-1).each do |info|
-                        row.push(info.to_s)
+                    if not item.all_info.blank?
+                        item.all_info.split("|",-1).each do |info|
+                            row.push(info.to_s)
+                        end
                     end
 		    #row.push(rowNum)
 		    #row.push(item.description)
@@ -2905,7 +2906,7 @@ WHERE
                     end
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     Rails.logger.info(item.all_info.inspect)
-                    Rails.logger.info(item.all_info.split("|",-1).inspect)
+                    #Rails.logger.info(item.all_info.split("|",-1).inspect)
                     Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                     if not item.dn_id.blank?
                         Rails.logger.info("111111111111111")

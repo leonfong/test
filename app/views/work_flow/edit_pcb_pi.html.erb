@@ -4,7 +4,7 @@
             <%= render partial: "work_flow/menu", locals: {selected: "pi"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-        <%= form_tag('/pi_draft', method:"post") do %>
+
             <div class="row "><div class="col-md-12">
                 
                 <div class="panel panel-info">
@@ -189,12 +189,14 @@
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
-                    <%= submit_tag "提交", class:"btn btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
+                    <%= form_tag('/pi_draft', method:"post") do %>
+                        <%= submit_tag "提交", class:"btn btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
+                    <% end %>
                 </div>
             </div></div>
 
 
-       <% end %>
+       
        </small></div>
     </div>
 

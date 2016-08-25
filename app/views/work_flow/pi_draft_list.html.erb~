@@ -25,6 +25,7 @@
 -->
                                                         <li><a style="background-color: #d9edf7;" href="/pi_draft_list"><i></i> PI草稿箱</a></li>
 							<li><a href="/pcb_order_list?place_an_order=true"><i></i> 下单审批</a></li>
+                                                        <li><a href="/pcb_order_list?place_an_order=true"><i></i> 下单审批</a></li>
 							<li><a href="#"><i></i> 等待财务审批</a></li>
 							<li><a href="#"><i></i> 等待采购下单</a></li>
 							<li><a href="#"><i></i> 等待入库</a></li>
@@ -40,7 +41,7 @@
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
+        <% if can? :work_e, :all %>
             <div style="padding: 10px;">
             <a  type="button" class="btn btn-primary btn-sm"  href="/new_pcb_pi">新建PI</a>
             

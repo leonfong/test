@@ -9,6 +9,22 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def p_add_bom
+        bom_item = PItem.new
+        bom_item.procurement_bom_id = params[:p_id]
+        bom_item.quantity = params[:p_qty]
+        if not params[:p_mpn].blank?
+            bom_item.mpn = params[:p_mpn]
+        end
+        bom_item.part_code = params[:p_code]
+        if not params[:p_des].blank?
+            bom_item.description = params[:p_des]
+        end
+        bom_item.user_id = current_user.id
+        bom_item.save
+        redirect_to :back
+    end
+
     def add_dn
         add_dn = AllDn.new()
         add_dn.date = Time.new()

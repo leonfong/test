@@ -2,6 +2,10 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pi_list
+        
+    end
+
     def bom_edit_order_item
         find_data = PcbOrderItem.find(params[:bom_edit_id])
         find_data.moko_code = params[:bom_edit_moko_code]
@@ -202,6 +206,7 @@ before_filter :authenticate_user!
         @table = ''
         PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
             pi_item = PiItem.new
+            pi_item.c_id = @find_pi_info.pcb_customer_id
             pi_item.pi_info_id = @find_pi_info.id
             pi_item.pi_no = @find_pi_info.pi_no
             pi_item.moko_code = q_item.moko_code
@@ -771,6 +776,7 @@ before_filter :authenticate_user!
             up_c.c_country = @pcb.customer_country
             up_c.c_shipping_address = @pcb.shipping_address
             up_c.save
+            redirect_to edit_pcb_order_path(order_no: params[:c_order_no],c_id: up_c.pcb_customer_id) and return
         end
         redirect_to :back
     end

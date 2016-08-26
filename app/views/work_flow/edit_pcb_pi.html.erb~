@@ -4,7 +4,7 @@
             <%= render partial: "work_flow/menu", locals: {selected: "pi"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-        <%= form_tag('/pi_draft', method:"post") do %>
+
             <div class="row "><div class="col-md-12">
                 
                 <div class="panel panel-info">
@@ -53,7 +53,11 @@
 
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading"><strong>客户信息</strong> <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button></div>
+                <div class="panel-heading"><strong>客户信息</strong> 
+                <% if can? :work_e, :all and @pi_info.state == "new"%>
+                    <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button>
+                <% end %>
+                </div>
                 <div class="panel-body ">                     
                     <div class="row ">
                         <div class="col-md-1">代码：<ins id="daima_show" name="daima_show"><%= @pi_info.c_code.to_s %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
@@ -73,7 +77,7 @@
             </div></div>
 
 
-<% if params[:c_id]%>
+<% if params[:c_id] and can? :work_e, :all and @pi_info.state == "new" %>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addother" >添加其它费用</button>
@@ -107,7 +111,9 @@
                         <% @pi_item.each do |pi_item| %>
                         <tr>
                             <td>
+                                <% if @pi_info.state == "new" %>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>" data-edit_qty="<%= pi_item.qty %>" data-edit_follow_remark="<%= pi_item.remark %>" data-edit_t_p="<%= pi_item.t_p %>" data-edit_price="<%= pi_item.price %>"></a>
+                                <% end %>
                             </td>
                             <td><%= pi_item.moko_code %></td>
                             <td><%= pi_item.moko_des %></td>
@@ -123,7 +129,11 @@
                                 <% end %>
                             </td>
                             <td><%= pi_item.remark %></td>
-                            <td><a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
+                                <% end %>
+                            </td>
                         </tr>
                         <% end %>
                         <% end %> 
@@ -189,12 +199,22 @@
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
-                    <%= submit_tag "提交", class:"btn btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
+                    <%= form_tag('/pi_draft', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
+                        
+                    <% if can? :work_e, :all and @pi_info.state == "new"%>
+                        <%= submit_tag "提交", class:"btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
+                    <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定审核通过?"} %>
+                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% end %>
                 </div>
             </div></div>
 
 
-       <% end %>
+       
        </small></div>
     </div>
 
@@ -278,24 +298,22 @@
               <table class="table table-bordered">
               <thead>
               <tr class="active">
-              <th width="70">客户代码</th>
-              <th>客户名</th>
-              <th>客户公司名</th>
               <th  width="120">Order NO.</th>
               <th  width="70">报价</th>
               <th >备注</th>
+              <th>英文描述</th>
+              <th>中文描述</th>
               <th width="45">操作</th>
               <tr>
               </thead>
               <tbody>
               <% PcbOrderItem.where(c_id: params[:c_id]).each do |pi_item_f| %>
                     <tr>
-                    <td><div><%= PcbCustomer.find(pi_item_f.c_id).c_no %></div></td>
-                    <td><div><%= PcbCustomer.find(pi_item_f.c_id).customer.to_s %></div></td>
-                    <td><div><%= PcbCustomer.find(pi_item_f.c_id).customer_com.to_s %></div></td>
                     <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
                     <td><div><%= pi_item_f.price.to_s %></div></td>
                     <td><div><%= pi_item_f.remark.to_s %></div></td>
+                    <td><div><%= pi_item_f.des_en.to_s %></div></td>
+                    <td><div><%= pi_item_f.des_cn.to_s %></div></td>
                     <td><a rel="nofollow" data-method="get"  href="/find_order_check?id=<%= pi_item_f.pcb_order_id.to_s %>&pi=<%= params[:pi_no].to_s %>"><div>确认</div></a></td>
                     </tr>
               <% end %>

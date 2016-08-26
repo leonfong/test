@@ -199,7 +199,7 @@
                             </td>
                             <td><%= q_item.remark %></td>
                             <td>   
-                                <a class="btn btn-danger btn-xs" href="/procurement_new?erp_id=<%= q_item.id.to_s %>&erp_no=<%= @q_order.order_no %>">上传BOM</a>                                                              
+                                <a class="btn btn-danger btn-xs" href="/procurement_new?erp_item_id=<%= q_item.id.to_s %>&erp_no=<%= @q_order.order_no %>">上传BOM</a>                                                              
                             </td>
                             <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_item?edit_c_item_id=<%= q_item.id %>" data-confirm="确定要删除?"></a></td>
                         </tr>

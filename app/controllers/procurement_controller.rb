@@ -811,6 +811,13 @@ before_filter :authenticate_user!
         if can? :work_send_to_sell, :all
             p_bom.remark_to_sell = "mark"
             p_bom.save
+            if not p_bom.erp_item_id.blank?
+                upstart = PcbOrderItem.find_by_id(p_bom.erp_item_id)
+                if not upstart.blank?
+                    upstart.state = "quotechked"
+                    upstart.save
+                end
+            end
         end
         redirect_to :back
     end
@@ -852,7 +859,7 @@ before_filter :authenticate_user!
         if can? :work_g_all, :all
             @user_do = "7"
             #@bom_item = PItem.where(user_do: "7")
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7'  AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
             if @bom_item.blank?
                 @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
             end
@@ -1499,8 +1506,14 @@ before_filter :authenticate_user!
         @bom = ProcurementBom.new(bom_params)#使用页面传进来的文件名字作为参数创建一个bom对象
         @bom.user_id = current_user.id
         @bom.bom_eng_up = current_user.full_name
-        if params[:erp_id] != ""
-            @bom.erp_id = params[:erp_id]
+       # if params[:erp_id] != ""
+           # @bom.erp_id = params[:erp_id]
+       # end
+        if params[:erp_item_id] != ""
+            @bom.erp_item_id = params[:erp_item_id]
+            upstart = PcbOrderItem.find_by_id(params[:erp_item_id])
+            upstart.state = "quote"
+            upstart.save
         end
         if params[:erp_no] != ""
             @bom.erp_no = params[:erp_no]

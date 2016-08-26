@@ -25,43 +25,29 @@
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
-                <a type="button" class="btn btn-info btn-sm" href="/pcb_order_list?bom_chk=true">等待工程师审批</a>
-                <a type="button" class="btn btn-danger btn-sm" href="/pcb_order_list?quote=true">等待财务审批</a>
-                <a type="button" class="btn btn-success btn-sm" href="/pcb_order_list?quotechk=true">已经通过审批</a>
+                <a type="button" class="btn btn-info btn-sm" href="/pi_list?bom_chk=true">等待工程师审批</a>
+                <a type="button" class="btn btn-danger btn-sm" href="/pi_list?finance_chk=true">等待财务审批</a>
+                <a type="button" class="btn btn-success btn-sm" href="/pi_list?checked=true">已经通过审批</a>
             </div>
             <% end %>                       
             </span>
             </div>
         </div>
-
-
 <br>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
-<% if not @pcblist.blank? %>        
-<%= will_paginate(@pcblist) %>            
+<% if not @pilist.blank? %>        
+<%= will_paginate(@pilist) %>            
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="130">Order No.</th>
       <th width="150">Created Date</th>
-      <th width="80">进度</th>
+      <th width="80">BOM审核</th>
+      <th width="80">财务审核</th>
       <th width="80">数量</th>
       <th width="80">价格￥</th>
       <th width="90">所属业务员</th>
@@ -77,28 +63,34 @@
     </tr>
   </thead>
   <tbody>
-    <% @pcblist.each do |pcb| %>   
+    <% @pilist.each do |pcb| %>   
       <tr >
+        
         <% if not pcb.pcb_customer_id.blank? %>
-            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id) %></td>
         <% else %>
-            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no) %></td>
         <% end %>
         
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td>
-            <% if pcb.state == "bom_chk" %>
-                BOM检查
-            <% elsif pcb.state == "quote" %>
-                等待报价
-            <% elsif pcb.state == "quotechk" %>
-                报价完成
+            <% if pcb.bom_state.blank? %>
+                审核中
+            <% else %>
+                审核完成
+            <% end %>
+        </td>
+        <td>
+            <% if pcb.finance_state.blank? %>
+                审核中
+            <% else %>
+                审核完成
             <% end %>
         </td>
         <td><%= pcb.qty %></td>
         <td><%= pcb.price %></td>
         <td></td>
-        <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
+        <td><%= User.find_by(email: pcb.pi_sell).full_name %></td>
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
@@ -177,14 +169,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
 
 </div>
 

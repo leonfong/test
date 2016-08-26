@@ -62,7 +62,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                 <dd>
                     <div style="border: #ddd solid 1px;margin-bottom: 20px!important;width: 95%;margin-top: 10px!important;padding: 20px!important;">
                         <h4>1.Upload BOM from EXCEL Spreadsheet</h4>
-                        <h6>params[:erp_id] 询价单号: <%= params[:erp_no] %></h6>
+                        <h6><%= params[:erp_id] %> 询价单号: <%= params[:erp_no] %></h6>
                         <ul class="list-inline pt20 mt15">
                             <li class="w50">
                             	<a class="btn btn-danger" id="UploadButton" style="position: relative;">BROWSE

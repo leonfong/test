@@ -3,7 +3,49 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def pi_list
-        
+        if params[:key_order]
+            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        else
+            if params[:bom_chk]
+                @pilist = PiInfo.where(state: "check",bom_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "pi_list.html.erb" and return
+            elsif params[:finance_chk]
+                @pilist = PiInfo.where(state: "check",finance_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "pi_list.html.erb" and return     
+            elsif params[:checked]
+                @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                render "pi_list.html.erb" and return
+            else
+                @pilist = PiInfo.where("state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            end
+        end        
+    end
+
+    def pi_draft  
+        if params[:commit] == "提交"
+            pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
+            if can? :work_e, :all and pi_draft.state == "new"
+                pi_draft.state = "check"
+            end
+            if can? :work_d, :all 
+                if pi_draft.finance_state == "checked"
+                    pi_draft.state = "checked"
+                else
+                    pi_draft.state = "check"
+                end
+                pi_draft.bom_state = "checked"
+            end
+            if can? :work_finance, :all 
+                if pi_draft.bom_state == "checked"
+                    pi_draft.state = "checked"
+                else
+                    pi_draft.state = "check"
+                end
+                pi_draft.finance_state = "checked"
+            end
+            pi_draft.save
+        end
+        redirect_to pi_list_path() and return
     end
 
     def bom_edit_order_item
@@ -84,19 +126,6 @@ before_filter :authenticate_user!
 
     def find_moko_part_ch
         @moko_part = AllDn.find(params[:id])
-    end
-
-    def pi_draft  
-        if params[:commit] == "保存到草稿"
-            pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
-            pi_draft.p_name = params[:p_name]    
-            pi_draft.follow_remark = params[:teshu_remark]
-            pi_draft.save
-            
-            redirect_to :back and return
-        elsif params[:commit] == "提交"
-        end
-        redirect_to :back
     end
 
     def pi_draft_list
@@ -206,6 +235,7 @@ before_filter :authenticate_user!
         @table = ''
         PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
             pi_item = PiItem.new
+            pi_item.order_item_id = q_item.id
             pi_item.c_id = @find_pi_info.pcb_customer_id
             pi_item.pi_info_id = @find_pi_info.id
             pi_item.pi_no = @find_pi_info.pi_no
@@ -622,12 +652,7 @@ before_filter :authenticate_user!
             else
                 @pcblist = PcbOrder.where("state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             end
-
         end
-
-        #else
-         #   @pcblist = PcbOrder.where("state IS NULL").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        #end
     end
 
     def add_pcb_order_item

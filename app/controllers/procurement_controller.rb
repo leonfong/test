@@ -9,10 +9,6 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
-    def pi_buy_list
-
-    end
-
     def p_add_bom
         bom_item = PItem.new
         bom_item.procurement_bom_id = params[:p_id]
@@ -1482,6 +1478,8 @@ before_filter :authenticate_user!
                     bom_item.other = othera
                     bom_item.all_info = all_info.chop
                     bom_item.user_id = current_user.id
+                    bom_item.erp_id = @bom.erp_id
+                    bom_item.erp_no = @bom.erp_no
                     bom_item.save
                 #end
             end

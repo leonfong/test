@@ -2,6 +2,10 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pi_buy_list
+        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
+    end
+
     def pi_list
         if params[:key_order]
             @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
@@ -236,6 +240,7 @@ before_filter :authenticate_user!
         PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
             pi_item = PiItem.new
             pi_item.order_item_id = q_item.id
+            pi_item.bom_id = q_item.bom_id
             pi_item.c_id = @find_pi_info.pcb_customer_id
             pi_item.pi_info_id = @find_pi_info.id
             pi_item.pi_no = @find_pi_info.pi_no

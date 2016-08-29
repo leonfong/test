@@ -15,17 +15,37 @@
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="130">Order No.</th>
-      <th width="80">Created Date</th>
+      <th width="130">PI No.</th>
+      <th width="130">Created Date</th>
       <th width="80">MPN</th>
       <th width="80">DES</th>
       <th width="80">数量</th>
-      <th width="80">价格￥</th>
+      <th width="80">单价￥</th>
       <th >供应商</th>
     </tr>
   </thead>
-  <tbody>
-    
+  <tbody><small>
+<% if not @pi_buy.blank? %>
+  <%= will_paginate(@pi_buy) %> 
+  <% @pi_buy.each do |buy| %>
+  <tr>
+      <td><%= buy.pi_no %></td>
+      <td><%= buy.pi_no %></td>
+      <td><%= buy.mpn %></td>
+      <td><%= buy.description %></td>
+      <td><%= buy.quantity %></td>
+      <td><%= buy.cost %></td>
+      <td>
+          <% if not buy.dn_id.blank? %>
+              <% if not PDn.find_by_id(buy.dn_id).blank? %>
+                  <%= PDn.find_by_id(buy.dn_id).dn_long %> 
+              <% end %>
+          <% end %>
+      </td>
+  </tr>
+  <% end %>
+<% end %> 
+  </small>   
   </tbody>
 </table>
 

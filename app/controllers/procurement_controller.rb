@@ -9,6 +9,10 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def pi_buy_list
+
+    end
+
     def p_add_bom
         bom_item = PItem.new
         bom_item.procurement_bom_id = params[:p_id]
@@ -1511,9 +1515,9 @@ before_filter :authenticate_user!
        # end
         if params[:erp_item_id] != ""
             @bom.erp_item_id = params[:erp_item_id]
-            upstart = PcbOrderItem.find_by_id(params[:erp_item_id])
-            upstart.state = "quote"
-            upstart.save
+            #upstart = PcbOrderItem.find_by_id(params[:erp_item_id])
+            #upstart.state = "quote"
+            #upstart.save
         end
         if params[:erp_no] != ""
             @bom.erp_no = params[:erp_no]
@@ -1530,6 +1534,12 @@ before_filter :authenticate_user!
         @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
         #如果上传成功
 	if @bom.save
+            if params[:erp_item_id] != ""
+                upstart = PcbOrderItem.find_by_id(params[:erp_item_id])
+                upstart.state = "quote"
+                upstart.bom_id = @bom.id
+                upstart.save
+            end
             #if @bom.excel_file_identifier.split('.')[-1] == 'xls'
 	        #@xls_file = Roo::Excel.new(@bom.excel_file.current_path)
             #else

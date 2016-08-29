@@ -91,6 +91,8 @@ Rails.application.routes.draw do
   match '/edit_pi_other_item', to: 'work_flow#edit_pi_other_item', via: 'post'
   match '/del_pi_other_item', to: 'work_flow#del_pi_other_item', via: 'get'
   match '/pi_list', to: 'work_flow#pi_list', via: 'get'
+  match '/pi_buy_list', to: 'work_flow#pi_buy_list', via: 'get'
+
 
 
 

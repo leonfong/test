@@ -19,7 +19,7 @@
         <li><a href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> PI工程师审批</a></li>
         <li><a href="/pi_list?finance_chk=true"><i class="icon-pencil"></i> PI财务审批</a></li>
         <li><a href="#"><i class="icon-list-alt"></i> PMC</a></li>
-        <li><a <% if selected == "pi_buy_list" %>style="background-color: #d9edf7;"<% end %> href="/p_buy_list"><i class="icon-list-alt"></i> 采购下单</a></li>
+        <li><a <% if selected == "pi_buy_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_list"><i class="icon-list-alt"></i> 采购下单</a></li>
         <li><a href="#"><i class="icon-list-alt"></i> 等待入库</a></li>
         <li><a href="#"><i class="icon-list-alt"></i> 已经入库</a></li>
     <ul>

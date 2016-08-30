@@ -2,7 +2,75 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+        def find_dn
+        if params[:c_code] != ""
+            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@c_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @c_info.blank?
+                
+                Rails.logger.info("add-------------------------------------12")
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th width="70">客户代码</th>'
+                @c_table += '<th>客户名</th>'
+                @c_table += '<th>客户公司名</th>'
+                @c_table += '<th width="70">所属</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '</tr>'
+                end
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@c_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
+    def new_pi_buy
+        if params[:pi_buy_no] == "" or params[:pi_buy_no] == nil
+            if PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').last.pi_buy_no.split("BUY")[-1].to_i + 1
+            end
+            @pi_buy_no = "MO"+ Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "BUY"+ pi_n.to_s
+            pi_buy_info = PiBuyInfo.new()
+            pi_buy_info.pi_buy_no = @pi_buy_no
+            pi_buy_info.user = current_user.email
+            pi_buy_info.state = "new"
+            pi_buy_info.save
+            pi_buy_no = pi_buy_info.pi_buy_no
+        else
+            pi_buy_no = params[:pi_buy_no]
+        end
+        redirect_to edit_pi_buy_path(pi_buy_no: pi_buy_no) and return    
+    end
+
+    def edit_pi_buy
+        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'")
+        @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+
+    end
+
     def pi_buy_list
+        @pi_buy_list = PiBuyInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
         @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 

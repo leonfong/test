@@ -5,6 +5,44 @@
             <%= render partial: "work_flow/menu", locals: {selected: "pi_buy_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
+            <div style="padding: 10px;">
+            <a  type="button" class="btn btn-primary btn-sm"  href="/new_pi_buy">新建采购单</a>
+            
+            </div>
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+        
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="130">采购单号</th>
+      <th width="130">Created Date</th>
+      <th width="80">采购工程师</th>
+    </tr>
+  </thead>
+  <tbody><small>
+<% if not @pi_buy_list.blank? %>
+  <%= will_paginate(@pi_buy_list) %> 
+  <% @pi_buy_list.each do |buy_list| %>
+  <tr>
+      <td><%= buy_list.pi_buy_no %></td>
+      <td><%= buy_list.user %></td>
+      <td><%= buy_list.created_at %></td>
+  </tr>
+  <% end %>
+<% end %> 
+  </small>   
+  </tbody>
+</table>
+
+        </div></div>
+
+
+
+
 
 
 
@@ -18,7 +56,7 @@
       <th width="130">PI No.</th>
       <th width="130">Created Date</th>
       <th width="80">MPN</th>
-      <th width="80">DES</th>
+      <th >DES</th>
       <th width="80">数量</th>
       <th width="80">单价￥</th>
       <th >供应商</th>

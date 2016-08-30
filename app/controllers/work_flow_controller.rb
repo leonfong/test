@@ -2,8 +2,8 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
-        def find_dn
-        if params[:c_code] != ""
+    def find_dn
+        if params[:dn_code] != ""
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
             @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
             Rails.logger.info("add-------------------------------------12")
@@ -79,16 +79,32 @@ before_filter :authenticate_user!
             @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         else
             if params[:bom_chk]
-                @pilist = PiInfo.where(state: "check",bom_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                if can? :work_e, :all
+                    @pilist = PiInfo.where(state: "check",bom_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
                 render "pi_list.html.erb" and return
             elsif params[:finance_chk]
-                @pilist = PiInfo.where(state: "check",finance_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                if can? :work_e, :all
+                    @pilist = PiInfo.where(state: "check",finance_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where(state: "check",finance_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
                 render "pi_list.html.erb" and return     
             elsif params[:checked]
-                @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                if can? :work_e, :all
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
                 render "pi_list.html.erb" and return
             else
-                @pilist = PiInfo.where("state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                if can? :work_e, :all
+                    @pilist = PiInfo.where("state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where("state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
             end
         end        
     end

@@ -71,6 +71,7 @@
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
+      <th width="50">删除</th>
       <th width="130">PI No.</th>
       <th width="220">MPN</th>
       <th width="150">MOKO PART</th>
@@ -78,6 +79,7 @@
       <th width="80">数量</th>
       <th width="80">单价￥</th>
       <th >供应商</th>
+      <th >备注</th>
     </tr>
   </thead>
   <tbody><small>
@@ -85,12 +87,64 @@
   <% @pi_buy.each do |buy| %>
   <tr>
       <td></td>
+      <td></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.moko_part %></td>
       <td><%= buy.moko_des %></td>
       <td><%= buy.quantity %></td>
       <td><%= buy.cost %></td>
       <td><%= buy.dn_long %></td>
+                    <td>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >
+<% PItemRemark.where(p_item_id: buy.id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+</div>
+
+<% if not buy.dn_id.blank? %>
+<% if not PDn.find_by_id(buy.dn_id).blank? %>
+<% if not PDn.find(buy.dn_id).remark.blank? %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<% if not PDn.find(buy.dn_id).info.blank? %>                 
+<a class="btn btn-info btn-xs" href="<%= PDn.find(buy.dn_id).info %>" target="_blank">下载</a>
+<% end %>
+<strong>采购工程师: </strong>
+<%= PDn.find(buy.dn_id).remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% end %>
+<% end %>
+</div>
+                    </td>
   </tr>
   <% end %>
 <% end %> 
@@ -161,6 +215,86 @@
                 <%= form_tag('/add_pi_buy_item', method:"get") do %>
                 <%= text_field_tag :pi_buy_id, params[:pi_buy_id], class:"sr-only", value:@pi_buy_info.id %>
                 <div class="form-group" id="table_buy">
+
+                    <table class="table table-hover">
+                    <thead>
+                    <tr style="background-color: #eeeeee">
+                    <th width="20"></th>
+                    <th >MOKO DES</th>
+                    <th width="80">数量</th>
+                    <th width="80">单价￥</th>
+                    <th >供应商</th>
+                    <th >备注</th>
+                    </tr>
+                    </thead>
+                    <tbody><small>
+                    <% if not @pi_buy_find.blank? %>
+                        <% @pi_buy_find.each do |buy| %>
+                                <tr>
+                                <td><input type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
+                                <td><%= buy.moko_des.to_s %></td>
+                                <td><%= buy.quantity.to_s %></td>
+                                <td><%= buy.cost.to_s %></td>
+                                <td><%= buy.dn_long.to_s %></td>
+                    <td>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >
+<% PItemRemark.where(p_item_id: buy.id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+</div>
+
+<% if not buy.dn_id.blank? %>
+<% if not PDn.find_by_id(buy.dn_id).blank? %>
+<% if not PDn.find(buy.dn_id).remark.blank? %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<% if not PDn.find(buy.dn_id).info.blank? %>                 
+<a class="btn btn-info btn-xs" href="<%= PDn.find(buy.dn_id).info %>" target="_blank">下载</a>
+<% end %>
+<strong>采购工程师: </strong>
+<%= PDn.find(buy.dn_id).remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% end %>
+<% end %>
+</div>
+                    </td>
+                                </tr>
+                        <% end %>
+                    <% end %>
+                    </small></tbody>
+                    </table>
+
+
+
 
                 </div>
                 <%= submit_tag "tijiao", class:"btn btn-primary btn-sm sr-only",id:"tijiao_true" %>

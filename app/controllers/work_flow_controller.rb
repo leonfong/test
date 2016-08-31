@@ -64,12 +64,11 @@ before_filter :authenticate_user!
         @table_buy += '<thead>'
         @table_buy += '<tr style="background-color: #eeeeee">'
         @table_buy += '<th width="20"></th>'
-        @table_buy += '<th width="250">MPN</th>'
-        @table_buy += '<th width="150">MOKO PART</th>'
         @table_buy += '<th >MOKO DES</th>'
         @table_buy += '<th width="80">数量</th>'
         @table_buy += '<th width="80">单价￥</th>'
         @table_buy += '<th >供应商</th>'
+        @table_buy += '<th >备注</th>'
         @table_buy += '</tr>'
         @table_buy += '</thead>'
         @table_buy += '<tbody><small>'
@@ -89,12 +88,58 @@ before_filter :authenticate_user!
                 @pi_buy.each do |buy|
                     @table_buy += '<tr>'
                     @table_buy += '<td><input type="checkbox" value="'+buy.id.to_s+'" name="roles[]" id="roles_" checked></td>'
-                    @table_buy += '<td>'+buy.mpn.to_s+'</td>'
-                    @table_buy += '<td>'+buy.moko_part.to_s+'</td>'
                     @table_buy += '<td>'+buy.moko_des.to_s+'</td>'
                     @table_buy += '<td>'+buy.quantity.to_s+'</td>'
                     @table_buy += '<td>'+buy.cost.to_s+'</td>'
                     @table_buy += '<td>'+buy.dn_long.to_s+'</td>'
+                    @table_buy += '<td>'
+                    @table_buy += '<div class="row" style="margin: 0px;" >'
+                    @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >'
+                    PItemRemark.where(p_item_id: buy.id).each do |remark_item|
+                        @table_buy += '<div class="row" style="margin: 0px;" >'
+                        @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                        @table_buy += '<table style="margin: 0px;" >'
+                        @table_buy += '<tr>'
+                        @table_buy += '<td style="padding: 0px;margin: 0px;" >'
+                        @table_buy += '<p style="padding: 0px;margin: 0px;" >'
+                        @table_buy += '<small >'
+                        @table_buy += '<strong>'+remark_item.user_name+': </strong>'
+                        @table_buy += remark_item.remark
+                        @table_buy += '</small>'
+                        @table_buy += '</p>'
+                        @table_buy += '</td>'
+                        @table_buy += '</tr>'
+                        @table_buy += '</table>'
+                        @table_buy += '</div>'
+                        @table_buy += '</div>'
+                    end
+                    @table_buy += '</div>'
+                    if not buy.dn_id.blank?
+                        if not PDn.find_by_id(buy.dn_id).blank?
+                            if not PDn.find(buy.dn_id).remark.blank? 
+                                @table_buy += '<div class="row" style="margin: 0px;" >'
+                                @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                                @table_buy += '<table style="margin: 0px;" >'
+                                @table_buy += '<tr>'
+                                @table_buy += '<td style="padding: 0px;margin: 0px;" >'
+                                @table_buy += '<p style="padding: 0px;margin: 0px;" >'
+                                @table_buy += '<small >'
+                                if not PDn.find(buy.dn_id).info.blank?                
+                                    @table_buy += '<a class="btn btn-info btn-xs" href="'+PDn.find(buy.dn_id).info+'" target="_blank">下载</a>'
+                                end
+                                @table_buy += '<strong>采购工程师: </strong>'+PDn.find(buy.dn_id).remark.to_s
+                                @table_buy += '</small>'
+                                @table_buy += '</p>'
+                                @table_buy += '</td>'
+                                @table_buy += '</tr>'
+                                @table_buy += '</table>'
+                                @table_buy += '</div>'
+                                @table_buy += '</div>'
+                            end
+                        end
+                    end
+                    @table_buy += '</div>'
+                    @table_buy += '</td>'
                     @table_buy += '</tr>'
                 end
             end
@@ -169,7 +214,8 @@ before_filter :authenticate_user!
         redirect_to edit_pi_buy_path(pi_buy_no: pi_buy_no) and return    
     end
 
-    def edit_pi_buy     
+    def edit_pi_buy  
+        @pi_buy_find = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL")   
         @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
         @all_dn = "[&quot;"

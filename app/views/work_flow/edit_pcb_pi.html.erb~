@@ -147,7 +147,11 @@
                             <td colSpan="4">备注: <%= pi_item.remark %></td>
                             <td>金额: <%= pi_item.t_p %></td>
                             <td colSpan="3"></td>
-                            <td><a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
+                                <% end %>
+                            </td>
                         </tr>
                         <% end %>
                         <% end %>
@@ -307,7 +311,7 @@
               <tr>
               </thead>
               <tbody>
-              <% PcbOrderItem.where(c_id: params[:c_id]).each do |pi_item_f| %>
+              <% PcbOrderItem.where(c_id: params[:c_id],state: "quotechked").each do |pi_item_f| %>
                     <tr>
                     <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
                     <td><div><%= pi_item_f.price.to_s %></div></td>

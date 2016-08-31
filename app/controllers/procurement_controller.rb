@@ -1237,6 +1237,8 @@ before_filter :authenticate_user!
                 else
                     p_item = PItem.find(@item_id)
                     p_item.product_id = @new_part.id
+                    p_item.moko_part = @new_part.name
+                    p_item.moko_des = @new_part.description
                     p_item.save
                 #flash[:success] = "New part success"
                 
@@ -1596,7 +1598,8 @@ before_filter :authenticate_user!
                             use_mpn = Product.find_by_sql("SELECT * FROM products WHERE products.mpn LIKE '%#{item.mpn.strip}%'")
                             if not use_mpn.blank?
                                 item.product_id = use_mpn.id
-                                
+                                item.moko_part = use_mpn.name
+                                item.moko_des = use_mpn.description
                                 @item = item
                                 part_code = Product.find(item.product_id).name
                                 all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
@@ -1653,6 +1656,8 @@ before_filter :authenticate_user!
                                         item.cost = add_dns.cost
                                         item.color = "g"
                                         item.product_id = match_product_old.product_id
+                                        item.moko_part = match_product_old.name
+                                        item.moko_des = match_product_old.description
                                         item.dn_id = add_dns.id
                                         item.dn = add_dns.dn
                                         item.dn_long = add_dns.dn_long
@@ -1664,7 +1669,8 @@ before_filter :authenticate_user!
                                 end
                                 if not match_product.blank?
                                     item.product_id = match_product.first.id if match_product.count > 0
-                                    
+                                    item.moko_part = match_product.first.name if match_product.count > 0
+                                    item.moko_des = match_product.first.description if match_product.count > 0
                                     @item = item
                                     part_code = Product.find(item.product_id).name
                                     all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
@@ -1733,6 +1739,8 @@ before_filter :authenticate_user!
                                     item.cost = add_dns.cost
                                     item.color = "g"
                                     item.product_id = match_product_old.product_id
+                                    item.moko_part = match_product_old.name
+                                    item.moko_des = match_product_old.description
                                     item.dn_id = add_dns.id
                                     item.dn = add_dns.dn
                                     item.dn_long = add_dns.dn_long
@@ -1745,7 +1753,8 @@ before_filter :authenticate_user!
                             end
                             if not match_product.blank?
                                 item.product_id = match_product.first.id if match_product.count > 0
-                                
+                                item.moko_part = match_product.first.name if match_product.count > 0
+                                item.moko_des = match_product.first.description if match_product.count > 0
                                 @item = item
                                 part_code = Product.find(item.product_id).name
                                 all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
@@ -1884,6 +1893,9 @@ before_filter :authenticate_user!
         elsif can? :work_d, :all
             @user_do = "7"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+            Rails.logger.info("--------------------------1")
+            Rails.logger.info(@bom_item.inspect)
+            Rails.logger.info("--------------------------1")
         end
         if  params[:ajax]
             @bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
@@ -3152,7 +3164,7 @@ WHERE
         source_data = PItem.find(params[:item_id])
         if not source_data.blank?
             update_data = PItem.where("procurement_bom_id = #{source_data.procurement_bom_id} AND trim(description) = '#{source_data.description.strip}'")
-            update_data.update_all(product_id: source_data.product_id, cost: source_data.cost, price: source_data.price, dn_id: source_data.dn_id, color: source_data.color)
+            update_data.update_all(product_id: source_data.product_id, cost: source_data.cost, price: source_data.price, dn_id: source_data.dn_id, color: source_data.color,moko_part: source_data.moko_part,moko_des: source_data.moko_des)
         end
         redirect_to :back
     end

@@ -13,7 +13,7 @@
                             </div>
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= @pi_buy_info.created_at.to_s %></ins></p>
                             </div> 
-                            <div class="col-md-2"><p><strong>采购员: </strong><ins><%= @pi_buy_info.user.to_s %></ins></p>
+                            <div class="col-md-2"><p><strong>采购工程师: </strong><ins><%= @pi_buy_info.user.to_s %></ins></p>
                             </div>   
                         </div>
                     </div>
@@ -28,8 +28,8 @@
                 </div>
                 <div class="panel-body ">                     
                     <div class="row ">
-                        <div class="col-md-2"><strong>供应商代码：</strong><ins id="daima_show" name="daima_show"><%= @pi_buy_info.dn %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
-                        <div class="col-md-4"><strong>供应商信息：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
+                        <div class="col-md-2"><strong>供应商简称：</strong><ins id="daima_show" name="daima_show"><%= @pi_buy_info.dn %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
+                        <div class="col-md-4"><strong>供应商全称：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
                     </div>
                     
                 </div>
@@ -40,49 +40,31 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <div class="row "><div class="col-md-12 col-sm-12 form-inline" >
-            <span  style="color:#999;">
-               <%= form_tag('/edit_pi_buy', method:"get", class:"form-inline") do %>
-               <div class="form-group  nav navbar-nav navbar-left">
-                  
-                  <%= text_field_tag :pi_buy_no, params[:pi_buy_no], class:"sr-only", value:params[:pi_buy_no] %>
-                  <lable for="order" , class="sr-only">Qrder : </lable>
-                  <div class="input-group input-group-sm">    
-                                        
-                  <% if @key_order %>   
-                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
-                  <% else %> 
-                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:""%>
-                  <% end %>               
-                  <div class="input-group-btn">
-                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                  </div>
-                </div>
-               
-            </div>
-            <% end %>                       
-            </span>
+            <div class="row "><div class="col-md-12">
+                <button  type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addbuy" >添加采购物料</button>
             </div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <div class="row "><div class="col-md-12 col-sm-12 form-inline" >
@@ -102,23 +84,13 @@
 <% if not @pi_buy.blank? %>
   <% @pi_buy.each do |buy| %>
   <tr>
-      <td><%= buy.pi_no %></td>
+      <td></td>
       <td><%= buy.mpn %></td>
-      <% if not Product.find_by_id(buy.product_id).blank? %>
-      <td><%= Product.find_by_id(buy.product_id).name %></td>
-      <td><%= Product.find_by_id(buy.product_id).description %></td>
-      <% else %>
-      <td></td><td></td>
-      <% end %>
+      <td><%= buy.moko_part %></td>
+      <td><%= buy.moko_des %></td>
       <td><%= buy.quantity %></td>
       <td><%= buy.cost %></td>
-      <td>
-          <% if not buy.dn_id.blank? %>
-              <% if not PDn.find_by_id(buy.dn_id).blank? %>
-                  <%= PDn.find_by_id(buy.dn_id).dn_long %> 
-              <% end %>
-          <% end %>
-      </td>
+      <td><%= buy.dn_long %></td>
   </tr>
   <% end %>
 <% end %> 
@@ -148,6 +120,61 @@
 
         </div>
     </div>
+
+
+
+
+<div class="modal fade" id="addbuy" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
+    <div class="modal-dialog modal-lg" role="document"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择采购物料</strong></h4>
+            </div>
+      
+            <div class="modal-body">        
+                <div class="form-inline">
+                <%= form_tag('/find_pi_buy', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group sr-only">         
+                        <label for="c_order_no" class="control-label">单号:</label>
+                        <%= text_field_tag :pi_buy_no, params[:pi_buy_no], class:"sr-only", value:params[:pi_buy_no] %>
+                    </div>
+                    <div class="form-group ">
+                        <lable for="dn_code" , class="control-label"><strong></strong></lable>
+                        <div class="input-group input-group-sm">  
+                            <% if @key_order %>   
+                                <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                            <% else %> 
+                                <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"MOKO描述/MOKO编号"%>
+                            <% end %>                     
+                                      
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                            </div>
+                        </div>
+                        <a type="button" class="btn btn-info btn-sm" href="#">提交</a>
+                    </div>
+                <% end %>             
+                </div> 
+                <%= form_tag('/add_pi_buy_item', method:"get") do %>
+                <%= text_field_tag :pi_buy_id, params[:pi_buy_id], class:"sr-only", value:@pi_buy_info.id %>
+                <div class="form-group" id="table_buy">
+
+                </div>
+                <%= submit_tag "tijiao", class:"btn btn-primary btn-sm" %>
+                <% end %>
+            </div>
+        </div></small>
+    </div>
+</div>
+
+
+
+
+
+
+
+
 
 
 

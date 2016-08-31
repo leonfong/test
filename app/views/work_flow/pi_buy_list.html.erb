@@ -29,8 +29,8 @@
   <% @pi_buy_list.each do |buy_list| %>
   <tr>
       <td><%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %></td>
-      <td><%= buy_list.user %></td>
       <td><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+      <td><%= buy_list.user %></td>
   </tr>
   <% end %>
 <% end %> 
@@ -47,47 +47,7 @@
 
 
 
-        <div class="row">
-            <div class="col-md-12 col-sm-12 form-inline" >
-        
-<table class="table table-hover">
-  <thead>
-    <tr style="background-color: #eeeeee">
-      <th width="130">PI No.</th>
-      <th width="130">Created Date</th>
-      <th width="80">MPN</th>
-      <th >DES</th>
-      <th width="80">数量</th>
-      <th width="80">单价￥</th>
-      <th >供应商</th>
-    </tr>
-  </thead>
-  <tbody><small>
-<% if not @pi_buy.blank? %>
-  <%= will_paginate(@pi_buy) %> 
-  <% @pi_buy.each do |buy| %>
-  <tr>
-      <td><%= buy.pi_no %></td>
-      <td><%= buy.pi_no %></td>
-      <td><%= buy.mpn %></td>
-      <td><%= buy.description %></td>
-      <td><%= buy.quantity %></td>
-      <td><%= buy.cost %></td>
-      <td>
-          <% if not buy.dn_id.blank? %>
-              <% if not PDn.find_by_id(buy.dn_id).blank? %>
-                  <%= PDn.find_by_id(buy.dn_id).dn_long %> 
-              <% end %>
-          <% end %>
-      </td>
-  </tr>
-  <% end %>
-<% end %> 
-  </small>   
-  </tbody>
-</table>
 
-        </div></div>
         </div>
     </div>
 

@@ -2,6 +2,108 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def add_pi_buy_item
+        if params[:roles]
+            params[:roles].each do |item_id|
+                item_data = PItem.find_by_id(item_id)
+                if not item_data.blank?
+                    find_buy_data = PiBuyItem.find_by_p_item_id(item_id)
+                    if find_buy_data.blank?
+                        add_buy_data = PiBuyItem.new
+                        add_buy_data.p_item_id = item_data.id
+                        add_buy_data.erp_id = item_data.erp_id
+                        add_buy_data.erp_no = item_data.erp_no
+                        add_buy_data.user_do = item_data.user_do
+                        add_buy_data.user_do_change = item_data.user_do_change
+                        add_buy_data.check = item_data.check
+                        add_buy_data.pi_buy_info_id = params[:pi_buy_id]
+                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                        add_buy_data.quantity = item_data.quantity
+                        add_buy_data.description = item_data.description
+                        add_buy_data.part_code = item_data.part_code
+                        add_buy_data.fengzhuang = item_data.fengzhuang
+                        add_buy_data.link = item_data.link
+                        add_buy_data.cost = item_data.cost
+                        add_buy_data.info = item_data.info
+                        add_buy_data.product_id = item_data.product_id
+                        add_buy_data.moko_part = item_data.moko_part
+                        add_buy_data.moko_des = item_data.moko_des
+                        add_buy_data.warn = item_data.warn
+                        add_buy_data.user_id = item_data.user_id
+                        add_buy_data.danger = item_data.danger
+                        add_buy_data.manual = item_data.manual
+                        add_buy_data.mark = item_data.mark
+                        add_buy_data.mpn = item_data.mpn
+                        add_buy_data.mpn_id = item_data.mpn_id
+                        add_buy_data.price = item_data.price
+                        add_buy_data.mf = item_data.mf
+                        add_buy_data.dn = item_data.dn
+                        add_buy_data.dn_id = item_data.dn_id
+                        add_buy_data.dn_long = item_data.dn_long
+                        add_buy_data.other = item_data.other
+                        add_buy_data.all_info = item_data.all_info
+                        add_buy_data.remark = item_data.remark
+                        add_buy_data.color = item_data.color
+                        add_buy_data.supplier_tag = item_data.supplier_tag
+                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                        if add_buy_data.save
+                            item_data.buy = "done"
+                            item_data.save
+                        end
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
+    def find_pi_buy
+        @table_buy = ''
+        @table_buy += '<table class="table table-hover">'
+        @table_buy += '<thead>'
+        @table_buy += '<tr style="background-color: #eeeeee">'
+        @table_buy += '<th width="20"></th>'
+        @table_buy += '<th width="250">MPN</th>'
+        @table_buy += '<th width="150">MOKO PART</th>'
+        @table_buy += '<th >MOKO DES</th>'
+        @table_buy += '<th width="80">数量</th>'
+        @table_buy += '<th width="80">单价￥</th>'
+        @table_buy += '<th >供应商</th>'
+        @table_buy += '</tr>'
+        @table_buy += '</thead>'
+        @table_buy += '<tbody><small>'
+        if params[:key_order]
+            if not params[:key_order].blank?
+                des = params[:key_order].strip.split(" ")
+                where_des = ""
+                des.each_with_index do |de,index|
+                    where_des += "p_items.moko_des LIKE '%#{de}%'"
+                    if des.size > (index + 1)
+                        where_des += " AND "
+                    end
+                end      
+            end
+            @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE (p_items.moko_part LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND pi_infos.state = 'checked' AND p_items.buy IS NULL")    
+            if not @pi_buy.blank?
+                @pi_buy.each do |buy|
+                    @table_buy += '<tr>'
+                    @table_buy += '<td><input type="checkbox" value="'+buy.id.to_s+'" name="roles[]" id="roles_" checked></td>'
+                    @table_buy += '<td>'+buy.mpn.to_s+'</td>'
+                    @table_buy += '<td>'+buy.moko_part.to_s+'</td>'
+                    @table_buy += '<td>'+buy.moko_des.to_s+'</td>'
+                    @table_buy += '<td>'+buy.quantity.to_s+'</td>'
+                    @table_buy += '<td>'+buy.cost.to_s+'</td>'
+                    @table_buy += '<td>'+buy.dn_long.to_s+'</td>'
+                    @table_buy += '</tr>'
+                end
+            end
+        end
+        @table_buy += '</small></tbody>'
+        @table_buy += '</table>'
+        Rails.logger.info(@table_buy.inspect)
+    end
+
     def find_dn
         if params[:dn_code] != ""
             @c_info = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn,all_dns.dn_long,id FROM all_dns WHERE all_dns.dn LIKE '%#{params[:dn_code]}%' GROUP BY all_dns.dn")
@@ -67,11 +169,9 @@ before_filter :authenticate_user!
         redirect_to edit_pi_buy_path(pi_buy_no: pi_buy_no) and return    
     end
 
-    def edit_pi_buy
-        if params[:key_order]
-            @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'")
-        end
+    def edit_pi_buy     
         @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+        @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
         @all_dn = "[&quot;"
         all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
         all_s_dn.each do |dn|
@@ -82,6 +182,10 @@ before_filter :authenticate_user!
 
     def pi_buy_list
         @pi_buy_list = PiBuyInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
+        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def pi_waitfor_buy
         @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 

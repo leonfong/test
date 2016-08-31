@@ -96,6 +96,12 @@ Rails.application.routes.draw do
   match '/edit_pi_buy', to: 'work_flow#edit_pi_buy', via: 'get'
   match '/find_dn', to: 'work_flow#find_dn', via: 'get'
   match '/find_dn_ch', to: 'work_flow#find_dn_ch', via: 'get'
+  match '/find_pi_buy', to: 'work_flow#find_pi_buy', via: 'get'
+  match '/add_pi_buy_item', to: 'work_flow#add_pi_buy_item', via: 'get'
+  match '/pi_waitfor_buy', to: 'work_flow#pi_waitfor_buy', via: 'get'
+
+
+
 
 
 

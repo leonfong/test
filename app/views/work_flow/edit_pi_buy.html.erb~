@@ -72,7 +72,7 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="130">PI No.</th>
-      <th width="80">MPN</th>
+      <th width="220">MPN</th>
       <th width="150">MOKO PART</th>
       <th >MOKO DES</th>
       <th width="80">数量</th>
@@ -152,7 +152,9 @@
                                 <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
                             </div>
                         </div>
-                        <a type="button" class="btn btn-info btn-sm" href="#">提交</a>
+                        
+                        <a id="tijiao" type="button" class="btn btn-info btn-sm" href="#">提交</a>
+                        
                     </div>
                 <% end %>             
                 </div> 
@@ -161,7 +163,7 @@
                 <div class="form-group" id="table_buy">
 
                 </div>
-                <%= submit_tag "tijiao", class:"btn btn-primary btn-sm" %>
+                <%= submit_tag "tijiao", class:"btn btn-primary btn-sm sr-only",id:"tijiao_true" %>
                 <% end %>
             </div>
         </div></small>
@@ -231,7 +233,11 @@
 
 
 <script>
-
+$(document).ready(function(){
+  $("#tijiao").click(function(){
+    $("#tijiao_true").click();
+  });
+});
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

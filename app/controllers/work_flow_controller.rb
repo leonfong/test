@@ -4,8 +4,8 @@ before_filter :authenticate_user!
 
     def find_dn
         if params[:dn_code] != ""
-            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
+            @c_info = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn,all_dns.dn_long,id FROM all_dns WHERE all_dns.dn LIKE '%#{params[:dn_code]}%' GROUP BY all_dns.dn")
+            #@c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:dn_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_info.inspect)
             Rails.logger.info("add-------------------------------------12")
@@ -17,20 +17,16 @@ before_filter :authenticate_user!
                 @c_table += '<table class="table table-bordered">'
                 @c_table += '<thead>'
                 @c_table += '<tr class="active">'
-                @c_table += '<th width="70">客户代码</th>'
-                @c_table += '<th>客户名</th>'
-                @c_table += '<th>客户公司名</th>'
-                @c_table += '<th width="70">所属</th>'
+                @c_table += '<th >供应商简称</th>'
+                @c_table += '<th>供应商全称</th>'
                 @c_table += '<tr>'
                 @c_table += '</thead>'
                 @c_table += '<tbody>'
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_dn_ch?id='+ cu.id.to_s + '&pi_buy_no=' + params[:pi_buy_no] + '"><div>' + cu.dn + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_dn_ch?id='+ cu.id.to_s + '&pi_buy_no=' + params[:pi_buy_no] + '"><div>' + cu.dn_long.to_s + '</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'
@@ -41,6 +37,14 @@ before_filter :authenticate_user!
                 Rails.logger.info("add-------------------------------------12")
             end
         end
+    end
+
+    def find_dn_ch
+        up_dn = PiBuyInfo.find_by(pi_buy_no: params[:pi_buy_no])
+        up_dn.dn = AllDn.find_by_id(params[:id]).dn
+        up_dn.dn_long = AllDn.find_by_id(params[:id]).dn_long
+        up_dn.save     
+        redirect_to edit_pi_buy_path(pi_buy_no: params[:pi_buy_no])
     end
 
     def new_pi_buy
@@ -64,9 +68,16 @@ before_filter :authenticate_user!
     end
 
     def edit_pi_buy
-        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'")
+        if params[:key_order]
+            @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'")
+        end
         @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
-
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+        end
+        @all_dn += "&quot;]"
     end
 
     def pi_buy_list

@@ -22,14 +22,14 @@
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>供应商信息</strong> 
-                <% if can? :work_e, :all and @pi_buy_info.state == "new"%>
+                <% if can? :work_g, :all and @pi_buy_info.state == "new"%>
                 <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_dn" style="margin-right: 5px;" >选择供应商</button>
                 <% end %>
                 </div>
                 <div class="panel-body ">                     
                     <div class="row ">
-                        <div class="col-md-2"><strong>供应商代码：</strong><ins id="daima_show" name="daima_show"><%= @pi_buy_info.dn %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
-                        <div class="col-md-4"><strong>供应商信息：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
+                        <div class="col-md-2"><strong>供应商简称：</strong><ins id="daima_show" name="daima_show"><%= @pi_buy_info.dn %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
+                        <div class="col-md-4"><strong>供应商全称：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
                     </div>
                     
                 </div>
@@ -169,8 +169,9 @@
                     </div>
                     <div class="form-group ">
                         <lable for="dn_code" , class="control-label"><strong>供应商: </strong></lable>
-                        <div class="input-group input-group-sm">              
-                            <%= text_field_tag :dn_code, params[:dn_code], class:"form-control input-lg", size:"60", placeholder:"供应商简称/全称"%>               
+                        <div class="input-group input-group-sm">  
+                            <input id="dn_code" autocomplete="off" name="dn_code" type="text" class="form-control input-lg" data-provide="typeahead" data-items="20" data-source="<%= raw @all_dn %>" placeholder="供应商简称" size="60">            
+                                      
                             <div class="input-group-btn">
                                 <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
                             </div>

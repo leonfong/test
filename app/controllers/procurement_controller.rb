@@ -1618,6 +1618,8 @@ before_filter :authenticate_user!
                                     item.cost = add_dns.cost
                                     item.color = "g"
                                     item.dn_id = add_dns.id
+                                    item.dn = add_dns.dn
+                                    item.dn_long = add_dns.dn_long
                                     item.save
                                 else
                                     item.save
@@ -1652,6 +1654,8 @@ before_filter :authenticate_user!
                                         item.color = "g"
                                         item.product_id = match_product_old.product_id
                                         item.dn_id = add_dns.id
+                                        item.dn = add_dns.dn
+                                        item.dn_long = add_dns.dn_long
                                         item.save
                                         @item = item
                                         render "p_search_part.js.erb" and return 
@@ -1682,6 +1686,8 @@ before_filter :authenticate_user!
                                         item.cost = add_dns.cost
                                         item.color = "g"
                                         item.dn_id = add_dns.id
+                                        item.dn = add_dns.dn
+                                        item.dn_long = add_dns.dn_long
                                         item.save
                                     else
                                         item.save
@@ -1728,6 +1734,8 @@ before_filter :authenticate_user!
                                     item.color = "g"
                                     item.product_id = match_product_old.product_id
                                     item.dn_id = add_dns.id
+                                    item.dn = add_dns.dn
+                                    item.dn_long = add_dns.dn_long
                                     item.save
                                     @item = item
                                     render "p_search_part.js.erb" and return 
@@ -1759,6 +1767,8 @@ before_filter :authenticate_user!
                                     item.cost = add_dns.cost
                                     item.color = "g"
                                     item.dn_id = add_dns.id
+                                    item.dn = add_dns.dn
+                                    item.dn_long = add_dns.dn_long
                                     item.save
                                 else
                                     item.save
@@ -2285,6 +2295,8 @@ before_filter :authenticate_user!
                     if not all_dns.blank?
                         @bom_item.cost = add_dns.cost
                         @bom_item.dn_id = add_dns.id
+                        @bom_item.dn = add_dns.dn
+                        @bom_item.dn_long = add_dns.dn_long
                         @bom_item.color = "b"
                     end
                     @bom_item.mark = false
@@ -2388,6 +2400,8 @@ WHERE
                     @bom_item.warn = false
                     @bom_item.cost = @add_dns.cost
                     @bom_item.dn_id = @add_dns.id
+                    @bom_item.dn = @add_dns.dn
+                    @bom_item.dn_long = @add_dns.dn_long
                     @bom_item.mark = false
                     @bom_item.manual = true
                     @bom_item.mpn_id = nil
@@ -2444,6 +2458,8 @@ WHERE
             @bom_item = PItem.find(params[:id]) 
             @bom_item.cost = @add_dns.cost
             @bom_item.dn_id = @add_dns.id
+            @bom_item.dn = @add_dns.dn
+            @bom_item.dn_long = @add_dns.dn_long
             #@bom_item.product_id = 0
             @bom_item.color = "b"
             if @add_dns.remark != nil or @add_dns.remark != ""
@@ -2827,6 +2843,8 @@ WHERE
         @dn = PDn.find(params[:id])
         if not @dn.blank?
             itemall.dn_id = nil
+            itemall.dn = nil
+            itemall.dn_long = nil
             itemall.save
             @dn.destroy
         end

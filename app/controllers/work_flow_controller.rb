@@ -67,6 +67,7 @@ before_filter :authenticate_user!
         @table_buy += '<th >MOKO DES</th>'
         @table_buy += '<th width="80">数量</th>'
         @table_buy += '<th width="80">单价￥</th>'
+        @table_buy += '<th width="80">附件</th>'
         @table_buy += '<th >供应商</th>'
         @table_buy += '<th >备注</th>'
         @table_buy += '</tr>'
@@ -91,6 +92,17 @@ before_filter :authenticate_user!
                     @table_buy += '<td>'+buy.moko_des.to_s+'</td>'
                     @table_buy += '<td>'+buy.quantity.to_s+'</td>'
                     @table_buy += '<td>'+buy.cost.to_s+'</td>'
+                    if not PDn.find_by_id(buy.dn_id).blank?
+                        if not PDn.find_by_id(buy.dn_id).info.blank?
+                            @table_buy += '<td><small><a href="'
+                            @table_buy += dn.info.to_s
+                            @table_buy += '">下载</a></small></td>'
+                        else
+                            @table_buy += '<td></td>'
+                        end
+                    else
+                        @table_buy += '<td></td>'
+                    end
                     @table_buy += '<td>'+buy.dn_long.to_s+'</td>'
                     @table_buy += '<td>'
                     @table_buy += '<div class="row" style="margin: 0px;" >'
@@ -146,7 +158,7 @@ before_filter :authenticate_user!
         end
         @table_buy += '</small></tbody>'
         @table_buy += '</table>'
-        Rails.logger.info(@table_buy.inspect)
+        #Rails.logger.info(@table_buy.inspect)
     end
 
     def find_dn

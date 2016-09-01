@@ -92,7 +92,7 @@
                     <tr>
                         <td><%= bom.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
                         <td><%= bom.mpn %></td>
-                        <td><%= bom.description %></td>
+                        <td><%= bom.des %></td>
                         <td><%= bom.moko_des %></td>
                         <td><%= bom.quantity*ProcurementBom.find(bom.procurement_bom_id).qty %></td>
                         <td><%= link_to ProcurementBom.find(bom.procurement_bom_id).p_name,  p_viewbom_path(bom_id: bom.procurement_bom_id,bak: "bak") %></td>

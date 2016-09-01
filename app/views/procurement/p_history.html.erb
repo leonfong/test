@@ -90,7 +90,7 @@
                 <tbody>
                 <% @p_history.each do |bom| %>
                     <tr>
-                        <td><%= bom.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
+                        <td><%= bom.c_time.localtime.strftime('%Y-%m-%d').to_s %></td>
                         <td><%= bom.mpn %></td>
                         <td><%= bom.des %></td>
                         <td><%= bom.moko_des %></td>

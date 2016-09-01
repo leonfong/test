@@ -846,41 +846,55 @@ before_filter :authenticate_user!
         @all_dn += "&quot;]"
         #@boms = ProcurementBom.find(params[:bom_id])
         if params[:key_order]
-            key = " AND procurement_boms.p_name LIKE '%#{params[:key_order]}%'"
+            key = "procurement_boms.p_name LIKE '%#{params[:key_order]}%' OR p_items.mpn LIKE '%#{params[:key_order]}%'"
             #key_des = " AND p_items.description LIKE '%#{params[:key_order]}%'"
             des = params[:key_order].strip.split(" ")
             key_des = ""
             des.each_with_index do |de,index|
-                key_des += " AND p_items.description LIKE '%#{de}%'"
+                key_des += "p_items.description LIKE '%#{de}%'"
+                if des.size > (index + 1)
+                    key_des += " AND "
+                end
             end      
-            #part_ctl = ""
+
             @key_order = params[:key_order]
+            where_data = " AND (#{key} OR (#{key_des}))"
+        else
+            where_data = ""
         end
         if can? :work_g_all, :all
             @user_do = "7"
             #@bom_item = PItem.where(user_do: "7")
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7'  AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7'  AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+=begin
             if @bom_item.blank?
-                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+                @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' OR AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
             end
+=end
         elsif can? :work_g_a, :all
             @user_do = "77"
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '77' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '77' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+=begin
             if @bom_item.blank?
                 @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '77' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
             end
+=end
         elsif can? :work_g_b, :all
             @user_do = "75"
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '75' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '75' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+=begin
             if @bom_item.blank?
                 @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '75' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
             end
+=end
         elsif can? :work_d, :all
             @user_do = "7"
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+=begin
             if @bom_item.blank?
                 @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
             end
+=end
         end
         #@bom_item = @bom_item.select {|item| item.quantity != 0 }
         #if  params[:ajax]

@@ -95,7 +95,7 @@
                         <td><%= bom.quantity*ProcurementBom.find(bom.procurement_bom_id).qty %></td>
                         <td><%= link_to ProcurementBom.find(bom.procurement_bom_id).p_name,  p_viewbom_path(bom_id: bom.procurement_bom_id,bak: "bak") %></td>
                         <td><%= bom.cost %></td>
-                        <% if not PDn.find(bom.dn_id).blank? %>
+                        <% if not bom.dn_id.blank? %>
                             <td><%= PDn.find(bom.dn_id).dn_long %></td>
                             <td><%= PDn.find(bom.dn_id).remark %></td>
                         <% else %>

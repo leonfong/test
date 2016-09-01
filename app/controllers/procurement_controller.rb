@@ -1099,13 +1099,13 @@ before_filter :authenticate_user!
                 des = params[:part_name].strip.split(" ")
                 des.each_with_index do |de,index|
                     where_des += "p_items.description LIKE '%#{de}%'"
-                    where_moko_des += "p_items.moko_des LIKE '%#{de}%'"
+                    where_moko_des += "products.description LIKE '%#{de}%'"
                     if des.size > (index + 1)
                         where_des += " AND "
                         where_moko_des += " AND "
                     end
                 end 
-                @p_history = PItem.find_by_sql("SELECT * FROM `p_items` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%' or (#{where_des}) or (#{where_moko_des})  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+                @p_history = PItem.find_by_sql("SELECT *,p_items.description AS des, products.description AS moko_des FROM `p_items` LEFT JOIN `products` ON `p_items`.`product_id` = `products`.`id` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%' or (#{where_des}) or (#{where_moko_des})  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             else
                 where_des = "p_items.description LIKE '%%'"
                 where_des = "p_items.moko_des LIKE '%%'"

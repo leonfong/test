@@ -58,7 +58,7 @@
                         <% if @part_name %>   
                             <%= text_field_tag :part_name, @part_name, class:"form-control  input-lg", size:"30", placeholder:"MPN/描述"%>     
                         <% else %> 
-                            <%= text_field_tag :part_name, params[:part_name], class:"form-control input-lg", size:"30", placeholder:"MPN/描述"%>
+                            <%= text_field_tag :part_name, params[:part_name], class:"form-control input-lg", size:"30", placeholder:"MPN/描述/MOKO描述"%>
                         <% end %>               
                         <div class="input-group-btn">
                             <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
@@ -94,9 +94,9 @@
 <!--
       <th width="180">ADD IN ORDER LIST</th>
 -->
-      <% if can? :work_send_to_sell, :all %>
+
       <th width="60">已发送</th>
-      <% end %>
+
     </tr>
   </thead>
   <tbody>

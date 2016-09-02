@@ -1681,7 +1681,7 @@ before_filter :authenticate_user!
                                         item.dn_long = add_dns.dn_long
                                         item.save
                                         @item = item
-                                        render "p_search_part.js.erb" and return 
+                                        render "p_search_part.js.erb" and return
                                     rescue
                                     end
                                 end
@@ -1732,13 +1732,54 @@ before_filter :authenticate_user!
                                 end
                         else
     #0.2如果没有mpn只有描述
-                            Rails.logger.info("22-------------------------------------------------------22")
+                            Rails.logger.info("22555-------------------------------------------------------22")
                             match_product_old = search_bom_use(item.description,nil) #根据历史记录查询产品
                             Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
                             Rails.logger.info(match_product_old.inspect)
                             Rails.logger.info("qqqqqq-------------------------------------------------------qqqqqq")
                             if match_product_old.blank?
                                 match_product = search_bom(item.description,item.part_code) #根据关键字和位号查询产品
+=begin
+                                if not match_product.blank?
+                                    item.product_id = match_product.first.id if match_product.count > 0
+                                    Rails.logger.info("product_id-------------------------------------------------------product_id1")
+                                    item.moko_part = match_product.first.name if match_product.count > 0
+                                    item.moko_des = match_product.first.description if match_product.count > 0
+                                    @item = item
+                                    part_code = Product.find(item.product_id).name
+                                    all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+                                    if all_dns.blank?
+                                        all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
+                                    end
+                                #all_dns.each do |dns|
+                                    if not all_dns.blank?
+                                        add_dns = PDn.new
+                                        add_dns.item_id = @item.id
+                                        add_dns.date = all_dns.date
+                                        add_dns.part_code = all_dns.part_code
+                                        add_dns.dn = all_dns.dn
+                                        add_dns.dn_long = all_dns.dn_long
+                                        add_dns.cost = all_dns.price
+                                        add_dns.qty = all_dns.qty
+                                        add_dns.color = "g"
+                                        add_dns.save
+                                        item.cost = add_dns.cost
+                                        item.color = "g"
+                                        item.dn_id = add_dns.id
+                                        item.dn = add_dns.dn
+                                        item.dn_long = add_dns.dn_long
+                                        item.save
+                                    else
+                                        item.save
+                                    end
+                                #item.save
+                                else
+                                    item.product_id = 0
+                                    Rails.logger.info("product_id-------------------------------------------------------product_id2")
+                                    item.save
+                                    @item = item
+                                end
+=end
                             elsif not match_product_old.dn_id.blank?
                                 begin
                                     match_dn = PDn.find(match_product_old.dn_id)
@@ -1757,6 +1798,9 @@ before_filter :authenticate_user!
                                     item.cost = add_dns.cost
                                     item.color = "g"
                                     item.product_id = match_product_old.product_id
+                                    Rails.logger.info("product_id-------------------------------------------------------product_id0")
+                                    Rails.logger.info(match_product_old.product_id.inspect)
+                                    Rails.logger.info("match_product_old.product_id-------------------------------------------------------match_product_old.product_id")
                                     item.moko_part = match_product_old.name
                                     item.moko_des = match_product_old.description
                                     item.dn_id = add_dns.id
@@ -1769,8 +1813,10 @@ before_filter :authenticate_user!
                                     
                                 end
                             end
+
                             if not match_product.blank?
                                 item.product_id = match_product.first.id if match_product.count > 0
+                                Rails.logger.info("product_id-------------------------------------------------------product_id1")
                                 item.moko_part = match_product.first.name if match_product.count > 0
                                 item.moko_des = match_product.first.description if match_product.count > 0
                                 @item = item
@@ -1802,11 +1848,17 @@ before_filter :authenticate_user!
                                 end
                                 #item.save
                             else
-                                item.product_id = 0
+                                if match_product_old.blank?
+                                    item.product_id = 0
+                                    Rails.logger.info("product_id-------------------------------------------------------product_id2")
+                                    #item.save  
+                                end
                                 item.save
                                 @item = item
                             end
                             
+
+
                             #item.product_id = match_product.first.id if match_product.count > 0
                             #item.save
                             #@item = item

@@ -162,7 +162,20 @@
 
 
 
-
+         <%= form_tag('/update_pcb_order', method:"post",id:"upatt") do %>
+            <div class="row "><div class="col-md-12">   
+                <div class="modal-footer">                    
+                    <input type="text" class="form-control sr-only" id="p_no" name="p_no" value="">
+                    <% if can? :work_e, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
+                    <% elsif can? :work_d, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到采购工程师?"} %>
+                    <% elsif can? :work_g, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定已经完成报价?"} %>
+                    <% end %>
+                </div>
+            </div></div>
+       <% end %>
 
 
 
@@ -223,7 +236,7 @@
                     <th >MOKO DES</th>
                     <th width="80">数量</th>
                     <th width="80">单价￥</th>
-                    <th width="80">附件￥</th>
+                    <th width="80">附件</th>
                     <th >供应商</th>
                     <th >备注</th>
                     </tr>

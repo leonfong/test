@@ -162,16 +162,12 @@
 
 
 
-         <%= form_tag('/update_pcb_order', method:"post",id:"upatt") do %>
+         <%= form_tag('/send_pi_buy', method:"post",id:"upatt") do %>
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">                    
-                    <input type="text" class="form-control sr-only" id="p_no" name="p_no" value="">
-                    <% if can? :work_e, :all %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
-                    <% elsif can? :work_d, :all %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到采购工程师?"} %>
-                    <% elsif can? :work_g, :all %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定已经完成报价?"} %>
+                    <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= @pi_buy_info.pi_buy_no.to_s %>">
+                    <% if can? :work_g, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要下单?"} %>                
                     <% end %>
                 </div>
             </div></div>

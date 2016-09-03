@@ -2,6 +2,23 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def send_pi_buy
+        up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+        if not up_state.blank?
+            up_state.state = "buy"
+            up_state.save
+        end
+        redirect_to :back
+    end
+
+    def pi_waiting_for_wh
+        @w_wh = PiBuyInfo.where(state: "buy")
+    end
+
+    def pi_buy_item
+        @pi_buy = PiBuyItem.where(pi_buy_info_id: params[:pi_buy_info_id])
+    end
+
     def add_pi_buy_item
         if params[:roles]
             params[:roles].each do |item_id|
@@ -244,7 +261,8 @@ before_filter :authenticate_user!
     end
 
     def pi_waitfor_buy
-        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
+        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL").paginate(:page => params[:page], :per_page => 20)
+        #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 
     def pi_list

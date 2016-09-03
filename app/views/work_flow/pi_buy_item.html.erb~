@@ -1,0 +1,65 @@
+<div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "pi_buy_item"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+        
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="130">采购单号</th>
+      <th width="130">Created Date</th>
+      <th width="220">MPN</th>
+      <th >DES</th>
+      <th width="80">数量</th>
+      <th width="80">单价￥</th>
+      <th >供应商</th>
+    </tr>
+  </thead>
+  <tbody><small>
+<% if not @pi_buy.blank? %>
+  <% @pi_buy.each do |buy| %>
+  <tr>
+      <td><%= PiBuyInfo.find_by_id(buy.pi_buy_info_id).pi_buy_no %></td>
+      <td><%= buy.pi_no %></td>
+      <td><%= buy.mpn %></td>
+      <td><%= buy.description %></td>
+      <td><%= buy.quantity %></td>
+      <td><%= buy.cost %></td>
+      <td>
+          <% if not buy.dn_id.blank? %>
+              <% if not PDn.find_by_id(buy.dn_id).blank? %>
+                  <%= PDn.find_by_id(buy.dn_id).dn_long %> 
+              <% end %>
+          <% end %>
+      </td>
+  </tr>
+  <% end %>
+<% end %> 
+  </small>   
+  </tbody>
+</table>
+
+        </div></div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

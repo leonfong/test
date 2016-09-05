@@ -215,7 +215,9 @@
 <td style="padding: 0px;margin: 0px;" >
 <p style="padding: 0px;margin: 0px;" >
 <small >
-
+<% if not remark_item.info.blank? %>
+<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>
+<% end %>
 <strong><%= remark_item.user_name %>: </strong>
 <%= remark_item.remark %>
 </small>
@@ -300,6 +302,10 @@
           <div class="form-group sr-only">
             <label for="sell_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="sell_remark" name="sell_remark" value="sell_remark">
+          </div>
+          <div class="form-group">
+            <label for="info" class="control-label">附件:</label>
+            <input class="form-control" name="dn_info[info]" id="dn_info" type="file" accept=".zip,.rar,.gz,.bz2,.7z,.pdf"  >
           </div>
           <div class="form-group">
             <label for="pj_remark">备注：</label>

@@ -770,6 +770,9 @@ before_filter :authenticate_user!
         remark.p_item_id = params[:itemp_id]
         remark.user_id = current_user.id
         remark.user_name = current_user.full_name
+        if not params[:dn_info].blank?
+            remark.update(editbn_params)
+        end
         p_c = PItem.find(params[:itemp_id])       
         if can? :work_e, :all
             remark.user_team = "sell"
@@ -793,10 +796,13 @@ before_filter :authenticate_user!
             @remark_all += '<table style="margin: 0px;" >'
             @remark_all += '<tr>'
             @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+            if not remark_item.info.blank?
+                @remark_all += '<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>'
+            end
             #if params[:sell_remark] != "sell_remark"
                 #@remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
             #else
-                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
             #end
             @remark_all += '</td>'
             @remark_all += '</tr>'

@@ -29,7 +29,7 @@
       <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.description %></td>
-      <td><%= buy.quantity %></td>
+      <td><%= buy.qty %></td>
       <td><%= buy.cost %></td>
       <td>
           <% if not buy.dn_id.blank? %>

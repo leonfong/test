@@ -36,6 +36,7 @@ before_filter :authenticate_user!
                         add_buy_data.pi_buy_info_id = params[:pi_buy_id]
                         add_buy_data.procurement_bom_id = item_data.procurement_bom_id
                         add_buy_data.quantity = item_data.quantity
+                        add_buy_data.qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
                         add_buy_data.description = item_data.description
                         add_buy_data.part_code = item_data.part_code
                         add_buy_data.fengzhuang = item_data.fengzhuang

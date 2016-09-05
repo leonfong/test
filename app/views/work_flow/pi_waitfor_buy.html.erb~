@@ -14,7 +14,7 @@
     <tr style="background-color: #eeeeee">
       <th width="130">PI No.</th>
       <th width="130">Created Date</th>
-      <th width="80">MPN</th>
+      <th width="220">MPN</th>
       <th >DES</th>
       <th width="80">数量</th>
       <th width="80">单价￥</th>
@@ -27,7 +27,7 @@
   <% @pi_buy.each do |buy| %>
   <tr>
       <td><%= buy.pi_no %></td>
-      <td><%= buy.pi_no %></td>
+      <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.description %></td>
       <td><%= buy.quantity %></td>

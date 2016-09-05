@@ -26,7 +26,7 @@
   <% @pi_buy.each do |buy| %>
   <tr>
       <td><%= PiBuyInfo.find_by_id(buy.pi_buy_info_id).pi_buy_no %></td>
-      <td><%= buy.pi_no %></td>
+      <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.description %></td>
       <td><%= buy.quantity %></td>

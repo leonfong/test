@@ -23,6 +23,7 @@ class Ability
     alias_action :update, :to => :work_h          #工时
     alias_action :update, :to => :work_i          #MPN
     alias_action :update, :to => :work_finance    #财务
+    alias_action :update, :to => :work_wh         #仓库
     alias_action :update, :to => :pcb_review      #PCB_R
     alias_action :update, :to => :pcb_dc          #PCB_DC
     alias_action :update, :to => :old_bom         #老bom匹配功能
@@ -50,6 +51,7 @@ class Ability
       can :work_pcb_business, :all
       can :work_suppliers, :all
       can :work_send_to_sell, :all
+      can :work_wh, :all
     elsif user.has_role?(:manager)
       can :manage, :all
     elsif user.has_role?(:work_one)

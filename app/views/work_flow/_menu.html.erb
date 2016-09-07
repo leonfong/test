@@ -21,7 +21,27 @@
         <li><a href="#"><i class="icon-list-alt"></i> PMC</a></li>
         <li><a <% if selected == "pi_waitfor_buy" %>style="background-color: #d9edf7;"<% end %> href="/pi_waitfor_buy"><i class="icon-list-alt"></i> 待采购的物料</a></li>
         <li><a <% if selected == "pi_buy_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_list"><i class="icon-list-alt"></i> 采购下单</a></li>
-        <li><a <% if selected == "pi_w_wh" %>style="background-color: #d9edf7;"<% end %> href="/pi_waiting_for_wh"><i class="icon-list-alt"></i> 等待入库</a></li>
-        <li><a href="#"><i class="icon-list-alt"></i> 已经入库</a></li>
+        <li><a <% if selected == "pi_w" %>style="background-color: #d9edf7;"<% end %> href="/pi_waiting_for"><i class="icon-list-alt"></i> 采购记录</a></li>
+    </ul>
+    <a style="background-color: #ddd;" href="#whMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 库存管理</a>
+    <ul id="whMenu" class="nav nav-list  menu-second <% if selected =~ /wh/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "wh_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list"><i></i> 入库草稿箱</a></li>
+        <li><a <% if selected == "wh_query" %>style="background-color: #d9edf7;"<% end %> href="/wh_query"><i></i> 入库</a></li>
+        <li><a <% if selected == "wh_out" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 出库</a></li>
+        <li><a <% if selected == "wh_q" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 库存查询</a></li>
     <ul>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

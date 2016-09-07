@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pi_w_wh"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pi_w"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
            
@@ -151,6 +151,7 @@ function postform() {
 $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');
   $('#articleMenu').collapse('hide');
+  $('#whMenu').collapse('hide');
 });
   
 </script>

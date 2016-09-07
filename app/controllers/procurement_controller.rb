@@ -802,7 +802,9 @@ before_filter :authenticate_user!
             #if params[:sell_remark] != "sell_remark"
                 #@remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
             #else
-            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+            @remark_all += '<strong>' + remark_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+            @remark_all += '<strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
             #end
             @remark_all += '</td>'
             @remark_all += '</tr>'

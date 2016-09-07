@@ -100,10 +100,16 @@ Rails.application.routes.draw do
   match '/add_pi_buy_item', to: 'work_flow#add_pi_buy_item', via: 'get'
   match '/pi_waitfor_buy', to: 'work_flow#pi_waitfor_buy', via: 'get'
   match '/send_pi_buy', to: 'work_flow#send_pi_buy', via: 'post'
-  match '/pi_waiting_for_wh', to: 'work_flow#pi_waiting_for_wh', via: 'get'
+  match '/pi_waiting_for', to: 'work_flow#pi_waiting_for', via: 'get'
   match '/pi_buy_item', to: 'work_flow#pi_buy_item', via: 'get'
-
-
+  match '/p_wh_in', to: 'work_flow#p_wh_in', via: 'post'
+  match '/wh_in', to: 'work_flow#wh_in', via: 'get'
+  match '/wh_out', to: 'work_flow#wh_out', via: 'get'
+  match '/wh_query', to: 'work_flow#wh_query', via: 'get'
+  match '/wh_find', to: 'work_flow#wh_find', via: 'get'
+  match '/wh_draft_list', to: 'work_flow#wh_draft_list', via: 'get'
+  match '/edit_wh_order', to: 'work_flow#edit_wh_order', via: 'get'
+  match '/new_wh_order', to: 'work_flow#new_wh_order', via: 'get'
 
 
 

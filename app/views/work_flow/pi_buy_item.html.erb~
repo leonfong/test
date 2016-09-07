@@ -15,10 +15,12 @@
       <th width="130">采购单号</th>
       <th width="130">Created Date</th>
       <th width="220">MPN</th>
-      <th >DES</th>
+      <th >moko编号</th>
+      <th >moko描述</th>
       <th width="80">数量</th>
       <th width="80">单价￥</th>
       <th >供应商</th>
+      <th width="180">入库</th>
     </tr>
   </thead>
   <tbody><small>
@@ -28,8 +30,9 @@
       <td><%= PiBuyInfo.find_by_id(buy.pi_buy_info_id).pi_buy_no %></td>
       <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
-      <td><%= buy.description %></td>
-      <td><%= buy.quantity %></td>
+      <td><%= buy.moko_part %></td>
+      <td><%= buy.moko_des %></td>
+      <td><%= buy.qty %></td>
       <td><%= buy.cost %></td>
       <td>
           <% if not buy.dn_id.blank? %>
@@ -37,6 +40,28 @@
                   <%= PDn.find_by_id(buy.dn_id).dn_long %> 
               <% end %>
           <% end %>
+      </td>
+      <td>
+          <small>
+          <%= form_tag({action: :p_wh_in},method:"post",class:"form-inline") do %>
+          <div class="form-group sr-only">
+              <label for="dn_itemid" class="control-label">itemid:</label>
+              <input type="text" class="form-control" id="buy_id" name="buy_id" value="<%= buy.id.to_s %>">
+              <input type="text" class="form-control" id="moko_part" name="moko_part" value="<%= buy.moko_part.to_s %>">
+              <input type="text" class="form-control" id="moko_des" name="moko_des" value="<%= buy.moko_des.to_s %>">
+          </div>
+          <div class="input-group input-group-sm">         
+              <input type="text" class="form-control " id="<%= buy.id.to_s + 'qty' %>"  name="qty_in" %>" size="10" placeholder="数量">            
+              
+          </div>
+          <div class="input-group input-group-sm">         
+                        
+              <span class="input-group-btn ">
+                  <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
+              </span>
+          </div>
+          <% end %>
+          </small> 
       </td>
   </tr>
   <% end %>

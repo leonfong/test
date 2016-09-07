@@ -2,16 +2,162 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def wh_in
+        
+    end
+
+    def wh_out
+
+    end
+
+    def wh_query
+        if not params[:moko_part].blank?
+            @find_in_wh = PiWhItem.find_by_moko_part(params[:moko_part].strip)
+            if @find_in_wh.blank?
+                find_in_product = Product.find_by_name(params[:moko_part].strip)
+                if not find_in_product.blank?
+                    @find_in_wh = PiWhItem.new
+                    @find_in_wh.moko_part = find_in_product.name
+                    @find_in_wh.moko_des = find_in_product.description
+                    @find_in_wh.qty = 0
+                    @find_in_wh.save
+                    #redirect_to :back and return
+                    render "wh_query.html.erb" and return
+                else
+                    redirect_to wh_query_path, :flash => {:error => params[:moko_part].to_s.strip+"--------请输入正确的MOKO Part,或者联系BOM工程师！"}
+                    return false
+                end
+            else
+                #redirect_to :back and return
+                render "wh_query.html.erb" and return
+            end
+        end
+    end
+  
+    def wh_find
+
+    end
+
+    def p_wh_in
+        if can? :work_wh, :all          
+            Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+            Rails.logger.info(params["qty_in"].inspect)
+            Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+            find_wh = PiWhItem.find_by_moko_part(params[:moko_part].strip)
+            if not find_wh.blank?
+                find_wh.qty = find_wh.qty + params["qty_in"].to_i
+                #find_wh.save
+            else 
+                find_wh = PiWhItem.new
+                find_wh.moko_part = params[:moko_part].strip
+                find_wh.moko_des = params[:moko_des].strip
+                find_wh.qty = params[:qty_in]
+                #find_wh.save
+            end
+            if find_wh.save
+                item_data = PiBuyItem.find_by_id(params[:buy_id])
+                if not item_data.blank?
+                    add_buy_data = PiBuyHistoryItem.new
+                    add_buy_data.wh_qty_in = params[:qty_in]
+                    add_buy_data.p_item_id = item_data.id
+                    add_buy_data.erp_id = item_data.erp_id
+                    add_buy_data.erp_no = item_data.erp_no
+                    add_buy_data.user_do = item_data.user_do
+                    add_buy_data.user_do_change = item_data.user_do_change
+                    add_buy_data.check = item_data.check
+                    add_buy_data.pi_buy_info_id = params[:pi_buy_id]
+                    add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                    add_buy_data.quantity = item_data.quantity
+                    add_buy_data.qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                    add_buy_data.description = item_data.description
+                    add_buy_data.part_code = item_data.part_code
+                    add_buy_data.fengzhuang = item_data.fengzhuang
+                    add_buy_data.link = item_data.link
+                    add_buy_data.cost = item_data.cost
+                    add_buy_data.info = item_data.info
+                    add_buy_data.product_id = item_data.product_id
+                    add_buy_data.moko_part = item_data.moko_part
+                    add_buy_data.moko_des = item_data.moko_des
+                    add_buy_data.warn = item_data.warn
+                    add_buy_data.user_id = item_data.user_id
+                    add_buy_data.danger = item_data.danger
+                    add_buy_data.manual = item_data.manual
+                    add_buy_data.mark = item_data.mark
+                    add_buy_data.mpn = item_data.mpn
+                    add_buy_data.mpn_id = item_data.mpn_id
+                    add_buy_data.price = item_data.price
+                    add_buy_data.mf = item_data.mf
+                    add_buy_data.dn = item_data.dn
+                    add_buy_data.dn_id = item_data.dn_id
+                    add_buy_data.dn_long = item_data.dn_long
+                    add_buy_data.other = item_data.other
+                    add_buy_data.all_info = item_data.all_info
+                    add_buy_data.remark = item_data.remark
+                    add_buy_data.color = item_data.color
+                    add_buy_data.supplier_tag = item_data.supplier_tag
+                    add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                    add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                end
+            end
+            render "p_wh_in.js.erb"
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+    end
+
+    def wh_draft_list
+        @whlist = PiWhInfo.where(state: "new",wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def new_wh_order
+        if params[:wh_no] == "" or params[:wh_no] == nil
+            if PiWhInfo.find_by_sql('SELECT pi_wh_no FROM pi_wh_infos WHERE to_days(pi_wh_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = PiWhInfo.find_by_sql('SELECT pi_wh_no FROM pi_wh_infos WHERE to_days(pi_wh_infos.created_at) = to_days(NOW())').last.pi_wh_no.split("WH")[-1].to_i + 1
+            end
+            @wh_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "WH"+ pi_n.to_s
+
+            wh_info = PiWhInfo.new
+            wh_info.pi_wh_no = @wh_no
+            wh_info.wh_user = current_user.email
+            wh_info.state = "new"
+            wh_info.save
+            pi_wh_no = wh_info.pi_wh_no
+        else
+            pi_wh_no = params[:wh_no]
+        end
+        #@pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        redirect_to edit_wh_order_path(pi_wh_no: pi_wh_no) and return 
+    end
+
+    def edit_wh_order
+        @wh_info = PiWhInfo.find_by(pi_wh_no: params[:pi_wh_no])
+        @wh_item = PiItem.where(pi_wh_no: params[:pi_wh_no])
+    end
+
+
+
+
+
+
+
+
+
+
+
+
+
     def send_pi_buy
         up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         if not up_state.blank?
             up_state.state = "buy"
             up_state.save
         end
-        redirect_to :back
+        redirect_to pi_waiting_for_path()
     end
 
-    def pi_waiting_for_wh
+    def pi_waiting_for
         @w_wh = PiBuyInfo.where(state: "buy")
     end
 

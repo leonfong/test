@@ -327,6 +327,7 @@ function change_<%= item.id.to_s %>(){
 <!--
 <a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="<%= item.id %>" data-remark_id="<%= remark_item.id %>" data-remark="<%= remark_item.remark %>" > </a>
 -->
+<strong><%= remark_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></strong>
 <strong><%= remark_item.user_name %>: </strong>
 <%= remark_item.remark %>
 </small>

@@ -216,7 +216,7 @@
 <p style="padding: 0px;margin: 0px;" >
 <small >
 <% if not remark_item.info.blank? %>
-<a href="<%= remark_item.info.url %>" target="_blank">下载</a>
+<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>
 <% end %>
 <strong><%= remark_item.user_name %>: </strong>
 <%= remark_item.remark %>

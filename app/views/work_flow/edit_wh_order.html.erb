@@ -1,7 +1,7 @@
 <div class="container-fluid" >
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pi"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "wh"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
 
@@ -23,130 +23,67 @@
 
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading"><strong>供应商信息</strong> 
+                <div class="panel-heading"><strong>等待入库物料列表</strong> 
                 <% if can? :work_e, :all and @wh_info.state == "new"%>
-                    <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择供应商</button>
+                    <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择入库物料</button>
                 <% end %>
                 </div>
-                <div class="panel-body ">                     
+<!--
+                <div class="panel-body ">  
+
+
+                 
                     <div class="row ">
                         <div class="col-md-1">供应商代码：<ins id="dn_show" name="dn_show"><%= @wh_info.dn.to_s %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="dn" name="dn" readonly></div>
                         <div class="col-md-3">供应商：<ins id="dn_long_show" name="dn_long_show"><%= @wh_info.dn_long.to_s %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="dn_long" name="dn_long" readonly></div>                        
-                         
-                         
-                         
-                         
                     </div>
+
                 </div>
-            </div>
-            </div></div>
-
-
-<% if params[:c_id] and can? :work_e, :all and @wh_info.state == "new" %>
-            <div class="row "><div class="col-md-12">
-                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
-                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addother" >添加其它费用</button>
-            </div></div>
-<% end %>
-
-
-
-
-            <div class="row "><div class="col-md-12">
-            <div class="panel panel-info">                
+-->
                 <table class="table table-hover">
                     <thead>
                         <tr style="background-color: #eeeeee">
-                            <th width="40">操作</th>
-                            <th width="150">物料编码</th>
-                            <th >物料名称</th>
-                            <th width="70">数量</th>
-                            <th >英文描述</th>
-                            <th >中文描述</th>
-                            <th width="100">类别</th>
-                            <th width="100">总价(报价)</th>
-                            <th width="100">单价</th>
-                            <th width="50">附件</th>
-                            <th >备注</th>
-                            <th width="40">删除</th>
+                            <th width="250">供应商</th>
+                            <th width="120">采购单号</th>
+                            <th width="120">PI订单号</th>
+                            <th width="120">物料编码</th>
+                            <th >物料描述</th>
+                            <th width="100">入库数量</th>
+                            <th width="50">操作</th>
                         </tr>
                     </thead>
-                    <tbody id="biaoge">
-                        <% if @pi_item %>
-                        <% @pi_item.each do |pi_item| %>
+                    <tbody id="wh_wait">
+                        <% if @wh_item %>
+                        <% @wh_item.each do |wh_item| %>
                         <tr>
+                            <td><%= PiBuyInfo.find_by_id(wh_item.pi_buy_info_id).dn_long %></td>
+                            <td><%= PiBuyInfo.find_by_id(wh_item.pi_buy_info_id).pi_buy_no %></td>
+                            <td><%= wh_item.erp_no %></td>
+                            <td><%= wh_item.moko_part %></td>
+                            <td><%= wh_item.moko_des %></td>
+                            <td><%= wh_item.qty_in %></td>
                             <td>
-                                <% if @wh_info.state == "new" %>
-                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>" data-edit_qty="<%= pi_item.qty %>" data-edit_follow_remark="<%= pi_item.remark %>" data-edit_t_p="<%= pi_item.t_p %>" data-edit_price="<%= pi_item.price %>"></a>
-                                <% end %>
-                            </td>
-                            <td><%= pi_item.moko_code %></td>
-                            <td><%= pi_item.moko_des %></td>
-                            <td><%= pi_item.qty %></td>
-                            <td><%= pi_item.des_en %></td>
-                            <td><%= pi_item.des_cn %></td>
-                            <td><%= pi_item.p_type %></td>
-                            <td><%= pi_item.t_p %></td>
-                            <td><%= pi_item.price %></td>
-                            <td>
-                                <% if not pi_item.att.blank? %>                 
-                                    <a class="btn btn-info btn-xs" href="<%= pi_item.att %>" target="_blank">下载</a>
-                                <% end %>
-                            </td>
-                            <td><%= pi_item.remark %></td>
-                            <td>
-                                <% if @wh_info.state == "new" %>
-                                <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
-                                <% end %>
+                                <a class="glyphicon glyphicon-remove" href="/del_wh_item?del_wh_item_id=<%= wh_item.id %>" data-confirm="确定要删除?"></a>               
                             </td>
                         </tr>
                         <% end %>
                         <% end %> 
-
-                        <% if @wh_other_item %>
-                        <% @pi_other_item.each do |pi_item| %>
-                        <tr>
-                            <td>
-                                <% if @wh_info.state == "new" %>
-                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
-                                <% end %>
-                            </td>
-                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
-                            <td colSpan="4">备注: <%= pi_item.remark %></td>
-                            <td>金额: <%= pi_item.t_p %></td>
-                            <td colSpan="3"></td>
-                            <td>
-                                <% if @wh_info.state == "new" %>
-                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
-                                <% end %>
-                            </td>
-                        </tr>
-                        <% end %>
-                        <% end %>
-                        <tr>
-                            <td colSpan="7"></td>
-                            <td colSpan="5"><strong>总计: <%= @total_p %></strong></td>
-                        </tr>                     
+                     
                     </tbody>
-                </table>             
+                </table>   
             </div>
             </div></div>
 
 
+
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
-<!--                    
-                    <%= submit_tag "保存到草稿", class:"btn btn-success" %>
--->
                     <%= form_tag('/pi_draft', method:"post") do %>
                         <input type="text" class="form-control sr-only" id="p_wh_no" name="p_wh_no" value="<%= @wh_info.pi_wh_no %>">
                         
-                    <% if can? :work_e, :all and @wh_info.state == "new"%>
-                        <%= submit_tag "提交", class:"btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
-                    <% elsif can? :work_d, :all and @wh_info.bom_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定审核通过?"} %>
-                    <% elsif can? :work_finance, :all and @wh_info.finance_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定审核通过?"} %>
+                    <% if can? :work_wh, :all and @wh_info.state == "new"%>
+                        <%= submit_tag "提交审批", class:"btn btn-info" ,data:{confirm: "确定要提交给XXX审批?"} %>
+                    
                     <% end %>
                     <% end %>
                 </div>
@@ -160,24 +97,35 @@
 
 
 <div class="modal fade" id="find_c" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
-    <div class="modal-dialog modal-lg" role="document"><small>
+    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="find_cLabel"><strong>选择客户</strong></h4>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择入库物料</strong></h4>
             </div>
       
             <div class="modal-body">        
                 <div class="form-inline">
-                <%= form_tag('/find_c_pi', method:"get", class:"form-inline",remote: true) do %>
+                <%= form_tag('/find_w_wh', method:"get", class:"form-inline",remote: true) do %>
                     <div class="form-group sr-only">         
-                        <label for="c_order_no" class="control-label">询价单号:</label>
-                        <input type="text" class="form-control" id="c_pi_no" name="c_pi_no" value="<%= @wh_info.pi_wh_no %>">
+                        <label for="pi_wh_no" class="control-label">入库单号:</label>
+                        <input type="text" class="form-control" id="pi_wh_no" name="pi_wh_no" value="<%= @wh_info.pi_wh_no %>">
                     </div>
                     <div class="form-group ">
-                        <lable for="order" , class="control-label"><strong>客户: </strong></lable>
+                        <lable for="order" , class="control-label sr-only"><strong>供应商: </strong></lable>
                         <div class="input-group input-group-sm">              
-                            <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"客户代码/客户名/客户公司名/客户联系方式"%>               
+                            
+                            <input id="dn_code" autocomplete="off" name="dn_code" type="text" class="form-control input-sm" data-provide="typeahead" data-items="20" data-source="<%= raw @all_dn %>" placeholder="供应商简称" size="60" value="<%= params[:dn_code] %>">              
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <lable for="order" , class="control-label sr-only"><strong>采购单号: </strong></lable>
+                        <div class="input-group input-group-sm">              
+                            
+                            <input id="pi_buy_no"  name="pi_buy_no" type="text" class="form-control input-sm" placeholder="采购单号" size="60" value="<%= params[:pi_buy_no]%>">              
                             <div class="input-group-btn">
                                 <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                             </div>
@@ -185,8 +133,9 @@
                     </div>
                 <% end %>             
                 </div> 
-                <div class="form-group" id="table_code">
-
+                <br>
+                <div class="form-group" id="w_part">
+                
 
                 </div>
             </div>
@@ -200,215 +149,18 @@
 
 
 
-<div class="modal fade" id="addOrdert" tabindex="-1" role="dialog" aria-labelledby="addOrdertLabel">
-  <div class="modal-dialog modal-lg" role="document">
-  <small>
-      <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel"><strong>查找询价信息</strong></h4>
-      </div>
-      
-      <div class="modal-body">  
-<!--      
-          <div class="form-inline">
-             <%= form_tag('/find_order', method:"get", class:"form-inline",remote: true) do %>
-               <div class="form-group sr-only"> 
-                   <label for="pi" class="control-label">pi:</label>
-                   <input type="text" class="form-control" id="pi" name="pi" value="<%= @wh_info.pi_wh_no.to_s %>">
-               </div>
-               <div class="form-group ">
-                  <lable for="order" , class="control-label"><strong>客户: </strong></lable>
-                  <div class="input-group input-group-sm">              
-                    <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"客户代码/客户名/客户公司名/客户联系方式/Order NO."%>               
-                    <div class="input-group-btn">
-                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                    </div>
-                  </div>
-              </div>
-            <% end %>             
-          </div> 
--->
-          <div class="form-group" id="table_code">
-          <% if params[:c_id]%>
-              <br>
-              <small>
-              <table class="table table-bordered">
-              <thead>
-              <tr class="active">
-              <th  width="120">Order NO.</th>
-              <th  width="70">报价</th>
-              <th >备注</th>
-              <th>英文描述</th>
-              <th>中文描述</th>
-              <th width="45">操作</th>
-              <tr>
-              </thead>
-              <tbody>
-              <% PcbOrderItem.where(c_id: params[:c_id],state: "quotechked").each do |pi_item_f| %>
-                    <tr>
-                    <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
-                    <td><div><%= pi_item_f.price.to_s %></div></td>
-                    <td><div><%= pi_item_f.remark.to_s %></div></td>
-                    <td><div><%= pi_item_f.des_en.to_s %></div></td>
-                    <td><div><%= pi_item_f.des_cn.to_s %></div></td>
-                    <td><a rel="nofollow" data-method="get"  href="/find_order_check?id=<%= pi_item_f.pcb_order_id.to_s %>&pi=<%= params[:pi_no].to_s %>"><div>确认</div></a></td>
-                    </tr>
-              <% end %>
-              </tbody>
-              </table>
-              </small>
-          <% end %>
-          </div>
-      
-        </div>
-        </div></small>
-    </div>
-</div>
-
-
-
-<div class="modal fade" id="edititem" tabindex="-1" role="dialog" aria-labelledby="edititemLabel">
-<div class="modal-dialog modal-lg"><small>
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edititemLabel"><strong>修改PI物料</strong></h4>
-        </div>
-        
-        <div class="modal-body">  
-            <%= form_tag({action: :edit_pi_item},method:"post",multipart:"ture",id: "order_form") do %>   
-            <div class="form-group sr-only">         
-                <label for="c_order_id" class="control-label">itemid:</label>
-                <input type="text" class="form-control" id="edit_c_item_id" name="edit_c_item_id">
-            </div>   
-            <div class="form-group">         
-              <label for="p_name" class="control-label">物料代码:</label>
-              <input type="text" class="form-control" id="edit_moko_code" name="edit_moko_code" <% if can? :work_e, :all %>readonly<% end %>>
-            </div> 
-            <div class="form-group">         
-              <label for="p_name" class="control-label">物料名称:</label>
-              <input type="text" class="form-control" id="edit_moko_des" name="edit_moko_des" <% if can? :work_e, :all %>readonly<% end %>>
-            </div> 
-            <div class="form-group">         
-              <label for="p_name" class="control-label">类别:</label>
-              <input type="text" class="form-control" id="edit_p_type" name="edit_p_type" <% if can? :work_e, :all %>readonly<% end %>>           
-            </div> 
-            <div class="form-group">
-              <label for="edit_t_p" class="control-label">报价(美金):</label>
-              <input type="text" class="form-control" id="edit_t_p" name="edit_t_p" >
-            </div>
-            <div class="form-group">
-              <label for="edit_price" class="control-label">单价(美金):</label>
-              <input type="text" class="form-control" id="edit_price" name="edit_price" >
-            </div>
-            <div class="form-group">         
-              <label for="des_en" class="control-label">英文描述:</label>
-              <input type="text" class="form-control" id="edit_des_en" name="edit_des_en">
-            </div> 
-            <div class="form-group">         
-              <label for="des_cn" class="control-label">中文描述:</label>
-              <input type="text" class="form-control" id="edit_des_cn" name="edit_des_cn">
-            </div> 
-            <div class="form-group">
-              <label for="qty" class="control-label">数量:</label>
-              <input type="number" class="form-control" id="edit_qty" name="edit_qty">
-            </div> 
-            <div class="form-group">
-              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
-              <textarea  class="form-control" id="edit_follow_remark" name="edit_follow_remark"></textarea>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_edit()">
-        </div>
-        <% end %>
-    </div></small>
-  </div>
-</div>
 
 
 
 
 
 
-<div class="modal fade" id="addother" tabindex="-1" role="dialog" aria-labelledby="addotherLabel">
-<div class="modal-dialog modal-lg"><small>
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="addotherLabel"><strong>添加其他费用</strong></h4>
-        </div>
-        
-        <div class="modal-body">  
-            <%= form_tag({action: :add_pi_other_item},method:"post") do %>   
-            <div class="form-group sr-only">         
-                <label for="add_c_id_other" class="control-label">itemid:</label>
-                <input type="text" class="form-control" id="add_c_id_other" name="add_c_id_other" value="<%= params[:c_id] %>">
-            </div>   
-            <div class="form-group sr-only">         
-                <label for="add_pi_no_other" class="control-label">itemid:</label>
-                <input type="text" class="form-control" id="add_pi_no_other" name="add_pi_no_other" value="<%= params[:pi_no] %>">
-            </div>   
-            <div class="form-group">         
-              <label for="add_type_other" class="control-label">费用种类:</label>
-              <input type="text" class="form-control" id="add_type_other" name="add_type_other" >
-            </div> 
-            <div class="form-group">         
-              <label for="add_remark_other" class="control-label">备注:</label>
-              <textarea  class="form-control" id="add_remark_other" name="add_remark_other"></textarea>
-            </div> 
-            <div class="form-group">
-              <label for="add_t_p_other" class="control-label">报价(美金):</label>
-              <input type="text" class="form-control" id="add_t_p_other" name="add_t_p_other" >
-            </div>         
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <input type="submit" class="btn btn-primary" value="Submit" >
-        </div>
-        <% end %>
-    </div></small>
-  </div>
-</div>
 
-<div class="modal fade" id="editotheritem" tabindex="-1" role="dialog" aria-labelledby="editotheritemLabel">
-<div class="modal-dialog modal-lg"><small>
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="editotheritemLabel"><strong>修改其他费用</strong></h4>
-        </div>
-        
-        <div class="modal-body">  
-            <%= form_tag({action: :edit_pi_other_item},method:"post") do %>   
-            <div class="form-group sr-only">         
-                <label for="add_item_id_other" class="control-label">itemid:</label>
-                <input type="text" class="form-control" id="edit_item_id_other" name="edit_item_id_other" >
-            </div>    
-            <div class="form-group">         
-              <label for="add_p_type_other" class="control-label">费用种类:</label>
-              <input type="text" class="form-control" id="edit_p_type_other" name="edit_p_type_other" >
-            </div> 
-            <div class="form-group">         
-              <label for="add_remark_other" class="control-label">备注:</label>
-              <textarea  class="form-control" id="edit_remark_other" name="edit_remark_other"></textarea>
-            </div> 
-            <div class="form-group">
-              <label for="add_t_p_other" class="control-label">报价(美金):</label>
-              <input type="text" class="form-control" id="edit_t_p_other" name="edit_t_p_other" >
-            </div>         
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <input type="submit" class="btn btn-primary" value="Submit" >
-        </div>
-        <% end %>
-    </div></small>
-  </div>
-</div>
+
+
+
+
+
 
 
 
@@ -419,56 +171,7 @@
 </div>
 
 <script>
-$('#edititem').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var edit_c_item_id = button.data('edit_c_item_id');
-  var edit_moko_code = button.data('edit_moko_code');
-  var edit_moko_des = button.data('edit_moko_des');
-  var edit_p_type = button.data('edit_p_type');
-  var edit_des_en = button.data('edit_des_en');
-  var edit_des_cn = button.data('edit_des_cn');  
-  var edit_qty = button.data('edit_qty'); 
-  var edit_t_p = button.data('edit_t_p'); 
-  var edit_price = button.data('edit_price'); 
-  var edit_follow_remark = button.data('edit_follow_remark');                       
-  var modal = $(this);
-  modal.find($("#edit_c_item_id")).val(edit_c_item_id);
-  modal.find($("#edit_moko_code")).val(edit_moko_code);
-  modal.find($("#edit_moko_des")).val(edit_moko_des);
-  modal.find($("#edit_p_type")).val(edit_p_type);
-  modal.find($("#edit_des_en")).val(edit_des_en);
-  modal.find($("#edit_des_cn")).val(edit_des_cn);
-  modal.find($("#edit_qty")).val(edit_qty);
-  modal.find($("#edit_t_p")).val(edit_t_p);
-  modal.find($("#edit_price")).val(edit_price);
-  modal.find($("#edit_follow_remark")).html(edit_follow_remark);
-})
 
-$('#editotheritem').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var edit_item_id_other = button.data('edit_item_id_other');
-  var edit_p_type_other = button.data('edit_p_type_other'); 
-  var edit_t_p_other = button.data('edit_t_p_other');  
-  var edit_remark_other = button.data('edit_remark_other');                       
-  var modal = $(this);
-  modal.find($("#edit_item_id_other")).val(edit_item_id_other);
-  modal.find($("#edit_p_type_other")).val(edit_p_type_other);
-  modal.find($("#edit_t_p_other")).val(edit_t_p_other);
-  modal.find($("#edit_remark_other")).html(edit_remark_other);
-})
-
-
-
-
-
-
-
-
-$(".menu-first").click(function(){
-  $('#userMeun').collapse('hide');
-  $('#articleMenu').collapse('hide');
-});
-   
 </script>
 
 

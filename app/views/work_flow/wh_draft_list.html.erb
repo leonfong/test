@@ -27,7 +27,7 @@
   <tbody><small>
     <% @whlist.each do |wh| %>   
       <tr >
-        <td><%= link_to wh.pi_wh_no, edit_wh_order_path(pi_wh_no: wh.pi_wh_no) %></td>
+        <td><%= link_to wh.pi_wh_no, edit_wh_order_path(wh_no: wh.pi_wh_no) %></td>
         <td><%= User.find_by(email: wh.wh_user).full_name %></td>
         <td><%= wh.dn %></td>
         <td><%= wh.dn_long %></td>
@@ -37,7 +37,7 @@
 <% end %>
 <!--
         <% if can? :work_pcb_business, :all and can? :work_wh, :all %>
-            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
+            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= wh.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
         <% else %>
             <td><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
         <% end %>

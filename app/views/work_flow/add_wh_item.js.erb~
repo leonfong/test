@@ -1,0 +1,1 @@
+$("#wh_item_<%= params[:pi_buy_item_id].to_s %>").attr("class","sr-only");

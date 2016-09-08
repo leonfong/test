@@ -132,16 +132,110 @@ before_filter :authenticate_user!
     end
 
     def edit_wh_order
-        @wh_info = PiWhInfo.find_by(pi_wh_no: params[:pi_wh_no])
-        @wh_item = PiItem.where(pi_wh_no: params[:pi_wh_no])
+        @wh_info = PiWhInfo.find_by(pi_wh_no: params[:wh_no])
+        @wh_item = PiWhItem.where(pi_wh_info_no: params[:wh_no])
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+        end
+        @all_dn += "&quot;]"
     end
 
+    def find_w_wh
+        if params[:dn_code] != ""
+            where_wh = "dn = '#{params[:dn_code].strip}' AND state = 'buy'"
+            if params[:pi_buy_no] != ""
+                where_wh += " AND pi_buy_no = '#{params[:pi_buy_no].strip}'"
+            end
+        else
+            if params[:pi_buy_no] != ""
+                where_wh = "pi_buy_no = '#{params[:pi_buy_no].strip}'  AND state = 'buy'"
+            end
+        end
+        @w_part = ""
+        if params[:dn_code] != "" or params[:pi_buy_no] != ""
+            @w_part += '<small>'
+            @w_part += '<table class="table table-bordered">'
+            @w_part += '<thead>'
+            @w_part += '<tr class="active">'
+            @w_part += '<th width="250">供应商</th>'
+            @w_part += '<th width="120">采购单号</th>'
+            @w_part += '<th width="120">PI订单号</th>'
+            @w_part += '<th width="120">物料编码</th>'
+            @w_part += '<th >物料描述</th>'
+            @w_part += '<th width="150">操作</th>'
+            @w_part += '<tr>'
+            @w_part += '</thead>'
+            @w_part += '<tbody>'
+            @w_wh_order = PiBuyInfo.where("#{where_wh}")
+            if not @w_wh_order.blank?
+                @w_wh_order.each do |wh_order|
+                    wh_order_item = PiBuyItem.where(pi_buy_info_id: wh_order.id)
+                    if not wh_order_item.blank?
+                        wh_order_item.each do |wh_item|                       
+                            @w_part += '<tr id="wh_item_'+wh_item.id.to_s+'">'
+                            @w_part += '<td>'+wh_order.dn_long.to_s+'('+wh_order.dn.to_s+')</td>'
+                            @w_part += '<td>'+PiBuyInfo.find_by_id(wh_item.pi_buy_info_id).pi_buy_no.to_s+'</td>'
+                            @w_part += '<td>'+wh_item.erp_no.to_s+'</td>'
+                            @w_part += '<td>'+wh_item.moko_part.to_s+'</td>'
+                            @w_part += '<td>'+wh_item.moko_des.to_s+'</td>'
+                            #@w_part += '<td>'+(wh_item.quantity*ProcurementBom.find(wh_item.procurement_bom_id).qty).to_s+'</td>'
+                            @w_part += '<td><div class="input-group input-group-sm">'
+                            @w_part += '<form class="form-inline" action="/add_wh_item" accept-charset="UTF-8" data-remote="true" method="post">'
+                            @w_part += '<input id="wh_order_no"  name="wh_order_no" type="text"  class="sr-only"  value="'+params[:pi_wh_no].to_s+'">'
+                            @w_part += '<input id="pi_buy_item_id"  name="pi_buy_item_id" type="text"  class="sr-only"  value="'+wh_item.id.to_s+'">'
+                            @w_part += '<input id="wh_qty_in"  name="wh_qty_in" type="text" size="10" class="form-control input-sm"  value="'+(wh_item.quantity*ProcurementBom.find(wh_item.procurement_bom_id).qty).to_s+'">'
+                            @w_part += '<span class="input-group-btn "><button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button></span>'
+                            @w_part += '</form>'
+                            @w_part +='</div></td>'
+                            @w_part += '</tr>'
+                        end
+                    end
+                end
+            end
+            @w_part += '<tbody>'
+            @w_part += '<table>'
+            @w_part += '<small>'
+        end
+    end
 
+    def add_wh_item
+        pi_buy_item = PiBuyItem.find_by_id(params[:pi_buy_item_id])
+        wh_item = PiWhItem.new
+        wh_item.pi_wh_info_no = params[:wh_order_no]
+        wh_item.pi_buy_item_id = params[:pi_buy_item_id]
+        wh_item.moko_part = pi_buy_item.moko_part
+        wh_item.moko_des = pi_buy_item.moko_des
+        wh_item.qty_in = params[:wh_qty_in]
+        wh_item.p_item_id = pi_buy_item.p_item_id
+        wh_item.erp_id = pi_buy_item.erp_id
+        wh_item.erp_no = pi_buy_item.erp_no
+        wh_item.pi_buy_info_id = pi_buy_item.pi_buy_info_id
+        wh_item.procurement_bom_id = pi_buy_item.procurement_bom_id
+        wh_item.save
+        @wh_wait = ''
+        wh_item_all = PiWhItem.where(pi_wh_info_no: params[:wh_order_no])
+        if not wh_item_all.blank?
+            wh_item_all.each do |item|
+                @wh_wait += '<tr>'
+                @wh_wait += '<td>'+PiBuyInfo.find_by_id(item.pi_buy_info_id).dn_long.to_s+'</td>'
+                @wh_wait += '<td>'+PiBuyInfo.find_by_id(item.pi_buy_info_id).pi_buy_no.to_s+'</td>'
+                @wh_wait += '<td>'+item.erp_no.to_s+'</td>'
+                @wh_wait += '<td>'+item.moko_part.to_s+'</td>'
+                @wh_wait += '<td>'+item.moko_des.to_s+'</td>'
+                @wh_wait += '<td>'+item.qty_in.to_s+'</td>'
+                @wh_wait += '<td><a class="glyphicon glyphicon-remove" href="/del_wh_item?del_wh_item_id='+item.id.to_s+'" data-confirm="确定要删除?"></a></td>'
+                @wh_wait += '</tr>'
+            end
+        end
+    end
 
-
-
-
-
+    def del_wh_item
+        del_wh_item = PiWhItem.find_by_id(params[:del_wh_item_id])
+        del_wh_item.destroy
+        redirect_to :back
+    end
 
 
 

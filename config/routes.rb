@@ -110,6 +110,9 @@ Rails.application.routes.draw do
   match '/wh_draft_list', to: 'work_flow#wh_draft_list', via: 'get'
   match '/edit_wh_order', to: 'work_flow#edit_wh_order', via: 'get'
   match '/new_wh_order', to: 'work_flow#new_wh_order', via: 'get'
+  match '/find_w_wh', to: 'work_flow#find_w_wh', via: 'get'
+  match '/add_wh_item', to: 'work_flow#add_wh_item', via: 'post'
+  match '/del_wh_item', to: 'work_flow#del_wh_item', via: 'get'
 
 
 

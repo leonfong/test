@@ -85,7 +85,7 @@
                                             <input type="text" class="form-control " id="<%= part.id.to_s + 'p' %>"  name="<%= part.id.to_s + 'p' %>" size="10" placeholder="单价">                      
                                         </div>
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control " id="dn_remark" name="dn_remark" size="40" placeholder="备注">                      
+                                            <input type="text" class="form-control " id="p_remark" name="p_remark" size="40" placeholder="备注">                      
 
                                             <span class="input-group-btn ">
                                                 <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>

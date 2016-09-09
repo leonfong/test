@@ -242,11 +242,7 @@
                         <% @pi_buy_find.each do |buy| %>
                                 <tr>
                                 <td><input type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
-                                <% if Product.find_by_id(buy.product_id).blank?%>
-                                <td></td>
-                                <% else %>
-                                <td><%= Product.find_by_id(buy.product_id).description.to_s %></td>
-                                <% end %>
+                                <td><%= buy.moko_des.to_s %></td>
                                 <td><%= buy.quantity.to_s %></td>
                                 <td><%= buy.cost.to_s %></td>
                                 <% if not PDn.find_by_id(buy.dn_id).blank? %>  

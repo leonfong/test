@@ -277,7 +277,7 @@ function postform<%= work.id.to_s %>() {
                    <div class="row" style="margin: 0px;padding: 0px;">
                    <div class="col-md-6" style="margin: 0px;">
                        <div class="panel panel-info" style="background-color: #d9edf7;">
-                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw fed.feedback %></strong></p><%= link_to "处理",  {action: "show", id: work}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %></div>   
+                       <div style="word-break:break-all;white-space:normal;"><p style="word-break:break-all;white-space:normal;"><strong><%= raw fed.feedback %></strong></p><%= link_to "处理",  {action: "show", id: fed}, class: "btn btn-primary btn-xs", data: { no_turbolink: true } %></div>   
                        
                              
                    </div>

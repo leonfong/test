@@ -575,7 +575,7 @@ before_filter :authenticate_user!
     end
 
     def edit_pi_buy  
-        @pi_buy_find = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no,pi_items.moko_des, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL")   
+        @pi_buy_find = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL")   
         @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
         @all_dn = "[&quot;"
@@ -1284,7 +1284,7 @@ before_filter :authenticate_user!
                 if can? :work_e, :all
                     @pcblist = PcbOrder.where("state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where("state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where("state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end
         end

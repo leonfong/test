@@ -390,7 +390,11 @@ function postform<%= work.id.to_s %>() {
                                         <tbody >
                                             <% Work.where(order_no: work.order_no).each do |his| %>
                                             <tr>
+                                                <% if not User.where(email: his.user_name).blank? %>
                                                 <td><%= User.where(email: his.user_name).first.full_name %></td>
+                                                <% else %>
+                                                <td><%= his.user_name %></td>
+                                                <% end %>
                                                 <td><%= his.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
                                                 <td><%= his.order_date %></td>
                                                 <td><%= his.order_no %></td>

@@ -16,7 +16,7 @@
                   <lable for="order" , class="sr-only">Qrder : </lable>
                   <div class="input-group input-group-sm">    
                                         
-                      <%= text_field_tag :moko_part, params[:moko_part], class:"form-control input-lg", size:"100", placeholder:"MOKO 代码"%>
+                      <%= text_field_tag :moko_part, params[:moko_part], class:"form-control input-lg", size:"100", placeholder:"MOKO 描述"%>
              
                   <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
@@ -44,12 +44,14 @@
     </tr>
   </thead>
   <tbody>
+<% @find_in_wh.each do |wh| %>
       <tr >
-        <td><%= @find_in_wh.moko_part %></td>
-        <td><%= @find_in_wh.moko_des %></td>
-        <td><%= @find_in_wh.qty %></td>
+        <td><%= wh.moko_part %></td>
+        <td><%= wh.moko_des %></td>
+        <td><%= wh.qty %></td>
         <td></td>
       </tr>
+<% end %>
   </tbody>
 </table>
 <% end %>

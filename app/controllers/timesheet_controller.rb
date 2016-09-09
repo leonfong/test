@@ -71,7 +71,11 @@ before_filter :authenticate_user!
             if not params[:dip_time].blank?
                 work_up.dip_time = work_up.dip_time + params[:dip_time].to_f
                 total_time_i = total_time_i.to_f + params[:dip_time].to_f
-            end            
+            end   
+            if not params[:ceshi_time].blank?
+                work_up.ceshi_time = work_up.ceshi_time + params[:ceshi_time].to_f
+                total_time_i = total_time_i.to_f + params[:ceshi_time].to_f
+            end         
             work_up.total_time = work_up.total_time.to_f + total_time_i.to_f            
             if work_up.save
                 timeup = Timesheet.new
@@ -91,7 +95,10 @@ before_filter :authenticate_user!
                 end
                 if not params[:dip_time].blank?
                     timeup.dip_time = params[:dip_time]
-                end               
+                end 
+                if not params[:ceshi_time].blank?
+                    timeup.ceshi_time = params[:ceshi_time]
+                end              
                 if timeup.save
                     redirect_to timesheet_path(:order_no => timeup.order_no), :flash => {:success => timeup.order_no+"--------工时录入成功！"}                  
                 else

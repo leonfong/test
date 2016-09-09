@@ -51,7 +51,7 @@
               <input type="text" class="form-control" id="moko_des" name="moko_des" value="<%= buy.moko_des.to_s %>">
           </div>
           <div class="input-group input-group-sm">         
-              <input type="text" class="form-control " id="<%= buy.id.to_s + 'qty' %>"  name="qty_in" %>" size="10" placeholder="数量">            
+              <input type="text" class="form-control " id="<%= buy.id.to_s + 'qty' %>"  name="qty_in" size="10" placeholder="数量">            
               
           </div>
           <div class="input-group input-group-sm">         

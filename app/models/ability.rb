@@ -52,6 +52,7 @@ class Ability
       can :work_suppliers, :all
       can :work_send_to_sell, :all
       can :work_wh, :all
+      can :work_h, :all
     elsif user.has_role?(:manager)
       can :manage, :all
     elsif user.has_role?(:work_one)

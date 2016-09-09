@@ -12,11 +12,13 @@ before_filter :authenticate_user!
 
     def wh_query
         if not params[:moko_part].blank?
-            @find_in_wh = PiWhItem.find_by_moko_part(params[:moko_part].strip)
+            #@find_in_wh = WarehouseInfo.find_by_moko_part(params[:moko_part].strip)
+            @find_in_wh = WarehouseInfo.where("moko_des LIKE '%#{params[:moko_part].strip}%'")
+=begin
             if @find_in_wh.blank?
                 find_in_product = Product.find_by_name(params[:moko_part].strip)
                 if not find_in_product.blank?
-                    @find_in_wh = PiWhItem.new
+                    @find_in_wh = WarehouseInfo.new
                     @find_in_wh.moko_part = find_in_product.name
                     @find_in_wh.moko_des = find_in_product.description
                     @find_in_wh.qty = 0
@@ -31,6 +33,7 @@ before_filter :authenticate_user!
                 #redirect_to :back and return
                 render "wh_query.html.erb" and return
             end
+=end
         end
     end
   
@@ -106,7 +109,8 @@ before_filter :authenticate_user!
     end
 
     def wh_draft_list
-        @whlist = PiWhInfo.where(state: "new",wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        #@whlist = PiWhInfo.where(state: "new",wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        @whlist = PiWhInfo.where(wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
     end
 
     def new_wh_order
@@ -132,19 +136,19 @@ before_filter :authenticate_user!
     end
 
     def edit_wh_order
-        @wh_info = PiWhInfo.find_by(pi_wh_no: params[:wh_no])
-        @wh_item = PiWhItem.where(pi_wh_info_no: params[:wh_no])
+        @wh_info = PiWhInfo.find_by(pi_wh_no: params[:pi_wh_no])
+        @wh_item = PiWhItem.where(pi_wh_info_no: params[:pi_wh_no])
         @all_dn = "[&quot;"
-        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
         all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+            @all_dn += "&quot;,&quot;" + dn.dn_long.to_s
         end
         @all_dn += "&quot;]"
     end
 
     def find_w_wh
         if params[:dn_code] != ""
-            where_wh = "dn = '#{params[:dn_code].strip}' AND state = 'buy'"
+            where_wh = "dn_long = '#{params[:dn_code].strip}' AND state = 'buy'"
             if params[:pi_buy_no] != ""
                 where_wh += " AND pi_buy_no = '#{params[:pi_buy_no].strip}'"
             end
@@ -237,10 +241,96 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def wh_draft
+        wh_order = PiWhInfo.find_by_pi_wh_no(params[:wh_no])
+        if not wh_order.blank?
+            if wh_order.state == "new" or wh_order.state == "fail"
+                wh_order.state = "checking"
+                wh_order.save
+            elsif wh_order.state == "checking"
+                if params[:commit] == "PASS"
+                    wh_order.state = "checked"
+                elsif params[:commit] == "FAIL"
+                    wh_order.state = "fail"
+                end
+                wh_order.save
+            elsif wh_order.state == "checked"
+                wh_in_data = PiWhItem.where(pi_wh_info_no: params[:wh_no])
+                if not wh_in_data.blank?
+                    wh_in_data.each do |wh_in|
+                        wh_data = WarehouseInfo.find_by_moko_part(wh_in.moko_part)
+                        if not wh_data.blank?
+                            wh_data.qty = wh_data.qty + wh_in.qty_in
+                            #wh_data.save
+                        else   
+                            wh_data = WarehouseInfo.new
+                            wh_data.moko_part = wh_in.moko_part
+                            wh_data.moko_des = wh_in.moko_des
+                            wh_data.qty = wh_in.qty_in                          
+                            #wh_data.save
+                        end
+                        if wh_data.save
+                            item_data = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
+                            if not item_data.blank?
+                                add_history_data = WhInHistoryItem.new
+                                add_history_data.wh_qty_in = wh_in.qty_in
+                                add_history_data.p_item_id = item_data.id
+                                add_history_data.erp_id = item_data.erp_id
+                                add_history_data.erp_no = item_data.erp_no
+                                add_history_data.user_do = item_data.user_do
+                                add_history_data.user_do_change = item_data.user_do_change
+                                add_history_data.check = item_data.check
+                                add_history_data.pi_buy_info_id = wh_in.pi_buy_info_id
+                                add_history_data.procurement_bom_id = item_data.procurement_bom_id
+                                add_history_data.quantity = item_data.quantity
+                                add_history_data.qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                                add_history_data.description = item_data.description
+                                add_history_data.part_code = item_data.part_code
+                                add_history_data.fengzhuang = item_data.fengzhuang
+                                add_history_data.link = item_data.link
+                                add_history_data.cost = item_data.cost
+                                add_history_data.info = item_data.info
+                                add_history_data.product_id = item_data.product_id
+                                add_history_data.moko_part = item_data.moko_part
+                                add_history_data.moko_des = item_data.moko_des
+                                add_history_data.warn = item_data.warn
+                                add_history_data.user_id = item_data.user_id
+                                add_history_data.danger = item_data.danger
+                                add_history_data.manual = item_data.manual
+                                add_history_data.mark = item_data.mark
+                                add_history_data.mpn = item_data.mpn
+                                add_history_data.mpn_id = item_data.mpn_id
+                                add_history_data.price = item_data.price
+                                add_history_data.mf = item_data.mf
+                                add_history_data.dn = item_data.dn
+                                add_history_data.dn_id = item_data.dn_id
+                                add_history_data.dn_long = item_data.dn_long
+                                add_history_data.other = item_data.other
+                                add_history_data.all_info = item_data.all_info
+                                add_history_data.remark = item_data.remark
+                                add_history_data.color = item_data.color
+                                add_history_data.supplier_tag = item_data.supplier_tag
+                                add_history_data.supplier_out_tag = item_data.supplier_out_tag
+                                add_history_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                                add_history_data.save
+                            end
+                        end
+                    end
+                end
+                wh_order.state = "done"
+                wh_order.save
+            end            
+        end
+        redirect_to wh_draft_list_path()
+    end
 
-
-
-
+    def del_wh
+        wh_order = PiWhInfo.find(params[:wh_id])
+        if can? :work_wh, :all
+            wh_order.destroy
+        end
+        redirect_to :back
+    end
 
     def send_pi_buy
         up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])

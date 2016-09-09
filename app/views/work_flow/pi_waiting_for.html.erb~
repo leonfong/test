@@ -13,8 +13,10 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="130">采购单号</th>
-      <th width="130">Created Date</th>
-      <th width="80">采购工程师</th>
+      <th width="130">供应商简称</th>
+      <th >供应商全称</th>
+      <th width="190">Created Date</th>
+      <th width="100">采购工程师</th>
     </tr>
   </thead>
   <tbody><small>
@@ -23,6 +25,8 @@
   <% @w_wh.each do |buy_list| %>
   <tr>
       <td><%= link_to buy_list.pi_buy_no, pi_buy_item_path(pi_buy_info_id: buy_list.id) %></td>
+      <td><%= buy_list.dn %></td>
+      <td><%= buy_list.dn_long %></td>
       <td><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy_list.user %></td>
   </tr>
@@ -151,6 +155,7 @@ function postform() {
 $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');
   $('#articleMenu').collapse('hide');
+  $('#whMenu').collapse('hide');
 });
   
 </script>

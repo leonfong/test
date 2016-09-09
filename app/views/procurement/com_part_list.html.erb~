@@ -8,6 +8,7 @@
 <% if @part %>
 <div>
 <% if can? :work_g_all, :all %>
+<!--
            <span  style="color:#999;">
                <%= form_tag('/supplier_offer', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
@@ -15,7 +16,7 @@
                   <lable for="order" , class="sr-only">Qrder : </lable>
                   <div class="input-group input-group-sm">    
 
-                      <%= text_field_tag :key_mpn, params[:key_mpn], class:"form-control input-lg", size:"30", placeholder:"MPN/描述"%>             
+                      <%= text_field_tag :key_mpn, params[:key_mpn], class:"form-control input-lg", size:"30", placeholder:"MPN/描述"%>  
                   <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
@@ -26,6 +27,7 @@
             </div>
             <% end %>                       
             </span>  
+-->
 <% end %>
 
 </div>

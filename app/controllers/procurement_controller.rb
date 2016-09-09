@@ -9,6 +9,32 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def com_part_list
+        @part = PcbOrderItem.where("p_type = 'COMPONENTS' AND state IS NULL").paginate(:page => params[:page], :per_page => 15)
+    end
+
+    def edit_com_price
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(params["#{params[:itemid]}p"].inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        @itemid = params[:itemid]
+        @pitem = PcbOrderItem.find(params[:itemid])
+        if params["#{params[:itemid]}p"] != "" 
+            @pitem.price = params["#{params[:itemid]}p"]         
+            @pitem.p_remark = params[:p_remark]
+            @pitem.state = "quotechked"
+            @pitem.save
+            check_state = PcbOrderItem.where(pcb_order_no: @pitem.pcb_order_no,state: nil)
+            if check_state.blank?
+                set_erp_order_state = PcbOrder.find_by_order_no(@pitem.pcb_order_no)
+                set_erp_order_state.state = "quotechk"
+                set_erp_order_state.save
+            end
+        end
+        
+        #render "p_edit_supplier_dn.js.erb"
+    end
+
     def p_add_bom
         bom_item = PItem.new
         bom_item.procurement_bom_id = params[:p_id]
@@ -826,6 +852,14 @@ before_filter :authenticate_user!
                     upstart.save
                 end
             end
+            if not p_bom.erp_no.blank?
+                check_state = PcbOrderItem.where(pcb_order_no: p_bom.erp_no,state: nil)
+                if check_state.blank?
+                    set_erp_order_state = PcbOrder.find_by_order_no(p_bom.erp_no)
+                    set_erp_order_state.state = "quotechk"
+                    set_erp_order_state.save
+                end
+            end
         end
         redirect_to :back
     end
@@ -919,7 +953,11 @@ before_filter :authenticate_user!
         check = ProcurementBom.find(params[:bom_id])
         check.bom_team_ck = "do"
         check.bom_eng = current_user.full_name
-        check.save
+        if check.save
+            q_order = PcbOrder.find_by_order_no(check.erp_no)
+            q_order.update(state: "quote") 
+            #q_order.save
+        end
         redirect_to p_bomlist_path() 
     end
 

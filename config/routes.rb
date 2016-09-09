@@ -180,6 +180,8 @@ Rails.application.routes.draw do
   match '/other_baojia_up', to: 'procurement#other_baojia_up', via: 'post'
   match '/moko_part_data', to: 'procurement#moko_part_data', via: 'get'
   match '/add_dn', to: 'procurement#add_dn', via: 'post'
+  match '/com_part_list', to: 'procurement#com_part_list', via: 'get'
+  match '/edit_com_price', to: 'procurement#edit_com_price', via: 'post'
 
 
 

@@ -1,0 +1,2 @@
+document.getElementById('<%= @itemid.to_s + "price" %>').innerHTML='<%= @dn.price.to_s %>';
+document.getElementById('<%= @itemid.to_s + "premark" %>').innerHTML='<%= @dn.p_remark.to_s %>';

@@ -14,7 +14,7 @@ class Ability
     alias_action :update, :to => :work_e          #业务8  
     alias_action :update, :to => :work_f          #跟单9
     alias_action :update, :to => :work_g          #采购10
-    alias_action :update, :to => :work_baojia          #报价
+    alias_action :update, :to => :work_baojia     #报价
     alias_action :update, :to => :work_g_all      #采购主管16
     alias_action :update, :to => :work_g_a        #采购1 17
     alias_action :update, :to => :work_g_b        #采购2 18

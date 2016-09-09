@@ -1,0 +1,113 @@
+<small>
+<div class="container-fluid" >
+<div class="row" style="padding: 0px;">
+  <h2><p class="text-primary">单独采购报价</p></h2><hr>
+  <%= render 'layouts/flash_messages' %>
+</div>
+
+<% if @part %>
+<div>
+<% if can? :work_g_all, :all %>
+           <span  style="color:#999;">
+               <%= form_tag('/supplier_offer', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+
+                      <%= text_field_tag :key_mpn, params[:key_mpn], class:"form-control input-lg", size:"30", placeholder:"MPN/描述"%>             
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                  
+                </div>
+<a type="button" class="btn btn-success btn-sm" href="/supplier_offer?complete=true">已经报价的物料</a>
+<a type="button" class="btn btn-danger btn-sm" href="/supplier_offer?undone=true">等待报价的物料</a>
+            </div>
+            <% end %>                       
+            </span>  
+<% end %>
+
+</div>
+<%= will_paginate(@part) %>
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >   
+                  <table class="table table-hover table-bordered" > 
+                      <thead >
+                            <tr style="background-color: #eeeeee"> 
+                                <th width="190">英文描述</th>
+                                <th width="200">中文描述</th>
+                                <th width="190">MOKO编码</th>
+                                <th width="200">MOKO描述</th>
+                                <th width="80">数量</th>  
+                                <th width="70">单价￥</th>
+                                <th >业务备注</th>
+                                <th >采购备注</th>
+                                <th width="420">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<% @part.each do |part| %>
+                            <tr >
+                                <td> 
+                                    <%= part.des_en %>
+                                </td>
+                                <td> 
+                                    <%= part.des_cn %>
+                                </td>
+                                <td> 
+                                    <%= part.moko_code %>
+                                </td>
+                                <td> 
+                                    <%= part.moko_des %>
+                                </td>
+                                <td>
+                                    <%= part.qty %>
+                                </td>
+                                <td id="<%= part.id.to_s %>price">
+                                    <%= part.price %>
+                                </td>
+                                <td id="<%= part.id.to_s %>remark">
+                                    <%= part.remark %>
+                                </td>
+                                <td id="<%= part.id.to_s %>premark">
+                                    <%= part.p_remark %>
+                                </td>
+                                <td>
+                                    <small>
+                                    <%= form_tag({action: :edit_com_price},method:"post",remote:"ture",class:"form-inline") do %>
+                                        <div class="form-group sr-only">
+                                            <label for="dn_itemid" class="control-label">itemid:</label>
+                                            <input type="text" class="form-control" id="itemid" name="itemid" value="<%= part.id.to_s %>">
+                                        </div>
+
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control " id="<%= part.id.to_s + 'p' %>"  name="<%= part.id.to_s + 'p' %>" size="10" placeholder="单价">                      
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control " id="dn_remark" name="dn_remark" size="40" placeholder="备注">                      
+
+                                            <span class="input-group-btn ">
+                                                <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
+                                           </span>
+                                       </div>
+                                   <% end %>
+                                   </small>
+                                </td> 
+                            </tr>
+<% end %>
+                        </tbody>
+                    </table>
+    </div>
+</div>
+
+
+<% end %>
+</div>
+</small> 
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+

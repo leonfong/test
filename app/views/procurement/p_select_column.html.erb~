@@ -282,7 +282,7 @@ $(document).ready(function() {
                         <%= text_field_tag :p_name_mom, @bom.erp_no, class:"form-control", size:20 %>  
                     </label>
                     <label for="p_name" class="col-sm-3 control-label form-inline">子项目名称:
-                        <%= text_field_tag :p_name, @bom.p_name, class:"form-control", size:20  %>  
+                        <%= text_field_tag :p_name, @bom.erp_no, class:"form-control", size:20  %>  
                     </label>                  
  
                     <label for="qty"  class="col-sm-5 control-label  form-inline">数量:                   

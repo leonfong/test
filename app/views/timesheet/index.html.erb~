@@ -183,6 +183,9 @@
                                     <%= workup.dip_time %>
                                 </td> 
                                 <td>
+                                    <%= workup.ceshi_time %>
+                                </td> 
+                                <td>
                                     <%= workup.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
                                 </td>                                                                                               
                             </tr>

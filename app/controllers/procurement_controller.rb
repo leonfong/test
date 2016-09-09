@@ -834,6 +834,8 @@ before_filter :authenticate_user!
         add_orderby = "procurement_boms.id"
         if params[:sort_date] == "mpn"
             add_orderby = "p_items.mpn DESC"
+        elsif params[:sort_date] == "des"
+            add_orderby = "p_items.description DESC"
         end
         if params[:complete]
             part_ctl = " AND p_items.color = 'b'" 

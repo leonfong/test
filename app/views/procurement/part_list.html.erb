@@ -64,10 +64,11 @@
                     <th width="80">分配</th> 
                     <% if params[:key_order] %>
                         <th width="150"><%= link_to "MPN",  {action: "part_list", sort_date: "mpn",key_order: params[:key_order]} %><span class="caret"></span></th>
+                        <th width="150"><%= link_to "描述",  {action: "part_list", sort_date: "des",key_order: params[:key_order]} %><span class="caret"></span></th>
                     <% else %> 
                         <th width="150"><%= link_to "MPN",  {action: "part_list", sort_date: "mpn"} %><span class="caret"></span></th>
+                        <th width="150"><%= link_to "描述",  {action: "part_list", sort_date: "des"} %><span class="caret"></span></th>
                     <% end %>
-                    <th width="150">描述</th>
                     <th >MOKO 描述</th>
                     <th width="50">位号</th>
                     <th width="50">数量</th>

@@ -247,7 +247,7 @@
                                 <td><%= buy.cost.to_s %></td>
                                 <% if not PDn.find_by_id(buy.dn_id).blank? %>  
                                     <% if not PDn.find_by_id(buy.dn_id).info.blank? %>
-                                        <td><small><a href="<%= dn.info %>">下载</a></small></td>
+                                        <td><small><a href="<%= PDn.find_by_id(buy.dn_id).info %>">下载</a></small></td>
                                     <% else %>
                                         <td></td>
                                     <% end %>

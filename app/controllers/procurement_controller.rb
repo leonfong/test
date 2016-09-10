@@ -351,7 +351,7 @@ before_filter :authenticate_user!
             url += '&window_title=Fastbom-PCB AND PCBA'
             url += '&tips_title='+URI.encode('供应商扣款需要审核')
             url += '&tips_content='+URI.encode('马风华 宝宝你有一个供应商扣款需要审核，点击查看。')
-            url += '&tips_url=www.fastbom.com/supplier_d_list'
+            url += '&tips_url=erp.fastbom.com/supplier_d_list'
             resp = Net::HTTP.get_response(URI(url)) 
         elsif @flow.state == "check"
             @flow.state = "checked"
@@ -370,7 +370,7 @@ before_filter :authenticate_user!
             url += '&window_title=Fastbom-PCB AND PCBA'
             url += '&tips_title='+URI.encode('供应商扣款需要确认')
             url += '&tips_content='+URI.encode('王萍 宝宝你有一个供应商扣款需要确认，点击查看。')
-            url += '&tips_url=www.fastbom.com/supplier_d_list'
+            url += '&tips_url=erp.fastbom.com/supplier_d_list'
             resp = Net::HTTP.get_response(URI(url)) 
         elsif @flow.state == "checked"
             @flow.state = "done"
@@ -401,7 +401,7 @@ before_filter :authenticate_user!
         url += '&window_title=Fastbom-PCB AND PCBA'
         url += '&tips_title='+URI.encode('供应商扣款需要确认')
         url += '&tips_content='+URI.encode('邓友素 宝宝你有一个供应商扣款被马风华宝宝退回，点击查看。')
-        url += '&tips_url=www.fastbom.com/supplier_d_list'
+        url += '&tips_url=erp.fastbom.com/supplier_d_list'
         resp = Net::HTTP.get_response(URI(url))
         redirect_to :back
     end
@@ -598,7 +598,7 @@ before_filter :authenticate_user!
                         #Rails.logger.info(link_dn.inspect)
                         #Rails.logger.info("----------------------------------------------------------------link_dn")
                         #sheet.rows[row_i.to_i][c_i.to_i] = Spreadsheet::Link.new link_dn, '技术资料'
-                        #sheet[row_i.to_i,c_i.to_i] = Spreadsheet::Link.new 'www.fastbom.com', '技术资料'
+                        #sheet[row_i.to_i,c_i.to_i] = Spreadsheet::Link.new 'erp.fastbom.com', '技术资料'
                         #c_i += 1
                             sheet.rows[row_i.to_i][c_i.to_i] = link_dn
                             c_i += 1
@@ -2941,7 +2941,7 @@ WHERE
                         url += '&window_title=Fastbom-PCB AND PCBA'
                         url += '&tips_title='+URI.encode('亲爱的'+User.find(params[:user_do]).full_name)
                         url += '&tips_content='+URI.encode('你有新的任务，点击查看。')
-                        url += '&tips_url=www.fastbom.com/p_viewbom?bom_id='+@bom_item.procurement_bom_id.to_s 
+                        url += '&tips_url=erp.fastbom.com/p_viewbom?bom_id='+@bom_item.procurement_bom_id.to_s 
                         resp = Net::HTTP.get_response(URI(url))
                     end 
                 end

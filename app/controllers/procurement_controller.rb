@@ -955,8 +955,10 @@ before_filter :authenticate_user!
         check.bom_eng = current_user.full_name
         if check.save
             q_order = PcbOrder.find_by_order_no(check.erp_no)
-            q_order.update(state: "quote") 
-            #q_order.save
+            if not q_order.blank?
+                q_order.state = "quote"
+                q_order.save
+            end
         end
         redirect_to p_bomlist_path() 
     end

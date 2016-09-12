@@ -21,7 +21,7 @@ module BomParser
      config.i18n.default_locale = :en
     #config.action_mailer.raise_delivery_errors = true     #注意，在development.rb下需修改成true
     #添加如下几行代码
-    config.action_mailer.default_url_options = { :host => "www.fastbom.com" } #提示中有提到需要配置，即执行rails g devise:install
+    config.action_mailer.default_url_options = { :host => "erp.fastbom.com" } #提示中有提到需要配置，即执行rails g devise:install
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
     address:              'smtp.exmail.qq.com',

@@ -164,10 +164,11 @@
 
          <%= form_tag('/send_pi_buy', method:"post",id:"upatt") do %>
             <div class="row "><div class="col-md-12">   
-                <div class="modal-footer">                    
+                <div class="modal-footer"> 
+                    <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= @pi_buy_info.dn.to_s %>">                   
                     <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= @pi_buy_info.pi_buy_no.to_s %>">
                     <% if can? :work_g, :all %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要下单?"} %>                
+                        <%= submit_tag "提交", class: "btn btn-info" ,onclick:"return postform()"%>                
                     <% end %>
                 </div>
             </div></div>
@@ -242,11 +243,7 @@
                         <% @pi_buy_find.each do |buy| %>
                                 <tr>
                                 <td><input type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
-                                <% if Product.find_by_id(buy.product_id).blank?%>
-                                <td></td>
-                                <% else %>
-                                <td><%= Product.find_by_id(buy.product_id).description.to_s %></td>
-                                <% end %>
+                                <td><%= buy.moko_des.to_s %></td>
                                 <td><%= buy.quantity.to_s %></td>
                                 <td><%= buy.cost.to_s %></td>
                                 <% if not PDn.find_by_id(buy.dn_id).blank? %>  
@@ -387,9 +384,27 @@
 </div>
 
 
+<script type="text/javascript">
+function postform() {  	           
+      if ($("#pi_buy_dn").val() == "")
+      {                    
+　　    alert("请选择供应商！");                    
+　　    return false;                
+　     }
+
+      if (confirm('确定要下单?')) {
+        if ($("#pi_buy_dn").val() == "")
+        {                    
+　　      alert("请选择供应商！");                    
+　　      return false;                
+　       }
+      } else {
+        return false;
+      }
+
+}  
 
 
-<script>
 $(document).ready(function(){
   $("#tijiao").click(function(){
     $("#tijiao_true").click();

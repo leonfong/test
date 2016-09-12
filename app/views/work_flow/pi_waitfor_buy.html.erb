@@ -16,6 +16,8 @@
       <th width="130">Created Date</th>
       <th width="220">MPN</th>
       <th >DES</th>
+      <th >MOKO PART</th> 
+      <th >MOKO DES</th>  
       <th width="80">数量</th>
       <th width="80">单价￥</th>
       <th width="80">总价￥</th>
@@ -31,6 +33,8 @@
       <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.description %></td>
+      <td><%= buy.moko_part %></td>
+      <td><%= buy.moko_des %></td> 
       <td><%= buy.quantity*ProcurementBom.find(buy.procurement_bom_id).qty %></td>
       <td><%= buy.cost %></td>
       <% if not buy.cost.blank? %>

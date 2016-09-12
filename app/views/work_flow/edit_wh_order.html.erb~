@@ -119,7 +119,7 @@
                         <lable for="order" , class="control-label sr-only"><strong>供应商: </strong></lable>
                         <div class="input-group input-group-sm">              
                             
-                            <input id="dn_code" autocomplete="off" name="dn_code" type="text" class="form-control input-sm" data-provide="typeahead" data-items="20" data-source="<%= raw @all_dn %>" placeholder="供应商全称" size="60" value="<%= params[:dn_code] %>">              
+                            <input id="dn_code" autocomplete="off" name="dn_code" type="text" class="form-control input-sm" data-provide="typeahead" data-items="200" data-source="<%= raw @all_dn %>" placeholder="供应商全称" size="60" value="<%= params[:dn_code] %>">              
                             <div class="input-group-btn">
                                 <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                             </div>

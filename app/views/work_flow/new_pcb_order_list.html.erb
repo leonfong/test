@@ -26,11 +26,10 @@
             </div>
         <% end %>
 <%= will_paginate(@pcblist) %>            
-<table class="table table-hover">
-  <thead>
-    <tr style="background-color: #eeeeee">
+<table class="table" >
+  <thead >
+    <tr style="background-color: #eeeeee;">
       <th width="220">询价单号</th>
-      <th width="200">项目名称</th>
       <th width="80">客户代码</th>
       <th >客户</th>
       <th width="150">日期</th>
@@ -45,32 +44,50 @@
 -->
     </tr>
   </thead>
-  <tbody><small>
+  <tbody ><small>
     <% @pcblist.each do |pcb| %>   
       <tr >
         <% if not pcb.pcb_customer_id.blank? %>
-            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+            <td style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
         <% else %>
-            <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+            <td style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <% end %>
-        <td><%= pcb.p_name %></td>
-        <td><%= pcb.c_code %></td>
-        <td><%= pcb.c_des %></td>
-        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td></td>
-        <td><%= User.find_by(email: pcb.order_sell).full_name %></td>
-        <td><%= pcb.follow_remark %></td>
+        <td style="border-top:0px none #ddd;"><%= pcb.c_code %></td>
+        <td style="border-top:0px none #ddd;"><%= pcb.c_des %></td>
+        <td style="border-top:0px none #ddd;"><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
+        <td style="border-top:0px none #ddd;"></td>
+        <td style="border-top:0px none #ddd;"><%= User.find_by(email: pcb.order_sell).full_name %></td>
+        <td style="border-top:0px none #ddd;"><%= pcb.follow_remark %></td>
 <% if can? :work_e, :all %>
-        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
+        <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
 <% end %>
 <!--
         <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
+            <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
         <% else %>
-            <td><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
+            <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
         <% end %>
--->
+-->        
       </tr>
+      <% if not PcbOrderSellItem.where(pcb_order_no: pcb.order_no).blank?%>
+      <tr >
+          <td colspan="8" style="margin: 0px;padding: 0px;border-top:0px none #ddd;">
+          <div class="highlight" style="margin: 0px;padding: 0px;">
+          <% PcbOrderSellItem.where(pcb_order_no: pcb.order_no).each do |item| %>
+              <table style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
+              <tr style="margin: 0px;padding: 0px;">
+                  <td width="150" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>描述:</strong><%= item.des_en %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
+                  <td width="120" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>数量:</strong><%= item.qty %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>备注:</strong><%= item.remark %></td>
+              </tr>
+              </table>
+          <% end %>
+          </div>
+          </td>
+      </tr>
+      <% end %>
     <% end %>
   </small>
   </tbody>

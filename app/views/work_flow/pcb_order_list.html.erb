@@ -85,7 +85,7 @@
             <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <% end %>
         
-        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
         <td>
             <% if pcb.state == "bom_chk" %>
                 BOM检查
@@ -109,6 +109,25 @@
         
         <% end %>
       </tr>
+      <% if not PcbOrderItem.where(pcb_order_no: pcb.order_no).blank?%>
+      <tr >
+          <td colspan="9" style="margin: 0px;padding: 0px;border-top:0px none #ddd;">
+          <div class="highlight" style="margin: 0px;padding: 0px;">
+          <% PcbOrderItem.where(pcb_order_no: pcb.order_no).each do |item| %>
+              <table style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
+              <tr style="margin: 0px;padding: 0px;">
+                  <td width="150" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>描述:</strong><%= item.des_en %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
+                  <td width="120" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>数量:</strong><%= item.qty %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>备注:</strong><%= item.remark %></td>
+              </tr>
+              </table>
+          <% end %>
+          </div>
+          </td>
+      </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

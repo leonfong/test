@@ -18,6 +18,7 @@
       <th >DES</th>
       <th width="80">数量</th>
       <th width="80">单价￥</th>
+      <th width="80">总价￥</th>
       <th >供应商</th>
     </tr>
   </thead>
@@ -30,8 +31,9 @@
       <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.description %></td>
-      <td><%= buy.quantity %></td>
+      <td><%= buy.quantity*ProcurementBom.find(buy.procurement_bom_id).qty %></td>
       <td><%= buy.cost %></td>
+      <td><%= buy.quantity*ProcurementBom.find(buy.procurement_bom_id).qty*buy.cost %></td>
       <td>
           <% if not buy.dn_id.blank? %>
               <% if not PDn.find_by_id(buy.dn_id).blank? %>

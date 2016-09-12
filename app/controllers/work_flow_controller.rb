@@ -244,6 +244,7 @@ before_filter :authenticate_user!
     def wh_draft
         wh_order = PiWhInfo.find_by_pi_wh_no(params[:wh_no])
         if not wh_order.blank?
+=begin
             if wh_order.state == "new" or wh_order.state == "fail"
                 wh_order.state = "checking"
                 wh_order.save
@@ -255,6 +256,8 @@ before_filter :authenticate_user!
                 end
                 wh_order.save
             elsif wh_order.state == "checked"
+=end
+            if wh_order.state == "new"
                 wh_in_data = PiWhItem.where(pi_wh_info_no: params[:wh_no])
                 if not wh_in_data.blank?
                     wh_in_data.each do |wh_in|

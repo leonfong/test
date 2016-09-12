@@ -82,7 +82,10 @@
                         <input type="text" class="form-control sr-only" id="wh_no" name="wh_no" value="<%= @wh_info.pi_wh_no %>">
                         
                     <% if can? :work_wh, :all and (@wh_info.state == "new" or @wh_info.state == "fail")%>
+<!--
                         <%= submit_tag "提交审批", class:"btn btn-info" ,data:{confirm: "确定要提交给XXX审批?"} %>
+-->
+                        <%= submit_tag "入库", class:"btn btn-primary" ,data:{confirm: "确定要入库?"} %> 
                     <% elsif can? :work_wh, :all and @wh_info.state == "checking"%>
                         <%= submit_tag "PASS", class:"btn btn-success" ,data:{confirm: "确定要提交给XXX审批?"} %>  
                         <%= submit_tag "FAIL", class:"btn btn-danger" ,data:{confirm: "确定要提交给XXX审批?"} %> 

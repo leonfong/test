@@ -3,42 +3,6 @@
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "pcb_order_list"} %>
-					<div class="sidebar-menu">
-						<a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
-						<ul id="userMeun" class="nav nav-list menu-second panel-collapse collapse in">
-                                                        
-							<li><a href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
-                                                        
-                                                        <% if can? :work_d, :all %>
-							    <li><a style="background-color: #d9edf7;" href="/pcb_order_list?bom_chk=true"><i class="icon-edit"></i> 询价结果</a></li>
-                                                        <% elsif can? :work_g, :all %>
-                                                            <li><a style="background-color: #d9edf7;" href="/pcb_order_list?quote=true"><i class="icon-edit"></i> 询价结果</a></li>
-                                                        <% else %>
-                                                            <li><a style="background-color: #d9edf7;" href="/pcb_order_list"><i class="icon-edit"></i> 询价结果</a></li>
-                                                        <% end %>
- 
-							
-						</ul>
-						<a style="background-color: #ddd;" href="#articleMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 订单中心</a>
-						<ul id="articleMenu" class="nav nav-list collapse menu-second">
-<!--
-                                                        <li><a href="/new_pcb_pi"><i class="icon-edit"></i> 新建PI</a></li>
--->
-                                                        <li><a href="/pi_draft_list"><i></i> PI草稿箱</a></li>
-							<li><a href="/pcb_order_list?place_an_order=true"><i class="icon-pencil"></i> 下单审批</a></li>
-							<li><a href="#"><i class="icon-list-alt"></i> 等待财务审批</a></li>
-							<li><a href="#"><i class="icon-list-alt"></i> 等待采购下单</a></li>
-							<li><a href="#"><i class="icon-list-alt"></i> 等待入库</a></li>
-							<li><a href="#"><i class="icon-list-alt"></i> 已经入库</a></li>
-						</ul>
-					</div>
-
-
-
-
-
-
-
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -121,7 +85,7 @@
             <td>  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <% end %>
         
-        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
         <td>
             <% if pcb.state == "bom_chk" %>
                 BOM检查
@@ -145,6 +109,25 @@
         
         <% end %>
       </tr>
+      <% if not PcbOrderItem.where(pcb_order_no: pcb.order_no).blank?%>
+      <tr >
+          <td colspan="8" style="margin: 0px;padding: 0px;border-top:0px none #ddd;">
+          <div class="highlight" style="margin: 0px;padding: 0px;">
+          <% PcbOrderItem.where(pcb_order_no: pcb.order_no).each do |item| %>
+              <table style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
+              <tr style="margin: 0px;padding: 0px;">
+                  <td width="150" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>描述:</strong><%= item.des_en %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
+                  <td width="120" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>数量:</strong><%= item.qty %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>备注:</strong><%= item.remark %></td>
+              </tr>
+              </table>
+          <% end %>
+          </div>
+          </td>
+      </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

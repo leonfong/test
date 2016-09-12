@@ -1155,7 +1155,7 @@ before_filter :authenticate_user!
                         where_moko_des += " AND "
                     end
                 end 
-                @p_history = PItem.find_by_sql("SELECT *,p_items.description AS des, products.description AS moko_des, p_items.created_at AS c_time FROM `p_items` LEFT JOIN `products` ON `p_items`.`product_id` = `products`.`id` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name]}%' or (#{where_des}) or (#{where_moko_des})  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+                @p_history = PItem.find_by_sql("SELECT *,p_items.description AS des, products.description AS moko_des, p_items.created_at AS c_time FROM `p_items` LEFT JOIN `products` ON `p_items`.`product_id` = `products`.`id` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name].strip}%' or (#{where_des}) or (#{where_moko_des})  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             else
                 where_des = "p_items.description LIKE '%%'"
                 where_des = "p_items.moko_des LIKE '%%'"
@@ -2064,8 +2064,8 @@ before_filter :authenticate_user!
             render "p_order_list.html.erb"
         else
             if params[:key_order]
-                @key_order = params[:key_order]
-                @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `p_name` LIKE '%#{params[:key_order]}%' AND `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 15)
+                @key_order = params[:key_order].strip
+                @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `p_name` LIKE '%#{params[:key_order].strip}%' AND `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 15)
             else
                 if params[:complete]
                     boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC,`created_at` DESC ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? }

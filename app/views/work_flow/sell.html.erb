@@ -199,12 +199,6 @@
 
       <%= form_tag('/edit_work', method:"post") do %>
       <div class="modal-body">
-<!--
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">标题:</label>           
-            <input type="text" name="feedback_title" id="<%= work.id.to_s %>feedback_title" class="form-control" />
-          </div>
--->
           <div class="form-group">
             <label for="message-text" class="control-label">内容:</label>
             <%= text_field_tag :topic_up, params[:topic_up], class:"sr-only", size:2 , value: work.id.to_s %>  

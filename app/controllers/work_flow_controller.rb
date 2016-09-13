@@ -11,9 +11,14 @@ before_filter :authenticate_user!
     end
 
     def wh_query
-        if not params[:moko_part].blank?
-            #@find_in_wh = WarehouseInfo.find_by_moko_part(params[:moko_part].strip)
-            @find_in_wh = WarehouseInfo.where("moko_des LIKE '%#{params[:moko_part].strip}%'")
+        if params[:moko_part]
+            if params[:moko_part] != ""
+                #@find_in_wh = WarehouseInfo.find_by_moko_part(params[:moko_part].strip)
+                @find_in_wh = WarehouseInfo.where("moko_des LIKE '%#{params[:moko_part].strip}%'")
+            else
+                @find_in_wh = WarehouseInfo.all
+            end
+            
 =begin
             if @find_in_wh.blank?
                 find_in_product = Product.find_by_name(params[:moko_part].strip)

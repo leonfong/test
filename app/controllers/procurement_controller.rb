@@ -1708,10 +1708,13 @@ before_filter :authenticate_user!
                                 Rails.logger.info(match_product_old.inspect)
                                 Rails.logger.info("qqqqqq------------------------根据历史记录查询产品--------------qqqqqq")
                                 if match_product_old.blank?
+                                    Rails.logger.info("qqqqqq-----------------------111111111111----------------------qqqqqq")
                                     match_product = search_bom(item.description,item.part_code) #根据关键字和位号查询产品
                                 elsif not match_product_old.dn_id.blank?
-                                    begin
-                                        match_dn = PDn.find(match_product_old.dn_id)
+                                    #begin
+                                    match_dn = PDn.find_by_id(match_product_old.dn_id)
+                                    if not match_dn.blank?
+                                        Rails.logger.info("qqqqqq-----------------------222222222222----------------------qqqqqq")
                                         add_dns = PDn.new
                                         add_dns.item_id = item.id
                                         add_dns.date = match_dn.date
@@ -1727,18 +1730,23 @@ before_filter :authenticate_user!
                                         item.cost = add_dns.cost
                                         item.color = "g"
                                         item.product_id = match_product_old.product_id
-                                        item.moko_part = match_product_old.name
-                                        item.moko_des = match_product_old.description
+                                        if match_product_old.product_id != 0
+                                            if not Product.find(match_product_old.product_id).blank? 
+                                                item.moko_part = Product.find(match_product_old.product_id).name
+                                                item.moko_des = Product.find(match_product_old.product_id).description
+                                            end
+                                        end
                                         item.dn_id = add_dns.id
                                         item.dn = add_dns.dn
                                         item.dn_long = add_dns.dn_long
                                         item.save
                                         @item = item
                                         render "p_search_part.js.erb" and return
-                                    rescue
+                                    #rescue
                                     end
                                 end
                                 if not match_product.blank?
+                                    Rails.logger.info("qqqqqq-----------------------3333333333333----------------------qqqqqq")
                                     item.product_id = match_product.first.id if match_product.count > 0
                                     item.moko_part = match_product.first.name if match_product.count > 0
                                     item.moko_des = match_product.first.description if match_product.count > 0
@@ -1834,8 +1842,9 @@ before_filter :authenticate_user!
                                 end
 =end
                             elsif not match_product_old.dn_id.blank?
-                                begin
-                                    match_dn = PDn.find(match_product_old.dn_id)
+                                #begin
+                                match_dn = PDn.find_by_id(match_product_old.dn_id)
+                                if not match_dn.blank?
                                     add_dns = PDn.new
                                     add_dns.item_id = item.id
                                     add_dns.date = match_dn.date
@@ -1854,15 +1863,19 @@ before_filter :authenticate_user!
                                     Rails.logger.info("product_id-------------------------------------------------------product_id0")
                                     Rails.logger.info(match_product_old.product_id.inspect)
                                     Rails.logger.info("match_product_old.product_id-------------------------------------------------------match_product_old.product_id")
-                                    item.moko_part = match_product_old.name
-                                    item.moko_des = match_product_old.description
+                                    if match_product_old.product_id != 0
+                                        if not Product.find(match_product_old.product_id).blank?
+                                            item.moko_part = Product.find(match_product_old.product_id).name
+                                            item.moko_des = Product.find(match_product_old.product_id).description
+                                        end  
+                                    end                                 
                                     item.dn_id = add_dns.id
                                     item.dn = add_dns.dn
                                     item.dn_long = add_dns.dn_long
                                     item.save
                                     @item = item
                                     render "p_search_part.js.erb" and return 
-                                rescue
+                                #rescue
                                     
                                 end
                             end

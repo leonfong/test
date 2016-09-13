@@ -230,7 +230,8 @@
                     <thead>
                     <tr style="background-color: #eeeeee">
                     <th width="20"></th>
-                    <th >MOKO DES</th>
+                    <th >MOKO 描述</th>
+                    <th >客户描述</th>
                     <th width="80">数量</th>
                     <th width="80">单价￥</th>
                     <th width="80">附件</th>
@@ -244,6 +245,7 @@
                                 <tr>
                                 <td><input type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
                                 <td><%= buy.moko_des.to_s %></td>
+                                <td><%= buy.description.to_s %></td>
                                 <td><%= buy.quantity.to_s %></td>
                                 <td><%= buy.cost.to_s %></td>
                                 <% if not PDn.find_by_id(buy.dn_id).blank? %>  

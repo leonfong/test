@@ -46,7 +46,12 @@
                                <div class="form-inline">
                                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#remarkOrder">备注</button>
                                    <label for="pj_remark">项目名：</label>
-                                   <%= @boms.p_name_mom %>
+                                   <% if PcbOrder.find_by_order_no(@boms.p_name_mom).blank? %>
+                                       <%= @boms.p_name_mom %>
+                                   <% else %>
+                                       <% if PcbOrder.find_by_order_no(@boms.p_name_mom).pcb_customer_id.blank? %>
+                                       <%= link_to @boms.p_name_mom, edit_pcb_order_path() %>
+                                   <% end %>
                                    <label for="pj_remark">子项目名：</label>
                                    <%= @boms.p_name %>
                                </div>
@@ -438,7 +443,12 @@ function change_<%= item.id.to_s %>(){
 
                                 <td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%y-%m') %></div></a></small></td>
 
-                                <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> <%= dn.qty %> ￥<%= dn.cost %></div></a></small></td> 
+                                <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> <% if dn.qty.blank?%>
+<%= PItem.find_by_id(dn.item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.item_id).procurement_bom_id).qty %>
+<% else %>
+<%= dn.qty %>
+<% end %>
+ ￥<%= dn.cost %></div></a></small></td> 
                               
                                 
                                 <td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.remark %></div></a></small></td>

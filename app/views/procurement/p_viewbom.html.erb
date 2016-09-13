@@ -46,7 +46,15 @@
                                <div class="form-inline">
                                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#remarkOrder">备注</button>
                                    <label for="pj_remark">项目名：</label>
-                                   <%= @boms.p_name_mom %>
+                                   <% if PcbOrder.find_by_order_no(@boms.p_name_mom).blank? %>
+                                       <%= @boms.p_name_mom %>
+                                   <% else %>
+                                       <% if PcbOrder.find_by_order_no(@boms.p_name_mom).pcb_customer_id.blank? %>
+                                           <%= link_to @boms.p_name_mom, edit_pcb_order_path(order_no: @boms.p_name_mom) %>
+                                       <% else %>
+                                           <%= link_to @boms.p_name_mom, edit_pcb_order_path(order_no: @boms.p_name_mom,c_id: PcbOrder.find_by_order_no(@boms.p_name_mom).pcb_customer_id) %>
+                                       <% end %>
+                                   <% end %>
                                    <label for="pj_remark">子项目名：</label>
                                    <%= @boms.p_name %>
                                </div>

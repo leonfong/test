@@ -189,7 +189,11 @@
                             <td><%= q_item.qty %></td>
                             <td><%= q_item.des_en %></td>
                             <td><%= q_item.des_cn %></td>
-                            <td><%= q_item.p_type %></td>
+                            <% if q_item.bom_id.blank? %>
+                                <td><%= q_item.p_type %></td>
+                            <% else %>
+                                <td><%= link_to "BOM", p_viewbom_path(bak: "bak",bom_id: q_item.bom_id) %></td>
+                            <% else %>
                             <td><%= q_item.t_p %></td>
                             <td><%= q_item.price %></td>
                             <td>

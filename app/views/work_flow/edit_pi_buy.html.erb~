@@ -386,12 +386,6 @@
 
 <script type="text/javascript">
 function postform() {  	           
-      if ($("#pi_buy_dn").val() == "")
-      {                    
-　　    alert("请选择供应商！");                    
-　　    return false;                
-　     }
-
       if (confirm('确定要下单?')) {
         if ($("#pi_buy_dn").val() == "")
         {                    

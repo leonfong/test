@@ -11,7 +11,7 @@
                         <div class="panel-body ">                     
                             <div class="col-md-2"><p><strong>采购单号: </strong><ins id="p_pi_show" name="p_pi_show"><%= @pi_buy_info.pi_buy_no.to_s %></ins></p>                                
                             </div>
-                            <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= @pi_buy_info.created_at.to_s %></ins></p>
+                            <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= @pi_buy_info.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></ins></p>
                             </div> 
                             <div class="col-md-2"><p><strong>采购工程师: </strong><ins><%= @pi_buy_info.user.to_s %></ins></p>
                             </div>   

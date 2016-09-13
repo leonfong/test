@@ -32,12 +32,19 @@
         <li><a <% if selected == "wh_out" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 出库</a></li>
 -->
         <li><a <% if selected == "wh_query" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 库存查询</a></li>
+        <li><a <% if selected == "wh_query" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 库存分配</a></li>
     <ul>
 </div>
 
-
-
-
+<!--
+<script>
+$(".menu-first").click(function(){
+  $('#userMeun').collapse('hide');
+  $('#articleMenu').collapse('hide');
+  $('#whMenu').collapse('hide');
+});
+</script>
+-->
 
 
 

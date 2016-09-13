@@ -173,6 +173,9 @@ before_filter :authenticate_user!
             @w_part += '<th width="120">PI订单号</th>'
             @w_part += '<th width="120">物料编码</th>'
             @w_part += '<th >物料描述</th>'
+            @w_part += '<th >总量</th>'
+            @w_part += '<th >待入</th>'
+            @w_part += '<th >已入</th>'
             @w_part += '<th width="150">操作</th>'
             @w_part += '<tr>'
             @w_part += '</thead>'
@@ -180,7 +183,7 @@ before_filter :authenticate_user!
             @w_wh_order = PiBuyInfo.where("#{where_wh}")
             if not @w_wh_order.blank?
                 @w_wh_order.each do |wh_order|
-                    wh_order_item = PiBuyItem.where(pi_buy_info_id: wh_order.id)
+                    wh_order_item = PiBuyItem.where(pi_buy_info_id: wh_order.id,state: nil)
                     if not wh_order_item.blank?
                         wh_order_item.each do |wh_item|                       
                             @w_part += '<tr id="wh_item_'+wh_item.id.to_s+'">'
@@ -189,12 +192,15 @@ before_filter :authenticate_user!
                             @w_part += '<td>'+wh_item.erp_no.to_s+'</td>'
                             @w_part += '<td>'+wh_item.moko_part.to_s+'</td>'
                             @w_part += '<td>'+wh_item.moko_des.to_s+'</td>'
+                            @w_part += '<td>'+(wh_item.quantity*ProcurementBom.find(wh_item.procurement_bom_id).qty).to_s+'</td>'
+                            @w_part += '<td>'+wh_item.qty_wait.to_s+'</td>'
+                            @w_part += '<td>'+wh_item.qty_done.to_s+'</td>'
                             #@w_part += '<td>'+(wh_item.quantity*ProcurementBom.find(wh_item.procurement_bom_id).qty).to_s+'</td>'
                             @w_part += '<td><div class="input-group input-group-sm">'
                             @w_part += '<form class="form-inline" action="/add_wh_item" accept-charset="UTF-8" data-remote="true" method="post">'
                             @w_part += '<input id="wh_order_no"  name="wh_order_no" type="text"  class="sr-only"  value="'+params[:pi_wh_no].to_s+'">'
                             @w_part += '<input id="pi_buy_item_id"  name="pi_buy_item_id" type="text"  class="sr-only"  value="'+wh_item.id.to_s+'">'
-                            @w_part += '<input id="wh_qty_in"  name="wh_qty_in" type="text" size="10" class="form-control input-sm"  value="'+(wh_item.quantity*ProcurementBom.find(wh_item.procurement_bom_id).qty).to_s+'">'
+                            @w_part += '<input id="wh_qty_in"  name="wh_qty_in" type="text" size="10" class="form-control input-sm"  value="'+(wh_item.quantity*ProcurementBom.find(wh_item.procurement_bom_id).qty-wh_item.qty_wait-wh_item.qty_done).to_s+'">'
                             @w_part += '<span class="input-group-btn "><button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button></span>'
                             @w_part += '</form>'
                             @w_part +='</div></td>'
@@ -222,7 +228,13 @@ before_filter :authenticate_user!
         wh_item.erp_no = pi_buy_item.erp_no
         wh_item.pi_buy_info_id = pi_buy_item.pi_buy_info_id
         wh_item.procurement_bom_id = pi_buy_item.procurement_bom_id
-        wh_item.save
+        if wh_item.save
+            pi_buy_item.qty_wait = pi_buy_item.qty_wait + wh_item.qty_in
+            if (pi_buy_item.qty_wait + pi_buy_item.qty_done) >= pi_buy_item.quantity*ProcurementBom.find(pi_buy_item.procurement_bom_id).qty 
+                pi_buy_item.state = "done"
+            end
+            pi_buy_item.save
+        end
         @wh_wait = ''
         wh_item_all = PiWhItem.where(pi_wh_info_no: params[:wh_order_no])
         if not wh_item_all.blank?
@@ -242,7 +254,16 @@ before_filter :authenticate_user!
 
     def del_wh_item
         del_wh_item = PiWhItem.find_by_id(params[:del_wh_item_id])
-        del_wh_item.destroy
+        pi_buy_item = PiBuyItem.find_by_id(del_wh_item.pi_buy_item_id)
+        pi_buy_item.qty_wait = pi_buy_item.qty_wait - del_wh_item.qty_in
+        if (pi_buy_item.qty_wait + pi_buy_item.qty_done) >= pi_buy_item.quantity*ProcurementBom.find(pi_buy_item.procurement_bom_id).qty 
+            pi_buy_item.state = "done"
+        else
+            pi_buy_item.state = nil
+        end
+        if del_wh_item.destroy
+            pi_buy_item.save
+        end
         redirect_to :back
     end
 
@@ -278,6 +299,13 @@ before_filter :authenticate_user!
                             #wh_data.save
                         end
                         if wh_data.save
+                            uo_buy_item = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
+                            uo_buy_item.qty_done = uo_buy_item.qty_done + wh_in.qty_in
+                            uo_buy_item.qty_wait = uo_buy_item.qty_wait - wh_in.qty_in
+                            if (uo_buy_item.qty_done + uo_buy_item.qty_wait) >= uo_buy_item.quantity*ProcurementBom.find(uo_buy_item.procurement_bom_id).qty 
+                                uo_buy_item.state = "done"
+                            end
+                            uo_buy_item.save
                             item_data = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
                             if not item_data.blank?
                                 add_history_data = WhInHistoryItem.new

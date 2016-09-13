@@ -2664,7 +2664,8 @@ WHERE
             else
                 p_dn.dn_long = params[:dn_long]
             end
-            p_dn.qty = params[:qty]
+            #p_dn.qty = params[:qty]
+            p_dn.qty = PItem.find_by_id(params[:item_id]).quantity*ProcurementBom.find_by_id(PItem.find_by_id(params[:item_id]).procurement_bom_id).qty
             p_dn.date = Time.new
             p_dn.remark = params[:remark]
             #if params[:remark] != ""

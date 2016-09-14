@@ -1284,6 +1284,9 @@ before_filter :authenticate_user!
             if params[:new]
                 if can? :work_e, :all
                     @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_a, :all
+                    @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+
                 else
                     @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end

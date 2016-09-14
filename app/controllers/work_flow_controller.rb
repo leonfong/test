@@ -1168,9 +1168,9 @@ before_filter :authenticate_user!
            if PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').blank?
                 p_n =1
            else
-                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.split(current_user.s_name_self.to_s)[-1].to_i + 1
+                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.to_s.chop.split(current_user.s_name_self.to_s)[-1].to_i + 1
            end
-           @p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s
+           @p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s + "B"
            @pcb = PcbOrder.new()        
            @pcb.order_no = @p_no
            @pcb.order_sell = current_user.email

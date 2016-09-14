@@ -708,6 +708,13 @@ before_filter :authenticate_user!
         copy_data.c_id = find_data.c_id
         copy_data.pcb_order_id = find_data.pcb_order_id
         copy_data.pcb_order_no = find_data.pcb_order_no
+        if PcbOrderItem.find_by_pcb_order_no(find_data.pcb_order_no).blank?
+            p_n =1
+        else
+            p_n = PcbOrderItem.find_by_pcb_order_no(find_data.pcb_order_no).pcb_order_no_son.split('-')[-1].to_i + 1
+        end
+        #@p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s
+        copy_data.pcb_order_no_son = find_data.pcb_order_no + "-" +p_n.to_s
         copy_data.des_en = find_data.des_en
         copy_data.des_cn = find_data.des_cn
         copy_data.qty = find_data.qty
@@ -1161,9 +1168,9 @@ before_filter :authenticate_user!
            if PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').blank?
                 p_n =1
            else
-                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.split("EQ")[-1].to_i + 1
+                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.split(current_user.s_name_self.to_s)[-1].to_i + 1
            end
-           @p_no = "ME"+current_user.s_name_self.to_s.upcase + Time.new.strftime('%y%m%d').to_s + "EQ"+ p_n.to_s
+           @p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s
            @pcb = PcbOrder.new()        
            @pcb.order_no = @p_no
            @pcb.order_sell = current_user.email

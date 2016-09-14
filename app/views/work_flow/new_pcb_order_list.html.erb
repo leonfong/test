@@ -7,12 +7,14 @@
         <div class="col-md-11" style="padding-top: 10px;">
 
 <div class="row" style="margin: 0px;padding: 0px;" >
+<!--
 <br>
   <ul class="nav nav-tabs" >
       <li role="presentation" ><a href="/sell_pcb_baojia"><h5 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h5></a></li>
       <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >询价草稿列表</p></strong></h5></a></li>
   </ul>
 <br>
+-->
   <%= render 'layouts/flash_messages' %>
 </div>
 
@@ -48,15 +50,15 @@
     <% @pcblist.each do |pcb| %>   
       <tr >
         <% if not pcb.pcb_customer_id.blank? %>
-            <td style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+            <td width="220" style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
         <% else %>
-            <td style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+            <td width="220" style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <% end %>
-        <td style="border-top:0px none #ddd;"><%= pcb.c_code %></td>
+        <td width="80" style="border-top:0px none #ddd;"><%= pcb.c_code %></td>
         <td style="border-top:0px none #ddd;"><%= pcb.c_des %></td>
-        <td style="border-top:0px none #ddd;"><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
+        <td width="150" style="border-top:0px none #ddd;"><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
         <td style="border-top:0px none #ddd;"></td>
-        <td style="border-top:0px none #ddd;"><%= User.find_by(email: pcb.order_sell).full_name %></td>
+        <td width="100" style="border-top:0px none #ddd;"><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td style="border-top:0px none #ddd;"><%= pcb.follow_remark %></td>
 <% if can? :work_e, :all %>
         <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>

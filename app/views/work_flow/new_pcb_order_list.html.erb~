@@ -48,15 +48,15 @@
     <% @pcblist.each do |pcb| %>   
       <tr >
         <% if not pcb.pcb_customer_id.blank? %>
-            <td style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+            <td width="220" style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
         <% else %>
-            <td style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+            <td width="220" style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <% end %>
-        <td style="border-top:0px none #ddd;"><%= pcb.c_code %></td>
+        <td width="80" style="border-top:0px none #ddd;"><%= pcb.c_code %></td>
         <td style="border-top:0px none #ddd;"><%= pcb.c_des %></td>
-        <td style="border-top:0px none #ddd;"><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
+        <td width="150" style="border-top:0px none #ddd;"><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
         <td style="border-top:0px none #ddd;"></td>
-        <td style="border-top:0px none #ddd;"><%= User.find_by(email: pcb.order_sell).full_name %></td>
+        <td width="100" style="border-top:0px none #ddd;"><%= User.find_by(email: pcb.order_sell).full_name %></td>
         <td style="border-top:0px none #ddd;"><%= pcb.follow_remark %></td>
 <% if can? :work_e, :all %>
         <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
@@ -79,7 +79,7 @@
                   <td width="150" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>描述:</strong><%= item.des_en %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
-                  <td width="90" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>数量:</strong><%= item.qty %></td>
+                  <td width="120" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>数量:</strong><%= item.qty %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>备注:</strong><%= item.remark %></td>
               </tr>
               </table>

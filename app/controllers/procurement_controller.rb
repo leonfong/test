@@ -1590,6 +1590,9 @@ before_filter :authenticate_user!
         if params[:erp_no] != ""
             @bom.erp_no = params[:erp_no]
         end
+        if params[:erp_no_son] != ""
+            @bom.erp_no_son = params[:erp_no_son]
+        end
         if params[:erp_qty] != ""
             @bom.erp_qty = params[:erp_qty]
         end

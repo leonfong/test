@@ -68,7 +68,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
                             <li class="w50">
                             	<a class="btn btn-danger" id="UploadButton" style="position: relative;">BROWSE
 <form style="margin: 0px !important; padding: 0px !important; position: absolute; top: 0px; left: 0px;" method="POST" enctype="multipart/form-data" action="/p_new_bom"> 
-<input name="erp_item_id" id="erp_item_id" type="text" class="sr-only" value="<%= params[:erp_item_id] %>"><input name="erp_no" id="erp_no" type="text" class="sr-only" value="<%= params[:erp_no] %>">
+<input name="erp_item_id" id="erp_item_id" type="text" class="sr-only" value="<%= params[:erp_item_id] %>"><input name="erp_no" id="erp_no" type="text" class="sr-only" value="<%= params[:erp_no] %>"><input name="erp_qty" id="erp_qty" type="text" class="sr-only" value="<%= params[:erp_qty] %>">
 <input name="bom[excel_file]" id="bom_excel_file" type="file" accept=".xls" style="display: block; overflow: hidden; width: 80px; height: 30px; text-align: right; opacity: 0; z-index: 999999; cursor: pointer;" onchange='this.form.submit()'>
 </form></a>
                             </li>

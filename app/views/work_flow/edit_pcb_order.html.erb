@@ -156,6 +156,7 @@
                     <thead>
                         <tr style="background-color: #eeeeee">
                             <th width="60">操作</th>
+                            <th width="130">单号</th>
                             <th width="150">物料编码</th>
                             <th >物料名称</th>
                             <th width="70">数量</th>
@@ -170,6 +171,7 @@
                             <th width="40">删除</th>
                         </tr>
                     </thead>
+                    <small>
                     <tbody id="biaoge">
                         <% if @q_order_item %>
                         <% @q_order_item.each do |q_item| %>
@@ -182,6 +184,7 @@
                             <td><%= q_item.moko_code %></td>
                             <td><%= q_item.moko_des %></td>
 -->
+                            <td><%= q_item.pcb_order_no_son %></td>
                         <%= form_tag({action: :bom_edit_order_item},method:"post",multipart:"ture") do %>  
                             <td><input class="sr-only" id="bom_edit_id" name="bom_edit_id" value="<%= q_item.id %>"><input id="bom_edit_moko_code" name="bom_edit_moko_code" value="<%= q_item.moko_code %>"></td>
                             <td><input id="bom_edit_moko_des" name="bom_edit_moko_des" value="<%= q_item.moko_des %>"><button type="submit" class="btn btn-link btn-sm glyphicon glyphicon-ok " ></button></td>
@@ -203,13 +206,13 @@
                             </td>
                             <td><%= q_item.remark %></td>
                             <td>   
-                                <a class="btn btn-danger btn-xs" href="/procurement_new?erp_item_id=<%= q_item.id.to_s %>&erp_no=<%= @q_order.order_no %>&erp_qty=<%= q_item.qty %>">上传BOM</a>                                                              
+                                <a class="btn btn-danger btn-xs" href="/procurement_new?erp_item_id=<%= q_item.id.to_s %>&erp_no=<%= @q_order.order_no %>&erp_no_son=<%= q_item.pcb_order_no_son %>&erp_qty=<%= q_item.qty %>">上传BOM</a>                                                              
                             </td>
                             <td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_item?edit_c_item_id=<%= q_item.id %>" data-confirm="确定要删除?"></a></td>
                         </tr>
                         <% end %>
                         <% end %>
-                    </tbody>
+                    </tbody></small>
                 </table>             
             </div>
             </div></div>

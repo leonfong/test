@@ -186,7 +186,13 @@
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no_son %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_en %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.p_type %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;">
+                  <% if item.p_type == "COMPONENTS" %>
+                      元器件
+                  <% else %>
+                      <%= item.p_type %>
+                  <% end %>
+                  </td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
                   <% if not item.bom_id.blank? %>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p %></td>

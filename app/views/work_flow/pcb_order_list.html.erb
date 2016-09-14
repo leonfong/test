@@ -188,8 +188,13 @@
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.p_type %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>
+                  <% if not item.bom_id.blank? %>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p %></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"></td>
+                  <% else %>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"></td>
+                  <% end %>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.remark %></td>
               </tr>
               

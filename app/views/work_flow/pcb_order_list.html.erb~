@@ -31,9 +31,11 @@
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
+<!--
                 <a type="button" class="btn btn-info btn-sm" href="/pcb_order_list?bom_chk=true">等待BOM检查</a>
                 <a type="button" class="btn btn-danger btn-sm" href="/pcb_order_list?quote=true">等待报价</a>
                 <a type="button" class="btn btn-success btn-sm" href="/pcb_order_list?quotechk=true">已经报价</a>
+-->
             </div>
             <% end %>                       
             </span>
@@ -186,8 +188,13 @@
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.p_type %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>
+                  <% if not item.bom_id.blank? %>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p %></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>
+                  <% else %>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"></td>
+                  <% end %>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.remark %></td>
               </tr>
               

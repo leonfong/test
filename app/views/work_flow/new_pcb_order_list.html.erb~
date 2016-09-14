@@ -7,12 +7,14 @@
         <div class="col-md-11" style="padding-top: 10px;">
 
 <div class="row" style="margin: 0px;padding: 0px;" >
+<!--
 <br>
   <ul class="nav nav-tabs" >
       <li role="presentation" ><a href="/sell_pcb_baojia"><h5 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h5></a></li>
       <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >询价草稿列表</p></strong></h5></a></li>
   </ul>
 <br>
+-->
   <%= render 'layouts/flash_messages' %>
 </div>
 
@@ -27,6 +29,7 @@
         <% end %>
 <%= will_paginate(@pcblist) %>            
 <table class="table" >
+<!--
   <thead >
     <tr style="background-color: #eeeeee;">
       <th width="220">询价单号</th>
@@ -39,51 +42,60 @@
 <% if can? :work_e, :all %>
       <th width="50">删除</th>
 <% end %>
+-->
 <!--
       <th width="120">发送到采购报价</th>
--->
+
     </tr>
   </thead>
+-->
   <tbody ><small>
     <% @pcblist.each do |pcb| %>   
-      <tr >
+      <tr>
         <% if not pcb.pcb_customer_id.blank? %>
-            <td width="220" style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
         <% else %>
-            <td width="220" style="border-top:0px none #ddd;">  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
         <% end %>
-        <td width="80" style="border-top:0px none #ddd;"><%= pcb.c_code %></td>
-        <td style="border-top:0px none #ddd;"><%= pcb.c_des %></td>
-        <td width="150" style="border-top:0px none #ddd;"><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
-        <td style="border-top:0px none #ddd;"></td>
-        <td width="100" style="border-top:0px none #ddd;"><%= User.find_by(email: pcb.order_sell).full_name %></td>
-        <td style="border-top:0px none #ddd;"><%= pcb.follow_remark %></td>
-<% if can? :work_e, :all %>
-        <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
-<% end %>
 <!--
-        <% if can? :work_pcb_business, :all and can? :work_e, :all %>
-            <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
-        <% else %>
-            <td style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
-        <% end %>
--->        
+        <td width="80" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><%= pcb.c_code %></td>
+        <td style="border-top:0px none #ddd;"><%= pcb.c_des %></td>
+-->
+        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>业务员: </strong><%= User.find_by(email: pcb.order_sell).full_name %></td>
+        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>日期: </strong><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
+<!--
+        <td style="border-top:0px none #ddd;"><strong>备注: </strong><%= pcb.follow_remark %></td>
+-->
+        <td style="padding: 20px 0px 0px;border-top:0px none #ddd;"></td>
+<% if can? :work_e, :all %>
+        <td width="50" style="border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
+<% end %>      
       </tr>
       <% if not PcbOrderSellItem.where(pcb_order_no: pcb.order_no).blank?%>
+        
       <tr >
-          <td colspan="8" style="margin: 0px;padding: 0px;border-top:0px none #ddd;">
+          <td colspan="5" style="margin: 0px;padding: 0px 0px 20px;border-top:0px none #ddd;">
           <div class="highlight" style="margin: 0px;padding: 0px;">
+          <table class="table" style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
+          <thead>
+          <tr style="background-color: #eeeeee;">
+            <th >英文描述</th>
+            <th >中文描述</th>
+            <th width="100">数量</th>
+            <th >备注</th>
+          </tr>
+          </thead>
           <% PcbOrderSellItem.where(pcb_order_no: pcb.order_no).each do |item| %>
-              <table style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
+              
               <tr style="margin: 0px;padding: 0px;">
-                  <td width="150" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>描述:</strong><%= item.des_en %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_en %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
-                  <td width="120" style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>数量:</strong><%= item.qty %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><strong>备注:</strong><%= item.remark %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.remark %></td>
               </tr>
-              </table>
+              
           <% end %>
+          </table>
           </div>
           </td>
       </tr>

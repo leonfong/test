@@ -1281,46 +1281,55 @@ before_filter :authenticate_user!
         if params[:key_order]
             @pcblist = PcbOrder.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         else
-            if params[:new]
-                if can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                elsif can? :work_a, :all
+            if params[:new] 
+                if can? :work_a, :all
                     @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-
+                elsif can? :work_e, :all
+                    @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "new_pcb_order_list.html.erb" and return
             elsif params[:quote]
-                if can? :work_e, :all
+                if can? :work_a, :all
+                    @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
                     @pcblist = PcbOrder.where(state: "quote",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:bom_chk]
-                if can? :work_e, :all
+                if can? :work_a, :all
+                    @pcblist = PcbOrder.where(state: "bom_chk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
                     @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pcblist = PcbOrder.where(state: "bom_chk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:place_an_order]
-                if can? :work_e, :all
+                if can? :work_a, :all
+                    @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
                     @pcblist = PcbOrder.where(state: "order",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:quotechk]
-                if can? :work_e, :all
+                if can? :work_a, :all
+                    @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
                     @pcblist = PcbOrder.where(state: "quotechk",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             else
-                if can? :work_e, :all
+                if can? :work_a, :all
+                    @pcblist = PcbOrder.where("state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
                     @pcblist = PcbOrder.where("state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pcblist = PcbOrder.where("state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)

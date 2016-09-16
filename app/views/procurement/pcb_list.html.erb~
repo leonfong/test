@@ -14,7 +14,7 @@
                         <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">数量</th>
                         <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">平米</th>
                         <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">元/平米</th>
-                        <th rowspan="2" class="text-center" width="50" style="padding-bottom: 20px;">单价</th>
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">单价</th>
                         <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">工程费</th>
                         <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">测试费</th>
                         <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">总金额</th>
@@ -29,6 +29,32 @@
                         <th class="text-center" >工艺</th>          
                     </tr>
                 </thead>
+                <% if @part %>
+                <% @part.each_with_index do |part,index| %>
+                <tbody>
+                    <tr>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= part.qty %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                    </tr>
+                </tbody>
+                <% end %>
+                <% end %>
                 </table>
                 </div>
             </div>

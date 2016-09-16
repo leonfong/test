@@ -29,6 +29,32 @@
                         <th class="text-center" >工艺</th>          
                     </tr>
                 </thead>
+                <% if @part %>
+                <% @part.each_with_index do |part,index| %>
+                <tbody>
+                    <tr>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= User.find_by_email(PcbOrder.find_by_id(part.pcb_order_id).order_sell).full_name.to_s %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= part.qty %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                        <td><%= index+1 %></td>
+                    </tr>
+                </tbody>
+                <% end %>
+                <% end %>
                 </table>
                 </div>
             </div>

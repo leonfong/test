@@ -193,15 +193,15 @@
                       <%= item.p_type %>
                   <% end %>
                   </td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty.to_s %></td>
                   <% if not item.bom_id.blank? %>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p %></td>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p/item.qty %></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p.to_s %></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p/item.qty.to_s %></td>
                   <% else %>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p %></td>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p.to_s %></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price.to_s %></td>
                   <% end %>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.remark %></td>
+                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.remark.to_s %></td>
               </tr>
               
           <% end %>

@@ -10,7 +10,7 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
     def pcb_list
-
+        @part = PcbOrderItem.where("p_type = 'PCB' AND state IS NULL")
     end
 
     def com_part_list

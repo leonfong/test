@@ -1762,9 +1762,9 @@ before_filter :authenticate_user!
                         if current_user.s_name.split(",").size > (index+1)
                         
                             where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 OR"
-                       
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 OR"
                         else
-                       
+                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 OR"
                             where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8)"
                         
                         end
@@ -1773,12 +1773,13 @@ before_filter :authenticate_user!
                     if params[:sell].size == 1
                         s_name = params[:sell]
                
-                        where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
-                
+                        #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
+                        where_p = " (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$')"
                     elsif params[:sell].size == 2
                         s_name = params[:sell]
                
-                        where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
+                        #where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
+                        where_p = "  (POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 or POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 9)  "
                     end
                 end
             end

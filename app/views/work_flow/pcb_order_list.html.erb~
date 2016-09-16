@@ -142,24 +142,24 @@
     <% @pcblist.each do |pcb| %>   
       <tr>
         <% if not pcb.pcb_customer_id.blank? %>
-            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></small></td>
         <% else %>
-            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %><small></small></td>
         <% end %>
-        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>业务员: </strong><%= User.find_by(email: pcb.order_sell).full_name %></td>
-        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>进度: </strong>
+        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>业务员: </strong><%= User.find_by(email: pcb.order_sell).full_name %></small></td>
+        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>进度: </strong>
             <% if pcb.state == "bom_chk" %>
                 BOM检查
             <% elsif pcb.state == "quote" %>
                 等待报价
             <% elsif pcb.state == "quotechk" %>
                 报价完成
-            <% end %>
+            <% end %></small>
         </td>
-        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><strong>日期: </strong><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
+        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>日期: </strong><%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></small></td>
         <td style="padding: 20px 0px 0px;border-top:0px none #ddd;"></td>
 <% if can? :work_e, :all %>
-        <td width="50" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
+        <td width="50" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></small></td>
 <% end %>      
       </tr>
       <% if not PcbOrderItem.where(pcb_order_no: pcb.order_no).blank?%>
@@ -196,7 +196,7 @@
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
                   <% if not item.bom_id.blank? %>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p %></td>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p/item.qty %></td>
                   <% else %>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p %></td>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>

@@ -53,22 +53,22 @@
     <% @pcblist.each do |pcb| %>   
       <tr>
         <% if not pcb.pcb_customer_id.blank? %>
-            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>询价单号:</small> <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></td>
+            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>询价单号:  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></small></td>
         <% else %>
-            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;">询价单号: <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></td>
+            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>询价单号:  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></small></td>
         <% end %>
 <!--
         <td width="80" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><%= pcb.c_code %></td>
         <td style="border-top:0px none #ddd;"><%= pcb.c_des %></td>
 -->
-        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;">业务员: <%= User.find_by(email: pcb.order_sell).full_name %></td>
-        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;">日期: <%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
+        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>业务员: <%= User.find_by(email: pcb.order_sell).full_name %></small></td>
+        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>日期: <%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></small></td>
 <!--
         <td style="border-top:0px none #ddd;">备注: <%= pcb.follow_remark %></td>
 -->
         <td style="padding: 20px 0px 0px;border-top:0px none #ddd;"></td>
 <% if can? :work_e, :all %>
-        <td width="50" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
+        <td width="50" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></small></td>
 <% end %>      
       </tr>
       <% if not PcbOrderSellItem.where(pcb_order_no: pcb.order_no).blank?%>

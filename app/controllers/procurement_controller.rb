@@ -11,6 +11,12 @@ before_filter :authenticate_user!
 
     def pcb_list
         @part = PcbOrderItem.where("p_type = 'PCB' AND state IS NULL")
+        @all_pcb_dn = "[&quot;"
+        all_s_dn = PcbSupplier.find_by_sql("SELECT DISTINCT pcb_suppliers.name FROM pcb_suppliers GROUP BY pcb_suppliers.name")
+        all_s_dn.each do |dn|
+            @all_pcb_dn += "&quot;,&quot;" + dn.name.to_s
+        end
+        @all_pcb_dn += "&quot;]"
     end
 
     def com_part_list
@@ -34,8 +40,7 @@ before_filter :authenticate_user!
                 set_erp_order_state.state = "quotechk"
                 set_erp_order_state.save
             end
-        end
-        
+        end     
         #render "p_edit_supplier_dn.js.erb"
     end
 

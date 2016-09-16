@@ -182,6 +182,7 @@ Rails.application.routes.draw do
   match '/add_dn', to: 'procurement#add_dn', via: 'post'
   match '/com_part_list', to: 'procurement#com_part_list', via: 'get'
   match '/edit_com_price', to: 'procurement#edit_com_price', via: 'post'
+  match '/pcb_list', to: 'procurement#pcb_list', via: 'get'
 
 
 

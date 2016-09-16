@@ -9,6 +9,10 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def pcb_list
+
+    end
+
     def com_part_list
         @part = PcbOrderItem.where("p_type = 'COMPONENTS' AND state IS NULL").paginate(:page => params[:page], :per_page => 15)
     end

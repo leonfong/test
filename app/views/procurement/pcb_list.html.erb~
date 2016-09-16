@@ -1,0 +1,37 @@
+<div class="container-fluid" style="padding-top: 15px;">
+    <small><div class="row" >
+        <div class="col-md-12" > 
+            <div class="panel panel-info" >
+                <div class="panel-heading"><span><strong>PCB报价列表</strong></span></div>
+                <table class="table table-hover table-bordered" style="margin: 0px;">
+                <thead >
+                    <tr class="well text-center"> 
+                        <th rowspan="2" class="text-center" width="50" style="padding-bottom: 20px;">行号</th>   
+                        <th rowspan="2" class="text-center" width="100" style="padding-bottom: 20px;">供应商</th>
+                        <th rowspan="2" class="text-center" width="150" style="padding-bottom: 20px;">询价单号</th>  
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">业务员</th> 
+                        <th colSpan="6" class="text-center" width="520" >PCB板(mm)</th>
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">数量</th>
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">平米</th>
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">元/平米</th>
+                        <th rowspan="2" class="text-center" width="50" style="padding-bottom: 20px;">单价</th>
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">工程费</th>
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">测试费</th>
+                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">总金额</th>
+                        <th rowspan="2" class="text-center" style="padding-bottom: 20px;">备注</th>
+                    </tr>
+                    <tr style="background-color: #eeeeee"> 
+                        <th class="text-center" >长度</th>   
+                        <th class="text-center" >宽地</th>  
+                        <th class="text-center" >板厚</th>  
+                        <th class="text-center" >拼板数量</th>  
+                        <th class="text-center" >层数*</th>  
+                        <th class="text-center" >工艺</th>          
+                    </tr>
+                </thead>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div></small>
+</div>

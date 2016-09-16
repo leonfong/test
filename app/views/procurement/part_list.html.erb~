@@ -49,10 +49,7 @@
 
 
     <div class="row" style="padding: 0px;">
-
         <div class="col-md-12">
-
-           
 <% if not @bom_item.blank? %> 
             <div class="row" style="padding: 0px;">
                 <div class="col-md-7" style="padding-right: 0px;">

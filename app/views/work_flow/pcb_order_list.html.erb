@@ -196,7 +196,7 @@
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
                   <% if not item.bom_id.blank? %>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p %></td>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p/item.qty %></td>
                   <% else %>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p %></td>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>

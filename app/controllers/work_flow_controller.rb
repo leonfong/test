@@ -1789,7 +1789,7 @@ before_filter :authenticate_user!
             if params[:end_date] != "" and  params[:end_date] != nil
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
-            @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at ASC").paginate(:page => params[:page], :per_page => 10)
+            @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
         else
             if params[:start_date] != "" and  params[:start_date] != nil
                 where_date += " procurement_boms.created_at > '#{params[:start_date]}'"
@@ -1798,12 +1798,12 @@ before_filter :authenticate_user!
                 where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
             end
             if where_date != ""
-                @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at ASC").paginate(:page => params[:page], :per_page => 10)
+                @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
             else
                 if params[:complete]
-                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE procurement_boms.star = 5   GROUP BY procurement_boms.p_name_mom ORDER BY created_at ASC").paginate(:page => params[:page], :per_page => 10)
+                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE procurement_boms.star = 5   GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms`   GROUP BY procurement_boms.p_name_mom ORDER BY created_at ASC").paginate(:page => params[:page], :per_page => 10)
+                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms`   GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
                 end
             end
         end

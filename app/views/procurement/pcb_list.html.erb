@@ -22,7 +22,7 @@
                     </tr>
                     <tr style="background-color: #eeeeee"> 
                         <th class="text-center" >长度</th>   
-                        <th class="text-center" >宽地</th>  
+                        <th class="text-center" >宽度</th>  
                         <th class="text-center" >板厚</th>  
                         <th class="text-center" >拼板数量</th>  
                         <th class="text-center" >层数*</th>  
@@ -38,14 +38,14 @@
                             <label for="dn" class="control-label sr-only">供应商简称:</label>
                                 <input id="pcb_dn" autocomplete="off" name="dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;">
                         </td>
-                        <td><%= index+1 %></td>
+                        <td><%= part.pcb_order_no %></td>
                         <td><%= User.find_by_email(PcbOrder.find_by_id(part.pcb_order_id).order_sell).full_name.to_s %></td>
-                        <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
+                        <td><input id="pcb_length" autocomplete="off" name="pcb_length" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="pcb_width" autocomplete="off" name="pcb_width" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="pcb_thickness" autocomplete="off" name="pcb_thickness" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="pcb_panel" autocomplete="off" name="pcb_panel" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="pcb_layer" autocomplete="off" name="pcb_layer" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="pcb_gongyi" autocomplete="off" name="pcb_gongyi" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><%= part.qty %></td>
                         <td><%= index+1 %></td>
                         <td><%= index+1 %></td>
@@ -53,7 +53,7 @@
                         <td><%= index+1 %></td>
                         <td><%= index+1 %></td>
                         <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
+                        <td><input id="pcb_remark" autocomplete="off" name="pcb_remark" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                     </tr>
                 </tbody>
                 <% end %>

@@ -1747,7 +1747,7 @@ before_filter :authenticate_user!
                 s_name = current_user.s_name
                
                 #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
-                where_p = " (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$')"
+                where_p = " ((POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$'))"
                 
             elsif current_user.s_name.size == 2
                 s_name = current_user.s_name
@@ -1774,7 +1774,7 @@ before_filter :authenticate_user!
                         s_name = params[:sell]
                
                         #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
-                        where_p = " (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$')"
+                        where_p = " ((POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$'))"
                     elsif params[:sell].size == 2
                         s_name = params[:sell]
                

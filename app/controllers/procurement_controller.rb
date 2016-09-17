@@ -20,7 +20,7 @@ before_filter :authenticate_user!
     end
 
     def com_part_list
-        @part = PcbOrderItem.where("p_type = 'COMPONENTS' AND state IS NULL").paginate(:page => params[:page], :per_page => 15)
+        @part = PcbOrderItem.where("p_type = 'COMPONENTS'").paginate(:page => params[:page], :per_page => 15)
     end
 
     def edit_com_price

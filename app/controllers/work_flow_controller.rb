@@ -1759,14 +1759,22 @@ before_filter :authenticate_user!
                     where_p = "("
                     current_user.s_name.split(",").each_with_index do |item,index|
                         s_name = item
-                        if current_user.s_name.split(",").size > (index+1)
-                        
-                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 OR"
-                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 OR"
-                        else
-                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 OR"
-                            where_p += "  LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8)"
-                        
+                        if s_name.size == 1
+                            if current_user.s_name.split(",").size > (index+1)
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                            else
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$'))"
+                            end
+                        elsif s_name.size == 2
+                            if current_user.s_name.split(",").size > (index+1)
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                            else
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$'))"
+                            end
                         end
                     end
                 else

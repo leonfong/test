@@ -193,7 +193,13 @@
                             <td><%= q_item.des_en %></td>
                             <td><%= q_item.des_cn %></td>
                             <% if q_item.bom_id.blank? %>
-                                <td><%= q_item.p_type %></td>
+                                <td>
+                                    <% if q_item.p_type == "COMPONENTS" %>
+                                        <%= link_to "元器件", p_viewbom_path(bak: "bak",bom_id: q_item.bom_id) %>
+                                    <% else %>
+                                        <%= q_item.p_type %>
+                                    <% end %>
+                                </td>
                             <% else %>
                                 <td><%= link_to "BOM", p_viewbom_path(bak: "bak",bom_id: q_item.bom_id) %></td>
                             <% end %>
@@ -258,13 +264,19 @@
 <!--
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
+
                     <% if can? :work_e, :all and @q_order.state == "new"%>
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
                     <% elsif can? :work_d, :all %>
+<!--
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到采购工程师?"} %>
+-->
                     <% elsif can? :work_g, :all %>
+<!--
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定已经完成报价?"} %>
+-->
                     <% end %>
+
                 </div>
             </div></div>
        <% end %>

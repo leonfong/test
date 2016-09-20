@@ -50,7 +50,10 @@
                                        <%= @boms.p_name_mom %>
                                    <% else %>
                                        <% if PcbOrder.find_by_order_no(@boms.p_name_mom).pcb_customer_id.blank? %>
-                                       <%= link_to @boms.p_name_mom, edit_pcb_order_path() %>
+                                           <%= link_to @boms.p_name_mom, edit_pcb_order_path(order_no: @boms.p_name_mom) %>
+                                       <% else %>
+                                           <%= link_to @boms.p_name_mom, edit_pcb_order_path(order_no: @boms.p_name_mom,c_id: PcbOrder.find_by_order_no(@boms.p_name_mom).pcb_customer_id) %>
+                                       <% end %>
                                    <% end %>
                                    <label for="pj_remark">子项目名：</label>
                                    <%= @boms.p_name %>
@@ -93,8 +96,10 @@
                            <% if @boms.row_use != nil %>
                            <td width="100"><%= link_to "导出测试", p_excel_add_path(:bom_id =>@boms.id) %></td>
                            <% end %>
+                           <% if @boms.excel_file != nil %>
                            <td width="100"><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
                            <td width="100"><%= link_to "导出源文件", @boms.excel_file_url %></td> 
+                           <% end %>
                        </tr>
                     </table>    
                 </div>
@@ -272,7 +277,7 @@ function change_<%= item.id.to_s %>(){
                         </td>
                         
                     <% end %>
-                    <% if item.part_code.size > 5 %>
+                    <% if item.part_code.to_s.size > 5 %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
                     <% else %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>

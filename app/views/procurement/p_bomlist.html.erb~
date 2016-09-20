@@ -153,15 +153,19 @@
 <!--
         <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/add_order?bom_id=<%= bom.id.to_s %>" data-confirm="确定要下单?">下单</a></div></td>
 -->
-      <% if can? :work_send_to_sell, :all %>
+      
       <% if bom.remark_to_sell == "mark" %>
         <td class="bg-success" >
       <% else %>
         <td>
       <% end %>
+      <% if can? :work_send_to_sell, :all %>
           <div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/remark_to_sell?bom_id=<%= bom.id.to_s %>" data-confirm="确定要标记?">标记</a></div>
-      </td>
+      <% else %>
+          <div></div>
       <% end %>
+      </td>
+
       </tr>
     <% end %>
   </tbody>

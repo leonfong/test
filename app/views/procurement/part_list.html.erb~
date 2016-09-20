@@ -51,6 +51,7 @@
     <div class="row" style="padding: 0px;">
         <div class="col-md-12">
 <% if not @bom_item.blank? %> 
+<%= will_paginate(@bom_item) %>
             <div class="row" style="padding: 0px;">
                 <div class="col-md-7" style="padding-right: 0px;">
             <small>

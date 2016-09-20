@@ -1420,7 +1420,111 @@ before_filter :authenticate_user!
             @pcb.t_p = params[:edit_price]
             @pcb.price = BigDecimal.new(params[:edit_price])/@pcb.qty
         end
-        @pcb.save
+        if @pcb.save
+            if @pcb.p_type == "COMPONENTS"
+                find_in_bomlist = ProcurementBom.find_by_erp_item_id(@pcb.id)
+                if find_in_bomlist.blank?
+                    @bom = ProcurementBom.new
+                    if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?
+                        order_n =1
+                    else      
+                        order_n = ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').last.no.split("B")[-1].to_i + 1
+                    end
+                    @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
+                    @bom.erp_no = @pcb.pcb_order_no
+                    @bom.p_name_mom = @pcb.pcb_order_no
+                    @bom.erp_no_son = @pcb.pcb_order_no_son
+                    @bom.p_name = @pcb.pcb_order_no_son
+                    @bom.erp_qty = @pcb.qty
+                    @bom.qty = @pcb.qty
+                    @bom.user_id = current_user.id
+                    if @bom.save
+                        @pcb.bom_id = @bom.id
+                        @pcb.save
+                        bom_item = @bom.p_items.build()
+                        #bom_item.part_code = refa
+=begin
+                        if refa.blank? 
+                            bom_item.user_do = 7
+                        else
+                            if refa =~ /r/i or refa =~ /c/i or refa =~ /d/i or refa =~ /v/i or refa =~ /q/i or refa =~ /lcd/i or refa =~ /led/i or refa =~ /ic/i or refa =~ /z/i or refa =~ /u/i
+                            #bom_item.user_do = 77
+                                bom_item.user_do = 7
+                            elsif refa =~ /l/i or refa =~ /x/i or refa =~ /sw/i or refa =~ /s/i or refa =~ /vr/i or refa =~ /w/i or refa =~ /k/i or refa =~ /rl/i or refa =~ /fb/i or refa =~ /fr/i or refa =~ /y/i or refa =~ /f/i or refa =~ /pf/i or refa =~ /j/i or refa =~ /con/i or refa =~ /jp/i or refa =~ /bz/i
+                                bom_item.user_do = 75
+                            else
+                                bom_item.user_do = 7
+                            end
+                        end
+=end
+		        bom_item.description = @pcb.des_en + "---" + @pcb.des_cn
+                        bom_item.quantity = @pcb.qty
+                        bom_item.moko_part = @pcb.moko_code
+                        bom_item.moko_des = @pcb.moko_des
+                        #bom_item.mpn = mpna
+                        #bom_item.fengzhuang = fengzhuang
+                        #bom_item.link = link
+                        #bom_item.other = othera
+                        #bom_item.all_info = all_info.chop
+                        bom_item.user_id = current_user.id
+                        bom_item.erp_id = @bom.erp_id
+                        bom_item.erp_no = @bom.erp_no
+                        bom_item.save
+                        
+                    end
+                else
+                    @bom = find_in_bomlist
+                    @bom.erp_no = @pcb.pcb_order_no
+                    @bom.p_name_mom = @pcb.pcb_order_no
+                    @bom.erp_no_son = @pcb.pcb_order_no_son
+                    @bom.p_name = @pcb.pcb_order_no_son
+                    @bom.erp_qty = @pcb.qty
+                    @bom.qty = @pcb.qty
+                    if @bom.save
+                        @pcb.bom_id = @bom.id
+                        @pcb.save
+                        bom_item = @bom.p_items.build()
+                        #bom_item.part_code = refa
+=begin
+                        if refa.blank? 
+                            bom_item.user_do = 7
+                        else
+                            if refa =~ /r/i or refa =~ /c/i or refa =~ /d/i or refa =~ /v/i or refa =~ /q/i or refa =~ /lcd/i or refa =~ /led/i or refa =~ /ic/i or refa =~ /z/i or refa =~ /u/i
+                            #bom_item.user_do = 77
+                                bom_item.user_do = 7
+                            elsif refa =~ /l/i or refa =~ /x/i or refa =~ /sw/i or refa =~ /s/i or refa =~ /vr/i or refa =~ /w/i or refa =~ /k/i or refa =~ /rl/i or refa =~ /fb/i or refa =~ /fr/i or refa =~ /y/i or refa =~ /f/i or refa =~ /pf/i or refa =~ /j/i or refa =~ /con/i or refa =~ /jp/i or refa =~ /bz/i
+                                bom_item.user_do = 75
+                            else
+                                bom_item.user_do = 7
+                            end
+                        end
+=end
+		        bom_item.description = @pcb.des_en + "---" + @pcb.des_cn
+                        bom_item.quantity = @pcb.qty
+                        bom_item.moko_part = @pcb.moko_code
+                        bom_item.moko_des = @pcb.moko_des
+                        #bom_item.mpn = mpna
+                        #bom_item.fengzhuang = fengzhuang
+                        #bom_item.link = link
+                        #bom_item.other = othera
+                        #bom_item.all_info = all_info.chop
+                        bom_item.user_id = current_user.id
+                        bom_item.erp_id = @bom.erp_id
+                        bom_item.erp_no = @bom.erp_no
+                        bom_item.save
+                        
+                    end
+                end
+                q_order = PcbOrder.find_by_id(@pcb.pcb_order_id)
+                q_order.state = "quote"
+                q_order.save
+            
+            elsif @pcb.p_type == "PCB"
+                q_order = PcbOrder.find_by_id(@pcb.pcb_order_id)
+                q_order.state = "quote"
+                q_order.save
+            end
+        end
         redirect_to :back
     end
 

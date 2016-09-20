@@ -1405,6 +1405,7 @@ before_filter :authenticate_user!
     end
 
     def edit_pcb_order_item
+        product_id = Product.find_by_name(params[:edit_moko_code]).id
         @pcb = PcbOrderItem.find(params[:edit_c_item_id])
         @pcb.moko_code = params[:edit_moko_code]
         @pcb.moko_des = params[:edit_moko_des]
@@ -1436,7 +1437,7 @@ before_filter :authenticate_user!
                     @bom.erp_no_son = @pcb.pcb_order_no_son
                     @bom.p_name = @pcb.pcb_order_no_son
                     @bom.erp_qty = @pcb.qty
-                    @bom.qty = @pcb.qty
+                    @bom.qty = 1
                     @bom.att = @pcb.att
                     @bom.user_id = current_user.id
                     if @bom.save
@@ -1461,6 +1462,7 @@ before_filter :authenticate_user!
                         bom_item.p_type = "COMPONENTS"
 		        bom_item.description = @pcb.des_en + "---" + @pcb.des_cn
                         bom_item.quantity = @pcb.qty
+                        bom_item.product_id = product_id
                         bom_item.moko_part = @pcb.moko_code
                         bom_item.moko_des = @pcb.moko_des
                         #bom_item.mpn = mpna
@@ -1480,7 +1482,7 @@ before_filter :authenticate_user!
                     @bom.p_name_mom = @pcb.pcb_order_no
                     @bom.erp_no_son = @pcb.pcb_order_no_son
                     @bom.p_name = @pcb.pcb_order_no_son
-                    @bom.erp_qty = @pcb.qty
+                    @bom.erp_qty = 1
                     @bom.qty = @pcb.qty
                     @bom.att = @pcb.att
                     if @bom.save
@@ -1509,6 +1511,7 @@ before_filter :authenticate_user!
                         bom_item.p_type = "COMPONENTS"
 		        bom_item.description = @pcb.des_en + "---" + @pcb.des_cn
                         bom_item.quantity = @pcb.qty
+                        bom_item.product_id = product_id
                         bom_item.moko_part = @pcb.moko_code
                         bom_item.moko_des = @pcb.moko_des
                         #bom_item.mpn = mpna

@@ -874,6 +874,7 @@ before_filter :authenticate_user!
     end
 
     def part_list
+        part_ctl = ""
         add_orderby = "procurement_boms.id"
         if params[:sort_date] == "mpn"
             add_orderby = "p_items.mpn DESC"
@@ -884,6 +885,11 @@ before_filter :authenticate_user!
             part_ctl = " AND p_items.color = 'b'" 
         else
             part_ctl = " AND (p_items.color <> 'b' OR p_items.color IS NULL)"
+        end
+        if params[:p_type] == "COM"
+            part_ctl += " AND p_items.p_type = 'COMPONENTS'" 
+        else
+            part_ctl += ""
         end
         @pdn = PDn.new
         #@mpninfo = "SP1007-01WTG"

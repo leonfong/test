@@ -1458,6 +1458,7 @@ before_filter :authenticate_user!
                             end
                         end
 =end
+                        bom_item.p_type = "COMPONENTS"
 		        bom_item.description = @pcb.des_en + "---" + @pcb.des_cn
                         bom_item.quantity = @pcb.qty
                         bom_item.moko_part = @pcb.moko_code
@@ -1485,6 +1486,10 @@ before_filter :authenticate_user!
                     if @bom.save
                         @pcb.bom_id = @bom.id
                         @pcb.save
+                        old_item = PItem.where(procurement_bom_id: @bom.id)
+                        old_item.each do |item|
+                           item.destroy
+                        end
                         bom_item = @bom.p_items.build()
                         #bom_item.part_code = refa
 =begin
@@ -1501,6 +1506,7 @@ before_filter :authenticate_user!
                             end
                         end
 =end
+                        bom_item.p_type = "COMPONENTS"
 		        bom_item.description = @pcb.des_en + "---" + @pcb.des_cn
                         bom_item.quantity = @pcb.qty
                         bom_item.moko_part = @pcb.moko_code

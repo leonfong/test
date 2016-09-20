@@ -195,7 +195,7 @@
                             <% if q_item.bom_id.blank? %>
                                 <td>
                                     <% if q_item.p_type == "COMPONENTS" %>
-                                        元器件
+                                        <%= link_to "元器件", p_viewbom_path(bak: "bak",bom_id: q_item.bom_id) %>
                                     <% else %>
                                         <%= q_item.p_type %>
                                     <% end %>

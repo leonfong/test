@@ -1405,7 +1405,10 @@ before_filter :authenticate_user!
     end
 
     def edit_pcb_order_item
-        product_id = Product.find_by_name(params[:edit_moko_code]).id
+        product_id = nil
+        if params[:edit_moko_code] != ""
+            product_id = Product.find_by_name(params[:edit_moko_code]).id
+        end
         @pcb = PcbOrderItem.find(params[:edit_c_item_id])
         @pcb.moko_code = params[:edit_moko_code]
         @pcb.moko_des = params[:edit_moko_des]

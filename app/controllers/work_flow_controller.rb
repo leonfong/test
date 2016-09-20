@@ -1437,6 +1437,7 @@ before_filter :authenticate_user!
                     @bom.p_name = @pcb.pcb_order_no_son
                     @bom.erp_qty = @pcb.qty
                     @bom.qty = @pcb.qty
+                    @bom.att = @pcb.att
                     @bom.user_id = current_user.id
                     if @bom.save
                         @pcb.bom_id = @bom.id
@@ -1480,6 +1481,7 @@ before_filter :authenticate_user!
                     @bom.p_name = @pcb.pcb_order_no_son
                     @bom.erp_qty = @pcb.qty
                     @bom.qty = @pcb.qty
+                    @bom.att = @pcb.att
                     if @bom.save
                         @pcb.bom_id = @bom.id
                         @pcb.save

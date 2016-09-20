@@ -1598,9 +1598,9 @@ before_filter :authenticate_user!
        # end
         if params[:erp_item_id] != ""
             @bom.erp_item_id = params[:erp_item_id]
-            if not PcbOrderItem.find_by_id(params[:erp_item_id]).blank?
-                @bom.erp_no.att = PcbOrderItem.find_by_id(params[:erp_item_id]).att
-            end
+            #if not PcbOrderItem.find_by_id(params[:erp_item_id]).blank?
+            @bom.att = PcbOrderItem.find_by_id(params[:erp_item_id]).att
+            #end
             #upstart = PcbOrderItem.find_by_id(params[:erp_item_id])
             #upstart.state = "quote"
             #upstart.save

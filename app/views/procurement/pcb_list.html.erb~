@@ -10,13 +10,14 @@
                         <th rowspan="2" class="text-center" width="100" style="padding-bottom: 20px;">供应商</th>
                         <th rowspan="2" class="text-center" width="120" style="padding-bottom: 20px;">询价单号</th>  
                         <th rowspan="2" class="text-center" width="60" style="padding-bottom: 20px;">业务员</th> 
-                        <th colSpan="6" class="text-center" width="420" >PCB板(mm)</th>
+                        <th colSpan="6" class="text-center" width="500" >PCB板(mm)</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">数量</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">平米</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">元/平米</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">单价</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">工程费</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">测试费</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">模具费</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">总金额</th>
                         <th rowspan="2" class="text-center" style="padding-bottom: 20px;">备注</th>
                     </tr>
@@ -30,33 +31,96 @@
                     </tr>
                 </thead>
                 <% if @part %>
-                <% @part.each_with_index do |part,index| %>
                 <tbody>
+                <% @part.each_with_index do |part,index| %>
+                    <%= form_tag({action: :pcb_info_update},method:"post",remote:"ture",class:"form-inline") do %>
                     <tr>
-                        <td style="padding-left: 0px;"><a class="btn btn-info btn-xs" href="<%= part.att %>" target="_blank">下<br>载</a></td>
+                        <td style="padding-left: 3px;">
+                            <div class="form-group sr-only">
+                                <label for="part_id" class="control-label">partid:</label>
+                                <input type="text" class="form-control" id="part_id" name="part_id" value="<%= part.id.to_s %>">
+                                <input type="text" class="form-control" id="pcb_order_no" name="pcb_order_no" value="<%= part.pcb_order_no.to_s %>">
+                                <input type="text" class="form-control" id="pcb_sell" name="pcb_sell" value="<%= PcbOrder.find_by_id(part.pcb_order_id).order_sell.to_s %>">
+                                <input type="text" class="form-control" id="pcb_qty" name="pcb_qty" value="<%= part.qty %>">
+                            </div>
+                            <a class="btn btn-info btn-xs" href="<%= part.att %>" target="_blank">下<br>载</a>
+                        </td>
                         <td>
                             <label for="dn" class="control-label sr-only">供应商简称:</label>
-                                <input id="pcb_dn" autocomplete="off" name="dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;">
+                                <input id="pcb_dn" autocomplete="off" name="pcb_dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;">
                         </td>
-                        <td><%= part.pcb_order_no %></td>
+                        <td id="pcb_order_no_color_<%= part.id.to_s %>"><%= part.pcb_order_no %></td>
                         <td><%= User.find_by_email(PcbOrder.find_by_id(part.pcb_order_id).order_sell).full_name.to_s %></td>
                         <td><input id="pcb_length" autocomplete="off" name="pcb_length" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><input id="pcb_width" autocomplete="off" name="pcb_width" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
-                        <td><input id="pcb_thickness" autocomplete="off" name="pcb_thickness" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td>
+<!--
+                            <input id="pcb_thickness" autocomplete="off" name="pcb_thickness" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;">
+-->
+                            <select class="form-control input-sm" id="pcb_thickness" name="pcb_thickness">
+                                <option value="">----请选择----</option>
+                                <option value="0.1">0.1</option>
+                                <option value="0.2">0.2</option>
+                                <option value="0.4">0.4</option>
+                                <option value="0.5">0.5</option>
+                                <option value="0.6">0.6</option>
+                                <option value="0.8">0.8</option>
+                                <option value="1.0">1.0</option>
+                                <option value="1.2">1.2</option>
+                                <option value="1.5">1.5</option>
+                                <option value="1.6">1.6</option>
+                                <option value="2.0">2.0</option>
+                                <option value="2.4">2.4</option>
+                                <option value="3.0">3.0</option>
+                                <option value="3.2">3.2</option>
+                            </select>
+                        </td>
                         <td><input id="pcb_panel" autocomplete="off" name="pcb_panel" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
-                        <td><input id="pcb_layer" autocomplete="off" name="pcb_layer" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
-                        <td><input id="pcb_gongyi" autocomplete="off" name="pcb_gongyi" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td>
+<!--
+                            <input id="pcb_layer" autocomplete="off" name="pcb_layer" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+-->
+                            <select class="form-control input-sm" id="pcb_layer" name="pcb_layer">
+                                <option value="">----请选择----</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                                <option value="12">12</option>
+                            </select>  
+                        <td>
+<!--
+                            <input id="pcb_gongyi" autocomplete="off" name="pcb_gongyi" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;">    
+-->
+                            <select class="form-control input-sm" id="pcb_gongyi" name="pcb_gongyi">
+                                <option value="">----请选择----</option>
+                                <option value="PCB">HASL</option>
+                                <option value="PCBA">ENIG</option>
+                                <option value="OSP">OSP</option>
+                            </select>  
+                        </td>
                         <td><%= part.qty %></td>
-                        <td><%= index+1 %></td>
+                        <td id="pcb_area_<%= part.id.to_s %>"></td>
                         <td><input id="pcb_area_price" autocomplete="off" name="pcb_area_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
-                        <td><%= index+1 %></td>
+                        <td id="pcb_price_<%= part.id.to_s %>"></td>
                         <td><input id="eng_price" autocomplete="off" name="eng_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><input id="test_price" autocomplete="off" name="test_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
-                        <td><%= index+1 %></td>
-                        <td><input id="pcb_remark" autocomplete="off" name="pcb_remark" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="mould_price" autocomplete="off" name="mould_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td id="pcb_t_p_<%= part.id.to_s %>"></td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input id="pcb_remark" autocomplete="off" name="pcb_remark" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;">
+                                <span class="input-group-btn ">
+                                    <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
+                                </span>
+                            </div>
+                        </td>
                     </tr>
-                </tbody>
+                    <% end %>
                 <% end %>
+                </tbody>
                 <% end %>
                 </table>
                 </div>

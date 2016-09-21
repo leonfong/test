@@ -19,6 +19,41 @@ before_filter :authenticate_user!
         @all_pcb_dn += "&quot;]"
     end
 
+    def pcb_info_update
+        pcb_info_find = PcbItemInfo.find_by_pcb_order_item_id(params[:part_id])
+        if not pcb_info_find.blank?
+            @pcb_info = pcb_info_find
+        else
+            @pcb_info = PcbItemInfo.new
+        end
+        @pcb_info.pcb_order_item_id = params[:part_id]
+        @pcb_info.pcb_supplier = params[:pcb_dn]
+        @pcb_info.pcb_order_no = params[:pcb_order_no]
+        @pcb_info.sell = params[:pcb_sell]
+        @pcb_info.pcb_length = params[:pcb_length]  
+        @pcb_info.pcb_width = params[:pcb_width]
+        @pcb_info.pcb_thickness = params[:pcb_thickness]
+        @pcb_info.pcb_panel = params[:pcb_panel]
+        @pcb_info.pcb_layer = params[:pcb_layer]
+        @pcb_info.pcb_gongyi = params[:pcb_gongyi]
+        @pcb_info.qty = params[:pcb_qty]
+        @pcb_info.pcb_area = params[:pcb_length].to_i*params[:pcb_width].to_i/1000000/params[:pcb_panel].to_i
+        @pcb_info.pcb_area_price = params[:pcb_area_price]
+        @pcb_info.price = params[:pcb_length].to_i*params[:pcb_width].to_i/1000000/params[:pcb_panel].to_i*params[:pcb_area_price].to_i
+        @pcb_info.eng_price = params[:eng_price]
+        @pcb_info.test_price = params[:test_price]
+        @pcb_info.m_price = params[:mould_price]
+        @pcb_info.t_p = params[:pcb_length].to_i*params[:pcb_width].to_i/1000000/params[:pcb_panel].to_i*params[:pcb_area_price].to_i*params[:pcb_qty].to_i + params[:eng_price].to_i + params[:test_price].to_i + params[:mould_price].to_i
+        @pcb_info.remark = params[:pcb_remark]
+        @pcb_info.save
+        @pcb_order_item_find = PcbOrderItem.find_by_id(params[:part_id])
+        @pcb_order_item_find.t_p = @pcb_info.t_p
+        @pcb_order_item_find.price = @pcb_info.price
+        @pcb_order_item_find.bom_id = @pcb_info.id
+        @pcb_order_item_find.state = "quotechked"
+        @pcb_order_item_find.save
+    end
+
     def com_part_list
         @part = PcbOrderItem.where("p_type = 'COMPONENTS'").paginate(:page => params[:page], :per_page => 15)
     end

@@ -6,18 +6,18 @@
                 <table class="table table-hover table-bordered" style="margin: 0px;">
                 <thead >
                     <tr class="well text-center"> 
-                        <th rowspan="2" class="text-center" width="50" style="padding-bottom: 20px;">行号</th>   
+                        <th rowspan="2" class="text-center" width="30" style="padding-bottom: 20px;">附件</th>   
                         <th rowspan="2" class="text-center" width="100" style="padding-bottom: 20px;">供应商</th>
-                        <th rowspan="2" class="text-center" width="150" style="padding-bottom: 20px;">询价单号</th>  
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">业务员</th> 
-                        <th colSpan="6" class="text-center" width="520" >PCB板(mm)</th>
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">数量</th>
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">平米</th>
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">元/平米</th>
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">单价</th>
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">工程费</th>
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">测试费</th>
-                        <th rowspan="2" class="text-center" width="90" style="padding-bottom: 20px;">总金额</th>
+                        <th rowspan="2" class="text-center" width="120" style="padding-bottom: 20px;">询价单号</th>  
+                        <th rowspan="2" class="text-center" width="60" style="padding-bottom: 20px;">业务员</th> 
+                        <th colSpan="6" class="text-center" width="420" >PCB板(mm)</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">数量</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">平米</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">元/平米</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">单价</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">工程费</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">测试费</th>
+                        <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">总金额</th>
                         <th rowspan="2" class="text-center" style="padding-bottom: 20px;">备注</th>
                     </tr>
                     <tr style="background-color: #eeeeee"> 
@@ -33,14 +33,14 @@
                 <% @part.each_with_index do |part,index| %>
                 <tbody>
                     <tr>
-                        <td><%= index+1 %></td>
+                        <td style="padding-left: 0px;"><a class="btn btn-info btn-xs" href="<%= part.att %>" target="_blank">下<br>载</a></td>
                         <td>
                             <label for="dn" class="control-label sr-only">供应商简称:</label>
                                 <input id="pcb_dn" autocomplete="off" name="dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;">
                         </td>
                         <td><%= part.pcb_order_no %></td>
                         <td><%= User.find_by_email(PcbOrder.find_by_id(part.pcb_order_id).order_sell).full_name.to_s %></td>
-                        <td><input id="pcb_length" autocomplete="off" name="pcb_length" type="text" class="form-control input-xs"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="pcb_length" autocomplete="off" name="pcb_length" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><input id="pcb_width" autocomplete="off" name="pcb_width" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><input id="pcb_thickness" autocomplete="off" name="pcb_thickness" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><input id="pcb_panel" autocomplete="off" name="pcb_panel" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
@@ -48,10 +48,10 @@
                         <td><input id="pcb_gongyi" autocomplete="off" name="pcb_gongyi" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><%= part.qty %></td>
                         <td><%= index+1 %></td>
+                        <td><input id="pcb_area_price" autocomplete="off" name="pcb_area_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
-                        <td><%= index+1 %></td>
+                        <td><input id="eng_price" autocomplete="off" name="eng_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
+                        <td><input id="test_price" autocomplete="off" name="test_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                         <td><%= index+1 %></td>
                         <td><input id="pcb_remark" autocomplete="off" name="pcb_remark" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;"></td>
                     </tr>

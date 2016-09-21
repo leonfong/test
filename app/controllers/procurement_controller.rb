@@ -10,7 +10,7 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
     def pcb_list
-        @part = PcbOrderItem.where("p_type = 'PCB' AND state IS NULL")
+        @part = PcbOrderItem.where("p_type = 'PCB' AND state = 'quote'")
         @all_pcb_dn = "[&quot;"
         all_s_dn = PcbSupplier.find_by_sql("SELECT DISTINCT pcb_suppliers.name FROM pcb_suppliers GROUP BY pcb_suppliers.name")
         all_s_dn.each do |dn|

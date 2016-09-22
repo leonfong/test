@@ -10,7 +10,18 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
     def pcb_list
-        @part = PcbOrderItem.where("p_type = 'PCB' AND state = 'quote'")
+        if params[:complete]
+            where_state = " AND state = 'quotechked'"
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.pcb_order_id FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+        end
+        if params[:undone]
+            where_state = " AND state IS NULL"
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+        end
+        if params[:key_order]
+            where_state = " AND pcb_order_items.pcb_order_no LIKE '%#{params[:key_order]}%'"
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+        end
         @all_pcb_dn = "[&quot;"
         all_s_dn = PcbSupplier.find_by_sql("SELECT DISTINCT pcb_suppliers.name FROM pcb_suppliers GROUP BY pcb_suppliers.name")
         all_s_dn.each do |dn|

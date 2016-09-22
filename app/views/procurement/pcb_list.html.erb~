@@ -64,7 +64,7 @@
                 <% if @part %>
                 <tbody>
                 <% @part.each_with_index do |part,index| %>
-                    <%= form_tag({action: :pcb_info_update},method:"post",remote:"ture",class:"form-inline") do %>
+                    <form class="form-inline" action="/pcb_info_update" accept-charset="UTF-8" data-remote="true" method="post">
                     <tr>
                         <td style="padding-left: 3px;">
                             <div class="form-group sr-only">
@@ -145,12 +145,11 @@
                                 <input id="pcb_remark" autocomplete="off" name="pcb_remark" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.remark %>">    
                                 <span class="input-group-btn ">
                                     <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
-                                </span>
-                                
+                                </span>              
                             </div>
                         </td>
                     </tr>
-                    <% end %>
+                    </form>
                 <% end %>
                 </tbody>
                 <% end %>

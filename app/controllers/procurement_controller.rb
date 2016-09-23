@@ -967,7 +967,11 @@ before_filter :authenticate_user!
         else
             where_data = ""
         end
-        if can? :work_g_all, :all
+        if can? :work_g_all, :all and can? :work_a, :all
+            @user_do = "7"
+            #@bom_item = PItem.where(user_do: "7")
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+        elsif can? :work_g_all, :all
             @user_do = "7"
             #@bom_item = PItem.where(user_do: "7")
             @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7'  AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
@@ -3844,8 +3848,9 @@ WHERE
                     Rails.logger.info(query_str.inspect)
                     Rails.logger.info(ary_all.inspect)
                     Rails.logger.info(value2_test.inspect)
-                    Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-                    Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+                    Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrvalue2_all")
+                    Rails.logger.info(value2_all.inspect)
+                    Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrvalue2_all")
                 
                     
                     if value2_all != []
@@ -3861,6 +3866,7 @@ WHERE
                     end
                 end
                 if value2_use != "nothing"
+                    Rails.logger.info("rrrrrrrrrrrrr获取电压")
                     #获取电压
                     value3_all = ary_all.join(" ").split(" ").grep(/[vV]/)
                     value3 = "nothing"
@@ -3870,6 +3876,7 @@ WHERE
                     ary_q[0] = value2_use
                     ary_q[1] = value3
                     #获取封装
+                    Rails.logger.info("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr获取封装")
                     package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'RES' GROUP BY products.package2")
                     value4_all = package2_all.select { |item| ary_all.join(" ").include?item.package2 }
                     if not value4_all.blank? 
@@ -3884,6 +3891,7 @@ WHERE
                         #ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                     #end
                 else
+                    Rails.logger.info("rrrrrrrrrrrrr判断是否IC")
                     #判断是否IC
                     ary_q = query_str.to_s.scan(/(-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)[a-zA-Z]+|[0-9]\.?[0-9]*[a-zA-Z]+|[a-zA-Z]*[0-9]+[a-zA-Z]*|[a-zA-Z]*[0-9]+|[0-9]+(?!\W)|[%]+)/)
                     ary_q << "nothing"
@@ -4037,14 +4045,19 @@ WHERE
                 #处理电阻
                 ary_q = []
                 #获取封装
+                Rails.logger.info("获取封装!!!!!!!!!!!!!!!!!!!!!!!!!!!获取封装")
+                Rails.logger.info(ary_all.inspect)
+                Rails.logger.info(ary_all.join(" ").inspect)
+                Rails.logger.info("获取封装!!!!!!!!!!!!!!!!!!!!!!!!!!!获取封装")
                 package2_all = Product.find_by_sql("SELECT products.package2, products.ptype FROM products WHERE products.ptype = 'RES' GROUP BY products.package2")
                 value4_all = package2_all.select { |item| ary_all.join(" ").include?item.package2 }
                 if not value4_all.blank?
-
-                    Rails.logger.info("__________0000000000000000000000000000000000000bbbbb___________________________")
-                    #Rails.logger.info(value4_all.first.package2)
-                    Rails.logger.info("_________0000000000000000000000000000000000000bbbbb_______________________________") 
                     ary_q[2] = value4_all.first.package2
+                    Rails.logger.info("获取封装!!!!!!!!!!!!!!!!!!!!!!!!!!!获取封装000000000000000000000bbbbb___________________________")
+                    Rails.logger.info(value4_all.inspect)
+                    Rails.logger.info(ary_q[2].inspect)
+                    Rails.logger.info("获取封装!!!!!!!!!!!!!!!!!!!!!!!!!!!获取封装0000bbbbb_______________________________") 
+
                 else
                     ary_q[2] = "nothing"
                 end

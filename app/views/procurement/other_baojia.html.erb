@@ -244,10 +244,10 @@ function change_<%= item.id.to_s %>(){
                         </td>
                         
                     <% end %>
-                    <% if item.part_code.size > 5 %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
+                    <% if item.part_code.to_s.size > 5 %>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code.to_s[0,3]+"..." %></small></td>
                     <% else %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code.to_s %></small></td>
                     <% end %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*ProcurementBom.find(item.procurement_bom_id).qty %></small></td> 
 

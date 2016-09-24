@@ -812,7 +812,10 @@ before_filter :authenticate_user!
 
     def p_item_remark_up
         @item_id = params[:itemp_id]
-        remark = PItemRemark.find(params[:remark_id])
+        remarkold = PItemRemark.find(params[:remark_id])
+        remarkold.state = "del"
+        remarkold.save
+        remark = PItemRemark.new
         remark.p_item_id = params[:itemp_id]
         remark.user_id = current_user.id
         remark.user_name = current_user.full_name
@@ -832,17 +835,60 @@ before_filter :authenticate_user!
             @remark_all += '<table style="margin: 0px;" >'
             @remark_all += '<tr>'
             @remark_all += '<td style="padding: 0px;margin: 0px;" >'
-            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+            @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"> </a>'
+            @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
+            @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+            if remark_item.state == "del"
+                @remark_all +=  '<del>' + remark_item.remark.to_s + '</del>'
+            else
+                @remark_all +=  remark_item.remark.to_s
+            end
+            @remark_all += '</small></p>'
             @remark_all += '</td>'
             @remark_all += '</tr>'
             @remark_all += '</table>'
             @remark_all += '</div>'
             @remark_all += '</div>'
         end
-        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-        Rails.logger.info(@remark_all.inspect)
-        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #Rails.logger.info(@remark_all.inspect)
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
 
+    end
+
+    def p_item_remark_del
+        @item_id = params[:itemp_id]
+        remarkold = PItemRemark.find(params[:remark_id])
+        remarkold.state = "del"
+        remarkold.save
+        @remark_all = ""
+        PItemRemark.where(p_item_id: @item_id).each do |remark_item|
+            @remark_all += '<div class="row" style="margin: 0px;" >'
+            @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+            @remark_all += '<table style="margin: 0px;" >'
+            @remark_all += '<tr>'
+            @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+            @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"> </a>'
+            @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
+            @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+            if remark_item.state == "del"
+                @remark_all +=  '<del>' + remark_item.remark.to_s + '</del>'
+            else
+                @remark_all +=  remark_item.remark.to_s
+            end
+            @remark_all += '</small></p>'
+            @remark_all += '</td>'
+            @remark_all += '</tr>'
+            @remark_all += '</table>'
+            @remark_all += '</div>'
+            @remark_all += '</div>'
+        end
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #Rails.logger.info(@remark_all.inspect)
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        render "p_item_remark_up.js.erb"
     end
 
     def p_item_remark

@@ -184,10 +184,10 @@
                         </td>
                         
                     <% end %>
-                    <% if item.part_code.size > 5 %>
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
+                    <% if item.part_code.to_s.size > 5 %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code.to_s[0,3]+"..." %></small></td>
                     <% else %>
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code.to_s %></small></td>
                     <% end %>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
 

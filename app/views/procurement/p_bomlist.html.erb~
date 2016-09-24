@@ -76,7 +76,7 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="110">BOM No.</th>
-      <th width="170">创建日期</th>
+      <th width="170">BOM创建日期</th>
       <th width="200">子项目名称</th>
       <th width="100">数量</th>
       <th width="100">上传</th>
@@ -100,9 +100,9 @@
     </tr>
   </thead>
   <tbody>
-    <% @itemall = "" %>
+    <% #@itemall = "" %>
     <% @boms.each do |bom| %>
-    <% @itemall = @itemall + " " + bom.excel_file_identifier %>
+    <% #@itemall = @itemall + " " + bom.excel_file_identifier %>
 
       <% if can? :work_g_all, :all %>
           <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>

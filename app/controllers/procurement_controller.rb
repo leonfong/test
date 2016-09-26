@@ -1642,12 +1642,12 @@ before_filter :authenticate_user!
                     if refa.blank? 
                         bom_item.user_do = 7
                     else
-                        if refa =~ /r/i or refa =~ /c/i or refa =~ /d/i or refa =~ /v/i or refa =~ /q/i or refa =~ /lcd/i or refa =~ /led/i or refa =~ /ic/i or refa =~ /z/i or refa =~ /u/i
-                            #bom_item.user_do = 77
-                            bom_item.user_do = 7
+                        if refa =~ /r/i or refa =~ /c/i or refa =~ /d/i or refa =~ /v/i or refa =~ /q/i or refa =~ /lcd/i or refa =~ /led/i or  refa =~ /z/i
+                            bom_item.user_do = 77
+                            #bom_item.user_do = 7
                         elsif refa =~ /l/i or refa =~ /x/i or refa =~ /sw/i or refa =~ /s/i or refa =~ /vr/i or refa =~ /w/i or refa =~ /k/i or refa =~ /rl/i or refa =~ /fb/i or refa =~ /fr/i or refa =~ /y/i or refa =~ /f/i or refa =~ /pf/i or refa =~ /j/i or refa =~ /con/i or refa =~ /jp/i or refa =~ /bz/i
                             bom_item.user_do = 75
-                        else
+                        elsif refa =~ /ic/i or refa =~ /u/i
                             bom_item.user_do = 7
                         end
                     end

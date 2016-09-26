@@ -672,6 +672,7 @@ before_filter :authenticate_user!
             pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
             if can? :work_e, :all and pi_draft.state == "new"
                 pi_draft.state = "check"
+            
             end
             if can? :work_d, :all 
                 if pi_draft.finance_state == "checked"
@@ -1165,10 +1166,22 @@ before_filter :authenticate_user!
 
     def new_pcb_order
        if params[:new]
-           if PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').blank?
+           if current_user.s_name_self.size == 1
+                s_name = current_user.s_name_self
+                where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,9)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,10),1) REGEXP '^[0-9]+$')"
+           elsif current_user.s_name_self.size == 2
+                s_name = current_user.s_name_self
+                where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,10)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,11),1) REGEXP '^[0-9]+$') "
+           end
+
+
+
+
+
+           if PcbOrder.find_by_sql("SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW()) #{where_p}").blank?
                 p_n =1
            else
-                p_n = PcbOrder.find_by_sql('SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW())').last.order_no.to_s.chop.split(current_user.s_name_self.to_s)[-1].to_i + 1
+                p_n = PcbOrder.find_by_sql("SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW()) #{where_p}").last.order_no.to_s.chop.split(current_user.s_name_self.to_s)[-1].to_i + 1
            end
            @p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s + "B"
            @pcb = PcbOrder.new()        

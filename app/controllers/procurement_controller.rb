@@ -871,12 +871,12 @@ before_filter :authenticate_user!
             @remark_all += '<td style="padding: 0px;margin: 0px;" >'
             @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
             @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"> </a>'
-            @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
+            @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s.gsub(/'/,'') + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
             @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
             if remark_item.state == "del"
-                @remark_all +=  '<del>' + remark_item.remark.to_s + '</del>'
+                @remark_all +=  '<del>' + remark_item.remark.to_s.gsub(/'/,'') + '</del>'
             else
-                @remark_all +=  remark_item.remark.to_s
+                @remark_all +=  remark_item.remark.to_s.gsub(/'/,'')
             end
             @remark_all += '</small></p>'
             @remark_all += '</td>'

@@ -159,14 +159,14 @@
         <td width="160" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>日期: </strong><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></small></td>
         <td style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>业务中文描述: </strong>
         <% if not PcbOrderSellItem.where(pcb_order_id: pcb.id).blank?%>
-            <% PcbOrderItem.where(pcb_order_id: pcb.id).each do |item| %>
+            <% PcbOrderSellItem.where(pcb_order_id: pcb.id).each do |item| %>
                 <%= item.des_cn.to_s %>
             <% end %>
         <% end %>
         </small></td>
         <td style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>业务英文描述: </strong>
         <% if not PcbOrderSellItem.where(pcb_order_id: pcb.id).blank?%>
-            <% PcbOrderItem.where(pcb_order_id: pcb.id).each do |item| %>
+            <% PcbOrderSellItem.where(pcb_order_id: pcb.id).each do |item| %>
                 <%= item.des_en.to_s %>
             <% end %>
         <% end %>

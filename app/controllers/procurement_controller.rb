@@ -2134,6 +2134,7 @@ before_filter :authenticate_user!
         end
         @all_dn += "&quot;]"
         @boms = ProcurementBom.find(params[:bom_id])
+=begin
         if can? :work_g_all, :all
             @user_do = "7"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
@@ -2150,6 +2151,9 @@ before_filter :authenticate_user!
             Rails.logger.info(@bom_item.inspect)
             Rails.logger.info("--------------------------1")
         end
+=end
+        @user_do = "7"
+        @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
         if  params[:ajax]
             @bomitem = PItem.find_by_sql("SELECT id,mpn,part_code,quantity,price,(price*quantity) AS total,mf,dn FROM bom_items WHERE bom_items.id = '#{params[:ajax]}'").first
             render "viewbom.js.erb"

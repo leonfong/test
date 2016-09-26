@@ -916,7 +916,7 @@ before_filter :authenticate_user!
         p_c.save
         remark.remark = params[:item_remark].chomp
         remark.save
-        @remark_all = ""
+        @remark_all = ''
         PItemRemark.where(p_item_id: @item_id).each do |remark_item|
             @remark_all += '<div class="row" style="margin: 0px;" >'
             @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
@@ -926,12 +926,16 @@ before_filter :authenticate_user!
             if not remark_item.info.blank?
                 @remark_all += '<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>'
             end
+            
             #if params[:sell_remark] != "sell_remark"
                 #@remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
             #else
-            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small>'
+            if remark_item.user_id == current_user.id
+                @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"></a>'
+            end
             @remark_all += '<strong>' + remark_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
-            @remark_all += '<strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+            @remark_all += '<strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s.gsub(/'/,'') + '</small></p>'
             #end
             @remark_all += '</td>'
             @remark_all += '</tr>'
@@ -939,6 +943,9 @@ before_filter :authenticate_user!
             @remark_all += '</div>'
             @remark_all += '</div>'
         end
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(@remark_all.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
     end
 
     def remark_to_sell

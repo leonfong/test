@@ -222,6 +222,7 @@
 <% if remark_item.user_id == current_user.id %>
 <a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=<%= item.id %>&remark_id=<%= remark_item.id %>" data-confirm="确定要删除?"> </a>
 <% end %>
+<strong><%= remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></strong>
 <strong><%= remark_item.user_name %>: </strong>
 <% if remark_item.state == "del" %>
 <del><%= remark_item.remark %></del>

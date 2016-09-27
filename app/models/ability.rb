@@ -109,6 +109,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_a)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_baojia, :all

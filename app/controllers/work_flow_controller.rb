@@ -672,7 +672,7 @@ before_filter :authenticate_user!
             pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
             if can? :work_e, :all and pi_draft.state == "new"
                 pi_draft.state = "check"
-            
+                #set_lock = 
             end
             if can? :work_d, :all 
                 if pi_draft.finance_state == "checked"

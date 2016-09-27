@@ -16,11 +16,11 @@ before_filter :authenticate_user!
         end
         if params[:undone]
             where_state = " AND pcb_order_items.state IS NULL"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
         end
         if params[:key_order]
             where_state = " AND pcb_order_items.pcb_order_no LIKE '%#{params[:key_order]}%'"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
         end
         @all_pcb_dn = "[&quot;"
         all_s_dn = PcbSupplier.find_by_sql("SELECT DISTINCT pcb_suppliers.name FROM pcb_suppliers GROUP BY pcb_suppliers.name")
@@ -57,7 +57,19 @@ before_filter :authenticate_user!
         @pcb_info.t_p = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000*params[:pcb_panel].to_i*params[:pcb_area_price].to_i*params[:pcb_qty].to_i + params[:eng_price].to_i + params[:test_price].to_i + params[:mould_price].to_i
         @pcb_info.remark = params[:pcb_remark]
         @pcb_info.save
-        @pcb_order_item_find = PcbOrderItem.find_by_id(params[:part_id])
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww@pcb_info")
+        Rails.logger.info(@pcb_info.pcb_area)
+        Rails.logger.info(@pcb_info.price)
+        Rails.logger.info(@pcb_info.t_p)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww@pcb_info")
+        @pcb_order_item_find = PcbOrderItem.find_by_id(@pcb_info.pcb_order_item_id)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww@pcb_order_item_find.t_p")
+        Rails.logger.info(@pcb_order_item_find.t_p)
+        Rails.logger.info("pcb_order_no_color_" + @pcb_order_item_find.id.to_s)
+        Rails.logger.info("pcb_area_" + @pcb_order_item_find.id.to_s)
+        Rails.logger.info("pcb_price_" + @pcb_order_item_find.id.to_s )
+        Rails.logger.info("pcb_t_p_" + @pcb_order_item_find.id.to_s)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww@pcb_order_item_find.t_p")
         @pcb_order_item_find.t_p = @pcb_info.t_p
         @pcb_order_item_find.price = @pcb_info.price
         @pcb_order_item_find.bom_id = @pcb_info.id

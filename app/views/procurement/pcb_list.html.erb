@@ -70,7 +70,7 @@
                         <td style="padding-left: 3px;">
                             <div class="form-group sr-only">
                                 <label for="part_id" class="control-label">partid:</label>
-                                <input type="text" class="form-control" id="part_id" name="part_id" value="<%= part.id.to_s %>">
+                                <input type="text" class="form-control" id="part_id" name="part_id" value="<%= part.pcb_order_item_id.to_s %>">
                                 <input type="text" class="form-control" id="pcb_order_no" name="pcb_order_no" value="<%= part.pcb_order_no.to_s %>">
                                 <input type="text" class="form-control" id="pcb_sell" name="pcb_sell" value="<%= PcbOrder.find_by_id(part.pcb_order_id).order_sell.to_s %>">
                                 <input type="text" class="form-control" id="pcb_qty" name="pcb_qty" value="<%= part.qty %>">
@@ -81,7 +81,7 @@
                             <label for="dn" class="control-label sr-only">供应商简称:</label>
                                 <input id="pcb_dn" autocomplete="off" name="pcb_dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;" value="<%= part.pcb_supplier %>">
                         </td>
-                        <td id="pcb_order_no_color_<%= part.id.to_s %>"><%= part.pcb_order_no %></td>
+                        <td id="pcb_order_no_color_<%= part.pcb_order_item_id.to_s %>"><%= part.pcb_order_no %></td>
                         <td><%= User.find_by_email(PcbOrder.find_by_id(part.pcb_order_id).order_sell).full_name.to_s %></td>
                         <td><input id="pcb_length" autocomplete="off" name="pcb_length" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.pcb_length %>"></td>
                         <td><input id="pcb_width" autocomplete="off" name="pcb_width" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.pcb_width %>"></td>
@@ -134,13 +134,13 @@
                             </select>  
                         </td>
                         <td><%= part.qty %></td>
-                        <td id="pcb_area_<%= part.id.to_s %>"><%= part.pcb_area %></td>
+                        <td id="pcb_area_<%= part.pcb_order_item_id.to_s %>"><%= part.pcb_area %></td>
                         <td><input id="pcb_area_price" autocomplete="off" name="pcb_area_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.pcb_area_price %>"></td>
-                        <td id="pcb_price_<%= part.id.to_s %>"><%= part.price %></td>
+                        <td id="pcb_price_<%= part.pcb_order_item_id.to_s %>"><%= part.price %></td>
                         <td><input id="eng_price" autocomplete="off" name="eng_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.eng_price %>"></td>
                         <td><input id="test_price" autocomplete="off" name="test_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.test_price %>"></td>
                         <td><input id="mould_price" autocomplete="off" name="mould_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.m_price %>"></td>
-                        <td id="pcb_t_p_<%= part.id.to_s %>"><%= part.t_p %></td>
+                        <td id="pcb_t_p_<%= part.pcb_order_item_id.to_s %>"><%= part.t_p %></td>
                         <td>
                             <div class="input-group input-group-sm">
                                 <input id="pcb_remark" autocomplete="off" name="pcb_remark" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.remark %>">    

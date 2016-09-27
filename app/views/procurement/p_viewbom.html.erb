@@ -1,6 +1,15 @@
 <div class="container-fluid" >
-﻿
-
+<% if @boms.bom_lock == "lock" %>
+﻿<fieldset disabled>
+<script> 
+$(document).ready(function() {
+    $("a").attr("href","");
+    
+});
+</script>
+<% else %>
+﻿<fieldset>
+<% end %>
 
 
   
@@ -820,7 +829,7 @@ function change_<%= item.id.to_s %>(){
 </div>
 
 
-
+﻿</fieldset>
 </div>
 
 

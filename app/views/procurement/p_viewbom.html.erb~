@@ -1,6 +1,15 @@
 <div class="container-fluid" >
-﻿
-
+<% if @boms.bom_lock == "lock" %>
+﻿<fieldset disabled>
+<script> 
+$(document).ready(function() {
+    //$("a").attr("href","");
+    $("a").remove("href");
+});
+</script>
+<% else %>
+﻿<fieldset>
+<% end %>
 
 
   
@@ -336,7 +345,6 @@ function change_<%= item.id.to_s %>(){
 <% end %>
 <% if remark_item.user_id == current_user.id %>
 <a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=<%= item.id %>&remark_id=<%= remark_item.id %>" data-confirm="确定要删除?"> </a>
-<a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>" data-
 <a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="<%= item.id %>" data-remark_id="<%= remark_item.id %>" data-remark="<%= remark_item.remark %>" > </a>
 <% end %>
 <strong><%= remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></strong>
@@ -821,7 +829,7 @@ function change_<%= item.id.to_s %>(){
 </div>
 
 
-
+﻿</fieldset>
 </div>
 
 

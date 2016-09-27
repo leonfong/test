@@ -48,9 +48,9 @@ before_filter :authenticate_user!
         @pcb_info.pcb_layer = params[:pcb_layer]
         @pcb_info.pcb_gongyi = params[:pcb_gongyi]
         @pcb_info.qty = params[:pcb_qty]
-        @pcb_info.pcb_area = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000*params[:pcb_panel].to_i
+        @pcb_info.pcb_area = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000/params[:pcb_panel].to_i*params[:pcb_qty].to_i
         @pcb_info.pcb_area_price = params[:pcb_area_price]
-        @pcb_info.price = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000*params[:pcb_panel].to_i*params[:pcb_area_price].to_i
+        @pcb_info.price = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000/params[:pcb_panel].to_i*params[:pcb_area_price].to_i
         @pcb_info.eng_price = params[:eng_price]
         @pcb_info.test_price = params[:test_price]
         @pcb_info.m_price = params[:mould_price]

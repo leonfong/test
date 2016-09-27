@@ -11,11 +11,11 @@ before_filter :authenticate_user!
 
     def pcb_list
         if params[:complete]
-            where_state = " AND state = 'quotechked'"
+            where_state = " AND pcb_order_items.state = 'quotechked'"
             @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.pcb_order_id FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
         end
         if params[:undone]
-            where_state = " AND state IS NULL"
+            where_state = " AND pcb_order_items.state IS NULL"
             @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
         end
         if params[:key_order]

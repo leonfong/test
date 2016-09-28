@@ -58,7 +58,9 @@ $(document).ready(function() {
                 <div class="col-md-6 col-sm-6 " >
                     <h4 style="color: #32aacb;margin-top: 0px;">
                         <strong>BOM No. <%= @boms.no %></strong>
+                        <% if not params[:bom_version].blank? %>
                         <span class="text-danger"><strong>版本 V<%= params[:bom_version] %></strong></span>
+                        <% end %>
                     </h4>
                 </div>
 <!--
@@ -117,6 +119,9 @@ $(document).ready(function() {
                                <% if can? :work_g_all, :all%>
                                <%= form_tag({action: :p_profit},method:"post",class:"form-inline") do %>
                                    <div class="form-group">
+                                       <% if not params[:bom_version].blank? %>
+                                          <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+                                       <% end %>
                                        <label for="profit">利润：</label>
                                        <input type="number" class="form-control" id="profit" name="profit" value="<%= @boms.profit %>" style="width:60px" >
                                    </div>
@@ -182,15 +187,15 @@ $(document).ready(function() {
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="80"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77"><div >罗</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >罗</div></a></small></td>
                             
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75"><div >黄</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >黄</div></a></small></td>
                                             
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >马</div></a></small></td>
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >马</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >供</div></a></small></td>
                             </tr>
                             <tr>                                
-                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% elsif item.user_do == 10000  %>class="text-center bg-info"<% else %>class="text-center"<% end %>><small><a  class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
+                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% elsif item.user_do == 10000  %>class="text-center bg-info"<% else %>class="text-center"<% end %>><small><a  class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >other</div></a></small></td>
                             </tr>
                         </table>
 
@@ -295,7 +300,7 @@ function change_<%= item.id.to_s %>(){
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
-                            <a class="glyphicon glyphicon-duplicate a_ctl" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
+                            <a class="glyphicon glyphicon-duplicate a_ctl" href="/copy_data?item_id=<%=item.id.to_s%><% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"></a>
                             <a class="text-muted a_ctl" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
                             </small>
                     </td>
@@ -303,7 +308,7 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small> 
-                                <a class="glyphicon glyphicon-duplicate a_ctl" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
+                                <a class="glyphicon glyphicon-duplicate a_ctl" href="/copy_data?item_id=<%=item.id.to_s%><% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"></a>
                                 <a class="text-muted a_ctl" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
                             </small>
                         </td>
@@ -325,21 +330,24 @@ function change_<%= item.id.to_s %>(){
                     <td width="110" style="padding: 5px 0px 5px 0px;margin: 0px;">
                         <small>
                             <%= form_tag({action: :p_edit_cost_dn},method:"post",remote:"ture",class:"form-inline") do %>
-          <div class="form-group sr-only">
-            <label for="dn_itemid" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="dn_itemid" name="dn_itemid" value="<%= item.id.to_s %>">
-          </div>
+                               <div class="form-group sr-only">
+                                   <label for="dn_itemid" class="control-label">itemid:</label>
+                                   <input type="text" class="form-control" id="dn_itemid" name="dn_itemid" value="<%= item.id.to_s %>">
+                                   <% if not params[:bom_version].blank? %>
+                                       <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+                                   <% end %>
+                               </div>
 
-                            <div class="input-group input-group-sm">
-                              <input type="text" class="form-control " id="<%= item.id.to_s + 'p' %>" name="<%= item.id.to_s + 'p' %>" value="<%= item.cost.to_s %>">                      
+                               <div class="input-group input-group-sm">
+                                   <input type="text" class="form-control " id="<%= item.id.to_s + 'p' %>" name="<%= item.id.to_s + 'p' %>" value="<%= item.cost.to_s %>">                      
 
 <!--
-                            <a class="text-muted a_ctl" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a>
--->                           <span class="input-group-btn ">
-                               <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
-                              </span>
-                            </div>
-                            <% end %>
+                                  <a class="text-muted a_ctl" name="<%= item.id.to_s + 'p' %>" id="<%= item.id.to_s + 'p' %>"><%= "￥" + item.cost.to_s %></a>
+-->                               <span class="input-group-btn ">
+                                      <button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button>
+                                  </span>
+                              </div>
+                           <% end %>
                         </small>
                     </td>
 
@@ -367,7 +375,7 @@ function change_<%= item.id.to_s %>(){
 <a class="btn btn-info btn-xs a_ctl" href="<%= remark_item.info.url %>" target="_blank">下载</a>
 <% end %>
 <% if remark_item.user_id == current_user.id %>
-<a class="glyphicon glyphicon-remove a_ctl" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=<%= item.id %>&remark_id=<%= remark_item.id %>" data-confirm="确定要删除?"> </a>
+<a class="glyphicon glyphicon-remove a_ctl" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=<%= item.id %>&remark_id=<%= remark_item.id %><% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" data-confirm="确定要删除?"> </a>
 <a type="button" class="glyphicon glyphicon-edit a_ctl" data-toggle="modal" data-target="#remarkupdate" data-itempid="<%= item.id %>" data-remark_id="<%= remark_item.id %>" data-remark="<%= remark_item.remark %>" > </a>
 <% end %>
 <strong><%= remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></strong>
@@ -427,7 +435,9 @@ function change_<%= item.id.to_s %>(){
         <%= form_tag({action: :p_edit},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
         <tr style="padding: 0px;margin: 0px;" >
           <td width="100" style="padding: 0px;margin: 0px;">
-         
+            <% if not params[:bom_version].blank? %>
+                <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+            <% end %>            
             <label for="item_id" class="control-label sr-only">id:</label>
             <input type="text" class="form-control sr-only" id="item_id" name="item_id" value="<%= item.id.to_s %>">
             <label for="cost" class="control-label sr-only">价格:</label>
@@ -483,9 +493,9 @@ function change_<%= item.id.to_s %>(){
                                     </small></td>
                                 <% end %>
 
-                                <td style="padding: 0px;margin: 0px;" width="70"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%y-%m-%d') %></div></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" width="70"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.date.localtime.strftime('%y-%m-%d') %></div></a></small></td>
 
-                                <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> <% if dn.qty.blank?%>
+                                <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.dn %> <% if dn.qty.blank?%>
 <%= PItem.find_by_id(dn.item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.item_id).procurement_bom_id).qty %>
 <% else %>
 <%= dn.qty %>
@@ -493,8 +503,8 @@ function change_<%= item.id.to_s %>(){
  ￥<%= dn.cost %></div></a></small></td> 
                               
                                 
-                                <td style="padding: 0px;margin: 0px;" ><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.remark %></div></a></small></td>
-                                <td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash a_ctl" data-method='get' data-remote='true' href="/del_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>" data-confirm="确定要删除?"></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" ><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.remark %></div></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash a_ctl" data-method='get' data-remote='true' href="/del_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %><% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" data-confirm="确定要删除?"></a></small></td>
                             </tr>
                             <% end %>
                             </tbody>
@@ -512,6 +522,9 @@ function change_<%= item.id.to_s %>(){
                               
                                 <%= form_tag('/search_m', remote: true, class:"form-inline") do %>
                                 <div class="form-group">
+                                    <% if not params[:bom_version].blank? %>
+                                        <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+                                    <% end %>
                                     <%= text_field_tag :q, params[:q], id:"input_"+item.id.to_s, class:"form-control", size:30, value: item.description.to_s, placeholder:"Description"%>
                                     <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2 , value: item.id.to_s %>
                                     <%= text_field_tag :id, params[:id], class:"sr-only", size:2 , value: item.id.to_s %>
@@ -620,6 +633,9 @@ function change_<%= item.id.to_s %>(){
           <div class="form-group sr-only">
             <label for="item_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="item_id" name="item_id">
+            <% if not params[:bom_version].blank? %>
+                <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+            <% end %>
           </div>
           <div class="form-group">
             <label for="dn" class="control-label">供应商简称:</label>
@@ -672,6 +688,9 @@ function change_<%= item.id.to_s %>(){
           <div class="form-group sr-only">
             <label for="dn_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="dn_id" name="dn_id">
+            <% if not params[:bom_version].blank? %>
+                <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+            <% end %>
           </div>
           <div class="form-group sr-only">
             <label for="dn_item_id" class="control-label">itemid:</label>
@@ -726,6 +745,9 @@ function change_<%= item.id.to_s %>(){
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">
+            <% if not params[:bom_version].blank? %>
+                <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+            <% end %>
           </div>
           
           <div class="form-group">
@@ -756,6 +778,9 @@ function change_<%= item.id.to_s %>(){
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">
+            <% if not params[:bom_version].blank? %>
+                <input type="text" class="form-control" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+            <% end %>
           </div>
                  
           <div class="form-group">
@@ -801,6 +826,9 @@ function change_<%= item.id.to_s %>(){
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
+            <% if not params[:bom_version].blank? %>
+                <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+            <% end %>
           </div>
           
           <div class="form-group">
@@ -830,6 +858,9 @@ function change_<%= item.id.to_s %>(){
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id_remark_up" name="itemp_id">
+            <% if not params[:bom_version].blank? %>
+                <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
+            <% end %>
           </div>
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>

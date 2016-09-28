@@ -2284,7 +2284,7 @@ before_filter :authenticate_user!
         #wcwc=(DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').others.include?'<name>Tolerance</name><value>')? (DigikeysStock.find_by(manufacturer_part_number: '798-ZX80-B-5SA').others.split('<name>Tolerance</name><value>')[-1].split('</value>')[0].to_s):'bb'
         #wcwc=(DigikeysStock.find_by(manufacturer_part_number: 'ft230xs-r').others.include?"<name>Tolerance</name><value>")? "cc":"bb"
         @pdn = PDn.new
-         @mpninfo = "SP1007-01WTG"
+        @mpninfo = "SP1007-01WTG"
         #@mpninfo = Digikey.find(1)   
         Rails.logger.info("--------------------------")
         #Rails.logger.info(wcwc)
@@ -2295,23 +2295,42 @@ before_filter :authenticate_user!
             @all_dn += "&quot;,&quot;" + dn.dn.to_s
         end
         @all_dn += "&quot;]"
-        @boms = ProcurementBom.find(params[:bom_id])
-        if can? :work_g_all, :all
-            @user_do = "7"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
-        elsif can? :work_g_a, :all
-            @user_do = "77"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
-            #@bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '77' OR user_do = '9999')")
-        elsif can? :work_g_b, :all
-            @user_do = "75"
-            @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
-        elsif can? :work_d, :all
-            @user_do = "7"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
-            Rails.logger.info("--------------------------1")
-            Rails.logger.info(@bom_item.inspect)
-            Rails.logger.info("--------------------------1")
+        @bom_version = nil
+        if not params[:bom_version].blank?
+            @bom_version = params[:bom_version]
+            @boms = ProcurementVersionBom.find_by_id(params[:bom_id])
+            if can? :work_g_all, :all
+                @user_do = "7"
+                @bom_item = PVersionItem.where(procurement_version_bom_id: params[:bom_id])
+            elsif can? :work_g_a, :all
+                @user_do = "77"
+                @bom_item = PVersionItem.where(procurement_version_bom_id: params[:bom_id])            
+            elsif can? :work_g_b, :all
+                @user_do = "75"
+                @bom_item = PVersionItem.where("procurement_version_id = #{params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
+            elsif can? :work_d, :all
+                @user_do = "7"
+                @bom_item = PVersionItem.where(procurement_version_bom_id: params[:bom_id])
+            end
+        else
+            @boms = ProcurementBom.find(params[:bom_id])
+            if can? :work_g_all, :all
+                @user_do = "7"
+                @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+            elsif can? :work_g_a, :all
+                @user_do = "77"
+                @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+                #@bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '77' OR user_do = '9999')")
+            elsif can? :work_g_b, :all
+                @user_do = "75"
+                @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
+            elsif can? :work_d, :all
+                @user_do = "7"
+                @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+                #Rails.logger.info("--------------------------1")
+                #Rails.logger.info(@bom_item.inspect)
+                #Rails.logger.info("--------------------------1")
+            end
         end
         #@user_do = "7"
         #@bom_item = PItem.where(procurement_bom_id: params[:bom_id])

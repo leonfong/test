@@ -1,9 +1,6 @@
-<div class="container-fluid" >
+<small><div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
-<!--
-        <h3><strong>PCBA BOM LIST</strong></h3>
--->
         <div class="col-md-1 list-group" style="padding: 0px;">
             <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCBA业务</strong></h4></div>
             <% if can? :pcb_review, :all %>
@@ -15,10 +12,7 @@
             <%= link_to "订单列表",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
             <%= link_to "新建BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
             <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%> 
-            <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item "%>
-<!--
-            <%= link_to "历史报价", p_history_path ,class: "list-group-item"%>     
--->     
+            <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item "%>     
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -56,7 +50,7 @@
                     <lable for="order" , class="sr-only">Qrder : </lable>
                     <div class="input-group input-group-sm"> 
                         <% if @part_name %>   
-                            <%= text_field_tag :part_name, @part_name, class:"form-control  input-lg", size:"30", placeholder:"MPN/描述"%>     
+                            <%= text_field_tag :part_name, @part_name, class:"form-control  input-lg", size:"30", placeholder:"MPN/描述"%>
                         <% else %> 
                             <%= text_field_tag :part_name, params[:part_name], class:"form-control input-lg", size:"30", placeholder:"MPN/描述/MOKO描述"%>
                         <% end %>               
@@ -79,22 +73,13 @@
       <th width="170">BOM创建日期</th>
       <th width="200">子项目名称</th>
       <th width="100">数量</th>
-      <th width="100">上传</th>
-      <th width="100">审核</th>
+      <th width="80">上传</th>
+      <th width="80">审核</th>
       <th width="100">采购工程师</th>
       <th >工程师备注</th>
       <th >业务备注</th>
-<!--
-      <th>BOM File</th>
-
-      <th>Action</th>
--->
       <th width="50">删除</th>
       <th width="50">编码</th>
-<!--
-      <th width="180">ADD IN ORDER LIST</th>
--->
-
       <th width="60">已发送</th>
 
     </tr>
@@ -105,13 +90,13 @@
     <% #@itemall = @itemall + " " + bom.excel_file_identifier %>
 
       <% if can? :work_g_all, :all %>
-          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %> >
       <% elsif can? :work_g_a, :all %>
-          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %> >
       <% elsif can? :work_g_b, :all %>
-          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %>>
+          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %> >
       <% else %>
-          <tr>
+          <tr >
       <% end %>
 
     <% if bom.bom_team_ck == "do" %>
@@ -121,25 +106,20 @@
     <% end %>
             <%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %>
         </td>
-        <td><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td><%= bom.p_name %></td>
-        <td><%= bom.qty %></td>
-        <td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">
         <% if bom.bom_eng_up == nil %>
             <%= User.find(bom.user_id).full_name %>
         <% else %>
             <%= bom.bom_eng_up %>
         <% end %>
         </td>
-        <td><%= bom.bom_eng %></td>
-        <td><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
-        <td><%= bom.remark %></td>
-        <td><%= bom.sell_remark %></td>
-<!--
-        <td><p class="text-info"><%= bom.excel_file_identifier %></p></td>
-
-        <td><div class="btn-group"><%= link_to "PLACE ORDER",  viewbom_path(bom_id: bom.id), class:"btn btn-danger" %></div></td>
--->
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_eng %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
         <% if can? :work_g_all, :all %>
             <% if bom.check == "do" %>
                 <td><div class="btn-group"><a class="btn btn-default">删除</a></div></td>
@@ -149,11 +129,7 @@
         <% else %> 
            <td><div class="btn-group"><a class="btn btn-default btn-xs">删除</a></div></td>
         <% end %>
-        <td><%= link_to "编码",  p_viewbom_path(bom_id: bom.id,add_bom: "add_bom"),class:"btn btn-success btn-xs" %></td>
-<!--
-        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/add_order?bom_id=<%= bom.id.to_s %>" data-confirm="确定要下单?">下单</a></div></td>
--->
-      
+        <td><%= link_to "编码",  p_viewbom_path(bom_id: bom.id,add_bom: "add_bom"),class:"btn btn-success btn-xs" %></td>      
       <% if bom.remark_to_sell == "mark" %>
         <td class="bg-success" >
       <% else %>
@@ -167,13 +143,50 @@
       </td>
 
       </tr>
+
+      <tr>
+          <td colSpan="12" style="padding: 0px;margin: 0px;">
+              <div class="collapse" id="bom_version_<%= bom.id.to_s %>">
+                  <div  style="padding: 0px;margin: 0px;">
+                      <table class="table " style="padding: 0px;margin: 0px;">  
+                          <% ProcurementVersionBom.where(procurement_bom_id: bom.id).each do |bom_v| %>
+                              <tr class="bg-warning">
+                                  <td width="50"><%= link_to "查看", p_viewbom_path(bom_id: bom_v.id,bom_version: bom_v.bom_version) %></td>
+                                  <td width="100"><strong>BOM版本: </strong><%= bom_v.bom_version %></td>
+                                  <td width="200"><strong>创建日期: </strong><%= bom_v.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                                  <td width="100"><strong>上传: </strong>
+                                      <% if bom_v.bom_eng_up == nil %>
+                                          <%= User.find(bom_v.user_id).full_name %>
+                                      <% else %>
+                                          <%= bom_v.bom_eng_up %>
+                                      <% end %>
+                                  </td>
+                                  <td width="100"><strong>审核: </strong><%= bom.bom_eng %></td>
+                                  <td></td>
+                              </tr>
+                          <% end %>
+                      </table>
+                  </div>
+               </div>
+           </td>
+       </tr>
+
+
+
+
+
+
+
+
+
+
     <% end %>
   </tbody>
 </table>
 <%= will_paginate(@boms) %>
         </div>
     </div>
-</div>
+</div></small>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

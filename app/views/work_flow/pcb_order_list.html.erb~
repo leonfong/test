@@ -350,11 +350,7 @@ function postform() {
 
 }  
 
-$(".menu-first").click(function(){
-  $('#userMeun').collapse('hide');
-  $('#articleMenu').collapse('hide');
-});
-  
+
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

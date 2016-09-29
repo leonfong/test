@@ -197,7 +197,8 @@ before_filter :authenticate_user!
         @pcb_info.eng_price = params[:eng_price]
         @pcb_info.test_price = params[:test_price]
         @pcb_info.m_price = params[:mould_price]
-        @pcb_info.t_p = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000*params[:pcb_panel].to_i*params[:pcb_area_price].to_i*params[:pcb_qty].to_i + params[:eng_price].to_i + params[:test_price].to_i + params[:mould_price].to_i
+        #@pcb_info.t_p = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000*params[:pcb_panel].to_i*params[:pcb_area_price].to_i*params[:pcb_qty].to_i + params[:eng_price].to_i + params[:test_price].to_i + params[:mould_price].to_i
+        @pcb_info.t_p = @pcb_info.price*params[:pcb_qty].to_i + params[:eng_price].to_i + params[:test_price].to_i + params[:mould_price].to_i
         @pcb_info.remark = params[:pcb_remark]
         @pcb_info.save
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww@pcb_info")

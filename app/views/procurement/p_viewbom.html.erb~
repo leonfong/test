@@ -187,15 +187,15 @@ $(document).ready(function() {
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="80"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77"><div >罗</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >罗</div></a></small></td>
                             
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75"><div >黄</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >黄</div></a></small></td>
                                             
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >马</div></a></small></td>
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >马</div></a></small></td>
+                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >供</div></a></small></td>
                             </tr>
                             <tr>                                
-                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% elsif item.user_do == 10000  %>class="text-center bg-info"<% else %>class="text-center"<% end %>><small><a  class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
+                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% elsif item.user_do == 10000  %>class="text-center bg-info"<% else %>class="text-center"<% end %>><small><a  class="a_ctl" data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"><div >other</div></a></small></td>
                             </tr>
                         </table>
 
@@ -300,7 +300,7 @@ function change_<%= item.id.to_s %>(){
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
-                            <a class="glyphicon glyphicon-duplicate a_ctl" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
+                            <a class="glyphicon glyphicon-duplicate a_ctl" href="/copy_data?item_id=<%=item.id.to_s%><% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>"></a>
                             <a class="text-muted a_ctl" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
                             </small>
                     </td>
@@ -495,8 +495,13 @@ function change_<%= item.id.to_s %>(){
 
                                 <td style="padding: 0px;margin: 0px;" width="70"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.date.localtime.strftime('%y-%m-%d') %></div></a></small></td>
 
-                                <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.dn %> <% if dn.qty.blank?%>
-<%= PItem.find_by_id(dn.item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.item_id).procurement_bom_id).qty %>
+                                <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.dn %> 
+<% if dn.qty.blank?%>
+    <% if not params[:bom_version].blank? %>
+        <%= PItem.find_by_id(dn.item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.item_id).procurement_bom_id).qty %>
+    <% else %> 
+        <%= PVersionItem.find_by_id(dn.p_version_item_id).quantity*ProcurementVersionBom.find_by_id(PVersionItem.find_by_id(dn.p_version_item_id).procurement_version_bom_id).qty %>
+    <% end %>
 <% else %>
 <%= dn.qty %>
 <% end %>

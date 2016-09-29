@@ -967,10 +967,18 @@ before_filter :authenticate_user!
 
     def p_item_remark_up
         @item_id = params[:itemp_id]
-        remarkold = PItemRemark.find(params[:remark_id])
+        if not params[:bom_version].blank?        
+            remarkold = PVersionItemRemark.find(params[:remark_id])
+        else
+            remarkold = PItemRemark.find(params[:remark_id])
+        end
         remarkold.state = "del"
         remarkold.save
-        remark = PItemRemark.new
+        if not params[:bom_version].blank?
+            remark = PVersionItemRemark.new
+        else
+            remark = PItemRemark.new
+        end
         remark.p_item_id = params[:itemp_id]
         remark.user_id = current_user.id
         remark.user_name = current_user.full_name
@@ -984,27 +992,52 @@ before_filter :authenticate_user!
         remark.remark = params[:item_remark].chomp
         remark.save
         @remark_all = ""
-        PItemRemark.where(p_item_id: @item_id).each do |remark_item|
-            @remark_all += '<div class="row" style="margin: 0px;" >'
-            @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
-            @remark_all += '<table style="margin: 0px;" >'
-            @remark_all += '<tr>'
-            @remark_all += '<td style="padding: 0px;margin: 0px;" >'
-            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
-            @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"> </a>'
-            @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
-            @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
-            if remark_item.state == "del"
-                @remark_all +=  '<del>' + remark_item.remark.to_s + '</del>'
-            else
-                @remark_all +=  remark_item.remark.to_s
+        if not params[:bom_version].blank?
+            PVersionItemRemark.where(p_item_id: @item_id).each do |remark_item|
+                @remark_all += '<div class="row" style="margin: 0px;" >'
+                @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                @remark_all += '<table style="margin: 0px;" >'
+                @remark_all += '<tr>'
+                @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+                @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '&bom_version=' + params[:bom_version].to_s + '" data-confirm="确定要删除?"> </a>'
+                @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
+                @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+                if remark_item.state == "del"
+                    @remark_all +=  '<del>' + remark_item.remark.to_s + '</del>'
+                else
+                    @remark_all +=  remark_item.remark.to_s
+                end
+                @remark_all += '</small></p>'
+                @remark_all += '</td>'
+                @remark_all += '</tr>'
+                @remark_all += '</table>'
+                @remark_all += '</div>'
+                @remark_all += '</div>'
             end
-            @remark_all += '</small></p>'
-            @remark_all += '</td>'
-            @remark_all += '</tr>'
-            @remark_all += '</table>'
-            @remark_all += '</div>'
-            @remark_all += '</div>'
+        else
+            PItemRemark.where(p_item_id: @item_id).each do |remark_item|
+                @remark_all += '<div class="row" style="margin: 0px;" >'
+                @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                @remark_all += '<table style="margin: 0px;" >'
+                @remark_all += '<tr>'
+                @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+                @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"> </a>'
+                @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
+                @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+                if remark_item.state == "del"
+                    @remark_all +=  '<del>' + remark_item.remark.to_s + '</del>'
+                else
+                    @remark_all +=  remark_item.remark.to_s
+                end
+                @remark_all += '</small></p>'
+                @remark_all += '</td>'
+                @remark_all += '</tr>'
+                @remark_all += '</table>'
+                @remark_all += '</div>'
+                @remark_all += '</div>'
+            end
         end
         #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         #Rails.logger.info(@remark_all.inspect)
@@ -1014,31 +1047,60 @@ before_filter :authenticate_user!
 
     def p_item_remark_del
         @item_id = params[:itemp_id]
-        remarkold = PItemRemark.find(params[:remark_id])
+        if not params[:bom_version].blank?
+            remarkold = PVersionItemRemark.find(params[:remark_id])
+        else
+            remarkold = PItemRemark.find(params[:remark_id])
+        end
         remarkold.state = "del"
         remarkold.save
         @remark_all = ""
-        PItemRemark.where(p_item_id: @item_id).each do |remark_item|
-            @remark_all += '<div class="row" style="margin: 0px;" >'
-            @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
-            @remark_all += '<table style="margin: 0px;" >'
-            @remark_all += '<tr>'
-            @remark_all += '<td style="padding: 0px;margin: 0px;" >'
-            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
-            @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"> </a>'
-            @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s.gsub(/'/,'') + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
-            @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
-            if remark_item.state == "del"
-                @remark_all +=  '<del>' + remark_item.remark.to_s.gsub(/'/,'') + '</del>'
-            else
-                @remark_all +=  remark_item.remark.to_s.gsub(/'/,'')
+        if not params[:bom_version].blank?
+            PVersionItemRemark.where(p_item_id: @item_id).each do |remark_item|
+                @remark_all += '<div class="row" style="margin: 0px;" >'
+                @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                @remark_all += '<table style="margin: 0px;" >'
+                @remark_all += '<tr>'
+                @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+                @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '&bom_version=' + params[:bom_version].to_s + '" data-confirm="确定要删除?"> </a>'
+                @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s.gsub(/'/,'') + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
+                @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+                if remark_item.state == "del"
+                    @remark_all +=  '<del>' + remark_item.remark.to_s.gsub(/'/,'') + '</del>'
+                else
+                    @remark_all +=  remark_item.remark.to_s.gsub(/'/,'')
+                end
+                @remark_all += '</small></p>'
+                @remark_all += '</td>'
+                @remark_all += '</tr>'
+                @remark_all += '</table>'
+                @remark_all += '</div>'
+                @remark_all += '</div>'
             end
-            @remark_all += '</small></p>'
-            @remark_all += '</td>'
-            @remark_all += '</tr>'
-            @remark_all += '</table>'
-            @remark_all += '</div>'
-            @remark_all += '</div>'
+        else
+            PItemRemark.where(p_item_id: @item_id).each do |remark_item|
+                @remark_all += '<div class="row" style="margin: 0px;" >'
+                @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                @remark_all += '<table style="margin: 0px;" >'
+                @remark_all += '<tr>'
+                @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small >'
+                @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"> </a>'
+                @remark_all += '<a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+@item_id+'" data-remark_id="' + remark_item.id.to_s + '" data-remark="' + remark_item.remark.to_s.gsub(/'/,'') + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' 
+                @remark_all += '<strong>' + remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+                if remark_item.state == "del"
+                    @remark_all +=  '<del>' + remark_item.remark.to_s.gsub(/'/,'') + '</del>'
+                else
+                    @remark_all +=  remark_item.remark.to_s.gsub(/'/,'')
+                end
+                @remark_all += '</small></p>'
+                @remark_all += '</td>'
+                @remark_all += '</tr>'
+                @remark_all += '</table>'
+                @remark_all += '</div>'
+                @remark_all += '</div>'
+            end
         end
         #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         #Rails.logger.info(@remark_all.inspect)
@@ -1048,14 +1110,22 @@ before_filter :authenticate_user!
 
     def p_item_remark
         @item_id = params[:itemp_id]
-        remark = PItemRemark.new()
+        if not params[:bom_version].blank?
+            remark = PVersionItemRemark.new()
+        else
+            remark = PItemRemark.new()
+        end
         remark.p_item_id = params[:itemp_id]
         remark.user_id = current_user.id
         remark.user_name = current_user.full_name
         if not params[:dn_info].blank?
             remark.update(editbn_params)
         end
-        p_c = PItem.find(params[:itemp_id])       
+        if not params[:bom_version].blank?
+            p_c = PVersionItem.find(params[:itemp_id])    
+        else
+            p_c = PItem.find(params[:itemp_id]) 
+        end   
         if can? :work_e, :all
             remark.user_team = "sell"
             
@@ -1072,31 +1142,60 @@ before_filter :authenticate_user!
         remark.remark = params[:item_remark].chomp
         remark.save
         @remark_all = ''
-        PItemRemark.where(p_item_id: @item_id).each do |remark_item|
-            @remark_all += '<div class="row" style="margin: 0px;" >'
-            @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
-            @remark_all += '<table style="margin: 0px;" >'
-            @remark_all += '<tr>'
-            @remark_all += '<td style="padding: 0px;margin: 0px;" >'
-            if not remark_item.info.blank?
-                @remark_all += '<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>'
-            end
+        if not params[:bom_version].blank?
+            PVersionItemRemark.where(p_item_id: @item_id).each do |remark_item|
+                @remark_all += '<div class="row" style="margin: 0px;" >'
+                @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                @remark_all += '<table style="margin: 0px;" >'
+                @remark_all += '<tr>'
+                @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+                if not remark_item.info.blank?
+                    @remark_all += '<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>'
+                end
             
-            #if params[:sell_remark] != "sell_remark"
-                #@remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
-            #else
-            @remark_all += '<p style="padding: 0px;margin: 0px;" ><small>'
-            if remark_item.user_id == current_user.id
-                @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"></a>'
+                #if params[:sell_remark] != "sell_remark"
+                    #@remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+                #else
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small>'
+                if remark_item.user_id == current_user.id
+                    @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '&bom_version=' + params[:bom_version].to_s + '" data-confirm="确定要删除?"></a>'
+                end
+                @remark_all += '<strong>' + remark_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+                @remark_all += '<strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s.gsub(/'/,'') + '</small></p>'
+                #end
+                @remark_all += '</td>'
+                @remark_all += '</tr>'
+                @remark_all += '</table>'
+                @remark_all += '</div>'
+                @remark_all += '</div>'
             end
-            @remark_all += '<strong>' + remark_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
-            @remark_all += '<strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s.gsub(/'/,'') + '</small></p>'
-            #end
-            @remark_all += '</td>'
-            @remark_all += '</tr>'
-            @remark_all += '</table>'
-            @remark_all += '</div>'
-            @remark_all += '</div>'
+        else
+            PItemRemark.where(p_item_id: @item_id).each do |remark_item|
+                @remark_all += '<div class="row" style="margin: 0px;" >'
+                @remark_all += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                @remark_all += '<table style="margin: 0px;" >'
+                @remark_all += '<tr>'
+                @remark_all += '<td style="padding: 0px;margin: 0px;" >'
+                if not remark_item.info.blank?
+                    @remark_all += '<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>'
+                end
+            
+                #if params[:sell_remark] != "sell_remark"
+                    #@remark_all += '<p style="padding: 0px;margin: 0px;" ><small ><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="'+remark_item.p_item_id.to_s+'" data-remark_id="'+remark_item.id.to_s+'" data-remark="' + remark_item.remark.to_s + '" > </a><strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s + '</small></p>'
+                #else
+                @remark_all += '<p style="padding: 0px;margin: 0px;" ><small>'
+                if remark_item.user_id == current_user.id
+                    @remark_all += '<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=' + @item_id.to_s + '&remark_id=' + remark_item.id.to_s + '" data-confirm="确定要删除?"></a>'
+                end
+                @remark_all += '<strong>' + remark_item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</strong>'
+                @remark_all += '<strong>' + remark_item.user_name.to_s + ': </strong>' +  remark_item.remark.to_s.gsub(/'/,'') + '</small></p>'
+                #end
+                @remark_all += '</td>'
+                @remark_all += '</tr>'
+                @remark_all += '</table>'
+                @remark_all += '</div>'
+                @remark_all += '</div>'
+            end
         end
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(@remark_all.inspect)
@@ -1442,7 +1541,11 @@ before_filter :authenticate_user!
     end
 
     def pj_edit
-        bom = ProcurementBom.find(params[:bom_id])              
+        if not params[:bom_version].blank?
+            bom = ProcurementBom.find(params[:bom_id])   
+        else
+            bom = ProcurementVersionBom.find(params[:bom_id])   
+        end           
         bom.p_name = params[:pj_name]
         bom.p_name_mom = params[:pj_name_mom]
         bom.qty = params[:pj_qty]
@@ -2402,7 +2505,11 @@ before_filter :authenticate_user!
         elsif cookies.permanent[:educator_locale].to_s == "en"
             part_name_locale = "part_name_en"
         end
-        @bom_item = PItem.find(params[:id])
+        if not params[:bom_version].blank?
+            @bom_item = PVersionItem.find(params[:id])
+        else
+            @bom_item = PItem.find(params[:id])
+        end
         #params[:q]=@bom_item.description
 	params[:p]=@bom_item.part_code
         if not params[:q].blank?
@@ -2461,11 +2568,19 @@ before_filter :authenticate_user!
                         @bom_html = @bom_html + "<tr>"
 
                         @bom_html = @bom_html + "<td>"
-                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        if not params[:bom_version].blank?
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        else
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        end
                         @bom_html = @bom_html + "</td>"
 
                         @bom_html = @bom_html + "<td>"
-                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        if not params[:bom_version].blank?
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        else
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        end
                         @bom_html = @bom_html + "</td>"
 =begin
                         @bom_html = @bom_html + "<td>"
@@ -2483,18 +2598,30 @@ before_filter :authenticate_user!
                                 @bom_html += "<td width='50'>无</td>"
                                 @bom_html += "<td width='80'>无</td>"
                             else
+                                if not params[:bom_version].blank?
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"                
+                                    @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                    @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+                                else
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"                
+                                    @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                    @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"                     
+                                end
+                            end
+                        else
+                            if not params[:bom_version].blank?
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+                            else
                                 @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
-                
                                 @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
                                 @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
                                 @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
                             end
-                        else
-                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
-                
-                            @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
-                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
-                            @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
                         end
                         
 
@@ -2504,7 +2631,11 @@ before_filter :authenticate_user!
                         
 
                         @bom_html = @bom_html + "<td>"
-                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        if not params[:bom_version].blank?
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        else
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        end
                         @bom_html = @bom_html + "</td>"
 
                         @bom_html = @bom_html + "</tr>"
@@ -2517,10 +2648,18 @@ before_filter :authenticate_user!
                     @match_products.each do |item|
                         @bom_html = @bom_html + "<tr>"
                         @bom_html = @bom_html + "<td>"
-                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        if not params[:bom_version].blank?
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        else
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.name.to_s}</div></a>"
+                        end
                         @bom_html = @bom_html + "</td>"
                         @bom_html = @bom_html + "<td>"
-                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        if not params[:bom_version].blank?
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        else
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{item.description.to_s}</div></a>"
+                        end
                         @bom_html = @bom_html + "</td>"
 =begin
                         @bom_html = @bom_html + "<td>"
@@ -2537,31 +2676,39 @@ before_filter :authenticate_user!
                                 @bom_html += "<td width='50'>无</td>"
                                 @bom_html += "<td width='80'>无</td>"
                             else
+                                if not params[:bom_version].blank?
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>" 
+                                    @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                    @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+                                else
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                                    @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                    @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                    @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"                             
+                                end
+                            end
+                        else
+                            if not params[:bom_version].blank?
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+                            else
                                 @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
-                
                                 @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
                                 @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
                                 @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
                             end
-                        else
-                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
-                
-                             @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
-                             @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
-                             @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
-
                         end
                         
-                        
-                        
-                        
-                        
-                        
-
-
 
                         @bom_html = @bom_html + "<td>"
-                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        if not params[:bom_version].blank?
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bom_version=" + params[:bom_version].to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        else
+                            @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>OK</div></a>"
+                        end
                         @bom_html = @bom_html + "</td>"
                         @bom_html = @bom_html + "</tr>"
                     end           
@@ -2583,7 +2730,11 @@ before_filter :authenticate_user!
                     Rails.logger.info(params[:p].inspect)
                     Rails.logger.info(key.inspect)
                     Rails.logger.info("--------------------------")
-                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;part_name=" + key + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    if not params[:bom_version].blank?
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;part_name=" + key + "&amp;q=" + params[:q].to_s + "&bom_version=" + params[:bom_version].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    else
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;part_name=" + key + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    end
                     @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
                 end
             end 
@@ -2595,7 +2746,11 @@ before_filter :authenticate_user!
                 @counted1.each do |key, value| 
                     #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %>
                     #<a href="/bom_item/8315/edit?p=C6-1%2CC7-1%2CC67-1%2CC68-1&amp;package2=0402&amp;q=CAP+CER+10PF+16V+NP0+0402">0402</a>
-                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    if not params[:bom_version].blank?
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&bom_version=" + params[:bom_version].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    else
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    end
                     @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
                 end
             end
@@ -2611,7 +2766,11 @@ before_filter :authenticate_user!
                     Rails.logger.info(key.inspect)
                     Rails.logger.info(value.inspect)
                     Rails.logger.info("--------------------------")
-                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>" 
+                    if not params[:bom_version].blank?
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&bom_version=" + params[:bom_version].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>" 
+                    else
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>"
+                    end
                     @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
                 end
             end
@@ -2621,7 +2780,11 @@ before_filter :authenticate_user!
                 Rails.logger.info("--------------------------fffff")
                 @counted1.each do |key, value|
                     #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %>
-                     @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    if not params[:bom_version].blank?
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&bom_version=" + params[:bom_version].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    else
+                        @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m' + "?id=" + @bom_item.id.to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    end
                     @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
                 end
             end
@@ -2636,7 +2799,11 @@ before_filter :authenticate_user!
 
     def p_update
         if not params[:product_id].blank?
-            del_dn = PDn.find_by_sql("SELECT * FROM p_dns WHERE p_dns.item_id = '#{params[:id]}' AND p_dns.tag IS NULL")
+            if not params[:bom_version].blank?
+                del_dn = PVersionDn.find_by_sql("SELECT * FROM p_version_dns WHERE p_version_dns.p_version_item_id = '#{params[:id]}' AND p_version_dns.tag IS NULL")
+            else
+                del_dn = PDn.find_by_sql("SELECT * FROM p_dns WHERE p_dns.item_id = '#{params[:id]}' AND p_dns.tag IS NULL")
+            end
             #del_dn = PDn.find_by(item_id: params[:id], tag: nil)
             if not del_dn.blank?
                 #del_dn.delete 
@@ -2653,11 +2820,22 @@ before_filter :authenticate_user!
                 all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{part_code}' ORDER BY all_dns.date DESC").first
             end
             #all_dns.each do |dns|
-            PDn.where(item_id: params[:id]).update_all "color=NULL"
+            if not params[:bom_version].blank?
+                PVersionDn.where(p_version_item_id: params[:id]).update_all "color=NULL"
+            else
+                PDn.where(item_id: params[:id]).update_all "color=NULL"
+            end
             if not all_dns.blank?
                 Rails.logger.info("ttttttttttttt--------------------------22222222222")
-                add_dns = PDn.new
-                add_dns.item_id = params[:id]
+                if not params[:bom_version].blank?
+                    add_dns = PVersionDn.new
+                    add_dns.p_version_item_id = params[:id]
+                else
+                    add_dns = PDn.new
+                    add_dns.item_id = params[:id]
+                end
+                 
+                
                 add_dns.dn = all_dns.dn
                 add_dns.dn_long = all_dns.dn_long
                 add_dns.date = all_dns.date
@@ -2686,57 +2864,67 @@ before_filter :authenticate_user!
             @view_dns += '</thead>'
 =end
             @view_dns += '<tbody >'
-            PDn.where(item_id: params[:id]).each do |dn|
-                @view_dns += '<tr id="' + params[:id].to_s + '_' + dn.id.to_s + '" '
-                if dn.color == "b"
-                    @view_dns += ' class="bg-info">'
-                elsif dn.color == "g" 
-                    @view_dns += ' class="bg-success">' 
-                else
-                    @view_dns += ' >'
-                end
+            if not params[:bom_version].blank?
+                PVersionDn.where(p_version_item_id: params[:id]).each do |dn|
+                    @view_dns += '<tr id="' + params[:id].to_s + '_' + dn.id.to_s + '" '
+                    if dn.color == "b"
+                        @view_dns += ' class="bg-info">'
+                    elsif dn.color == "g" 
+                        @view_dns += ' class="bg-success">' 
+                    else
+                        @view_dns += ' >'
+                    end
                 #@view_dns += '<td width="25"><small><a class="glyphicon glyphicon-edit" data-method="get" data-remote="true" href=""></a></small></td>'
-                @view_dns += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:id].to_s + '" > '
-                if not dn.info.blank?                
-                    @view_dns += ' <a href="'+dn.info.to_s+'">下载</a></small></td>'
-                else
-                    @view_dns += ' </small></td>'
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:id].to_s + '" > '
+                    if not dn.info.blank?                
+                        @view_dns += ' <a href="'+dn.info.to_s+'">下载</a></small></td>'
+                    else
+                        @view_dns += ' </small></td>'
+                    end
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'             
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" ><div>' + dn.dn.to_s+ ' '  + dn.qty.to_s+ ' ￥'+ dn.cost.to_s+'</div></a></small></td>'
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:id].to_s+ '&bom_version=' + params[:bom_version].to_s + '" data-confirm="确定要删除?"></a></small></td>'
+                    @view_dns += '</tr>'
                 end
-
-
-                @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'
-                
-
-                @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s+ ' '  + dn.qty.to_s+ ' ￥'+ dn.cost.to_s+'</div></a></small></td>'
-                
-
- 
-                @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
-                @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:id].to_s+'" data-confirm="确定要删除?"></a></small></td>'
-                @view_dns += '</tr>'
-
-
-                #@view_dns += '<tr id="' + params[:id].to_s + '_' + dn.id.to_s + '" class="">'
-                #@view_dns += '<td><small>'+dn.dn.to_s+'</small></td>'
-                #@view_dns += '<td><small>$'+dn.cost.to_s+'</small></td>'
-                #if not dn.info.blank?                
-                 #   @view_dns += '<td><small><a href="'+dn.info.to_s+'">下载</a></small></td>'
-                #else
-                #    @view_dns += '<td><small></small></td>'
-                #end 
-                  #  @view_dns += '<td><small>'+dn.remark.to_s+'</small></td>'
-                  #  @view_dns += '<td><small><a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:id].to_s+'"></a></small></td>'
-
-                    #@view_dns += '</tr>'
+            else
+                PDn.where(item_id: params[:id]).each do |dn|
+                    @view_dns += '<tr id="' + params[:id].to_s + '_' + dn.id.to_s + '" '
+                    if dn.color == "b"
+                        @view_dns += ' class="bg-info">'
+                    elsif dn.color == "g" 
+                        @view_dns += ' class="bg-success">' 
+                    else
+                        @view_dns += ' >'
+                    end
+                #@view_dns += '<td width="25"><small><a class="glyphicon glyphicon-edit" data-method="get" data-remote="true" href=""></a></small></td>'
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:id].to_s + '" > '
+                    if not dn.info.blank?                
+                        @view_dns += ' <a href="'+dn.info.to_s+'">下载</a></small></td>'
+                    else
+                        @view_dns += ' </small></td>'
+                    end
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'             
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s+ ' '  + dn.qty.to_s+ ' ￥'+ dn.cost.to_s+'</div></a></small></td>'
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:id].to_s+'" data-confirm="确定要删除?"></a></small></td>'
+                    @view_dns += '</tr>'
+                end
             end
+
             @view_dns += '</tbody>'
             @view_dns += '</table>'
             Rails.logger.info("----------------------111")
             Rails.logger.info(@view_dns)
             Rails.logger.info("----------------------999")
             #@view_dns = "wwwww"
-            @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
-            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            if not params[:bom_version].blank?
+                @bom_item = PVersionItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+                @bom = ProcurementVersionBom.find(@bom_item.procurement_bom_id)
+            else
+                @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+                @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            end
             if @bom_item.update_attribute("product_id", params[:product_id])
                 if @bom_item.product_id
 	            #@bom_item.product = Product.find(@bom_item.product_id)
@@ -2765,7 +2953,44 @@ before_filter :authenticate_user!
                         redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
                     else
                         @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
-                        @matched_items_nn = Product.find_by_sql("
+                        if not params[:bom_version].blank?
+                            @matched_items_nn = Product.find_by_sql("
+SELECT
+	p_version_items.id,
+	p_version_items.quantity,
+	p_version_items.description,
+	p_version_items.part_code,
+	p_version_items.procurement_bom_id,
+	p_version_items.product_id,
+	p_version_items.created_at,
+	p_version_items.updated_at,
+	p_version_items.warn,
+	p_version_items.user_id,
+	p_version_items.danger,
+	p_version_items.manual,
+	p_version_items.mark,
+	p_version_items.mpn,
+	p_version_items.mpn_id,
+
+IF (
+	p_version_items.mpn_id > 0,
+	mpn_items.price,
+	products.price
+) AS price,
+
+IF (
+	p_version_items.mpn_id > 0,
+	mpn_items.description,
+	products.description
+) AS description_p
+FROM
+	p_version_items
+LEFT JOIN products ON p_version_items.product_id = products.id
+LEFT JOIN mpn_items ON p_version_items.mpn_id = mpn_items.id
+WHERE
+	p_version_items.procurement_version_bom_id = "+@bom_item.procurement_version_bom_id.to_s)   
+                        else
+                            @matched_items_nn = Product.find_by_sql("
 SELECT
 	p_items.id,
 	p_items.quantity,
@@ -2799,7 +3024,8 @@ FROM
 LEFT JOIN products ON p_items.product_id = products.id
 LEFT JOIN mpn_items ON p_items.mpn_id = mpn_items.id
 WHERE
-	p_items.procurement_bom_id = "+@bom_item.procurement_bom_id.to_s)             
+	p_items.procurement_bom_id = "+@bom_item.procurement_bom_id.to_s)
+                        end          
                         @total_price_nn = 0.00               
 	                unless @matched_items_nn.empty?
                             @bom_api_all = []
@@ -2822,27 +3048,41 @@ WHERE
 	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
 	        end
             end  
-            
-
-            
             #Rails.logger.info(@bom_item.id.to_s + '_dns')
         end
     end
 
     def p_updateii
-        dell_dns_color = PDn.where(item_id: params[:id])
+        if not params[:bom_version].blank?
+            dell_dns_color = PVersionDn.where(p_version_item_id: params[:id])
+        else
+            dell_dns_color = PDn.where(p_version_item_id: params[:id])
+        end
         c_color = nil
-        dell_dns_color = PDn.where("item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
+        if not params[:bom_version].blank?
+            dell_dns_color = PVersionDn.where("p_version_item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
+        else
+            dell_dns_color = PDn.where("item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
+        end
         if not params[:product_name].blank?
-            @add_dns = PDn.find(params[:dn_id])
+            if not params[:bom_version].blank?
+                @add_dns = PVersionDn.find(params[:dn_id])
+            else
+                @add_dns = PDn.find(params[:dn_id])
+            end
             if @add_dns.color == "y"
                 @add_dns.color = "y"
             else
                 @add_dns.color = "b"
             end
             @add_dns.save
-            @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
-            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            if not params[:bom_version].blank?
+                @bom_item = PVersionItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+                @bom = ProcurementVersionBom.find(@bom_item.procurement_bom_id)
+            else
+                @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+                @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            end
             if @bom_item.update_attribute("product_id", Product.find_by(name: params[:product_name]).id)
                 if @bom_item.product_id
 	            #@bom_item.product = Product.find(@bom_item.product_id)
@@ -2896,7 +3136,11 @@ WHERE
             
             #Rails.logger.info(@bom_item.id.to_s + '_dns')
         else
-            @add_dns = PDn.find(params[:dn_id])
+            if not params[:bom_version].blank?
+                @add_dns = PVersionDn.find(params[:dn_id])
+            else
+                @add_dns = PDn.find(params[:dn_id])
+            end
             if @add_dns.color == "y"
                 @add_dns.color = "y"
             else
@@ -2904,7 +3148,11 @@ WHERE
             end
             #@add_dns.color = "b"
             @add_dns.save
-            @bom_item = PItem.find(params[:id]) 
+            if not params[:bom_version].blank?
+                @bom_item = PVersionItem.find(params[:id]) 
+            else
+                @bom_item = PItem.find(params[:id]) 
+            end
             @bom_item.cost = @add_dns.cost
             @bom_item.dn_id = @add_dns.id
             @bom_item.dn = @add_dns.dn
@@ -2917,10 +3165,17 @@ WHERE
             @bom_item.user_do_change = nil
             @bom_item.save
 
-
-            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            if not params[:bom_version].blank?
+                @bom = ProcurementVersionBom.find(@bom_item.procurement_bom_id)
+            else
+                @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            end
             @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
-            @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)      
+            if not params[:bom_version].blank?
+                @matched_items_nn = PVersionItem.where(procurement_bom_id: @bom.id)     
+            else
+                @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)   
+            end 
             @total_price_nn = 0.00               
 	    if not @matched_items_nn.blank?
                 @bom_api_all = []
@@ -2947,12 +3202,24 @@ WHERE
             end
         end
 =end
-        @bom_item = PItem.find(params[:item_id])
+        if not params[:bom_version].blank?
+            @bom_item = PVersionItem.find(params[:item_id])
+        else
+            @bom_item = PItem.find(params[:item_id])
+        end
         if not @bom_item.blank?
-            if not params[:info].blank?
-                p_dn = PDn.new(bn_params)
+            if not params[:bom_version].blank?
+                if not params[:info].blank?
+                    p_dn = PVersionDn.new(bn_params)
+                else
+                    p_dn = PVersionDn.new()
+                end
             else
-                p_dn = PDn.new()
+                if not params[:info].blank?
+                    p_dn = PDn.new(bn_params)
+                else
+                    p_dn = PDn.new()
+                end
             end
             #Rails.logger.info("--------------------------")
             #Rails.logger.info(p_dn.info.current_path.inspect)
@@ -2966,7 +3233,11 @@ WHERE
                 p_dn.dn_long = params[:dn_long]
             end
             #p_dn.qty = params[:qty]
-            p_dn.qty = PItem.find_by_id(params[:item_id]).quantity*ProcurementBom.find_by_id(PItem.find_by_id(params[:item_id]).procurement_bom_id).qty
+            if not params[:bom_version].blank?
+                p_dn.qty = PVersionItem.find_by_id(params[:item_id]).quantity*ProcurementVersionBom.find_by_id(PVersionItem.find_by_id(params[:item_id]).procurement_bom_id).qty
+            else
+                p_dn.qty = PItem.find_by_id(params[:item_id]).quantity*ProcurementBom.find_by_id(PItem.find_by_id(params[:item_id]).procurement_bom_id).qty
+            end
             p_dn.date = Time.new
             p_dn.remark = params[:remark]
             #if params[:remark] != ""
@@ -2999,15 +3270,25 @@ WHERE
                     @view_dns += ' </td>'
                 end 
 
+                if not params[:bom_version].blank?
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'
 
-                @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'
+
+                
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
+
+                
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
+                else
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'
 
 
                 
-                @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
 
                 
-                @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
+                end
                 Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                 Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
                 #@view_dns += dn.remark ? dn.remark[0]:''
@@ -3016,8 +3297,12 @@ WHERE
                 else
                     @view_dns += ''
                 end
-                @view_dns += '</div></a></small></td>'             
-                @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'" data-confirm="确定要删除?"></a></small></td>'
+                @view_dns += '</div></a></small></td>' 
+                if not params[:bom_version].blank?            
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'&bom_version=' + params[:bom_version].to_s + '" data-confirm="确定要删除?"></a></small></td>'
+                else
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'" data-confirm="确定要删除?"></a></small></td>'
+                end
                 @view_dns += '</tr>'
             end
             @view_dns += '</tbody>'
@@ -3030,8 +3315,12 @@ WHERE
 
     end
 
-    def p_edit_dn       
-        dn = PDn.find(params[:dn_id])
+    def p_edit_dn    
+        if not params[:bom_version].blank?   
+            dn = PVersionDn.find(params[:dn_id])
+        else
+            dn = PDn.find(params[:dn_id])
+        end
         if not params[:dn_info].blank?
             dn.update(editbn_params)
         end
@@ -3051,7 +3340,11 @@ WHERE
         
         if not params[:dn_remark].blank?
             dn.remark = params[:dn_remark]
-            @bom_item = PItem.find(dn.item_id)
+            if not params[:bom_version].blank? 
+                @bom_item = PItem.find(dn.item_id)
+            else
+                @bom_item = PVersionItem.find(dn.item_id)
+            end
             #@bom_item.sell_feed_back_tag = "sell"
             #@bom_item.save
         end
@@ -3070,18 +3363,33 @@ WHERE
         end 
 
 
+        if not params[:bom_version].blank?
+            @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'    
 
-        @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'    
 
-
-        @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
+            @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + ' &bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s + '</div></a></small></td>'
 
        
-        #@view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
+            #@view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
 
 
-        @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
+            @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
                 
+        else
+            @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'    
+
+
+            @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
+
+       
+            #@view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
+
+
+            @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>'
+        end
+
+
+
         if not dn.remark.blank?
             @view_dns += dn.remark
         else
@@ -3233,7 +3541,11 @@ WHERE
 
     def p_up_userdo
         @user_do = params[:user_do]
-        @bom_item = PItem.find(params[:id])
+        if not params[:bom_version].blank?
+            @bom_item = PVersionItem.find(params[:id])
+        else
+            @bom_item = PItem.find(params[:id])
+        end
         if not @bom_item.blank?
             if @bom_item.user_do != params[:user_do]
                 @bom_item.user_do = params[:user_do]
@@ -3289,8 +3601,13 @@ WHERE
     def del_dn
         @item_id = params[:item_id]
         @dn_id = params[:id]
-        itemall = PItem.find(params[:item_id])
-        @dn = PDn.find(params[:id])
+        if not params[:bom_version].blank?
+            itemall = PVersionItem.find(params[:item_id])
+            @dn = PVersionDn.find(params[:id])
+        else
+            itemall = PItem.find(params[:item_id])
+            @dn = PDn.find(params[:id])
+        end
         if not @dn.blank?
             itemall.dn_id = nil
             itemall.dn = nil
@@ -3448,7 +3765,11 @@ WHERE
     end
 
     def del_cost
-        @p_item = PItem.find(params[:id])
+        if not params[:bom_version].blank?
+            @p_item = PVersionItem.find(params[:id])
+        else
+            @p_item = PItem.find(params[:id])
+        end
         Rails.logger.info("--------------------------")
         Rails.logger.info(@p_item.id.inspect)
         Rails.logger.info("--------------------------")
@@ -3459,10 +3780,20 @@ WHERE
             @p_item.color = nil
             @p_item.save
         end 
-        PDn.where(item_id: params[:id]).update_all "color=NULL"
-        @bom = ProcurementBom.find(@p_item.procurement_bom_id)
-        @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
-        @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)      
+        if not params[:bom_version].blank?
+            PVersionDn.where(p_version_item_id: params[:id]).update_all "color=NULL"
+        else
+            PDn.where(item_id: params[:id]).update_all "color=NULL"
+        end
+        if not params[:bom_version].blank?
+            @bom = ProcurementVersionBom.find(@p_item.procurement_bom_id)
+            @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+            @matched_items_nn = PVersionItem.where(procurement_bom_id: @bom.id)      
+        else
+            @bom = ProcurementBom.find(@p_item.procurement_bom_id)
+            @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+            @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)   
+        end
         @total_price_nn = 0.00               
 	if not @matched_items_nn.blank?
             @bom_api_all = []
@@ -3480,7 +3811,11 @@ WHERE
     end
 
     def p_edit_mpn
-        item = PItem.find(params[:itemp_id])
+        if not params[:bom_version].blank?
+            item = PVersionItem.find(params[:itemp_id])
+        else
+            item = PItem.find(params[:itemp_id])
+        end
         @p_item = item
         item.mpn = params[:item_mpn].strip
         item.save
@@ -3599,9 +3934,17 @@ WHERE
     end
 
     def copy_data
-        source_data = PItem.find(params[:item_id])
+        if not params[:bom_version].blank?
+            source_data = PVersionItem.find(params[:item_id])
+        else
+            source_data = PItem.find(params[:item_id])
+        end
         if not source_data.blank?
-            update_data = PItem.where("procurement_bom_id = #{source_data.procurement_bom_id} AND trim(description) = '#{source_data.description.strip}'")
+            if not params[:bom_version].blank?
+                update_data = PVersionItem.where("procurement_bom_id = #{source_data.procurement_bom_id} AND trim(description) = '#{source_data.description.strip}'")
+            else
+                update_data = PItem.where("procurement_bom_id = #{source_data.procurement_bom_id} AND trim(description) = '#{source_data.description.strip}'")
+            end
             update_data.update_all(product_id: source_data.product_id, cost: source_data.cost, price: source_data.price, dn_id: source_data.dn_id, color: source_data.color,moko_part: source_data.moko_part,moko_des: source_data.moko_des)
         end
         redirect_to :back

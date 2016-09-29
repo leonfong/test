@@ -1982,7 +1982,8 @@ before_filter :authenticate_user!
             elsif params[:order].strip.size == 2
                 order = params[:order].strip
                 #where_def = "  POSITION('" + order + "' IN work_flows.order_no) = 8"
-                where_def = "  (POSITION('" + order + "' IN work_flows.order_no) = 8 ) OR (POSITION('" + order + "' IN work_flows.order_no) = 9)"
+                where_def = "  (POSITION('" + order + "' IN work_flows.order_no) = 8 AND RIGHT(LEFT(work_flows.order_no,10),1) REGEXP '^[0-9]+$') OR (POSITION('" + order + "' IN work_flows.order_no) = 9 AND RIGHT(LEFT(work_flows.order_no,8),1) REGEXP '^[0-9]+$')"
+                
                 limit = ""
             else
                 order = params[:order].strip

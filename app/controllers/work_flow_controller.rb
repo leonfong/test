@@ -2177,14 +2177,22 @@ before_filter :authenticate_user!
             if not current_user.s_name.blank?
                 if current_user.s_name.size == 1
                     s_name = current_user.s_name
-                    where_o = "  POSITION('" + s_name + "' IN RIGHT(LEFT(topics.order_no,9),7)) = 6 and RIGHT(LEFT(topics.order_no,9),1) REGEXP '^[0-9]+$' AND "
+                    #where_o = "  POSITION('" + s_name + "' IN RIGHT(LEFT(topics.order_no,9),7)) = 6 and RIGHT(LEFT(topics.order_no,9),1) REGEXP '^[0-9]+$' AND "
+                    where_o = "  ((POSITION('" + s_name + "' IN RIGHT(LEFT(topics.order_no,9),7)) = 6 and RIGHT(LEFT(topics.order_no,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(topics.order_no,9),7)) = 7 and RIGHT(LEFT(topics.order_no,10),1) REGEXP '^[0-9]+$' and RIGHT(LEFT(topics.order_no,8),1) REGEXP '^[0-9]+$'))  AND "
+                    
+
                     #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name,9),1) REGEXP '^[0-9]+$' "
-                    where_o_a = " WHERE POSITION('" + s_name + "' IN RIGHT(LEFT(a.order_no,9),7)) = 6 and RIGHT(LEFT(a.order_no,9),1) REGEXP '^[0-9]+$' "
+                    #where_o_a = " WHERE POSITION('" + s_name + "' IN RIGHT(LEFT(a.order_no,9),7)) = 6 and RIGHT(LEFT(a.order_no,9),1) REGEXP '^[0-9]+$' "
+                    where_o_a = " WHERE ((POSITION('" + s_name + "' IN RIGHT(LEFT(a.order_no,9),7)) = 6 and RIGHT(LEFT(a.order_no,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(a.order_no,9),7)) = 7 and RIGHT(LEFT(a.order_no,10),1) REGEXP '^[0-9]+$' and RIGHT(LEFT(a.order_no,8),1) REGEXP '^[0-9]+$')) "
                 elsif current_user.s_name.size == 2
                     s_name = current_user.s_name
-                    where_o = "  POSITION('" + s_name + "' IN topics.order_no) = 8 AND "
+                    #where_o = "  POSITION('" + s_name + "' IN topics.order_no) = 8 AND "
+                    #where_o = "  (POSITION('" + s_name + "' IN topics.order_no) = 8 or POSITION('" + s_name + "' IN topics.order_no) = 9) AND "
+                    where_o = "  (LOCATE('" + s_name + "', topics.order_no,3) = 8 AND RIGHT(LEFT(topics.order_no,10),1) REGEXP '^[0-9]+$') OR (LOCATE('" + s_name + "', topics.order_no,3) = 9 AND RIGHT(LEFT(topics.order_no,8),1) REGEXP '^[0-9]+$') AND "
                     #where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
-                    where_o_a = " WHERE POSITION('" + s_name + "' IN a.order_no) = 8 "
+                    #where_o_a = " WHERE POSITION('" + s_name + "' IN a.order_no) = 8 "
+                    #where_o_a = " WHERE (POSITION('" + s_name + "' IN topics.order_no) = 8 or POSITION('" + s_name + "' IN topics.order_no) = 9) "
+                    where_o_a = " WHERE (LOCATE('" + s_name + "', a.order_no,3) = 8 AND RIGHT(LEFT(a.order_no,10),1) REGEXP '^[0-9]+$') OR (LOCATE('" + s_name + "', a.order_no,3) = 9 AND RIGHT(LEFT(a.order_no,8),1) REGEXP '^[0-9]+$') "
                 elsif current_user.s_name.size > 2
                     where_o_a = " WHERE "
                     where_o = "("
@@ -2192,13 +2200,14 @@ before_filter :authenticate_user!
                     current_user.s_name.split(",").each_with_index do |item,index|
                         s_name = item
                         if current_user.s_name.split(",").size > (index+1)
-                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8 OR "
+                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8 OR LOCATE('" + s_name + "', topics.order_no,3) = 9 OR"
+
                             #where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 OR"
-                            where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 OR"
+                            where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 OR LOCATE('" + s_name + "', a.order_no,3) = 9 OR "
                         else
-                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8) AND"
+                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8) OR LOCATE('" + s_name + "', topics.order_no,3) = 9) AND"
                             #where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8)"
-                            where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 "
+                            where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 OR LOCATE('" + s_name + "', a.order_no,3) = 9"
                         end
                     end
                 end

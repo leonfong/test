@@ -3341,9 +3341,9 @@ WHERE
         if not params[:dn_remark].blank?
             dn.remark = params[:dn_remark]
             if not params[:bom_version].blank? 
-                @bom_item = PItem.find(dn.item_id)
+                @bom_item = PVersionItem.find(dn.p_version_item_id)
             else
-                @bom_item = PVersionItem.find(dn.item_id)
+                @bom_item = PItem.find(dn.item_id)
             end
             #@bom_item.sell_feed_back_tag = "sell"
             #@bom_item.save

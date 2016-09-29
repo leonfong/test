@@ -952,13 +952,52 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def new_pcb_order
+       if params[:new]
+           if current_user.s_name_self.size == 1
+                s_name = current_user.s_name_self
+                where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,9)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,10),1) REGEXP '^[0-9]+$')"
+           elsif current_user.s_name_self.size == 2
+                s_name = current_user.s_name_self
+                where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,10)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,11),1) REGEXP '^[0-9]+$') "
+           end
+
+           if PcbOrder.find_by_sql("SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW()) #{where_p}").blank?
+                p_n =1
+           else
+                p_n = PcbOrder.find_by_sql("SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW()) #{where_p}").last.order_no.to_s.chop.split(current_user.s_name_self.to_s)[-1].to_i + 1
+           end
+           @p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s + "B"
+           @pcb = PcbOrder.new()        
+           @pcb.order_no = @p_no
+           @pcb.order_sell = current_user.email
+           @pcb.team = current_user.team
+           @pcb.phone = current_user.phone
+           @pcb.state = "new"
+           @pcb.save
+           redirect_to edit_pcb_order_path(order_no: @p_no) and return
+       else
+           redirect_to :back and return
+       end 
+    end
+
     def new_pcb_pi
         if params[:pi_no] == "" or params[:pi_no] == nil
-            if PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW())').blank?
+
+            if current_user.s_name_self.size == 1
+                s_name = current_user.s_name_self
+                where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,4),1) REGEXP '^[0-9]+$')"
+            elsif current_user.s_name_self.size == 2
+                s_name = current_user.s_name_self
+                where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,5),1) REGEXP '^[0-9]+$') "
+            end
+
+            if PiInfo.find_by_sql("SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW()) #{where_p}").blank?
                 pi_n =1
             else
-                pi_n = PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW())').last.pi_no.split("PI")[-1].to_i + 1
+                pi_n = PiInfo.find_by_sql('SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW()) #{where_p}').last.pi_no.split("PI")[-1].to_i + 1
             end
+
             @pi_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PI"+ pi_n.to_s
             pi_info = PiInfo.new()
             pi_info.pi_no = @pi_no
@@ -1173,38 +1212,7 @@ before_filter :authenticate_user!
         end
     end
 
-    def new_pcb_order
-       if params[:new]
-           if current_user.s_name_self.size == 1
-                s_name = current_user.s_name_self
-                where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,9)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,10),1) REGEXP '^[0-9]+$')"
-           elsif current_user.s_name_self.size == 2
-                s_name = current_user.s_name_self
-                where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,10)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,11),1) REGEXP '^[0-9]+$') "
-           end
 
-
-
-
-
-           if PcbOrder.find_by_sql("SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW()) #{where_p}").blank?
-                p_n =1
-           else
-                p_n = PcbOrder.find_by_sql("SELECT order_no FROM pcb_orders WHERE to_days(pcb_orders.created_at) = to_days(NOW()) #{where_p}").last.order_no.to_s.chop.split(current_user.s_name_self.to_s)[-1].to_i + 1
-           end
-           @p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s + "B"
-           @pcb = PcbOrder.new()        
-           @pcb.order_no = @p_no
-           @pcb.order_sell = current_user.email
-           @pcb.team = current_user.team
-           @pcb.phone = current_user.phone
-           @pcb.state = "new"
-           @pcb.save
-           redirect_to edit_pcb_order_path(order_no: @p_no) and return
-       else
-           redirect_to :back and return
-       end 
-    end
 
     def edit_pcb_order
         @all_dn = "[&quot;"

@@ -1542,9 +1542,9 @@ before_filter :authenticate_user!
 
     def pj_edit
         if not params[:bom_version].blank?
-            bom = ProcurementBom.find(params[:bom_id])   
-        else
             bom = ProcurementVersionBom.find(params[:bom_id])   
+        else
+            bom = ProcurementBom.find(params[:bom_id])   
         end           
         bom.p_name = params[:pj_name]
         bom.p_name_mom = params[:pj_name_mom]

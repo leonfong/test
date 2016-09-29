@@ -2205,7 +2205,7 @@ before_filter :authenticate_user!
                             #where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 OR"
                             where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 OR LOCATE('" + s_name + "', a.order_no,3) = 9 OR "
                         else
-                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8) OR LOCATE('" + s_name + "', topics.order_no,3) = 9) AND"
+                            where_o += "  LOCATE('" + s_name + "', topics.order_no,3) = 8 OR LOCATE('" + s_name + "', topics.order_no,3) = 9) AND"
                             #where_p += "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8)"
                             where_o_a += " LOCATE('" + s_name + "', a.order_no,3) = 8 OR LOCATE('" + s_name + "', a.order_no,3) = 9"
                         end

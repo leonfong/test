@@ -2,6 +2,10 @@ require 'will_paginate/array'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pi_print
+
+    end
+
     def wh_in
         
     end

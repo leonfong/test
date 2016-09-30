@@ -18,7 +18,7 @@ class Ability
     alias_action :update, :to => :work_g_all      #采购主管16
     alias_action :update, :to => :work_g_a        #采购1 17
     alias_action :update, :to => :work_g_b        #采购2 18
-    alias_action :update, :to => :work_g_c        #采购3
+    alias_action :update, :to => :work_g_c        #采购3 19
     alias_action :update, :to => :work_g_d        #采购4
     alias_action :update, :to => :work_h          #工时
     alias_action :update, :to => :work_i          #MPN

@@ -115,6 +115,7 @@ Rails.application.routes.draw do
   match '/del_wh_item', to: 'work_flow#del_wh_item', via: 'get'
   match '/wh_draft', to: 'work_flow#wh_draft', via: 'post'
   match '/del_wh', to: 'work_flow#del_wh', via: 'get'
+  match '/pi_print', to: 'work_flow#pi_print', via: 'get'
 
 
 
@@ -186,6 +187,7 @@ Rails.application.routes.draw do
   match '/pcb_list', to: 'procurement#pcb_list', via: 'get'
   match '/pcb_info_update', to: 'procurement#pcb_info_update', via: 'post'
   match '/bom_v_up', to: 'procurement#bom_v_up', via: 'post'
+
 
 
 

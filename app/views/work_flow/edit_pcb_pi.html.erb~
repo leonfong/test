@@ -141,7 +141,10 @@
                         <% if @pi_other_item %>
                         <% @pi_other_item.each do |pi_item| %>
                         <tr>
-                            <td><a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                                <% end %>
                             </td>
                             <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
                             <td colSpan="4">备注: <%= pi_item.remark %></td>
@@ -200,6 +203,7 @@
             </div> 
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
+                    <span class="nav navbar-nav navbar-right"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=@pi_info.id" >打印预览</a></span>
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->

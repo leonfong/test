@@ -11,6 +11,15 @@ before_filter :authenticate_user!
         #end
         @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
         @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
+        if params[:type] == 1
+            render "pi_print_1.html.erb" and return
+        elsif params[:type] == 2
+            render "pi_print_2.html.erb" and return
+        elsif params[:type] == 3
+            render "pi_print_3.html.erb" and return
+        elsif params[:type] == 4
+            render "pi_print_4.html.erb" and return
+        end
     end
 
     def wh_in

@@ -203,7 +203,10 @@
             </div> 
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
-                    <span class="nav navbar-nav navbar-right"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=@pi_info.id" >打印预览</a></span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=1" >打印模板1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=2" >打印模板2</a></span>&nbsp;
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=3" >打印模板3</a></span>&nbsp;
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=4" >打印模板4</a></span>
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->

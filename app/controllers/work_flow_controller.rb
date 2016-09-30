@@ -3,7 +3,14 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def pi_print
-
+        @pi_info = PiInfo.find_by_id(params[:id])
+        @pi_item = PiItem.where(pi_info_id: params[:id])
+        @find_pcb = PiItem.where(pi_info_id: params[:id], p_type: "PCB")
+        if not @find_pcb.blank?
+            @pi_pcb = PcbItemInfo.find_by_pcb_order_item_id(find_pcb.first.find_pcb.order_item_id)
+        end
+        @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
     end
 
     def wh_in

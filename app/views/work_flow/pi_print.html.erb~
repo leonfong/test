@@ -122,7 +122,7 @@
             <% @pi_item.each_with_index do |item,index| %>            
                 <tr>
                     <td><%= index + 1 %></td>
-                    <td><%= index %></td>
+                    <td><%= index + 1 %></td>
                 </tr>
             <% end %>
         <% end %>

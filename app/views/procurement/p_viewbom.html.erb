@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <%= form_tag({action: :bom_v_up},method:"post") do %>
                     <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-                    <h1><img  src="/assets/lock.png" >
+                    <h1><img  src="/uploads/lock.png" >
                     <button type="submit" class="btn btn-primary btn-lg">更新版本</button></h1>
             <% end %>
         </div>

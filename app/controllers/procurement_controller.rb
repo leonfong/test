@@ -3343,7 +3343,7 @@ WHERE
         end
         
         if not params[:dn_remark].blank?
-            dn.remark = params[:dn_remark]
+            dn.remark = params[:dn_remark].gsub(/\r\n/, " ")
             if not params[:bom_version].blank? 
                 @bom_item = PVersionItem.find(dn.p_version_item_id)
             else

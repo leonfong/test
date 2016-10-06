@@ -166,7 +166,7 @@
                 </table>             
             </div>
             </div></div>
-
+<!--
             <div class="row ">
                 <div class="col-md-4">
                     <div class="panel panel-info">
@@ -183,7 +183,7 @@
                         </div>
                     </div>
                 </div>
-<!--
+
                 <div class="col-md-4" >
                     <div class="panel panel-info" >
                         <div class="panel-heading" ><strong>特殊备注</strong></div>                          
@@ -203,10 +203,10 @@
             </div> 
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=1" >打印模板1</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=2" >打印模板2</a></span>&nbsp;
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=3" >打印模板3</a></span>&nbsp;
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=4" >打印模板4</a></span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=1" >打印模板MOKO1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=2" >打印模板MOKO2</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=3" >打印模板EASTWIN1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=4" >打印模板EASTWIN2</a></span>
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
@@ -214,11 +214,11 @@
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
                         
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
-                        <%= submit_tag "提交", class:"btn btn-info" ,data:{confirm: "确定要提交PI?"} %>
+                        <%= submit_tag "提交", class:"btn btn-primary" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-primary",data:{confirm: "确定审核通过?"} %>
                     <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-primary",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% end %>
                 </div>

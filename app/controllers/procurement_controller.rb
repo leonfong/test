@@ -700,7 +700,7 @@ before_filter :authenticate_user!
     def p_excel_add
         @bom = ProcurementBom.find(params[:bom_id])
         #Rails.logger.info("----------------------------------------------------------------a1")
-        file_name = @bom.p_name.to_s+"_out.xls"
+        file_name = @bom.p_name.to_s+".xls"
         path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
         col_use = @bom.all_title.split("|").size
         row_use = @bom.row_use
@@ -3623,7 +3623,7 @@ WHERE
 
     def p_excel
         @bom = ProcurementBom.find(params[:bom_id])
-        file_name = @bom.p_name.to_s+"_out.xls"
+        file_name = @bom.p_name.to_s+".xls"
         path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
         #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         #Rails.logger.info(file_name.inspect)

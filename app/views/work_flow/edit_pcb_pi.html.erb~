@@ -93,6 +93,7 @@
                     <thead>
                         <tr style="background-color: #eeeeee">
                             <th width="40">操作</th>
+<!--
                             <th width="150">物料编码</th>
                             <th >物料名称</th>
                             <th width="70">数量</th>
@@ -103,6 +104,17 @@
                             <th width="100">单价</th>
                             <th width="50">附件</th>
                             <th >备注</th>
+-->
+                            <th>Customer Part No.</th>
+                            <th>PCB Size(mm)</th>
+                            <th width="100">Quantity(PCS)</th>
+                            <th width="50">Layer</th>
+                            <th>Description</th>
+                            <th>PCB Price</th>
+                            <th>Components Cost</th>
+                            <th>PCBA</th>
+                            <th>Unit Price</th>
+                            <th>Total Price(USD)</th>
                             <th width="40">删除</th>
                         </tr>
                     </thead>
@@ -115,6 +127,7 @@
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>" data-edit_qty="<%= pi_item.qty %>" data-edit_follow_remark="<%= pi_item.remark %>" data-edit_t_p="<%= pi_item.t_p %>" data-edit_price="<%= pi_item.price %>"></a>
                                 <% end %>
                             </td>
+<!--
                             <td><%= pi_item.moko_code %></td>
                             <td><%= pi_item.moko_des %></td>
                             <td><%= pi_item.qty %></td>
@@ -129,6 +142,7 @@
                                 <% end %>
                             </td>
                             <td><%= pi_item.remark %></td>
+-->
                             <td>
                                 <% if @pi_info.state == "new" %>
                                 <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
@@ -166,8 +180,9 @@
                 </table>             
             </div>
             </div></div>
-<!--
+
             <div class="row ">
+<!--
                 <div class="col-md-4">
                     <div class="panel panel-info">
                         <div class="panel-heading"><strong>结算</strong></div>
@@ -310,7 +325,6 @@
               <thead>
               <tr class="active">
               <th  width="120">Order NO.</th>
-              <th  width="70">报价</th>
               <th >备注</th>
               <th>英文描述</th>
               <th>中文描述</th>
@@ -318,10 +332,10 @@
               <tr>
               </thead>
               <tbody>
-              <% PcbOrderItem.where(c_id: params[:c_id],state: "quotechked").each do |pi_item_f| %>
+              <% #PcbOrderItem.where(c_id: params[:c_id],state: "quotechked").each do |pi_item_f| %>
+              <% PcbOrderItem.find_by_sql("SELECT DISTINCT pcb_order_items.pcb_order_sell_item_id, pcb_order_sell_items.* FROM pcb_order_items INNER JOIN pcb_order_sell_items ON pcb_order_sell_items.id = pcb_order_items.pcb_order_sell_item_id WHERE pcb_order_items.state = 'quotechked' AND pcb_order_items.c_id = #{params[:c_id]}").each do |pi_item_f| %>
                     <tr>
                     <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
-                    <td><div><%= pi_item_f.price.to_s %></div></td>
                     <td><div><%= pi_item_f.remark.to_s %></div></td>
                     <td><div><%= pi_item_f.des_en.to_s %></div></td>
                     <td><div><%= pi_item_f.des_cn.to_s %></div></td>

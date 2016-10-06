@@ -737,6 +737,7 @@ before_filter :authenticate_user!
         copy_data = PcbOrderItem.new
         copy_data.c_id = find_data.c_id
         copy_data.pcb_order_id = find_data.pcb_order_id
+        copy_data.pcb_order_sell_item_id = params[:id]
         copy_data.pcb_order_no = find_data.pcb_order_no
         if PcbOrderItem.find_by_pcb_order_no(find_data.pcb_order_no).blank?
             p_n =1

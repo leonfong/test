@@ -2463,7 +2463,9 @@ before_filter :authenticate_user!
             if not params[:add_bom].blank?
                 render "bom_viewbom.html.erb"
             else
-                @bom_item = @bom_item.select {|item| item.quantity != 0 }
+                if not @bom_item.blank?
+                    @bom_item = @bom_item.select {|item| item.quantity != 0 }
+                end
                 render "p_viewbom.html.erb"
             end
             return false  

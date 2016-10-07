@@ -80,6 +80,7 @@
 <% if params[:c_id] and can? :work_e, :all and @pi_info.state == "new" %>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsb" >添加运费/银行费</button>
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addother" >添加其它费用</button>
             </div></div>
 <% end %>
@@ -129,7 +130,7 @@
                                 <% end %>
                             </td>
 <!--
-                            <td><%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %></td>
+                            
                             <td><%= pi_item.moko_code %></td>
                             <td><%= pi_item.moko_des %></td>
                             <td><%= pi_item.qty %></td>
@@ -145,6 +146,7 @@
                             </td>
                             <td><%= pi_item.remark %></td>
 -->
+                            <td><%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %></td>
                             <td><%= pi_item.c_p_no %></td>
                             <td><%= pi_item.pcb_size %></td>
                             <td><%= pi_item.qty %></td>
@@ -185,9 +187,21 @@
                         <% end %>
                         <% end %>
                         <tr>
-                            <td colSpan="7"></td>
-                            <td colSpan="5"><strong>总计: <%= @total_p %></strong></td>
-                        </tr>                     
+                            <td colSpan="11"></td>
+                            <td colSpan="2"><strong>Shipping Cost: <%= @pi_info.pi_shipping_cost %></strong></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="11"></td>
+                            <td colSpan="2"><strong>Bank Fee: <%= @pi_info.pi_bank_fee %></strong></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="11"></td>
+                            <td colSpan="2"><strong>Total: <%= @pi_info.t_p %></strong></td>
+                        </tr>    
+                        <tr>
+                            <td colSpan="11"></td>
+                            <td colSpan="2"><strong>Total RMB: <%= @pi_info.t_p_rmb %></strong></td>
+                        </tr>                 
                     </tbody>
                 </table>             
             </div>
@@ -241,11 +255,11 @@
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
                         
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
-                        <%= submit_tag "提交", class:"btn btn-primary" ,data:{confirm: "确定要提交PI?"} %>
+                        <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-primary",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-primary",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% end %>
                 </div>
@@ -472,7 +486,46 @@
 
 
 
-
+<div class="modal fade" id="addsb" tabindex="-1" role="dialog" aria-labelledby="addsbLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="addsbLabel"><strong>添加运费/银行费 总价</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :add_pi_sb},method:"post") do %>   
+            <div class="form-group sr-only">         
+                <label for="add_pi_sb_id" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="add_pi_sb_id" name="add_pi_sb_id" value="<%= @pi_info.id %>">
+            </div>   
+  
+            <div class="form-group">         
+              <label for="add_sc" class="control-label">Shipping Cost:</label>
+              <input type="text" class="form-control" id="add_sc" name="add_sc" value="<%= @pi_info.pi_shipping_cost %>">
+            </div> 
+            <div class="form-group">
+              <label for="add_bf" class="control-label">Bank Fee:</label>
+              <input type="text" class="form-control" id="add_bf" name="add_bf" value="<%= @pi_info.pi_bank_fee %>">
+            </div>  
+            <div class="form-group">
+              <label for="add_t_p" class="control-label">Total:</label>
+              <input type="text" class="form-control" id="add_t_p" name="add_t_p" value="<%= @pi_info.t_p %>">
+            </div> 
+            <div class="form-group">
+              <label for="add_t_p_rmb" class="control-label">Total RMB:</label>
+              <input type="text" class="form-control" id="add_t_p_rmb" name="add_t_p_rmb" value="<%= @pi_info.t_p_rmb %>">
+            </div>        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" >
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
 
 
 <div class="modal fade" id="addother" tabindex="-1" role="dialog" aria-labelledby="addotherLabel">

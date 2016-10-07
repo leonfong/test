@@ -122,9 +122,33 @@
             <% @pi_item.each_with_index do |item,index| %>            
                 <tr>
                     <td><%= index + 1 %></td>
-                    <td><%= index + 1 %></td>
+                    <td><%= item.c_p_no.to_s %></td>
+                    <td><%= item.pcb_size.to_s %></td>
+                    <td><%= item.qty.to_s %></td>
+                    <td><%= item.layer.to_s %></td>
+                    <td><%= item.des.to_s %></td>
+                    <td><%= item.unit_price.to_s %></td>
+                    <td><%= item.t_p.to_s %></td>
                 </tr>
             <% end %>
+                <tr>
+                    <td colSpan="6"></td>
+                    <td><strong>Shipping Cost</strong></td>
+                    <td><%= @pi_info.pi_shipping_cost.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="6"></td>
+                    <td><strong>Bank Fee</strong></td>
+                    <td><%= @pi_info.pi_bank_fee.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="6"></td>
+                    <td><strong>Total</strong></td>
+                    <td><%= @pi_info.t_p.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="8">Leadtime: The lead time for PCBA is 20 working days.</td>
+                </tr>
         <% end %>
             </table>
             <table class="table table-bordered" style="padding: 0px;margin: 0px;">

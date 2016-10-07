@@ -110,21 +110,54 @@
             <table class="table table-bordered" style="padding: 0px;margin: 0px;">
                 <tr style="padding: 0px;margin: 0px;background-color: #eeeeee;" >
                     <th width="45">NO.</th>
-                    <th>Customer Part No.</th>
-                    <th>PCB Size(mm)</th>
+                    <th width="80">Customer Part No.</th>
+                    <th width="100">PCB Size(mm)</th>
                     <th width="100">Quantity(PCS)</th>
-                    <th width="50">Layer</th>
-                    <th>Description</th>
-                    <th>Unit Price</th>
+                    <th width="45">Layer</th>
+                    <th width="100">Description</th>
+                    <th width="45">PCB Price</th>
+                    <th width="100">Components Price</th>
+                    <th width="45">PCBA</th>
                     <th width="100">Total Price(USD)</th>
                 </tr>
         <% if not @pi_item.blank? %>
             <% @pi_item.each_with_index do |item,index| %>            
                 <tr>
                     <td><%= index + 1 %></td>
-                    <td><%= index + 1 %></td>
+                    <td><%= item.c_p_no.to_s %></td>
+                    <td><%= item.pcb_size.to_s %></td>
+                    <td><%= item.qty.to_s %></td>
+                    <td><%= item.layer.to_s %></td>
+                    <td><%= item.des.to_s %></td>
+                    <td><%= item.pcb_price.to_s %></td>
+                    <td><%= item.com_cost.to_s %></td>
+                    <td><%= item.pcba.to_s %></td>
+                    <td><%= item.t_p.to_s %></td>
                 </tr>
             <% end %>
+                <tr>
+                    <td colSpan="7"></td>
+                    <td colSpan="2"><strong>Shipping Cost</strong></td>
+                    <td><%= @pi_info.pi_shipping_cost.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="7"></td>
+                    <td colSpan="2"><strong>Bank Fee</strong></td>
+                    <td><%= @pi_info.pi_bank_fee.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="7"></td>
+                    <td colSpan="2"><strong>In Total</strong></td>
+                    <td><%= @pi_info.t_p.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="7"></td>
+                    <td colSpan="2"><strong>In Total RMB</strong></td>
+                    <td><%= @pi_info.t_p_rmb.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="10">Leadtime: The lead time for PCBA is 20 working days.</td>
+                </tr>
         <% end %>
             </table>
             <table class="table table-bordered" style="padding: 0px;margin: 0px;">

@@ -116,7 +116,7 @@ Rails.application.routes.draw do
   match '/wh_draft', to: 'work_flow#wh_draft', via: 'post'
   match '/del_wh', to: 'work_flow#del_wh', via: 'get'
   match '/pi_print', to: 'work_flow#pi_print', via: 'get'
-
+  match '/add_pi_sb', to: 'work_flow#add_pi_sb', via: 'post'
 
 
 

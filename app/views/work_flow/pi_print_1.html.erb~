@@ -110,14 +110,12 @@
             <table class="table table-bordered" style="padding: 0px;margin: 0px;">
                 <tr style="padding: 0px;margin: 0px;background-color: #eeeeee;" >
                     <th width="45">NO.</th>
-                    <th width="80">Customer Part No.</th>
-                    <th width="100">PCB Size(mm)</th>
+                    <th>Customer Part No.</th>
+                    <th>PCB Size(mm)</th>
                     <th width="100">Quantity(PCS)</th>
-                    <th width="45">Layer</th>
-                    <th width="100">Description</th>
-                    <th width="45">PCB Price</th>
-                    <th width="100">Components Price</th>
-                    <th width="45">PCBA</th>
+                    <th width="50">Layer</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
                     <th width="100">Total Price(USD)</th>
                 </tr>
         <% if not @pi_item.blank? %>
@@ -129,46 +127,48 @@
                     <td><%= item.qty.to_s %></td>
                     <td><%= item.layer.to_s %></td>
                     <td><%= item.des.to_s %></td>
-                    <td><%= item.pcb_price.to_s %></td>
-                    <td><%= item.com_cost.to_s %></td>
-                    <td><%= item.pcba.to_s %></td>
+                    <td><%= item.unit_price.to_s %></td>
                     <td><%= item.t_p.to_s %></td>
                 </tr>
             <% end %>
                 <tr>
-                    <td colSpan="7"></td>
-                    <td colSpan="2"><strong>Shipping Cost</strong></td>
+                    <td colSpan="6"></td>
+                    <td><strong>Shipping Cost</strong></td>
                     <td><%= @pi_info.pi_shipping_cost.to_s %></td>
                 </tr>
                 <tr>
-                    <td colSpan="7"></td>
-                    <td colSpan="2"><strong>Bank Fee</strong></td>
+                    <td colSpan="6"></td>
+                    <td><strong>Bank Fee</strong></td>
                     <td><%= @pi_info.pi_bank_fee.to_s %></td>
                 </tr>
                 <tr>
-                    <td colSpan="7"></td>
-                    <td colSpan="2"><strong>In Total</strong></td>
+                    <td colSpan="6"></td>
+                    <td><strong>Total</strong></td>
                     <td><%= @pi_info.t_p.to_s %></td>
-                </tr>
-                <tr>
-                    <td colSpan="7"></td>
-                    <td colSpan="2"><strong>In Total RMB</strong></td>
-                    <td><%= @pi_info.t_p_rmb.to_s %></td>
                 </tr>
         <% end %>
             </table>
             <table class="table table-bordered" style="padding: 0px;margin: 0px;">
                 <tr style="padding: 0px;margin: 0px;">
-                    <td style="padding: 0px;margin: 0px;"><strong>Bank RMB Information:</strong></td>
+                    <td style="padding: 0px;margin: 0px;"><strong>Bank information:</strong></td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
-                    <td style="padding: 0px;margin: 0px;">Bank account:	6241 8578 0704 4682</td>
+                    <td style="padding: 0px;margin: 0px;">Account Name : MOKO TECHNOLOGY LIMITED</td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
-                    <td style="padding: 0px;margin: 0px;">Name	黄丽娟 Huang Li Juan</td>
+                    <td style="padding: 0px;margin: 0px;">Bank Account Number ：801144007838</td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
-                    <td style="padding: 0px;margin: 0px;">Bank Name: 深圳招行梅龙支行</td>
+                    <td style="padding: 0px;margin: 0px;">Swift code:HSBCHKHHHKH</td>
+                </tr>
+                <tr style="padding: 0px;margin: 0px;">
+                    <td style="padding: 0px;margin: 0px;">Bank  Name ：The Hongkong and Shanghai Banking Corporation Limited</td>
+                </tr>
+                <tr style="padding: 0px;margin: 0px;">
+                    <td style="padding: 0px;margin: 0px;">Bank Adress:No.1 Queen’s Road Central ,Hong Kong</td>
+                </tr>
+                <tr style="padding: 0px;margin: 0px;">
+                    <td style="padding: 0px;margin: 0px;">Bank Code :  004</td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
                     <td style="padding: 0px;margin: 0px;"></td>
@@ -190,9 +190,6 @@
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
                     <td style="padding: 0px;margin: 0px;">4.The quotation is valid for 10days.</td>
-                </tr>
-                <tr style="padding: 0px;margin: 0px;">
-                    <td style="padding: 0px;margin: 0px;">5.Delivery Term:EXW</td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
                     <td style="padding: 0px;margin: 0px;"></td>

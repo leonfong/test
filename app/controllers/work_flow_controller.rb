@@ -1650,6 +1650,16 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def add_pi_sb
+        add_sb = PiInfo.find_by_id(params[:add_pi_sb_id])
+        add_sb.pi_shipping_cost = params[:add_sc]
+        add_sb.pi_bank_fee = params[:add_bf]
+        add_sb.t_p = params[:add_t_p]
+        add_sb.t_p_rmb = params[:add_t_p_rmb]
+        add_sb.save
+        redirect_to :back
+    end
+
     def edit_pi_other_item
         add_item = PiOtherItem.find(params[:edit_item_id_other])     
         add_item.p_type = params[:edit_p_type_other]

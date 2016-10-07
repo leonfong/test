@@ -80,8 +80,8 @@
 <% if params[:c_id] and can? :work_e, :all and @pi_info.state == "new" %>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
-                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsb" >添加运费/银行费</button>
-                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addother" >添加其它费用</button>
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsb" >添加运费/银行费/总价</button>
+                <button  type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addother" >添加其它费用</button>
             </div></div>
 <% end %>
 

@@ -1922,7 +1922,7 @@ before_filter :authenticate_user!
                     end
 		    bom_item.description = desa
                     bom_item.quantity = qtya.to_i
-                    bom_item.mpn = mpna
+                    bom_item.mpn = mpna.gsub(/.0/, "")
                     bom_item.fengzhuang = fengzhuang
                     bom_item.link = link
                     bom_item.other = othera

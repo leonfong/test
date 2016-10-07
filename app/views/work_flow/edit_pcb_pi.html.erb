@@ -38,6 +38,7 @@
             <div class="row "><div class="col-md-12">
                 <div class="panel panel-info">
                     <div class="panel-heading"><strong>业务员信息</strong></div>
+                        <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >编辑</button>
                     <div class="panel-body ">                     
                         <div class="row ">
                             <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= User.find_by(email: @pi_info.pi_sell).full_name %></ins></div> 

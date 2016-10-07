@@ -21,12 +21,13 @@
                         P.I NO.:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
-            
+                        <%= @pi_info.pi_no %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         Date:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
                     </td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
@@ -34,12 +35,13 @@
                         To:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info_c.customer.to_s %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         From:
                     </td>
                     <td style="padding: 0px;margin: 0px;" colspan="3">
-            
+                        <%= current_user.en_name %>
                     </td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
@@ -47,6 +49,7 @@
                         Company:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info_c.customer_com.to_s %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         Company:
@@ -60,12 +63,13 @@
                         Tel:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info_c.tel.to_s %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         Tel:
                     </td>
                     <td style="padding: 0px;margin: 0px;" colspan="3">
-                        86-755-23573370
+                        <%= current_user.tel %>
                     </td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
@@ -73,12 +77,13 @@
                         Fax:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info_c.fax.to_s %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         Fax:
                     </td>
                     <td style="padding: 0px;margin: 0px;" colspan="3">
-                        86-755-23573370-832
+                        <%= current_user.fax %>
                     </td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
@@ -86,11 +91,13 @@
                         E-mail:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info_c.email.to_s %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         E-mail:
                     </td>
                     <td style="padding: 0px;margin: 0px;" colspan="3">
+                        <%= current_user.email %>
                     </td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">
@@ -98,12 +105,13 @@
                         Add:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info_c.shipping_address.to_s %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         Add:
                     </td>
                     <td style="padding: 0px;margin: 0px;" colspan="3">
-                        4 Floor,2 Building,Guanghui Technology Park,MinQing Road,Longhua,Shenzhen,China
+                        <%= current_user.add %>
                     </td>
                 </tr>
             </table>
@@ -145,6 +153,9 @@
                     <td colSpan="6"></td>
                     <td><strong>Total</strong></td>
                     <td><%= @pi_info.t_p.to_s %></td>
+                </tr>
+                <tr>
+                    <td colSpan="8">Leadtime: The lead time for PCBA is 20 working days.</td>
                 </tr>
         <% end %>
             </table>

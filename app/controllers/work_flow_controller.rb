@@ -4,6 +4,7 @@ before_filter :authenticate_user!
 
     def pi_print
         @pi_info = PiInfo.find_by_id(params[:id])
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
         @pi_item = PiItem.where(pi_info_id: params[:id])
         @find_pcb = PiItem.where(pi_info_id: params[:id], p_type: "PCB")
         #if not @find_pcb.blank?
@@ -20,6 +21,28 @@ before_filter :authenticate_user!
         elsif params[:type] == '4'
             render "pi_print_4.html.erb" and return
         end
+    end
+
+    def edit_user_info
+        get_user = User.find_by_email(current_user.email)
+        get_user.en_name = params[:edit_en_name]
+        get_user.tel = params[:edit_tel]
+        get_user.fax = params[:edit_fax]
+        get_user.add = params[:edit_add]
+        get_user.save
+        redirect_to :back
+    end
+
+    def edit_c_info
+        get_c = PcbCustomer.find_by_id(params[:edit_c_id])
+        get_c.customer = params[:edit_c_customer]
+        get_c.customer_com = params[:edit_c_customer_com]
+        get_c.tel = params[:edit_c_tel]
+        get_c.fax = params[:edit_c_fax]
+        get_c.email = params[:edit_c_email]
+        get_c.shipping_address = params[:edit_c_add]
+        get_c.save
+        redirect_to :back
     end
 
     def wh_in
@@ -1059,6 +1082,7 @@ before_filter :authenticate_user!
 
     def edit_pcb_pi
         @pi_info = PiInfo.find_by(pi_no: params[:pi_no])
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
         @pi_item = PiItem.where(pi_no: params[:pi_no])
         @pi_other_item = PiOtherItem.where(pi_no: params[:pi_no])
         @total_p = PiItem.where(pi_no: params[:pi_no]).sum("t_p") + PiOtherItem.where(pi_no: params[:pi_no]).sum("t_p")

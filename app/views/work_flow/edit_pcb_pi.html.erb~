@@ -37,12 +37,16 @@
 
             <div class="row "><div class="col-md-12">
                 <div class="panel panel-info">
-                    <div class="panel-heading"><strong>业务员信息</strong></div>
+                    <div class="panel-heading"><strong>业务员信息</strong>
+                        <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#edit_user_info" style="margin-right: 5px;" >编辑</button>
+                    </div>
                     <div class="panel-body ">                     
                         <div class="row ">
-                            <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= User.find_by(email: @pi_info.pi_sell).full_name %></ins></div> 
-                            <div class="col-md-2"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= @pi_info.team %></ins></div> 
-                            <div class="col-md-2"><strong>制单人电话：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= @pi_info.phone %></ins></div> 
+                            <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= current_user.en_name %></ins></div> 
+                            <div class="col-md-2"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= current_user.team %></ins></div> 
+                            <div class="col-md-2"><strong>Tel：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.tel %></ins></div> 
+                            <div class="col-md-2"><strong>Fox：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.fax %></ins></div> 
+                            <div class="col-md-4"><strong>Add：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.add %></ins></div>
                         </div>
                     </div>
                 </div>
@@ -55,22 +59,25 @@
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>客户信息</strong> 
                 <% if can? :work_e, :all and @pi_info.state == "new"%>
+                    <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#edit_c_info" style="margin-right: 5px;" >编辑</button>
                     <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button>
                 <% end %>
                 </div>
                 <div class="panel-body ">                     
                     <div class="row ">
-                        <div class="col-md-1">代码：<ins id="daima_show" name="daima_show"><%= @pi_info.c_code.to_s %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
-                        <div class="col-md-3">客户：<ins id="kehu_show" name="kehu_show"><%= @pi_info.c_des.to_s %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div> 
-                         <div class="col-md-2">国家：<ins id="guojia_show" name="guojia_show"><%= @pi_info.c_country.to_s %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="guojia" name="guojia" readonly></div>   
+                        <div class="col-md-1"><strong>Code：</strong><ins id="daima_show" name="daima_show"><%= @pi_info_c.c_no.to_s %></ins></div>
+                        <div class="col-md-2"><strong>Customer Name：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_info_c.customer.to_s %></ins></div>
+                        <div class="col-md-6"><strong>Company：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_info_c.customer_com.to_s %></ins></div> 
+                        <div class="col-md-2"><strong>Country：</strong><ins id="guojia_show" name="guojia_show"><%= @pi_info_c.customer_country.to_s %></ins></div>
                          
                     </div>
                     <div class="row " style="padding-top: 10px;">
-                         <div class="col-md-12">客户收货地址和电话：<ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info.c_shipping_address.to_s %></ins><input type="text" class="input-sm sr-only" style="width:90%" id="fahuodizhi" name="fahuodizhi" readonly></div> 
-                         
-                         
-                         
-                         
+                         <div class="col-md-4"><strong>Tel：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.tel.to_s %></ins></div>
+                         <div class="col-md-4"><strong>Fax：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.fax.to_s %></ins></div>
+                         <div class="col-md-4"><strong>Email：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.email.to_s %></ins></div>
+                    </div>
+                    <div class="row " style="padding-top: 10px;">
+                         <div class="col-md-12"><strong>Add：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.shipping_address.to_s %></ins></div>     
                     </div>
                 </div>
             </div>
@@ -485,6 +492,91 @@
 </div>
 
 
+
+<div class="modal fade" id="edit_user_info" tabindex="-1" role="dialog" aria-labelledby="edit_user_infoLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edit_user_infoLabel"><strong>修改业务员信息</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :edit_user_info},method:"post") do %>    
+            <div class="form-group">         
+              <label for="edit_en_name" class="control-label">EN Name:</label>
+              <input type="text" class="form-control" id="edit_en_name" name="edit_en_name" value="<%= current_user.en_name %>">
+            </div> 
+            <div class="form-group">         
+              <label for="edit_tel" class="control-label">Tel:</label>
+              <input type="text" class="form-control" id="edit_tel" name="edit_tel" value="<%= current_user.tel %>">
+            </div> 
+            <div class="form-group">         
+              <label for="edit_fax" class="control-label">Fax:</label>
+              <input type="text" class="form-control" id="edit_fax" name="edit_fax" value="<%= current_user.fax %>">
+            </div>     
+            <div class="form-group">         
+              <label for="edit_add" class="control-label">Add:</label>
+              <textarea  class="form-control" id="edit_add" name="edit_add"><%= current_user.add %></textarea>
+            </div>                
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" >
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+<div class="modal fade" id="edit_c_info" tabindex="-1" role="dialog" aria-labelledby="edit_c_infoLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edit_c_infoLabel"><strong>修改客户信息</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :edit_c_info},method:"post") do %>  
+            <div class="form-group sr-only">         
+                <label for="edit_c_id" class="control-label">cid:</label>
+                <input type="text" class="form-control" id="edit_c_id" name="edit_c_id" value="<%= @pi_info.pcb_customer_id %>">
+            </div>  
+            <div class="form-group">         
+              <label for="edit_c_customer" class="control-label">C Name:</label>
+              <input type="text" class="form-control" id="edit_c_customer" name="edit_c_customer" value="<%= @pi_info_c.customer %>">
+            </div> 
+            <div class="form-group">         
+              <label for="edit_c_customer_com" class="control-label">Company:</label>
+              <input type="text" class="form-control" id="edit_c_customer_com" name="edit_c_customer_com" value="<%= @pi_info_c.customer_com %>">
+            </div> 
+            <div class="form-group">         
+              <label for="edit_c_tel" class="control-label">Tel:</label>
+              <input type="text" class="form-control" id="edit_c_tel" name="edit_c_tel" value="<%= @pi_info_c.tel %>">
+            </div> 
+            <div class="form-group">         
+              <label for="edit_c_fax" class="control-label">Fax:</label>
+              <input type="text" class="form-control" id="edit_c_fax" name="edit_c_fax" value="<%= @pi_info_c.fax %>">
+            </div> 
+            <div class="form-group">         
+              <label for="edit_c_email" class="control-label">Email:</label>
+              <input type="text" class="form-control" id="edit_c_email" name="edit_c_email" value="<%= @pi_info_c.email %>">
+            </div>    
+            <div class="form-group">         
+              <label for="edit_c_add" class="control-label">Add:</label>
+              <textarea  class="form-control" id="edit_c_add" name="edit_c_add"><%= @pi_info_c.shipping_address %></textarea>
+            </div>                
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" >
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
 
 <div class="modal fade" id="addsb" tabindex="-1" role="dialog" aria-labelledby="addsbLabel">
 <div class="modal-dialog modal-lg"><small>

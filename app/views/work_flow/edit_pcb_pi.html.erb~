@@ -105,6 +105,7 @@
                             <th width="50">附件</th>
                             <th >备注</th>
 -->
+                            <th>Order No.</th>
                             <th>Customer Part No.</th>
                             <th>PCB Size(mm)</th>
                             <th width="100">Quantity(PCS)</th>
@@ -124,10 +125,11 @@
                         <tr>
                             <td>
                                 <% if @pi_info.state == "new" %>
-                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>" data-edit_qty="<%= pi_item.qty %>" data-edit_follow_remark="<%= pi_item.remark %>" data-edit_t_p="<%= pi_item.t_p %>" data-edit_price="<%= pi_item.price %>"></a>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>"  data-edit_follow_remark="<%= pi_item.remark %>"  data-edit_price="<%= pi_item.price %>" data-edit_c_p_no="<%= pi_item.c_p_no %>" data-edit_pcb_size="<%= pi_item.pcb_size %>" data-edit_qty="<%= pi_item.qty %>" data-edit_layer="<%= pi_item.layer %>" data-edit_des="<%= pi_item.des %>" data-edit_unit_price="<%= pi_item.unit_price %>" data-edit_pcb_price="<%= pi_item.pcb_price %>" data-edit_com_cost="<%= pi_item.com_cost %>" data-edit_pcba="<%= pi_item.pcba %>" data-edit_t_p="<%= pi_item.t_p %>"  ></a>
                                 <% end %>
                             </td>
 <!--
+                            <td><%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %></td>
                             <td><%= pi_item.moko_code %></td>
                             <td><%= pi_item.moko_des %></td>
                             <td><%= pi_item.qty %></td>
@@ -143,6 +145,16 @@
                             </td>
                             <td><%= pi_item.remark %></td>
 -->
+                            <td><%= pi_item.c_p_no %></td>
+                            <td><%= pi_item.pcb_size %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.layer %></td>
+                            <td><%= pi_item.des %></td>
+                            <td><%= pi_item.pcb_price %></td>
+                            <td><%= pi_item.com_cost %></td>
+                            <td><%= pi_item.pcba %></td>
+                            <td><%= pi_item.unit_price %></td>
+                            <td><%= pi_item.t_p %></td>
                             <td>
                                 <% if @pi_info.state == "new" %>
                                 <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
@@ -369,6 +381,7 @@
                 <label for="c_order_id" class="control-label">itemid:</label>
                 <input type="text" class="form-control" id="edit_c_item_id" name="edit_c_item_id">
             </div>   
+<!--
             <div class="form-group">         
               <label for="p_name" class="control-label">物料代码:</label>
               <input type="text" class="form-control" id="edit_moko_code" name="edit_moko_code" <% if can? :work_e, :all %>readonly<% end %>>
@@ -379,7 +392,7 @@
             </div> 
             <div class="form-group">         
               <label for="p_name" class="control-label">类别:</label>
-              <input type="text" class="form-control" id="edit_p_type" name="edit_p_type" <% if can? :work_e, :all %>readonly<% end %>>           
+              <input type="text" class="form-control" id="edit_p_type" name="edit_p_type" <% if can? :work_e, :all %>readonly<% end %>>
             </div> 
             <div class="form-group">
               <label for="edit_t_p" class="control-label">报价(美金):</label>
@@ -405,6 +418,48 @@
               <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
               <textarea  class="form-control" id="edit_follow_remark" name="edit_follow_remark"></textarea>
             </div>
+-->
+            <div class="form-group">         
+              <label for="p_name" class="control-label">Customer Part No.:</label>
+              <input type="text" class="form-control" id="edit_c_p_no" name="edit_c_p_no" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">PCB Size(mm):</label>
+              <input type="text" class="form-control" id="edit_pcb_size" name="edit_pcb_size" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">Quantity(PCS):</label>
+              <input type="text" class="form-control" id="edit_qty" name="edit_qty" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">Layer:</label>
+              <input type="text" class="form-control" id="edit_layer" name="edit_layer" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">Description:</label>
+              <input type="text" class="form-control" id="edit_des" name="edit_des" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">Unit Price:</label>
+              <input type="text" class="form-control" id="edit_unit_price" name="edit_unit_price" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">PCB Price:</label>
+              <input type="text" class="form-control" id="edit_pcb_price" name="edit_pcb_price" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">Components Cost:</label>
+              <input type="text" class="form-control" id="edit_com_cost" name="edit_com_cost" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">PCBA:</label>
+              <input type="text" class="form-control" id="edit_pcba" name="edit_pcba" >
+            </div>
+            <div class="form-group">         
+              <label for="p_name" class="control-label">Total Price(USD):</label>
+              <input type="text" class="form-control" id="edit_t_p" name="edit_t_p" >
+            </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -513,10 +568,24 @@ $('#edititem').on('show.bs.modal', function (event) {
   var edit_p_type = button.data('edit_p_type');
   var edit_des_en = button.data('edit_des_en');
   var edit_des_cn = button.data('edit_des_cn');  
-  var edit_qty = button.data('edit_qty'); 
-  var edit_t_p = button.data('edit_t_p'); 
+
+
   var edit_price = button.data('edit_price'); 
-  var edit_follow_remark = button.data('edit_follow_remark');                       
+  var edit_follow_remark = button.data('edit_follow_remark');   
+
+
+
+  var edit_c_p_no = button.data('edit_c_p_no'); 
+  var edit_pcb_size = button.data('edit_pcb_size'); 
+  var edit_qty = button.data('edit_qty');  
+  var edit_layer = button.data('edit_layer'); 
+  var edit_des = button.data('edit_des'); 
+  var edit_unit_price = button.data('edit_unit_price'); 
+  var edit_pcb_price = button.data('edit_pcb_price'); 
+  var edit_com_cost = button.data('edit_com_cost'); 
+  var edit_pcba = button.data('edit_pcba'); 
+  var edit_t_p = button.data('edit_t_p'); 
+                    
   var modal = $(this);
   modal.find($("#edit_c_item_id")).val(edit_c_item_id);
   modal.find($("#edit_moko_code")).val(edit_moko_code);
@@ -524,10 +593,23 @@ $('#edititem').on('show.bs.modal', function (event) {
   modal.find($("#edit_p_type")).val(edit_p_type);
   modal.find($("#edit_des_en")).val(edit_des_en);
   modal.find($("#edit_des_cn")).val(edit_des_cn);
-  modal.find($("#edit_qty")).val(edit_qty);
-  modal.find($("#edit_t_p")).val(edit_t_p);
+
+
   modal.find($("#edit_price")).val(edit_price);
   modal.find($("#edit_follow_remark")).html(edit_follow_remark);
+
+  modal.find($("#edit_c_p_no")).val(edit_c_p_no);
+  modal.find($("#edit_pcb_size")).val(edit_pcb_size);
+  modal.find($("#edit_qty")).val(edit_qty);
+  modal.find($("#edit_layer")).val(edit_layer);
+  modal.find($("#edit_des")).val(edit_des);
+  modal.find($("#edit_unit_price")).val(edit_unit_price);
+  modal.find($("#edit_pcb_price")).val(edit_pcb_price);
+  modal.find($("#edit_com_cost")).val(edit_com_cost);
+  modal.find($("#edit_pcba")).val(edit_pcba);
+  modal.find($("#edit_t_p")).val(edit_t_p);
+
+
 })
 
 $('#editotheritem').on('show.bs.modal', function (event) {

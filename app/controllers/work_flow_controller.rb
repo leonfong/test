@@ -907,6 +907,10 @@ before_filter :authenticate_user!
         @find_pi_info.remark = @find_order_info.remark
         @find_pi_info.follow_remark = @find_order_info.follow_remark
         @find_pi_info.save
+
+
+
+
 =begin
         find_pi_item = PiItem.where(pi_no: params[:pi])
         if not find_pi_item.blank?
@@ -919,6 +923,24 @@ before_filter :authenticate_user!
         @table = ''
         PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
             pi_item = PiItem.new
+            find_pcb = PcbItemInfo.find_by_pcb_order_item_id(q_item.id) 
+            if not find_pcb.blank?       
+                pi_item.pcb_size = find_pcb.pcb_length.to_s + '*' + find_pcb.pcb_width.to_s
+                pi_item.layer = find_pcb.pcb_layer
+                pi_item.pcb_price = find_pcb.t_p
+            end
+            
+
+            #pi_item.unit_price
+            if not q_item.bom_id.blank?
+                find_bom = ProcurementBom.find_by_id(q_item.bom_id)
+                if not find_bom.blank?
+                    pi_item.com_cost = find_bom.t_p
+                end
+            end
+            #pi_item.pcba
+
+
             pi_item.order_item_id = q_item.id
             pi_item.bom_id = q_item.bom_id
             pi_item.c_id = @find_pi_info.pcb_customer_id
@@ -1595,12 +1617,24 @@ before_filter :authenticate_user!
 
     def edit_pi_item
         edit_pi_item = PiItem.find(params[:edit_c_item_id])
+=begin
         edit_pi_item.t_p = params[:edit_t_p]
         edit_pi_item.price = params[:edit_price]
         edit_pi_item.des_en = params[:edit_des_en]
         edit_pi_item.des_cn = params[:edit_des_cn]
         edit_pi_item.qty = params[:edit_qty]
         edit_pi_item.remark = params[:edit_follow_remark]
+=end
+        edit_pi_item.c_p_no = params[:edit_c_p_no]
+        edit_pi_item.pcb_size = params[:edit_pcb_size]
+        edit_pi_item.qty = params[:edit_qty]  
+        edit_pi_item.layer = params[:edit_layer]
+        edit_pi_item.des = params[:edit_des]
+        edit_pi_item.unit_price = params[:edit_unit_price]
+        edit_pi_item.pcb_price =params[:edit_pcb_price]
+        edit_pi_item.com_cost = params[:edit_com_cost]
+        edit_pi_item.pcba = params[:edit_pcba]
+        edit_pi_item.t_p = params[:edit_t_p]
         edit_pi_item.save
         redirect_to :back
     end

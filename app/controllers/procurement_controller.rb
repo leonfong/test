@@ -990,7 +990,7 @@ before_filter :authenticate_user!
         elsif can? :work_g, :all
             remark.user_team = "procurement"
         end
-        remark.remark = params[:item_remark].chomp
+        remark.remark = params[:item_remark].chomp.gsub(/\r\n/, " ")
         remark.save
         @remark_all = ""
         if not params[:bom_version].blank?
@@ -1140,7 +1140,7 @@ before_filter :authenticate_user!
             p_c.sell_feed_back_tag = "sell" 
         end
         p_c.save
-        remark.remark = params[:item_remark].chomp
+        remark.remark = params[:item_remark].chomp.gsub(/\r\n/, " ")
         remark.save
         @remark_all = ''
         if not params[:bom_version].blank?

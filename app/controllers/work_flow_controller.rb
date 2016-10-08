@@ -405,6 +405,167 @@ before_filter :authenticate_user!
         sheet1.row(row_set).set_format(8,ss_format)
         sheet1.row(row_set).set_format(9,ss_format)
 
+        row_set = row_set +1
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle,:size => 12,:weight => :bold)
+        sheet1.merge_cells(row_set,0,row_set,6)  
+        sheet1.row(row_set).push("Bank information:")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle,:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,6)  
+        sheet1.row(row_set).push("Account Name : MOKO TECHNOLOGY LIMITED")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle,:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,6)  
+        sheet1.row(row_set).push("Bank Account Number ：801144007838")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle,:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,6)  
+        sheet1.row(row_set).push("Swift code:HSBCHKHHHKH")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle,:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,6)  
+        sheet1.row(row_set).push("Bank  Name ：The Hongkong and Shanghai Banking Corporation Limited")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle,:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,6)  
+        sheet1.row(row_set).push("Bank Adress:No.1 Queen’s Road Central ,Hong Kong")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle,:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,6)  
+        sheet1.row(row_set).push("Bank Code :  004")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:text_wrap => 1,:size => 12,:weight => :bold)
+        sheet1.merge_cells(row_set,0,row_set,3)  
+        sheet1.row(row_set).push("Remark:")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,3)  
+        sheet1.row(row_set).push("The above quotation is based on the following conditions:")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,3)  
+        sheet1.row(row_set).push("1.Payment Terms: T/T in advance.")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,3)  
+        sheet1.row(row_set).push("2.Cetificate :ROHS.ISO9001.")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,3)  
+        sheet1.row(row_set).push("3.The outline tolerance is +/-0.2mm.")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:size => 10)
+        sheet1.merge_cells(row_set,0,row_set,3)  
+        sheet1.row(row_set).push("4.The quotation is valid for 10days.")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+
 
 
         ff.write (path+file_name)   

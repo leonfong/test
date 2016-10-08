@@ -1,4 +1,6 @@
 require 'will_paginate/array'
+require 'roo'
+require 'spreadsheet'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
@@ -21,6 +23,241 @@ before_filter :authenticate_user!
         elsif params[:type] == '4'
             render "pi_print_4.html.erb" and return
         end
+    end
+
+    def supplier_dn_excel
+        if can? :work_suppliers, :all
+            if params[:out_tag]
+                @bom = PItem.where(user_do: '999',supplier_tag: nil,supplier_out_tag: nil).order("mpn")
+            else
+                @bom = PItem.where(user_do: '999',supplier_tag: nil).order("mpn")
+            end
+            file_name = "supplier_out.xls"
+            path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
+                all_title = []
+                all_title << "MPN"
+                all_title << "描述"
+                all_title << "数量"
+                all_title << "报价"
+                sheet1.row(0).concat all_title
+                #sheet1.column(1).width = 50
+                set_color = 0  
+                while set_color < all_title.size do         
+                    sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
+                    if all_title[set_color] =~ /数量/i 
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /报价/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /描述/i
+                        sheet1.column(set_color).width = 35  
+                    elsif all_title[set_color] =~ /MPN/i
+                        sheet1.column(set_color).width = 20                   
+                    else
+                        sheet1.column(set_color).width = 15
+                    end
+                    set_color += 1
+                end
+		@bom.each_with_index do |item,index|
+                    if params[:out_tag]
+                        item.supplier_out_tag = "do"
+                        item.save
+                    end
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :text_wrap => 1,:size => 8
+                    })
+		    row = sheet1.row(rowNum)
+                    row.set_format(2,title_format)
+                    set_f = 0  
+                    while set_f < all_title.size do         
+                        row.set_format(set_f,title_format)
+                        set_f += 1
+                    end
+                    row.push(item.mpn)
+		    row.push(item.description)
+                    row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
+                    if not PDn.find_by(item_id: item.id,color: "y").blank?
+                        row.push(PDn.where(item_id: item.id,color: "y").last!.cost)
+                    else
+                        row.push("")
+                    end
+                end               
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel") and return
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+                #send_file(path,filename: file_name, type: "application/vnd.ms-excel")    
+    end
+
+    def pi_out_excel
+        @pi_info = PiInfo.find_by_id(params[:id])
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
+        @pi_item = PiItem.where(pi_info_id: params[:id])
+        @find_pcb = PiItem.where(pi_info_id: params[:id], p_type: "PCB")
+        #if not @find_pcb.blank?
+            #@pi_pcb = PcbItemInfo.find_by_pcb_order_item_id(find_pcb.first.find_pcb.order_item_id)
+        #end
+        @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
+        
+        file_name = @pi_info.pi_no.to_s + "_out.xls"
+        path = Rails.root.to_s+"/public/uploads/bom/pi_excel_file/"
+        Spreadsheet.client_encoding = 'UTF-8'
+	ff = Spreadsheet::Workbook.new
+        sheet1 = ff.create_worksheet
+ 
+        #all_title = [] 
+        #all_title << "MPN"
+        #sheet1.row(0).concat all_title   
+        top_format = Spreadsheet::Format.new(:horizontal_align => :centre,:size => 24,:weight => :bold)
+        sheet1.merge_cells(0,0,0,9)  
+        sheet1.row(0).push("MOKO Technology Ltd") 
+        sheet1.row(0).default_format = top_format 
+
+        two_format = Spreadsheet::Format.new(:horizontal_align => :centre,:size => 20,:weight => :bold)
+        sheet1.merge_cells(1,0,1,9)  
+        sheet1.row(1).push("Proforma Invoice") 
+        sheet1.row(1).default_format = two_format 
+
+        sheet1.merge_cells(2,1,2,3)
+        sheet1.merge_cells(2,6,2,7)
+        all_ii = []
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << "P.I NO.:"
+        all_ii << @pi_info.pi_no.to_s
+        all_ii << ""
+        all_ii << "Date:"
+        all_ii << @pi_info.updated_at.localtime.strftime('%Y/%m/%d').to_s
+        sheet1.row(2).concat all_ii
+
+
+        sheet1.merge_cells(3,1,3,3)
+        sheet1.merge_cells(3,6,3,8)
+        all_ii = []
+        all_ii << "To:"
+        all_ii << @pi_info_c.customer.to_s
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << "From:"
+        all_ii << current_user.en_name.to_s
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        sheet1.row(3).concat all_ii
+
+        sheet1.merge_cells(4,1,4,3)
+        sheet1.merge_cells(4,6,4,7)
+        all_ii = []
+        all_ii << "Company:"
+        all_ii << @pi_info_c.customer_com.to_s
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << "Company:"
+        all_ii << "MOKO TECHNOLOGY LTD"
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        sheet1.row(4).concat all_ii
+
+        sheet1.merge_cells(5,1,5,3)
+        sheet1.merge_cells(5,6,5,8)
+        all_ii = []
+        all_ii << "Tel:"
+        all_ii << @pi_info_c.tel.to_s
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << "Tel:"
+        all_ii << current_user.tel
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        sheet1.row(5).concat all_ii
+
+
+        sheet1.merge_cells(6,1,6,3)
+        sheet1.merge_cells(6,6,6,8)
+        all_ii = []
+        all_ii << "Fax:"
+        all_ii << @pi_info_c.fax.to_s
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << "Fax:"
+        all_ii << current_user.fax
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        sheet1.row(6).concat all_ii
+
+
+        sheet1.merge_cells(7,1,7,3)
+        sheet1.merge_cells(7,6,7,8)
+        all_ii = []
+        all_ii << "E-mail:"
+        all_ii << @pi_info_c.email.to_s
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << "E-mail:"
+        all_ii << current_user.email
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        sheet1.row(7).concat all_ii
+
+        sheet1.merge_cells(8,1,8,3)
+        sheet1.merge_cells(8,6,8,9)
+        all_ii = []
+        all_ii << "Add:"
+        all_ii << @pi_info_c.shipping_address.to_s
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        all_ii << "Add:"
+        all_ii << current_user.add
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        sheet1.row(8).concat all_ii
+        sheet1.row(8).height = 40
+        eight_format = Spreadsheet::Format.new(:text_wrap => 1,:align => :left,:vertical_align => :middle,)
+        sheet1.merge_cells(1,0,1,9)  
+        sheet1.row(8).default_format = eight_format
+
+
+        sheet1.merge_cells(7,6,7,8)
+        all_ii = []
+        all_ii << "NO."
+        all_ii << "Customer Part No."
+        all_ii << "PCB Size(mm)"
+        all_ii << "Quantity(PCS)"
+        all_ii << ""
+        all_ii << "E-mail:"
+        all_ii << current_user.email
+        all_ii << ""
+        all_ii << ""
+        all_ii << ""
+        sheet1.row(7).concat all_ii
+
+
+
+
+        ff.write (path+file_name)   
+        send_file(path+file_name, type: "application/vnd.ms-excel") and return
     end
 
     def edit_user_info
@@ -1022,7 +1259,7 @@ before_filter :authenticate_user!
        if params[:new]
            if current_user.s_name_self.size == 1
                 s_name = current_user.s_name_self
-                where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,9)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,10),1) REGEXP '^[0-9]+$')"
+                where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pcb_orders.order_no,9),8)) = 8 and (RIGHT(LEFT(pcb_orders.order_no,10),1) REGEXP '^[0-9]+$')"
            elsif current_user.s_name_self.size == 2
                 s_name = current_user.s_name_self
                 where_p = "AND POSITION('" + s_name + "' IN LEFT(pcb_orders.order_no,10)) = 9 and (RIGHT(LEFT(pcb_orders.order_no,11),1) REGEXP '^[0-9]+$') "

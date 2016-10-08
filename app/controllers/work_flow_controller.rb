@@ -234,25 +234,176 @@ before_filter :authenticate_user!
         all_ii << ""
         sheet1.row(8).concat all_ii
         sheet1.row(8).height = 40
-        eight_format = Spreadsheet::Format.new(:text_wrap => 1,:align => :left,:vertical_align => :middle,)
-        sheet1.merge_cells(1,0,1,9)  
+        eight_format = Spreadsheet::Format.new(:text_wrap => 1,:align => :left,:vertical_align => :middle)  
         sheet1.row(8).default_format = eight_format
 
 
-        sheet1.merge_cells(7,6,7,8)
+        sheet1.merge_cells(9,6,9,8)
         all_ii = []
         all_ii << "NO."
         all_ii << "Customer Part No."
         all_ii << "PCB Size(mm)"
         all_ii << "Quantity(PCS)"
+        all_ii << "Layer"
+        all_ii << "Description"
+        all_ii << "Unit Price"
         all_ii << ""
-        all_ii << "E-mail:"
-        all_ii << current_user.email
         all_ii << ""
-        all_ii << ""
-        all_ii << ""
-        sheet1.row(7).concat all_ii
+        all_ii << "Total Price(USD)"
+        sheet1.row(9).concat all_ii
+        sheet1.row(9).height = 20
+        sheet1.column(1).width = 20
+        sheet1.column(2).width = 20
+        sheet1.column(3).width = 20
+        sheet1.column(5).width = 25
+        sheet1.column(9).width = 25
+=begin
+        sheet1.row(9).set_format(0,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(1,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(2,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(3,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(4,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(5,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(6,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(7,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(8,ColorFormat.new(:silver,:black))
+        sheet1.row(9).set_format(9,ColorFormat.new(:silver,:black))
+=end
+        night_format = Spreadsheet::Format.new(:horizontal_align => :centre,:vertical_align => :middle,:pattern_fg_color => :silver,:color => :black,:pattern => 1,:border => :thin,:border_color => :black)  
+        #sheet1.row(9).default_format = night_format
+        sheet1.row(9).set_format(0,night_format)
+        sheet1.row(9).set_format(1,night_format)
+        sheet1.row(9).set_format(2,night_format)
+        sheet1.row(9).set_format(3,night_format)
+        sheet1.row(9).set_format(4,night_format)
+        sheet1.row(9).set_format(5,night_format)
+        sheet1.row(9).set_format(6,night_format)
+        sheet1.row(9).set_format(7,night_format)
+        sheet1.row(9).set_format(8,night_format)
+        sheet1.row(9).set_format(9,night_format)
+        
+        row_set = 9
+        if not @pi_item.blank?     
+            @pi_item.each_with_index do |item,index|
+                row_set = row_set +1
+                sheet1.merge_cells(row_set,6,row_set,8)
+                all_ii = []
+                all_ii << index + 1
+                all_ii << item.c_p_no.to_s
+                all_ii << item.pcb_size.to_s
+                all_ii << item.qty.to_s
+                all_ii << item.layer.to_s
+                all_ii << item.des.to_s
+                all_ii << item.unit_price.to_s
+                all_ii << ""
+                all_ii << ""
+                all_ii << item.t_p.to_s
+                sheet1.row(row_set).concat all_ii
+                ss_format = Spreadsheet::Format.new(:horizontal_align => :centre,:vertical_align => :middle,:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1)
+                sheet1.row(row_set).set_format(0,ss_format)
+                sheet1.row(row_set).set_format(1,ss_format)
+                sheet1.row(row_set).set_format(2,ss_format)
+                sheet1.row(row_set).set_format(3,ss_format)
+                sheet1.row(row_set).set_format(4,ss_format)
+                sheet1.row(row_set).set_format(5,ss_format)
+                sheet1.row(row_set).set_format(6,ss_format)
+                sheet1.row(row_set).set_format(7,ss_format)
+                sheet1.row(row_set).set_format(8,ss_format)
+                sheet1.row(row_set).set_format(9,ss_format)
+            end
+            row_set = row_set +1
+            sheet1.merge_cells(row_set,6,row_set,8)
+            all_ii = []
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << "Shipping Cost"
+            all_ii << ""
+            all_ii << ""
+            all_ii << @pi_info.pi_shipping_cost.to_s
+            sheet1.row(row_set).concat all_ii
+            ss_format = Spreadsheet::Format.new(:horizontal_align => :centre,:vertical_align => :middle,:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1)
+            sheet1.row(row_set).set_format(0,ss_format)
+            sheet1.row(row_set).set_format(1,ss_format)
+            sheet1.row(row_set).set_format(2,ss_format)
+            sheet1.row(row_set).set_format(3,ss_format)
+            sheet1.row(row_set).set_format(4,ss_format)
+            sheet1.row(row_set).set_format(5,ss_format)
+            sheet1.row(row_set).set_format(6,ss_format)
+            sheet1.row(row_set).set_format(7,ss_format)
+            sheet1.row(row_set).set_format(8,ss_format)
+            sheet1.row(row_set).set_format(9,ss_format)
 
+            row_set = row_set +1
+            sheet1.merge_cells(row_set,6,row_set,8)
+            all_ii = []
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << "Bank Fee"
+            all_ii << ""
+            all_ii << ""
+            all_ii << @pi_info.pi_bank_fee.to_s
+            sheet1.row(row_set).concat all_ii
+            ss_format = Spreadsheet::Format.new(:horizontal_align => :centre,:vertical_align => :middle,:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1)
+            sheet1.row(row_set).set_format(0,ss_format)
+            sheet1.row(row_set).set_format(1,ss_format)
+            sheet1.row(row_set).set_format(2,ss_format)
+            sheet1.row(row_set).set_format(3,ss_format)
+            sheet1.row(row_set).set_format(4,ss_format)
+            sheet1.row(row_set).set_format(5,ss_format)
+            sheet1.row(row_set).set_format(6,ss_format)
+            sheet1.row(row_set).set_format(7,ss_format)
+            sheet1.row(row_set).set_format(8,ss_format)
+            sheet1.row(row_set).set_format(9,ss_format)
+
+            row_set = row_set +1
+            sheet1.merge_cells(row_set,6,row_set,8)
+            all_ii = []
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << ""
+            all_ii << "Total"
+            all_ii << ""
+            all_ii << ""
+            all_ii << @pi_info.t_p.to_s
+            sheet1.row(row_set).concat all_ii
+            ss_format = Spreadsheet::Format.new(:horizontal_align => :centre,:vertical_align => :middle,:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1)
+            sheet1.row(row_set).set_format(0,ss_format)
+            sheet1.row(row_set).set_format(1,ss_format)
+            sheet1.row(row_set).set_format(2,ss_format)
+            sheet1.row(row_set).set_format(3,ss_format)
+            sheet1.row(row_set).set_format(4,ss_format)
+            sheet1.row(row_set).set_format(5,ss_format)
+            sheet1.row(row_set).set_format(6,ss_format)
+            sheet1.row(row_set).set_format(7,ss_format)
+            sheet1.row(row_set).set_format(8,ss_format)
+            sheet1.row(row_set).set_format(9,ss_format)
+        end
+        
+        row_set = row_set +1
+        ss_format = Spreadsheet::Format.new(:pattern_fg_color => :white,:color => :black,:pattern => 1,:border => :thin,:border_color => :black,:text_wrap => 1,:vertical_align => :middle)
+        sheet1.merge_cells(row_set,0,row_set,9)  
+        sheet1.row(row_set).push("Leadtime: The lead time for PCBA is 20 working days.")
+        sheet1.row(row_set).set_format(0,ss_format)
+        sheet1.row(row_set).set_format(1,ss_format)
+        sheet1.row(row_set).set_format(2,ss_format)
+        sheet1.row(row_set).set_format(3,ss_format)
+        sheet1.row(row_set).set_format(4,ss_format)
+        sheet1.row(row_set).set_format(5,ss_format)
+        sheet1.row(row_set).set_format(6,ss_format)
+        sheet1.row(row_set).set_format(7,ss_format)
+        sheet1.row(row_set).set_format(8,ss_format)
+        sheet1.row(row_set).set_format(9,ss_format)
 
 
 
@@ -3649,4 +3800,10 @@ before_filter :authenticate_user!
         def pcb_params
   	    params.require(:att).permit(:att)
   	end
+
+        class ColorFormat < Spreadsheet::Format
+            def initialize(gb_color, font_color)
+                super :pattern => 1, :pattern_fg_color => gb_color,:color => font_color, :text_wrap => 1
+            end
+        end
 end

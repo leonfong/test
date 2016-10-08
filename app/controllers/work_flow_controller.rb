@@ -2674,7 +2674,7 @@ before_filter :authenticate_user!
                     s_name = current_user.s_name
                     #where_o = "  POSITION('" + s_name + "' IN topics.order_no) = 8 AND "
                     #where_o = "  (POSITION('" + s_name + "' IN topics.order_no) = 8 or POSITION('" + s_name + "' IN topics.order_no) = 9) AND "
-                    where_o = "  (LOCATE('" + s_name + "', topics.order_no,3) = 8 AND RIGHT(LEFT(topics.order_no,10),1) REGEXP '^[0-9]+$') OR (LOCATE('" + s_name + "', topics.order_no,3) = 9 AND RIGHT(LEFT(topics.order_no,8),1) REGEXP '^[0-9]+$') AND "
+                    where_o = "  ((LOCATE('" + s_name + "', topics.order_no,3) = 8 AND RIGHT(LEFT(topics.order_no,10),1) REGEXP '^[0-9]+$') OR (LOCATE('" + s_name + "', topics.order_no,3) = 9 AND RIGHT(LEFT(topics.order_no,8),1) REGEXP '^[0-9]+$')) AND "
                     #where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name) = 8 "
                     #where_o_a = " WHERE POSITION('" + s_name + "' IN a.order_no) = 8 "
                     #where_o_a = " WHERE (POSITION('" + s_name + "' IN topics.order_no) = 8 or POSITION('" + s_name + "' IN topics.order_no) = 9) "

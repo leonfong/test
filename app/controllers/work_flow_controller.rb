@@ -162,7 +162,7 @@ before_filter :authenticate_user!
                                                      :vertical => :center}
                 wb.add_worksheet(:name => 'moko') do |sheet|
                     
-                    img = File.expand_path('/var/www/fastbom/public/uploads/logo.jpg', __FILE__)
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/logo.jpg', __FILE__)
                     sheet.add_image(:image_src => img,:alignment => { :horizontal => :right, :vertical => :right }) do |image|
                         image.width=40
                         image.height=40

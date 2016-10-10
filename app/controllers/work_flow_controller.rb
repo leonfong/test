@@ -2516,7 +2516,10 @@ before_filter :authenticate_user!
         if not params[:edit_att].blank?
             @pcb.att = params[:edit_att]
         end
-        @pcb.p_type = params[:edit_p_type]    
+        if params[:edit_p_type] != ""
+            @pcb.p_type = params[:edit_p_type]    
+        end
+   
         @pcb.remark = params[:edit_follow_remark]
         if params[:edit_price]
             @pcb.t_p = params[:edit_price]

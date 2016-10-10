@@ -409,6 +409,13 @@ before_filter :authenticate_user!
                     all_ii << ""
                     all_ii << ""
                     sheet.add_row all_ii, :style => h_text
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/MOKO_bank.png', __FILE__)
+                    sheet.add_image(:image_src => img) do |image|
+                        image.width=400
+                        image.height=200
+                        #image.hyperlink.tooltip = "MOKO"
+                        image.start_at 3, row_set-3
+                    end
                     sheet.merge_cells("a#{row_set}:g#{row_set}")
 
 
@@ -874,6 +881,13 @@ before_filter :authenticate_user!
                     all_ii << ""
                     all_ii << ""
                     sheet.add_row all_ii, :style => h_text
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/MOKO_bank.png', __FILE__)
+                    sheet.add_image(:image_src => img) do |image|
+                        image.width=400
+                        image.height=200
+                        #image.hyperlink.tooltip = "MOKO"
+                        image.start_at 3, row_set-5
+                    end
                     sheet.merge_cells("a#{row_set}:g#{row_set}")
 
 
@@ -1325,6 +1339,13 @@ before_filter :authenticate_user!
                     all_ii << ""
                     all_ii << ""
                     sheet.add_row all_ii, :style => h_text
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/EASTWIN_bank.png', __FILE__)
+                    sheet.add_image(:image_src => img) do |image|
+                        image.width=400
+                        image.height=200
+                        #image.hyperlink.tooltip = "MOKO"
+                        image.start_at 3, row_set-3
+                    end
                     sheet.merge_cells("a#{row_set}:g#{row_set}")
 
 
@@ -1804,6 +1825,13 @@ before_filter :authenticate_user!
                     all_ii << ""
                     all_ii << ""
                     sheet.add_row all_ii, :style => h_text
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/EASTWIN_bank.png', __FILE__)
+                    sheet.add_image(:image_src => img) do |image|
+                        image.width=400
+                        image.height=200
+                        #image.hyperlink.tooltip = "MOKO"
+                        image.start_at 3, row_set-5
+                    end
                     sheet.merge_cells("a#{row_set}:g#{row_set}")
 
 

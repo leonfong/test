@@ -192,7 +192,9 @@
             <th width="100">数量</th>
             <th width="100">总价</th>
             <th width="100">单价</th>
+<% if item.bom_id != nil and item.p_type == "COMPONENTS"%>
             <th width="30"></th>
+<% end %>
             <th >备注</th>
           </tr>
           </thead>

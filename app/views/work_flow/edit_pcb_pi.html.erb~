@@ -273,10 +273,10 @@
             </div></div>
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_excel?id=<%= @pi_info.id %>&type=1" >导出MOKO1</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx?id=<%= @pi_info.id %>&type=2" >导出MOKO2</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_excel?id=<%= @pi_info.id %>&type=3" >导出EASTWIN1</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_excel?id=<%= @pi_info.id %>&type=4" >导出EASTWIN2</a></span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx_moko_a?id=<%= @pi_info.id %>" >导出MOKO1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx_moko_b?id=<%= @pi_info.id %>" >导出MOKO2</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx?id=<%= @pi_info.id %>&type=3" >导出EASTWIN1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx?id=<%= @pi_info.id %>&type=4" >导出EASTWIN2</a></span>
 
                 </div>
             </div></div>

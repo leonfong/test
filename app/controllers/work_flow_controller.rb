@@ -97,7 +97,7 @@ before_filter :authenticate_user!
                 #send_file(path,filename: file_name, type: "application/vnd.ms-excel")    
     end
 
-    def pi_out_xlsx
+    def pi_out_xlsx_moko_a
         @pi_info = PiInfo.find_by_id(params[:id])
         @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
         @pi_item = PiItem.where(pi_info_id: params[:id])
@@ -122,12 +122,14 @@ before_filter :authenticate_user!
                                      :alignment => { :horizontal => :center,
                                                      :vertical => :center }
                 c_text = s.add_style :alignment => { :horizontal => :left,
-                                                     :vertical => :center }
+                                                     :vertical => :center,
+                                                     :wrap_text => true  }
                 d_text = s.add_style :fg_color => "00",
                                      :bg_color => "EEEEEE",
                                      :border => { :style => :thin, :color => "00" },
                                      :alignment => { :horizontal => :center,
-                                                     :vertical => :center }
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
                 e_text = s.add_style :border => { :style => :thin, :color => "00" },
                                      :alignment => { :horizontal => :center,
                                                      :vertical => :center,
@@ -152,12 +154,12 @@ before_filter :authenticate_user!
                     
                     img = File.expand_path(Rails.root.to_s+'/public/uploads/logo.jpg', __FILE__)
                     sheet.add_image(:image_src => img,:alignment => { :horizontal => :right, :vertical => :right }) do |image|
-                        image.width=40
-                        image.height=40
+                        image.width=60
+                        image.height=60
                         #image.hyperlink.tooltip = "MOKO"
                         image.start_at 3, 0
                     end
-                    sheet.add_row ['MOKO Technology Ltd'], :style => a_text
+                    sheet.add_row ['MOKO Technology Ltd'], :height => 50, :style => a_text
                     sheet.merge_cells("A1:J1")
 
 
@@ -275,7 +277,7 @@ before_filter :authenticate_user!
                     all_ii << ""
                     all_ii << ""
                     all_ii << ""
-                    sheet.add_row all_ii, :height => 40, :style => c_text
+                    sheet.add_row all_ii, :style => c_text
                     sheet.merge_cells("b9:d9")
                     sheet.merge_cells("g9:j9")
 
@@ -540,6 +542,1372 @@ before_filter :authenticate_user!
                     row_set = row_set +1
                     all_ii = []
                     all_ii << "4.The quotation is valid for 10days."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    sheet.column_widths 10, 15, 15, 15, 10, 25, 10, 10, 10, 25
+                end
+            end
+        end
+
+
+        p.serialize(path+file_name)
+        send_file(path+file_name, type: "application/vnd.ms-excel") and return
+
+    end
+
+    def pi_out_xlsx_moko_b
+        @pi_info = PiInfo.find_by_id(params[:id])
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
+        @pi_item = PiItem.where(pi_info_id: params[:id])
+        @find_pcb = PiItem.where(pi_info_id: params[:id], p_type: "PCB")
+
+        @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
+        
+        file_name = @pi_info.pi_no.to_s + "_out.xlsx"
+        path = Rails.root.to_s+"/public/uploads/bom/pi_excel_file/"
+
+
+        p = Axlsx::Package.new
+        p.workbook do |wb|
+            wb.styles do |s|
+                a_text = s.add_style :b => true,
+                                     :sz => 24,
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center }
+                b_text = s.add_style :b => true,
+                                     :sz => 20,
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center }
+                c_text = s.add_style :alignment => { :horizontal => :left,
+                                                     :vertical => :center,
+                                                     :wrap_text => true  }
+                d_text = s.add_style :fg_color => "00",
+                                     :bg_color => "EEEEEE",
+                                     :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                e_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                f_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                g_text = s.add_style :b => true,
+                                     :sz => 12,
+                                     :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                h_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                i_text = s.add_style :b => true,
+                                     :sz => 12,
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                wb.add_worksheet(:name => 'moko') do |sheet|
+                    
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/logo.jpg', __FILE__)
+                    sheet.add_image(:image_src => img,:alignment => { :horizontal => :right, :vertical => :right }) do |image|
+                        image.width=60
+                        image.height=60
+                        #image.hyperlink.tooltip = "MOKO"
+                        image.start_at 3, 0
+                    end
+                    sheet.add_row ['MOKO Technology Ltd'], :height => 50, :style => a_text
+                    sheet.merge_cells("A1:J1")
+
+
+                    sheet.add_row ['Proforma Invoice'], :style => b_text
+                    sheet.merge_cells("A2:J2")
+
+
+                    all_ii = []
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "P.I NO.:"
+                    all_ii << @pi_info.pi_no.to_s
+                    all_ii << ""
+                    all_ii << "Date:"
+                    all_ii << @pi_info.updated_at.localtime.strftime('%Y/%m/%d').to_s
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b3:d3")
+                    sheet.merge_cells("g3:h3")
+                    
+
+
+                    all_ii = []
+                    all_ii << "To:"
+                    all_ii << @pi_info_c.customer.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "From:"
+                    all_ii << current_user.en_name.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b4:d4")
+                    sheet.merge_cells("g4:i4")
+
+
+                    all_ii = []
+                    all_ii << "Company:"
+                    all_ii << @pi_info_c.customer_com.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Company:"
+                    all_ii << "MOKO TECHNOLOGY LTD"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b5:d5")
+                    sheet.merge_cells("g5:i5")
+
+
+                    all_ii = []
+                    all_ii << "Tel:"
+                    all_ii << @pi_info_c.tel.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Tel:"
+                    all_ii << current_user.tel
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b6:d6")
+                    sheet.merge_cells("g6:i6")
+
+
+                    all_ii = []
+                    all_ii << "Fax:"
+                    all_ii << @pi_info_c.fax.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Fax:"
+                    all_ii << current_user.fax
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b7:d7")
+                    sheet.merge_cells("g7:i7")
+
+
+                    all_ii = []
+                    all_ii << "E-mail:"
+                    all_ii << @pi_info_c.email.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "E-mail:"
+                    all_ii << current_user.email
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b8:d8")
+                    sheet.merge_cells("g8:i8")
+
+
+
+
+                    all_ii = []
+                    all_ii << "Add:"
+                    all_ii << @pi_info_c.shipping_address.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Add:"
+                    all_ii << current_user.add
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b9:d9")
+                    sheet.merge_cells("g9:j9")
+
+
+
+                    all_ii = []
+                    all_ii << "NO."
+                    all_ii << "Customer Part No."
+                    all_ii << "PCB Size(mm)"
+                    all_ii << "Quantity(PCS)"
+                    all_ii << "Layer"
+                    all_ii << "Description"
+                    all_ii << "PCB Price"
+                    all_ii << "Components Price"
+                    all_ii << "PCBA"
+                    all_ii << "Total Price(USD)"
+                    sheet.add_row all_ii, :style => d_text
+                    #sheet.merge_cells("g10:i10")
+
+                    row_set = 10
+                    if not @pi_item.blank?     
+                        @pi_item.each_with_index do |item,index|
+                            row_set = row_set +1
+                            all_ii = []
+                            all_ii << index + 1
+                            all_ii << item.c_p_no.to_s
+                            all_ii << item.pcb_size.to_s
+                            all_ii << item.qty.to_s
+                            all_ii << item.layer.to_s
+                            all_ii << item.des.to_s
+                            all_ii << item.pcb_price.to_s
+                            all_ii << item.com_cost.to_s
+                            all_ii << item.pcba.to_s
+                            all_ii << item.t_p.to_s
+                            sheet.add_row all_ii, :style => e_text
+                            #sheet.merge_cells("g#{row_set}:i#{row_set}")
+                        end
+
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "Shipping Cost"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.pi_shipping_cost.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+            
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "Bank Fee"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.pi_bank_fee.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+            
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "Total"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.t_p.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+
+                    end
+             
+                    row_set = row_set +1
+                    all_ii = []
+                        all_ii << "Leadtime: The lead time for PCBA is 20 working days."
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                    sheet.add_row all_ii, :style => f_text
+                    sheet.merge_cells("a#{row_set}:j#{row_set}")
+                    
+
+                    row_set = row_set +1
+                    sheet.add_row
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank RMB Information:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => g_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank account:	6241 8578 0704 4682"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Name:	黄丽娟 Huang Li Juan"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank Name: 深圳招行梅龙支行"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Remark:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => i_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "The above quotation is based on the following conditions:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "1.Payment Terms: T/T in advance."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "2.Cetificate :ROHS.ISO9001."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "3.The outline tolerance is +/-0.2mm."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "4.The quotation is valid for 10days."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "5.Delivery Term:EXW"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    sheet.column_widths 10, 15, 15, 15, 10, 25, 10, 10, 10, 25
+                end
+            end
+        end
+
+
+        p.serialize(path+file_name)
+        send_file(path+file_name, type: "application/vnd.ms-excel") and return
+
+    end
+
+    def pi_out_xlsx_moko_c
+        @pi_info = PiInfo.find_by_id(params[:id])
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
+        @pi_item = PiItem.where(pi_info_id: params[:id])
+        @find_pcb = PiItem.where(pi_info_id: params[:id], p_type: "PCB")
+
+        @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
+        
+        file_name = @pi_info.pi_no.to_s + "_out.xlsx"
+        path = Rails.root.to_s+"/public/uploads/bom/pi_excel_file/"
+
+
+        p = Axlsx::Package.new
+        p.workbook do |wb|
+            wb.styles do |s|
+                a_text = s.add_style :b => true,
+                                     :sz => 24,
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center }
+                b_text = s.add_style :b => true,
+                                     :sz => 20,
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center }
+                c_text = s.add_style :alignment => { :horizontal => :left,
+                                                     :vertical => :center,
+                                                     :wrap_text => true  }
+                d_text = s.add_style :fg_color => "00",
+                                     :bg_color => "EEEEEE",
+                                     :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                e_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                f_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                g_text = s.add_style :b => true,
+                                     :sz => 12,
+                                     :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                h_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                i_text = s.add_style :b => true,
+                                     :sz => 12,
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                wb.add_worksheet(:name => 'moko') do |sheet|
+                    
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/eastwin.png', __FILE__)
+                    sheet.add_image(:image_src => img,:alignment => { :horizontal => :right, :vertical => :right }) do |image|
+                        image.width=60
+                        image.height=60
+                        #image.hyperlink.tooltip = "MOKO"
+                        image.start_at 2, 0
+                    end
+                    sheet.add_row ['Shenzhen Eastwin Trading Ltd'], :height => 50, :style => a_text
+                    sheet.merge_cells("A1:J1")
+
+
+                    sheet.add_row ['Proforma Invoice'], :style => b_text
+                    sheet.merge_cells("A2:J2")
+
+
+                    all_ii = []
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "P.I NO.:"
+                    all_ii << @pi_info.pi_no.to_s
+                    all_ii << ""
+                    all_ii << "Date:"
+                    all_ii << @pi_info.updated_at.localtime.strftime('%Y/%m/%d').to_s
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b3:d3")
+                    sheet.merge_cells("g3:h3")
+                    
+
+
+                    all_ii = []
+                    all_ii << "To:"
+                    all_ii << @pi_info_c.customer.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "From:"
+                    all_ii << current_user.en_name.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b4:d4")
+                    sheet.merge_cells("g4:i4")
+
+
+                    all_ii = []
+                    all_ii << "Company:"
+                    all_ii << @pi_info_c.customer_com.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Company:"
+                    all_ii << "MOKO TECHNOLOGY LTD"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b5:d5")
+                    sheet.merge_cells("g5:i5")
+
+
+                    all_ii = []
+                    all_ii << "Tel:"
+                    all_ii << @pi_info_c.tel.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Tel:"
+                    all_ii << current_user.tel
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b6:d6")
+                    sheet.merge_cells("g6:i6")
+
+
+                    all_ii = []
+                    all_ii << "Fax:"
+                    all_ii << @pi_info_c.fax.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Fax:"
+                    all_ii << current_user.fax
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b7:d7")
+                    sheet.merge_cells("g7:i7")
+
+
+                    all_ii = []
+                    all_ii << "E-mail:"
+                    all_ii << @pi_info_c.email.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "E-mail:"
+                    all_ii << current_user.email
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b8:d8")
+                    sheet.merge_cells("g8:i8")
+
+
+
+
+                    all_ii = []
+                    all_ii << "Add:"
+                    all_ii << @pi_info_c.shipping_address.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Add:"
+                    all_ii << current_user.add
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b9:d9")
+                    sheet.merge_cells("g9:j9")
+
+
+
+                    all_ii = []
+                    all_ii << "NO."
+                    all_ii << "Customer Part No."
+                    all_ii << "PCB Size(mm)"
+                    all_ii << "Quantity(PCS)"
+                    all_ii << "Layer"
+                    all_ii << "Description"
+                    all_ii << "Unit Price"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Total Price(USD)"
+                    sheet.add_row all_ii, :style => d_text
+                    sheet.merge_cells("g10:i10")
+
+                    row_set = 10
+                    if not @pi_item.blank?     
+                        @pi_item.each_with_index do |item,index|
+                            row_set = row_set +1
+                            all_ii = []
+                            all_ii << index + 1
+                            all_ii << item.c_p_no.to_s
+                            all_ii << item.pcb_size.to_s
+                            all_ii << item.qty.to_s
+                            all_ii << item.layer.to_s
+                            all_ii << item.des.to_s
+                            all_ii << item.unit_price.to_s
+                            all_ii << ""
+                            all_ii << ""
+                            all_ii << item.t_p.to_s
+                            sheet.add_row all_ii, :style => e_text
+                            sheet.merge_cells("g#{row_set}:i#{row_set}")
+                        end
+
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "Shipping Cost"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.pi_shipping_cost.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+            
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "Bank Fee"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.pi_bank_fee.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+            
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "In Total"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.t_p.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "In Total RMB"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.t_p_rmb.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+
+                    end
+             
+                    row_set = row_set +1
+                    all_ii = []
+                        all_ii << "Leadtime: The lead time for PCBA is 20 working days."
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                    sheet.add_row all_ii, :style => f_text
+                    sheet.merge_cells("a#{row_set}:j#{row_set}")
+                    
+
+                    row_set = row_set +1
+                    sheet.add_row
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank information:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => g_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Account Name : MOKO TECHNOLOGY LIMITED"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank Account Number ：801144007838"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Swift code:HSBCHKHHHKH"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank  Name ：The Hongkong and Shanghai Banking Corporation Limited"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank Adress:No.1 Queen’s Road Central ,Hong Kong"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank Code :  004"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+                    row_set = row_set +1
+                    sheet.add_row
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Remark:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => i_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "The above quotation is based on the following conditions:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "1.Payment Terms: T/T in advance."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "2.Cetificate :ROHS.ISO9001."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "3.The outline tolerance is +/-0.2mm."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "4.The quotation is valid for 10days."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    sheet.column_widths 10, 15, 15, 15, 10, 25, 10, 10, 10, 25
+                end
+            end
+        end
+
+
+        p.serialize(path+file_name)
+        send_file(path+file_name, type: "application/vnd.ms-excel") and return
+
+    end
+
+    def pi_out_xlsx_moko_d
+        @pi_info = PiInfo.find_by_id(params[:id])
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
+        @pi_item = PiItem.where(pi_info_id: params[:id])
+        @find_pcb = PiItem.where(pi_info_id: params[:id], p_type: "PCB")
+
+        @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
+        
+        file_name = @pi_info.pi_no.to_s + "_out.xlsx"
+        path = Rails.root.to_s+"/public/uploads/bom/pi_excel_file/"
+
+
+        p = Axlsx::Package.new
+        p.workbook do |wb|
+            wb.styles do |s|
+                a_text = s.add_style :b => true,
+                                     :sz => 24,
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center }
+                b_text = s.add_style :b => true,
+                                     :sz => 20,
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center }
+                c_text = s.add_style :alignment => { :horizontal => :left,
+                                                     :vertical => :center,
+                                                     :wrap_text => true  }
+                d_text = s.add_style :fg_color => "00",
+                                     :bg_color => "EEEEEE",
+                                     :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                e_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :center,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                f_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center,
+                                                     :wrap_text => true }
+                g_text = s.add_style :b => true,
+                                     :sz => 12,
+                                     :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                h_text = s.add_style :border => { :style => :thin, :color => "00" },
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                i_text = s.add_style :b => true,
+                                     :sz => 12,
+                                     :alignment => { :horizontal => :left,
+                                                     :vertical => :center}
+                wb.add_worksheet(:name => 'moko') do |sheet|
+                    
+                    img = File.expand_path(Rails.root.to_s+'/public/uploads/eastwin.png', __FILE__)
+                    sheet.add_image(:image_src => img,:alignment => { :horizontal => :right, :vertical => :right }) do |image|
+                        image.width=60
+                        image.height=60
+                        #image.hyperlink.tooltip = "MOKO"
+                        image.start_at 2, 0
+                    end
+                    sheet.add_row ['Shenzhen Eastwin Trading Ltd'], :height => 50, :style => a_text
+                    sheet.merge_cells("A1:J1")
+
+
+                    sheet.add_row ['Proforma Invoice'], :style => b_text
+                    sheet.merge_cells("A2:J2")
+
+
+                    all_ii = []
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "P.I NO.:"
+                    all_ii << @pi_info.pi_no.to_s
+                    all_ii << ""
+                    all_ii << "Date:"
+                    all_ii << @pi_info.updated_at.localtime.strftime('%Y/%m/%d').to_s
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b3:d3")
+                    sheet.merge_cells("g3:h3")
+                    
+
+
+                    all_ii = []
+                    all_ii << "To:"
+                    all_ii << @pi_info_c.customer.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "From:"
+                    all_ii << current_user.en_name.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b4:d4")
+                    sheet.merge_cells("g4:i4")
+
+
+                    all_ii = []
+                    all_ii << "Company:"
+                    all_ii << @pi_info_c.customer_com.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Company:"
+                    all_ii << "MOKO TECHNOLOGY LTD"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b5:d5")
+                    sheet.merge_cells("g5:i5")
+
+
+                    all_ii = []
+                    all_ii << "Tel:"
+                    all_ii << @pi_info_c.tel.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Tel:"
+                    all_ii << current_user.tel
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b6:d6")
+                    sheet.merge_cells("g6:i6")
+
+
+                    all_ii = []
+                    all_ii << "Fax:"
+                    all_ii << @pi_info_c.fax.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Fax:"
+                    all_ii << current_user.fax
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b7:d7")
+                    sheet.merge_cells("g7:i7")
+
+
+                    all_ii = []
+                    all_ii << "E-mail:"
+                    all_ii << @pi_info_c.email.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "E-mail:"
+                    all_ii << current_user.email
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b8:d8")
+                    sheet.merge_cells("g8:i8")
+
+
+
+
+                    all_ii = []
+                    all_ii << "Add:"
+                    all_ii << @pi_info_c.shipping_address.to_s
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << "Add:"
+                    all_ii << current_user.add
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("b9:d9")
+                    sheet.merge_cells("g9:j9")
+
+
+
+                    all_ii = []
+                    all_ii << "NO."
+                    all_ii << "Customer Part No."
+                    all_ii << "PCB Size(mm)"
+                    all_ii << "Quantity(PCS)"
+                    all_ii << "Layer"
+                    all_ii << "Description"
+                    all_ii << "PCB Price"
+                    all_ii << "Components Price"
+                    all_ii << "PCBA"
+                    all_ii << "Total Price(USD)"
+                    sheet.add_row all_ii, :style => d_text
+                    #sheet.merge_cells("g10:i10")
+
+                    row_set = 10
+                    if not @pi_item.blank?     
+                        @pi_item.each_with_index do |item,index|
+                            row_set = row_set +1
+                            all_ii = []
+                            all_ii << index + 1
+                            all_ii << item.c_p_no.to_s
+                            all_ii << item.pcb_size.to_s
+                            all_ii << item.qty.to_s
+                            all_ii << item.layer.to_s
+                            all_ii << item.des.to_s
+                            all_ii << item.pcb_price.to_s
+                            all_ii << item.com_cost.to_s
+                            all_ii << item.pcba.to_s
+                            all_ii << item.t_p.to_s
+                            sheet.add_row all_ii, :style => e_text
+                            #sheet.merge_cells("g#{row_set}:i#{row_set}")
+                        end
+
+=begin
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "Shipping Cost"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.pi_shipping_cost.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+            
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "Bank Fee"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.pi_bank_fee.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+=end            
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "In Total USD"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.t_p.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+
+                        row_set = row_set +1
+                        all_ii = []
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << "In Total RMB"
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << @pi_info.t_p_rmb.to_s
+                        sheet.add_row all_ii, :style => e_text
+                        sheet.merge_cells("g#{row_set}:i#{row_set}")
+                    end
+             
+                    row_set = row_set +1
+                    all_ii = []
+                        all_ii << "Leadtime: The lead time for PCBA is 20 working days."
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                        all_ii << ""
+                    sheet.add_row all_ii, :style => f_text
+                    sheet.merge_cells("a#{row_set}:j#{row_set}")
+                    
+
+                    row_set = row_set +1
+                    sheet.add_row
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank RMB Information:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => g_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank account:	6241 8578 0704 4682"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Name:	黄丽娟 Huang Li Juan"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Bank Name: 深圳招行梅龙支行"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => h_text
+                    sheet.merge_cells("a#{row_set}:g#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "Remark:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => i_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "The above quotation is based on the following conditions:"
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "1.Payment Terms: T/T in advance."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "2.Cetificate :ROHS.ISO9001."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "3.The outline tolerance is +/-0.2mm."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "4.The quotation is valid for 10days."
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    all_ii << ""
+                    sheet.add_row all_ii, :style => c_text
+                    sheet.merge_cells("a#{row_set}:d#{row_set}")
+
+                    row_set = row_set +1
+                    all_ii = []
+                    all_ii << "5.Delivery Term:EXW"
                     all_ii << ""
                     all_ii << ""
                     all_ii << ""

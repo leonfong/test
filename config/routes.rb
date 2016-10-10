@@ -120,8 +120,10 @@ Rails.application.routes.draw do
   match '/edit_user_info', to: 'work_flow#edit_user_info', via: 'post'
   match '/edit_c_info', to: 'work_flow#edit_c_info', via: 'post'
   match '/pi_out_excel', to: 'work_flow#pi_out_excel', via: 'get'
-  match '/pi_out_xlsx', to: 'work_flow#pi_out_xlsx', via: 'get'
-
+  match '/pi_out_xlsx_moko_a', to: 'work_flow#pi_out_xlsx_moko_a', via: 'get'
+  match '/pi_out_xlsx_moko_b', to: 'work_flow#pi_out_xlsx_moko_b', via: 'get'
+  match '/pi_out_xlsx_moko_c', to: 'work_flow#pi_out_xlsx_moko_c', via: 'get'
+  match '/pi_out_xlsx_moko_d', to: 'work_flow#pi_out_xlsx_moko_d', via: 'get'
 
 
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 

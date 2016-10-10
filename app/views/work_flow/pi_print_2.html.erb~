@@ -21,12 +21,13 @@
                         P.I NO.:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
-            
+                        <%= @pi_info.pi_no %>
                     </td>
                     <td style="padding: 0px;margin: 0px;" width="90">
                         Date:
                     </td>
                     <td style="padding: 0px;margin: 0px;">
+                        <%= @pi_info.updated_at.localtime.strftime('%Y/%m/%d').to_s %>
                     </td>
                 </tr>
                 <tr style="padding: 0px;margin: 0px;">

@@ -198,7 +198,11 @@
           <% PcbOrderItem.where(pcb_order_no: pcb.order_no).each do |item| %>
               
               <tr style="margin: 0px;padding: 0px;">
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no_son %></td>
+                  <% if item.p_type == "PCBA" %>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= link_to item.pcb_order_no_son, sell_view_baojia_path(bom_id: bom_id) %></td>
+                  <% else %>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.pcb_order_no_son %></td>
+                  <% end %>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_en %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;">

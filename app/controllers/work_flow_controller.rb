@@ -102,25 +102,13 @@ before_filter :authenticate_user!
         @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
         @pi_item = PiItem.where(pi_info_id: params[:id])
         @find_pcb = PiItem.where(pi_info_id: params[:id], p_type: "PCB")
-        #if not @find_pcb.blank?
-            #@pi_pcb = PcbItemInfo.find_by_pcb_order_item_id(find_pcb.first.find_pcb.order_item_id)
-        #end
+
         @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
         @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
         
         file_name = @pi_info.pi_no.to_s + "_out.xlsx"
         path = Rails.root.to_s+"/public/uploads/bom/pi_excel_file/"
 
-=begin
-            Axlsx::Package.new do |p|
-                p.workbook.add_worksheet(:name => "Pie Chart") do |sheet|
-                    sheet.merge_cells("A1:J1")
-                    sheet.add_row ["MOKO Technology Ltd"], :sz => 20, :b => true, :alignment => {:horizontal => :center, :vertical => :center}
-                
-                end
-            p.serialize(path+file_name)
-            end
-=end
 
         p = Axlsx::Package.new
         p.workbook do |wb|

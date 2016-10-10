@@ -1999,6 +1999,7 @@ before_filter :authenticate_user!
             if params[:erp_item_id] != ""
                 upstart = PcbOrderItem.find_by_id(params[:erp_item_id])
                 upstart.state = "quote"
+                upstart.p_type = "PCBA"
                 upstart.bom_id = @bom.id
                 upstart.save
             end

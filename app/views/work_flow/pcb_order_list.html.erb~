@@ -465,6 +465,12 @@ function postform() {
 
 }  
 
+$('#remarkitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var modal = $(this);
+  modal.find($("#itemp_id_remark")).val(itempid);
+})
 
 </script>
 <%

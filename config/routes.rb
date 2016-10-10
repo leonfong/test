@@ -120,6 +120,7 @@ Rails.application.routes.draw do
   match '/edit_user_info', to: 'work_flow#edit_user_info', via: 'post'
   match '/edit_c_info', to: 'work_flow#edit_c_info', via: 'post'
   match '/pi_out_excel', to: 'work_flow#pi_out_excel', via: 'get'
+  match '/pi_out_xlsx', to: 'work_flow#pi_out_xlsx', via: 'get'
 
 
 

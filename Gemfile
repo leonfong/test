@@ -80,6 +80,7 @@ gem 'oauth2'
 gem 'roo', '~> 2.0.0'
 gem 'roo-xls'
 gem 'spreadsheet'
+
 gem 'metamagic'
 gem 'sitemap_generator'
 #gem 'mina-sitemap_generator', :require => false
@@ -91,6 +92,10 @@ gem 'cancan'
 gem 'devise-i18n'
 gem 'prototype-rails', github: 'rails/prototype-rails', branch: '4.2'
 gem 'country_select'
+gem 'zip-zip'
+
+gem 'axlsx'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :development, :test do

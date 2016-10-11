@@ -7,7 +7,7 @@
 
 <% if @part %>
 <div>
-<% if can? :work_g_all %>
+<% if can? :work_g_all, :all %>
            <span  style="color:#999;">
                <%= form_tag('/supplier_offer', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
@@ -49,6 +49,7 @@
                   <table class="table table-hover table-bordered" > 
                       <thead >
                             <tr style="background-color: #eeeeee"> 
+                                <th width="80">日期</th>
                                 <th width="190">MPN</th>
                                 <th width="200">描述</th>
                                 <th width="80">数量</th>  
@@ -60,6 +61,9 @@
                         <tbody>
 <% @part.each do |part| %>
                             <tr >
+                                <td> 
+                                    <%= part.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
+                                </td>
                                 <td> 
                                     <%= part.mpn %>
                                 </td>

@@ -42,6 +42,7 @@ before_filter :authenticate_user!
 
 		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
                 all_title = []
+                all_title << "日期"
                 all_title << "MPN"
                 all_title << "描述"
                 all_title << "数量"
@@ -58,7 +59,9 @@ before_filter :authenticate_user!
                     elsif all_title[set_color] =~ /描述/i
                         sheet1.column(set_color).width = 35  
                     elsif all_title[set_color] =~ /MPN/i
-                        sheet1.column(set_color).width = 20                   
+                        sheet1.column(set_color).width = 20 
+                    elsif all_title[set_color] =~ /日期/i
+                        sheet1.column(set_color).width = 20                  
                     else
                         sheet1.column(set_color).width = 15
                     end
@@ -80,6 +83,7 @@ before_filter :authenticate_user!
                         row.set_format(set_f,title_format)
                         set_f += 1
                     end
+                    row.push(item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s)
                     row.push(item.mpn)
 		    row.push(item.description)
                     row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)

@@ -3446,7 +3446,6 @@ before_filter :authenticate_user!
 
     def new_pcb_pi
         if params[:pi_no] == "" or params[:pi_no] == nil
-
             if current_user.s_name_self.size == 1
                 s_name = current_user.s_name_self
                 where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,4),1) REGEXP '^[0-9]+$')"

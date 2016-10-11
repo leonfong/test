@@ -1065,7 +1065,7 @@ before_filter :authenticate_user!
                                      :sz => 12,
                                      :alignment => { :horizontal => :left,
                                                      :vertical => :center}
-                wb.add_worksheet(:name => 'moko') do |sheet|
+                wb.add_worksheet(:name => 'Eastwin') do |sheet|
                     
                     img = File.expand_path(Rails.root.to_s+'/public/uploads/eastwin.png', __FILE__)
                     sheet.add_image(:image_src => img,:alignment => { :horizontal => :right, :vertical => :right }) do |image|
@@ -1552,7 +1552,7 @@ before_filter :authenticate_user!
                                      :sz => 12,
                                      :alignment => { :horizontal => :left,
                                                      :vertical => :center}
-                wb.add_worksheet(:name => 'moko') do |sheet|
+                wb.add_worksheet(:name => 'Eastwin') do |sheet|
                     
                     img = File.expand_path(Rails.root.to_s+'/public/uploads/eastwin.png', __FILE__)
                     sheet.add_image(:image_src => img,:alignment => { :horizontal => :right, :vertical => :right }) do |image|
@@ -3480,6 +3480,24 @@ before_filter :authenticate_user!
     def edit_pcb_pi
         @pi_info = PiInfo.find_by(pi_no: params[:pi_no])
         @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
+        @pi_info_c_c_no = ""
+        @pi_info_c_customer = ""
+        @pi_info_c_customer_com = ""
+        @pi_info_c_customer_country = ""
+        @pi_info_c_tel = ""
+        @pi_info_c_fax = ""
+        @pi_info_c_email = ""
+        @pi_info_c_shipping_address = ""
+        if not @pi_info_c.blank?
+            @pi_info_c_c_no = @pi_info_c.c_no
+            @pi_info_c_customer = @pi_info_c.customer
+            @pi_info_c_customer_com = @pi_info_c.customer_com
+            @pi_info_c_customer_country = @pi_info_c.customer_country
+            @pi_info_c_tel = @pi_info_c.tel
+            @pi_info_c_fax = @pi_info_c.fax
+            @pi_info_c_email = @pi_info_c.email
+            @pi_info_c_shipping_address = @pi_info_c.shipping_address
+        end
         @pi_item = PiItem.where(pi_no: params[:pi_no])
         @pi_other_item = PiOtherItem.where(pi_no: params[:pi_no])
         @total_p = PiItem.where(pi_no: params[:pi_no]).sum("t_p") + PiOtherItem.where(pi_no: params[:pi_no]).sum("t_p")

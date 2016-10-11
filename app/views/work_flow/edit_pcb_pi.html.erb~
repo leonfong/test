@@ -65,19 +65,19 @@
                 </div>
                 <div class="panel-body ">                     
                     <div class="row ">
-                        <div class="col-md-1"><strong>Code：</strong><ins id="daima_show" name="daima_show"><%= @pi_info_c.c_no.to_s %></ins></div>
-                        <div class="col-md-2"><strong>Customer Name：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_info_c.customer.to_s %></ins></div>
-                        <div class="col-md-6"><strong>Company：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_info_c.customer_com.to_s %></ins></div> 
-                        <div class="col-md-2"><strong>Country：</strong><ins id="guojia_show" name="guojia_show"><%= @pi_info_c.customer_country.to_s %></ins></div>
+                        <div class="col-md-1"><strong>Code：</strong><ins id="daima_show" name="daima_show"><%= @pi_info_c_c_no.to_s %></ins></div>
+                        <div class="col-md-2"><strong>Customer Name：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_info_c_customer.to_s %></ins></div>
+                        <div class="col-md-6"><strong>Company：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_info_c_customer_com.to_s %></ins></div> 
+                        <div class="col-md-2"><strong>Country：</strong><ins id="guojia_show" name="guojia_show"><%= @pi_info_c_customer_country.to_s %></ins></div>
                          
                     </div>
                     <div class="row " style="padding-top: 10px;">
-                         <div class="col-md-4"><strong>Tel：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.tel.to_s %></ins></div>
-                         <div class="col-md-4"><strong>Fax：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.fax.to_s %></ins></div>
-                         <div class="col-md-4"><strong>E-mail：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.email.to_s %></ins></div>
+                         <div class="col-md-4"><strong>Tel：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c_tel.to_s %></ins></div>
+                         <div class="col-md-4"><strong>Fax：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c_fax.to_s %></ins></div>
+                         <div class="col-md-4"><strong>E-mail：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c_email.to_s %></ins></div>
                     </div>
                     <div class="row " style="padding-top: 10px;">
-                         <div class="col-md-12"><strong>Add：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c.shipping_address.to_s %></ins></div>     
+                         <div class="col-md-12"><strong>Add：</strong><ins id="fahuodizhi_show" name="fahuodizhi_show"><%= @pi_info_c_shipping_address.to_s %></ins></div>     
                     </div>
                 </div>
             </div>
@@ -275,8 +275,8 @@
                 <div class="modal-footer">
                     <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx_moko_a?id=<%= @pi_info.id %>" >导出MOKO1</a>&nbsp;</span>
                     <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx_moko_b?id=<%= @pi_info.id %>" >导出MOKO2</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx?id=<%= @pi_info.id %>&type=3" >导出EASTWIN1</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx?id=<%= @pi_info.id %>&type=4" >导出EASTWIN2</a></span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx_moko_c?id=<%= @pi_info.id %>&type=3" >导出EASTWIN1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-info btn-sm" target="_blank" href="/pi_out_xlsx_moko_d?id=<%= @pi_info.id %>&type=4" >导出EASTWIN2</a></span>
 
                 </div>
             </div></div>

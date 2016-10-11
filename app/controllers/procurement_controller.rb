@@ -1873,6 +1873,9 @@ before_filter :authenticate_user!
                     if item["#{@sheet.row(row_use)[des.to_i]}"].blank?
                         desa += ""
                     else
+                        if desa.to_s[-2..-1] == ".0"
+                            desa = desa.to_s.chop.chop
+                        end
                         desa += item["#{@sheet.row(row_use)[des.to_i]}"].to_s + " "
                     end
                 end

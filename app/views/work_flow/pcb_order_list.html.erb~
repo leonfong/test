@@ -185,7 +185,7 @@
           <table class="table" style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
           <thead>
           <tr style="background-color: #eeeeee;">
-            <th >子单号</th>
+            <th width="150">子单号</th>
             <th >英文描述</th>
             <th >中文描述</th>
             <th width="100">类别</th>
@@ -198,7 +198,7 @@
           </thead>
           <% PcbOrderItem.where(pcb_order_no: pcb.order_no).each do |item| %>
               
-              <tr style="margin: 0px;padding: 0px;">
+              <tr style="margin: 0px;padding: 0px;" >
                   <% if item.p_type == "PCBA" %>
                       <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= link_to item.pcb_order_no_son, sell_view_baojia_path(bom_id: item.bom_id) %></td>
                   <% else %>
@@ -311,6 +311,64 @@
 
 
               </tr>
+<% if item.p_type == "PCB" %>
+              <tr><td colspan="9" style="margin: 0px;padding: 0px;" >
+                  <div class="row" style="margin: 0px;padding: 0px;" >
+                      <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #FFFFFF;">
+                          <table style="margin: 0px;padding: 0px;" >
+                              <tr class="well text-center" style="margin: 0px;padding: 0px;"  >
+                                  <th rowspan="2" class="text-center" width="100" style="padding-bottom: 20px;">供应商</th>
+                                  <th rowspan="2" class="text-center" width="120" style="padding-bottom: 20px;">询价单号</th>  
+                                  <th colSpan="6" class="text-center" width="500" >PCB板(mm)</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">数量</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">平米</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">元/平米</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">单价</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">工程费</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">测试费</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">模具费</th>
+                                  <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">总金额</th>
+                                  <th rowspan="2" class="text-center" style="padding-bottom: 20px;">备注</th>
+                              </tr> 
+                              <tr style="background-color: #eeeeee"> 
+                                  <th class="text-center" >长度</th>   
+                                  <th class="text-center" >宽度</th>  
+                                  <th class="text-center" >板厚</th>  
+                                  <th class="text-center" >拼板数量</th>  
+                                  <th class="text-center" >层数*</th>  
+                                  <th class="text-center" >工艺</th>          
+                              <tr>
+                      <% @part = PcbItemInfo.where(pcb_order_item_id: item.id) %>
+                      <% if not @part.blank? %>
+                          <% @part.each_with_index do |part,index| %>    
+                              <tr>
+                                  <td><%= part.pcb_supplier %></td>
+                                  <td><%= part.pcb_order_no %></td>
+                                  <td><%= part.pcb_length %></td>
+                                  <td><%= part.pcb_width %></td>
+                                  <td><%= part.pcb_thickness %></td>
+                                  <td><%= part.pcb_panel %></td>
+                                  <td><%= part.pcb_layer %></td>
+                                  <td><%= part.pcb_gongyi %></td>
+                                  <td><%= part.qty %></td>
+                                  <td><%= part.pcb_area %></td>
+                                  <td><%= part.pcb_area_price %></td>
+                                  <td><%= part.price %></td>
+                                  <td><%= part.eng_price %></td>
+                                  <td><%= part.test_price %></td>
+                                  <td><%= part.m_price %></td>
+                                  <td><%= part.t_p %></td>
+                                  <td><%= part.remark %></td>
+                              <tr>
+                          <% end %>
+                      <% end %>
+
+
+                          </table>
+                      </div>
+                  </div>
+              </td></tr>
+<% end %>
               
           <% end %>
           </table>

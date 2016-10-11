@@ -1873,10 +1873,11 @@ before_filter :authenticate_user!
                     if item["#{@sheet.row(row_use)[des.to_i]}"].blank?
                         desa += ""
                     else
-                        if desa.to_s[-2..-1] == ".0"
-                            desa = desa.to_s.chop.chop
+                        if item["#{@sheet.row(row_use)[des.to_i]}"].to_s.strip[-2..-1] == ".0"
+                            desa = item["#{@sheet.row(row_use)[des.to_i]}"].to_s.strip.chop.chop + " "
+                        else
+                            desa += item["#{@sheet.row(row_use)[des.to_i]}"].to_s + " "
                         end
-                        desa += item["#{@sheet.row(row_use)[des.to_i]}"].to_s + " "
                     end
                 end
                 othera = ""
@@ -1926,8 +1927,8 @@ before_filter :authenticate_user!
 		    bom_item.description = desa
                     bom_item.quantity = qtya.to_i
                     #bom_item.mpn = mpna.gsub(/.0/, "")
-                    if mpna.to_s[-2..-1] == ".0"
-                        bom_item.mpn = mpna.to_s.chop.chop
+                    if mpna.to_s.strip[-2..-1] == ".0"
+                        bom_item.mpn = mpna.to_s.strip.chop.chop
                     else
                         bom_item.mpn = mpna
                     end

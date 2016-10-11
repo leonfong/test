@@ -229,6 +229,7 @@
 
 <% if item.bom_id != nil and item.p_type == "COMPONENTS"%>
 <% item_back = PItem.where(procurement_bom_id: item.bom_id).first %>
+<% if not item_back.blank? %>
                   <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item_back.id %>" >备<br>注</a></small></td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;">
                       <%= item.remark.to_s %>
@@ -293,6 +294,12 @@
 <% end %>
 </div>
 </td>
+<% else %>
+              <td></td>
+              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;">
+                      <%= item.remark.to_s %>
+              </td>
+<% end %>
 <% else %>
               <td></td>
               <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;">

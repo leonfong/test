@@ -1870,11 +1870,6 @@ before_filter :authenticate_user!
                     qtya += item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].to_s + " "             
                 end
                 refa = ""
-                Rails.logger.info("------------------------------------------------------------qqwww-----------------------") 
-                Rails.logger.info(@sheet.row(row_use)[params[:refdesCol].to_i].inspect)
-                Rails.logger.info(item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].inspect)
-                Rails.logger.info(item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].inspect)
-                Rails.logger.info("------------------------------------------------------------qqwww-----------------------") 
                 if item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].blank? or params[:refdesCol].blank?
                     refa += ""
                 else
@@ -1904,7 +1899,7 @@ before_filter :authenticate_user!
                         desa += ""
                     else
                         if item["#{@sheet.row(row_use)[des.to_i]}"].to_s.strip[-2..-1] == ".0"
-                            desa = item["#{@sheet.row(row_use)[des.to_i]}"].to_s.strip.chop.chop + " "
+                            desa += item["#{@sheet.row(row_use)[des.to_i]}"].to_s.strip.chop.chop + " "
                         else
                             desa += item["#{@sheet.row(row_use)[des.to_i]}"].to_s + " "
                         end

@@ -155,15 +155,15 @@ before_filter :authenticate_user!
     def pcb_list
         if params[:complete]
             where_state = " AND pcb_order_items.state = 'quotechked'"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.pcb_order_id FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.pcb_order_id,pcb_item_infos.id AS pcb_item_infos_id FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
         end
         if params[:undone]
             where_state = " AND pcb_order_items.state IS NULL"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id,pcb_item_infos.id AS pcb_item_infos_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
         end
         if params[:key_order]
             where_state = " AND pcb_order_items.pcb_order_no LIKE '%#{params[:key_order]}%'"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id,pcb_item_infos.id AS pcb_item_infos_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state}")
         end
         @all_pcb_dn = "[&quot;"
         all_s_dn = PcbSupplier.find_by_sql("SELECT DISTINCT pcb_suppliers.name FROM pcb_suppliers GROUP BY pcb_suppliers.name")
@@ -171,6 +171,25 @@ before_filter :authenticate_user!
             @all_pcb_dn += "&quot;,&quot;" + dn.name.to_s
         end
         @all_pcb_dn += "&quot;]"
+    end
+
+    def copy_pcb_item_info
+        find_data = PcbItemInfo.find_by_id(params[:id])
+        if not find_data.blank?
+            copy_data = PcbItemInfo.new
+            copy_data.pcb_order_item_id = find_data.pcb_order_item_id
+            copy_data.pcb_supplier =  find_data.pcb_supplier
+            copy_data.pcb_order_no = find_data.pcb_order_no
+            copy_data.sell = find_data.sell
+            copy_data.pcb_length = find_data.pcb_length
+            copy_data.pcb_width = find_data.pcb_width
+            copy_data.pcb_thickness = find_data.pcb_thickness
+            copy_data.pcb_panel = find_data.pcb_panel
+            copy_data.pcb_layer = find_data.pcb_layer
+            copy_data.pcb_gongyi = find_data.pcb_gongyi
+            copy_data.save
+        end
+        redirect_to :back
     end
 
     def pcb_info_update
@@ -1785,6 +1804,7 @@ before_filter :authenticate_user!
                         all_item << '"'+item+'":'+'"'+item+'"'
                     end
                 end
+
             end
             all_title = @sheet.row(row_use).join("|")
             @bom.all_title = all_title  
@@ -1801,11 +1821,12 @@ before_filter :authenticate_user!
 	    @parse_result.shift
             #render "select_column.html.erb" 
             #return false 
-            Rails.logger.info("------------------------------------------------------------qq1")
+            Rails.logger.info("------------------------------------------------------------qq1----------------------")
             #Rails.logger.info(@sheet.row(row_use)[params[:partCol].to_i].split("").inspect)
             Rails.logger.info(@sheet.row(row_use)[params[:quantityCol].to_i].split("").inspect)
             Rails.logger.info(@sheet.row(row_use)[params[:refdesCol].to_i].split("").inspect)
-            Rails.logger.info("------------------------------------------------------------qq2") 
+            Rails.logger.info(@sheet.row(row_use)[params[:refdesCol].to_i].inspect)
+            Rails.logger.info("------------------------------------------------------------qq2-----------------------") 
             all_use = @sheet.row(row_use)[params[:partCol].to_i].split("")+@sheet.row(row_use)[params[:quantityCol].to_i].split("")+@sheet.row(row_use)[params[:refdesCol].to_i].split("")
             #params[:select_part].each do |use|
 	    #@parse_result.select! {|item| !item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].blank? } #选择非空行
@@ -1849,6 +1870,11 @@ before_filter :authenticate_user!
                     qtya += item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].to_s + " "             
                 end
                 refa = ""
+                Rails.logger.info("------------------------------------------------------------qqwww-----------------------") 
+                Rails.logger.info(@sheet.row(row_use)[params[:refdesCol].to_i].inspect)
+                Rails.logger.info(item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].inspect)
+                Rails.logger.info(item["#{@sheet.row(row_use)[params[:quantityCol].to_i]}"].inspect)
+                Rails.logger.info("------------------------------------------------------------qqwww-----------------------") 
                 if item["#{@sheet.row(row_use)[params[:refdesCol].to_i]}"].blank? or params[:refdesCol].blank?
                     refa += ""
                 else

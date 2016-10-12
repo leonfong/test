@@ -193,9 +193,11 @@ before_filter :authenticate_user!
     end
 
     def pcb_info_update
-        pcb_info_find = PcbItemInfo.find_by_pcb_order_item_id(params[:part_id])
+        @pcb_info_id = ''
+        pcb_info_find = PcbItemInfo.find_by_id(params[:pcb_item_infos_id])
         if not pcb_info_find.blank?
             @pcb_info = pcb_info_find
+            @pcb_info_id = @pcb_info.id.to_s
         else
             @pcb_info = PcbItemInfo.new
         end
@@ -228,16 +230,19 @@ before_filter :authenticate_user!
         @pcb_order_item_find = PcbOrderItem.find_by_id(@pcb_info.pcb_order_item_id)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww@pcb_order_item_find.t_p")
         Rails.logger.info(@pcb_order_item_find.t_p)
-        Rails.logger.info("pcb_order_no_color_" + @pcb_order_item_find.id.to_s)
-        Rails.logger.info("pcb_area_" + @pcb_order_item_find.id.to_s)
-        Rails.logger.info("pcb_price_" + @pcb_order_item_find.id.to_s )
-        Rails.logger.info("pcb_t_p_" + @pcb_order_item_find.id.to_s)
+        Rails.logger.info("pcb_order_no_color_" + @pcb_order_item_find.id.to_s + "_" + @pcb_info_id.to_s)
+        Rails.logger.info("pcb_area_" + @pcb_order_item_find.id.to_s + "_" + @pcb_info_id.to_s)
+        Rails.logger.info("pcb_price_" + @pcb_order_item_find.id.to_s + "_" + @pcb_info_id.to_s)
+        Rails.logger.info("pcb_t_p_" + @pcb_order_item_find.id.to_s + "_" + @pcb_info_id.to_s)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww@pcb_order_item_find.t_p")
         @pcb_order_item_find.t_p = @pcb_info.t_p
         @pcb_order_item_find.price = @pcb_info.price
         @pcb_order_item_find.bom_id = @pcb_info.id
         @pcb_order_item_find.state = "quotechked"
         @pcb_order_item_find.save
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info("pcb_price_"+ @pcb_order_item_find.id.to_s + "_" + @pcb_info_id.to_s)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
     end
 
     def com_part_list

@@ -1,4 +1,4 @@
-document.getElementById('pcb_order_no_color_<%= @pcb_order_item_find.id.to_s %>').className="bg-info"
-document.getElementById('pcb_area_<%= @pcb_order_item_find.id.to_s %>').innerHTML='<%= @pcb_info.pcb_area %>';
-document.getElementById('pcb_price_<%= @pcb_order_item_find.id.to_s %>').innerHTML='<%= @pcb_info.price %>';
-document.getElementById('pcb_t_p_<%= @pcb_order_item_find.id.to_s %>').innerHTML='<%= @pcb_info.t_p %>';
+document.getElementById('<%= @pcb_info_id.to_s %>_pcb_order_no_color_<%= @pcb_order_item_find.id.to_s %>').className="bg-info"
+document.getElementById('<%= @pcb_info_id.to_s %>_pcb_area_<%= @pcb_order_item_find.id.to_s %>').innerHTML='<%= @pcb_info.pcb_area %>';
+document.getElementById('<%= @pcb_info_id.to_s %>_pcb_price_<%= @pcb_order_item_find.id.to_s %>').innerHTML='<%= @pcb_info.price %>';
+document.getElementById('<%= @pcb_info_id.to_s %>_pcb_t_p_<%= @pcb_order_item_find.id.to_s %>').innerHTML='<%= @pcb_info.t_p %>';

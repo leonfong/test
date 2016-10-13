@@ -199,7 +199,7 @@
                                 
                             </tr>
                             <tr>
-                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><a><%= ProcurementBom.find(item.procurement_bom_id).p_name %></a></small></td>
+                                <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><%= link_to ProcurementBom.find(item.procurement_bom_id).p_name,  p_viewbom_path(bom_id: item.procurement_bom_id,bak: "bak"),target: "_blank" %></small></td>
                             </tr>
                         </table>
 

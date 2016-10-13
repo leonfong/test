@@ -8,6 +8,8 @@
                 <%= render partial: "work_flow/menu", locals: {selected: "pcb_quote"} %>
             <% elsif params[:quotechk] %>
                 <%= render partial: "work_flow/menu", locals: {selected: "pcb_quotechk"} %>
+            <% elsif params[:key_order] %>
+                <%= render partial: "work_flow/menu", locals: {selected: "key_order"} %>
             <% end %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
@@ -182,7 +184,7 @@
       <tr >
           <td colspan="7" style="margin: 0px;padding: 0px 0px 20px;border-top:0px none #ddd;">
           <small><div class="highlight" style="margin: 0px;padding: 0px;">
-          <table class="table" style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
+          <table class="table table-hover" style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
           <thead>
           <tr style="background-color: #eeeeee;">
             <th width="150">子单号</th>

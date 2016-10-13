@@ -1,0 +1,1 @@
+$("#table_code").html('<%= raw @c_table %>');

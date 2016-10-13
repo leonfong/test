@@ -3559,6 +3559,43 @@ before_filter :authenticate_user!
         redirect_to edit_pcb_pi_path(pi_no: params[:c_pi_no],c_id: params[:id])
     end
 
+    def find_linkbom
+        if params[:c_code] != ""
+            @c_info = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`  WHERE `procurement_boms`.`erp_no_son` LIKE '%#{params[:c_code]}%'")
+            if not @c_info.blank?
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th>项目名</th>'
+                @c_table += '<th>子项目名</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '" data-confirm="确定要关联?"><div>' + cu.p_name_mom.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '" data-confirm="确定要关联?"><div>' + cu.no.to_s + '</div></a></td>'
+                    @c_table += '</tr>'
+                end
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+            end
+        end
+    end
+
+    def find_linkbom_link
+        upstart = PcbOrderItem.find_by_id(params[:order_id])
+        upstart.state = "quote"
+        upstart.p_type = "PCBA"
+        upstart.bom_id = params[:id]
+        upstart.save
+        redirect_to :back
+    end
+
     def find_c
         if params[:c_code] != ""
             #@c_info = PcbCustomer.find_by(c_no: params[:c_code])

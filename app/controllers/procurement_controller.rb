@@ -27,7 +27,7 @@ before_filter :authenticate_user!
             @c_table += '<table class="table table-bordered">'
             @c_table += '<thead>'
             @c_table += '<tr class="active">'
-            @c_table += '<th width="140"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=time">询价时间</a><span class="caret"></span></th>'
+            @c_table += '<th width="100"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=time">询价时间</a><span class="caret"></span></th>'
             @c_table += '<th>MOKO代码</th>' 
             @c_table += '<th width="120"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=dn">供应商代码</a><span class="caret"></span></th>'
             @c_table += '<th>供应商全称</th>'    
@@ -3325,6 +3325,8 @@ WHERE
             p_dn.cost = params[:cost]
             if params[:part_code]
                 p_dn.part_code = params[:part_code]
+            else
+                p_dn.part_code = @bom_item.moko_part
             end
             p_dn.dn = params[:dn]
             if params[:dn_long] == "" and params[:dn] != ""

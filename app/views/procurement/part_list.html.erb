@@ -220,7 +220,7 @@ function change_<%= item.id.to_s %>(){
 <!--
                             <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
 -->
-                            <a class="text-muted" data-method='get' data-remote='true' href="/cost_history?part_code=<%= Product.find(item.product_id).name.to_s%>"><%= Product.find(item.product_id).description %></a>
+                            <a class="text-muted" data-method='get' data-remote='true' href="/cost_history?part_code=<%= Product.find(item.product_id).name.to_s%>&item_id=<%= item.id.to_s %>"><%= Product.find(item.product_id).description %></a>
                             </small>
                     </td>
                         
@@ -614,7 +614,7 @@ function change_<%= item.id.to_s %>(){
 
 
 <div class="modal fade" id="cost_history" tabindex="-1" role="dialog" aria-labelledby="cost_historyLabel">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

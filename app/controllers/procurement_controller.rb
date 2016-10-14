@@ -10,30 +10,36 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
     def cost_history
-        @history_list = PDn.where(part_code: params[:part_code])
+        @history_list = PDn.where(part_code: params[:part_code]).order("created_at DESC, date DESC")
         if not @history_list.blank?
             @c_table = '<br>'
             @c_table += '<small>'
             @c_table += '<table class="table table-bordered">'
             @c_table += '<thead>'
             @c_table += '<tr class="active">'
-            @c_table += '<th>询价时间</th>'
+            @c_table += '<th width="140">询价时间</th>'
             @c_table += '<th>MOKO代码</th>' 
-            @c_table += '<th width="200">供应商代码</th>'
+            @c_table += '<th width="100">供应商代码</th>'
             @c_table += '<th>供应商全称</th>'    
-            @c_table += '<th>数量</th>'        
-            @c_table += '<th>价格</th>'  
+            @c_table += '<th width="100">数量</th>'        
+            @c_table += '<th width="100">价格</th>'  
             @c_table += '<tr>'
             @c_table += '</thead>'
             @c_table += '<tbody>'
             @history_list.each do |item|
                 @c_table += '<tr>'
-                @c_table += '<td>' + item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') + '</td>'
-                @c_table += '<td>' + item.part_code + '</td>'
-                @c_table += '<td>' + item.dn + '</td>'
-                @c_table += '<td>' + item.dn_long + '</td>'
-                @c_table += '<td>' + item.qty + '</td>'
-                @c_table += '<td>' + item.cost + '</td>'
+                if not item.created_at.blank?
+                    @c_table += '<td>' + item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</td>'
+                else
+                    @c_table += '<td>' + item.date.strftime('%Y-%m-%d').to_s + '</td>'
+                end
+         
+
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.part_code.to_s + '</div></a></small></td>'
+                @c_table += '<td>' + item.dn.to_s + '</td>'
+                @c_table += '<td>' + item.dn_long.to_s + '</td>'
+                @c_table += '<td>' + item.qty.to_s + '</td>'
+                @c_table += '<td>' + item.cost.to_s + '</td>'
                 @c_table += '</tr>'
             end
             @c_table += '</tbody>'
@@ -41,6 +47,8 @@ before_filter :authenticate_user!
             @c_table += '</small>'
         end
     end
+
+
 
     def bom_v_up
         find_bom = ProcurementBom.find_by_id(params[:bom_id])
@@ -3305,6 +3313,9 @@ WHERE
             #Rails.logger.info("--------------------------")
             p_dn.item_id = params[:item_id]
             p_dn.cost = params[:cost]
+            if params[:part_code]
+                p_dn.part_code = params[:part_code]
+            end
             p_dn.dn = params[:dn]
             if params[:dn_long] == "" and params[:dn] != ""
                 p_dn.dn_long = AllDn.find_by(dn: params[:dn].strip).dn_long

@@ -1,0 +1,2 @@
+$("#cost_history").html('<%= raw @c_table %>');
+

@@ -217,7 +217,10 @@ function change_<%= item.id.to_s %>(){
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
                             <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
+<!--
                             <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
+-->
+                            <a class="text-muted" data-method='get' data-remote='true' href="/cost_history?part_code=<%= Product.find(item.product_id).name.to_s%>"><%= Product.find(item.product_id).description %></a>
                             </small>
                     </td>
                         
@@ -225,7 +228,7 @@ function change_<%= item.id.to_s %>(){
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small> 
                                 <a class="glyphicon glyphicon-duplicate" href="/copy_data?item_id=<%=item.id.to_s%>"></a>
-                                <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
+                                <a class="text-muted" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>     
                             </small>
                         </td>
                         
@@ -609,6 +612,22 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
+
+<div class="modal fade" id="cost_history" tabindex="-1" role="dialog" aria-labelledby="cost_historyLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="cost_historyLabel">History Cost</h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-group" id="cost_history_list">
+
+          </div>       
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <div class="modal fade" id="remarkitem" tabindex="-1" role="dialog" aria-labelledby="remarkitemLabel">

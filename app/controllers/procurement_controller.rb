@@ -9,6 +9,39 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def cost_history
+        @history_list = PDn.where(part_code: params[:part_code])
+        if not @history_list.blank?
+            @c_table = '<br>'
+            @c_table += '<small>'
+            @c_table += '<table class="table table-bordered">'
+            @c_table += '<thead>'
+            @c_table += '<tr class="active">'
+            @c_table += '<th>询价时间</th>'
+            @c_table += '<th>MOKO代码</th>' 
+            @c_table += '<th width="200">供应商代码</th>'
+            @c_table += '<th>供应商全称</th>'    
+            @c_table += '<th>数量</th>'        
+            @c_table += '<th>价格</th>'  
+            @c_table += '<tr>'
+            @c_table += '</thead>'
+            @c_table += '<tbody>'
+            @history_list.each do |item|
+                @c_table += '<tr>'
+                @c_table += '<td>' + item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') + '</td>'
+                @c_table += '<td>' + item.part_code + '</td>'
+                @c_table += '<td>' + item.dn + '</td>'
+                @c_table += '<td>' + item.dn_long + '</td>'
+                @c_table += '<td>' + item.qty + '</td>'
+                @c_table += '<td>' + item.cost + '</td>'
+                @c_table += '</tr>'
+            end
+            @c_table += '</tbody>'
+            @c_table += '</table>'
+            @c_table += '</small>'
+        end
+    end
+
     def bom_v_up
         find_bom = ProcurementBom.find_by_id(params[:bom_id])
         if not find_bom.blank?

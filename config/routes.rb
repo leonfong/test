@@ -195,7 +195,7 @@ Rails.application.routes.draw do
   match '/pcb_info_update', to: 'procurement#pcb_info_update', via: 'post'
   match '/bom_v_up', to: 'procurement#bom_v_up', via: 'post'
   match '/copy_pcb_item_info', to: 'procurement#copy_pcb_item_info', via: 'get'
-
+  match '/cost_history', to: 'procurement#cost_history', via: 'get'
 
 
 

@@ -3326,7 +3326,14 @@ WHERE
             if params[:part_code]
                 p_dn.part_code = params[:part_code]
             else
-                p_dn.part_code = @bom_item.moko_part
+                if not @bom_item.moko_part.blank?
+                    p_dn.part_code = @bom_item.moko_part
+                else
+                    find_moko_part = Product.find_by_id(@bom_item.product_id)
+                    if not find_moko_part.blank?
+                        p_dn.part_code = find_moko_part.name
+                    end
+                end
             end
             p_dn.dn = params[:dn]
             if params[:dn_long] == "" and params[:dn] != ""

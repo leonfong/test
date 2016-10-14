@@ -9,7 +9,7 @@
             <% elsif params[:quotechk] %>
                 <%= render partial: "work_flow/menu", locals: {selected: "pcb_quotechk"} %>
             <% elsif params[:key_order] %>
-                <%= render partial: "work_flow/menu", locals: {selected: "key_order"} %>
+                <%= render partial: "work_flow/menu", locals: {selected: "pcb"} %>
             <% end %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">

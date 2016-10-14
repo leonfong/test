@@ -10,26 +10,19 @@
 
 
 
-
-
-<% if @bom_item.product_id != 0 %>
-document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= Product.find(@bom_item.product_id).description %>';
-$("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_item.product_id).name %>");
-<% else %>
-document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
-$("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
-<% end %>
-
-
 <% PDn.where(item_id: @bom_item.id).each do |ppp| %>
     <% if ppp.color == "g" %>
         document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="bg-success";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","bg-success");
     <% elsif ppp.color == "b"  %>
         document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="bg-info";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","bg-info");
     <% elsif ppp.color == "y"  %>
         document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="bg-warning";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","bg-warning");
     <% else %>
         document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","");
     <% end %> 
 <% end %>
 document.getElementById('<%= @bom_item.id.to_s + "_tr" %>').className="bg-info";
@@ -50,7 +43,18 @@ document.getElementById('total_price').innerHTML='<%=  number_with_precision(@to
 
 
 
-
+<% if @bom_item.product_id != 0 %>
+    <% if not Product.find_by_id(@bom_item.product_id).blank? %>
+        document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= Product.find_by_id(@bom_item.product_id).description %>';
+        $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_item.product_id).name %>");
+    <% else %>
+        document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
+        $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
+    <% end %> 
+<% else %>
+    document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
+    $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
+<% end %>
 
 
 

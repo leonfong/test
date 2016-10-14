@@ -3350,7 +3350,7 @@ WHERE
                 elsif dn.color == "g" 
                     @view_dns += ' class="bg-success">' 
                 else
-                    @view_dns += ' >'
+                    @view_dns += ' class="">'
                 end
                 #@view_dns += '<td width="25"><small><a class="glyphicon glyphicon-edit" data-method="get" data-remote="true" href=""></a></small></td>'
                 @view_dns += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:item_id].to_s + '" ></small></a> '

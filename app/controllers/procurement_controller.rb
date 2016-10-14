@@ -36,10 +36,10 @@ before_filter :authenticate_user!
          
 
                 @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.part_code.to_s + '</div></a></small></td>'
-                @c_table += '<td>' + item.dn.to_s + '</td>'
-                @c_table += '<td>' + item.dn_long.to_s + '</td>'
-                @c_table += '<td>' + item.qty.to_s + '</td>'
-                @c_table += '<td>' + item.cost.to_s + '</td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.dn.to_s + '</div></a></small></td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.dn_long.to_s + '</div></a></small></td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.qty.to_s + '</div></a></small></td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.cost.to_s + '</div></a></small></td>'
                 @c_table += '</tr>'
             end
             @c_table += '</tbody>'

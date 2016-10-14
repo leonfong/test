@@ -39,7 +39,7 @@ before_filter :authenticate_user!
             @history_list.each do |item|
                 @c_table += '<tr>'
                 if not item.created_at.blank?
-                    @c_table += '<td>' + item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s + '</td>'
+                    @c_table += '<td>' + item.created_at.localtime.strftime('%Y-%m-%d').to_s + '</td>'
                 else
                     @c_table += '<td>' + item.date.strftime('%Y-%m-%d').to_s + '</td>'
                 end

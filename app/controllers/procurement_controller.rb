@@ -10,19 +10,29 @@ skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
     def cost_history
-        @history_list = PDn.where(part_code: params[:part_code]).order("created_at DESC, date DESC")
+        order_set = "created_at DESC, date DESC"
+        if params[:order_by] == "time"
+            order_set = "created_at DESC, date DESC"
+        elsif params[:order_by] == "dn"
+            order_set = "dn DESC, created_at DESC, date DESC"
+        elsif params[:order_by] == "qty"
+            order_set = "qty DESC, created_at DESC, date DESC"
+        elsif params[:order_by] == "cost"
+            order_set = "cost DESC, created_at DESC, date DESC"
+        end
+        @history_list = PDn.where(part_code: params[:part_code]).order(order_set)
         if not @history_list.blank?
             @c_table = '<br>'
             @c_table += '<small>'
             @c_table += '<table class="table table-bordered">'
             @c_table += '<thead>'
             @c_table += '<tr class="active">'
-            @c_table += '<th width="140">询价时间</th>'
+            @c_table += '<th width="140"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=time">询价时间</a><span class="caret"></span></th>'
             @c_table += '<th>MOKO代码</th>' 
-            @c_table += '<th width="100">供应商代码</th>'
+            @c_table += '<th width="120"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=dn">供应商代码</a><span class="caret"></span></th>'
             @c_table += '<th>供应商全称</th>'    
-            @c_table += '<th width="100">数量</th>'        
-            @c_table += '<th width="100">价格</th>'  
+            @c_table += '<th width="100"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=qty">数量</a><span class="caret"></span></th>'        
+            @c_table += '<th width="100"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=cost">价格</a><span class="caret"></span></th>' 
             @c_table += '<tr>'
             @c_table += '</thead>'
             @c_table += '<tbody>'

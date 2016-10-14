@@ -1,2 +1,2 @@
-$("#cost_history").html('<%= raw @c_table %>');
-
+$("#cost_history_list").html('<%= raw @c_table %>');
+$("#cost_history").modal("toggle")

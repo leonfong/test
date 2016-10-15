@@ -3546,6 +3546,7 @@ WHERE
             #if not @dnid.blank?
             dn = PDn.find(@dnid)  
             if not params["#{params[:dn_itemid]}p"].blank?
+                #dn.part_code = Product.find_by_id(@pitem.product_id).name
                 dn.cost = params["#{params[:dn_itemid]}p"]
                 dn.color = "b"
             end
@@ -3583,6 +3584,7 @@ WHERE
             #else
         rescue
             dn = PDn.new
+            dn.part_code = Product.find_by_id(@pitem.product_id).name
             dn.cost = params["#{params[:dn_itemid]}p"]
             dn.item_id = @pitem.id
             dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty

@@ -126,6 +126,8 @@ Rails.application.routes.draw do
   match '/pi_out_xlsx_moko_d', to: 'work_flow#pi_out_xlsx_moko_d', via: 'get'
   match '/find_linkbom', to: 'work_flow#find_linkbom', via: 'get'
   match '/find_linkbom_link', to: 'work_flow#find_linkbom_link', via: 'get'
+  match '/sell_feeback_list', to: 'work_flow#sell_feeback_list', via: 'get'
+
 
 
 

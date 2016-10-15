@@ -4338,6 +4338,10 @@ before_filter :authenticate_user!
         @baojia = PItem.where(procurement_bom_id: params[:bom_id])
     end
 
+    def sell_feeback_list
+        @baojia = PItem.find_by_sql("SELECT pcb_orders.order_sell, pcb_order_items.pcb_order_id, p_items.* FROM pcb_order_items INNER JOIN pcb_orders ON pcb_order_items.pcb_order_id = pcb_orders.id INNER JOIN p_items ON p_items.procurement_bom_id = pcb_order_items.bom_id WHERE pcb_order_items.p_type = 'PCBA' AND pcb_orders.order_sell = '#{current_user.email}'")
+    end
+
     def edit_orderinfo
         if params[:hint] == ""
            hint = 1

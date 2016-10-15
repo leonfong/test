@@ -2,7 +2,8 @@
     <a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
     <ul id="userMeun" class="nav nav-list menu-second panel-collapse <% if selected =~ /pcb/i %>collapse in<% else %>collapse<% end %>">
         <% if can? :work_e, :all %>
-            <li><a <% if selected == "pcb_draft_list" %>style="background-color: #d9edf7;"<% end %>href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>
+            <li><a <% if selected == "pcb_sell_feeback_list" %>style="background-color: #d9edf7;"<% end %>href="/sell_feeback_list"><i ></i> 待回复的物料</a></li>
+            <li><a <% if selected == "pcb_draft_list" %>style="background-color: #d9edf7;"<% end %>href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>           
         <% end %>
 <!--
         <% if can? :work_d, :all %>

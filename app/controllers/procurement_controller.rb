@@ -3161,7 +3161,7 @@ WHERE
         else
             dell_dns_color = PDn.where("item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
         end
-        if not params[:product_name].blank?
+        if params[:product_name] != ""
             if not params[:bom_version].blank?
                 @add_dns = PVersionDn.find(params[:dn_id])
             else
@@ -3323,7 +3323,7 @@ WHERE
             #Rails.logger.info("--------------------------")
             p_dn.item_id = params[:item_id]
             p_dn.cost = params[:cost]
-            if params[:part_code]
+            if not params[:part_code].blank?
                 p_dn.part_code = params[:part_code]
             else
                 if not @bom_item.moko_part.blank?

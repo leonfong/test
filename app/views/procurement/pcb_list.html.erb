@@ -71,7 +71,7 @@
                             <div class="form-group sr-only">
                                 <label for="part_id" class="control-label">partid:</label>
                                 <input type="text" class="form-control" id="part_id" name="part_id" value="<%= part.pcb_order_item_id.to_s %>">
-                                <input type="text" class="form-control" id="pcb_item_infos_id" name="pcb_item_infos_id" value="<%= part.pcb_item_infos_id.to_s %>">
+                                <input type="text" class="form-control" id="pcb_item_infos_id_<%= part.pcb_item_infos_id.to_s %>" name="pcb_item_infos_id" value="<%= part.pcb_item_infos_id.to_s %>">
                                 <input type="text" class="form-control" id="pcb_order_no" name="pcb_order_no" value="<%= part.pcb_order_no.to_s %>">
                                 <input type="text" class="form-control" id="pcb_sell" name="pcb_sell" value="<%= PcbOrder.find_by_id(part.pcb_order_id).order_sell.to_s %>">
 <!--

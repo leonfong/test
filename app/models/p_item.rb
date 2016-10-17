@@ -8,7 +8,7 @@ class PItem < ActiveRecord::Base
     validates :procurement_bom_id , presence: true
     has_many :p_item_remarks, dependent: :destroy
 
-    #after_save :send_message, on: :update
+    after_save :send_message, on: :update
     
     protected
         def send_message

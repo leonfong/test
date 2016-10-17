@@ -3329,9 +3329,11 @@ WHERE
                 if not @bom_item.moko_part.blank?
                     p_dn.part_code = @bom_item.moko_part
                 else
-                    find_moko_part = Product.find_by_id(@bom_item.product_id)
-                    if not find_moko_part.blank?
-                        p_dn.part_code = find_moko_part.name
+                    if @bom_item.product_id != 0
+                        find_moko_part = Product.find_by_id(@bom_item.product_id)
+                        if not find_moko_part.blank?
+                            p_dn.part_code = find_moko_part.name
+                        end
                     end
                 end
             end

@@ -35,7 +35,7 @@ class PItem < ActiveRecord::Base
                                 url += '&to_all=0'  
                                 url += '&receivers='+open_id
                                 url += '&window_title=Fastbom-PCB AND PCBA'
-                                url += '&tips_title='+URI.encode(User.find_by(email: (Topic.find(self.topic_id).user_name)).full_name+'宝宝')
+                                url += '&tips_title='+URI.encode(User.find_by(email: (PcbOrder.find(item.pcb_order_id).order_sell)).full_name+'宝宝')
                                 url += '&tips_content='+URI.encode('你有需要关注的物料，点击查看。')
                                 url += '&tips_url=erp.fastbom.com/sell_feeback_list'
                                 resp = Net::HTTP.get_response(URI(url))

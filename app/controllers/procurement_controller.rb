@@ -3323,6 +3323,8 @@ WHERE
             #Rails.logger.info("--------------------------")
             p_dn.item_id = params[:item_id]
             p_dn.cost = params[:cost]
+            p_dn.part_code = @bom_item.moko_part
+=begin
             if not params[:part_code].blank?
                 p_dn.part_code = params[:part_code]
             else
@@ -3337,6 +3339,7 @@ WHERE
                     end
                 end
             end
+=end
             p_dn.dn = params[:dn]
             if params[:dn_long] == "" and params[:dn] != ""
                 p_dn.dn_long = AllDn.find_by(dn: params[:dn].strip).dn_long

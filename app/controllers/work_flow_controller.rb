@@ -4385,7 +4385,7 @@ before_filter :authenticate_user!
     
     def sell_baojia_q
         if can? :work_admin, :all 
-            @quate = PItem.find_by_sql("SELECT pcb_orders.order_sell, pcb_order_items.pcb_order_id, p_items.* FROM pcb_order_items INNER JOIN pcb_orders ON pcb_order_items.pcb_order_id = pcb_orders.id INNER JOIN p_items ON p_items.procurement_bom_id = pcb_order_items.bom_id WHERE pcb_order_items.p_type = 'PCBA' AND p_items.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 20)
+            @quate = PItem.find_by_sql("SELECT pcb_orders.order_sell, pcb_order_items.pcb_order_id, pcb_order_items.pcb_order_no_son, p_items.* FROM pcb_order_items INNER JOIN pcb_orders ON pcb_order_items.pcb_order_id = pcb_orders.id INNER JOIN p_items ON p_items.procurement_bom_id = pcb_order_items.bom_id WHERE pcb_order_items.p_type = 'PCBA' AND p_items.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 20)
         else
             @quate = PItem.find_by_sql("SELECT pcb_orders.order_sell, pcb_order_items.pcb_order_id, p_items.* FROM pcb_order_items INNER JOIN pcb_orders ON pcb_order_items.pcb_order_id = pcb_orders.id INNER JOIN p_items ON p_items.procurement_bom_id = pcb_order_items.bom_id WHERE pcb_order_items.p_type = 'PCBA' AND pcb_orders.order_sell = '#{current_user.email}' AND p_items.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 20)
         end

@@ -234,7 +234,7 @@
 <% end %>
 </div>
 
-
+<% if not item.dn_id.blank? %>
 <% if not PDn.find(item.dn_id).remark.blank? %>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
@@ -256,7 +256,7 @@
 </div>
 </div>
 <% end %>
-
+<% end %>
 </div>
                     </td>
                     <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>

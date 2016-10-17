@@ -35,6 +35,7 @@ class Ability
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
+      can :work_admin, :all
       can :work_top, :all
       #can :work_b, :all
       #can :work_c, :all

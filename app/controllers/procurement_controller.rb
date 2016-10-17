@@ -3891,6 +3891,8 @@ WHERE
         Rails.logger.info("--------------------------")
         if not @p_item.blank?
             @p_item.product_id = 0
+            @p_item.moko_part = nil
+            @p_item.moko_des = nil
             @p_item.cost = nil 
             @p_item.price = nil
             @p_item.color = nil

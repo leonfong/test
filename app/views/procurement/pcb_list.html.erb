@@ -140,7 +140,7 @@
                             </select>  
                         </td>
                         <td><input id="pcb_qty" autocomplete="off" name="pcb_qty" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.qty %>"></td>
-                        <td id="pcb_area_<%= part.pcb_order_item_id.to_s %>_<%= part.pcb_item_infos_id.to_s %>"><%= part.pcb_area %></td>
+                        <td id="pcb_area_<%= part.pcb_order_item_id.to_s %>_<%= part.pcb_item_infos_id.to_s %>"><%= format("%.2f",part.pcb_area) %></td>
                         <td><input id="pcb_area_price" autocomplete="off" name="pcb_area_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.pcb_area_price %>"></td>
                         <td id="pcb_price_<%= part.pcb_order_item_id.to_s %>_<%= part.pcb_item_infos_id.to_s %>"><%= part.price %></td>
                         <td><input id="eng_price" autocomplete="off" name="eng_price" type="text" class="form-control input-sm"  style="padding: 0px;margin: 0px;" value="<%= part.eng_price %>"></td>

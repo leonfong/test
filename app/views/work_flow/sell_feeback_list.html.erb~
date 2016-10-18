@@ -9,15 +9,22 @@
 
 
 
-            <div class="row">
-                <div class="col-md-12">
-            <small>
-<% if not @baojia.blank? %> 
-<%= will_paginate(@baojia) %>
+
+<div class="row " style="padding-top: 7px;">
+    <div class="col-md-12 " style="padding: 5px;" >
+       <%= will_paginate(@quate) %> 
+       <div class="panel panel-info " >
+                    
+
+
+
+
+
             <table class="table table-hover" > 
 
                 <thead >
-                <tr style="background-color: #eeeeee">  
+                <tr style="background-color: #eeeeee"> 
+                    <th width="150">Order No.</th>  
                     <th width="150">MPN</th> 
                     <th>描述</th>
                     <th width="150">MOKO 编码</th>
@@ -27,23 +34,24 @@
                     <th width="100">成本价</th>
                     <th width="60">报价</th>                 
                     <th >Other</th>
-                    <th width="30"></th>
                     <th >工程师备注</th>
+                    <th width="30"></th>
+                    <th width="30"></th>
                 </tr>
                 </thead>
                
-                <% @baojia.each_with_index do |item,index| %> 
+                <% @quate.each_with_index do |item,index| %> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
-<!--
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.mpn %></small></td>
--->
+
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= link_to item.pcb_order_no_son, sell_view_baojia_path(:bom_id =>item.procurement_bom_id) %></small></td>
+
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
                                 <td colSpan="3" class="text-center" style="padding: 0px;margin: 0px;"><small><%= item.mpn %></small></td>
                             </tr>
                             <tr id="<%= item.id.to_s + '_mpn_tr' %>">
-                                <% if DigikeysStock.find_by_manufacturer_part_number(item.mpn).blank? %>
+                                <% if DigikeysStock.find_by(manufacturer_part_number: item.mpn).blank? %>
                                     <% if item.link.blank? or item.link == "" %>
                                         <% if item.mpn == nil or item.mpn == "" %>
                                             <td class="text-center" style="padding: 0px;margin: 0px;"><small><a style="color:#F0F0F0" class="glyphicon glyphicon-info-sign" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="NO DATA"></a></small></td>
@@ -131,10 +139,10 @@
                         </td>
                         
                     <% end %>
-                    <% if item.part_code.to_s.size > 5 %>
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code.to_s[0,3]+"..." %></small></td>
+                    <% if item.part_code.size > 5 %>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
                     <% else %>
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code.to_s %></small></td>
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*ProcurementBom.find(item.procurement_bom_id).qty %></small></td> 
 
@@ -151,7 +159,6 @@
                         </small>
                     </td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.other %></small></td>
-                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>
                     <td>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" id="<%= item.id %>_item_remark">
@@ -163,19 +170,9 @@
 <td style="padding: 0px;margin: 0px;" >
 <p style="padding: 0px;margin: 0px;" >
 <small >
-<% if not remark_item.info.blank? %>
-<a class="btn btn-info btn-xs" href="<%= remark_item.info.url %>" target="_blank">下载</a>
-<% end %>
-<% if remark_item.user_id == current_user.id %>
-<a class="glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/p_item_remark_del?itemp_id=<%= item.id %>&remark_id=<%= remark_item.id %>" data-confirm="确定要删除?"> </a>
-<% end %>
-<strong><%= remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></strong>
+
 <strong><%= remark_item.user_name %>: </strong>
-<% if remark_item.state == "del" %>
-<del><%= remark_item.remark %></del>
-<% else %>
 <%= remark_item.remark %>
-<% end %>
 </small>
 </p>
 </td>
@@ -187,7 +184,6 @@
 </div>
 
 <% if not item.dn_id.blank? %>
-<% if not PDn.find_by_id(item.dn_id).blank? %>
 <% if not PDn.find(item.dn_id).remark.blank? %>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
@@ -195,13 +191,13 @@
 <tr>
 <td style="padding: 0px;margin: 0px;" >
 <p style="padding: 0px;margin: 0px;" >
-<small >
+<div><small >
 <% if not PDn.find(item.dn_id).info.blank? %>                 
 <a class="btn btn-info btn-xs" href="<%= PDn.find(item.dn_id).info %>" target="_blank">下载</a>
 <% end %>
 <strong>采购工程师: </strong>
 <%= PDn.find(item.dn_id).remark %>
-</small>
+</small></div>
 </p>
 </td>
 </tr>
@@ -210,18 +206,80 @@
 </div>
 <% end %>
 <% end %>
-<% end %>
 </div>
                     </td>
-
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-danger btn-xs" data-confirm="确定要取消关注?" href="/unfollow_bom_item?id=<%= item.id.to_s %>">取<br>消<br>关<br>注</a></small></td>
                 </tr>
                 <% end %>
 
             </table>
-<% end %>
-            </small>
-               </div>
-            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+<div class="modal fade" id="remarkitem" tabindex="-1" role="dialog" aria-labelledby="remarkitemLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="remarkitemLabel">备注</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_item_remark,controller: :procurement},method:"post",remote: true) do %>
+          <div class="form-group sr-only">
+            <label for="itemp_id_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
+          </div>
+          <div class="form-group sr-only">
+            <label for="sell_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="sell_remark" name="sell_remark" value="sell_remark">
+          </div>
+          <div class="form-group">
+            <label for="pj_remark">备注：</label>
+            <textarea type="text" class="form-control" id="item_remark" name="item_remark"  ></textarea>
+          </div>             
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+</small>
+
  
 
 
@@ -258,7 +316,14 @@
 
 </div>
 
-
+<script>
+$('#remarkitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid');
+  var modal = $(this);
+  modal.find($("#itemp_id_remark")).val(itempid);
+})
+</script>
 
 
 

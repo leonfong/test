@@ -443,7 +443,7 @@ function change_<%= item.id.to_s %>(){
 
 <div class="modal fade" id="addmoko" tabindex="-1" role="dialog" aria-labelledby="editMpnLabel">
 
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -451,7 +451,7 @@ function change_<%= item.id.to_s %>(){
       </div>
       <div class="modal-body">
 <%= form_tag({action: :add_moko_part},method:"post",remote: true , class: "form-inline") do %>
-          <div class="form-group ">
+          <div class="form-group sr-only">
             <label for="item_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="itemadd_id" name="item_id" >
           </div>

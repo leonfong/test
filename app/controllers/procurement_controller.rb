@@ -3195,6 +3195,8 @@ WHERE
                     @bom_item.color = "b"
                     if @add_dns.remark != nil or @add_dns.remark != ""
                         @bom_item.sell_feed_back_tag = "sell"
+                    else
+                        @bom_item.sell_feed_back_tag = ""
                     end
                     @bom_item.user_do_change = nil
 	            @bom_item.save!
@@ -3258,6 +3260,8 @@ WHERE
             @bom_item.color = "b"
             if @add_dns.remark != nil or @add_dns.remark != ""
                 @bom_item.sell_feed_back_tag = "sell"
+            else
+                @bom_item.sell_feed_back_tag = ""
             end
             @bom_item.user_do_change = nil
             @bom_item.save

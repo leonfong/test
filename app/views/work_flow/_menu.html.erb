@@ -2,9 +2,9 @@
     <a style="background-color: #ddd;" href="#userMeun" class="list-group-item menu-first " data-toggle="collapse"><i class="icon-user-md icon-large"></i> 询价管理</a>
     <ul id="userMeun" class="nav nav-list menu-second panel-collapse <% if selected =~ /pcb/i %>collapse in<% else %>collapse<% end %>">
         <% if can? :work_e, :all %>
-            <% if can? :work_e, :all %>
+            <% if can? :work_admin, :all %>
             <li><a <% if selected == "pcb_sell_feeback_list" %>style="background-color: #d9edf7;"<% end %>href="/sell_feeback_list"><i ></i> 待回复的物料<span class="badge" style="background-color: red;"><%= PItem.find_by_sql("SELECT COUNT(p_items.id) AS count_item FROM pcb_order_items INNER JOIN pcb_orders ON pcb_order_items.pcb_order_id = pcb_orders.id INNER JOIN p_items ON p_items.procurement_bom_id = pcb_order_items.bom_id WHERE pcb_order_items.p_type = 'PCBA' AND p_items.sell_feed_back_tag = 'sell'").first.count_item %></span></a></li>
-            <% else %>
+            <% elsif can? :work_e, :all %>
             <li><a <% if selected == "pcb_sell_feeback_list" %>style="background-color: #d9edf7;"<% end %>href="/sell_feeback_list"><i ></i> 待回复的物料<span class="badge" style="background-color: red;"><%= PItem.find_by_sql("SELECT COUNT(p_items.id) AS count_item FROM pcb_order_items INNER JOIN pcb_orders ON pcb_order_items.pcb_order_id = pcb_orders.id INNER JOIN p_items ON p_items.procurement_bom_id = pcb_order_items.bom_id WHERE pcb_order_items.p_type = 'PCBA' AND pcb_orders.order_sell = '#{current_user.email}'  AND p_items.sell_feed_back_tag = 'sell'").first.count_item %></span></a></li>
             <% end %>
             <li><a <% if selected == "pcb_draft_list" %>style="background-color: #d9edf7;"<% end %>href="/pcb_order_list?new=true"><i ></i> 询价草稿</a></li>           

@@ -1206,7 +1206,7 @@ before_filter :authenticate_user!
             remark.user_team = "sell"
             
             p_c.color = nil
-            p_c.sell_feed_back_tag = nil
+            p_c.sell_feed_back_tag = "eng"
         elsif can? :work_d, :all
             remark.user_team = "bom"
             p_c.sell_feed_back_tag = "sell"           

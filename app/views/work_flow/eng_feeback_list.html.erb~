@@ -1,51 +1,12 @@
-<div class="container-fluid" >
-﻿
-<div class="row" style="margin: 0px;padding: 0px;" >
-<br>
-  <ul class="nav nav-tabs">
-      <li role="presentation" class="active" ><a href="/part_list"><h4><strong><p class="text-primary"  >采购部报价列表</p></strong></h4></a></li>
-      <li role="presentation" ><a href="/other_baojia"><h4><strong><p class="text-primary" >供应商批量报价工具</p></strong></h4></a></li>     
-  </ul>
-<br>
-  <%= render 'layouts/flash_messages' %>
-</div>
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "pcb_sell_feeback_list"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
 
 
-
-
-
-<div class="row" style="padding-bottom: 10px;">
-   <div class="col-md-12">     
-<!--
-            <h3><strong>权限-采购工程师</strong></h3>
--->
-            <span  style="color:#999;">
-               <%= form_tag('/part_list', method:"get", class:"form-inline") do %>
-               <div class="form-group  nav navbar-nav navbar-left">
-                  
-                  <lable for="order" , class="sr-only">Qrder : </lable>
-                  <div class="input-group input-group-sm">    
-                                        
-                  <% if @key_order %>   
-                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
-                  <% else %> 
-                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号/描述/MPN"%>
-                  <% end %>               
-                  <div class="input-group-btn">
-                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                  </div>
-                  
-                </div>
-                <a type="button" class="btn btn-success btn-sm" href="/part_list?complete=true">已经报价的物料</a>
-                <a type="button" class="btn btn-warning btn-sm" href="/part_list?undone=true">等待报价的物料</a>
-                <a type="button" class="btn btn-info btn-sm" href="/part_list?p_type=COM">单独采购的物料</a>
-            </div>
-            <% end %>                       
-            </span>               
-            
-    </div>
-</div>
-  
 
 
 
@@ -248,7 +209,7 @@ function change_<%= item.id.to_s %>(){
                     </td>
                     <td width="110" style="padding: 5px 0px 5px 0px;margin: 0px;">
                         <small>
-                            <%= form_tag({action: :p_edit_cost_dn},method:"post",remote:"ture",class:"form-inline") do %>
+                            <%= form_tag({action: :p_edit_cost_dn,controller: :procurement},method:"post",remote:"ture",class:"form-inline") do %>
           <div class="form-group sr-only">
             <label for="dn_itemid" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="dn_itemid" name="dn_itemid" value="<%= item.id.to_s %>">
@@ -347,7 +308,7 @@ function change_<%= item.id.to_s %>(){
                    <td style="padding: 0px;margin: 0px;">
    <table class="table table-hover table-bordered " style="padding: 0px;margin: 0px;">  
    <tbody >             
-        <%= form_tag({action: :p_edit},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
+        <%= form_tag({action: :p_edit,controller: :procurement},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
         <tr style="padding: 0px;margin: 0px;" >
           <td width="100" style="padding: 0px;margin: 0px;">
          
@@ -434,7 +395,7 @@ function change_<%= item.id.to_s %>(){
                         <td  style="padding: 0px;margin: 0px;">
                             <div id="<%= item.id.to_s + 'dow' %>" class="collapse" >
                               
-                                <%= form_tag('/search_m', remote: true, class:"form-inline") do %>
+                                <%= form_tag({action: :search_m,controller: :procurement}, remote: true, class:"form-inline") do %>
                                 <div class="form-group">
                                     <%= text_field_tag :q, params[:q], id:"input_"+item.id.to_s, class:"form-control", size:30, value: item.description.to_s, placeholder:"Description"%>
                                     <%= text_field_tag :itemid, params[:itemid], class:"sr-only", size:2 , value: item.id.to_s %>
@@ -484,7 +445,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="exampleModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit},method:"post",multipart:"ture") do %>
+        <%= form_tag({action: :p_edit,controller: :procurement},method:"post",multipart:"ture") do %>
           <div class="form-group sr-only">
             <label for="item_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="item_id" name="item_id">
@@ -536,7 +497,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_dn},method:"post",remote: true,multipart:"ture") do %>
+        <%= form_tag({action: :p_edit_dn,controller: :procurement},method:"post",remote: true,multipart:"ture") do %>
           <div class="form-group sr-only">
             <label for="dn_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="dn_id" name="dn_id">
@@ -590,7 +551,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editMpnLabel">Update MPN</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_mpn},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_edit_mpn,controller: :procurement},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">
@@ -638,7 +599,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="remarkitemLabel">备注</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_item_remark},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_item_remark,controller: :procurement},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
@@ -667,7 +628,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="remarkupdateLabel">备注更新</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_item_remark_up},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_item_remark_up,controller: :procurement},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id_remark_up" name="itemp_id">
@@ -691,9 +652,6 @@ function change_<%= item.id.to_s %>(){
     </div>
   </div>
 </div>
-
-<%= will_paginate(@bom_item) %>
-
 </div>
 
 
@@ -701,7 +659,27 @@ function change_<%= item.id.to_s %>(){
 
 
 
-<%= form_tag('/p_del_bom', remote: true, method:"post", class:"form-inline") do %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div></small>
+
+<%= form_tag({action: :p_del_bom,controller: :procurement}, remote: true, method:"post", class:"form-inline") do %>
         <%= text_field_tag :id, params[:id], class:"sr-only", size:200, value: "" %>
         <%= submit_tag t(:search), class:"btn-del  sr-only", id:"btn-del" %>
 <% end %>

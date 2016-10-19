@@ -3971,7 +3971,34 @@ before_filter :authenticate_user!
             @pcb.att = params[:edit_att]
         end
         if params[:edit_p_type] != ""
-            @pcb.p_type = params[:edit_p_type]    
+            @pcb.p_type = params[:edit_p_type] 
+            if params[:edit_p_type] == "PCBA"
+#创建PCB
+                copy_data = PcbOrderItem.new
+                copy_data.item_pcba_id = @pcb.id
+                copy_data.p_type = "PCB"
+                copy_data.c_id = @pcb.c_id
+                copy_data.pcb_order_id = @pcb.pcb_order_id
+                copy_data.pcb_order_sell_item_id = @pcb.pcb_order_sell_item_id
+                copy_data.pcb_order_no = @pcb.pcb_order_no
+                if PcbOrderItem.find_by_pcb_order_no(@pcb.pcb_order_no).blank?
+                    p_n =1
+                else
+                    p_n = PcbOrderItem.where(pcb_order_no: @pcb.pcb_order_no).last.pcb_order_no_son.split('-')[-1].to_i + 1
+                end
+                #@p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s
+                copy_data.pcb_order_no_son = @pcb.pcb_order_no + "-" +p_n.to_s
+                copy_data.des_en = @pcb.des_en
+                copy_data.des_cn = @pcb.des_cn
+                copy_data.qty = @pcb.qty
+                copy_data.att = @pcb.att
+                copy_data.remark = @pcb.remark
+                copy_data.save
+                @pcb.item_pcb_id = copy_data.id
+                q_order = PcbOrder.find_by_id(@pcb.pcb_order_id)
+                q_order.state = "quote"
+                q_order.save
+            end
         end
    
         @pcb.remark = params[:edit_follow_remark]

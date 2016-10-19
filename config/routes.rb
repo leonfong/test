@@ -126,7 +126,7 @@ Rails.application.routes.draw do
   match '/pi_out_xlsx_moko_d', to: 'work_flow#pi_out_xlsx_moko_d', via: 'get'
   match '/find_linkbom', to: 'work_flow#find_linkbom', via: 'get'
   match '/find_linkbom_link', to: 'work_flow#find_linkbom_link', via: 'get'
-  match '/sell_feeback_list', to: 'work_flow#sell_feeback_list', via: 'get'
+
 
 
 
@@ -199,6 +199,9 @@ Rails.application.routes.draw do
   match '/bom_v_up', to: 'procurement#bom_v_up', via: 'post'
   match '/copy_pcb_item_info', to: 'procurement#copy_pcb_item_info', via: 'get'
   match '/cost_history', to: 'procurement#cost_history', via: 'get'
+  match '/sell_feeback_list', to: 'procurement#sell_feeback_list', via: 'get'
+
+
 
 
 

@@ -212,7 +212,7 @@
 </div>
                     </td>
 -->
-                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br><br><br>注</a></small></td>
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br><br>注</a></small></td>
                     <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-danger btn-xs" data-confirm="确定要取消关注?" href="/unfollow_bom_item?id=<%= item.id.to_s %>">取<br>消<br>关<br>注</a></small></td>
                 </tr>
 

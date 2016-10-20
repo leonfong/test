@@ -3335,17 +3335,46 @@ before_filter :authenticate_user!
 
 
 
-=begin
-        find_pi_item = PiItem.where(pi_no: params[:pi])
-        if not find_pi_item.blank?
-            #find_pi_item.destroy
-            find_pi_item.each do |del_item|
-                del_item.destroy
+        PcbOrderItem.where(pcb_order_id: params[:id],p_type: "PCBA").each do |q_item|
+            pi_item = PiItem.new
+            find_pcb = PcbItemInfo.find_by_pcb_order_item_id(q_item.item_pcb_id) 
+                Rails.logger.info("add-------------------------------------33")
+                Rails.logger.info(find_pcb.inspect)
+                Rails.logger.info("add-------------------------------------33")
+            if not find_pcb.blank?       
+                pi_item.pcb_size = find_pcb.pcb_length.to_s + '*' + find_pcb.pcb_width.to_s
+                pi_item.layer = find_pcb.pcb_layer
+                pi_item.pcb_price = find_pcb.t_p
             end
+            
+
+            #pi_item.unit_price
+            if not q_item.bom_id.blank?
+                find_bom = ProcurementBom.find_by_id(q_item.bom_id)
+                if not find_bom.blank?
+                    pi_item.com_cost = find_bom.t_p
+                end
+            end
+            #pi_item.pcba
+
+
+            pi_item.order_item_id = q_item.id
+            pi_item.bom_id = q_item.bom_id
+            pi_item.c_id = @find_pi_info.pcb_customer_id
+            pi_item.pi_info_id = @find_pi_info.id
+            pi_item.pi_no = @find_pi_info.pi_no
+            pi_item.moko_code = q_item.moko_code
+            pi_item.moko_des = q_item.moko_des
+            pi_item.des_en = q_item.des_en
+            pi_item.des_cn = q_item.des_cn
+            pi_item.qty = q_item.qty
+            pi_item.p_type = q_item.p_type
+            pi_item.att = q_item.att
+            pi_item.remark =  q_item.remark    
+            pi_item.save
         end
-=end      
-        @table = ''
-        PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
+
+        PcbOrderItem.where(pcb_order_id: params[:id],p_type: "PCB",item_pcba_id: nil).each do |q_item|
             pi_item = PiItem.new
             find_pcb = PcbItemInfo.find_by_pcb_order_item_id(q_item.id) 
             if not find_pcb.blank?       
@@ -3379,7 +3408,92 @@ before_filter :authenticate_user!
             pi_item.att = q_item.att
             pi_item.remark =  q_item.remark    
             pi_item.save
+        end
+
+        PcbOrderItem.where(pcb_order_id: params[:id],p_type: "COMPONENTS",item_pcba_id: nil).each do |q_item|
+            pi_item = PiItem.new
+            find_pcb = PcbItemInfo.find_by_pcb_order_item_id(q_item.id) 
+            if not find_pcb.blank?       
+                pi_item.pcb_size = find_pcb.pcb_length.to_s + '*' + find_pcb.pcb_width.to_s
+                pi_item.layer = find_pcb.pcb_layer
+                pi_item.pcb_price = find_pcb.t_p
+            end
+            
+
+            #pi_item.unit_price
+            if not q_item.bom_id.blank?
+                find_bom = ProcurementBom.find_by_id(q_item.bom_id)
+                if not find_bom.blank?
+                    pi_item.com_cost = find_bom.t_p
+                end
+            end
+            #pi_item.pcba
+
+
+            pi_item.order_item_id = q_item.id
+            pi_item.bom_id = q_item.bom_id
+            pi_item.c_id = @find_pi_info.pcb_customer_id
+            pi_item.pi_info_id = @find_pi_info.id
+            pi_item.pi_no = @find_pi_info.pi_no
+            pi_item.moko_code = q_item.moko_code
+            pi_item.moko_des = q_item.moko_des
+            pi_item.des_en = q_item.des_en
+            pi_item.des_cn = q_item.des_cn
+            pi_item.qty = q_item.qty
+            pi_item.p_type = q_item.p_type
+            pi_item.att = q_item.att
+            pi_item.remark =  q_item.remark    
+            pi_item.saveinspect
+        end
+
+
+
 =begin
+        find_pi_item = PiItem.where(pi_no: params[:pi])
+        if not find_pi_item.blank?
+            #find_pi_item.destroy
+            find_pi_item.each do |del_item|
+                del_item.destroy
+            end
+        end
+=end      
+        @table = ''
+=begin
+        PcbOrderItem.where(pcb_order_id: params[:id]).each do |q_item|
+            pi_item = PiItem.new
+            find_pcb = PcbItemInfo.find_by_pcb_order_item_id(q_item.id) 
+            if not find_pcb.blank?       
+                pi_item.pcb_size = find_pcb.pcb_length.to_s + '*' + find_pcb.pcb_width.to_s
+                pi_item.layer = find_pcb.pcb_layer
+                pi_item.pcb_price = find_pcb.t_p
+            end
+            
+
+            #pi_item.unit_price
+            if not q_item.bom_id.blank?
+                find_bom = ProcurementBom.find_by_id(q_item.bom_id)
+                if not find_bom.blank?inspect
+                    pi_item.com_cost = find_bom.t_p
+                end
+            end
+            #pi_item.pcba
+
+
+            pi_item.order_item_id = q_item.id
+            pi_item.bom_id = q_item.bom_id
+            pi_item.c_id = @find_pi_info.pcb_customer_id
+            pi_item.pi_info_id = @find_pi_info.id
+            pi_item.pi_no = @find_pi_info.pi_no
+            pi_item.moko_code = q_item.moko_code
+            pi_item.moko_des = q_item.moko_des
+            pi_item.des_en = q_item.des_en
+            pi_item.des_cn = q_item.des_cn
+            pi_item.qty = q_item.qty
+            pi_item.p_type = q_item.p_type
+            pi_item.att = q_item.att
+            pi_item.remark =  q_item.remark    
+            pi_item.save
+
             @table += '<tr>'
             @table += '<td><a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="'
             @table += q_item.id.to_s
@@ -3414,8 +3528,9 @@ before_filter :authenticate_user!
             @table += '<td>'+q_item.remark.to_s+'</td>'
             @table += '<td><a class="glyphicon glyphicon-remove" href="/del_pcb_order_item?edit_c_item_id='+q_item.id.to_s+'"  data-confirm="确定要删除?"></a></td>'
             @table += '</tr>'
-=end
+
         end
+=end
         redirect_to :back
     end
 
@@ -3455,7 +3570,7 @@ before_filter :authenticate_user!
                 where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,4),1) REGEXP '^[0-9]+$')"
             elsif current_user.s_name_self.size == 2
                 s_name = current_user.s_name_self
-                where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,5),1) REGEXP '^[0-9]+$') "
+                where_p = "AND POSITION('" + s_name + "' IN inspectRIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,5),1) REGEXP '^[0-9]+$') "
             end
 
             if PiInfo.find_by_sql("SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW()) #{where_p}").blank?

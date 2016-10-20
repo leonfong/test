@@ -306,10 +306,23 @@ before_filter :authenticate_user!
         @pcb_order_item_find.bom_id = @pcb_info.id
         @pcb_order_item_find.state = "quotechked"
         @pcb_order_item_find.save
+
+        check_state = PcbOrderItem.where("pcb_order_id = '#{@pcb_order_item_find.pcb_order_id}' AND (state = '' OR state = 'quote')")
+        if check_state.blank?
+            set_erp_order_state = PcbOrder.find_by_id(@pcb_order_item_find.pcb_order_id)
+            set_erp_order_state.state = "quotechk"
+            set_erp_order_state.save
+        end
+
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info("pcb_price_"+ @pcb_order_item_find.id.to_s + "_" + @pcb_info_id.to_s)
         Rails.logger.info(@pcb_info.pcb_order_item_id)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+
+
+
+
+
         redirect_to pcb_list_path(complete: true)
     end
 
@@ -1317,12 +1330,13 @@ before_filter :authenticate_user!
                 end
             end
 =end
+#设置所有使用相同bom的order为已报价
             find_order = PcbOrderItem.where(bom_id: p_bom.id)
             if not find_order.blank?
                 find_order.each do |order_item|
                     order_item.state = "quotechked"
                     order_item.save
-                    check_state = PcbOrderItem.where(pcb_order_id: order_item.pcb_order_id,state: nil)
+                    check_state = PcbOrderItem.where("pcb_order_id = '#{order_item.pcb_order_id}' AND (state = '' OR state = 'quote')")
                     if check_state.blank?
                         set_erp_order_state = PcbOrder.find_by_id(order_item.pcb_order_id)
                         set_erp_order_state.state = "quotechk"

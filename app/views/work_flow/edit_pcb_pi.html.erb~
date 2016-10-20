@@ -335,7 +335,7 @@
 
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="editModalLabel"><strong>查找询价信息</strong></h4>
+        <h4 class="modal-title" id="editModalLabel"><strong>添加已询价物料</strong></h4>
       </div>
       
       <div class="modal-body">  
@@ -554,27 +554,27 @@
             </div>  
             <div class="form-group">         
               <label for="edit_c_customer" class="control-label">C Name:</label>
-              <input type="text" class="form-control" id="edit_c_customer" name="edit_c_customer" value="<%= @pi_info_c.customer %>">
+              <input type="text" class="form-control" id="edit_c_customer" name="edit_c_customer" value="<%= @pi_info_c_customer %>">
             </div> 
             <div class="form-group">         
               <label for="edit_c_customer_com" class="control-label">Company:</label>
-              <input type="text" class="form-control" id="edit_c_customer_com" name="edit_c_customer_com" value="<%= @pi_info_c.customer_com %>">
+              <input type="text" class="form-control" id="edit_c_customer_com" name="edit_c_customer_com" value="<%= @pi_info_c_customer_com %>">
             </div> 
             <div class="form-group">         
               <label for="edit_c_tel" class="control-label">Tel:</label>
-              <input type="text" class="form-control" id="edit_c_tel" name="edit_c_tel" value="<%= @pi_info_c.tel %>">
+              <input type="text" class="form-control" id="edit_c_tel" name="edit_c_tel" value="<%= @pi_info_c_tel %>">
             </div> 
             <div class="form-group">         
               <label for="edit_c_fax" class="control-label">Fax:</label>
-              <input type="text" class="form-control" id="edit_c_fax" name="edit_c_fax" value="<%= @pi_info_c.fax %>">
+              <input type="text" class="form-control" id="edit_c_fax" name="edit_c_fax" value="<%= @pi_info_c_fax %>">
             </div> 
             <div class="form-group">         
               <label for="edit_c_email" class="control-label">Email:</label>
-              <input type="text" class="form-control" id="edit_c_email" name="edit_c_email" value="<%= @pi_info_c.email %>">
+              <input type="text" class="form-control" id="edit_c_email" name="edit_c_email" value="<%= @pi_info_c_email %>">
             </div>    
             <div class="form-group">         
               <label for="edit_c_add" class="control-label">Add:</label>
-              <textarea  class="form-control" id="edit_c_add" name="edit_c_add"><%= @pi_info_c.shipping_address %></textarea>
+              <textarea  class="form-control" id="edit_c_add" name="edit_c_add"><%= @pi_info_c_shipping_address %></textarea>
             </div>                
         </div>
         <div class="modal-footer">

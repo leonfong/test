@@ -1294,6 +1294,7 @@ before_filter :authenticate_user!
         if can? :work_send_to_sell, :all
             p_bom.remark_to_sell = "mark"
             p_bom.save
+=begin
             if not p_bom.erp_item_id.blank?
                 upstart = PcbOrderItem.find_by_id(p_bom.erp_item_id)
                 if not upstart.blank?
@@ -1307,6 +1308,20 @@ before_filter :authenticate_user!
                     set_erp_order_state = PcbOrder.find_by_order_no(p_bom.erp_no)
                     set_erp_order_state.state = "quotechk"
                     set_erp_order_state.save
+                end
+            end
+=end
+            find_order = PcbOrderItem.where(bom_id: p_bom.id)
+            if not find_order.blank?
+                find_order.each do |order_item|
+                    order_item.state = "quotechked"
+                    order_item.save
+                    check_state = PcbOrderItem.where(pcb_order_id: order_item.pcb_order_id,state: nil)
+                    if check_state.blank?
+                        set_erp_order_state = PcbOrder.find_by_id(order_item.pcb_order_id)
+                        set_erp_order_state.state = "quotechk"
+                        set_erp_order_state.save
+                    end
                 end
             end
         end

@@ -3576,8 +3576,8 @@ before_filter :authenticate_user!
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '" data-confirm="确定要关联?"><div>' + cu.p_name_mom.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '" data-confirm="确定要关联?"><div>' + cu.no.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '&state=' + cu.remark_to_sell.to_s + '" data-confirm="确定要关联?"><div>' + cu.p_name_mom.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '&state=' + cu.remark_to_sell.to_s + '" data-confirm="确定要关联?"><div>' + cu.no.to_s + '</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'
@@ -3589,7 +3589,11 @@ before_filter :authenticate_user!
 
     def find_linkbom_link
         upstart = PcbOrderItem.find_by_id(params[:order_id])
-        upstart.state = "quote"
+        if params[:state] == "mark"
+            upstart.state = "quotechked"
+        else
+            upstart.state = "quote"
+        end
         upstart.p_type = "PCBA"
         upstart.bom_id = params[:id]
         upstart.save

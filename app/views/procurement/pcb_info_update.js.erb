@@ -3,3 +3,5 @@ document.getElementById('pcb_area_<%= @pcb_order_item_find.id.to_s %>_<%= @pcb_i
 document.getElementById('pcb_price_<%= @pcb_order_item_find.id.to_s %>_<%= @pcb_info_id.to_s %>').innerHTML='<%= @pcb_info.price %>';
 document.getElementById('pcb_t_p_<%= @pcb_order_item_find.id.to_s %>_<%= @pcb_info_id.to_s %>').innerHTML='<%= @pcb_info.t_p %>';
 document.getElementById('pcb_order_no_color_<%= @pcb_info_id.to_s %>').value='<%= @pcb_info_id.to_s %>';
+document.getElementById('pcb_item_infos_id_<%= @pcb_info.pcb_order_item_id.to_s %>').value="<%= @pcb_info_id.to_s %>";
+

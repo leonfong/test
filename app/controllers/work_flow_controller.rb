@@ -3166,7 +3166,7 @@ before_filter :authenticate_user!
         if PcbOrderItem.find_by_pcb_order_no(find_data.pcb_order_no).blank?
             p_n =1
         else
-            p_n = PcbOrderItem.where("pcb_order_no = '#{find_data.pcb_order_no}' AND p_type <> 'PCB'").last.pcb_order_no_son.split('-')[-1].to_i + 1
+            p_n = PcbOrderItem.where("pcb_order_no = '#{find_data.pcb_order_no}' AND item_pcba_id IS NULL").last.pcb_order_no_son.split('-')[-1].to_i + 1
         end
         #@p_no = "MK" + Time.new.strftime('%y%m%d').to_s + current_user.s_name_self.to_s.upcase + p_n.to_s
         copy_data.pcb_order_no_son = find_data.pcb_order_no + "-" +p_n.to_s

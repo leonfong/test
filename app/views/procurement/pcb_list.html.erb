@@ -39,7 +39,7 @@
                     <tr class="well text-center"> 
                         <th rowspan="2" class="text-center" width="30" style="padding-bottom: 20px;">附件</th>   
                         <th rowspan="2" class="text-center" width="100" style="padding-bottom: 20px;">供应商</th>
-                        <th rowspan="2" class="text-center" width="120" style="padding-bottom: 20px;">询价单号</th>  
+                        <th rowspan="2" class="text-center" width="145" style="padding-bottom: 20px;">询价单号</th>  
                         <th rowspan="2" class="text-center" width="60" style="padding-bottom: 20px;">业务员</th> 
                         <th colSpan="6" class="text-center" width="500" >PCB板(mm)</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">数量</th>
@@ -85,7 +85,7 @@
                                 <input id="pcb_dn" autocomplete="off" name="pcb_dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;" value="<%= part.pcb_supplier %>">
                         </td>
                         <td id="pcb_order_no_color_<%= part.pcb_order_item_id.to_s %>_<%= part.pcb_item_infos_id.to_s %>">
-                            <%= part.pcb_order_no %><br>
+                            <%= part.pcb_order_no_son %><br>
                             <a class="btn btn-info btn-xs" href="/copy_pcb_item_info?id=<%= part.pcb_item_infos_id%>" >复制</a>
                         </td>
                         <td><%= User.find_by_email(PcbOrder.find_by_id(part.pcb_order_id).order_sell).full_name.to_s %></td>

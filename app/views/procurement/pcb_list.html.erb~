@@ -39,7 +39,7 @@
                     <tr class="well text-center"> 
                         <th rowspan="2" class="text-center" width="30" style="padding-bottom: 20px;">附件</th>   
                         <th rowspan="2" class="text-center" width="100" style="padding-bottom: 20px;">供应商</th>
-                        <th rowspan="2" class="text-center" width="150" style="padding-bottom: 20px;">询价单号</th>  
+                        <th rowspan="2" class="text-center" width="145" style="padding-bottom: 20px;">询价单号</th>  
                         <th rowspan="2" class="text-center" width="60" style="padding-bottom: 20px;">业务员</th> 
                         <th colSpan="6" class="text-center" width="500" >PCB板(mm)</th>
                         <th rowspan="2" class="text-center" width="70" style="padding-bottom: 20px;">数量</th>
@@ -82,7 +82,7 @@
                         </td>
                         <td>
                             <label for="dn" class="control-label sr-only">供应商简称:</label>
-                                <input id="pcb_dn" autocomplete="off" name="pcb_dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;" value="<%= part.pcb_supplier %>">
+                                <input id="pcb_dn" autocomplete="off" name="pcb_dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;" value="<%= part.pcb_supplier %>"><%= part.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
                         </td>
                         <td id="pcb_order_no_color_<%= part.pcb_order_item_id.to_s %>_<%= part.pcb_item_infos_id.to_s %>">
                             <%= part.pcb_order_no_son %><br>

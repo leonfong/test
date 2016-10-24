@@ -4479,6 +4479,17 @@ before_filter :authenticate_user!
         redirect_to :back and return
     end
 
+    def unfollow_bom_item_more
+        if not params[:unfollow_item].blank?
+            params[:unfollow_item].each do |id|
+                item = PItem.find(id)
+                item.sell_feed_back_tag = nil
+                item.save    
+            end
+        end
+        redirect_to :back and return
+    end
+
     def sell_view_baojia
         @boms = ProcurementBom.find(params[:bom_id])
         @baojia = PItem.where(procurement_bom_id: params[:bom_id])

@@ -1,4 +1,4 @@
-<div class="container-fluid" >
+<small><div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
@@ -18,12 +18,13 @@
 
 
 
-
+            <%= form_tag({action: :unfollow_bom_item_more,controller: :work_flow},method:"post") do %>
 
             <table class="table table-hover" > 
 
                 <thead >
                 <tr style="background-color: #eeeeee"> 
+                    <th width="40"></th>
                     <th width="150">Order No.</th>  
                     <th width="150">MPN</th> 
                     <th>描述</th>
@@ -41,10 +42,10 @@
                     <th width="30"></th>
                 </tr>
                 </thead>
-               
+                
                 <% @quate.each_with_index do |item,index| %> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
-
+                    <td style="padding: 5px 5px 5px 10px;margin: 0px;"><input type="checkbox" name="unfollow_item[]" value="<%= item.id.to_s %>"></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= link_to item.pcb_order_no_son, sell_view_baojia_path(:bom_id =>item.procurement_bom_id) %></small></td>
 
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
@@ -212,7 +213,7 @@
 </div>
                     </td>
 -->
-                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br><br>注</a></small></td>
+                    <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br><br><br>注</a></small></td>
                     <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-danger btn-xs" data-confirm="确定要取消关注?" href="/unfollow_bom_item?id=<%= item.id.to_s %>">取<br>消<br>关<br>注</a></small></td>
                 </tr>
 
@@ -299,7 +300,10 @@
                 <% end %>
 
             </table>
-
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" >批量取消关注</button>
+            <div>
+            <% end %>
 
 
 
@@ -403,7 +407,7 @@
 
 
 
-</div>
+</div></small>
 
 <script>
 $('#remarkitem').on('show.bs.modal', function (event) {

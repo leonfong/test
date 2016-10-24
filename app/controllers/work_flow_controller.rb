@@ -3570,7 +3570,7 @@ before_filter :authenticate_user!
                 where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,4),1) REGEXP '^[0-9]+$')"
             elsif current_user.s_name_self.size == 2
                 s_name = current_user.s_name_self
-                where_p = "AND POSITION('" + s_name + "' IN inspectRIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,5),1) REGEXP '^[0-9]+$') "
+                where_p = "AND POSITION('" + s_name + "' IN RIGHT(LEFT(pi_infos.pi_no,4),2)) = 1 and (RIGHT(LEFT(pi_infos.pi_no,5),1) REGEXP '^[0-9]+$') "
             end
 
             if PiInfo.find_by_sql("SELECT pi_no FROM pi_infos WHERE to_days(pi_infos.created_at) = to_days(NOW()) #{where_p}").blank?

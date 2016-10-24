@@ -144,7 +144,9 @@
 <% if can? :work_d, :all  or can? :work_g, :all %>
 <% if params[:c_id]%>
             <div class="row "><div class="col-md-12">
+<!--
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#additem" >添加询价物料</button>
+-->
             </div></div>
 <% end %>
 

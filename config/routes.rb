@@ -25,7 +25,12 @@ Rails.application.routes.draw do
   match '/privacy', to: 'static_pages#privacy', via: 'get'
   match '/technical', to: 'static_pages#technical', via: 'get'
   match '/how_to_use', to: 'static_pages#how', via: 'get'
-  match '/search', to: 'boms#search_keyword', via: 'get'
+  #match '/search', to: 'boms#search_keyword', via: 'get'
+  get ':boms/:search_keyword/:mpn', to: 'boms#search_keyword'
+
+
+
+
   match '/down_excel', to: 'boms#down_excel', via: 'get'
   match '/show_excel', to: 'boms#show_excel', via: 'get'
   match '/work_flow', to: 'work_flow#index', via: 'post'  

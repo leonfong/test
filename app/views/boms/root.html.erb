@@ -120,7 +120,7 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
            <br><br>  
            <ul>
            <% @mpn_show.each_with_index do |item,index| %>
-              <li><%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn},target: "_black" %></li>
+              <li><a href="/boms/search_keyword/<%=item.mpn%>" target="_black" ><%=item.mpn%></a></li>
            <% end %>
            </ul>
          </div>

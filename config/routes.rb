@@ -25,10 +25,11 @@ Rails.application.routes.draw do
   match '/privacy', to: 'static_pages#privacy', via: 'get'
   match '/technical', to: 'static_pages#technical', via: 'get'
   match '/how_to_use', to: 'static_pages#how', via: 'get'
-  #match '/search', to: 'boms#search_keyword', via: 'get'
-  get ':boms/:search_keyword/:mpn', to: 'boms#search_keyword'
+  match '/search', to: 'boms#search_change', via: 'post'
+  #get ':boms/:search_keyword/:mpn', to: 'boms#search_keyword'
+  #get '/:search_keyword', to: 'boms#search_keyword'
 
-
+  get 'boms/search_keyword/:mpn', to: 'boms#search_keyword'
 
 
   match '/down_excel', to: 'boms#down_excel', via: 'get'

@@ -88,6 +88,9 @@ before_filter :authenticate_user!, :except => [:root,:upload,:mpn_item,:search_k
 
     end   
  
+    def search_change
+        redirect_to "/boms/search_keyword/#{params[:mpn]}"
+    end
 
     def search_keyword
         Rails.logger.info("params[:locale]------------------------------------------------------params[:locale]")

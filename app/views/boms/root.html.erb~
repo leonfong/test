@@ -103,9 +103,13 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
 <small>
   <div class="col-md-12 panel panel-default">
     <div class="panel-body ">
-      <ul id="myTab" class="nav nav-tabs nav-justified">
-        <li ><a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a></li>
-        <li class="active"><a href="#home" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a></li>
+      <ul id="myTab" class="nav nav-tabs nav-justified" role="tablelist">
+        <li >
+            <a href="#des" type="button" data-toggle="tab">Real-time electronic components price query by Keywords</a>
+        </li>
+        <li class="active">
+            <a href="#mpnn" type="button" data-toggle="tab">Real-time electronic components price query by Part Number</a>
+        </li>
       </ul>
       <div id="myTabContent" class="tab-content upul">
          <div class="upul tab-pane fade " id="des">
@@ -116,11 +120,11 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
              <% end %>
            </ul>
          </div>
-         <div class="mpnul tab-pane fade in active" id="home">
+         <div class="mpnul tab-pane fade in active" id="mpnn">
            <br><br>  
            <ul>
            <% @mpn_show.each_with_index do |item,index| %>
-              <li><a href="/boms/search_keyword/<%=item.mpn%>" target="_black" ><%=item.mpn%></a></li>
+              <li><%= link_to item.mpn,  {action: "search_keyword", mpn: item.mpn},target: "_black" %></li>
            <% end %>
            </ul>
          </div>
@@ -135,5 +139,9 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
           window.location.href = 'upload?multipage=true';
         });
       }
+$('#myTab a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
 </script>
 

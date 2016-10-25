@@ -3070,7 +3070,9 @@ before_filter :authenticate_user!
             end
             if @bom_item.update_attribute("product_id", params[:product_id])
                 if @bom_item.product_id
-	            #@bom_item.product = Product.find(@bom_item.product_id)
+	            bom_item_product = Product.find(@bom_item.product_id)
+                    @bom_item.moko_part = bom_item_product.name
+                    @bom_item.moko_des = bom_item_product.description
                     @bom_item.warn = false
                     if not all_dns.blank?
                         @bom_item.cost = add_dns.cost

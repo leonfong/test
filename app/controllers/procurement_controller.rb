@@ -217,7 +217,7 @@ before_filter :authenticate_user!
     def pcb_list
         if params[:complete]
             where_state = " AND pcb_order_items.state = 'quotechked'"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.pcb_order_no_son,pcb_order_items.pcb_order_id,pcb_item_infos.id AS pcb_item_infos_id FROM pcb_order_items RIGHT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.updated_at DESC,pcb_item_infos.pcb_order_no DESC")
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.des_cn,pcb_order_items.pcb_order_no_son,pcb_order_items.pcb_order_id,pcb_item_infos.id AS pcb_item_infos_id FROM pcb_order_items RIGHT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.updated_at DESC,pcb_item_infos.pcb_order_no DESC")
         end
         if params[:undone]
             where_state = " AND pcb_order_items.state = ''"

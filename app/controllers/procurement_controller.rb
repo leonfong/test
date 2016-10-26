@@ -2209,7 +2209,8 @@ before_filter :authenticate_user!
                                     add_dns.dn = all_dns.dn
                                     add_dns.dn_long = all_dns.dn_long
                                     add_dns.cost = all_dns.price
-                                    add_dns.qty = all_dns.qty
+                                    #add_dns.qty = all_dns.qty
+                                    add_dns.qty = item.quantity * ProcurementBom.find(item.procurement_bom_id).qty
                                     add_dns.color = "g"
                                     add_dns.save
                                     item.cost = add_dns.cost
@@ -2246,6 +2247,7 @@ before_filter :authenticate_user!
                                         add_dns.dn_long = match_dn.dn_long
                                         add_dns.cost = match_dn.cost
                                         add_dns.qty = match_dn.qty
+                                        add_dns.qty = item.quantity * ProcurementBom.find(item.procurement_bom_id).qty
                                         add_dns.info = match_dn.info
                                         add_dns.remark = match_dn.remark
                                         add_dns.color = "g"
@@ -2288,7 +2290,8 @@ before_filter :authenticate_user!
                                         add_dns.dn = all_dns.dn
                                         add_dns.dn_long = all_dns.dn_long
                                         add_dns.cost = all_dns.price
-                                        add_dns.qty = all_dns.qty
+                                        #add_dns.qty = all_dns.qty
+                                        add_dns.qty = item.quantity * ProcurementBom.find(item.procurement_bom_id).qty
                                         add_dns.color = "g"
                                         add_dns.save
                                         item.cost = add_dns.cost
@@ -2375,7 +2378,8 @@ before_filter :authenticate_user!
                                     add_dns.dn = match_dn.dn
                                     add_dns.dn_long = match_dn.dn_long
                                     add_dns.cost = match_dn.cost
-                                    add_dns.qty = match_dn.qty
+                                    #add_dns.qty = match_dn.qty
+                                    add_dns.qty = item.quantity * ProcurementBom.find(item.procurement_bom_id).qty
                                     add_dns.info = match_dn.info
                                     add_dns.remark = match_dn.remark
                                     add_dns.color = "g"
@@ -2423,7 +2427,8 @@ before_filter :authenticate_user!
                                     add_dns.dn = all_dns.dn
                                     add_dns.dn_long = all_dns.dn_long
                                     add_dns.cost = all_dns.price
-                                    add_dns.qty = all_dns.qty
+                                    #add_dns.qty = all_dns.qty
+                                    add_dns.qty = item.quantity * ProcurementBom.find(item.procurement_bom_id).qty
                                     add_dns.color = "g"
                                     add_dns.save
                                     item.cost = add_dns.cost
@@ -2968,6 +2973,13 @@ before_filter :authenticate_user!
             else
                 PDn.where(item_id: params[:id]).update_all "color=NULL"
             end
+            if not params[:bom_version].blank?
+                @bom_item = PVersionItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+                @bom = ProcurementVersionBom.find(@bom_item.procurement_bom_id)
+            else
+                @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+                @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            end
             if not all_dns.blank?
                 Rails.logger.info("ttttttttttttt--------------------------22222222222")
                 if not params[:bom_version].blank?
@@ -2983,7 +2995,8 @@ before_filter :authenticate_user!
                 add_dns.dn_long = all_dns.dn_long
                 add_dns.date = all_dns.date
                 add_dns.part_code = all_dns.part_code
-                add_dns.qty = all_dns.qty
+                #add_dns.qty = all_dns.qty
+                add_dns.qty = @bom_item.quantity * @bom.qty
                 #add_dns.remark = dns.remark
                 add_dns.cost = all_dns.price
                 add_dns.color = "b"

@@ -2557,12 +2557,15 @@ before_filter :authenticate_user!
             elsif can? :work_g_b, :all
                 @user_do = "75"
                 @bom_item = PVersionItem.where("procurement_version_id = #{params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
+            elsif can? :work_g_c, :all
+                @user_do = "9999"
+                @bom_item = PVersionItem.where("procurement_version_id = #{params[:bom_id]} AND user_do = '9999'")
             elsif can? :work_d, :all
                 @user_do = "7"
                 @bom_item = PVersionItem.where(procurement_version_bom_id: params[:bom_id])
             end
         else
-            @boms = ProcurementBom.find(params[:bom_id])
+            @boms = ProcurementBom.find_by_id(params[:bom_id])
             if can? :work_g_all, :all
                 @user_do = "7"
                 @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
@@ -2573,6 +2576,9 @@ before_filter :authenticate_user!
             elsif can? :work_g_b, :all
                 @user_do = "75"
                 @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
+            elsif can? :work_g_c, :all
+                @user_do = "9999"
+                @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND user_do = '9999'")
             elsif can? :work_d, :all
                 @user_do = "7"
                 @bom_item = PItem.where(procurement_bom_id: params[:bom_id])

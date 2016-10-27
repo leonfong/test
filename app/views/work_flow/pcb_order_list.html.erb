@@ -216,19 +216,23 @@
                   <% end %>
                   </td>
                   <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty.to_s %></td>
-                  <% if not item.bom_id.blank? %>
-                      <% if not ProcurementBom.find_by_id(item.bom_id).blank? %>
-                          <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p.to_s %></td>
-                          <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p.to_i/(item.qty.to_i) %></td>
+                  <% if item.p_type == "PCB" %> 
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p.to_s %></td>
+                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price.to_s %></td>
+                  <% else %>                 
+                      <% if not item.bom_id.blank? %>
+                          <% if not ProcurementBom.find_by_id(item.bom_id).blank? %>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p.to_s %></td>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p.to_i/(item.qty.to_i) %></td>
+                          <% else %>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p.to_s %></td>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price.to_s %></td>
+                          <% end %>
                       <% else %>
                           <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p.to_s %></td>
                           <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price.to_s %></td>
                       <% end %>
-                  <% else %>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p.to_s %></td>
-                      <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price.to_s %></td>
                   <% end %>
-
 <% if item.bom_id != nil and item.p_type == "COMPONENTS"%>
 <% item_back = PItem.where(procurement_bom_id: item.bom_id).first %>
 <% if not item_back.blank? %>

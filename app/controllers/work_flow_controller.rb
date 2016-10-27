@@ -4235,9 +4235,11 @@ before_filter :authenticate_user!
                 q_order.save
             
             elsif @pcb.p_type == "PCB"
+                @pcb.bom_id = nil
                 q_order = PcbOrder.find_by_id(@pcb.pcb_order_id)
                 q_order.state = "quote"
                 q_order.save
+                @pcb.save
             end
         end
         redirect_to :back

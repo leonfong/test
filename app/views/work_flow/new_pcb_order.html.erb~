@@ -28,7 +28,7 @@
                     <div class="panel-heading"><strong>询价基本信息:</strong></div>
                     <div class="panel-body ">  
                    
-                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"></ins></p><input type="text" class="form-control sr-only" id="p_pi" name="p_pi" >
+                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"></ins></p><input type="text" class="form-control sr-only" id="p_no" name="p_no" >
                         </div>
 
                         <div class="col-md-2 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" >

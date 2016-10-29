@@ -66,6 +66,13 @@
         <li><a <% if selected == "p_bomlist" %>style="background-color: #d9edf7;"<% end %> href="/p_bomlist"><i></i>BOM列表</a></li>
     </ul>
 <% end %>
+
+<% if can? :work_a, :all %>
+    <a style="background-color: #ddd;" href="#Part_Menu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> MOKO物料管理</a>
+    <ul id="Part_Menu" class="nav nav-list  menu-second <% if selected =~ /part_manage/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "new_part_manage" %>style="background-color: #d9edf7;"<% end %> href="/new_moko_part"><i></i>新建物料</a></li>
+    </ul>
+<% end %>
 </div>
 
 
@@ -75,6 +82,7 @@ $(".menu-first").click(function(){
   $('#articleMenu').collapse('hide');
   $('#whMenu').collapse('hide');
   $('#bom_Menu').collapse('hide');
+  $('#Part_Menu').collapse('hide');
 });
 </script>
 

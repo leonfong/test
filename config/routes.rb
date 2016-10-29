@@ -133,7 +133,9 @@ Rails.application.routes.draw do
   match '/pi_out_xlsx_moko_d', to: 'work_flow#pi_out_xlsx_moko_d', via: 'get'
   match '/find_linkbom', to: 'work_flow#find_linkbom', via: 'get'
   match '/find_linkbom_link', to: 'work_flow#find_linkbom_link', via: 'get'
-
+  match '/new_moko_part', to: 'work_flow#new_moko_part', via: 'get'
+  match '/new_moko_part', to: 'work_flow#new_moko_part', via: 'post'
+  match '/add_part_moko', to: 'work_flow#add_part_moko', via: 'post'
 
 
 

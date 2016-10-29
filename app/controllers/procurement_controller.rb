@@ -2368,9 +2368,11 @@ before_filter :authenticate_user!
                                 end
 =end
                             elsif not match_product_old.dn_id.blank?
+                                Rails.logger.info("1111-------------------------------------------------------111")
                                 #begin
                                 match_dn = PDn.find_by_id(match_product_old.dn_id)
                                 if not match_dn.blank?
+                                    Rails.logger.info("1111-------------------------------------------------------222")
                                     add_dns = PDn.new
                                     add_dns.item_id = item.id
                                     add_dns.date = match_dn.date
@@ -2456,6 +2458,7 @@ before_filter :authenticate_user!
                             #item.product_id = match_product.first.id if match_product.count > 0
                             #item.save
                             #@item = item
+                            Rails.logger.info("1111-------------------------------------------------------333")
                             render "p_search_part.js.erb" and return
                         end
                     end

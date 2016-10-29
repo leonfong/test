@@ -5,6 +5,30 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def new_moko_part
+        @type_b = "[&quot;"
+        all_type_b = MokoPartsType.find_by_sql("SELECT moko_parts_types.part_name_type_b_name FROM moko_parts_types GROUP BY moko_parts_types.part_name_type_b_name")
+        all_type_b.each do |type_b|
+            @type_b += "&quot;,&quot;" + type_b.part_name_type_b_name.to_s
+        end
+        @type_b += "&quot;]"
+        
+        if params[:type_b]
+            all_type_c = MokoPartsType.find_by_sql("SELECT moko_parts_types.part_name_type_c_name FROM moko_parts_types WHERE moko_parts_types.part_name_type_b_name = '#{params[:type_b]}'")
+            @type_c = '<lable for="type_c" class="col-sm-1 control-label"><strong>三级类型</strong></lable>'
+            @type_c += '<div class="col-sm-8">'
+            if all_type_c.blank?
+                @type_c += "没有找到三级类型"
+            else
+                all_type_c.each do |type_c|
+                    @type_c += '<a class="btn btn-link">' + type_c.part_name_type_c_name + '</a>'
+                end
+            end
+            @type_c += '</div>'
+        end
+
+    end
+
     def pi_print
         @pi_info = PiInfo.find_by_id(params[:id])
         @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)

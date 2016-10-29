@@ -99,19 +99,21 @@
             <table class="table table-bordered">
                 <tr>
                     <th>PART</th>
+                    <th>DES</th>
                     <th>STATE</th>
                 </tr>
                 <% @bom_item.each do |item| %>
                 <tr>
                     <td><%= item.mpn %></td>
+                    <td><%= item.des %></td>
                     <td id="<%= item.id %>">
                     <% if item.mpn_id.blank? or item.product_id.blank? %>
-                        The query is completed
-                    <% else %>
-                        
                         <div class="card">
                             <span class="spinner-loader">Loading…</span>
                         </div>
+                    <% else %>
+                        The query is completed
+                        
                     <% end %>
                     </td>
                 </tr>

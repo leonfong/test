@@ -99,11 +99,13 @@
             <table class="table table-bordered">
                 <tr>
                     <th>PART</th>
+                    <th>DES</th>
                     <th>STATE</th>
                 </tr>
                 <% @bom_item.each do |item| %>
                 <tr>
                     <td><%= item.mpn %></td>
+                    <td><%= item.description %></td>
                     <td id="<%= item.id %>">
                     <% if item.mpn_id.blank? or item.product_id.blank? %>
                         <div class="card">

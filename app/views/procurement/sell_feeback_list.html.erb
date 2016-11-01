@@ -199,7 +199,13 @@
 <% if not PDn.find(item.dn_id).info.blank? %>                 
 <a class="btn btn-info btn-xs" href="<%= PDn.find(item.dn_id).info %>" target="_blank">下载</a>
 <% end %>
-<strong>采购工程师: </strong>
+<strong>
+<% if PDn.find(item.dn_id).email.blank? %>
+采购工程师:
+<% else %> 
+<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>
+<% end %> 
+</strong>
 <%= PDn.find(item.dn_id).remark %>
 </small></div>
 </p>

@@ -502,6 +502,7 @@ before_filter :authenticate_user!
             row_num = 0
 	    @parse_result.each do |item| #处理每一行的数据
                 other_baojia = PDn.new()
+                other_baojia.email = current_user.email
                 other_baojia.item_id = item["MOKO_ID"]
                 other_baojia.date = Time.new
 	        #other_baojia.part_code = item["Ref"]
@@ -1575,6 +1576,7 @@ before_filter :authenticate_user!
         @pitem = PItem.find(params[:dn_itemid])
         if params["#{params[:dn_itemid]}p"] != "" 
             @dn = PDn.new
+            @dn.email = current_user.email
             @dn.cost = params["#{params[:dn_itemid]}p"]
             @dn.item_id = @pitem.id
             @dn.remark = params[:dn_remark]
@@ -2203,6 +2205,7 @@ before_filter :authenticate_user!
                                 #all_dns.each do |dns|
                                 if not all_dns.blank?
                                     add_dns = PDn.new
+                                    add_dns.email = current_user.email
                                     add_dns.item_id = @item.id
                                     add_dns.date = all_dns.date
                                     add_dns.part_code = all_dns.part_code
@@ -2240,6 +2243,7 @@ before_filter :authenticate_user!
                                     if not match_dn.blank?
                                         Rails.logger.info("qqqqqq-----------------------222222222222----------------------qqqqqq")
                                         add_dns = PDn.new
+                                        add_dns.email = current_user.email
                                         add_dns.item_id = item.id
                                         add_dns.date = match_dn.date
                                         add_dns.part_code = match_dn.part_code
@@ -2284,6 +2288,7 @@ before_filter :authenticate_user!
                                     end
                                     if not all_dns.blank?
                                         add_dns = PDn.new
+                                        add_dns.email = current_user.email
                                         add_dns.item_id = @item.id
                                         add_dns.date = all_dns.date
                                         add_dns.part_code = all_dns.part_code
@@ -2374,6 +2379,7 @@ before_filter :authenticate_user!
                                 if not match_dn.blank?
                                     Rails.logger.info("1111-------------------------------------------------------222")
                                     add_dns = PDn.new
+                                    add_dns.email = current_user.email
                                     add_dns.item_id = item.id
                                     add_dns.date = match_dn.date
                                     add_dns.part_code = match_dn.part_code
@@ -2423,6 +2429,7 @@ before_filter :authenticate_user!
                                 #all_dns.each do |dns|
                                 if not all_dns.blank?
                                     add_dns = PDn.new
+                                    add_dns.email = current_user.email
                                     add_dns.item_id = @item.id
                                     add_dns.date = all_dns.date
                                     add_dns.part_code = all_dns.part_code
@@ -2993,9 +3000,11 @@ before_filter :authenticate_user!
                 Rails.logger.info("ttttttttttttt--------------------------22222222222")
                 if not params[:bom_version].blank?
                     add_dns = PVersionDn.new
+                    add_dns.email = current_user.email
                     add_dns.p_version_item_id = params[:id]
                 else
                     add_dns = PDn.new
+                    add_dns.email = current_user.email
                     add_dns.item_id = params[:id]
                 end
                  
@@ -3234,8 +3243,10 @@ WHERE
         if params[:product_name] != ""
             if not params[:bom_version].blank?
                 @add_dns = PVersionDn.find(params[:dn_id])
+                @add_dns.email = current_user.email
             else
                 @add_dns = PDn.find(params[:dn_id])
+                @add_dns.email = current_user.email
             end
             if @add_dns.color == "y"
                 @add_dns.color = "y"
@@ -3307,8 +3318,10 @@ WHERE
         else
             if not params[:bom_version].blank?
                 @add_dns = PVersionDn.find(params[:dn_id])
+                @add_dns.email = current_user.email
             else
                 @add_dns = PDn.find(params[:dn_id])
+                @add_dns.email = current_user.email
             end
             if @add_dns.color == "y"
                 @add_dns.color = "y"
@@ -3391,6 +3404,7 @@ WHERE
                 else
                     p_dn = PDn.new()
                 end
+                p_dn.email = current_user.email
             end
             #Rails.logger.info("--------------------------")
             #Rails.logger.info(p_dn.info.current_path.inspect)
@@ -3536,6 +3550,7 @@ WHERE
             #@bom_item.sell_feed_back_tag = "sell"
             #@bom_item.save
         end
+        dn.email = current_user.email
         dn.save
         @itemid = params[:dn_item_id]
         @dnid = params[:dn_id]
@@ -3629,6 +3644,7 @@ WHERE
                 dn.cost = params["#{params[:dn_itemid]}p"]
                 dn.color = "b"
             end
+            dn.email = current_user.email
             dn.save
             @view_dn = ""
             @view_dn += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:dn_itemid].to_s + '" ></small></a>'
@@ -3663,6 +3679,7 @@ WHERE
             #else
         rescue
             dn = PDn.new
+            dn.email = current_user.email
             dn.part_code = Product.find_by_id(@pitem.product_id).name
             dn.cost = params["#{params[:dn_itemid]}p"]
             dn.item_id = @pitem.id

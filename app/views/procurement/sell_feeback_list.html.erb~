@@ -19,9 +19,7 @@
 
 
             <%= form_tag({action: :unfollow_bom_item_more,controller: :work_flow},method:"post") do %>
-            <div >
-                <button type="submit" class="btn btn-danger" >批量取消关注</button>
-            <div>
+
             <table class="table table-hover" > 
 
                 <thead >
@@ -201,7 +199,13 @@
 <% if not PDn.find(item.dn_id).info.blank? %>                 
 <a class="btn btn-info btn-xs" href="<%= PDn.find(item.dn_id).info %>" target="_blank">下载</a>
 <% end %>
-<strong>采购工程师: </strong>
+<strong>
+<% if PDn.find(item.dn_id).email.blank? %>
+采购工程师:
+<% else %> 
+<%= User.find_by_email(PDn.find(item.dn_id).email) %>
+<% end %> 
+</strong>
 <%= PDn.find(item.dn_id).remark %>
 </small></div>
 </p>

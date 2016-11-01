@@ -88,7 +88,17 @@
                                 <td><%=  q_order.p_name_mom %></td>
                                 <td><%= q_order.qty %></td>
                                 <td>￥<%= q_order.sum_t_p %></td>
-                                <td><%= q_order.order_country %></td>
+                                <td >
+                                    <% if not PcbOrderItem.find_by_id(q_order.erp_item_id).blank? %>
+                                        <% if not PcbOrder.find_by_id(PcbOrderItem.find_by_id(q_order.erp_item_id).pcb_order_id).blank? %>
+                                            <%= PcbOrder.find_by_id(PcbOrderItem.find_by_id(q_order.erp_item_id).pcb_order_id).c_country %>
+                                        <% else %>
+                                            <%= q_order.order_country %>
+                                        <% end %>
+                                    <% else %>
+                                        <%= q_order.order_country %>
+                                    <% end %>
+                                </td>
                                 <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
                                 <td><%= q_order.sell_remark %></td>
                                 <td><%= q_order.sell_manager_remark %></td>
@@ -107,7 +117,17 @@
                                             <td width="150"><%= link_to order_son.p_name, sell_view_baojia_path(:bom_id =>order_son.id) %></td>
                                             <td width="100"><%= order_son.qty %></td>
                                             <td width="150">￥<%= order_son.t_p %></td>
-                                            <td width="140"><%= order_son.order_country %></td>
+                                            <td width="140">
+                                            <% if not PcbOrderItem.find_by_id(order_son.erp_item_id).blank? %>
+                                                <% if not PcbOrder.find_by_id(PcbOrderItem.find_by_id(order_son.erp_item_id).pcb_order_id).blank? %>
+                                                    <%= PcbOrder.find_by_id(PcbOrderItem.find_by_id(order_son.erp_item_id).pcb_order_id).c_country %>
+                                                <% else %>
+                                                    <%= order_son.order_country %>
+                                                <% end %>
+                                            <% else %>
+                                                <%= order_son.order_country %>
+                                            <% end %>
+                                            </td>
                                             <td width="150"><stardef ccc="<%= order_son.star %>" id="<%= order_son.id %>"></stardef>
                                             <td><%= order_son.sell_remark %></td>
                                             <td><%= order_son.sell_manager_remark %></td>

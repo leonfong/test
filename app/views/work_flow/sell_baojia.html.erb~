@@ -52,7 +52,7 @@
             </div>
           </div>
           <a type="button" class="btn btn-success btn-sm" href="/sell_baojia?complete=true">已经下单的order</a>
-          <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia_q">需要关注的Order</a>
+          <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia_q">需要关注的物料</a>
         </div>
       <% end %>
 </div>
@@ -107,7 +107,20 @@
                                             <td width="150"><%= link_to order_son.p_name, sell_view_baojia_path(:bom_id =>order_son.id) %></td>
                                             <td width="100"><%= order_son.qty %></td>
                                             <td width="150">￥<%= order_son.t_p %></td>
-                                            <td width="140"><%= order_son.order_country %></td>
+<!--
+                                            <td width="140"></td>
+-->
+                                            <td width="140">
+                                            <% if not PcbOrderItem.find_by_id(order_son.erp_item_id).blank? %>
+                                                <% if not PcbOrder.find_by_id(PcbOrderItem.find_by_id(order_son.erp_item_id).pcb_order_id).blank? %>
+                                                    <%= PcbOrder.find_by_id(PcbOrderItem.find_by_id(order_son.erp_item_id).pcb_order_id).c_country %>
+                                                <% else %>
+                                                    <%= order_son.order_country %>
+                                                <% end %>
+                                            <% else %>
+                                                <%= order_son.order_country %>
+                                            <% end %>
+                                            </td>
                                             <td width="150"><stardef ccc="<%= order_son.star %>" id="<%= order_son.id %>"></stardef>
                                             <td><%= order_son.sell_remark %></td>
                                             <td><%= order_son.sell_manager_remark %></td>

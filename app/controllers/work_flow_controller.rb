@@ -6,27 +6,136 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def new_moko_part
+        @part_name_main = ""
+        @part_name_type_a_no = ""
+        @part_name_type_c_no = "" 
+        @moko_part_number = ""
+        @part_name_type_c_name = ""
         @type_b = "[&quot;"
-        all_type_b = MokoPartsType.find_by_sql("SELECT moko_parts_types.part_name_type_b_name FROM moko_parts_types GROUP BY moko_parts_types.part_name_type_b_name")
+        all_type_b = MokoPartsType.find_by_sql("SELECT moko_parts_types.part_name_type_b_name,moko_parts_types.part_name_type_b_sname FROM moko_parts_types GROUP BY moko_parts_types.part_name_type_b_name")
         all_type_b.each do |type_b|
             @type_b += "&quot;,&quot;" + type_b.part_name_type_b_name.to_s
         end
         @type_b += "&quot;]"
         
         if params[:type_b]
-            all_type_c = MokoPartsType.find_by_sql("SELECT moko_parts_types.part_name_type_c_name FROM moko_parts_types WHERE moko_parts_types.part_name_type_b_name = '#{params[:type_b]}'")
+            all_type_c = MokoPartsType.find_by_sql("SELECT moko_parts_types.part_name_type_c_no, moko_parts_types.part_name_type_a_no, moko_parts_types.part_name_main, moko_parts_types.part_name_type_c_name FROM moko_parts_types WHERE moko_parts_types.part_name_type_b_name = '#{params[:type_b]}'")
             @type_c = '<lable for="type_c" class="col-sm-1 control-label"><strong>三级类型</strong></lable>'
             @type_c += '<div class="col-sm-8">'
             if all_type_c.blank?
-                @type_c += "没有找到三级类型"
+                @type_c += '<code class="control-label">没有找到二级类型--->' + params[:type_b].to_s + '</code>'
             else
+                @part_name_main = all_type_c.first.part_name_main.to_s
+                @part_name_type_a_no = all_type_c.first.part_name_type_a_no.to_s
+
                 all_type_c.each do |type_c|
-                    @type_c += '<a class="btn btn-link">' + type_c.part_name_type_c_name + '</a>'
-                end
+                    @type_c += '<a data-remote="true" class="btn btn-link" href="/new_moko_part?type_b=' + params[:type_b].to_s + '&type_c=' + type_c.part_name_type_c_name.to_s + '&type_c_no=' + type_c.part_name_type_c_no.to_s + '" >' + type_c.part_name_type_c_name + '</a>'
+                end   
             end
             @type_c += '</div>'
+            if params[:type_c]
+                @part_name_type_c_no = params[:type_c_no].to_s
+                @part_name_type_c_name = params[:type_c].to_s
+                @selected = MokoPartsType.find_by(part_name_type_b_name: params[:type_b],part_name_type_c_name: params[:type_c])
+                @moko_des_show = ''
+                @selected.all_des_cn.split("|").each_with_index do |moko_des,index|
+                    @moko_des_show += '<div class="form-group">'
+                    @moko_des_show += '<lable for="' + moko_des.to_s + '" class="col-sm-1 control-label"><strong>' + moko_des.to_s + '</strong></lable>'
+                    @moko_des_show += '<div class="col-sm-2">'
+                    @moko_des_show += '<input id="value_' + (index+1).to_s + '" name="value_' + (index+1).to_s + '" type="text" class="form-control input-sm" style="padding: 0px;margin: 0px;" size="20">'
+                    @moko_des_show += '</div>'
+                    @moko_des_show += '<div class="col-sm-9"></div>'
+                    @moko_des_show += '</div>'
+                end
+                moko_part_number = Product.find_by_sql("SELECT MAX(products.part_no) AS num FROM products WHERE products.part_name = '#{params[:type_b]}' AND products.package2 = '#{params[:type_c]}'")
+                if not moko_part_number.blank?
+                    @moko_part_number_new = moko_part_number.first.num + 1
+                    @moko_part_number_new_show = "%04d"%(moko_part_number.first.num + 1)
+                end
+                render "new_moko_part_type_c.js.erb" and return
+            else
+                render "new_moko_part_type_b.js.erb" and return
+            end
         end
+         
+    end
 
+    def add_new_moko_part
+        add_des = ""
+        if not params[:value_1].blank?
+            add_des += params[:value_1].to_s + " "
+        end
+        if not params[:value_2].blank?
+            add_des += params[:value_2].to_s + " "
+        end
+        if not params[:value_3].blank?
+            add_des += params[:value_3].to_s + " "
+        end
+        if not params[:value_4].blank?
+            add_des += params[:value_4].to_s + " "
+        end
+        if not params[:value_5].blank?
+            add_des += params[:value_5].to_s + " "
+        end
+        if not params[:value_6].blank?
+            add_des += params[:value_6].to_s + " "
+        end
+        if not params[:value_7].blank?
+            add_des += params[:value_7].to_s + " "
+        end
+        if not params[:value_8].blank?
+            add_des += params[:value_8].to_s + " "
+        end
+        if not params[:value_9].blank?
+            add_des += params[:value_9].to_s + " "
+        end
+        if not params[:value_10].blank?
+            add_des += params[:value_10].to_s + " "
+        end
+        check_data = Product.find_by_description(add_des)
+        if check_data.blank?
+            add_part = Product.new
+            add_part.part_no = params[:moko_part_number_new]
+            add_part.name = params[:part_name_main] + "." + params[:part_name_type_a_no] + "." + params[:part_name_type_c_no] + "." + "%04d"%params[:moko_part_number_new] + "-" + params[:part_name_type_c_name]
+            add_part.description = add_des
+            add_part.part_name = params[:value_1]
+            add_part.part_name_en = params[:part_name_type_b_name_en]
+            add_part.ptype = params[:part_name_type_a_sname]
+            add_part.package1 = params[:part_name_type_c_no]
+            add_part.package2 = params[:part_name_type_c_name]
+            if params[:value_1]
+                add_part.value1 = params[:value_1]
+            end
+            if params[:value_2]
+                add_part.value2 = params[:value_2]
+            end
+            if params[:value_3]
+                add_part.value3 = params[:value_3]
+            end
+            if params[:value_4]
+                add_part.value4 = params[:value_4]
+            end
+            if params[:value_5]
+                add_part.value5 = params[:value_5]
+            end
+            if params[:value_6]
+                add_part.value6 = params[:value_6]
+            end
+            if params[:value_7]
+                add_part.value7 = params[:value_7]
+            end
+            if params[:value_8]
+                add_part.value8 = params[:value_8]
+            end
+            if params[:value_9]
+                add_part.value9 = params[:value_9]
+            end
+            if params[:value_10]
+                add_part.value10 = params[:value_10]
+            end
+            add_part.save
+        end  
+        redirect_to :back 
     end
 
     def pi_print

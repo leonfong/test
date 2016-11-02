@@ -137,7 +137,7 @@ Rails.application.routes.draw do
   match '/new_moko_part', to: 'work_flow#new_moko_part', via: 'post'
   match '/add_part_moko', to: 'work_flow#add_part_moko', via: 'post'
   match '/add_new_moko_part', to: 'work_flow#add_new_moko_part', via: 'post'
-
+  match '/pmc', to: 'work_flow#pmc', via: 'get'
 
 
 

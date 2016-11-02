@@ -34,7 +34,9 @@
 <% if can? :work_d, :all or can? :work_admin, :all%>
         <li><a href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> PI工程师审批</a></li>
         <li><a href="/pi_list?finance_chk=true"><i class="icon-pencil"></i> PI财务审批</a></li>
-        <li><a href="#"><i class="icon-list-alt"></i> PMC</a></li>
+<% end %>
+<% if can? :work_a, :all or can? :work_admin, :all%>
+        <li><a <% if selected == "pi_pmc" %>style="background-color: #d9edf7;"<% end %>href="/pmc"><i class="icon-list-alt"></i> PMC</a></li>
 <% end %>
 <% if can? :work_g, :all %>
         <li><a <% if selected == "pi_waitfor_buy" %>style="background-color: #d9edf7;"<% end %> href="/pi_waitfor_buy"><i class="icon-list-alt"></i> 待采购的物料</a></li>

@@ -5,6 +5,10 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pmc
+
+    end
+
     def new_moko_part
         @part_name_main = ""
         @part_name_type_a_no = ""

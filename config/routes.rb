@@ -107,7 +107,7 @@ Rails.application.routes.draw do
   match '/add_pi_buy_item', to: 'work_flow#add_pi_buy_item', via: 'get'
   match '/pi_waitfor_buy', to: 'work_flow#pi_waitfor_buy', via: 'get'
   match '/send_pi_buy', to: 'work_flow#send_pi_buy', via: 'post'
-  match '/pi_waiting_for', to: 'work_flow#pi_waiting_for', via: 'get'
+  match '/pi_buy_history', to: 'work_flow#pi_buy_history', via: 'get'
   match '/pi_buy_item', to: 'work_flow#pi_buy_item', via: 'get'
   match '/p_wh_in', to: 'work_flow#p_wh_in', via: 'post'
   match '/wh_in', to: 'work_flow#wh_in', via: 'get'
@@ -137,7 +137,9 @@ Rails.application.routes.draw do
   match '/new_moko_part', to: 'work_flow#new_moko_part', via: 'post'
   match '/add_part_moko', to: 'work_flow#add_part_moko', via: 'post'
   match '/add_new_moko_part', to: 'work_flow#add_new_moko_part', via: 'post'
-  match '/pmc', to: 'work_flow#pmc', via: 'get'
+  match '/pmc_h', to: 'work_flow#pmc_h', via: 'get'
+  match '/pmc_new', to: 'work_flow#pmc_new', via: 'get'
+
 
 
 

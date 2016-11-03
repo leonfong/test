@@ -3275,7 +3275,11 @@ WHERE
                     #@bom_item.mpn = nil
                     @bom_item.color = "b"
                     if @add_dns.remark != nil or @add_dns.remark != ""
-                        @bom_item.sell_feed_back_tag = "sell"
+                        if @add_dns.color != "y"
+                            @bom_item.sell_feed_back_tag = "sell"
+                        else
+                            @bom_item.sell_feed_back_tag = ""
+                        end
                     else
                         @bom_item.sell_feed_back_tag = ""
                     end

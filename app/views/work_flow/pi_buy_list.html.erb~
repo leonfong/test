@@ -18,7 +18,7 @@
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="130">采购单号</th>
+      <th width="150">采购单号</th>
       <th  >供应商</th>
       <th width="230">Created Date</th>
       <th width="190">采购工程师</th>

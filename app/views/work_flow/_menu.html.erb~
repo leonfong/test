@@ -35,13 +35,22 @@
         <li><a href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> PI工程师审批</a></li>
         <li><a href="/pi_list?finance_chk=true"><i class="icon-pencil"></i> PI财务审批</a></li>
 <% end %>
+    </ul>
+
 <% if can? :work_a, :all or can? :work_admin, :all%>
-        <li><a <% if selected == "pi_pmc" %>style="background-color: #d9edf7;"<% end %>href="#"><i class="icon-list-alt"></i> PMC</a></li>
+    <a style="background-color: #ddd;" href="#pmcMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> PMC</a>
+    <ul id="pmcMenu" class="nav nav-list  menu-second <% if selected =~ /pmc/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增采购申请</a></li>
+        <li><a <% if selected == "pmc_h" %>style="background-color: #d9edf7;"<% end %>href="/pmc"><i class="icon-list-alt"></i>PMC历史记录</a></li>
 <% end %>
+    </ul>
+
 <% if can? :work_g, :all %>
-        <li><a <% if selected == "pi_waitfor_buy" %>style="background-color: #d9edf7;"<% end %> href="/pi_waitfor_buy"><i class="icon-list-alt"></i> 待采购的物料</a></li>
-        <li><a <% if selected == "pi_buy_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_list"><i class="icon-list-alt"></i> 采购下单</a></li>
-        <li><a <% if selected == "pi_w" %>style="background-color: #d9edf7;"<% end %> href="/pi_waiting_for"><i class="icon-list-alt"></i> 采购记录</a></li>
+    <a style="background-color: #ddd;" href="#buyMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 采购中心</a>
+    <ul id="buyMenu" class="nav nav-list  menu-second <% if selected =~ /buy/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "waitfor_buy" %>style="background-color: #d9edf7;"<% end %> href="/pi_waitfor_buy"><i class="icon-list-alt"></i> 待采购的物料</a></li>
+        <li><a <% if selected == "buy_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_list"><i class="icon-list-alt"></i> 采购下单</a></li>
+        <li><a <% if selected == "buy_history" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_history"><i class="icon-list-alt"></i> 采购记录</a></li>
 <% end %>
     </ul>
 
@@ -85,6 +94,8 @@ $(".menu-first").click(function(){
   $('#whMenu').collapse('hide');
   $('#bom_Menu').collapse('hide');
   $('#Part_Menu').collapse('hide');
+  $('#pmcMenu').collapse('hide');
+  $('#buyMenu').collapse('hide');
 });
 </script>
 

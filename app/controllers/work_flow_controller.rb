@@ -5,8 +5,12 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
-    def pmc
+    def pmc_h
+        @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL ORDER BY p_items.product_id DESC")
+    end
 
+    def pmc_new
+        @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL ORDER BY p_items.product_id DESC")
     end
 
     def new_moko_part
@@ -2955,10 +2959,10 @@ before_filter :authenticate_user!
             up_state.state = "buy"
             up_state.save
         end
-        redirect_to pi_waiting_for_path()
+        redirect_to pi_buy_history_path()
     end
 
-    def pi_waiting_for
+    def pi_buy_history
         @w_wh = PiBuyInfo.where(state: "buy")
     end
 

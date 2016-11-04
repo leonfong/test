@@ -3548,6 +3548,7 @@ before_filter :authenticate_user!
                     end
                 end
             end
+            
             if can? :work_d, :all 
                 if pi_draft.finance_state == "checked"
                     pi_draft.state = "checked"
@@ -3565,6 +3566,12 @@ before_filter :authenticate_user!
                 pi_draft.finance_state = "checked"
             end
             pi_draft.save
+            if can? :work_admin, :all 
+                pi_draft.state = "checked"
+                pi_draft.bom_state = "checked"
+                pi_draft.finance_state = "checked"
+                pi_draft.save
+            end
         end
         redirect_to pi_list_path() and return
     end
@@ -4299,11 +4306,13 @@ before_filter :authenticate_user!
             q_order = PcbOrder.find_by(order_no: params[:p_no])
             q_order.p_name = params[:p_name]
             q_order.follow_remark = params[:teshu_remark]
-            if can? :work_e, :all
+            if can? :work_admin, :all 
+                q_order.state = "quotechk"
+            elsif can? :work_e, :all
                 q_order.state = "bom_chk"
             elsif can? :work_d, :all
                 q_order.state = "quote"
-            elsif can? :work_g, :all
+            elsif can? :work_g, :all 
                 q_order.state = "quotechk"
             end
             q_order.save

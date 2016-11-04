@@ -2,44 +2,40 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;"> 
-            <%= render partial: "work_flow/menu", locals: {selected: "pmc_new"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pmc_warehouse_check"} %>
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
             <div class="row">
                 <div class="col-md-12" >
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead>
                             <tr style="background-color: #eeeeee">
+                                <th width="130">日期时间</th>
                                 <th width="130">Order No.</th>
                                 <th width="150">MOKO ID</th>
                                 <th width="350">物料名称</th>
-                                <th width="80">位号</th>
                                 <th width="80">申请数量</th>
-                                <th width="80">库存</th>
-                                <th >备注</th>
-                                <th width="90">采购员</th>
-                                <th width="90">下单数量</th>
+                                <th width="80">实际库存</th>
+                                <th width="80">审核通过</th>
                             <tr>
                         </thead>
                         <tbody>
-                        <% if @pmc_new %>
-                            <% @pmc_new.each do |item|%>   
+                        <% if @wh_chk %>
+                            <% @wh_chk.each do |item|%>   
                             <tr>
+                                <td><%= item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
                                 <td><%= item.erp_no_son %></td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
-                                <td><%= item.part_code %></td>
-                                <td><%= item.qty %></td>
+                                <td><%= item.chk_qty %></td>
+                                <td><%= item.apply_for_qty %></td>
+                                <%= form_tag('/pmc_wh_check_pass', class:"form-inline") do %>
                                 <td>
-                                <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>
-                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %>
-                                <% else %>
-                                <% end %>
+                                    <input name="chk_id" type="text" class="sr-only"  value="<%= item.id %>">
+                                    <button type="submit" class="btn btn-primary btn-sm" >审核通过</button>
                                 </td>
-                                <td><%= item.remark %></td>
-                                <td><%= item.buy_user %></td>
-                                <td>采购的功能完成后补上</td>
+                                <% end %>
                             </tr>
                             <% end %>
                         <% end %>

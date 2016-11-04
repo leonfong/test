@@ -5,6 +5,113 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pmc_wh_check_apply_for_list
+        @wh_chk = WhChkInfo.where(state: "new")
+    end
+
+    def pmc_wh_check_apply_for
+        wh_chk = WhChkInfo.find_by(id: params[:chk_id],state: "new")
+        if not wh_chk.blank?
+            wh_chk.apply_for_qty = params[:apply_for_qty]
+            wh_chk.state = "applying"
+            wh_chk.save
+        end
+        redirect_to :back
+    end
+
+    def pmc_wh_check_list
+        @wh_chk = WhChkInfo.where(state: "applying")
+    end
+
+    def pmc_wh_check_pass
+        wh_chk = WhChkInfo.find_by(id: params[:chk_id],state: "applying")
+        if not wh_chk.blank?
+            wh_data = WarehouseInfo.find_by_moko_part(wh_chk.moko_part)
+            wh_data.qty = wh_chk.apply_for_qty
+            wh_chk.loss_qty = wh_chk.chk_qty - wh_chk.apply_for_qty
+            wh_data.loss_qty = wh_chk.chk_qty - wh_chk.apply_for_qty + wh_data.loss_qty
+            wh_chk.save
+            if wh_data.save
+                pmc_data = PiPmcItem.find_by_id(wh_chk.pi_pmc_item_id)
+                qty_contrast = pmc_data.qty - wh_data.qty
+                if qty_contrast <= 0 
+                    pmc_data.buy_user = "MOKO"
+                    #pmc_data.state = "pass"
+                    pmc_data.save
+
+                    wh_data.qty = wh_data.qty - pmc_data.qty
+                    wh_data.temp_moko_qty = pmc_data.qty
+                    wh_data.save
+                    wh_chk.state = "pass"
+                    wh_chk.save
+                elsif qty_contrast > 0
+                    package1 = Product.find_by_name(wh_chk.moko_part).package1
+                    if package1 == "D" or package1 == "Q"
+                        pmc_data.buy_user = "A"
+                    elsif package1 == "PZ"
+                        pmc_data.buy_user = "B"
+                    end
+                    pmc_data.qty = qty_contrast
+                    #pmc_data.state = "pass"
+                    pmc_data.save
+
+                    add_buy_data = PiPmcItem.new
+                    add_buy_data.state = "new"
+                    add_buy_data.erp_no = pmc_data.erp_no
+                    add_buy_data.erp_no_son = pmc_data.erp_no_son
+                    add_buy_data.moko_part = pmc_data.moko_part
+                    add_buy_data.moko_des = pmc_data.moko_des
+                    add_buy_data.part_code = pmc_data.part_code
+
+                    add_buy_data.qty = wh_data.qty
+
+                    add_buy_data.buy_user = "MOKO"
+                    add_buy_data.remark = pmc_data.remark
+                    add_buy_data.p_item_id = pmc_data.id
+                    add_buy_data.erp_id = pmc_data.erp_id
+                    add_buy_data.user_do = pmc_data.user_do
+                    add_buy_data.user_do_change = pmc_data.user_do_change
+                    add_buy_data.check = pmc_data.check
+                    add_buy_data.pi_buy_info_id = pmc_data.pi_buy_info_id
+                    add_buy_data.procurement_bom_id = pmc_data.procurement_bom_id
+                    add_buy_data.quantity = pmc_data.quantity
+                    add_buy_data.description = pmc_data.description
+                    add_buy_data.fengzhuang = pmc_data.fengzhuang
+                    add_buy_data.link = pmc_data.link
+                    add_buy_data.cost = pmc_data.cost
+                    add_buy_data.info = pmc_data.info
+                    add_buy_data.product_id = pmc_data.product_id
+                    add_buy_data.warn = pmc_data.warn
+                    add_buy_data.user_id = pmc_data.user_id
+                    add_buy_data.danger = pmc_data.danger
+                    add_buy_data.manual = pmc_data.manual
+                    add_buy_data.mark = pmc_data.mark
+                    add_buy_data.mpn = pmc_data.mpn
+                    add_buy_data.mpn_id = pmc_data.mpn_id
+                    add_buy_data.price = pmc_data.price
+                    add_buy_data.mf = pmc_data.mf
+                    add_buy_data.dn = pmc_data.dn
+                    add_buy_data.dn_id = pmc_data.dn_id
+                    add_buy_data.dn_long = pmc_data.dn_long
+                    add_buy_data.other = pmc_data.other
+                    add_buy_data.all_info = pmc_data.all_info
+                    add_buy_data.color = pmc_data.color
+                    add_buy_data.supplier_tag = pmc_data.supplier_tag
+                    add_buy_data.supplier_out_tag = pmc_data.supplier_out_tag
+                    add_buy_data.sell_feed_back_tag = pmc_data.sell_feed_back_tag
+                    add_buy_data.save
+                    wh_data.qty = 0
+                    wh_data.temp_buy_qty = pmc_data.qty
+                    wh_data.temp_moko_qty = add_buy_data.qty
+                    wh_data.save
+                    wh_chk.state = "pass"
+                    wh_chk.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def add_pi_buy_item
         if params[:roles]
             params[:roles].each do |item_id|
@@ -63,11 +170,11 @@ before_filter :authenticate_user!
     end
 
     def pmc_h
-        @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL ORDER BY p_items.product_id DESC")
+        @pi_buy = PiPmcItem.where(state: "pass")
     end
 
     def pmc_new
-        @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL ORDER BY p_items.product_id DESC")
+        @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy = '' ORDER BY p_items.product_id DESC")
         if @pi_buy
             @pi_buy.each do |item_buy|
                 item_id = item_buy.id
@@ -84,21 +191,32 @@ before_filter :authenticate_user!
                         add_buy_data.moko_des = item_data.moko_des
                         add_buy_data.part_code = item_data.part_code
         
-                        sell_qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
-                        add_buy_data.qty = sell_qty
+
                         moko_data = Product.find_by_id(item_buy.product_id)
                         wh_data = WarehouseInfo.find_by_moko_part(item_data.moko_part)
-                        
+                        use_data = WhChkInfo.find_by_sql("SELECT SUM(wh_chk_infos.chk_qty) AS use_qty FROM wh_chk_infos WHERE (wh_chk_infos.state = 'new' OR wh_chk_infos.state = 'applying') AND wh_chk_infos.moko_part = '#{item_data.moko_part}'")
+                        use_qty = 0
+                        if not use_data.blank?
+                            if not use_data.first.use_qty.blank?
+                                use_qty = use_data.first.use_qty
+                            end 
+                        end
+                        sell_qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                        add_buy_data.qty = sell_qty
                         if not wh_data.blank? and not moko_data.blank?
-                            if wh_data.qty > 0
+                            if wh_data.qty > 0 and wh_data.qty - use_qty > 0
                                 add_buy_data.buy_user = "CHK"
+=begin
                                 send_chk_wh = WhChkInfo.new
+                                send_chk_wh.pi_pmc_item_id = add_buy_data.id
+                                send_chk_wh.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
                                 send_chk_wh.p_item_id = item_data.id
                                 send_chk_wh.moko_part = item_data.moko_part
                                 send_chk_wh.moko_des = item_data.moko_des
                                 send_chk_wh.chk_qty = wh_data.qty
                                 send_chk_wh.state = "new"
                                 send_chk_wh.save
+=end
                             else
                                 if moko_data.package1 == "D" or moko_data.package1 == "Q"
                                     add_buy_data.buy_user = "A"
@@ -150,6 +268,20 @@ before_filter :authenticate_user!
                         add_buy_data.supplier_out_tag = item_data.supplier_out_tag
                         add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
                         if add_buy_data.save
+                            if not wh_data.blank? and not moko_data.blank?  
+                                if wh_data.qty > 0 and wh_data.qty - use_qty > 0
+                                    
+                                    send_chk_wh = WhChkInfo.new
+                                    send_chk_wh.pi_pmc_item_id = add_buy_data.id
+                                    send_chk_wh.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
+                                    send_chk_wh.p_item_id = item_data.id
+                                    send_chk_wh.moko_part = item_data.moko_part
+                                    send_chk_wh.moko_des = item_data.moko_des
+                                    send_chk_wh.chk_qty = wh_data.qty
+                                    send_chk_wh.state = "new"
+                                    send_chk_wh.save
+                                end
+                            end
                             item_data.buy = "pmc"
                             item_data.save
                         end
@@ -158,7 +290,7 @@ before_filter :authenticate_user!
                 end
             end
         end
-        @pmc_new = PiPmcItem.where(state: "new")
+        @pmc_new = PiPmcItem.where(state: "new").order("moko_part DESC")
     end
 
     def new_moko_part

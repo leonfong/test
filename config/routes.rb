@@ -139,7 +139,10 @@ Rails.application.routes.draw do
   match '/add_new_moko_part', to: 'work_flow#add_new_moko_part', via: 'post'
   match '/pmc_h', to: 'work_flow#pmc_h', via: 'get'
   match '/pmc_new', to: 'work_flow#pmc_new', via: 'get'
-
+  match '/pmc_wh_check_apply_for_list', to: 'work_flow#pmc_wh_check_apply_for_list', via: 'get'
+  match '/pmc_wh_check_apply_for', to: 'work_flow#pmc_wh_check_apply_for', via: 'post'
+  match '/pmc_wh_check_list', to: 'work_flow#pmc_wh_check_list', via: 'get'
+  match '/pmc_wh_check_pass', to: 'work_flow#pmc_wh_check_pass', via: 'post'
 
 
 

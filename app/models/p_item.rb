@@ -17,7 +17,7 @@ class PItem < ActiveRecord::Base
             Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
             
             if not self.sell_feed_back_tag.blank?
-                if self.sell_feed_back_tag == "sell"
+                if self.sell_feed_back_tag == "sell" and self.buy == ""
                     find_sell = PcbOrderItem.where(bom_id: self.procurement_bom_id)            
                     if not find_sell.blank?
                         find_sell.each do |item|

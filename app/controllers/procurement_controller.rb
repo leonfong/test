@@ -3013,8 +3013,8 @@ before_filter :authenticate_user!
                 add_dns.dn_long = all_dns.dn_long
                 add_dns.date = all_dns.date
                 add_dns.part_code = all_dns.part_code
-                #add_dns.qty = all_dns.qty
-                add_dns.qty = @bom_item.quantity * @bom.qty
+                add_dns.qty = all_dns.qty
+                #add_dns.qty = @bom_item.quantity * @bom.qty
                 #add_dns.remark = dns.remark
                 add_dns.cost = all_dns.price
                 add_dns.color = "b"
@@ -3640,15 +3640,31 @@ WHERE
         @pitem.save
         @itemid = params[:dn_itemid]
         @dnid = @pitem.dn_id
-        begin
-            #if not @dnid.blank?
-            dn = PDn.find(@dnid)  
+        dn_old = PDn.find_by_id(@dnid) 
+        if not @dnid.blank? 
+=begin
             if not params["#{params[:dn_itemid]}p"].blank?
-                #dn.part_code = Product.find_by_id(@pitem.product_id).name
                 dn.cost = params["#{params[:dn_itemid]}p"]
+                dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
                 dn.color = "b"
             end
             dn.email = current_user.email
+            dn.save
+=end
+            dn = PDn.new
+            dn.email = current_user.email
+            dn.item_id = @pitem.id
+            dn.part_code = Product.find_by_id(@pitem.product_id).name
+            dn.date = Time.new
+            dn.dn = dn_old.dn
+            dn.dn_long = dn_old.dn_long
+            dn.cost = params["#{params[:dn_itemid]}p"]
+            dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
+            dn.info = dn_old.info
+            dn.remark = dn_old.remark
+            dn.tag = dn_old.tag
+            dn.color = "b"
+
             dn.save
             @view_dn = ""
             @view_dn += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:dn_itemid].to_s + '" ></small></a>'
@@ -3681,7 +3697,7 @@ WHERE
 
             @view_dn += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn?id='+dn.id.to_s+'&item_id='+@itemid.to_s+'" data-confirm="确定要删除?"></a></small></td>'
             #else
-        rescue
+        else
             dn = PDn.new
             dn.email = current_user.email
             dn.part_code = Product.find_by_id(@pitem.product_id).name

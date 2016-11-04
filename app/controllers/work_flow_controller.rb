@@ -5,12 +5,160 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def add_pi_buy_item
+        if params[:roles]
+            params[:roles].each do |item_id|
+                item_data = PItem.find_by_id(item_id)
+                if not item_data.blank?
+                    find_buy_data = PiBuyItem.find_by_p_item_id(item_id)
+                    if find_buy_data.blank?
+                        add_buy_data = PiBuyItem.new
+                        add_buy_data.p_item_id = item_data.id
+                        add_buy_data.erp_id = item_data.erp_id
+                        add_buy_data.erp_no = item_data.erp_no
+                        add_buy_data.user_do = item_data.user_do
+                        add_buy_data.user_do_change = item_data.user_do_change
+                        add_buy_data.check = item_data.check
+                        add_buy_data.pi_buy_info_id = params[:pi_buy_id]
+                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                        add_buy_data.quantity = item_data.quantity
+                        add_buy_data.qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                        add_buy_data.description = item_data.description
+                        add_buy_data.part_code = item_data.part_code
+                        add_buy_data.fengzhuang = item_data.fengzhuang
+                        add_buy_data.link = item_data.link
+                        add_buy_data.cost = item_data.cost
+                        add_buy_data.info = item_data.info
+                        add_buy_data.product_id = item_data.product_id
+                        add_buy_data.moko_part = item_data.moko_part
+                        add_buy_data.moko_des = item_data.moko_des
+                        add_buy_data.warn = item_data.warn
+                        add_buy_data.user_id = item_data.user_id
+                        add_buy_data.danger = item_data.danger
+                        add_buy_data.manual = item_data.manual
+                        add_buy_data.mark = item_data.mark
+                        add_buy_data.mpn = item_data.mpn
+                        add_buy_data.mpn_id = item_data.mpn_id
+                        add_buy_data.price = item_data.price
+                        add_buy_data.mf = item_data.mf
+                        add_buy_data.dn = item_data.dn
+                        add_buy_data.dn_id = item_data.dn_id
+                        add_buy_data.dn_long = item_data.dn_long
+                        add_buy_data.other = item_data.other
+                        add_buy_data.all_info = item_data.all_info
+                        add_buy_data.remark = item_data.remark
+                        add_buy_data.color = item_data.color
+                        add_buy_data.supplier_tag = item_data.supplier_tag
+                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                        if add_buy_data.save
+                            item_data.buy = "done"
+                            item_data.save
+                        end
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def pmc_h
         @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL ORDER BY p_items.product_id DESC")
     end
 
     def pmc_new
         @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL ORDER BY p_items.product_id DESC")
+        if @pi_buy
+            @pi_buy.each do |item_buy|
+                item_id = item_buy.id
+                item_data = PItem.find_by_id(item_id)
+                if not item_data.blank?
+                    find_buy_data = PiPmcItem.find_by_p_item_id(item_id)
+                    if find_buy_data.blank?
+
+                        add_buy_data = PiPmcItem.new
+                        add_buy_data.state = "new"
+                        add_buy_data.erp_no = item_data.erp_no
+                        add_buy_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
+                        add_buy_data.moko_part = item_data.moko_part
+                        add_buy_data.moko_des = item_data.moko_des
+                        add_buy_data.part_code = item_data.part_code
+        
+                        sell_qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                        add_buy_data.qty = sell_qty
+                        moko_data = Product.find_by_id(item_buy.product_id)
+                        wh_data = WarehouseInfo.find_by_moko_part(item_data.moko_part)
+                        
+                        if not wh_data.blank? and not moko_data.blank?
+                            if wh_data.qty > 0
+                                add_buy_data.buy_user = "CHK"
+                                send_chk_wh = WhChkInfo.new
+                                send_chk_wh.p_item_id = item_data.id
+                                send_chk_wh.moko_part = item_data.moko_part
+                                send_chk_wh.moko_des = item_data.moko_des
+                                send_chk_wh.chk_qty = wh_data.qty
+                                send_chk_wh.state = "new"
+                                send_chk_wh.save
+                            else
+                                if moko_data.package1 == "D" or moko_data.package1 == "Q"
+                                    add_buy_data.buy_user = "A"
+                                elsif moko_data.package1 == "PZ"
+                                    add_buy_data.buy_user = "B"
+                                end
+                            end
+                        else
+                            add_buy_data.buy_user = ""
+                        end
+                        
+
+
+                        add_buy_data.remark = item_data.remark
+
+                         
+
+
+                        add_buy_data.p_item_id = item_data.id
+                        add_buy_data.erp_id = item_data.erp_id
+                        add_buy_data.user_do = item_data.user_do
+                        add_buy_data.user_do_change = item_data.user_do_change
+                        add_buy_data.check = item_data.check
+                        add_buy_data.pi_buy_info_id = params[:pi_buy_id]
+                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                        add_buy_data.quantity = item_data.quantity
+                        add_buy_data.description = item_data.description
+                        add_buy_data.fengzhuang = item_data.fengzhuang
+                        add_buy_data.link = item_data.link
+                        add_buy_data.cost = item_data.cost
+                        add_buy_data.info = item_data.info
+                        add_buy_data.product_id = item_data.product_id
+                        add_buy_data.warn = item_data.warn
+                        add_buy_data.user_id = item_data.user_id
+                        add_buy_data.danger = item_data.danger
+                        add_buy_data.manual = item_data.manual
+                        add_buy_data.mark = item_data.mark
+                        add_buy_data.mpn = item_data.mpn
+                        add_buy_data.mpn_id = item_data.mpn_id
+                        add_buy_data.price = item_data.price
+                        add_buy_data.mf = item_data.mf
+                        add_buy_data.dn = item_data.dn
+                        add_buy_data.dn_id = item_data.dn_id
+                        add_buy_data.dn_long = item_data.dn_long
+                        add_buy_data.other = item_data.other
+                        add_buy_data.all_info = item_data.all_info
+                        add_buy_data.color = item_data.color
+                        add_buy_data.supplier_tag = item_data.supplier_tag
+                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                        if add_buy_data.save
+                            item_data.buy = "pmc"
+                            item_data.save
+                        end
+                        
+                    end
+                end
+            end
+        end
+        @pmc_new = PiPmcItem.where(state: "new")
     end
 
     def new_moko_part

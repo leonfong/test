@@ -50,6 +50,8 @@ before_filter :authenticate_user!
                         pmc_data.buy_user = "A"
                     elsif package1 == "PZ"
                         pmc_data.buy_user = "B"
+                    else 
+                        pmc_data.buy_user = ""
                     end
                     pmc_data.qty = qty_contrast
                     #pmc_data.state = "pass"

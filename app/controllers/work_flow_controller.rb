@@ -201,7 +201,8 @@ before_filter :authenticate_user!
                                 use_qty = use_data.first.use_qty
                             end 
                         end
-                        sell_qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                        #sell_qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                        sell_qty = item_data.quantity*PcbOrderItem.find_by_id(item_buy.order_item_id).qty
                         add_buy_data.qty = sell_qty
                         if not wh_data.blank? and not moko_data.blank?
                             if wh_data.qty > 0 and wh_data.qty - use_qty > 0

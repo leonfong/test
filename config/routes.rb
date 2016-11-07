@@ -143,7 +143,7 @@ Rails.application.routes.draw do
   match '/pmc_wh_check_apply_for', to: 'work_flow#pmc_wh_check_apply_for', via: 'post'
   match '/pmc_wh_check_list', to: 'work_flow#pmc_wh_check_list', via: 'get'
   match '/pmc_wh_check_pass', to: 'work_flow#pmc_wh_check_pass', via: 'post'
-  match '/del_pmc_wh_check_pass', to: 'work_flow#pmc_wh_check_pass', via: 'get'
+  match '/del_pmc_wh_check_pass', to: 'work_flow#del_pmc_wh_check_pass', via: 'get'
 
 
 

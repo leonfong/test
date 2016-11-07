@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;"> 
-            <%= render partial: "work_flow/menu", locals: {selected: "pmc"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pmc_h"} %>
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
@@ -26,28 +26,12 @@
                         <% if @pi_buy %>
                             <% @pi_buy.each do |item|%>   
                             <tr>
-                                <td><%= PcbOrderItem.find_by_id(item.order_item_id).pcb_order_no_son %></td>
+                                <td><%= item.erp_no_son %></td>
                                 <% if item.product_id > 0 %>
                                     <td><%= Product.find_by_id(item.product_id).name %></td>
                                     <td><%= Product.find_by_id(item.product_id).description %></td>
                                     <td><%= item.part_code %></td>
-                                    <% if not WarehouseInfo.find_by_moko_part(Product.find_by_id(item.product_id).name).blank? %>
-                                        <% if WarehouseInfo.find_by_moko_part(Product.find_by_id(item.product_id).name).qty > 0 %>
-                                            <% if WarehouseInfo.find_by_moko_part(Product.find_by_id(item.product_id).name).qty >= item.quantity*ProcurementBom.find_by_id(item.procurement_bom_id).qty %>
-                                                <td>0</td>
-                                                <td><%= WarehouseInfo.find_by_moko_part(Product.find_by_id(item.product_id).name).qty %></td>
-                                            <% else %>
-                                                <td><%= item.quantity*ProcurementBom.find_by_id(item.procurement_bom_id).qty - WarehouseInfo.find_by_moko_part(Product.find_by_id(item.product_id).name).qty %></td>
-                                                <td><%= WarehouseInfo.find_by_moko_part(Product.find_by_id(item.product_id).name).qty %></td>
-                                            <% end %>
-                                        <% else %>
-                                            <td><%= item.quantity*ProcurementBom.find_by_id(item.procurement_bom_id).qty %></td>
-                                            <td><%= WarehouseInfo.find_by_moko_part(Product.find_by_id(item.product_id).name).qty %></td>
-                                        <% end %>
-                                    <% else %>
-                                        <td><%= item.quantity*ProcurementBom.find_by_id(item.procurement_bom_id).qty %></td> 
-                                        <td>0</td>
-                                    <% end %>
+                                    <td><%= item.qty %></td>
                                     <td></td>
                                     <td>
                                         <% if Product.find_by_id(item.product_id).package1 == "D" or Product.find_by_id(item.product_id).package1 == "Q"%>

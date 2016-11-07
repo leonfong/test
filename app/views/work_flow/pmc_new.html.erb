@@ -19,7 +19,7 @@
                                 <th width="80">库存</th>
                                 <th >备注</th>
                                 <th width="90">采购员</th>
-                                <th width="90">下单数量</th>
+                                <th width="60">审核</th>
                             <tr>
                         </thead>
                         <tbody>
@@ -44,7 +44,7 @@
                                 </td>
                                 <td><%= item.remark %></td>
                                 <td><%= item.buy_user %></td>
-                                <td>采购的功能完成后补上</td>
+                                <td><a type="button" class="btn btn-success btn-xs" data-confirm="确定审核通过?" href="/pmc_check_pass?id=<%= item.id.to_s %>">审核</a></td>
                             </tr>
                             <% end %>
                         <% end %>

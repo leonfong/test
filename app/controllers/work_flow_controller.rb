@@ -5,6 +5,18 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pmc_check_pass
+        if can? :work_a, :all or can? :work_admin, :all
+            get_data = PiPmcItem.find_by_id(params[:id])
+            if not get_data.blank?
+                get_data.state = "pass"
+                get_data.save
+                redirect_to pmc_h_path() and return
+            end
+        end
+        redirect_to :back
+    end
+
     def del_pmc_wh_check_pass
         if can? :work_a, :all or can? :work_admin, :all
             get_data = PiPmcItem.find_by_id(params[:id])

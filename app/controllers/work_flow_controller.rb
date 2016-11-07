@@ -28,7 +28,8 @@ before_filter :authenticate_user!
                         #如果大于1,先还原请料后删除
                         change_data = PiPmcItem.where("p_item_id = '#{get_data.p_item_id}' AND id <> '#{params[:id]}'").first
    
-                        change_data.qty = change_data.qty = get_data.qty
+                        change_data.qty = change_data.qty + get_data.qty
+                        change_data.check = "GREEN"
                         change_data.save
                         get_data.destroy
                     else
@@ -39,6 +40,7 @@ before_filter :authenticate_user!
                         elsif get_data.package1 == "PZ"
                             get_data.buy_user = "B"
                         end
+                        get_data.check = "GREEN"
                         get_data.save
                     end
                 else

@@ -25,7 +25,7 @@
                         <tbody>
                         <% if @pmc_new %>
                             <% @pmc_new.each do |item|%>   
-                            <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% end %>>
+                            <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% elsif item.check == "GREEN" %>class="bg-success"<% end %>>
                                 <td>
                                     <%= item.erp_no_son %>
                                     <% if item.buy_user == "MOKO" %>

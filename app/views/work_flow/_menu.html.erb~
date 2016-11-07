@@ -46,7 +46,7 @@
         <li><a <% if selected == "pmc_warehouse_check" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_list"><i class="icon-list-alt"></i>PMC库存盘点审核</a></li>
 <% end %>
 <% if can? :work_c, :all or can? :work_admin, :all%>
-        <li><a <% if selected == "pmc_warehouse_check_apply_for" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_apply_for_list"><i class="icon-list-alt"></i>工厂盘赢/亏申请</a></li>
+        <li><a <% if selected == "pmc_warehouse_check_apply_for" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_apply_for_list"><i class="icon-list-alt"></i>工厂盘赢/亏 申请</a></li>
 <% end %>
     </ul>
 

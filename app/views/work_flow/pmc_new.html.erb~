@@ -28,7 +28,9 @@
                             <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% end %>>
                                 <td>
                                     <%= item.erp_no_son %>
+                                    <% if item.buy_user == "MOKO" %>
                                     <a type="button" class="btn btn-danger btn-xs" data-confirm="确定要删除?" href="/del_pmc_wh_check_pass?id=<%= item.id.to_s %>">取消内购</a>
+                                    <% end %>
                                 </td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>

@@ -5,6 +5,59 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def del_pmc_wh_check_pass
+        if can? :work_a, :all or can? :work_admin, :all
+            get_data = PiPmcItem.find_by_id(params[:id])
+            if not get_data.blank?
+                #判断是否MOKO料
+                if get_data.buy_user == "MOKO"
+                    #如果是moko料
+                    #qty_data = WhChkInfo.find_by_pi_pmc_iten_id(params[:id])
+                    #还原库存
+                    wh_data = WarehouseInfo.find_by_moko_part(get_data.moko_part)
+                    if not wh_data.blank?
+                        wh_data.qty = wh_data.qty + get_data.qty
+                        wh_data.temp_moko_qty = wh_data.temp_moko_qty - get_data.qty
+                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + get_data.qty
+                        wh_data.save
+                    end
+                    #还原请料
+                    #判断是否有两条请料
+                    #chk_qty = PiPmcItem.find_by_sql("SELECT COUNT(id) AS c_q FROM pi_pcm_items WHERE pi_pcm_items.p_item_id = '#{get_data.p_item_id}'")
+                    if PiPmcItem.where(p_item_id: get_data.p_item_id).count > 1
+                        #如果大于1,先还原请料后删除
+                        change_data = PiPmcItem.where("p_item_id = '#{get_data.p_item_id}' AND id <> '#{params[:id]}'").first
+   
+                        change_data.qty = change_data.qty = get_data.qty
+                        change_data.save
+                        get_data.destroy
+                    else
+                        #如果只有1,更改为外购
+                        get_data.buy_user = ""
+                        if get_data.package1 == "D" or get_data.package1 == "Q"
+                            get_data.buy_user = "A"
+                        elsif get_data.package1 == "PZ"
+                            get_data.buy_user = "B"
+                        end
+                        get_data.save
+                    end
+                else
+                    #如果不是moko料
+                    #还原库存
+                    wh_data = WarehouseInfo.find_by_moko_part(get_data.moko_part)
+                    if not wh_data.blank?
+                        wh_data.temp_buy_qty = wh_data.temp_buy_qty - get_data.qty
+                        wh_data.save
+                    end
+                    get_data.buy_user = ""
+                    get_data.state = "del"
+                    get_data.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def pmc_wh_check_apply_for_list
         @wh_chk = WhChkInfo.where(state: "new")
     end
@@ -33,7 +86,11 @@ before_filter :authenticate_user!
             wh_chk.save
             if wh_data.save
                 pmc_data = PiPmcItem.find_by_id(wh_chk.pi_pmc_item_id)
-                qty_contrast = pmc_data.qty - wh_data.qty
+                if wh_data.true_buy_qty - wh_data.temp_buy_qty > 0 
+                    qty_contrast = pmc_data.qty - (wh_data.true_buy_qty - wh_data.temp_buy_qty + wh_data.qty)
+                else
+                    qty_contrast = pmc_data.qty - wh_data.qty
+                end
                 if qty_contrast <= 0 
                     pmc_data.buy_user = "MOKO"
                     #pmc_data.state = "pass"
@@ -69,7 +126,7 @@ before_filter :authenticate_user!
 
                     add_buy_data.buy_user = "MOKO"
                     add_buy_data.remark = pmc_data.remark
-                    add_buy_data.p_item_id = pmc_data.id
+                    add_buy_data.p_item_id = pmc_data.p_item_id
                     add_buy_data.erp_id = pmc_data.erp_id
                     add_buy_data.user_do = pmc_data.user_do
                     add_buy_data.user_do_change = pmc_data.user_do_change
@@ -293,7 +350,7 @@ before_filter :authenticate_user!
                 end
             end
         end
-        @pmc_new = PiPmcItem.where(state: "new").order("moko_part DESC")
+        @pmc_new = PiPmcItem.where(state: "new").order("moko_part,p_item_id DESC")
     end
 
     def new_moko_part

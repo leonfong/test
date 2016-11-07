@@ -26,7 +26,10 @@
                         <% if @pmc_new %>
                             <% @pmc_new.each do |item|%>   
                             <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% end %>>
-                                <td><%= item.erp_no_son %></td>
+                                <td>
+                                    <%= item.erp_no_son %>
+                                    <a type="button" class="btn btn-danger btn-xs" data-confirm="确定要删除?" href="/del_pmc_wh_check_pass?id=<%= item.id.to_s %>">取消内购</a>
+                                </td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
                                 <td><%= item.part_code %></td>

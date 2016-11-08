@@ -27,28 +27,18 @@
                             <% @pi_buy.each do |item|%>   
                             <tr>
                                 <td><%= item.erp_no_son %></td>
-                                <% if item.product_id > 0 %>
-                                    <td><%= Product.find_by_id(item.product_id).name %></td>
-                                    <td><%= Product.find_by_id(item.product_id).description %></td>
-                                    <td><%= item.part_code %></td>
-                                    <td><%= item.qty %></td>
-                                    <td></td>
-                                    <td>
-                                        <% if Product.find_by_id(item.product_id).package1 == "D" or Product.find_by_id(item.product_id).package1 == "Q"%>
-                                            A
-                                        <% elsif Product.find_by_id(item.product_id).package1 == "PZ"%>
-                                            B
-                                        <% end %>
-                                    </td>
+                                <td><%= item.moko_part %></td>
+                                <td><%= item.moko_des %></td>
+                                <td><%= item.part_code %></td>
+                                <td><%= item.qty %></td>
+                                <td>
+                                <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>
+                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %>
                                 <% else %>
-                                    <td><%= item.product_id %></td>
-                                    <td><%= item.product_id %></td>
-                                    <td><%= item.part_code %></td>
-                                    <td><%= item.quantity*ProcurementBom.find_by_id(item.procurement_bom_id).qty %></td>
-                                    <td>0</td>
-                                    <td></td>
-                                    <td></td>
                                 <% end %>
+                                </td>
+                                <td><%= item.remark %></td>
+                                <td><%= item.buy_user %></td>
 
                                 <td></td>
                             </tr>

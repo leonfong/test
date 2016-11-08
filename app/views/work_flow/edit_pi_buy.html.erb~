@@ -1,8 +1,8 @@
-<div class="container-fluid" >
+<small><div class="container-fluid" >
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "new_pi_buy"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "new_buy"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
             <div class="row "><div class="col-md-12">                
@@ -87,7 +87,7 @@
   <% @pi_buy.each do |buy| %>
   <tr>
       <td></td>
-      <td></td>
+      <td><%= buy.erp_no_son %></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.moko_part %></td>
       <td><%= buy.moko_des %></td>
@@ -245,7 +245,7 @@
                                 <tr>
                                 <td><input type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
                                 <td><%= buy.moko_des.to_s %></td>
-                                <td><%= buy.moko_des.to_s %></td>
+                                <td><%= buy.description.to_s %></td>
                                 <td><%= buy.quantity.to_s %></td>
                                 <td><%= buy.cost.to_s %></td>
                                 <% if not PDn.find_by_id(buy.dn_id).blank? %>  
@@ -383,7 +383,7 @@
 
 
 
-</div>
+</div></small>
 
 
 <script type="text/javascript">

@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pi_waitfor_buy"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "waitfor_buy"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
 
@@ -29,26 +29,20 @@
   <%= will_paginate(@pi_buy) %> 
   <% @pi_buy.each do |buy| %>
   <tr>
-      <td><%= buy.pi_no %></td>
+      <td><%= buy.erp_no_son %></td>
       <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
       <td><%= buy.description %></td>
       <td><%= buy.moko_part %></td>
       <td><%= buy.moko_des %></td> 
-      <td><%= buy.quantity*ProcurementBom.find(buy.procurement_bom_id).qty %></td>
+      <td><%= buy.qty %></td>
       <td><%= buy.cost %></td>
       <% if not buy.cost.blank? %>
-          <td><%= buy.quantity*ProcurementBom.find(buy.procurement_bom_id).qty*buy.cost %></td>
+          <td><%= buy.qty*buy.cost %></td>
       <% else %>
           <td></td>
       <% end %>
-      <td>
-          <% if not buy.dn_id.blank? %>
-              <% if not PDn.find_by_id(buy.dn_id).blank? %>
-                  <%= PDn.find_by_id(buy.dn_id).dn_long %> 
-              <% end %>
-          <% end %>
-      </td>
+      <td><%= buy.dn_long %></td>
   </tr>
   <% end %>
 <% end %> 

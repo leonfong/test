@@ -11,6 +11,7 @@
                     <table class="table">
                         <thead>
                             <tr style="background-color: #eeeeee">
+                                <th width="80">状态</th>
                                 <th width="130">Order No.</th>
                                 <th width="150">MOKO ID</th>
                                 <th width="350">物料名称</th>
@@ -26,6 +27,7 @@
                         <% if @pi_buy %>
                             <% @pi_buy.each do |item|%>   
                             <tr>
+                                <td><%= item.state %></td>
                                 <td><%= item.erp_no_son %></td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>

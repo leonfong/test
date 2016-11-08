@@ -5,6 +5,22 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def send_pi_buy
+        up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+        if not up_state.blank?
+            up_state.state = "buy"
+            up_state.save
+            PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
+                item.state = "buying"
+                item.save
+                pmc_date = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                pmc_date.state = "buying" 
+                pmc_date.save
+            end
+        end
+        redirect_to pi_buy_history_path()
+    end
+
     def pmc_check_pass
         if can? :work_a, :all or can? :work_admin, :all
             get_data = PiPmcItem.find_by_id(params[:id])
@@ -188,21 +204,25 @@ before_filter :authenticate_user!
     def add_pi_buy_item
         if params[:roles]
             params[:roles].each do |item_id|
-                item_data = PItem.find_by_id(item_id)
+                #item_data = PItem.find_by_id(item_id)
+                
+                item_data = PiPmcItem.find_by_id(item_id)
                 if not item_data.blank?
                     find_buy_data = PiBuyItem.find_by_p_item_id(item_id)
                     if find_buy_data.blank?
                         add_buy_data = PiBuyItem.new
-                        add_buy_data.p_item_id = item_data.id
+                        add_buy_data.pi_pmc_item_id = item_data.id 
+                        add_buy_data.p_item_id = item_data.p_item_id
                         add_buy_data.erp_id = item_data.erp_id
                         add_buy_data.erp_no = item_data.erp_no
+                        add_buy_data.erp_no_son = item_data.erp_no_son
                         add_buy_data.user_do = item_data.user_do
                         add_buy_data.user_do_change = item_data.user_do_change
                         add_buy_data.check = item_data.check
                         add_buy_data.pi_buy_info_id = params[:pi_buy_id]
                         add_buy_data.procurement_bom_id = item_data.procurement_bom_id
                         add_buy_data.quantity = item_data.quantity
-                        add_buy_data.qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                        add_buy_data.qty = item_data.qty
                         add_buy_data.description = item_data.description
                         add_buy_data.part_code = item_data.part_code
                         add_buy_data.fengzhuang = item_data.fengzhuang
@@ -232,8 +252,13 @@ before_filter :authenticate_user!
                         add_buy_data.supplier_out_tag = item_data.supplier_out_tag
                         add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
                         if add_buy_data.save
-                            item_data.buy = "done"
+                            item_data.state = "buy_adding"
                             item_data.save
+                            pitem_data = PItem.find_by_id(add_buy_data.p_item_id)
+                            if not pitem_data.blank? 
+                                pitem_data.buy = "buy_adding"
+                                pitem_data.save
+                            end
                         end
                     end
                 end
@@ -243,7 +268,7 @@ before_filter :authenticate_user!
     end
 
     def pmc_h
-        @pi_buy = PiPmcItem.where(state: "pass")
+        @pi_buy = PiPmcItem.where("state <> 'new'")
     end
 
     def pmc_new
@@ -3307,15 +3332,6 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
-    def send_pi_buy
-        up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
-        if not up_state.blank?
-            up_state.state = "buy"
-            up_state.save
-        end
-        redirect_to pi_buy_history_path()
-    end
-
     def pi_buy_history
         @w_wh = PiBuyInfo.where(state: "buy")
     end
@@ -3324,62 +3340,7 @@ before_filter :authenticate_user!
         @pi_buy = PiBuyItem.where(pi_buy_info_id: params[:pi_buy_info_id])
     end
 
-    def add_pi_buy_item
-        if params[:roles]
-            params[:roles].each do |item_id|
-                item_data = PItem.find_by_id(item_id)
-                if not item_data.blank?
-                    find_buy_data = PiBuyItem.find_by_p_item_id(item_id)
-                    if find_buy_data.blank?
-                        add_buy_data = PiBuyItem.new
-                        add_buy_data.p_item_id = item_data.id
-                        add_buy_data.erp_id = item_data.erp_id
-                        add_buy_data.erp_no = item_data.erp_no
-                        add_buy_data.user_do = item_data.user_do
-                        add_buy_data.user_do_change = item_data.user_do_change
-                        add_buy_data.check = item_data.check
-                        add_buy_data.pi_buy_info_id = params[:pi_buy_id]
-                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
-                        add_buy_data.quantity = item_data.quantity
-                        add_buy_data.qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
-                        add_buy_data.description = item_data.description
-                        add_buy_data.part_code = item_data.part_code
-                        add_buy_data.fengzhuang = item_data.fengzhuang
-                        add_buy_data.link = item_data.link
-                        add_buy_data.cost = item_data.cost
-                        add_buy_data.info = item_data.info
-                        add_buy_data.product_id = item_data.product_id
-                        add_buy_data.moko_part = item_data.moko_part
-                        add_buy_data.moko_des = item_data.moko_des
-                        add_buy_data.warn = item_data.warn
-                        add_buy_data.user_id = item_data.user_id
-                        add_buy_data.danger = item_data.danger
-                        add_buy_data.manual = item_data.manual
-                        add_buy_data.mark = item_data.mark
-                        add_buy_data.mpn = item_data.mpn
-                        add_buy_data.mpn_id = item_data.mpn_id
-                        add_buy_data.price = item_data.price
-                        add_buy_data.mf = item_data.mf
-                        add_buy_data.dn = item_data.dn
-                        add_buy_data.dn_id = item_data.dn_id
-                        add_buy_data.dn_long = item_data.dn_long
-                        add_buy_data.other = item_data.other
-                        add_buy_data.all_info = item_data.all_info
-                        add_buy_data.remark = item_data.remark
-                        add_buy_data.color = item_data.color
-                        add_buy_data.supplier_tag = item_data.supplier_tag
-                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
-                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
-                        if add_buy_data.save
-                            item_data.buy = "done"
-                            item_data.save
-                        end
-                    end
-                end
-            end
-        end
-        redirect_to :back
-    end
+
 
     def find_pi_buy
         @table_buy = ''
@@ -3401,13 +3362,18 @@ before_filter :authenticate_user!
                 des = params[:key_order].strip.split(" ")
                 where_des = ""
                 des.each_with_index do |de,index|
-                    where_des += "p_items.moko_des LIKE '%#{de}%'"
+                    #where_des += "p_items.moko_des LIKE '%#{de}%'"
+                    where_des += "`pi_pmc_items`.`moko_des` LIKE '%#{de}%'"
                     if des.size > (index + 1)
                         where_des += " AND "
                     end
-                end      
+                end 
+                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' AND `pi_pmc_items`.`buy_user` <> 'MOKO' ")
+            else
+                @pi_buy = PiPmcItem.where("state = 'pass'")
             end
-            @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE (p_items.moko_part LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND pi_infos.state = 'checked' AND p_items.buy IS NULL")    
+            #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE (p_items.moko_part LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND pi_infos.state = 'checked' AND p_items.buy IS NULL")    
+            #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' ") 
             if not @pi_buy.blank?
                 @pi_buy.each do |buy|
                     @table_buy += '<tr>'
@@ -3430,7 +3396,7 @@ before_filter :authenticate_user!
                     @table_buy += '<td>'
                     @table_buy += '<div class="row" style="margin: 0px;" >'
                     @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >'
-                    PItemRemark.where(p_item_id: buy.id).each do |remark_item|
+                    PItemRemark.where(p_item_id: buy.p_item_id).each do |remark_item|
                         @table_buy += '<div class="row" style="margin: 0px;" >'
                         @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
                         @table_buy += '<table style="margin: 0px;" >'
@@ -3567,7 +3533,9 @@ before_filter :authenticate_user!
     end
 
     def pi_waitfor_buy
-        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL").paginate(:page => params[:page], :per_page => 20)
+        @pi_buy = PiPmcItem.where(state: "pass").paginate(:page => params[:page], :per_page => 20)
+        #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL").paginate(:page => params[:page], :per_page => 20)
+        
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 

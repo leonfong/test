@@ -86,12 +86,14 @@
 <% if not @pi_buy.blank? %>
   <% @pi_buy.each do |buy| %>
   <tr>
-      <td></td>
+      <td><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pi_buy_item?id=<%= buy.id.to_s %>" data-confirm="确定要删除?">删除</a></td>
       <td><%= buy.erp_no_son %></td>
       <td><%= buy.mpn %></td>
-      <td><%= buy.moko_part %></td>
+      <td>
+          <a class="text-info" data-method='get' data-remote='true' href="/cost_history_buy?part_code=<%= buy.moko_part.to_s%>&item_id=<%= buy.id.to_s %>"><%= buy.moko_part %></a>
+      </td>
       <td><%= buy.moko_des %></td>
-      <td><%= buy.quantity %></td>
+      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>"><%= buy.qty %></div></td>
       <td><%= buy.cost %></td>
       <td><%= buy.dn_long %></td>
                     <td>
@@ -380,7 +382,62 @@
 
 
 
+<div class="modal fade" id="cost_history_buy" tabindex="-1" role="dialog" aria-labelledby="cost_history_buyLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="cost_history_buyLabel">History Cost</h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-group" id="cost_history_buy_list">
 
+          </div>       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="edit_buy_qty" tabindex="-1" role="dialog" aria-labelledby="edit_buy_qtyLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_buy_qtyLabel">编辑数量和价格</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_pi_buy_qty_cost},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="buy_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="buy_id" name="buy_id">
+          </div>
+          <div class="form-group">
+            <label for="buy_dn" class="control-label">供应商简称:</label>
+            <input class="form-control" name="buy_dn" id="buy_dn" type="text" value="<%= @pi_buy_info.dn %>" readonly>
+          </div>
+          <div class="form-group">
+            <label for="buy_dn_long" class="control-label">供应商全称:</label>
+            <input class="form-control" name="buy_dn_long" id="buy_dn_long" type="text" value="<%= @pi_buy_info.dn_long %>" readonly>
+          </div>
+          <div class="form-group">
+            <label for="buy_qty" class="control-label">数量:</label>
+            <input class="form-control" name="buy_qty" id="buy_qty" type="number">
+          </div>
+          <div class="form-group">
+            <label for="buy_cost">价格：</label>
+            <input class="form-control" name="buy_cost" id="buy_cost" type="text">
+          </div>             
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 </div></small>
@@ -400,6 +457,23 @@ function postform() {
 
 }  
 
+
+$('#edit_buy_qty').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var buy_id = button.data('buy_id');
+  var buy_qty = button.data('buy_qty');
+  var buy_cost = button.data('buy_cost');
+  //var buy_dn = button.data('buy_dn');
+  //var buy_dn_long = button.data('buy_dn_long');
+  var buy_moko_des = button.data('buy_moko_des');
+  var modal = $(this);
+  modal.find($("#edit_buy_qtyLabel")).html('编辑数量和价格: ' + buy_moko_des);
+  modal.find($("#buy_id")).val(buy_id);
+  modal.find($("#buy_qty")).val(buy_qty);
+  modal.find($("#buy_cost")).val(buy_cost);
+  //modal.find($("#buy_dn")).val(buy_dn);
+  //modal.find($("#buy_dn_long")).val(buy_dn_long);
+})
 
 $(document).ready(function(){
   $("#tijiao").click(function(){

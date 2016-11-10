@@ -145,7 +145,10 @@ Rails.application.routes.draw do
   match '/pmc_wh_check_pass', to: 'work_flow#pmc_wh_check_pass', via: 'post'
   match '/del_pmc_wh_check_pass', to: 'work_flow#del_pmc_wh_check_pass', via: 'get'
   match '/pmc_check_pass', to: 'work_flow#pmc_check_pass', via: 'get'
-
+  match '/del_pmc_wh_check_pass', to: 'work_flow#del_pmc_wh_check_pass', via: 'get'
+  match '/cost_history_buy', to: 'work_flow#cost_history_buy', via: 'get'
+  match '/del_pi_buy_item', to: 'work_flow#del_pi_buy_item', via: 'get'
+  match '/edit_pi_buy_qty_cost', to: 'work_flow#edit_pi_buy_qty_cost', via: 'post'
 
 
 

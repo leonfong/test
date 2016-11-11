@@ -149,6 +149,9 @@ Rails.application.routes.draw do
   match '/cost_history_buy', to: 'work_flow#cost_history_buy', via: 'get'
   match '/del_pi_buy_item', to: 'work_flow#del_pi_buy_item', via: 'get'
   match '/edit_pi_buy_qty_cost', to: 'work_flow#edit_pi_buy_qty_cost', via: 'post'
+  match '/pi_buy_check_list', to: 'work_flow#pi_buy_check_list', via: 'get'
+  match '/send_pi_buy_check', to: 'work_flow#send_pi_buy_check', via: 'post'
+
 
 
 

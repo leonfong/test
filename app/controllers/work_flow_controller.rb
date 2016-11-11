@@ -5,6 +5,29 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_pi_buy  
+        @pi_buy_find = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL")   
+        @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+        @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+        end
+        @all_dn += "&quot;]"
+        if @pi_buy_info.state == "check"
+            render "edit_pi_buy_check.html.erb" and return
+        end
+    end
+
+    def pi_buy_history
+        @w_wh = PiBuyInfo.where(state: "buy")
+    end
+
+    def pi_buy_check_list
+        @w_wh = PiBuyInfo.where(state: "check")
+    end
+
     def del_pi_buy_item
         buy_data = PiBuyItem.find_by_id(params[:id])
         if not buy_data.blank?
@@ -38,7 +61,24 @@ before_filter :authenticate_user!
                 pmc_data.save
             end
         end
-        redirect_to pi_buy_history_path()
+        redirect_to pi_buy_check_list_path()
+    end
+
+    def send_pi_buy_check
+        up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+        if not up_state.blank?
+            up_state.state = "check"
+            up_state.save
+            PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
+                item.state = "checking"
+                item.save
+                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                #pmc_data.buy_qty = item.qty
+                pmc_data.state = "checking" 
+                pmc_data.save
+            end
+        end
+        redirect_to pi_buy_list_path()
     end
 
     def edit_pi_buy_qty_cost
@@ -3685,10 +3725,6 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
-    def pi_buy_history
-        @w_wh = PiBuyInfo.where(state: "buy")
-    end
-
     def pi_buy_item
         @pi_buy = PiBuyItem.where(pi_buy_info_id: params[:pi_buy_info_id])
     end
@@ -3858,18 +3894,6 @@ before_filter :authenticate_user!
             pi_buy_no = params[:pi_buy_no]
         end
         redirect_to edit_pi_buy_path(pi_buy_no: pi_buy_no) and return    
-    end
-
-    def edit_pi_buy  
-        @pi_buy_find = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL")   
-        @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
-        @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
-        @all_dn = "[&quot;"
-        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
-        all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.dn.to_s
-        end
-        @all_dn += "&quot;]"
     end
 
     def pi_buy_list

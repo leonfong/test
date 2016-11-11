@@ -173,7 +173,7 @@
             <% end %>
         <% end %>
         </small></td>
-<% if can? :work_a, :all %>
+<% if can? :work_admin, :all %>
 
         <td width="50" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></small></td>
 

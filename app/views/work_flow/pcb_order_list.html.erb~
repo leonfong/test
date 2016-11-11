@@ -173,7 +173,7 @@
             <% end %>
         <% end %>
         </small></td>
-<% if can? :work_a, :all %>
+<% if can? :work_admin, :all %>
 
         <td width="50" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></small></td>
 
@@ -222,15 +222,15 @@
                   <% else %>                 
                       <% if not item.bom_id.blank? %>
                           <% if not ProcurementBom.find_by_id(item.bom_id).blank? %>
-                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p.to_s %></td>
-                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p.to_i/(item.qty.to_i) %></td>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p %></td>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= ProcurementBom.find_by_id(item.bom_id).t_p/(item.qty.to_i) %></td>
                           <% else %>
-                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p.to_s %></td>
-                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price.to_s %></td>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p %></td>
+                              <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>
                           <% end %>
                       <% else %>
-                          <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p.to_s %></td>
-                          <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price.to_s %></td>
+                          <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.t_p %></td>
+                          <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.price %></td>
                       <% end %>
                   <% end %>
 <% if item.bom_id != nil and item.p_type == "COMPONENTS"%>

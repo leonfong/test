@@ -3651,17 +3651,17 @@ before_filter :authenticate_user!
                         if not wh_data.blank?
                             wh_data.wh_qty = wh_data.wh_qty + wh_in.qty_in
                             if wh_in.buy_user == "MOKO"
-                                wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty
+                                wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty_in
                             elsif wh_in.buy_user == "MOKO_TEMP" 
-                                wh_data.temp_future_qty = wh_data.temp_future_qty - wh_in.qty
+                                wh_data.temp_future_qty = wh_data.temp_future_qty - wh_in.qty_in
                             else
-                                if wh_data.temp_buy_qty >= wh_in.qty
-                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty 
-                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty
-                                elsif wh_data.temp_buy_qty < wh_in.qty
-                                    wh_data.qty = wh_in.qty - wh_data.temp_buy_qty
+                                if wh_data.temp_buy_qty >= wh_in.qty_in
+                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty_in 
+                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
+                                elsif wh_data.temp_buy_qty < wh_in.qty_in
+                                    wh_data.qty = wh_in.qty_in - wh_data.temp_buy_qty
                                     wh_data.temp_buy_qty = 0
-                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty
+                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
                                      
                                 end 
                             end

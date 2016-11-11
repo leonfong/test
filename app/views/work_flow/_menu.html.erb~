@@ -55,6 +55,7 @@
     <ul id="buyMenu" class="nav nav-list  menu-second <% if selected =~ /buy/i %>collapse in<% else %>collapse<% end %>">
         <li><a <% if selected == "waitfor_buy" %>style="background-color: #d9edf7;"<% end %> href="/pi_waitfor_buy"><i class="icon-list-alt"></i> 待采购的物料</a></li>
         <li><a <% if selected == "buy_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_list"><i class="icon-list-alt"></i> 采购下单</a></li>
+        <li><a <% if selected == "buy_check_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_check_list"><i class="icon-list-alt"></i> 待审核</a></li>
         <li><a <% if selected == "buy_history" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_history"><i class="icon-list-alt"></i> 采购记录</a></li>
 <% end %>
     </ul>

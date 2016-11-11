@@ -190,6 +190,7 @@ before_filter :authenticate_user!
                 find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_data.id)
                 if find_buy_data.blank?
                     add_buy_data = PiBuyItem.new
+                    add_buy_data.buy_user = item_data.buy_user
                     add_buy_data.state = "new"
                     add_buy_data.pi_pmc_item_id = item_data.id 
                     add_buy_data.p_item_id = item_data.p_item_id
@@ -257,6 +258,7 @@ before_filter :authenticate_user!
                     find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
                     if find_buy_data.blank?
                         add_buy_data = PiBuyItem.new
+                        add_buy_data.buy_user = item_data.buy_user
                         add_buy_data.state = "new"
                         add_buy_data.pi_pmc_item_id = item_data.id 
                         add_buy_data.p_item_id = item_data.p_item_id
@@ -3575,6 +3577,7 @@ before_filter :authenticate_user!
     def add_wh_item
         pi_buy_item = PiBuyItem.find_by_id(params[:pi_buy_item_id])
         wh_item = PiWhItem.new
+        wh_item.buy_user = pi_buy_item.buy_user
         wh_item.pi_wh_info_no = params[:wh_order_no]
         wh_item.pi_buy_item_id = params[:pi_buy_item_id]
         wh_item.moko_part = pi_buy_item.moko_part
@@ -3646,13 +3649,30 @@ before_filter :authenticate_user!
                     wh_in_data.each do |wh_in|
                         wh_data = WarehouseInfo.find_by_moko_part(wh_in.moko_part)
                         if not wh_data.blank?
-                            wh_data.qty = wh_data.qty + wh_in.qty_in
+                            wh_data.wh_qty = wh_data.wh_qty + wh_in.qty_in
+                            if wh_in.buy_user == "MOKO"
+                                wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty
+                            elsif wh_in.buy_user == "MOKO_TEMP" 
+                                wh_data.temp_future_qty = wh_data.temp_future_qty - wh_in.qty
+                            else
+                                if wh_data.temp_buy_qty >= wh_in.qty
+                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty 
+                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty
+                                elsif wh_data.temp_buy_qty < wh_in.qty
+                                    wh_data.qty = wh_in.qty - wh_data.temp_buy_qty
+                                    wh_data.temp_buy_qty = 0
+                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty
+                                     
+                                end 
+                            end
+                            #wh_data.qty = wh_data.qty + wh_in.qty_in
                             #wh_data.save
                         else   
                             wh_data = WarehouseInfo.new
                             wh_data.moko_part = wh_in.moko_part
                             wh_data.moko_des = wh_in.moko_des
-                            wh_data.qty = wh_in.qty_in                          
+                            #wh_data.qty = wh_in.qty_in  
+                            wh_data.wh_qty = wh_in.qty_in                        
                             #wh_data.save
                         end
                         if wh_data.save

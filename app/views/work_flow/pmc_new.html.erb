@@ -15,6 +15,7 @@
                                 <th width="150">MOKO ID</th>
                                 <th width="350">物料名称</th>
                                 <th width="80">位号</th>
+                                <th width="80">申请总量</th>
                                 <th width="80">申请数量</th>
                                 <th width="80">库存</th>
                                 <th >备注</th>
@@ -36,6 +37,7 @@
                                 <td><%= item.moko_des %></td>
                                 <td><%= item.part_code %></td>
                                 <td><%= item.qty %></td>
+                                <td><%= item.buy_qty %></td>
                                 <td>
                                 <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>
                                     <%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %>
@@ -44,7 +46,12 @@
                                 </td>
                                 <td><%= item.remark %></td>
                                 <td><%= item.buy_user %></td>
-                                <td><a type="button" class="btn btn-success btn-xs" data-confirm="确定审核通过?" href="/pmc_check_pass?id=<%= item.id.to_s %>">审核</a></td>
+                                <td>
+                                <% if item.buy_user == "CHK" %>
+                                <% else %>
+                                    <a type="button" class="btn btn-success btn-xs" data-confirm="确定审核通过?" href="/pmc_check_pass?id=<%= item.id.to_s %>">审核</a>
+                                <% end %>
+                                </td>
                             </tr>
                             <% end %>
                         <% end %>

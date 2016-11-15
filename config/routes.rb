@@ -154,6 +154,18 @@ Rails.application.routes.draw do
   match '/factory_in', to: 'work_flow#factory_in', via: 'get'
   match '/factory_out', to: 'work_flow#factory_out', via: 'get'
   match '/wh_material_flow', to: 'work_flow#wh_material_flow', via: 'get'
+  match '/wh_draft_change_list', to: 'work_flow#wh_draft_change_list', via: 'get'
+  match '/new_wh_change_order', to: 'work_flow#new_wh_change_order', via: 'get'
+  match '/edit_wh_change_order', to: 'work_flow#edit_wh_change_order', via: 'get'
+  match '/del_wh_change', to: 'work_flow#del_wh_change', via: 'get'
+  match '/find_w_wh_change', to: 'work_flow#find_w_wh_change', via: 'get'
+  match '/add_wh_change_item', to: 'work_flow#add_wh_change_item', via: 'post'
+  match '/wh_draft_change', to: 'work_flow#wh_draft_change', via: 'post'
+
+
+
+
+
 
 
 

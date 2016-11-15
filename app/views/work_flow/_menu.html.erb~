@@ -65,8 +65,8 @@
 <% if can? :work_wh, :all %>
     <a style="background-color: #ddd;" href="#whMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 库存管理</a>
     <ul id="whMenu" class="nav nav-list  menu-second <% if selected =~ /wh/i %>collapse in<% else %>collapse<% end %>">
-        <li><a <% if selected == "wh_draft_list_f" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list?site=f"><i></i> 入库到工厂草稿箱</a></li>
-        <li><a <% if selected == "wh_draft_list_c" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list?site=c"><i></i> 工厂到公司草稿箱</a></li>
+        <li><a <% if selected == "wh_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list"><i></i> 入库到工厂草稿箱</a></li>
+        <li><a <% if selected == "wh_draft_list_c" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list?site=c"><i></i> 工厂转到公司</a></li>
 <!--
         <li><a <% if selected == "wh_material_flow" %>style="background-color: #d9edf7;"<% end %> href="/wh_material_flow"><i></i> 物料流转</a></li>
 

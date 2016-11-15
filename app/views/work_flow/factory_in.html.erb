@@ -10,7 +10,7 @@
             
             
             <span  style="color:#999;">
-               <%= form_tag('/wh_query', method:"get", class:"form-inline") do %>
+               <%= form_tag('/factory_in', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
                   
                   <lable for="order" , class="sr-only">Qrder : </lable>
@@ -22,6 +22,7 @@
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
+                <a type="button" class="btn btn-info btn-sm" href="/factory_in">料齐的订单</a>
             </div>
             <% end %>                       
             </span>
@@ -33,23 +34,23 @@
 
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
-<% if not @find_in_wh.blank? %>                   
+<% if not @buy_done.blank? %>                   
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th >MOKO PART</th>
-      <th >MOKO DES</th>
-      <th width="80">库存</th>
+      <th >单号</th>
+      <th >状态</th>
+      <th width="80"> </th>
       <th width="75">操作</th>
     </tr>
   </thead>
   <tbody>
-<% @find_in_wh.each do |wh| %>
+<% @buy_done.each do |wh| %>
       <tr >
-        <td><%= wh.moko_part %></td>
-        <td><%= wh.moko_des %></td>
-        <td><%= wh.qty %></td>
-        <td></td>
+        <td><%= wh.pcb_order_no_son %></td>
+        <td><%= wh.buy_type %></td>
+        <td> </td>
+        <td>上线生产</td>
       </tr>
 <% end %>
   </tbody>

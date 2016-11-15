@@ -5,20 +5,87 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def wh_draft_change
+        wh_order = PiWhChangeInfo.find_by_pi_wh_change_no(params[:wh_no])
+        if not wh_order.blank?
+            if wh_order.state == "new" or wh_order.state == "fail"
+                wh_order.state = "checking"
+                wh_order.save
+            elsif wh_order.state == "checking"
+                if params[:commit] == "PASS"
+                    wh_order.state = "checked"
+                elsif params[:commit] == "FAIL"
+                    wh_order.state = "fail"
+                end
+                wh_order.save
+            end
+            if wh_order.state == "checked"
+            #if wh_order.state == "new"
+                wh_in_data = PiWhChangeItem.where(pi_wh_change_info_no: params[:wh_no])
+                if not wh_in_data.blank?
+                    wh_in_data.each do |wh_in|
+                        wh_data = WarehouseInfo.find_by_moko_part(wh_in.moko_part)
+                        if not wh_data.blank?
+                            wh_data.wh_c_qty = wh_data.wh_c_qty + wh_in.qty_in
+                            wh_data.wh_f_qty = wh_data.wh_f_qty - wh_in.qty_in
+                            #wh_data.save
+                        end
+                        if wh_data.save
+                            wh_in.state = "done"
+                            wh_in.save
+                        end
+                    end
+                    wh_order.state = "done"
+                    wh_order.save
+                end
+            end            
+        end
+        redirect_to wh_draft_change_list_path()
+    end
+
     def wh_material_flow
 
     end
 
     def factory_in
-
+        if not params[:order_no].blank?
+            @buy_done = PcbOrderItem.where(buy_type: "done",pcb_order_no_son: params[:order_no].strip)
+        else
+            @buy_done = PcbOrderItem.where(buy_type: "done")
+        end
     end
 
     def factory_out
     end
 
+    def add_wh_change_item
+        pi_wh_change_info = PiWhChangeInfo.find_by_pi_wh_change_no(params[:pi_wh_change_no])
+        wh_item = PiWhChangeItem.new
+        @wh_data = WarehouseInfo.find_by_moko_part(params[:moko_part])
+        wh_item.pi_wh_change_info_id = pi_wh_change_info.id
+        wh_item.pi_wh_change_info_no = params[:pi_wh_change_no]
+        wh_item.moko_part = params[:moko_part]
+        wh_item.moko_des = @wh_data.moko_des
+        wh_item.qty_in = params[:wh_qty_in]
+        wh_item.save
+        @wh_wait = ''
+        wh_item_all = PiWhChangeItem.where(pi_wh_change_info_no: params[:pi_wh_change_no])
+        if not wh_item_all.blank?
+            wh_item_all.each do |item|
+                @wh_wait += '<tr>'
+                @wh_wait += '<td>'+item.moko_part.to_s+'</td>'
+                @wh_wait += '<td>'+item.moko_des.to_s+'</td>'
+                @wh_wait += '<td>'+item.qty_in.to_s+'</td>'
+                @wh_wait += '<td><a class="glyphicon glyphicon-remove" href="/del_wh_change_item?del_wh_item_id='+item.id.to_s+'" data-confirm="确定要删除?"></a></td>'
+                @wh_wait += '</tr>'
+            end
+        end
+    end
+
     def add_wh_item
         pi_buy_item = PiBuyItem.find_by_id(params[:pi_buy_item_id])
         wh_item = PiWhItem.new
+        wh_item.pi_pmc_item_id = pi_buy_item.pi_pmc_item_id
         wh_item.buy_user = pi_buy_item.buy_user
         wh_item.pi_wh_info_no = params[:wh_order_no]
         wh_item.pi_buy_item_id = params[:pi_buy_item_id]
@@ -527,7 +594,7 @@ before_filter :authenticate_user!
                         add_future_data.part_code = pmc_data.part_code
 
                         add_future_data.qty = pmc_data.qty
-
+                        add_future_data.qty_in = pmc_data.qty
                         add_future_data.buy_user = "MOKO_TEMP"
                         #如果虚拟库存满足需求
                         if wh_data.future_qty - temp_qty >= 0
@@ -588,7 +655,7 @@ before_filter :authenticate_user!
                     add_buy_data.moko_des = pmc_data.moko_des
                     add_buy_data.part_code = pmc_data.part_code
                     add_buy_data.qty = pmc_data.qty
-
+                    add_buy_data.qty_in = pmc_data.qty
                     package1 = Product.find_by_name(wh_chk.moko_part).package1
                     if package1 == "D" or package1 == "Q"
                         add_buy_data.buy_user = "A"
@@ -681,7 +748,7 @@ before_filter :authenticate_user!
                         #需求
                         sell_qty = item_data.quantity*PcbOrderItem.find_by_id(item_buy.order_item_id).qty
                         add_buy_data.qty = sell_qty
-                        
+                        add_buy_data.qty_in = sell_qty 
                         if not wh_data.blank? and not moko_data.blank?
                             #如果库存大于0
                             if wh_data.qty > 0 and wh_data.qty - use_qty > 0
@@ -802,6 +869,7 @@ before_filter :authenticate_user!
                                 add_buy_do.part_code = add_buy_data.part_code
 
                                 add_buy_do.qty = add_buy_data.qty
+                                add_buy_do.qty_in = add_buy_data.qty
 
                                 if moko_data.package1 == "D" or moko_data.package1 == "Q"
                                     add_buy_do.buy_user = "A"
@@ -3545,7 +3613,108 @@ before_filter :authenticate_user!
 
     def wh_draft_list
         #@whlist = PiWhInfo.where(state: "new",wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        @whlist = PiWhInfo.where(wh_user: current_user.email,site: "c").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        @whlist = PiWhInfo.where(wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def wh_draft_change_list
+        @whlist = PiWhChangeInfo.where(wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def new_wh_change_order
+        if params[:wh_no] == "" or params[:wh_no] == nil
+            if PiWhChangeInfo.find_by_sql('SELECT pi_wh_change_no FROM pi_wh_change_infos WHERE to_days(pi_wh_change_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = PiWhChangeInfo.find_by_sql('SELECT pi_wh_change_no FROM pi_wh_change_infos WHERE to_days(pi_wh_change_infos.created_at) = to_days(NOW())').last.pi_wh_change_no.split("WH")[-1].to_i + 1
+            end
+            @wh_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "WH"+ pi_n.to_s
+
+            wh_info = PiWhChangeInfo.new
+            wh_info.pi_wh_change_no = @wh_no
+            wh_info.wh_user = current_user.email
+            wh_info.state = "new"
+            #wh_info.site = "c"            
+            wh_info.save
+            pi_wh_change_no = wh_info.pi_wh_change_no
+        else
+            pi_wh_change_no = params[:wh_no]
+        end
+        #@pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        redirect_to edit_wh_change_order_path(pi_wh_change_no: pi_wh_change_no) and return
+    end
+
+    def edit_wh_change_order
+        @wh_info = PiWhChangeInfo.find_by(pi_wh_change_no: params[:pi_wh_change_no])
+        @wh_item = PiWhChangeItem.where(pi_wh_change_info_no: params[:pi_wh_change_no])
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn_long.to_s
+        end
+        @all_dn += "&quot;]"
+    end
+
+    def del_wh_change
+        wh_order = PiWhChangeInfo.find(params[:wh_change_id])
+        if can? :work_wh, :all
+            wh_order.destroy
+        end
+        redirect_to :back
+    end
+
+    def del_wh_change_item
+        del_wh_item = PiWhChangeItem.find_by_id(params[:del_wh_change_item_id])
+        if not del_wh_item.blank?
+            if can? :work_wh, :all
+                del_wh_item.save
+            end
+        end
+        redirect_to :back
+    end
+
+    def find_w_wh_change
+        if params[:pi_wh_info] != ""
+            where_wh = "moko_part LIKE '%#{params[:pi_wh_info].strip}%' OR moko_des LIKE '%#{params[:pi_wh_info].strip}%'" 
+            @w_part = ""
+            @w_part += '<small>'
+            @w_part += '<table class="table table-bordered">'
+            @w_part += '<thead>'
+            @w_part += '<tr class="active">'
+            @w_part += '<th width="120">物料编码</th>'
+            @w_part += '<th >物料描述</th>'
+            @w_part += '<th >总量</th>'
+            @w_part += '<th >库存</th>'
+            @w_part += '<th >工厂数量</th>'
+            @w_part += '<th >公司总量</th>'
+            @w_part += '<th >流转数量</th>'
+            @w_part += '<tr>'
+            @w_part += '</thead>'
+            @w_part += '<tbody>'
+            @w_wh_change = WarehouseInfo.where("#{where_wh}")
+            if not @w_wh_change.blank?
+                @w_wh_change.each do |wh_change|                                   
+                            @w_part += '<tr id="wh_change_'+wh_change.id.to_s+'">'
+                            @w_part += '<td>'+wh_change.moko_part.to_s+'</td>'
+                            @w_part += '<td>'+wh_change.moko_des.to_s+'</td>'
+                            @w_part += '<td>'+wh_change.wh_qty.to_s+'</td>'
+                            @w_part += '<td>'+wh_change.qty.to_s+'</td>'
+                            @w_part += '<td>'+wh_change.wh_f_qty.to_s+'</td>'
+                            @w_part += '<td>'+wh_change.wh_c_qty.to_s+'</td>'
+                            @w_part += '<td><div class="input-group input-group-sm">'
+                            @w_part += '<form class="form-inline" action="/add_wh_change_item" accept-charset="UTF-8" data-remote="true" method="post">'
+                            @w_part += '<input id="pi_wh_change_no"  name="pi_wh_change_no" type="text"  class="sr-only"  value="'+params[:pi_wh_change_no].to_s+'">'
+                            @w_part += '<input id="moko_part"  name="moko_part" type="text"  class="sr-only"  value="'+wh_change.moko_part.to_s+'">'
+                            @w_part += '<span class="form-inline input-group-btn "><input id="wh_qty_in"  name="wh_qty_in" type="text" size="10" class="form-control input-sm" >'
+                            @w_part += '<button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button></span>'
+                            @w_part += '</form>'
+                            @w_part +='</div></td>'
+                            @w_part += '</tr>'
+                end
+            end
+            @w_part += '<tbody>'
+            @w_part += '<table>'
+            @w_part += '<small>'
+        end
     end
 
     def new_wh_order
@@ -3561,7 +3730,7 @@ before_filter :authenticate_user!
             wh_info.pi_wh_no = @wh_no
             wh_info.wh_user = current_user.email
             wh_info.state = "new"
-            wh_info.site = "c"            
+            #wh_info.site = "c"            
             wh_info.save
             pi_wh_no = wh_info.pi_wh_no
         else
@@ -3699,6 +3868,20 @@ before_filter :authenticate_user!
                             #wh_data.save
                         end
                         if wh_data.save
+                            pmc_data = PiPmcItem.find_by_id(wh_in.pi_pmc_item_id)
+                            if pmc_data.qty_in - wh_in.qty_in <= 0
+                                pmc_data.buy_type = "done"
+                            end
+                            pmc_data.qty_in = pmc_data.qty_in - wh_in.qty_in
+                            pmc_data.save
+                            find_order_done = PiPmcItem.where(erp_no_son: pmc_data.erp_no_son,type: "")
+                            if find_order_done.blank?
+                                get_order_son = PcbOrderItem.find_by_pcb_order_no_son(pmc_data.erp_no_son)
+                                if not get_order_son.blank?
+                                    get_order_son.buy_type = "done"
+                                    get_order_son.save
+                                end
+                            end
                             uo_buy_item = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
                             uo_buy_item.qty_done = uo_buy_item.qty_done + wh_in.qty_in
                             uo_buy_item.qty_wait = uo_buy_item.qty_wait - wh_in.qty_in

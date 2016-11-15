@@ -1,19 +1,19 @@
 <div class="container-fluid" >
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "wh_draft_list"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "wh_draft_change_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
         <% if can? :work_e, :all %>
             <div style="padding: 10px;">
-                <a type="button" class="btn btn-primary btn-sm"  href="/new_wh_order %>">新建入库单</a>   
+                <a type="button" class="btn btn-primary btn-sm"  href="/new_wh_change_order">新建物料流转单</a>   
             </div>
         <% end %>
 <%= will_paginate(@whlist) %>            
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="220">入库单号</th>
+      <th width="220">物料流转单号</th>
       <th width="220">状态</th>
       <th >入库员工</th>
       <th width="150">日期</th>
@@ -25,20 +25,13 @@
   <tbody><small>
     <% @whlist.each do |wh| %>   
       <tr >
-        <td><%= link_to wh.pi_wh_no, edit_wh_order_path(pi_wh_no: wh.pi_wh_no) %></td>
+        <td><%= link_to wh.pi_wh_change_no, edit_wh_change_order_path(pi_wh_change_no: wh.pi_wh_change_no) %></td>
         <td><%= wh.state %></td>
         <td><%= User.find_by(email: wh.wh_user).full_name %></td>
         <td><%= wh.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
 <% if can? :work_wh, :all %>
-        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_wh?wh_id=<%= wh.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
+        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_wh_change?wh_change_id=<%= wh.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>
 <% end %>
-<!--
-        <% if can? :work_pcb_business, :all and can? :work_wh, :all %>
-            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quote?bom_id=<%= wh.id.to_s %>" data-confirm="确定要发送给采购部?">发送给采购部报价</a></div></td>
-        <% else %>
-            <td><div class="btn-group"><a class="btn btn-danger disabled" >发送给采购部报价</a></div></td>
-        <% end %>
--->
       </tr>
     <% end %>
   </small>

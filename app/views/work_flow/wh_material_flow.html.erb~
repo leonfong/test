@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "wh_query"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "wh_material_flow"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -52,8 +52,9 @@
         <td><%= wh.moko_part %></td>
         <td><%= wh.moko_des %></td>
         <td><%= wh.qty %></td>
-        <td><%= wh.qty %></td>
-        <td><%= wh.qty %></td>
+        <td><%= wh.wh_qty %></td>
+        <td><%= wh.wh_c_qty %></td>
+        <td><%= wh.wh_f_qty %></td>
         <td></td>
       </tr>
 <% end %>

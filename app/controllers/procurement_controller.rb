@@ -3832,7 +3832,7 @@ WHERE
             itemall = PVersionItem.find(params[:item_id])
             @dn = PVersionDn.find(params[:id])
         else
-            itemall = PItem.find(params[:item_id])
+            itemall = PItem.find(params[:id])
             @dn = PDn.find(params[:id])
         end
         if not @dn.blank?
@@ -3840,7 +3840,7 @@ WHERE
             itemall.dn = nil
             itemall.dn_long = nil
             itemall.save
-            @dn.destroy
+            #@dn.destroy
         end
     end
 

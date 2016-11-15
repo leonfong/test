@@ -40,6 +40,9 @@
       <th >MOKO PART</th>
       <th >MOKO DES</th>
       <th width="80">库存</th>
+      <th width="80">待用总量</th>
+      <th width="80">公司数量</th>
+      <th width="80">工厂数量</th>
       <th width="75">操作</th>
     </tr>
   </thead>
@@ -49,6 +52,9 @@
         <td><%= wh.moko_part %></td>
         <td><%= wh.moko_des %></td>
         <td><%= wh.qty %></td>
+        <td><%= wh.wh_qty %></td>
+        <td><%= wh.wh_c_qty %></td>
+        <td><%= wh.wh_f_qty %></td>
         <td></td>
       </tr>
 <% end %>

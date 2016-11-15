@@ -5,6 +5,17 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def wh_material_flow
+
+    end
+
+    def factory_in
+
+    end
+
+    def factory_out
+    end
+
     def add_wh_item
         pi_buy_item = PiBuyItem.find_by_id(params[:pi_buy_item_id])
         wh_item = PiWhItem.new
@@ -3534,7 +3545,7 @@ before_filter :authenticate_user!
 
     def wh_draft_list
         #@whlist = PiWhInfo.where(state: "new",wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        @whlist = PiWhInfo.where(wh_user: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        @whlist = PiWhInfo.where(wh_user: current_user.email,site: "c").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
     end
 
     def new_wh_order
@@ -3550,6 +3561,7 @@ before_filter :authenticate_user!
             wh_info.pi_wh_no = @wh_no
             wh_info.wh_user = current_user.email
             wh_info.state = "new"
+            wh_info.site = "c"            
             wh_info.save
             pi_wh_no = wh_info.pi_wh_no
         else
@@ -3637,7 +3649,6 @@ before_filter :authenticate_user!
     def wh_draft
         wh_order = PiWhInfo.find_by_pi_wh_no(params[:wh_no])
         if not wh_order.blank?
-=begin
             if wh_order.state == "new" or wh_order.state == "fail"
                 wh_order.state = "checking"
                 wh_order.save
@@ -3648,15 +3659,20 @@ before_filter :authenticate_user!
                     wh_order.state = "fail"
                 end
                 wh_order.save
-            elsif wh_order.state == "checked"
-=end
-            if wh_order.state == "new"
+            end
+            if wh_order.state == "checked"
+            #if wh_order.state == "new"
                 wh_in_data = PiWhItem.where(pi_wh_info_no: params[:wh_no])
                 if not wh_in_data.blank?
                     wh_in_data.each do |wh_in|
                         wh_data = WarehouseInfo.find_by_moko_part(wh_in.moko_part)
                         if not wh_data.blank?
                             wh_data.wh_qty = wh_data.wh_qty + wh_in.qty_in
+                            if wh_data.site == "c"
+                                wh_data.wh_c_qty = wh_data.wh_c_qty + wh_in.qty_in
+                            elsif wh_data.site == "f"
+                                wh_data.wh_f_qty = wh_data.wh_f_qty + wh_in.qty_in
+                            end
                             if wh_in.buy_user == "MOKO"
                                 wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty_in
                             elsif wh_in.buy_user == "MOKO_TEMP" 

@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "wh_query"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "factory_out"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -40,9 +40,6 @@
       <th >MOKO PART</th>
       <th >MOKO DES</th>
       <th width="80">库存</th>
-      <th width="80">待用总量</th>
-      <th width="80">公司数量</th>
-      <th width="80">工厂数量</th>
       <th width="75">操作</th>
     </tr>
   </thead>
@@ -51,8 +48,6 @@
       <tr >
         <td><%= wh.moko_part %></td>
         <td><%= wh.moko_des %></td>
-        <td><%= wh.qty %></td>
-        <td><%= wh.qty %></td>
         <td><%= wh.qty %></td>
         <td></td>
       </tr>

@@ -65,8 +65,11 @@
 <% if can? :work_wh, :all %>
     <a style="background-color: #ddd;" href="#whMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 库存管理</a>
     <ul id="whMenu" class="nav nav-list  menu-second <% if selected =~ /wh/i %>collapse in<% else %>collapse<% end %>">
-        <li><a <% if selected == "wh_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list"><i></i> 入库草稿箱</a></li>
+        <li><a <% if selected == "wh_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list"><i></i> 入库到工厂草稿箱</a></li>
+        <li><a <% if selected == "wh_draft_list_c" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list?site=c"><i></i> 工厂到公司草稿箱</a></li>
 <!--
+        <li><a <% if selected == "wh_material_flow" %>style="background-color: #d9edf7;"<% end %> href="/wh_material_flow"><i></i> 物料流转</a></li>
+
         <li><a <% if selected == "wh_query" %>style="background-color: #d9edf7;"<% end %> href="/wh_query"><i></i> 入库</a></li>
 
         <li><a <% if selected == "wh_out" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 出库</a></li>
@@ -75,6 +78,13 @@
     </ul>
 <% end %>
 
+<% if can? :work_c, :all or can? :work_admin, :all%>
+    <a style="background-color: #ddd;" href="#factoryMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 工厂生产流程</a>
+    <ul id="factoryMenu" class="nav nav-list  menu-second <% if selected =~ /factory/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "factory_in" %>style="background-color: #d9edf7;"<% end %> href="/factory_in"><i></i> 上线生产</a></li>
+        <li><a <% if selected == "factory_out" %>style="background-color: #d9edf7;"<% end %> href="/factory_out" ><i></i> 下线发货</a></li>
+    </ul>
+<% end %>
 
 <% if can? :work_a, :all %>
     <a style="background-color: #ddd;" href="#bom_Menu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> BOM版本管理</a>
@@ -101,6 +111,7 @@ $(".menu-first").click(function(){
   $('#Part_Menu').collapse('hide');
   $('#pmcMenu').collapse('hide');
   $('#buyMenu').collapse('hide');
+  $('#factoryMenu').collapse('hide');
 });
 </script>
 

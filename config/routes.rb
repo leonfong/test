@@ -151,6 +151,9 @@ Rails.application.routes.draw do
   match '/edit_pi_buy_qty_cost', to: 'work_flow#edit_pi_buy_qty_cost', via: 'post'
   match '/pi_buy_check_list', to: 'work_flow#pi_buy_check_list', via: 'get'
   match '/send_pi_buy_check', to: 'work_flow#send_pi_buy_check', via: 'post'
+  match '/factory_in', to: 'work_flow#factory_in', via: 'get'
+  match '/factory_out', to: 'work_flow#factory_out', via: 'get'
+  match '/wh_material_flow', to: 'work_flow#wh_material_flow', via: 'get'
 
 
 

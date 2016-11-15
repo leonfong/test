@@ -2410,8 +2410,40 @@ before_filter :authenticate_user!
                                     item.save
                                     @item = item
                                     render "p_search_part.js.erb" and return 
-                                #rescue
-                                    
+                                else
+                                    add_dns = PDn.new
+                                    add_dns.email = current_user.email
+                                    add_dns.item_id = item.id
+                                    add_dns.date = Time.new
+                                    add_dns.part_code = match_product_old.moko_part
+                                    add_dns.dn = match_product_old.dn
+                                    add_dns.dn_long = match_product_old.dn_long
+                                    add_dns.cost = match_product_old.cost
+                                    #add_dns.qty = match_dn.qty
+                                    add_dns.qty = match_product_old.quantity * ProcurementBom.find(match_product_old.procurement_bom_id).qty
+                                    #add_dns.info = match_dn.info
+                                    #add_dns.remark = match_dn.remark
+                                    add_dns.color = "g"
+                                    add_dns.save
+                                    item.cost = add_dns.cost
+                                    item.color = "g"
+                                    item.product_id = match_product_old.product_id
+                                    Rails.logger.info("product_id-------------------------------------------------------product_id0")
+                                    Rails.logger.info(match_product_old.product_id.inspect)
+                                    Rails.logger.info("match_product_old.product_id-------------------------------------------------------match_product_old.product_id")
+                                    if match_product_old.product_id != 0
+                                        if not Product.find(match_product_old.product_id).blank?
+                                            item.moko_part = Product.find(match_product_old.product_id).name
+                                            item.moko_des = Product.find(match_product_old.product_id).description
+                                        end  
+                                    end                                 
+                                    item.dn_id = add_dns.id
+                                    item.dn = add_dns.dn
+                                    item.dn_long = add_dns.dn_long
+                                    item.save
+                                    @item = item
+                                    render "p_search_part.js.erb" and return 
+
                                 end
                             end
 
@@ -3840,7 +3872,7 @@ WHERE
             itemall.dn = nil
             itemall.dn_long = nil
             itemall.save
-            #@dn.destroy
+            @dn.destroy
         end
     end
 

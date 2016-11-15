@@ -3864,7 +3864,7 @@ WHERE
             itemall = PVersionItem.find(params[:item_id])
             @dn = PVersionDn.find(params[:id])
         else
-            itemall = PItem.find(params[:id])
+            itemall = PItem.find(params[:item_id])
             @dn = PDn.find(params[:id])
         end
         if not @dn.blank?

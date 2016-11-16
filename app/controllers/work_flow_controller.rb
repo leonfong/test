@@ -119,10 +119,11 @@ before_filter :authenticate_user!
         wh_item.procurement_bom_id = pi_buy_item.procurement_bom_id
         if wh_item.save
             pi_buy_item.qty_wait = pi_buy_item.qty_wait + wh_item.qty_in
-            if (pi_buy_item.qty_wait + pi_buy_item.qty_done) >= pi_buy_item.qty 
-                pi_buy_item.state = "done"
-            end
             pi_buy_item.save
+            if (pi_buy_item.qty_wait + pi_buy_item.qty_done) >= pi_buy_item.buy_qty 
+                pi_buy_item.state = "done"
+                pi_buy_item.save
+            end         
         end
         @wh_wait = ''
         wh_item_all = PiWhItem.where(pi_wh_info_no: params[:wh_order_no])
@@ -145,7 +146,7 @@ before_filter :authenticate_user!
         del_wh_item = PiWhItem.find_by_id(params[:del_wh_item_id])
         pi_buy_item = PiBuyItem.find_by_id(del_wh_item.pi_buy_item_id)
         pi_buy_item.qty_wait = pi_buy_item.qty_wait - del_wh_item.qty_in
-        if (pi_buy_item.qty_wait + pi_buy_item.qty_done) >= pi_buy_item.qty 
+        if (pi_buy_item.qty_wait + pi_buy_item.qty_done) >= pi_buy_item.buy_qty 
             pi_buy_item.state = "done"
         else
             pi_buy_item.state = "buying"
@@ -210,6 +211,42 @@ before_filter :authenticate_user!
                 #pmc_data.buy_qty = item.qty
                 pmc_data.state = "buying" 
                 pmc_data.save
+
+                if item.save
+                    get_pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                    if not get_pmc_data.blank?
+                        get_wh = WarehouseInfo.find_by_moko_part(item.moko_part)
+                        if not get_wh.blank?
+                            #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
+                            get_wh.true_buy_qty = get_wh.true_buy_qty + (item.buy_qty - item.qty)
+                            get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.qty)
+                            get_wh.save
+                        end
+                        get_pmc_data.buy_qty = item.buy_qty
+                        get_pmc_data.cost = item.cost
+                        get_pmc_data.dn = item.dn
+                        get_pmc_data.dn_long = item.dn_long
+                        get_pmc_data.save
+                    end
+                
+                    put_pdn = PDn.new
+                    put_pdn.email = current_user.email
+                    put_pdn.item_id = item.p_item_id
+                    put_pdn.part_code = item.moko_part
+                    put_pdn.date = Time.new
+                    put_pdn.dn = item.dn
+                    put_pdn.dn_long = item.dn_long
+                    put_pdn.cost = item.cost
+                    put_pdn.qty = item.buy_qty
+                    put_pdn.save
+                    #更新所有价格
+                    change_pmc_cost = PiPmcItem.where("moko_part = '#{item.moko_part}' AND (state = 'buy_adding' OR state = 'new' OR state = 'pass')")
+                    if not change_pmc_cost.blank?
+                        change_pmc_cost.update_all "cost = '#{item.cost}'"
+                    end
+                    change_buy_cost = PiBuyItem.where("moko_part = '#{item.moko_part}' AND state = 'new'").update_all "cost = '#{item.cost}'"
+                end
+
             end
         end
         redirect_to pi_buy_check_list_path()
@@ -239,12 +276,16 @@ before_filter :authenticate_user!
             get_item.cost = params[:buy_cost]
             get_item.dn = params[:buy_dn]
             get_item.dn_long = params[:buy_dn_long]
+            get_item.save
+=begin
             if get_item.save
                 get_pmc_data = PiPmcItem.find_by_id(get_item.pi_pmc_item_id)
                 if not get_pmc_data.blank?
                     get_wh = WarehouseInfo.find_by_moko_part(get_item.moko_part)
                     if not get_wh.blank?
-                        get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
+                        #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
+                        get_wh.true_buy_qty = get_wh.true_buy_qty + (get_item.buy_qty - get_item.qty)
+                        get_wh.future_qty = get_wh.future_qty + (get_item.buy_qty - get_item.qty)
                         get_wh.save
                     end
                     get_pmc_data.buy_qty = params[:buy_qty]
@@ -271,6 +312,7 @@ before_filter :authenticate_user!
                 end
                 change_buy_cost = PiBuyItem.where("moko_part = '#{get_item.moko_part}' AND state = 'new'").update_all "cost = '#{params[:buy_cost]}'"
             end
+=end
         end
         redirect_to :back
     end
@@ -3887,7 +3929,12 @@ before_filter :authenticate_user!
                                     wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty_in 
                                     wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
                                 elsif wh_data.temp_buy_qty < wh_in.qty_in
-                                    wh_data.qty = wh_in.qty_in - wh_data.temp_buy_qty
+                                    wh_data.qty = wh_data.qty + (wh_in.qty_in - wh_data.temp_buy_qty)
+                                    if wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty) > 0
+                                        wh_data.future_qty = wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty)
+                                    else
+                                        wh_data.future_qty = 0
+                                    end
                                     wh_data.temp_buy_qty = 0
                                     wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
                                      
@@ -3921,10 +3968,12 @@ before_filter :authenticate_user!
                             uo_buy_item = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
                             uo_buy_item.qty_done = uo_buy_item.qty_done + wh_in.qty_in
                             uo_buy_item.qty_wait = uo_buy_item.qty_wait - wh_in.qty_in
-                            if (uo_buy_item.qty_done + uo_buy_item.qty_wait) >= uo_buy_item.qty 
-                                uo_buy_item.state = "done"
-                            end
                             uo_buy_item.save
+                            if uo_buy_item.qty_done  >= uo_buy_item.buy_qty 
+                                uo_buy_item.state = "done"
+                                uo_buy_item.save
+                            end
+                            
                             item_data = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
                             if not item_data.blank?
                                 add_history_data = WhInHistoryItem.new

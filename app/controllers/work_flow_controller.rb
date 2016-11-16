@@ -5,6 +5,26 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def factory_online
+        if can? :work_c, :all or can? :work_admin, :all
+            #get_order_data = PiPmcItem.where(erp_no_son: params[:order])
+            set_order_state = PcbOrderItem.find_by_pcb_order_no_son(params[:order])
+            if set_order_state.state != "online"
+                get_order_data = PiPmcItem.find_by_sql("SELECT DISTINCT p_item_id,moko_part FROM pi_pmc_items WHERE erp_no_son = '#{params[:order]}'")
+                get_order_data.each do |item|
+                    wh_data = WarehouseInfo.find_by_moko_part(item.moko_part)
+                    wh_data.wh_qty = wh_data.wh_qty - item.qty
+                    wh_data.wh_f_qty = wh_data.wh_f_qty - item.qty
+                    wh_data.save
+                end
+                set_order_state = PcbOrderItem.find_by_pcb_order_no_son(params[:order])
+                set_order_state.state = "online"
+                set_order_state.save
+            end
+        end
+        redirect_to :back
+    end
+
     def wh_draft_change
         wh_order = PiWhChangeInfo.find_by_pi_wh_change_no(params[:wh_no])
         if not wh_order.blank?

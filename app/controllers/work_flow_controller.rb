@@ -736,16 +736,19 @@ before_filter :authenticate_user!
     end
 
     def pmc_new
+        Rails.logger.info("pmc_new--------------------------------------1")
         @pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy = '' ORDER BY p_items.product_id DESC")
         if @pi_buy
+            Rails.logger.info("pmc_new--------------------------------------2")
             @pi_buy.each do |item_buy|
                 need_buy = "no"
                 item_id = item_buy.id
                 item_data = PItem.find_by_id(item_id)
                 if not item_data.blank?
+                    Rails.logger.info("pmc_new--------------------------------------3")
                     find_buy_data = PiPmcItem.find_by_p_item_id(item_id)
                     if find_buy_data.blank?
-
+                        Rails.logger.info("pmc_new--------------------------------------4")
                         add_buy_data = PiPmcItem.new
                         add_buy_data.state = "new"
                         add_buy_data.erp_no = item_data.erp_no
@@ -770,8 +773,10 @@ before_filter :authenticate_user!
                         add_buy_data.qty = sell_qty
                         add_buy_data.qty_in = sell_qty 
                         if not wh_data.blank? and not moko_data.blank?
+                            Rails.logger.info("pmc_new--------------------------------------5")
                             #如果库存大于0
                             if wh_data.qty > 0 and wh_data.qty - use_qty > 0
+                                Rails.logger.info("pmc_new--------------------------------------6")
                                 add_buy_data.buy_user = "CHK"
                                 add_buy_data.buy_qty = sell_qty
 =begin
@@ -787,16 +792,20 @@ before_filter :authenticate_user!
 =end
                             
                             else
+                                Rails.logger.info("pmc_new--------------------------------------7")
                                 #如果虚拟库存大于0
                                 if wh_data.future_qty > 0
+                                    Rails.logger.info("pmc_new--------------------------------------8")
                                     #如果库存虚拟大于等于需求
                                     if wh_data.future_qty - sell_qty >= 0
+                                        Rails.logger.info("pmc_new--------------------------------------9")
                                         add_buy_data.buy_user = "MOKO_TEMP"
                                         add_buy_data.buy_qty = sell_qty
                                         wh_data.future_qty = wh_data.future_qty - sell_qty
                                         wh_data.temp_future_qty = wh_data.temp_future_qty + sell_qty
                                         wh_data.save
                                     elsif wh_data.future_qty - sell_qty < 0
+                                        Rails.logger.info("pmc_new--------------------------------------10")
                                         add_buy_data.buy_user = "MOKO_TEMP"
                                         add_buy_data.buy_qty = wh_data.future_qty
                                         wh_data.future_qty = 0
@@ -807,6 +816,7 @@ before_filter :authenticate_user!
                                     
                                     end
                                 else
+                                    Rails.logger.info("pmc_new--------------------------------------11")
                                     add_buy_data.buy_qty = sell_qty
                                     if moko_data.package1 == "D" or moko_data.package1 == "Q"
                                         add_buy_data.buy_user = "A"
@@ -819,10 +829,11 @@ before_filter :authenticate_user!
                                 end
                             end
                         else
+                            Rails.logger.info("pmc_new--------------------------------------12")
                             add_buy_data.buy_qty = sell_qty
                             
                         end
-                        
+                        Rails.logger.info("pmc_new--------------------------------------13")
 
 
                         add_buy_data.remark = item_data.remark
@@ -863,10 +874,12 @@ before_filter :authenticate_user!
                         add_buy_data.supplier_out_tag = item_data.supplier_out_tag
                         add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
                         if add_buy_data.save
+                            Rails.logger.info("pmc_new--------------------------------------14")
                             #判断是否需要工厂盘料
                             if not wh_data.blank? and not moko_data.blank?  
+                                Rails.logger.info("pmc_new--------------------------------------15")
                                 if wh_data.qty > 0 and wh_data.qty - use_qty > 0
-                                    
+                                    Rails.logger.info("pmc_new--------------------------------------16")
                                     send_chk_wh = WhChkInfo.new
                                     send_chk_wh.pi_pmc_item_id = add_buy_data.id
                                     send_chk_wh.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
@@ -880,6 +893,7 @@ before_filter :authenticate_user!
                             end
                             #判断是否需要采购补齐
                             if need_buy == "do"
+                                Rails.logger.info("pmc_new--------------------------------------17")
                                 add_buy_do = PiPmcItem.new
                                 add_buy_do.state = "new"
                                 add_buy_do.erp_no = add_buy_data.erp_no
@@ -932,12 +946,14 @@ before_filter :authenticate_user!
                                 add_buy_do.supplier_out_tag = add_buy_data.supplier_out_tag
                                 add_buy_do.sell_feed_back_tag = add_buy_data.sell_feed_back_tag
                                 if add_buy_do.save
+                                    Rails.logger.info("pmc_new--------------------------------------18")
                                     wh_data.temp_buy_qty = wh_data.temp_buy_qty + add_buy_do.buy_qty
                                     wh_data.save
                                 end
                             end
                             item_data.buy = "pmc"
                             item_data.save
+                            Rails.logger.info("pmc_new--------------------------------------19")
                         end
                     end
                 end
@@ -3857,11 +3873,11 @@ before_filter :authenticate_user!
                         wh_data = WarehouseInfo.find_by_moko_part(wh_in.moko_part)
                         if not wh_data.blank?
                             wh_data.wh_qty = wh_data.wh_qty + wh_in.qty_in
-                            if wh_data.site == "c"
-                                wh_data.wh_c_qty = wh_data.wh_c_qty + wh_in.qty_in
-                            elsif wh_data.site == "f"
-                                wh_data.wh_f_qty = wh_data.wh_f_qty + wh_in.qty_in
-                            end
+                            #if wh_data.site == "c"
+                                #wh_data.wh_c_qty = wh_data.wh_c_qty + wh_in.qty_in
+                            #elsif wh_data.site == "f"
+                            wh_data.wh_f_qty = wh_data.wh_f_qty + wh_in.qty_in
+                            #end
                             if wh_in.buy_user == "MOKO"
                                 wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty_in
                             elsif wh_in.buy_user == "MOKO_TEMP" 
@@ -3889,12 +3905,12 @@ before_filter :authenticate_user!
                         end
                         if wh_data.save
                             pmc_data = PiPmcItem.find_by_id(wh_in.pi_pmc_item_id)
-                            if pmc_data.qty_in - wh_in.qty_in <= 0
+                            if pmc_data.qty_in.to_i - wh_in.qty_in.to_i <= 0
                                 pmc_data.buy_type = "done"
                             end
-                            pmc_data.qty_in = pmc_data.qty_in - wh_in.qty_in
+                            pmc_data.qty_in = pmc_data.qty_in.to_i - wh_in.qty_in.to_i
                             pmc_data.save
-                            find_order_done = PiPmcItem.where(erp_no_son: pmc_data.erp_no_son,type: "")
+                            find_order_done = PiPmcItem.where(erp_no_son: pmc_data.erp_no_son,buy_type: "")
                             if find_order_done.blank?
                                 get_order_son = PcbOrderItem.find_by_pcb_order_no_son(pmc_data.erp_no_son)
                                 if not get_order_son.blank?
@@ -5599,8 +5615,11 @@ before_filter :authenticate_user!
            hint = params[:hint]
         end
         order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{hint}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
-        
-
+        if not params[:order_country].blank?
+            c = PcbOrder.find_by_id(PcbOrderItem.find_by_id(ProcurementBom.find_by(p_name_mom: params[:itemp_id]).erp_item_id).pcb_order_id)
+            c.c_country = params[:order_country]
+            c.save
+        end
         if params[:sell_remark] != ""
             open_id = "6ab2628d9a320296032f6a6f5495582b,5c1c9ba5ef315dcaac48cb9c1fb9731a"
             Rails.logger.info("oauth-------------------------")

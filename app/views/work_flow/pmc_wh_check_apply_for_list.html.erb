@@ -14,11 +14,13 @@
                                 <th width="130">日期时间</th>
                                 <th width="130">Order No.</th>
                                 <th width="150">MOKO ID</th>
-                                <th width="350">物料名称</th>
+                                <th >物料名称</th>
                                 <th width="80">申请数量</th>
                                 <th width="80">库存</th>
-                                <th width="80">仓库数量</th>
-                                <th width="80">实际数量</th>
+                                <th width="80">总量</th>
+                                <th width="90">公司仓库数量</th>
+                                <th width="90">工厂仓库数量</th>
+                                <th width="90">工厂实际数量</th>
                                 <th width="80">申请盘点</th>
                             <tr>
                         </thead>
@@ -33,6 +35,8 @@
                                 <td><%= item.chk_qty %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_qty %></td>
+                                <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_c_qty %></td>
+                                <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_f_qty %></td>
                                 <%= form_tag('/pmc_wh_check_apply_for', class:"form-inline") do %>
                                 <td>
                                     <input name="chk_id" type="text" class="sr-only"  value="<%= item.id %>">

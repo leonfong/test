@@ -162,9 +162,9 @@ before_filter :authenticate_user!
         @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
         @all_dn = "[&quot;"
-        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
         all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.dn.to_s
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s + "&#{dn.dn_long.to_s}"
         end
         @all_dn += "&quot;]"
         if @pi_buy_info.state == "check"
@@ -218,8 +218,8 @@ before_filter :authenticate_user!
                         get_wh = WarehouseInfo.find_by_moko_part(item.moko_part)
                         if not get_wh.blank?
                             #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
-                            get_wh.true_buy_qty = get_wh.true_buy_qty + (item.buy_qty - item.qty)
-                            get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.qty)
+                            get_wh.true_buy_qty = get_wh.true_buy_qty + (item.buy_qty - item.pmc_qty)
+                            get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.pmc_qty)
                             get_wh.save
                         end
                         get_pmc_data.buy_qty = item.buy_qty
@@ -277,42 +277,7 @@ before_filter :authenticate_user!
             get_item.dn = params[:buy_dn]
             get_item.dn_long = params[:buy_dn_long]
             get_item.save
-=begin
-            if get_item.save
-                get_pmc_data = PiPmcItem.find_by_id(get_item.pi_pmc_item_id)
-                if not get_pmc_data.blank?
-                    get_wh = WarehouseInfo.find_by_moko_part(get_item.moko_part)
-                    if not get_wh.blank?
-                        #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
-                        get_wh.true_buy_qty = get_wh.true_buy_qty + (get_item.buy_qty - get_item.qty)
-                        get_wh.future_qty = get_wh.future_qty + (get_item.buy_qty - get_item.qty)
-                        get_wh.save
-                    end
-                    get_pmc_data.buy_qty = params[:buy_qty]
-                    get_pmc_data.cost = params[:buy_cost]
-                    get_pmc_data.dn = params[:buy_dn]
-                    get_pmc_data.dn_long = params[:buy_dn_long]
-                    get_pmc_data.save
-                end
-                
-                put_pdn = PDn.new
-                put_pdn.email = current_user.email
-                put_pdn.item_id = get_item.p_item_id
-                put_pdn.part_code = get_item.moko_part
-                put_pdn.date = Time.new
-                put_pdn.dn = params[:buy_dn]
-                put_pdn.dn_long = params[:buy_dn_long]
-                put_pdn.cost = params[:buy_cost]
-                put_pdn.qty = params[:buy_qty]
-                put_pdn.save
-                #更新所有价格
-                change_pmc_cost = PiPmcItem.where("moko_part = '#{get_item.moko_part}' AND (state = 'buy_adding' OR state = 'new' OR state = 'pass')")
-                if not change_pmc_cost.blank?
-                    change_pmc_cost.update_all "cost = '#{params[:buy_cost]}'"
-                end
-                change_buy_cost = PiBuyItem.where("moko_part = '#{get_item.moko_part}' AND state = 'new'").update_all "cost = '#{params[:buy_cost]}'"
-            end
-=end
+
         end
         redirect_to :back
     end
@@ -466,6 +431,7 @@ before_filter :authenticate_user!
                         add_buy_data.procurement_bom_id = item_data.procurement_bom_id
                         add_buy_data.quantity = item_data.quantity
                         add_buy_data.qty = item_data.qty
+                        add_buy_data.pmc_qty = item_data.pmc_qty
                         add_buy_data.buy_qty = item_data.buy_qty
                         add_buy_data.description = item_data.description
                         add_buy_data.part_code = item_data.part_code
@@ -538,6 +504,8 @@ before_filter :authenticate_user!
                         wh_data.temp_moko_qty = wh_data.temp_moko_qty - get_data.qty
                         wh_data.temp_buy_qty = wh_data.temp_buy_qty + get_data.qty
                         wh_data.true_buy_qty = wh_data.true_buy_qty + get_data.qty
+                        wh_data.wh_qty = wh_data.wh_qty + get_data.qty
+                        wh_data.wh_f_qty = wh_data.wh_f_qty + get_data.qty
                         wh_data.save
                     end
                     #还原请料
@@ -603,9 +571,15 @@ before_filter :authenticate_user!
         wh_chk = WhChkInfo.find_by(id: params[:chk_id],state: "applying")
         if not wh_chk.blank?
             wh_data = WarehouseInfo.find_by_moko_part(wh_chk.moko_part)
-            wh_data.qty = wh_chk.apply_for_qty
-            wh_chk.loss_qty = wh_chk.chk_qty - wh_chk.apply_for_qty
-            wh_data.loss_qty = wh_chk.chk_qty - wh_chk.apply_for_qty + wh_data.loss_qty
+            wh_data.qty = wh_data.qty - (wh_data.wh_qty - wh_chk.apply_for_qty)
+
+
+            wh_chk.loss_qty = wh_data.wh_qty - wh_chk.apply_for_qty
+            wh_data.loss_qty = wh_data.wh_qty - wh_chk.apply_for_qty + wh_data.loss_qty
+
+            wh_data.wh_qty = wh_data.wh_qty - (wh_data.wh_f_qty - wh_chk.apply_for_qty)
+            wh_data.wh_f_qty = wh_chk.apply_for_qty
+             
             wh_chk.save
             if wh_data.save
                 pmc_data = PiPmcItem.find_by_id(wh_chk.pi_pmc_item_id)
@@ -616,13 +590,19 @@ before_filter :authenticate_user!
                     #如果实际库存满足需求
                     if wh_data.qty - pmc_data.qty >= 0
                         pmc_data.buy_qty = pmc_data.qty
+                        pmc_data.pmc_qty = pmc_data.qty
                         wh_data.qty = wh_data.qty - pmc_data.qty
                         wh_data.temp_moko_qty = wh_data.temp_moko_qty + pmc_data.qty
+                        wh_data.wh_qty = wh_data.wh_qty - pmc_data.qty
+                        wh_data.wh_f_qty = wh_data.wh_f_qty - pmc_data.qty
                     #如果实际库存不满足需求
                     else wh_data.qty - pmc_data.qty < 0
                         pmc_data.buy_qty = wh_data.qty
-                        wh_data.qty = 0
+                        pmc_data.pmc_qty = wh_data.qty
                         wh_data.temp_moko_qty = wh_data.temp_moko_qty + wh_data.qty
+                        wh_data.wh_qty = wh_data.wh_qty - wh_data.qty
+                        wh_data.wh_f_qty = wh_data.wh_f_qty - wh_data.qty
+                        wh_data.qty = 0
                     end
                     pmc_data.save
                     wh_data.save
@@ -635,11 +615,13 @@ before_filter :authenticate_user!
                         #如果虚拟库存满足需求
                         if wh_data.future_qty - pmc_data.qty >= 0
                             pmc_data.buy_qty = pmc_data.qty
+                            pmc_data.pmc_qty = pmc_data.qty
                             wh_data.future_qty = wh_data.future_qty - pmc_data.qty
                             wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
                         #如果虚拟库存不满足需求
                         else wh_data.future_qty - pmc_data.qty < 0
                             pmc_data.buy_qty = wh_data.future_qty
+                            pmc_data.pmc_qty = wh_data.future_qty
                             wh_data.future_qty = 0
                             wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
                         end
@@ -661,11 +643,13 @@ before_filter :authenticate_user!
                         #如果虚拟库存满足需求
                         if wh_data.future_qty - temp_qty >= 0
                             add_future_data.buy_qty = temp_qty
+                            add_future_data.pmc_qty = temp_qty
                             wh_data.future_qty = wh_data.future_qty - pmc_data.qty
                             wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
                         #如果虚拟库存不满足需求
                         else wh_data.future_qty - temp_qty < 0
                             add_future_data.buy_qty = wh_data.future_qty
+                            add_future_data.pmc_qty = wh_data.future_qty
                             wh_data.future_qty = 0
                             wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
                         end
@@ -726,7 +710,8 @@ before_filter :authenticate_user!
                     else 
                         add_buy_data.buy_user = ""
                     end
-                    add_buy_data.buy_qty = temp_qty   
+                    add_buy_data.buy_qty = temp_qty
+                    add_buy_data.pmc_qty = temp_qty  
                     add_buy_data.remark = pmc_data.remark
                     add_buy_data.p_item_id = pmc_data.p_item_id
                     add_buy_data.erp_id = pmc_data.erp_id
@@ -762,8 +747,10 @@ before_filter :authenticate_user!
                     add_buy_data.sell_feed_back_tag = pmc_data.sell_feed_back_tag
                     add_buy_data.save
 
-                    wh_data.temp_buy_qty = wh_data.temp_buy_qty + pmc_data.qty
-                    wh_data.true_buy_qty = wh_data.true_buy_qty + pmc_data.qty
+                    #wh_data.temp_buy_qty = wh_data.temp_buy_qty + pmc_data.qty
+                    #wh_data.true_buy_qty = wh_data.true_buy_qty + pmc_data.qty
+                    wh_data.temp_buy_qty = wh_data.temp_buy_qty + temp_qty
+                    wh_data.true_buy_qty = wh_data.true_buy_qty + temp_qty
                     wh_data.save
                 end
                 wh_chk.state = "pass"
@@ -821,6 +808,7 @@ before_filter :authenticate_user!
                                 Rails.logger.info("pmc_new--------------------------------------6")
                                 add_buy_data.buy_user = "CHK"
                                 add_buy_data.buy_qty = sell_qty
+                                add_buy_data.pmc_qty = sell_qty
 =begin
                                 send_chk_wh = WhChkInfo.new
                                 send_chk_wh.pi_pmc_item_id = add_buy_data.id
@@ -843,6 +831,7 @@ before_filter :authenticate_user!
                                         Rails.logger.info("pmc_new--------------------------------------9")
                                         add_buy_data.buy_user = "MOKO_TEMP"
                                         add_buy_data.buy_qty = sell_qty
+                                        add_buy_data.pmc_qty = sell_qty
                                         wh_data.future_qty = wh_data.future_qty - sell_qty
                                         wh_data.temp_future_qty = wh_data.temp_future_qty + sell_qty
                                         wh_data.save
@@ -850,6 +839,7 @@ before_filter :authenticate_user!
                                         Rails.logger.info("pmc_new--------------------------------------10")
                                         add_buy_data.buy_user = "MOKO_TEMP"
                                         add_buy_data.buy_qty = wh_data.future_qty
+                                        add_buy_data.pmc_qty = wh_data.future_qty
                                         wh_data.future_qty = 0
                                         wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.temp_future_qty
                                         wh_data.save
@@ -860,6 +850,7 @@ before_filter :authenticate_user!
                                 else
                                     Rails.logger.info("pmc_new--------------------------------------11")
                                     add_buy_data.buy_qty = sell_qty
+                                    add_buy_data.pmc_qty = sell_qty
                                     if moko_data.package1 == "D" or moko_data.package1 == "Q"
                                         add_buy_data.buy_user = "A"
                                     elsif moko_data.package1 == "PZ"
@@ -873,6 +864,7 @@ before_filter :authenticate_user!
                         else
                             Rails.logger.info("pmc_new--------------------------------------12")
                             add_buy_data.buy_qty = sell_qty
+                            add_buy_data.pmc_qty = sell_qty
                             
                         end
                         Rails.logger.info("pmc_new--------------------------------------13")
@@ -953,7 +945,7 @@ before_filter :authenticate_user!
                                     add_buy_do.buy_user = "B"
                                 end
                                 add_buy_do.buy_qty = add_buy_data.qty - add_buy_data.buy_qty
-
+                                add_buy_do.pmc_qty = add_buy_data.qty - add_buy_data.buy_qty
                                 add_buy_do.remark = add_buy_data.remark
                                 add_buy_do.p_item_id = add_buy_data.p_item_id
                                 add_buy_do.erp_id = add_buy_data.erp_id
@@ -3822,16 +3814,21 @@ before_filter :authenticate_user!
         @wh_info = PiWhInfo.find_by(pi_wh_no: params[:pi_wh_no])
         @wh_item = PiWhItem.where(pi_wh_info_no: params[:pi_wh_no])
         @all_dn = "[&quot;"
-        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long,all_dns.dn FROM all_dns GROUP BY all_dns.dn")
         all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.dn_long.to_s
+            @all_dn += "&quot;,&quot;" + dn.dn.to_s + "&#{dn.dn_long.to_s}"
         end
         @all_dn += "&quot;]"
     end
 
     def find_w_wh
         if params[:dn_code] != ""
-            where_wh = "dn_long = '#{params[:dn_code].strip}' AND state = 'buy'"
+            if params[:dn_code] =~ /&/i
+                key_word = params[:dn_code].strip.split("&")[-1]
+            else
+                key_word = params[:dn_code]
+            end
+            where_wh = "dn_long = '#{key_word}' AND state = 'buy'"
             if params[:pi_buy_no] != ""
                 where_wh += " AND pi_buy_no = '#{params[:pi_buy_no].strip}'"
             end
@@ -4049,7 +4046,7 @@ before_filter :authenticate_user!
         @table_buy += '<tr style="background-color: #eeeeee">'
         @table_buy += '<th width="20"></th>'
         @table_buy += '<th >MOKO DES</th>'
-        @table_buy += '<th width="80">数量</th>'
+        @table_buy += '<th width="80">申请数量</th>'
         @table_buy += '<th width="80">单价￥</th>'
         @table_buy += '<th width="80">附件</th>'
         @table_buy += '<th >供应商</th>'
@@ -4079,7 +4076,7 @@ before_filter :authenticate_user!
                     @table_buy += '<tr>'
                     @table_buy += '<td><input type="checkbox" value="'+buy.id.to_s+'" name="roles[]" id="roles_" checked></td>'
                     @table_buy += '<td>'+buy.moko_des.to_s+'</td>'
-                    @table_buy += '<td>'+buy.buy_qty.to_s+'</td>'
+                    @table_buy += '<td>'+buy.pmc_qty.to_s+'</td>'
                     @table_buy += '<td>'+buy.cost.to_s+'</td>'
                     if not PDn.find_by_id(buy.dn_id).blank?
                         if not PDn.find_by_id(buy.dn_id).info.blank?
@@ -4152,7 +4149,12 @@ before_filter :authenticate_user!
 
     def find_dn
         if params[:dn_code] != ""
-            @c_info = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn,all_dns.dn_long,id FROM all_dns WHERE all_dns.dn LIKE '%#{params[:dn_code]}%' GROUP BY all_dns.dn")
+            if params[:dn_code] =~ /&/i
+                key_word = params[:dn_code].split("&")[0]
+            else
+                key_word = params[:dn_code]
+            end
+            @c_info = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn,all_dns.dn_long,id FROM all_dns WHERE all_dns.dn LIKE '%#{key_word}%' GROUP BY all_dns.dn")
             #@c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:dn_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_info.inspect)

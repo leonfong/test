@@ -88,7 +88,7 @@
           <a class="text-info" data-method='get' data-remote='true' href="/cost_history_buy?part_code=<%= buy.moko_part.to_s%>&item_id=<%= buy.id.to_s %>"><%= buy.moko_part %></a>
       </td>
       <td><%= buy.moko_des %></td>
-      <td><%= buy.qty %></td>
+      <td><%= buy.pmc_qty %></td>
       <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>"><%= buy.buy_qty %></div></td>
       <td><%= buy.cost %></td>
       <td><%= buy.dn_long %></td>

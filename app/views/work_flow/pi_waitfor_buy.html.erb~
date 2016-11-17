@@ -35,10 +35,10 @@
       <td><%= buy.description %></td>
       <td><%= buy.moko_part %></td>
       <td><%= buy.moko_des %></td> 
-      <td><%= buy.qty %></td>
+      <td><%= buy.pmc_qty %></td>
       <td><%= buy.cost %></td>
       <% if not buy.cost.blank? %>
-          <td><%= buy.qty*buy.cost %></td>
+          <td><%= buy.buy_qty*buy.cost %></td>
       <% else %>
           <td></td>
       <% end %>

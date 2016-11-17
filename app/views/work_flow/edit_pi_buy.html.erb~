@@ -77,7 +77,7 @@
       <th width="150">MOKO PART</th>
       <th >MOKO DES</th>
       <th width="80">需求数量</th>
-      <th width="80">数量</th>
+      <th width="80">购买数量</th>
       <th width="80">单价￥</th>
       <th >供应商</th>
       <th >备注</th>
@@ -95,7 +95,7 @@
       </td>
       <td><%= buy.moko_des %></td>
       <td><%= buy.qty %></td>
-      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>"><%= buy.buy_qty %></div></td>
+      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>"><%= buy.buy_qty %></div></td>
       <td><%= buy.cost %></td>
       <td><%= buy.dn_long %></td>
                     <td>

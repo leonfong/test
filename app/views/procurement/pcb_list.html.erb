@@ -65,7 +65,7 @@
                 <tbody>
                 <% @part.each_with_index do |part,index| %>
                     
-                    <tr>
+                    <tr <% if Time.new.localtime - part.updated_at.localtime  > 127800 %>class="bg-danger"<% end %>>
                         <form class="form-inline" action="/pcb_info_update" accept-charset="UTF-8"  method="post">
                         <td style="padding-left: 3px;">
                             <div class="form-group sr-only">

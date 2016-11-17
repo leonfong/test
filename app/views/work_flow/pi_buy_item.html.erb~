@@ -18,6 +18,8 @@
       <th >moko编号</th>
       <th >moko描述</th>
       <th width="80">数量</th>
+      <th width="80">PMC数量</th>
+      <th width="80">采购数量</th>
       <th width="80">单价￥</th>
       <th width="80">总价￥</th>
       <th >供应商</th>
@@ -34,12 +36,12 @@
       <td><%= buy.moko_part %></td>
       <td><%= buy.moko_des %></td>
       <td><%= buy.qty %></td>
+      <td><%= buy.qty_in %></td>
+      <td><%= buy.buy_qty %></td>
       <td><%= buy.cost %></td>
       <td>
           <% if not buy.cost.blank? %>
-              <td><%= buy.qty*buy.cost %></td>
-          <% else %>
-              <td></td>
+              <%= buy.qty*buy.cost %>
           <% end %>
       </td>
       <td>

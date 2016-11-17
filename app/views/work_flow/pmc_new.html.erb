@@ -8,6 +8,13 @@
         <div class="col-md-11" style="padding-top: 10px;">
             <div class="row">
                 <div class="col-md-12" >
+  <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="/pmc_new"><h5><strong><p class="text-primary" >全部</p></strong></h5></a></li>
+      <li role="presentation" ><a href="/pmc_new?chk=chk"><h5><strong><p class="text-primary" >待确认</p></strong></h5></a></li>
+  </ul>
+<br>
+                        <% if @pmc_new %>
+<%= will_paginate(@pmc_new) %>
                     <table class="table">
                         <thead>
                             <tr style="background-color: #eeeeee">
@@ -23,8 +30,9 @@
                                 <th width="60">审核</th>
                             <tr>
                         </thead>
+
                         <tbody>
-                        <% if @pmc_new %>
+
                             <% @pmc_new.each do |item|%>   
                             <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% elsif item.check == "GREEN" %>class="bg-success"<% end %>>
                                 <td>
@@ -54,9 +62,12 @@
                                 </td>
                             </tr>
                             <% end %>
-                        <% end %>
+
                         </tbody>
+
                     </table>
+<%= will_paginate(@pmc_new) %>
+                        <% end %>
                 </div>
             </div>
         </div>

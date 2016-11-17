@@ -993,7 +993,12 @@ before_filter :authenticate_user!
                 end
             end
         end
-        @pmc_new = PiPmcItem.where(state: "new").order("moko_part,p_item_id DESC")
+        if params[:chk].blank?
+            @pmc_new = PiPmcItem.where(state: "new").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 20)
+        else
+            @pmc_new = PiPmcItem.where(state: "new",buy_user: "CHK").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 20)
+            render "pmc_new_chk.html.erb" and return
+        end
     end
 
     def new_moko_part

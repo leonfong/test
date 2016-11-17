@@ -504,8 +504,8 @@ before_filter :authenticate_user!
                         wh_data.temp_moko_qty = wh_data.temp_moko_qty - get_data.qty
                         wh_data.temp_buy_qty = wh_data.temp_buy_qty + get_data.qty
                         wh_data.true_buy_qty = wh_data.true_buy_qty + get_data.qty
-                        wh_data.wh_qty = wh_data.wh_qty + get_data.qty
-                        wh_data.wh_f_qty = wh_data.wh_f_qty + get_data.qty
+                        #wh_data.wh_qty = wh_data.wh_qty + get_data.qty
+                        #wh_data.wh_f_qty = wh_data.wh_f_qty + get_data.qty
                         wh_data.save
                     end
                     #还原请料
@@ -593,15 +593,15 @@ before_filter :authenticate_user!
                         pmc_data.pmc_qty = pmc_data.qty
                         wh_data.qty = wh_data.qty - pmc_data.qty
                         wh_data.temp_moko_qty = wh_data.temp_moko_qty + pmc_data.qty
-                        wh_data.wh_qty = wh_data.wh_qty - pmc_data.qty
-                        wh_data.wh_f_qty = wh_data.wh_f_qty - pmc_data.qty
+                        #wh_data.wh_qty = wh_data.wh_qty - pmc_data.qty
+                        #wh_data.wh_f_qty = wh_data.wh_f_qty - pmc_data.qty
                     #如果实际库存不满足需求
                     else wh_data.qty - pmc_data.qty < 0
                         pmc_data.buy_qty = wh_data.qty
                         pmc_data.pmc_qty = wh_data.qty
                         wh_data.temp_moko_qty = wh_data.temp_moko_qty + wh_data.qty
-                        wh_data.wh_qty = wh_data.wh_qty - wh_data.qty
-                        wh_data.wh_f_qty = wh_data.wh_f_qty - wh_data.qty
+                        #wh_data.wh_qty = wh_data.wh_qty - wh_data.qty
+                        #wh_data.wh_f_qty = wh_data.wh_f_qty - wh_data.qty
                         wh_data.qty = 0
                     end
                     pmc_data.save

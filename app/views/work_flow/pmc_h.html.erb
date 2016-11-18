@@ -13,6 +13,33 @@
                         <div class="form-group  nav navbar-nav navbar-left">
                             <lable for="order_no" , class="sr-only">Qrder : </lable>
                             <div class="input-group input-group-sm">    
+                                <%= text_field_tag :pass_date, params[:pass_date], id: "pass_date",class:"form-control input-sm", size:"30" , placeholder:"审核日期" %>
+                                <script type="text/javascript">
+                                    $(function () {
+                                    $('#pass_date').datetimepicker({
+                                        useCurrent: false,
+                                        format: 'YYYY-MM-DD'
+                                    });    
+                                    });
+                                 </script>
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                </div>
+                            </div>
+                        </div>                       
+                    </span>
+                </div>
+
+
+
+
+
+
+                <div class="col-md-2 col-sm-2 form-inline" >
+                    <span  style="color:#999;">
+                        <div class="form-group  nav navbar-nav navbar-left">
+                            <lable for="order_no" , class="sr-only">Qrder : </lable>
+                            <div class="input-group input-group-sm">    
                                 <%= text_field_tag :order_no, params[:order_no], class:"form-control input-lg", size:"30", placeholder:"订单号"%>     
                                 <div class="input-group-btn">
                                     <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
@@ -80,6 +107,7 @@
                     <table class="table">
                         <thead>
                             <tr style="background-color: #eeeeee">
+                                <th width="100">审核时间</th>
                                 <th width="80">状态</th>
                                 <th width="130">Order No.</th>
                                 <th width="150">MOKO ID</th>
@@ -96,6 +124,7 @@
                         <% if @pi_buy %>
                             <% @pi_buy.each do |item|%>   
                             <tr>
+                                <td><%= item.pass_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
                                 <td><%= item.state %></td>
                                 <td><%= item.erp_no_son %></td>
                                 <td><%= item.moko_part %></td>

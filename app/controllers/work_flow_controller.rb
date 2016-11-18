@@ -482,6 +482,7 @@ before_filter :authenticate_user!
             get_data = PiPmcItem.find_by_id(params[:id])
             if not get_data.blank?
                 get_data.state = "pass"
+                get_data.pass_at = Time.new
                 get_data.save
                 #redirect_to pmc_h_path() and return
             end
@@ -762,6 +763,12 @@ before_filter :authenticate_user!
 
     def pmc_h
         pmc_where = "state <> 'new'"
+        if not params[:pass_date].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "pass_at LIKE '#{params[:pass_date]}%'"
+        end
         if not params[:order_no].blank?
             if not pmc_where.blank?
             pmc_where += " AND "

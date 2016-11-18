@@ -761,7 +761,38 @@ before_filter :authenticate_user!
     end
 
     def pmc_h
-        @pi_buy = PiPmcItem.where("state <> 'new'")
+        pmc_where = "state <> 'new'"
+        if not params[:order_no].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "erp_no_son LIKE '%#{params[:order_no]}%'"
+        end
+        if not params[:moko_part].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "moko_part LIKE '%#{params[:moko_part]}%'"
+        end
+        if not params[:moko_des].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "moko_des LIKE '%#{params[:moko_des]}%'"
+        end
+        if not params[:part_code].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "part_code LIKE '%#{params[:part_code]}%'"
+        end
+        if not params[:buy_user].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "buy_user LIKE '%#{params[:buy_user]}%'"
+        end
+        @pi_buy = PiPmcItem.where("#{pmc_where}")
     end
 
     def pmc_new
@@ -994,9 +1025,9 @@ before_filter :authenticate_user!
             end
         end
         if params[:chk].blank?
-            @pmc_new = PiPmcItem.where(state: "new").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 20)
+            @pmc_new = PiPmcItem.where(state: "new").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
         else
-            @pmc_new = PiPmcItem.where(state: "new",buy_user: "CHK").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 20)
+            @pmc_new = PiPmcItem.where(state: "new",buy_user: "CHK").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
             render "pmc_new_chk.html.erb" and return
         end
     end

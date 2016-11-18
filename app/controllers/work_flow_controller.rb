@@ -501,10 +501,12 @@ before_filter :authenticate_user!
                     #还原库存
                     wh_data = WarehouseInfo.find_by_moko_part(get_data.moko_part)
                     if not wh_data.blank?
-                        wh_data.qty = wh_data.qty + get_data.qty
-                        wh_data.temp_moko_qty = wh_data.temp_moko_qty - get_data.qty
-                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + get_data.qty
-                        wh_data.true_buy_qty = wh_data.true_buy_qty + get_data.qty
+                        wh_data.qty = wh_data.qty + get_data.pmc_qty
+                        wh_data.wh_qty = wh_data.wh_qty + get_data.pmc_qty
+                        wh_data.wh_f_qty = wh_data.wh_f_qty + get_data.pmc_qty
+                        wh_data.temp_moko_qty = wh_data.temp_moko_qty - get_data.pmc_qty
+                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + get_data.pmc_qty
+                        wh_data.true_buy_qty = wh_data.true_buy_qty + get_data.pmc_qty
                         #wh_data.wh_qty = wh_data.wh_qty + get_data.qty
                         #wh_data.wh_f_qty = wh_data.wh_f_qty + get_data.qty
                         wh_data.save
@@ -516,17 +518,20 @@ before_filter :authenticate_user!
                         #如果大于1,先还原请料后删除
                         change_data = PiPmcItem.where("p_item_id = '#{get_data.p_item_id}' AND id <> '#{params[:id]}'").first
    
-                        change_data.qty = change_data.qty + get_data.qty
+                        change_data.pmc_qty = change_data.pmc_qty + get_data.pmc_qty
+                        change_data.buy_qty = change_data.buy_qty + get_data.buy_qty
                         change_data.check = "GREEN"
                         change_data.save
                         get_data.destroy
                     else
                         #如果只有1,更改为外购
-                        get_data.buy_user = ""
-                        if get_data.package1 == "D" or get_data.package1 == "Q"
+                        package1 = Product.find_by_name(get_data.moko_part).package1
+                        if package1 == "D" or package1 == "Q"
                             get_data.buy_user = "A"
-                        elsif get_data.package1 == "PZ"
+                        elsif package1 == "PZ"
                             get_data.buy_user = "B"
+                        else 
+                            get_data.buy_user = ""
                         end
                         get_data.check = "GREEN"
                         get_data.save
@@ -536,8 +541,8 @@ before_filter :authenticate_user!
                     #还原库存
                     wh_data = WarehouseInfo.find_by_moko_part(get_data.moko_part)
                     if not wh_data.blank?
-                        wh_data.temp_buy_qty = wh_data.temp_buy_qty - get_data.qty
-                        wh_data.true_buy_qty = wh_data.true_buy_qty - get_data.qty
+                        wh_data.temp_buy_qty = wh_data.temp_buy_qty - get_data.pmc_qty
+                        wh_data.true_buy_qty = wh_data.true_buy_qty - get_data.pmc_qty
                         wh_data.save
                     end
                     get_data.buy_user = ""
@@ -583,179 +588,195 @@ before_filter :authenticate_user!
              
             wh_chk.save
             if wh_data.save
-                pmc_data = PiPmcItem.find_by_id(wh_chk.pi_pmc_item_id)
-                temp_qty = pmc_data.qty
-                #1先减去实际库存
-                if wh_data.qty > 0
-                    pmc_data.buy_user = "MOKO"
-                    #如果实际库存满足需求
-                    if wh_data.qty - pmc_data.qty >= 0
-                        pmc_data.buy_qty = pmc_data.qty
-                        pmc_data.pmc_qty = pmc_data.qty
-                        wh_data.qty = wh_data.qty - pmc_data.qty
-                        wh_data.temp_moko_qty = wh_data.temp_moko_qty + pmc_data.qty
-                        #wh_data.wh_qty = wh_data.wh_qty - pmc_data.qty
-                        #wh_data.wh_f_qty = wh_data.wh_f_qty - pmc_data.qty
-                    #如果实际库存不满足需求
-                    else wh_data.qty - pmc_data.qty < 0
-                        pmc_data.buy_qty = wh_data.qty
-                        pmc_data.pmc_qty = wh_data.qty
-                        wh_data.temp_moko_qty = wh_data.temp_moko_qty + wh_data.qty
-                        #wh_data.wh_qty = wh_data.wh_qty - wh_data.qty
-                        #wh_data.wh_f_qty = wh_data.wh_f_qty - wh_data.qty
-                        wh_data.qty = 0
-                    end
-                    pmc_data.save
-                    wh_data.save
-                    temp_qty = temp_qty - pmc_data.buy_qty
-                end
-                #2再判断是否要减去虚拟库存 
-                if temp_qty > 0 and wh_data.future_qty > 0
-                    if temp_qty == pmc_data.qty
-                        pmc_data.buy_user = "MOKO_TEMP"
-                        #如果虚拟库存满足需求
-                        if wh_data.future_qty - pmc_data.qty >= 0
+                all_pmc_data = PiPmcItem.where(moko_part: wh_chk.moko_part,buy_user: "CHK")
+                #pmc_data = PiPmcItem.find_by_id(wh_chk.pi_pmc_item_id)
+                all_pmc_data.each do |pmc_data|
+                    temp_qty = pmc_data.qty
+                    #1先减去实际库存
+                    if wh_data.qty > 0
+                        pmc_data.buy_user = "MOKO"
+                        #如果实际库存满足需求
+                        if wh_data.qty - pmc_data.qty >= 0
                             pmc_data.buy_qty = pmc_data.qty
                             pmc_data.pmc_qty = pmc_data.qty
-                            wh_data.future_qty = wh_data.future_qty - pmc_data.qty
-                            wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
-                        #如果虚拟库存不满足需求
-                        else wh_data.future_qty - pmc_data.qty < 0
-                            pmc_data.buy_qty = wh_data.future_qty
-                            pmc_data.pmc_qty = wh_data.future_qty
-                            wh_data.future_qty = 0
-                            wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
+                            wh_data.qty = wh_data.qty - pmc_data.qty
+                            wh_data.temp_moko_qty = wh_data.temp_moko_qty + pmc_data.qty
+                            #wh_data.wh_qty = wh_data.wh_qty - pmc_data.qty
+                            #wh_data.wh_f_qty = wh_data.wh_f_qty - pmc_data.qty
+                        #如果实际库存不满足需求
+                        else wh_data.qty - pmc_data.qty < 0
+                            pmc_data.buy_qty = wh_data.qty
+                            pmc_data.pmc_qty = wh_data.qty
+                            wh_data.temp_moko_qty = wh_data.temp_moko_qty + wh_data.qty
+                            #wh_data.wh_qty = wh_data.wh_qty - wh_data.qty
+                            #wh_data.wh_f_qty = wh_data.wh_f_qty - wh_data.qty
+                            wh_data.qty = 0
                         end
                         pmc_data.save
                         wh_data.save
                         temp_qty = temp_qty - pmc_data.buy_qty
-                    else
-                        add_future_data = PiPmcItem.new
-                        add_future_data.state = "new"
-                        add_future_data.erp_no = pmc_data.erp_no
-                        add_future_data.erp_no_son = pmc_data.erp_no_son
-                        add_future_data.moko_part = pmc_data.moko_part
-                        add_future_data.moko_des = pmc_data.moko_des
-                        add_future_data.part_code = pmc_data.part_code
+                    end
+                    #2再判断是否要减去虚拟库存 
+                    if temp_qty > 0 and wh_data.future_qty > 0
+                        if temp_qty == pmc_data.qty
+                            pmc_data.buy_user = "MOKO_TEMP"
+                            #如果虚拟库存满足需求
+                            if wh_data.future_qty - pmc_data.qty >= 0
+                                pmc_data.buy_qty = pmc_data.qty
+                                pmc_data.pmc_qty = pmc_data.qty
+                                wh_data.future_qty = wh_data.future_qty - pmc_data.qty
+                                wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
+                            #如果虚拟库存不满足需求
+                            else wh_data.future_qty - pmc_data.qty < 0
+                                pmc_data.buy_qty = wh_data.future_qty
+                                pmc_data.pmc_qty = wh_data.future_qty
+                                wh_data.future_qty = 0
+                                wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
+                            end
+                            pmc_data.save
+                            wh_data.save
+                            temp_qty = temp_qty - pmc_data.buy_qty
+                        else
+                            add_future_data = PiPmcItem.new
+                            add_future_data.pmc_type = "CHK"
+                            add_future_data.state = "new"
+                            add_future_data.erp_no = pmc_data.erp_no
+                            add_future_data.erp_no_son = pmc_data.erp_no_son
+                            add_future_data.moko_part = pmc_data.moko_part
+                            add_future_data.moko_des = pmc_data.moko_des
+                            add_future_data.part_code = pmc_data.part_code
 
-                        add_future_data.qty = pmc_data.qty
-                        add_future_data.qty_in = pmc_data.qty
-                        add_future_data.buy_user = "MOKO_TEMP"
-                        #如果虚拟库存满足需求
-                        if wh_data.future_qty - temp_qty >= 0
-                            add_future_data.buy_qty = temp_qty
-                            add_future_data.pmc_qty = temp_qty
-                            wh_data.future_qty = wh_data.future_qty - pmc_data.qty
-                            wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
-                        #如果虚拟库存不满足需求
-                        else wh_data.future_qty - temp_qty < 0
-                            add_future_data.buy_qty = wh_data.future_qty
-                            add_future_data.pmc_qty = wh_data.future_qty
-                            wh_data.future_qty = 0
-                            wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
+                            add_future_data.qty = pmc_data.qty
+                            add_future_data.qty_in = pmc_data.qty
+                            add_future_data.buy_user = "MOKO_TEMP"
+                            #如果虚拟库存满足需求
+                            if wh_data.future_qty - temp_qty >= 0
+                                add_future_data.buy_qty = temp_qty
+                                add_future_data.pmc_qty = temp_qty
+                                wh_data.future_qty = wh_data.future_qty - pmc_data.qty
+                                wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
+                            #如果虚拟库存不满足需求
+                            else wh_data.future_qty - temp_qty < 0
+                                add_future_data.buy_qty = wh_data.future_qty
+                                add_future_data.pmc_qty = wh_data.future_qty
+                                wh_data.future_qty = 0
+                                wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
+                            end
+                            add_future_data.remark = pmc_data.remark
+                            add_future_data.p_item_id = pmc_data.p_item_id
+                            add_future_data.erp_id = pmc_data.erp_id
+                            add_future_data.user_do = pmc_data.user_do
+                            add_future_data.user_do_change = pmc_data.user_do_change
+                            add_future_data.check = pmc_data.check
+                            add_future_data.pi_buy_info_id = pmc_data.pi_buy_info_id
+                            add_future_data.procurement_bom_id = pmc_data.procurement_bom_id
+                            add_future_data.quantity = pmc_data.quantity
+                            add_future_data.description = pmc_data.description
+                            add_future_data.fengzhuang = pmc_data.fengzhuang
+                            add_future_data.link = pmc_data.link
+                            add_future_data.cost = pmc_data.cost
+                            add_future_data.info = pmc_data.info
+                            add_future_data.product_id = pmc_data.product_id
+                            add_future_data.warn = pmc_data.warn
+                            add_future_data.user_id = pmc_data.user_id
+                            add_future_data.danger = pmc_data.danger
+                            add_future_data.manual = pmc_data.manual
+                            add_future_data.mark = pmc_data.mark
+                            add_future_data.mpn = pmc_data.mpn
+                            add_future_data.mpn_id = pmc_data.mpn_id
+                            add_future_data.price = pmc_data.price
+                            add_future_data.mf = pmc_data.mf
+                            add_future_data.dn = pmc_data.dn
+                            add_future_data.dn_id = pmc_data.dn_id
+                            add_future_data.dn_long = pmc_data.dn_long
+                            add_future_data.other = pmc_data.other
+                            add_future_data.all_info = pmc_data.all_info
+                            add_future_data.color = pmc_data.color
+                            add_future_data.supplier_tag = pmc_data.supplier_tag
+                            add_future_data.supplier_out_tag = pmc_data.supplier_out_tag
+                            add_future_data.sell_feed_back_tag = pmc_data.sell_feed_back_tag
+                            add_future_data.save
+                            wh_data.save
+                            temp_qty = temp_qty - add_future_data.buy_qty
                         end
-                        add_future_data.remark = pmc_data.remark
-                        add_future_data.p_item_id = pmc_data.p_item_id
-                        add_future_data.erp_id = pmc_data.erp_id
-                        add_future_data.user_do = pmc_data.user_do
-                        add_future_data.user_do_change = pmc_data.user_do_change
-                        add_future_data.check = pmc_data.check
-                        add_future_data.pi_buy_info_id = pmc_data.pi_buy_info_id
-                        add_future_data.procurement_bom_id = pmc_data.procurement_bom_id
-                        add_future_data.quantity = pmc_data.quantity
-                        add_future_data.description = pmc_data.description
-                        add_future_data.fengzhuang = pmc_data.fengzhuang
-                        add_future_data.link = pmc_data.link
-                        add_future_data.cost = pmc_data.cost
-                        add_future_data.info = pmc_data.info
-                        add_future_data.product_id = pmc_data.product_id
-                        add_future_data.warn = pmc_data.warn
-                        add_future_data.user_id = pmc_data.user_id
-                        add_future_data.danger = pmc_data.danger
-                        add_future_data.manual = pmc_data.manual
-                        add_future_data.mark = pmc_data.mark
-                        add_future_data.mpn = pmc_data.mpn
-                        add_future_data.mpn_id = pmc_data.mpn_id
-                        add_future_data.price = pmc_data.price
-                        add_future_data.mf = pmc_data.mf
-                        add_future_data.dn = pmc_data.dn
-                        add_future_data.dn_id = pmc_data.dn_id
-                        add_future_data.dn_long = pmc_data.dn_long
-                        add_future_data.other = pmc_data.other
-                        add_future_data.all_info = pmc_data.all_info
-                        add_future_data.color = pmc_data.color
-                        add_future_data.supplier_tag = pmc_data.supplier_tag
-                        add_future_data.supplier_out_tag = pmc_data.supplier_out_tag
-                        add_future_data.sell_feed_back_tag = pmc_data.sell_feed_back_tag
-                        add_future_data.save
+                    end
+                    #3再判断是否要外购
+                    if temp_qty > 0
+                        if temp_qty == pmc_data.qty
+                            package1 = Product.find_by_name(wh_chk.moko_part).package1
+                            if package1 == "D" or package1 == "Q"
+                                pmc_data.buy_user = "A"
+                            elsif package1 == "PZ"
+                                pmc_data.buy_user = "B"
+                            else 
+                                pmc_data.buy_user = ""
+                            end
+                            pmc_data.save
+                        else
+                            add_buy_data = PiPmcItem.new
+                            add_buy_data.pmc_type = "CHK"
+                            add_buy_data.state = "new"
+                            add_buy_data.erp_no = pmc_data.erp_no
+                            add_buy_data.erp_no_son = pmc_data.erp_no_son
+                            add_buy_data.moko_part = pmc_data.moko_part
+                            add_buy_data.moko_des = pmc_data.moko_des
+                            add_buy_data.part_code = pmc_data.part_code
+                            add_buy_data.qty = pmc_data.qty
+                            add_buy_data.qty_in = pmc_data.qty
+                            package1 = Product.find_by_name(wh_chk.moko_part).package1
+                            if package1 == "D" or package1 == "Q"
+                                add_buy_data.buy_user = "A"
+                            elsif package1 == "PZ"
+                                add_buy_data.buy_user = "B"
+                            else 
+                                add_buy_data.buy_user = ""
+                            end
+                            add_buy_data.buy_qty = temp_qty
+                            add_buy_data.pmc_qty = temp_qty  
+                            add_buy_data.remark = pmc_data.remark
+                            add_buy_data.p_item_id = pmc_data.p_item_id
+                            add_buy_data.erp_id = pmc_data.erp_id
+                            add_buy_data.user_do = pmc_data.user_do
+                            add_buy_data.user_do_change = pmc_data.user_do_change
+                            add_buy_data.check = pmc_data.check
+                            add_buy_data.pi_buy_info_id = pmc_data.pi_buy_info_id
+                            add_buy_data.procurement_bom_id = pmc_data.procurement_bom_id
+                            add_buy_data.quantity = pmc_data.quantity
+                            add_buy_data.description = pmc_data.description
+                            add_buy_data.fengzhuang = pmc_data.fengzhuang
+                            add_buy_data.link = pmc_data.link
+                            add_buy_data.cost = pmc_data.cost
+                            add_buy_data.info = pmc_data.info
+                            add_buy_data.product_id = pmc_data.product_id
+                            add_buy_data.warn = pmc_data.warn
+                            add_buy_data.user_id = pmc_data.user_id
+                            add_buy_data.danger = pmc_data.danger
+                            add_buy_data.manual = pmc_data.manual
+                            add_buy_data.mark = pmc_data.mark
+                            add_buy_data.mpn = pmc_data.mpn
+                            add_buy_data.mpn_id = pmc_data.mpn_id
+                            add_buy_data.price = pmc_data.price
+                            add_buy_data.mf = pmc_data.mf
+                            add_buy_data.dn = pmc_data.dn
+                            add_buy_data.dn_id = pmc_data.dn_id
+                            add_buy_data.dn_long = pmc_data.dn_long
+                            add_buy_data.other = pmc_data.other
+                            add_buy_data.all_info = pmc_data.all_info
+                            add_buy_data.color = pmc_data.color
+                            add_buy_data.supplier_tag = pmc_data.supplier_tag
+                            add_buy_data.supplier_out_tag = pmc_data.supplier_out_tag
+                            add_buy_data.sell_feed_back_tag = pmc_data.sell_feed_back_tag
+                            add_buy_data.save
+                        end
+                        #wh_data.temp_buy_qty = wh_data.temp_buy_qty + pmc_data.qty
+                        #wh_data.true_buy_qty = wh_data.true_buy_qty + pmc_data.qty
+                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + temp_qty
+                        wh_data.true_buy_qty = wh_data.true_buy_qty + temp_qty
                         wh_data.save
-                        temp_qty = temp_qty - add_future_data.buy_qty
                     end
+                    wh_chk.state = "pass"
+                    wh_chk.save
                 end
-                #3再判断是否要外购
-                if temp_qty > 0
-                    add_buy_data = PiPmcItem.new
-                    add_buy_data.state = "new"
-                    add_buy_data.erp_no = pmc_data.erp_no
-                    add_buy_data.erp_no_son = pmc_data.erp_no_son
-                    add_buy_data.moko_part = pmc_data.moko_part
-                    add_buy_data.moko_des = pmc_data.moko_des
-                    add_buy_data.part_code = pmc_data.part_code
-                    add_buy_data.qty = pmc_data.qty
-                    add_buy_data.qty_in = pmc_data.qty
-                    package1 = Product.find_by_name(wh_chk.moko_part).package1
-                    if package1 == "D" or package1 == "Q"
-                        add_buy_data.buy_user = "A"
-                    elsif package1 == "PZ"
-                        add_buy_data.buy_user = "B"
-                    else 
-                        add_buy_data.buy_user = ""
-                    end
-                    add_buy_data.buy_qty = temp_qty
-                    add_buy_data.pmc_qty = temp_qty  
-                    add_buy_data.remark = pmc_data.remark
-                    add_buy_data.p_item_id = pmc_data.p_item_id
-                    add_buy_data.erp_id = pmc_data.erp_id
-                    add_buy_data.user_do = pmc_data.user_do
-                    add_buy_data.user_do_change = pmc_data.user_do_change
-                    add_buy_data.check = pmc_data.check
-                    add_buy_data.pi_buy_info_id = pmc_data.pi_buy_info_id
-                    add_buy_data.procurement_bom_id = pmc_data.procurement_bom_id
-                    add_buy_data.quantity = pmc_data.quantity
-                    add_buy_data.description = pmc_data.description
-                    add_buy_data.fengzhuang = pmc_data.fengzhuang
-                    add_buy_data.link = pmc_data.link
-                    add_buy_data.cost = pmc_data.cost
-                    add_buy_data.info = pmc_data.info
-                    add_buy_data.product_id = pmc_data.product_id
-                    add_buy_data.warn = pmc_data.warn
-                    add_buy_data.user_id = pmc_data.user_id
-                    add_buy_data.danger = pmc_data.danger
-                    add_buy_data.manual = pmc_data.manual
-                    add_buy_data.mark = pmc_data.mark
-                    add_buy_data.mpn = pmc_data.mpn
-                    add_buy_data.mpn_id = pmc_data.mpn_id
-                    add_buy_data.price = pmc_data.price
-                    add_buy_data.mf = pmc_data.mf
-                    add_buy_data.dn = pmc_data.dn
-                    add_buy_data.dn_id = pmc_data.dn_id
-                    add_buy_data.dn_long = pmc_data.dn_long
-                    add_buy_data.other = pmc_data.other
-                    add_buy_data.all_info = pmc_data.all_info
-                    add_buy_data.color = pmc_data.color
-                    add_buy_data.supplier_tag = pmc_data.supplier_tag
-                    add_buy_data.supplier_out_tag = pmc_data.supplier_out_tag
-                    add_buy_data.sell_feed_back_tag = pmc_data.sell_feed_back_tag
-                    add_buy_data.save
-
-                    #wh_data.temp_buy_qty = wh_data.temp_buy_qty + pmc_data.qty
-                    #wh_data.true_buy_qty = wh_data.true_buy_qty + pmc_data.qty
-                    wh_data.temp_buy_qty = wh_data.temp_buy_qty + temp_qty
-                    wh_data.true_buy_qty = wh_data.true_buy_qty + temp_qty
-                    wh_data.save
-                end
-                wh_chk.state = "pass"
-                wh_chk.save
             end
         end
         redirect_to :back
@@ -809,6 +830,7 @@ before_filter :authenticate_user!
             Rails.logger.info("pmc_new--------------------------------------2")
             @pi_buy.each do |item_buy|
                 need_buy = "no"
+                need_chk = "no"
                 item_id = item_buy.id
                 item_data = PItem.find_by_id(item_id)
                 if not item_data.blank?
@@ -839,14 +861,25 @@ before_filter :authenticate_user!
                         sell_qty = item_data.quantity*PcbOrderItem.find_by_id(item_buy.order_item_id).qty
                         add_buy_data.qty = sell_qty
                         add_buy_data.qty_in = sell_qty 
-                        if not wh_data.blank? and not moko_data.blank?
-                            Rails.logger.info("pmc_new--------------------------------------5")
-                            #如果库存大于0
-                            if wh_data.qty > 0 and wh_data.qty - use_qty > 0
-                                Rails.logger.info("pmc_new--------------------------------------6")
-                                add_buy_data.buy_user = "CHK"
-                                add_buy_data.buy_qty = sell_qty
-                                add_buy_data.pmc_qty = sell_qty
+                        chk_data = WhChkInfo.where(moko_part: item_data.moko_part,state: "new")
+                        #如果这个料正在被申请盘点中
+                        if not chk_data.blank?
+                            add_buy_data.buy_user = "CHK"
+                            add_buy_data.pmc_type = "CHK"
+                            add_buy_data.buy_qty = sell_qty
+                            add_buy_data.pmc_qty = sell_qty
+                        else
+                            #如果库存中有这个料
+                            if not wh_data.blank? and not moko_data.blank?
+                                Rails.logger.info("pmc_new--------------------------------------5")
+                                #如果库存大于0
+                                if wh_data.qty > 0 and wh_data.qty - use_qty > 0
+                                    Rails.logger.info("pmc_new--------------------------------------6")
+                                    add_buy_data.buy_user = "CHK"
+                                    add_buy_data.pmc_type = "CHK"
+                                    add_buy_data.buy_qty = sell_qty
+                                    add_buy_data.pmc_qty = sell_qty
+                                    need_chk = "do"
 =begin
                                 send_chk_wh = WhChkInfo.new
                                 send_chk_wh.pi_pmc_item_id = add_buy_data.id
@@ -859,51 +892,52 @@ before_filter :authenticate_user!
                                 send_chk_wh.save
 =end
                             
-                            else
-                                Rails.logger.info("pmc_new--------------------------------------7")
-                                #如果虚拟库存大于0
-                                if wh_data.future_qty > 0
+                                else
+                                    Rails.logger.info("pmc_new--------------------------------------7")
+                                    #如果虚拟库存大于0
+                                    if wh_data.future_qty > 0
                                     Rails.logger.info("pmc_new--------------------------------------8")
-                                    #如果库存虚拟大于等于需求
-                                    if wh_data.future_qty - sell_qty >= 0
-                                        Rails.logger.info("pmc_new--------------------------------------9")
-                                        add_buy_data.buy_user = "MOKO_TEMP"
+                                        #如果库存虚拟大于等于需求
+                                        if wh_data.future_qty - sell_qty >= 0
+                                            Rails.logger.info("pmc_new--------------------------------------9")
+                                            add_buy_data.buy_user = "MOKO_TEMP"
+                                            add_buy_data.buy_qty = sell_qty
+                                            add_buy_data.pmc_qty = sell_qty
+                                            wh_data.future_qty = wh_data.future_qty - sell_qty
+                                            wh_data.temp_future_qty = wh_data.temp_future_qty + sell_qty
+                                            wh_data.save
+                                        elsif wh_data.future_qty - sell_qty < 0
+                                            Rails.logger.info("pmc_new--------------------------------------10")
+                                            add_buy_data.buy_user = "MOKO_TEMP"
+                                            add_buy_data.buy_qty = wh_data.future_qty
+                                            add_buy_data.pmc_qty = wh_data.future_qty
+                                            wh_data.future_qty = 0
+                                            wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.temp_future_qty
+                                            wh_data.save
+                                            #不够的让采购员补齐
+                                            need_buy = "do"
+                                    
+                                        end
+                                    else
+                                        Rails.logger.info("pmc_new--------------------------------------11")
                                         add_buy_data.buy_qty = sell_qty
                                         add_buy_data.pmc_qty = sell_qty
-                                        wh_data.future_qty = wh_data.future_qty - sell_qty
-                                        wh_data.temp_future_qty = wh_data.temp_future_qty + sell_qty
+                                        if moko_data.package1 == "D" or moko_data.package1 == "Q"
+                                            add_buy_data.buy_user = "A"
+                                        elsif moko_data.package1 == "PZ"
+                                            add_buy_data.buy_user = "B"
+                                        end
+                                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + sell_qty
+                                        wh_data.true_buy_qty = wh_data.true_buy_qty + sell_qty
                                         wh_data.save
-                                    elsif wh_data.future_qty - sell_qty < 0
-                                        Rails.logger.info("pmc_new--------------------------------------10")
-                                        add_buy_data.buy_user = "MOKO_TEMP"
-                                        add_buy_data.buy_qty = wh_data.future_qty
-                                        add_buy_data.pmc_qty = wh_data.future_qty
-                                        wh_data.future_qty = 0
-                                        wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.temp_future_qty
-                                        wh_data.save
-                                        #不够的让采购员补齐
-                                        need_buy = "do"
-                                    
                                     end
-                                else
-                                    Rails.logger.info("pmc_new--------------------------------------11")
-                                    add_buy_data.buy_qty = sell_qty
-                                    add_buy_data.pmc_qty = sell_qty
-                                    if moko_data.package1 == "D" or moko_data.package1 == "Q"
-                                        add_buy_data.buy_user = "A"
-                                    elsif moko_data.package1 == "PZ"
-                                        add_buy_data.buy_user = "B"
-                                    end
-                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty + sell_qty
-                                    wh_data.true_buy_qty = wh_data.true_buy_qty + sell_qty
-                                    wh_data.save
                                 end
-                            end
-                        else
-                            Rails.logger.info("pmc_new--------------------------------------12")
-                            add_buy_data.buy_qty = sell_qty
-                            add_buy_data.pmc_qty = sell_qty
+                            else
+                                Rails.logger.info("pmc_new--------------------------------------12")
+                                add_buy_data.buy_qty = sell_qty
+                                add_buy_data.pmc_qty = sell_qty
                             
+                            end
                         end
                         Rails.logger.info("pmc_new--------------------------------------13")
 
@@ -948,7 +982,8 @@ before_filter :authenticate_user!
                         if add_buy_data.save
                             Rails.logger.info("pmc_new--------------------------------------14")
                             #判断是否需要工厂盘料
-                            if not wh_data.blank? and not moko_data.blank?  
+                            #if not wh_data.blank? and not moko_data.blank?
+                            if need_chk == "do"  
                                 Rails.logger.info("pmc_new--------------------------------------15")
                                 if wh_data.qty > 0 and wh_data.qty - use_qty > 0
                                     Rails.logger.info("pmc_new--------------------------------------16")
@@ -1032,9 +1067,9 @@ before_filter :authenticate_user!
             end
         end
         if params[:chk].blank?
-            @pmc_new = PiPmcItem.where(state: "new").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
+            @pmc_new = PiPmcItem.where(state: "new",pmc_type: "").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
         else
-            @pmc_new = PiPmcItem.where(state: "new",buy_user: "CHK").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
+            @pmc_new = PiPmcItem.where(state: "new",pmc_type: "CHK").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
             render "pmc_new_chk.html.erb" and return
         end
     end

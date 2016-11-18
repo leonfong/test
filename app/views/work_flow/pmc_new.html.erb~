@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12" >
   <ul class="nav nav-tabs">
-      <li role="presentation" class="active"><a href="/pmc_new"><h5><strong><p class="text-primary" >全部</p></strong></h5></a></li>
+      <li role="presentation" class="active"><a href="/pmc_new"><h5><strong><p class="text-primary" >已分配</p></strong></h5></a></li>
       <li role="presentation" ><a href="/pmc_new?chk=chk"><h5><strong><p class="text-primary" >待确认</p></strong></h5></a></li>
   </ul>
 <br>
@@ -43,7 +43,7 @@
                                 </td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
-                                <td><%= item.part_code %></td>
+                                <td><%= item.part_code[0,3]+"..." %></td>
                                 <td><%= item.qty %></td>
                                 <td><%= item.buy_qty %></td>
                                 <td>

@@ -162,6 +162,7 @@ Rails.application.routes.draw do
   match '/add_wh_change_item', to: 'work_flow#add_wh_change_item', via: 'post'
   match '/wh_draft_change', to: 'work_flow#wh_draft_change', via: 'post'
   match '/factory_online', to: 'work_flow#factory_online', via: 'get'
+  match '/pmc_check_pass_all', to: 'work_flow#pmc_check_pass_all', via: 'post'
 
 
 

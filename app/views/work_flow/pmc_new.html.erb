@@ -15,9 +15,11 @@
 <br>
                         <% if @pmc_new %>
 <%= will_paginate(@pmc_new) %>
+                    <%= form_tag({action: :pmc_check_pass_all,controller: :work_flow},method:"post") do %>
                     <table class="table table-hover">
                         <thead>
                             <tr style="background-color: #eeeeee">
+                                <th width="30"></th>
                                 <th width="130">Order No.</th>
                                 <th width="150">MOKO ID</th>
                                 <th width="350">物料名称</th>
@@ -28,13 +30,14 @@
                                 <th >备注</th>
                                 <th width="90">采购员</th>
                                 <th width="60">审核</th>
-                            <tr>
+                            </tr>
                         </thead>
 
                         <tbody>
 
                             <% @pmc_new.each do |item|%>   
                             <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% elsif item.check == "GREEN" %>class="bg-success"<% end %>>
+                                <td style="padding: 5px 5px 5px 10px;margin: 0px;"><input class="chk_all" type="checkbox" name="checkpass_item[]" value="<%= item.id.to_s %>"></td>
                                 <td>
                                     <%= item.erp_no_son %>
                                     <% if item.buy_user == "MOKO" %>
@@ -66,7 +69,16 @@
                         </tbody>
 
                     </table>
-<%= will_paginate(@pmc_new) %>
+            <div class="modal-footer" style="padding-left: 0px;">
+                
+                <input type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+                <input type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+                <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
+                <button type="submit" class="btn btn-danger" >批量审核</button>
+                
+            <div>
+            <% end %>
+
                         <% end %>
                 </div>
             </div>
@@ -77,7 +89,25 @@
 
 </div></small>
 
+<script>
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    }); 
 
+</script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

@@ -240,6 +240,7 @@ Rails.application.routes.draw do
   match '/copy_pcb_item_info', to: 'procurement#copy_pcb_item_info', via: 'get'
   match '/cost_history', to: 'procurement#cost_history', via: 'get'
   match '/sell_feeback_list', to: 'procurement#sell_feeback_list', via: 'get'
+  match '/edit_item_qty', to: 'procurement#edit_item_qty', via: 'post'
 
 
 

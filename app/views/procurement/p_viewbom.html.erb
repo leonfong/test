@@ -319,8 +319,9 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
-
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
+                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" ><%= item.pmc_qty %></div></small>
+                    </td> 
                     
                     <td width="25" style="padding: 5px 0px 5px 0px;margin: 0px;">
                       <small>                      
@@ -353,7 +354,7 @@ function change_<%= item.id.to_s %>(){
 
 <!-- 小计 报价 -->
                     <% if item.cost%>
-                        <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*@boms.qty*item.quantity).to_s %></a></small></td>
+                        <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*item.pmc_qty).to_s %></a></small></td>
                     <% else %>
                         <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
                     <% end %>
@@ -919,6 +920,35 @@ function change_<%= item.id.to_s %>(){
 </div>
 
 
+<div class="modal fade" id="edit_item_qty" tabindex="-1" role="dialog" aria-labelledby="edit_item_qtyLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_item_qtyLabel">编辑数量</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_item_qty},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="item_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="item_pmc_qty_id" name="item_id">
+          </div>
+          <div class="form-group">
+            <label for="pmc_qty" class="control-label">数量:</label>
+            <input class="form-control" name="pmc_qty" id="pmc_qty" type="number">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
 ﻿</fieldset>
 </div>
 </small>
@@ -964,6 +994,16 @@ $(document).ready(function() {
     });
 });
 
+$('#edit_item_qty').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var item_id = button.data('item_id');
+  var item_des = button.data('item_des');
+  var pmc_qty = button.data('pmc_qty');
+  var modal = $(this);
+  modal.find('.modal-title').text('编辑数量 ' + item_des);
+  modal.find($("#item_pmc_qty_id")).val(item_id);
+  modal.find($("#pmc_qty")).val(pmc_qty);
+})
 $('#exampleModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var recipient = button.data('whatever') // Extract info from data-* attributes

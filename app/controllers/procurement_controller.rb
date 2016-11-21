@@ -9,6 +9,30 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def edit_item_qty
+        if can? :work_d, :all or can? :work_admin, :all 
+            if not params[:item_id].blank?
+                get_item_data = PItem.find_by_id(params[:item_id])
+                if not get_item_data.blank?
+                    get_item_data.pmc_qty = params[:pmc_qty]
+                    if get_item_data.save
+                        @bom = ProcurementBom.find(get_item_data.procurement_bom_id)  
+                        @bom_item = PItem.where(procurement_bom_id: get_item_data.procurement_bom_id)
+                        @total_p = 0
+                        @bom_item.each do |bomitem|
+                            if not bomitem.cost.blank?
+                                @total_p += bomitem.cost*bomitem.pmc_qty
+                            end
+                        end
+                        @bom.t_p = @total_p
+                        @bom.save
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def sell_feeback_list
         if can? :work_admin, :all 
             @quate = PItem.find_by_sql("SELECT pcb_orders.order_sell, pcb_order_items.pcb_order_id, pcb_order_items.pcb_order_no_son, p_items.* FROM pcb_order_items INNER JOIN pcb_orders ON pcb_order_items.pcb_order_id = pcb_orders.id INNER JOIN p_items ON p_items.procurement_bom_id = pcb_order_items.bom_id WHERE pcb_order_items.p_type = 'PCBA' AND p_items.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 10)
@@ -2055,6 +2079,7 @@ before_filter :authenticate_user!
                     end
 		    bom_item.description = desa
                     bom_item.quantity = qtya.to_i
+                    bom_item.pmc_qty = qtya.to_i*@bom.qty.to_i
                     #bom_item.mpn = mpna.gsub(/.0/, "")
                     if mpna.to_s.strip[-2..-1] == ".0"
                         bom_item.mpn = mpna.to_s.strip.chop.chop
@@ -2549,7 +2574,7 @@ before_filter :authenticate_user!
                 all_c = 0           
                 @bom_item.each do |bomitem|
                     if not bomitem.cost.blank?
-                        @total_p += bomitem.cost*bomitem.quantity*@bom.qty.to_i
+                        @total_p += bomitem.cost*bomitem.pmc_qty
                     end
                     all_c += bomitem.quantity                    
                 end
@@ -3333,7 +3358,7 @@ WHERE
                             @bom_api_all = []
 		            @matched_items_nn.each do |item|
                                 if not item.cost.blank?
-                                    @total_price_nn += item.cost * item.quantity * @bom.qty.to_i 
+                                    @total_price_nn += item.cost * item.pmc_qty 
                                 end                      
 		            end
                         end
@@ -3401,12 +3426,13 @@ WHERE
                 @bom_api_all = []
 		@matched_items_nn.each do |item|
                     if not item.cost.blank?
-                        @total_price_nn += item.cost * item.quantity * @bom.qty.to_i 
+                        @total_price_nn += item.cost * item.pmc_qty 
                     end                      
 		end
             end
             @bom.t_p = @total_price_nn.to_f.round(4)
             @bom.save
+
             render "p_updateii.js.erb"    
         end
     end
@@ -4010,13 +4036,15 @@ WHERE
         t_pp = 0
         bom.p_items.each do |item|
             if not item.cost.blank?
-                t_p += item.cost*item.quantity
+                #t_p += item.cost*item.quantity
+                t_p += item.cost*item.pmc_qty
                 item.price = item.cost*(100+params[:profit].to_i)/100
                 t_pp += item.price*item.quantity
                 item.save
             end
         end
-        bom.t_p = t_p*bom.qty
+        #bom.t_p = t_p*bom.qty
+        bom.t_p = t_p
         bom.profit = params[:profit].to_i
         bom.t_pp = t_pp*bom.qty
         bom.save

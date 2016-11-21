@@ -353,8 +353,12 @@ function change_<%= item.id.to_s %>(){
                     </td>
 
 <!-- 小计 报价 -->
-                    <% if item.cost%>
-                        <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*item.pmc_qty).to_s %></a></small></td>
+                    <% if item.cost %>
+                        <% if not item.pmc_qty.blank? %>
+                            <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*item.pmc_qty).to_s %></a></small></td>
+                        <% else %>
+                            <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*item.qty).to_s %></a></small></td>
+                        <% end %>
                     <% else %>
                         <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>
                     <% end %>

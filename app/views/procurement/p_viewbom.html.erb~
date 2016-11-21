@@ -319,8 +319,14 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
+                   
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
-                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" ><%= item.pmc_qty %></div></small>
+                    <% if not item.pmc_qty.blank? %>
+                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" ><%= item.pmc_qty %></div>
+                    <% else %> 
+                        item.quantity
+                    <% end %>
+                    </small>
                     </td> 
                     
                     <td width="25" style="padding: 5px 0px 5px 0px;margin: 0px;">
@@ -357,7 +363,7 @@ function change_<%= item.id.to_s %>(){
                         <% if not item.pmc_qty.blank? %>
                             <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*item.pmc_qty).to_s %></a></small></td>
                         <% else %>
-                            <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*item.qty).to_s %></a></small></td>
+                            <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>"><%= "￥" + (item.cost*item.quantity).to_s %></a></small></td>
                         <% end %>
                     <% else %>
                         <td width="65" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="text-muted a_ctl" name="<%= item.id.to_s + 'p_t' %>" id="<%= item.id.to_s + 'p_t' %>">￥</a></small></td>

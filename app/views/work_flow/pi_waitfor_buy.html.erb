@@ -37,7 +37,7 @@
       <td><%= buy.moko_des %></td> 
       <td><%= buy.pmc_qty %></td>
       <td><%= buy.cost %></td>
-      <% if not buy.cost.blank? %>
+      <% if not buy.cost.blank? and not buy.buy_qty.blank? %>
           <td><%= buy.buy_qty*buy.cost %></td>
       <% else %>
           <td></td>

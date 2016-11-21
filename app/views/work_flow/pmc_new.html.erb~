@@ -56,7 +56,9 @@
                                 <% end %>
                                 </td>
                                 <td><%= item.remark %></td>
-                                <td><%= item.buy_user %></td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>" ><%= item.buy_user %></div>
+                                </td>
                                 <td>
                                 <% if item.buy_user == "CHK" %>
                                 <% else %>
@@ -75,7 +77,7 @@
                 <input type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
                 <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
                 <button type="submit" class="btn btn-danger" >批量审核</button>
-                <%= submit_tag "批量审核", :class =>"btn btn-danger", :onclick => "return postform()" %>
+                
             <div>
             <% end %>
 
@@ -86,10 +88,56 @@
     </div>
 
 
+<div class="modal fade" id="edit_buy_user" tabindex="-1" role="dialog" aria-labelledby="edit_buy_userLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_buy_userLabel">重新分配采购工程师</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_buy_user},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="item_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="item_id" name="item_id">
+          </div>
+          <div class="form-group">
+            <label for="buy_dn" class="control-label">采购工程师:</label>
+            <input class="form-control" name="buy_dn" id="buy_dn" type="text" >
+          </div>         
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 
 </div></small>
 
 <script>
+$('#edit_buy_user').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var item_id = button.data('item_id');
+  var buy_user = button.data('buy_user');
+  var moko_part = button.data('moko_part');
+  var modal = $(this);
+  modal.find($("#edit_buy_userLabel")).html('重新分配采购工程师: ' + moko_part);
+  modal.find($("#item_id")).val(item_id);
+  modal.find($("#buy_user")).val(buy_user);
+})
+
+
 $("#selectAll").click(function () {   
         $(".chk_all").each(function () {     
             $(this).prop('checked', true);//  
@@ -106,16 +154,7 @@ $("#selectAll").click(function () {
             this.checked = !this.checked;    
         });   
     }); 
-function postform() {  	         
-    html = my_feedback.html();     
 
-      if (html == "")
-      {                    
-　　    alert("请填写回复的内容！");                    
-　　    return false;                
-　     }
-
-}   
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

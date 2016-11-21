@@ -163,7 +163,7 @@ Rails.application.routes.draw do
   match '/wh_draft_change', to: 'work_flow#wh_draft_change', via: 'post'
   match '/factory_online', to: 'work_flow#factory_online', via: 'get'
   match '/pmc_check_pass_all', to: 'work_flow#pmc_check_pass_all', via: 'post'
-
+  match '/edit_buy_user', to: 'work_flow#edit_buy_user', via: 'post'
 
 
 

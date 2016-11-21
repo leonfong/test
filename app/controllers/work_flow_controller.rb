@@ -5,6 +5,19 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_buy_user
+        if can? :work_d, :all or can? :work_admin, :all 
+            if not params[:item_id].blank?
+                get_item_data = PiPmcItem.find_by_id(params[:item_id])
+                if not get_item_data.blank?
+                    get_item_data.buy_user = params[:buy_user]
+                    get_item_data.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def factory_online
         if can? :work_c, :all or can? :work_admin, :all
             #get_order_data = PiPmcItem.where(erp_no_son: params[:order])
@@ -548,7 +561,7 @@ before_filter :authenticate_user!
                         elsif package1 == "PZ"
                             get_data.buy_user = "B"
                         else 
-                            get_data.buy_user = ""
+                            get_data.buy_user = "NULL"
                         end
                         get_data.check = "GREEN"
                         get_data.save
@@ -562,7 +575,7 @@ before_filter :authenticate_user!
                         wh_data.true_buy_qty = wh_data.true_buy_qty - get_data.pmc_qty
                         wh_data.save
                     end
-                    get_data.buy_user = ""
+                    get_data.buy_user = "NULL"
                     get_data.state = "del"
                     get_data.save
                 end
@@ -726,7 +739,7 @@ before_filter :authenticate_user!
                             elsif package1 == "PZ"
                                 pmc_data.buy_user = "B"
                             else 
-                                pmc_data.buy_user = ""
+                                pmc_data.buy_user = "NULL"
                             end
                             pmc_data.save
                         else
@@ -746,7 +759,7 @@ before_filter :authenticate_user!
                             elsif package1 == "PZ"
                                 add_buy_data.buy_user = "B"
                             else 
-                                add_buy_data.buy_user = ""
+                                add_buy_data.buy_user = "NULL"
                             end
                             add_buy_data.buy_qty = temp_qty
                             add_buy_data.pmc_qty = temp_qty  

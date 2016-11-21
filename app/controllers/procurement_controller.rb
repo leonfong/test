@@ -3358,8 +3358,12 @@ WHERE
                             @bom_api_all = []
 		            @matched_items_nn.each do |item|
                                 if not item.cost.blank?
-                                    @total_price_nn += item.cost * item.pmc_qty 
-                                end                      
+                                    if not item.pmc_qty.blank?
+                                        @total_price_nn += item.cost * item.pmc_qty 
+                                    else
+                                        @total_price_nn += item.cost * @bom.qty * item.quantity
+                                    end
+                                end   
 		            end
                         end
                         @bom.t_p = @total_price_nn.to_f.round(4)

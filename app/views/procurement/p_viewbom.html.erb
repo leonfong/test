@@ -324,7 +324,7 @@ function change_<%= item.id.to_s %>(){
                     <% if not item.pmc_qty.blank? %>
                         <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" ><%= item.pmc_qty %></div>
                     <% else %> 
-                        <%= item.quantity %>
+                        <%= item.quantity*@boms.qty %>
                     <% end %>
                     </small>
                     </td> 

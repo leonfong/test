@@ -5,7 +5,77 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def del_add_pmc_add_item
+        if can? :work_a, :all or can? :work_admin, :all
+            get_data = PiPmcAddItem.find_by_id(params[:id])
+            if not get_data.blank?
+                get_data.destroy
+            end
+        end
+        redirect_to :back
+    end
+    
+    def send_to_pi_pmc_item
+        if can? :work_a, :all or can? :work_admin, :all
+            get_data = PiPmcAddItem.where(state: "new",pi_pmc_add_info_id: params[:pi_pmc_add_info_id])
+            if not get_data.blank?
+                get_data.each do |item|
+                    new_pmc_item = PiPmcItem.new
+                    new_pmc_item.pmc_flag = "pmc"
+                    new_pmc_item.state = "pass"
+                    new_pmc_item.erp_no = item.pi_pmc_add_info_no
+                    new_pmc_item.erp_no_son = item.pi_pmc_add_info_no
+                    new_pmc_item.moko_part = item.moko_part
+                    new_pmc_item.moko_des = item.moko_des
+                    new_pmc_item.qty = item.pmc_qty
+                    new_pmc_item.pmc_qty = item.pmc_qty
+                    new_pmc_item.qty_in = item.pmc_qty
+                    new_pmc_item.remark = item.remark
+                    package1 = Product.find_by_name(item.moko_part).package1
+                    if package1 == "D" or package1 == "Q"
+                        new_pmc_item.buy_user = "A"
+                    elsif package1 == "PZ"
+                        new_pmc_item.buy_user = "B"
+                    else 
+                        new_pmc_item.buy_user = "NULL"
+                    end
+                    new_pmc_item.buy_qty = item.pmc_qty
+
+                    if new_pmc_item.save
+                        item.state = "done"
+                        item.save
+                        wh_data = WarehouseInfo.find_by_moko_part(item.moko_part)
+                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + item.pmc_qty
+                        wh_data.true_buy_qty = wh_data.true_buy_qty + item.pmc_qty
+                        wh_data.save
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def add_pmc_add_item
+        if params[:add_pmc_add_item]
+            all_order = params[:add_pmc_add_item].split("\r\n");
+            all_order.each do |item|
+                pmc_add = item.split(" ")
+                if pmc_add.size == 2
+                    pmc_add_item = PiPmcAddItem.new
+                    pmc_add_item.state = "new"
+                    pmc_add_item.pi_pmc_add_info_id = params[:pi_pmc_add_info_id]
+                    pmc_add_item.pi_pmc_add_info_no = params[:pi_pmc_add_info_no]
+                    pmc_add_item.moko_part = pmc_add[0]
+                    pmc_add_item.moko_des = Product.find_by_name(pmc_add[0]).description
+                    pmc_add_item.pmc_qty = pmc_add[1]
+                    pmc_add_item.save
+                else
+                    redirect_to edit_pmc_add_order_path(pi_pmc_add_info_id: params[:pi_pmc_add_info_id]), :flash => {:error => item+"--------数据上传失败，请检查上传数据格式！"}
+                    return false
+                end
+            end
+        end
+        redirect_to edit_pmc_add_order_path(pi_pmc_add_info_id: params[:pi_pmc_add_info_id]) and return 
     end
 
     def pmc_add_list
@@ -34,7 +104,7 @@ before_filter :authenticate_user!
 
     def edit_pmc_add_order
         @get_info = PiPmcAddInfo.find_by_id(params[:pi_pmc_add_info_id])
-        @get_item = PiPmcAddItem.find_by_pi_pmc_add_info_id(params[:pi_pmc_add_info_id])
+        @get_item = PiPmcAddItem.where(pi_pmc_add_info_id: params[:pi_pmc_add_info_id])
     end
 
     def edit_buy_user
@@ -150,6 +220,7 @@ before_filter :authenticate_user!
     def add_wh_item
         pi_buy_item = PiBuyItem.find_by_id(params[:pi_buy_item_id])
         wh_item = PiWhItem.new
+        wh_item.pmc_flag = pi_buy_item.pmc_flag
         wh_item.pi_pmc_item_id = pi_buy_item.pi_pmc_item_id
         wh_item.buy_user = pi_buy_item.buy_user
         wh_item.pi_wh_info_no = params[:wh_order_no]
@@ -263,8 +334,13 @@ before_filter :authenticate_user!
                         get_wh = WarehouseInfo.find_by_moko_part(item.moko_part)
                         if not get_wh.blank?
                             #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
+                            
                             get_wh.true_buy_qty = get_wh.true_buy_qty + (item.buy_qty - item.pmc_qty)
-                            get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.pmc_qty)
+                            if item.flag == "pmc"
+                                get_wh.future_qty = get_wh.future_qty + item.buy_qty
+                            else
+                                get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.pmc_qty)
+                            end
                             get_wh.save
                         end
                         get_pmc_data.buy_qty = item.buy_qty
@@ -4066,12 +4142,25 @@ before_filter :authenticate_user!
                                 if wh_data.temp_buy_qty >= wh_in.qty_in
                                     wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty_in 
                                     wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
+                                    if  wh_in.pmc_flag == "pmc"
+                                        wh_data.future_qty - wh_data.future_qty - wh_in.qty_in
+                                        wh_data.qty = wh_data.qty + wh_in.qty_in
+                                    end
                                 elsif wh_data.temp_buy_qty < wh_in.qty_in
-                                    wh_data.qty = wh_data.qty + (wh_in.qty_in - wh_data.temp_buy_qty)
-                                    if wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty) > 0
-                                        wh_data.future_qty = wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty)
+                                    if  wh_in.pmc_flag == "pmc"
+                                        wh_data.qty = wh_data.qty + wh_in.qty_in
+                                        if wh_data.future_qty - wh_in.qty_in > 0
+                                            wh_data.future_qty = wh_data.future_qty - wh_in.qty_in
+                                        else
+                                            wh_data.future_qty = 0
+                                        end
                                     else
-                                        wh_data.future_qty = 0
+                                        wh_data.qty = wh_data.qty + (wh_in.qty_in - wh_data.temp_buy_qty)
+                                        if wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty) > 0
+                                            wh_data.future_qty = wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty)
+                                        else
+                                            wh_data.future_qty = 0
+                                        end
                                     end
                                     wh_data.temp_buy_qty = 0
                                     wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in

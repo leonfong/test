@@ -30,7 +30,7 @@
                            {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
                         }
                 </script>
-                <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新增物料
+                <button class="btn btn-success btn-xs" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新增物料
                  <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
 
@@ -40,11 +40,15 @@
                 <div class="col-md-12" >
                 <div class="collapse" id="collapseExampledow">
                     <div class="well">
-                        <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
+                        <%= form_tag('/add_pmc_add_item', method:"post", class:"form-inline") do %>
+                        <div class="form-group sr-only">
+                            <input type="text" class="form-control" id="pi_pmc_add_info_id" name="pi_pmc_add_info_id" value="<%= @get_info.id.to_s %>">
+                            <input type="text" class="form-control" id="pi_pmc_add_info_no" name="pi_pmc_add_info_no" value="<%= @get_info.no.to_s %>">
+                        </div>
                         <div>
-                            <p class="text-warning">数据格式：<code>MOKO代码 MOKO描述 数量</code></p>
+                            <p class="text-warning">数据格式：<code>MOKO代码 数量</code></p>
                             <p>
-                                <%= text_area_tag :order_info, params[:order_info], size:"150x10", class:"form-control"%>
+                                <%= text_area_tag :add_pmc_add_item, params[:add_pmc_add_item], size:"150x10", class:"form-control"%>
                             </p>
                         </div> 
                         <div >
@@ -57,9 +61,47 @@
             </div>
 
 
+            <div class="row "><div class="col-md-12 col-sm-12 form-inline" >
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th width="50">删除</th>
+                            <th width="50">状态</th>
+                            <th width="150">MOKO PART</th>
+                            <th >MOKO DES</th>
+                            <th width="80">需求数量</th>
+                            <th >备注</th>
+                        </tr>
+                    </thead>
+                    <tbody><small>
+                    <% if not @get_item.blank? %>
+                        <% @get_item.each do |item| %>
+                        <tr>
+                            <td><a class="btn btn-danger btn-xs" data-method='get'  href="/del_add_pmc_add_item?id=<%= item.id.to_s %>" data-confirm="确定要删除?">删除</a></td>
+                            <td><%= item.state %></td>
+                            <td><%= item.moko_part %></td>
+                            <td><%= item.moko_des %></td>
+                            <td><%= item.pmc_qty %></td>
+                            <td><%= item.remark %></td>
+                        </tr>
+                        <% end %>
+                    <% end %> 
+                    </small>   
+                    </tbody>
+                </table>
+            </div></div>
 
 
-
+            <%= form_tag('/send_to_pi_pmc_item', method:"post",id:"upatt") do %>
+            <div class="row "><div class="col-md-12">   
+                <div class="modal-footer"> 
+                    <input type="text" class="form-control sr-only" id="pi_pmc_add_info_id_send" name="pi_pmc_add_info_id" value="<%= @get_info.id.to_s %>">
+                    <% if can? :work_g, :all %>
+                        <%= submit_tag "提交", class: "btn btn-primary" ,onclick:"return postform()"%>                
+                    <% end %>
+                </div>
+            </div></div>
+            <% end %>
 
 
 
@@ -74,27 +116,7 @@
 
 
 <script type="text/javascript">
-function postform() {  	           
-      if (confirm('确定要下单?')) {
-        if ($("#pi_buy_dn").val() == "")
-        {                    
-　　      alert("请选择供应商！");                    
-　　      return false;                
-　       }
-      } else {
-        return false;
-      }
 
-}  
-
-
-
-
-$(document).ready(function(){
-  $("#tijiao").click(function(){
-    $("#tijiao_true").click();
-  });
-});
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

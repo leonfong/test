@@ -168,6 +168,10 @@ Rails.application.routes.draw do
   match '/new_pmc_add_order', to: 'work_flow#new_pmc_add_order', via: 'get'
   match '/edit_pmc_add_order', to: 'work_flow#edit_pmc_add_order', via: 'get'
   match '/add_pmc_add_item', to: 'work_flow#add_pmc_add_item', via: 'post'
+  match '/del_add_pmc_add_item', to: 'work_flow#del_add_pmc_add_item', via: 'get'
+  match '/send_to_pi_pmc_item', to: 'work_flow#send_to_pi_pmc_item', via: 'post'
+
+
 
 
 

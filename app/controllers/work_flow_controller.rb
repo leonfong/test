@@ -45,9 +45,11 @@ before_filter :authenticate_user!
                         item.state = "done"
                         item.save
                         wh_data = WarehouseInfo.find_by_moko_part(item.moko_part)
-                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + item.pmc_qty
-                        wh_data.true_buy_qty = wh_data.true_buy_qty + item.pmc_qty
-                        wh_data.save
+                        if not wh_data.blank?
+                            wh_data.temp_buy_qty = wh_data.temp_buy_qty + item.pmc_qty
+                            wh_data.true_buy_qty = wh_data.true_buy_qty + item.pmc_qty
+                            wh_data.save
+                        end
                     end
                 end
             end

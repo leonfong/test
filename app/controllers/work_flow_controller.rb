@@ -471,6 +471,7 @@ before_filter :authenticate_user!
                 find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_data.id)
                 if find_buy_data.blank?
                     add_buy_data = PiBuyItem.new
+                    add_buy_data.pmc_flag = item_data.pmc_flag
                     add_buy_data.buy_user = item_data.buy_user
                     add_buy_data.state = "new"
                     add_buy_data.pi_pmc_item_id = item_data.id 
@@ -540,6 +541,7 @@ before_filter :authenticate_user!
                     find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
                     if find_buy_data.blank?
                         add_buy_data = PiBuyItem.new
+                        add_buy_data.pmc_flag = item_data.pmc_flag
                         add_buy_data.buy_user = item_data.buy_user
                         add_buy_data.state = "new"
                         add_buy_data.pi_pmc_item_id = item_data.id 
@@ -3844,6 +3846,7 @@ before_filter :authenticate_user!
                 #find_wh.save
             else 
                 find_wh = PiWhItem.new
+                #find_wh.pmc_flag = ""
                 find_wh.moko_part = params[:moko_part].strip
                 find_wh.moko_des = params[:moko_des].strip
                 find_wh.qty = params[:qty_in]
@@ -4178,7 +4181,8 @@ before_filter :authenticate_user!
                             if wh_in.pmc_flag == "pmc"
                                 wh_data.qty = wh_in.qty_in  
                             end
-                            wh_data.wh_qty = wh_in.qty_in                        
+                            wh_data.wh_qty = wh_in.qty_in
+                            wh_data.wh_f_qty = wh_in.qty_in                        
                             #wh_data.save
                         end
                         if wh_data.save

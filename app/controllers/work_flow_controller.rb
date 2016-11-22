@@ -4,6 +4,14 @@ require 'spreadsheet'
 require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
+    
+    def pmc_add_list
+        @pmc_add_list = PiPmcAddInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def new_pmc_add_order
+
+    end
 
     def edit_buy_user
         if can? :work_d, :all or can? :work_admin, :all 
@@ -5776,9 +5784,15 @@ before_filter :authenticate_user!
         end
         order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{hint}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
         if not params[:order_country].blank?
-            c = PcbOrder.find_by_id(PcbOrderItem.find_by_id(ProcurementBom.find_by(p_name_mom: params[:itemp_id]).erp_item_id).pcb_order_id)
-            c.c_country = params[:order_country]
-            c.save
+            a = ProcurementBom.find_by(p_name_mom: params[:itemp_id])
+            if not a.erp_item_id.blank?
+                b = PcbOrderItem.find_by_id(a.erp_item_id)
+                if not b.pcb_order_id.blank?
+                    c = PcbOrder.find_by_id(b.pcb_order_id)
+                    c.c_country = params[:order_country]
+                    c.save
+                end
+            end       
         end
         if params[:sell_remark] != ""
             open_id = "6ab2628d9a320296032f6a6f5495582b,5c1c9ba5ef315dcaac48cb9c1fb9731a"

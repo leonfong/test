@@ -43,6 +43,7 @@
 <% if can? :work_a, :all or can? :work_admin, :all%>
         <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增采购申请</a></li>
         <li><a <% if selected == "pmc_h" %>style="background-color: #d9edf7;"<% end %>href="/pmc_h"><i class="icon-list-alt"></i>PMC历史记录</a></li>
+        <li><a <% if selected == "pmc_add_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_add_list"><i class="icon-list-alt"></i>新增备库存申请</a></li>
         <li><a <% if selected == "pmc_warehouse_check" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_list"><i class="icon-list-alt"></i>PMC库存盘点审核</a></li>
 <% end %>
 <% if can? :work_c, :all or can? :work_admin, :all or can? :work_a, :all%>

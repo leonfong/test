@@ -5,12 +5,36 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def add_pmc_add_item
+    end
+
     def pmc_add_list
         @pmc_add_list = PiPmcAddInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
     end
 
     def new_pmc_add_order
+        if params[:pi_pmc_add_info_no] == "" or params[:pi_pmc_add_info_no] == nil
+            if PiPmcAddInfo.find_by_sql('SELECT no FROM pi_pmc_add_infos WHERE to_days(pi_pmc_add_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = PiPmcAddInfo.find_by_sql('SELECT no FROM pi_pmc_add_infos WHERE to_days(pi_pmc_add_infos.created_at) = to_days(NOW())').last.no.split("PMC")[-1].to_i + 1
+            end
+            @pi_pmc_add_info_no = "MO"+ Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PMC"+ pi_n.to_s
+            pi_pmc_add_info = PiPmcAddInfo.new()
+            pi_pmc_add_info.no = @pi_pmc_add_info_no
+            pi_pmc_add_info.user = current_user.email
+            pi_pmc_add_info.state = "new"
+            pi_pmc_add_info.save
+            pi_pmc_add_info_id = pi_pmc_add_info.id
+        else
+            pi_pmc_add_info_id = params[:pi_pmc_add_info_id]
+        end
+        redirect_to edit_pmc_add_order_path(pi_pmc_add_info_id: pi_pmc_add_info_id) and return 
+    end
 
+    def edit_pmc_add_order
+        @get_info = PiPmcAddInfo.find_by_id(params[:pi_pmc_add_info_id])
+        @get_item = PiPmcAddItem.find_by_pi_pmc_add_info_id(params[:pi_pmc_add_info_id])
     end
 
     def edit_buy_user

@@ -165,8 +165,9 @@ Rails.application.routes.draw do
   match '/pmc_check_pass_all', to: 'work_flow#pmc_check_pass_all', via: 'post'
   match '/edit_buy_user', to: 'work_flow#edit_buy_user', via: 'post'
   match '/pmc_add_list', to: 'work_flow#pmc_add_list', via: 'get'
-
-
+  match '/new_pmc_add_order', to: 'work_flow#new_pmc_add_order', via: 'get'
+  match '/edit_pmc_add_order', to: 'work_flow#edit_pmc_add_order', via: 'get'
+  match '/add_pmc_add_item', to: 'work_flow#add_pmc_add_item', via: 'post'
 
 
 

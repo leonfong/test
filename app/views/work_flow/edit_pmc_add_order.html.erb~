@@ -1,0 +1,103 @@
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "pmc_add_list"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+            <div class="row "><div class="col-md-12">                
+                <div class="panel panel-info">
+                        <div class="panel-heading"><strong>申请采购 信息:</strong></div>
+                        <div class="panel-body ">                     
+                            <div class="col-md-2"><p><strong>申请单号: </strong><ins id="pmc_order_no" name="pmc_order_no"><%= @get_info.no.to_s %></ins></p>                                
+                            </div>
+                            <div class="col-md-2"><p><strong>日期 : </strong><ins id="pmc_order_date" name="pmc_order_date"><%= @get_info.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></ins></p>
+                            </div> 
+                            <div class="col-md-2"><p><strong>申请工程师: </strong><ins><%= @get_info.user.to_s %></ins></p>
+                            </div>   
+                        </div>
+                    </div>
+            </div></div>
+
+
+            <div class="row ">
+            <div class="col-md-7" >
+                <script>
+                    function change_p(){
+                        if (document.getElementById('collapseExampledow').className=='collapse in')
+                           {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-plus';}
+                        else
+                           {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
+                        }
+                </script>
+                <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#collapseExampledow" aria-expanded="false" aria-controls="collapseExamplebom" onclick="change_p()">新增物料
+                 <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+
+            </div></div>
+
+            <div class="row" style="padding-top: 7px;">
+                <div class="col-md-12" >
+                <div class="collapse" id="collapseExampledow">
+                    <div class="well">
+                        <%= form_tag('/up_work', method:"post", class:"form-inline") do %>
+                        <div>
+                            <p class="text-warning">数据格式：<code>MOKO代码 MOKO描述 数量</code></p>
+                            <p>
+                                <%= text_area_tag :order_info, params[:order_info], size:"150x10", class:"form-control"%>
+                            </p>
+                        </div> 
+                        <div >
+                            <%= submit_tag "提交", class:"btn btn-info btn-sm" %>
+                        </div>
+                        <% end %> 
+                    </div>
+                </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+</div></small>
+
+
+<script type="text/javascript">
+function postform() {  	           
+      if (confirm('确定要下单?')) {
+        if ($("#pi_buy_dn").val() == "")
+        {                    
+　　      alert("请选择供应商！");                    
+　　      return false;                
+　       }
+      } else {
+        return false;
+      }
+
+}  
+
+
+
+
+$(document).ready(function(){
+  $("#tijiao").click(function(){
+    $("#tijiao_true").click();
+  });
+});
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

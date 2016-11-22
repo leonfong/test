@@ -4173,7 +4173,9 @@ before_filter :authenticate_user!
                             wh_data = WarehouseInfo.new
                             wh_data.moko_part = wh_in.moko_part
                             wh_data.moko_des = wh_in.moko_des
-                            #wh_data.qty = wh_in.qty_in  
+                            if wh_in.pmc_flag == "pmc"
+                                wh_data.qty = wh_in.qty_in  
+                            end
                             wh_data.wh_qty = wh_in.qty_in                        
                             #wh_data.save
                         end

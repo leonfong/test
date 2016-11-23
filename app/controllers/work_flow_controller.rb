@@ -23,6 +23,7 @@ before_filter :authenticate_user!
                     new_pmc_item = PiPmcItem.new
                     new_pmc_item.pmc_flag = "pmc"
                     new_pmc_item.state = "pass"
+                    new_pmc_item.pass_at = Time.new
                     new_pmc_item.erp_no = item.pi_pmc_add_info_no
                     new_pmc_item.erp_no_son = item.pi_pmc_add_info_no
                     new_pmc_item.moko_part = item.moko_part

@@ -76,8 +76,8 @@
                     <tbody><small>
                     <% if not @get_item.blank? %>
                         <% @get_item.each do |item| %>
-                        <tr>
-                            <td><a class="btn btn-danger btn-xs" data-method='get'  href="/del_add_pmc_add_item?id=<%= item.id.to_s %>" data-confirm="确定要删除?">删除</a></td>
+                        <tr <% if item.state == "done" %>class="bg-success"<% end %>>
+                            <td><a class="btn btn-danger btn-xs<% if item.state == 'done' %>sr-only<% end %>" data-method='get'  href="/del_add_pmc_add_item?id=<%= item.id.to_s %>" data-confirm="确定要删除?">删除</a></td>
                             <td><%= item.state %></td>
                             <td><%= item.moko_part %></td>
                             <td><%= item.moko_des %></td>

@@ -43,7 +43,7 @@
 <% if can? :work_a, :all or can? :work_admin, :all%>
         <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增采购申请</a></li>
         <li><a <% if selected == "pmc_h" %>style="background-color: #d9edf7;"<% end %>href="/pmc_h"><i class="icon-list-alt"></i>PMC历史记录</a></li>
-        <li><a <% if selected == "pmc_add_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增备库存申请</a></li>
+        <li><a <% if selected == "pmc_add_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_add_list"><i class="icon-list-alt"></i>新增备库存申请</a></li>
         <li><a <% if selected == "pmc_warehouse_check" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_list"><i class="icon-list-alt"></i>PMC库存盘点审核</a></li>
 <% end %>
 <% if can? :work_c, :all or can? :work_admin, :all or can? :work_a, :all%>
@@ -55,9 +55,10 @@
     <a style="background-color: #ddd;" href="#buyMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 采购中心</a>
     <ul id="buyMenu" class="nav nav-list  menu-second <% if selected =~ /buy/i %>collapse in<% else %>collapse<% end %>">
         <li><a <% if selected == "waitfor_buy" %>style="background-color: #d9edf7;"<% end %> href="/pi_waitfor_buy"><i class="icon-list-alt"></i> 待采购的物料</a></li>
-        <li><a <% if selected == "buy_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_list"><i class="icon-list-alt"></i> 采购下单</a></li>
-        <li><a <% if selected == "buy_check_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_check_list"><i class="icon-list-alt"></i> 待审核</a></li>
-        <li><a <% if selected == "buy_history" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_history"><i class="icon-list-alt"></i> 采购记录</a></li>
+        <li><a <% if selected == "buy_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_list"><i class="icon-list-alt"></i> 采购申请</a></li>
+        <li><a <% if selected == "buy_check_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_check_list"><i class="icon-list-alt"></i> 待审核的采购单</a></li>
+        <li><a <% if selected == "buy_checked_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_check_list"><i class="icon-list-alt"></i> 已审核的采购单</a></li>
+        <li><a <% if selected == "buy_history" %>style="background-color: #d9edf7;"<% end %> href="/pi_buy_history"><i class="icon-list-alt"></i> 已下单的采购记录</a></li>
 <% end %>
     </ul>
 

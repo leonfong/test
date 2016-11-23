@@ -36,7 +36,7 @@
       <td><%= buy.moko_part %></td>
       <td><%= buy.moko_des %></td>
       <td><%= buy.qty %></td>
-      <td><%= buy.qty_in %></td>
+      <td><%= buy.pmc_qty %></td>
       <td><%= buy.buy_qty %></td>
       <td><%= buy.cost %></td>
       <td>

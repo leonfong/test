@@ -150,6 +150,7 @@ Rails.application.routes.draw do
   match '/del_pi_buy_item', to: 'work_flow#del_pi_buy_item', via: 'get'
   match '/edit_pi_buy_qty_cost', to: 'work_flow#edit_pi_buy_qty_cost', via: 'post'
   match '/pi_buy_check_list', to: 'work_flow#pi_buy_check_list', via: 'get'
+  match '/pi_buy_checked_list', to: 'work_flow#pi_buy_checked_list', via: 'get'
   match '/send_pi_buy_check', to: 'work_flow#send_pi_buy_check', via: 'post'
   match '/factory_in', to: 'work_flow#factory_in', via: 'get'
   match '/factory_out', to: 'work_flow#factory_out', via: 'get'
@@ -171,6 +172,7 @@ Rails.application.routes.draw do
   match '/del_add_pmc_add_item', to: 'work_flow#del_add_pmc_add_item', via: 'get'
   match '/send_to_pi_pmc_item', to: 'work_flow#send_to_pi_pmc_item', via: 'post'
   match '/edit_pmc_add_buy_user', to: 'work_flow#edit_pmc_add_buy_user', via: 'post'
+  match '/send_pi_buy_checked', to: 'work_flow#send_pi_buy_checked', via: 'post'
 
 
 

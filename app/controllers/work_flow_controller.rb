@@ -302,6 +302,8 @@ before_filter :authenticate_user!
         @all_dn += "&quot;]"
         if @pi_buy_info.state == "check"
             render "edit_pi_buy_check.html.erb" and return
+        elsif @pi_buy_info.state == "checked"
+            render "edit_pi_buy_checked.html.erb" and return
         end
     end
 
@@ -311,6 +313,44 @@ before_filter :authenticate_user!
 
     def pi_buy_check_list
         @w_wh = PiBuyInfo.where(state: "check")
+    end
+
+    def pi_buy_checked_list
+        @w_wh = PiBuyInfo.where(state: "checked")
+    end
+
+    def send_pi_buy_check
+        up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+        if not up_state.blank?
+            up_state.state = "check"
+            up_state.save
+            PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
+                item.state = "checking"
+                item.save
+                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                #pmc_data.buy_qty = item.qty
+                pmc_data.state = "checking" 
+                pmc_data.save
+            end
+        end
+        redirect_to pi_buy_check_list_path()
+    end
+
+    def send_pi_buy_checked
+        up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
+        if not up_state.blank?
+            up_state.state = "checked"
+            up_state.save
+            PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
+                item.state = "checked"
+                item.save
+                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                #pmc_data.buy_qty = item.qty
+                pmc_data.state = "checked" 
+                pmc_data.save
+            end
+        end
+        redirect_to pi_buy_checked_list_path()
     end
 
     def del_pi_buy_item
@@ -387,24 +427,7 @@ before_filter :authenticate_user!
 
             end
         end
-        redirect_to pi_buy_check_list_path()
-    end
-
-    def send_pi_buy_check
-        up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
-        if not up_state.blank?
-            up_state.state = "check"
-            up_state.save
-            PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
-                item.state = "checking"
-                item.save
-                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
-                #pmc_data.buy_qty = item.qty
-                pmc_data.state = "checking" 
-                pmc_data.save
-            end
-        end
-        redirect_to pi_buy_list_path()
+        redirect_to pi_buy_checked_list_path()
     end
 
     def edit_pi_buy_qty_cost

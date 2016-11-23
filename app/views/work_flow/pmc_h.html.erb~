@@ -13,7 +13,7 @@
                         <div class="form-group  nav navbar-nav navbar-left">
                             <lable for="order_no" , class="sr-only">Qrder : </lable>
                             <div class="input-group input-group-sm">    
-                                <%= text_field_tag :pass_date, params[:pass_date], id: "pass_date",class:"form-control input-sm", size:"30" %>
+                                <%= text_field_tag :pass_date, params[:pass_date], id: "pass_date",class:"form-control input-sm", size:"30" , placeholder:"审核日期" %>
                                 <script type="text/javascript">
                                     $(function () {
                                     $('#pass_date').datetimepicker({

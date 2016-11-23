@@ -129,7 +129,7 @@
                                 <td><%= item.erp_no_son %></td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
-                                <td><%= item.part_code[0,3]+"..." %></td>
+                                <td><%= item.part_code.to_s[0,3]+"..." %></td>
                                 <td><%= item.qty %></td>
                                 <td>
                                 <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>

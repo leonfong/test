@@ -5,6 +5,19 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def edit_pmc_add_buy_user
+        if can? :work_d, :all or can? :work_admin, :all 
+            if not params[:item_id].blank?
+                get_item_data = PiPmcAddItem.find_by_id(params[:item_id])
+                if not get_item_data.blank?
+                    get_item_data.buy_user = params[:buy_user]
+                    get_item_data.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def del_add_pmc_add_item
         if can? :work_a, :all or can? :work_admin, :all
             get_data = PiPmcAddItem.find_by_id(params[:id])
@@ -32,14 +45,7 @@ before_filter :authenticate_user!
                     new_pmc_item.pmc_qty = item.pmc_qty
                     new_pmc_item.qty_in = item.pmc_qty
                     new_pmc_item.remark = item.remark
-                    package1 = Product.find_by_name(item.moko_part).package1
-                    if package1 == "D" or package1 == "Q"
-                        new_pmc_item.buy_user = "A"
-                    elsif package1 == "PZ"
-                        new_pmc_item.buy_user = "B"
-                    else 
-                        new_pmc_item.buy_user = "NULL"
-                    end
+                    new_pmc_item.buy_user = item.buy_user
                     new_pmc_item.buy_qty = item.pmc_qty
 
                     if new_pmc_item.save
@@ -71,6 +77,14 @@ before_filter :authenticate_user!
                     pmc_add_item.moko_part = pmc_add[0]
                     pmc_add_item.moko_des = Product.find_by_name(pmc_add[0]).description
                     pmc_add_item.pmc_qty = pmc_add[1]
+                    package1 = Product.find_by_name(pmc_add[0]).package1
+                    if package1 == "D" or package1 == "Q"
+                        pmc_add_item.buy_user = "A"
+                    elsif package1 == "PZ"
+                        pmc_add_item.buy_user = "B"
+                    else 
+                        pmc_add_item.buy_user = "NULL"
+                    end
                     pmc_add_item.save
                 else
                     redirect_to edit_pmc_add_order_path(pi_pmc_add_info_id: params[:pi_pmc_add_info_id]), :flash => {:error => item+"--------数据上传失败，请检查上传数据格式！"}

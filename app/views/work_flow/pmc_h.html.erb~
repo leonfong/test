@@ -109,19 +109,30 @@
                             <tr style="background-color: #eeeeee">
                                 <th width="100">审核时间</th>
                                 <th width="80">状态</th>
-                                <th width="130">Order No.</th>
-                                <th width="150">MOKO ID</th>
-                                <th width="350">物料名称</th>
-                                <th width="80">位号</th>
+                                <th width="130">
+                                    <%= link_to "Order No.",  {action: "pmc_h", sort_data: "erp_no_son",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
+                                <th width="150">
+                                    <%= link_to "MOKO ID",  {action: "pmc_h", sort_data: "moko_part",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
+                                <th width="350">
+                                    <%= link_to "物料名称",  {action: "pmc_h", sort_data: "moko_des",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
+                                <th width="80">
+                                    <%= link_to "位号",  {action: "pmc_h", sort_data: "part_code",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
                                 <th width="80">申请数量</th>
                                 <th width="80">库存</th>
                                 <th >备注</th>
-                                <th width="90">采购员</th>
+                                <th width="90">
+                                    <%= link_to "采购工程师",  {action: "pmc_h", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
                                 <th width="90">下单数量</th>
                             <tr>
                         </thead>
                         <tbody>
                         <% if @pi_buy %>
+<%= will_paginate(@pi_buy) %>
                             <% @pi_buy.each do |item|%>   
                             <tr>
                                 <td><%= item.pass_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
@@ -129,7 +140,7 @@
                                 <td><%= item.erp_no_son %></td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
-                                <td><%= item.part_code[0,3]+"..." %></td>
+                                <td><%= item.part_code.to_s[0,3]+"..." %></td>
                                 <td><%= item.qty %></td>
                                 <td>
                                 <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>

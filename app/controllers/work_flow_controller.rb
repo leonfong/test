@@ -974,33 +974,37 @@ before_filter :authenticate_user!
             if not pmc_where.blank?
             pmc_where += " AND "
             end
-            pmc_where += "erp_no_son LIKE '%#{params[:order_no]}%'"
+            pmc_where += "erp_no_son LIKE '%#{params[:order_no].to_s.strip}%'"
         end
         if not params[:moko_part].blank?
             if not pmc_where.blank?
             pmc_where += " AND "
             end
-            pmc_where += "moko_part LIKE '%#{params[:moko_part]}%'"
+            pmc_where += "moko_part LIKE '%#{params[:moko_part].to_s.strip}%'"
         end
         if not params[:moko_des].blank?
             if not pmc_where.blank?
             pmc_where += " AND "
             end
-            pmc_where += "moko_des LIKE '%#{params[:moko_des]}%'"
+            pmc_where += "moko_des LIKE '%#{params[:moko_des].to_s.strip}%'"
         end
         if not params[:part_code].blank?
             if not pmc_where.blank?
             pmc_where += " AND "
             end
-            pmc_where += "part_code LIKE '%#{params[:part_code]}%'"
+            pmc_where += "part_code LIKE '%#{params[:part_code].to_s.strip}%'"
         end
         if not params[:buy_user].blank?
             if not pmc_where.blank?
             pmc_where += " AND "
             end
-            pmc_where += "buy_user LIKE '%#{params[:buy_user]}%'"
+            pmc_where += "buy_user LIKE '%#{params[:buy_user].to_s.strip}%'"
         end
-        @pi_buy = PiPmcItem.where("#{pmc_where}")
+        sort_data = "pass_at"
+        if not params[:sort_data].blank?
+            sort_data = params[:sort_data]
+        end
+        @pi_buy = PiPmcItem.where("#{pmc_where}").order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
     end
 
     def pmc_new
@@ -1247,10 +1251,53 @@ before_filter :authenticate_user!
                 end
             end
         end
+        pmc_where = "state = 'new'"
+        if not params[:pass_date].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "pass_at LIKE '#{params[:pass_date].to_s.strip}%'"
+        end
+        if not params[:order_no].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "erp_no_son LIKE '%#{params[:order_no].to_s.strip}%'"
+        end
+        if not params[:moko_part].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "moko_part LIKE '%#{params[:moko_part].to_s.strip}%'"
+        end
+        if not params[:moko_des].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "moko_des LIKE '%#{params[:moko_des].to_s.strip}%'"
+        end
+        if not params[:part_code].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "part_code LIKE '%#{params[:part_code].to_s.strip}%'"
+        end
+        if not params[:buy_user].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "buy_user LIKE '%#{params[:buy_user].to_s.strip}%'"
+        end
+        sort_data = "moko_part"
+        if not params[:sort_data].blank?
+            sort_data = params[:sort_data]
+        end
         if params[:chk].blank?
-            @pmc_new = PiPmcItem.where(state: "new",pmc_type: "").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
+            pmc_where += " AND pmc_type = ''"
+            @pmc_new = PiPmcItem.where(pmc_where).order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
         else
-            @pmc_new = PiPmcItem.where(state: "new",pmc_type: "CHK").order("moko_part,p_item_id DESC").paginate(:page => params[:page], :per_page => 10)
+            pmc_where += " AND pmc_type = 'CHK'"
+            @pmc_new = PiPmcItem.where(pmc_where).order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
             render "pmc_new_chk.html.erb" and return
         end
     end

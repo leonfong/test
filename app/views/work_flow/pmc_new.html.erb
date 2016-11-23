@@ -12,7 +12,82 @@
       <li role="presentation" class="active"><a href="/pmc_new"><h5><strong><p class="text-primary" >已分配</p></strong></h5></a></li>
       <li role="presentation" ><a href="/pmc_new?chk=chk"><h5><strong><p class="text-primary" >待确认</p></strong></h5></a></li>
   </ul>
-<br>
+                </div>
+            </div>
+
+            <%= form_tag('/pmc_new', method:"get", class:"form-inline") do %>
+            <div class="row" style="padding-top: 10px;">
+                
+                <div class="col-md-2 col-sm-2 form-inline" >
+                    <span  style="color:#999;">
+                        <div class="form-group  nav navbar-nav navbar-left">
+                            <lable for="order_no" , class="sr-only">Qrder : </lable>
+                            <div class="input-group input-group-sm">    
+                                <%= text_field_tag :order_no, params[:order_no], class:"form-control input-lg", size:"30", placeholder:"订单号"%>     
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                </div>
+                            </div>
+                        </div>                       
+                    </span>
+                </div>
+                <div class="col-md-2 col-sm-2 form-inline" >
+                    <span  style="color:#999;">
+                        <div class="form-group  nav navbar-nav navbar-left">
+                            <lable for="moko_part" , class="sr-only">MOKO ID : </lable>
+                            <div class="input-group input-group-sm">    
+                                <%= text_field_tag :moko_part, params[:moko_part], class:"form-control input-lg", size:"30", placeholder:"MOKO ID"%>     
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                </div>
+                            </div>
+                        </div>                       
+                    </span>
+                </div>
+                <div class="col-md-2 col-sm-2 form-inline" >
+                    <span  style="color:#999;">
+                        <div class="form-group  nav navbar-nav navbar-left">
+                            <lable for="moko_des" , class="sr-only">MOKO ID : </lable>
+                            <div class="input-group input-group-sm">    
+                                <%= text_field_tag :moko_des, params[:moko_des], class:"form-control input-lg", size:"30", placeholder:"MOKO 描述"%>     
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                </div>
+                            </div>
+                        </div>                       
+                    </span>
+                </div>
+                <div class="col-md-2 col-sm-2 form-inline" >
+                    <span  style="color:#999;">
+                        <div class="form-group  nav navbar-nav navbar-left">
+                            <lable for="part_code" , class="sr-only">位号 : </lable>
+                            <div class="input-group input-group-sm">    
+                                <%= text_field_tag :part_code, params[:part_code], class:"form-control input-lg", size:"30", placeholder:"位号"%>     
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                </div>
+                            </div>
+                        </div>                       
+                    </span>
+                </div>
+                <div class="col-md-2 col-sm-2 form-inline" >
+                    <span  style="color:#999;">
+                        <div class="form-group  nav navbar-nav navbar-left">
+                            <lable for="buy_user" , class="sr-only">采购工程师 : </lable>
+                            <div class="input-group input-group-sm">    
+                                <%= text_field_tag :buy_user, params[:buy_user], class:"form-control input-lg", size:"30", placeholder:"采购工程师"%>     
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                </div>
+                            </div>
+                        </div>                       
+                    </span>
+                </div>
+            </div>
+            <% end %>
+
+            <div class="row">
+                <div class="col-md-12" >
                         <% if @pmc_new %>
 <%= will_paginate(@pmc_new) %>
                     <%= form_tag({action: :pmc_check_pass_all,controller: :work_flow},method:"post") do %>
@@ -20,15 +95,25 @@
                         <thead>
                             <tr style="background-color: #eeeeee">
                                 <th width="30"></th>
-                                <th width="130">Order No.</th>
-                                <th width="150">MOKO ID</th>
-                                <th width="350">物料名称</th>
-                                <th width="80">位号</th>
+                                <th width="130">
+                                    <%= link_to "Order No.",  {action: "pmc_new", sort_data: "erp_no_son",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
+                                <th width="150">
+                                    <%= link_to "MOKO ID",  {action: "pmc_new", sort_data: "moko_part",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
+                                <th width="350">
+                                    <%= link_to "物料名称",  {action: "pmc_new", sort_data: "moko_des",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
+                                <th width="80">
+                                    <%= link_to "位号",  {action: "pmc_new", sort_data: "part_code",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
                                 <th width="80">申请总量</th>
                                 <th width="80">申请数量</th>
                                 <th width="80">库存</th>
                                 <th >备注</th>
-                                <th width="90">采购员</th>
+                                <th width="90">
+                                    <%= link_to "采购工程师",  {action: "pmc_new", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
                                 <th width="60">审核</th>
                             </tr>
                         </thead>

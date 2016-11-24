@@ -5369,7 +5369,7 @@ before_filter :authenticate_user!
 
     def del_pcb_order
         pcb_order = PcbOrder.find(params[:order_id])
-        if can? :work_e, :all
+        if can? :work_e, :all or can? :work_d, :all
             pcb_order.destroy
         end
         redirect_to :back

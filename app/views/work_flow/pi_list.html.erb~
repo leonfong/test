@@ -2,7 +2,13 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pi_list"} %>
+            <% if not params[:finance_chk].blank? %>
+                <%= render partial: "work_flow/menu", locals: {selected: "pi_list"} %>
+            <% elsif not params[:bom_chk].blank?%>
+                <%= render partial: "work_flow/menu", locals: {selected: "pi_list"} %>
+            <% else %>
+                <%= render partial: "work_flow/menu", locals: {selected: "pi_list"} %>
+            <% end %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -27,7 +33,7 @@
                 </div>
                 <a type="button" class="btn btn-info btn-sm" href="/pi_list?bom_chk=true">等待工程师审批</a>
                 <a type="button" class="btn btn-danger btn-sm" href="/pi_list?finance_chk=true">等待财务审批</a>
-                <a type="button" class="btn btn-success btn-sm" href="/pi_list?checked=true">已经通过审批(待采购接单)</a>
+                <a type="button" class="btn btn-success btn-sm" href="/pi_list?checked=true">已经通过审批</a>
             </div>
             <% end %>                       
             </span>

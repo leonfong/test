@@ -68,7 +68,7 @@
                             <th width="50">删除</th>
                             <th width="50">状态</th>
                             <th width="150">MOKO PART</th>
-                            <th >MOKO DES</th>
+                            <th >物料描述</th>
                             <th width="80">需求数量</th>
                             <th width="80">采购工程师</th>
                             <th >备注</th>
@@ -84,7 +84,11 @@
                             <td><%= item.moko_des %></td>
                             <td><%= item.pmc_qty %></td>
                             <td>
+                            <% if item.state == "done" %>
+                                <%= item.buy_user %>
+                            <% else %>
                                 <div data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>" ><%= item.buy_user %></div>
+                            <% end %>
                             </td>
                             <td><%= item.remark %></td>
                         </tr>

@@ -152,7 +152,7 @@
                           <% ProcurementVersionBom.where(procurement_bom_id: bom.id).each do |bom_v| %>
                               <tr class="bg-warning">
                                   <td width="50"><%= link_to "查看", p_viewbom_path(bom_id: bom_v.id,bom_version: bom_v.bom_version) %></td>
-                                  <td width="100"><strong>BOM版本: </strong><%= bom_v.bom_version %></td>
+                                  <td width="100"><strong>BOM版本: </strong>V<%= bom_v.bom_version %></td>
                                   <td width="200"><strong>创建日期: </strong><%= bom_v.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
                                   <td width="100"><strong>上传: </strong>
                                       <% if bom_v.bom_eng_up == nil %>

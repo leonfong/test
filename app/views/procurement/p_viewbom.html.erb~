@@ -144,6 +144,17 @@ $(document).ready(function() {
 
 
 <% if not @bom_item.blank? %> 
+            <div class="row">
+                <div class="col-md-12">
+            <table class="table table-striped table-bordered">
+                <tr>               
+                    <td><strong><%= "The total part" %>：</strong><a class="text-muted a_ctl" id="matched"><%= @bom_item.size %></a></td>
+                    <td><strong><%= "The total cost" %>：</strong><a class="text-muted a_ctl" id="total_price">￥<%= @boms.t_p %></a></td>
+                    <td><strong><%= "The total price" %>：</strong><a class="text-muted a_ctl" >￥<%= @boms.t_pp %></a></td>
+                </tr>
+            </table>
+                </div>
+            </div>
             <div class="row" style="padding: 0px;">
                 <div class="col-md-7" style="padding-right: 0px;">
             <small>
@@ -156,7 +167,8 @@ $(document).ready(function() {
                     <th width="150">描述</th>
                     <th >MOKO 描述</th>
                     <th width="50">位号</th>
-                    <th width="50">数量</th>
+                    <th width="50">采购量</th>
+                    <th width="50">客供量</th>
                     <th width="25"></th>
                     <th width="110">成本价￥</th>
                     <th width="65">小计</th>
@@ -322,13 +334,13 @@ function change_<%= item.id.to_s %>(){
                    
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                     <% if not item.pmc_qty.blank? %>
-                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" ><%= item.pmc_qty %></div>
+                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.pmc_qty %></div>
                     <% else %> 
                         <%= item.quantity*@boms.qty %>
                     <% end %>
                     </small>
                     </td> 
-                    
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><%= item.customer_qty %></td>
                     <td width="25" style="padding: 5px 0px 5px 0px;margin: 0px;">
                       <small>                      
                           <a class="glyphicon glyphicon-trash a_ctl" data-method='get' data-remote='true' href="/del_cost?id=<%=item.id.to_s%>"></a>
@@ -599,17 +611,7 @@ function change_<%= item.id.to_s %>(){
 
 
 
-            <div class="row">
-                <div class="col-md-12">
-            <table class="table table-striped table-bordered">
-                <tr>               
-                    <td><strong><%= "The total part" %>：</strong><a class="text-muted a_ctl" id="matched"><%= @bom_item.size %></a></td>
-                    <td><strong><%= "The total cost" %>：</strong><a class="text-muted a_ctl" id="total_price">￥<%= @boms.t_p %></a></td>
-                    <td><strong><%= "The total price" %>：</strong><a class="text-muted a_ctl" >￥<%= @boms.t_pp %></a></td>
-                </tr>
-            </table>
-                </div>
-            </div>
+
             <% end %>
             <div class="row" style="padding-bottom: 20px;">
                 <div class="col-md-12">
@@ -621,9 +623,9 @@ function change_<%= item.id.to_s %>(){
             {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
             }
             </script>
-<!--
-                    <button class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">ADD A NEW PART <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
--->
+
+                    <button style="margin-top: 20px;" class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">ADD A NEW PART <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
+
                 </div>
             </div>
             <div class="collapse" id="shipping" style="padding-bottom: 20px;">
@@ -944,8 +946,12 @@ function change_<%= item.id.to_s %>(){
             <input type="text" class="form-control" id="item_pmc_qty_id" name="item_id">
           </div>
           <div class="form-group">
-            <label for="pmc_qty" class="control-label">数量:</label>
+            <label for="pmc_qty" class="control-label">采购量:</label>
             <input class="form-control" name="pmc_qty" id="pmc_qty" type="number">
+          </div>
+          <div class="form-group">
+            <label for="customer_qty" class="control-label">客供量:</label>
+            <input class="form-control" name="customer_qty" id="customer_qty" type="number">
           </div>
       </div>
       <div class="modal-footer">
@@ -1009,10 +1015,12 @@ $('#edit_item_qty').on('show.bs.modal', function (event) {
   var item_id = button.data('item_id');
   var item_des = button.data('item_des');
   var pmc_qty = button.data('pmc_qty');
+  var customer_qty = button.data('customer_qty');
   var modal = $(this);
   modal.find('.modal-title').text('编辑数量 ' + item_des);
   modal.find($("#item_pmc_qty_id")).val(item_id);
   modal.find($("#pmc_qty")).val(pmc_qty);
+  modal.find($("#customer_qty")).val(customer_qty);
 })
 $('#exampleModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal

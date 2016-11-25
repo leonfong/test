@@ -1,7 +1,7 @@
 <div class="container-fluid" >
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pi"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pi_draft_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
 
@@ -153,7 +153,10 @@
                             </td>
                             <td><%= pi_item.remark %></td>
 -->
-                            <td><%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %></td>
+                            <td>
+                                <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
+                                <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id) %>
+                            </td>
                             <td><%= pi_item.c_p_no %></td>
                             <td><%= pi_item.pcb_size %></td>
                             <td><%= pi_item.qty %></td>

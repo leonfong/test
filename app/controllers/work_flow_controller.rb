@@ -642,11 +642,82 @@ before_filter :authenticate_user!
 
     def pmc_check_pass
         if can? :work_a, :all or can? :work_admin, :all
-            get_data = PiPmcItem.find_by_id(params[:id])
-            if not get_data.blank?
-                get_data.state = "pass"
-                get_data.pass_at = Time.new
-                get_data.save
+            item_data = PiPmcItem.find_by_id(params[:id])
+            if not item_data.blank?
+                item_data.state = "pass"
+                item_data.pass_at = Time.new
+                item_data.save
+                if item_data.buy_user == "CUSTOMER"
+                    if PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').blank?
+                        pi_n =1
+                    else
+                        pi_n = PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').last.pi_buy_no.split("BUY")[-1].to_i + 1
+                    end
+                    @pi_buy_no = "MO"+ Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "BUY"+ pi_n.to_s
+                    pi_buy_info = PiBuyInfo.new()
+                    pi_buy_info.pi_buy_no = @pi_buy_no
+                    pi_buy_info.user = "CUSTOMER"
+                    pi_buy_info.state = "buy"
+                    if pi_buy_info.save
+                        add_buy_data = PiBuyItem.new
+                        add_buy_data.pmc_flag = item_data.pmc_flag
+                        add_buy_data.buy_user = "CUSTOMER"
+                        add_buy_data.state = "buying"
+                        add_buy_data.pi_pmc_item_id = item_data.id 
+                        add_buy_data.p_item_id = item_data.p_item_id
+                        add_buy_data.erp_id = item_data.erp_id
+                        add_buy_data.erp_no = item_data.erp_no
+                        add_buy_data.erp_no_son = item_data.erp_no_son
+                        add_buy_data.user_do = item_data.user_do
+                        add_buy_data.user_do_change = item_data.user_do_change
+                        add_buy_data.check = item_data.check
+                        add_buy_data.pi_buy_info_id = pi_buy_info.id
+                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                        add_buy_data.quantity = item_data.quantity
+                        add_buy_data.qty = item_data.qty
+                        add_buy_data.pmc_qty = item_data.pmc_qty
+                        add_buy_data.buy_qty = item_data.buy_qty
+                        add_buy_data.description = item_data.description
+                        add_buy_data.part_code = item_data.part_code
+                        add_buy_data.fengzhuang = item_data.fengzhuang
+                        add_buy_data.link = item_data.link
+                        add_buy_data.cost = item_data.cost
+                        add_buy_data.info = item_data.info
+                        add_buy_data.product_id = item_data.product_id
+                        add_buy_data.moko_part = item_data.moko_part
+                        add_buy_data.moko_des = item_data.moko_des
+                        add_buy_data.warn = item_data.warn
+                        add_buy_data.user_id = item_data.user_id
+                        add_buy_data.danger = item_data.danger
+                        add_buy_data.manual = item_data.manual
+                        add_buy_data.mark = item_data.mark
+                        add_buy_data.mpn = item_data.mpn
+                        add_buy_data.mpn_id = item_data.mpn_id
+                        add_buy_data.price = item_data.price
+                        add_buy_data.mf = item_data.mf
+                        add_buy_data.dn = item_data.dn
+                        add_buy_data.dn_id = item_data.dn_id
+                        add_buy_data.dn_long = item_data.dn_long
+                        add_buy_data.other = item_data.other
+                        add_buy_data.all_info = item_data.all_info
+                        add_buy_data.remark = item_data.remark
+                        add_buy_data.color = item_data.color
+                        add_buy_data.supplier_tag = item_data.supplier_tag
+                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                        if add_buy_data.save
+                            item_data.state = "buying"
+                            item_data.save
+=begin
+                            pitem_data = PItem.find_by_id(add_buy_data.p_item_id)
+                            if not pitem_data.blank? 
+                                pitem_data.buy = "buy_adding"
+                                pitem_data.save
+                            end
+=end
+                        end
+                    end
+                end
                 #redirect_to pmc_h_path() and return
             end
         end
@@ -657,11 +728,82 @@ before_filter :authenticate_user!
         if can? :work_a, :all or can? :work_admin, :all
             if not params[:checkpass_item].blank?
                 params[:checkpass_item].each do |id|
-                    get_data = PiPmcItem.find_by_id(id)
-                    if not get_data.blank?
-                        get_data.state = "pass"
-                        get_data.pass_at = Time.new
-                        get_data.save
+                    item_data = PiPmcItem.find_by_id(id)
+                    if not item_data.blank?
+                        item_data.state = "pass"
+                        item_data.pass_at = Time.new
+                        item_data.save
+                        if item_data.buy_user == "CUSTOMER"
+                            if PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').blank?
+                                pi_n =1
+                            else
+                                pi_n = PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').last.pi_buy_no.split("BUY")[-1].to_i + 1
+                            end
+                            @pi_buy_no = "MO"+ Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "BUY"+ pi_n.to_s
+                            pi_buy_info = PiBuyInfo.new()
+                            pi_buy_info.pi_buy_no = @pi_buy_no
+                            pi_buy_info.user = "CUSTOMER"
+                            pi_buy_info.state = "buy"
+                            if pi_buy_info.save
+                                add_buy_data = PiBuyItem.new
+                                add_buy_data.pmc_flag = item_data.pmc_flag
+                                add_buy_data.buy_user = "CUSTOMER"
+                                add_buy_data.state = "buying"
+                                add_buy_data.pi_pmc_item_id = item_data.id 
+                                add_buy_data.p_item_id = item_data.p_item_id
+                                add_buy_data.erp_id = item_data.erp_id
+                                add_buy_data.erp_no = item_data.erp_no
+                                add_buy_data.erp_no_son = item_data.erp_no_son
+                                add_buy_data.user_do = item_data.user_do
+                                add_buy_data.user_do_change = item_data.user_do_change
+                                add_buy_data.check = item_data.check
+                                add_buy_data.pi_buy_info_id = pi_buy_info.id
+                                add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                                add_buy_data.quantity = item_data.quantity
+                                add_buy_data.qty = item_data.qty
+                                add_buy_data.pmc_qty = item_data.pmc_qty
+                                add_buy_data.buy_qty = item_data.buy_qty
+                                add_buy_data.description = item_data.description
+                                add_buy_data.part_code = item_data.part_code
+                                add_buy_data.fengzhuang = item_data.fengzhuang
+                                add_buy_data.link = item_data.link
+                                add_buy_data.cost = item_data.cost
+                                add_buy_data.info = item_data.info
+                                add_buy_data.product_id = item_data.product_id
+                                add_buy_data.moko_part = item_data.moko_part
+                                add_buy_data.moko_des = item_data.moko_des
+                                add_buy_data.warn = item_data.warn
+                                add_buy_data.user_id = item_data.user_id
+                                add_buy_data.danger = item_data.danger
+                                add_buy_data.manual = item_data.manual
+                                add_buy_data.mark = item_data.mark
+                                add_buy_data.mpn = item_data.mpn
+                                add_buy_data.mpn_id = item_data.mpn_id
+                                add_buy_data.price = item_data.price
+                                add_buy_data.mf = item_data.mf
+                                add_buy_data.dn = item_data.dn
+                                add_buy_data.dn_id = item_data.dn_id
+                                add_buy_data.dn_long = item_data.dn_long
+                                add_buy_data.other = item_data.other
+                                add_buy_data.all_info = item_data.all_info
+                                add_buy_data.remark = item_data.remark
+                                add_buy_data.color = item_data.color
+                                add_buy_data.supplier_tag = item_data.supplier_tag
+                                add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                                add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                                if add_buy_data.save
+                                    item_data.state = "buying"
+                                    item_data.save
+=begin
+                                    pitem_data = PItem.find_by_id(add_buy_data.p_item_id)
+                                    if not pitem_data.blank? 
+                                        pitem_data.buy = "buy_adding"
+                                        pitem_data.save
+                                    end
+=end
+                                end
+                            end
+                        end
                         #redirect_to pmc_h_path() and return
                     end
                 end
@@ -1246,6 +1388,59 @@ before_filter :authenticate_user!
                             item_data.buy = "pmc"
                             item_data.save
                             Rails.logger.info("pmc_new--------------------------------------19")
+                            #判断是否需要客供
+                            if item_data.customer_qty > 0
+                                add_customer_data = PiPmcItem.new
+                                add_customer_data.state = "new"
+                                add_customer_data.erp_no = item_data.erp_no
+                                add_customer_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
+                                add_customer_data.moko_part = item_data.moko_part
+                                add_customer_data.moko_des = item_data.moko_des
+                                add_customer_data.part_code = item_data.part_code
+                                add_customer_data.qty = sell_qty
+                                add_customer_data.qty_in = item_data.customer_qty
+                                add_customer_data.buy_user = "CUSTOMER"
+                                add_customer_data.pmc_type = "CHK"
+                                add_customer_data.buy_qty = item_data.customer_qty
+                                add_customer_data.pmc_qty = item_data.customer_qty
+                                add_customer_data.remark = item_data.remark
+                                add_customer_data.p_item_id = item_data.id
+                                add_customer_data.erp_id = item_data.erp_id
+                                add_customer_data.user_do = item_data.user_do
+                                add_customer_data.user_do_change = item_data.user_do_change
+                                add_customer_data.check = item_data.check
+                                add_customer_data.pi_buy_info_id = params[:pi_buy_id]
+                                add_customer_data.procurement_bom_id = item_data.procurement_bom_id
+                                add_customer_data.quantity = item_data.quantity
+                                add_customer_data.description = item_data.description
+                                add_customer_data.fengzhuang = item_data.fengzhuang
+                                add_customer_data.link = item_data.link
+                                add_customer_data.cost = item_data.cost
+                                add_customer_data.info = item_data.info
+                                add_customer_data.product_id = item_data.product_id
+                                add_customer_data.warn = item_data.warn
+                                add_customer_data.user_id = item_data.user_id
+                                add_customer_data.danger = item_data.danger
+                                add_customer_data.manual = item_data.manual
+                                add_customer_data.mark = item_data.mark
+                                add_customer_data.mpn = item_data.mpn
+                                add_customer_data.mpn_id = item_data.mpn_id
+                                add_customer_data.price = item_data.price
+                                add_customer_data.mf = item_data.mf
+                                add_customer_data.dn = item_data.dn
+                                add_customer_data.dn_id = item_data.dn_id
+                                add_customer_data.dn_long = item_data.dn_long
+                                add_customer_data.other = item_data.other
+                                add_customer_data.all_info = item_data.all_info
+                                add_customer_data.color = item_data.color
+                                add_customer_data.supplier_tag = item_data.supplier_tag
+                                add_customer_data.supplier_out_tag = item_data.supplier_out_tag
+                                add_customer_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                                if add_customer_data.save
+                                    wh_data.temp_customer_qty = temp_customer_qty + add_customer_data.pmc_qty
+                                    wh_data.save
+                                end
+                            end
                         end
                     end
                 end
@@ -4228,6 +4423,8 @@ before_filter :authenticate_user!
                                 wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty_in
                             elsif wh_in.buy_user == "MOKO_TEMP" 
                                 wh_data.temp_future_qty = wh_data.temp_future_qty - wh_in.qty_in
+                            elsif wh_in.buy_user == "CUSTOMER" 
+                                wh_data.temp_customer_qty = wh_data.temp_customer_qty - wh_in.qty_in
                             else
                                 if wh_data.temp_buy_qty >= wh_in.qty_in
                                     wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty_in 

@@ -85,7 +85,7 @@
                                 <input id="pcb_dn" autocomplete="off" name="pcb_dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_pcb_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;" value="<%= part.pcb_supplier %>">
                         </td>
                         <td id="pcb_order_no_color_<%= part.pcb_order_item_id.to_s %>_<%= part.pcb_item_infos_id.to_s %>">
-                            <%= part.pcb_order_no_son %><br><%= part.des_cn %><br><%= part.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %><br><%= part.updated_at.localtime - Time.new.localtime %>
+                            <%= part.pcb_order_no_son %><br><%= part.des_cn %><br><%= part.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
                             <a class="btn btn-info btn-xs" href="/copy_pcb_item_info?id=<%= part.pcb_item_infos_id%>" >复制</a>
                         </td>
                         <td><%= User.find_by_email(PcbOrder.find_by_id(part.pcb_order_id).order_sell).full_name.to_s %></td>

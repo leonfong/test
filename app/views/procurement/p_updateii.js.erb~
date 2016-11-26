@@ -7,18 +7,7 @@
 <% end %>
 
 
-<% if @bom_item.product_id != 0 %>
-    <% if not Product.find_by_id(@bom_item.product_id).blank? %>
-        document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= Product.find_by_id(@bom_item.product_id).description %>';
-        $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_item.product_id).name %>");
-    <% else %>
-        document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
-        $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
-    <% end %> 
-<% else %>
-    document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
-    $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
-<% end %>
+
 
 
 <% PDn.where(item_id: @bom_item.id).each do |ppp| %>
@@ -54,7 +43,18 @@ document.getElementById('total_price').innerHTML='<%=  number_with_precision(@to
 
 
 
-
+<% if @bom_item.product_id != 0 %>
+    <% if not Product.find_by_id(@bom_item.product_id).blank? %>
+        document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='<%= Product.find_by_id(@bom_item.product_id).description %>';
+        $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","<%= Product.find(@bom_item.product_id).name %>");
+    <% else %>
+        document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
+        $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
+    <% end %> 
+<% else %>
+    document.getElementById('<%= @bom_item.id.to_s + "d" %>').innerHTML='';
+    $("#<%= @bom_item.id.to_s + 'd' %>").attr("data-content","");
+<% end %>
 
 
 

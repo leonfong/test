@@ -10,7 +10,7 @@
 
 
 
-<% PDn.where(item_id: @bom_item.id).each do |ppp| %>
+<% PDn.where(p_item_id: @bom_item.id).each do |ppp| %>
     <% if ppp.color == "g" %>
         document.getElementById('<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>').className="bg-success";
         //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","bg-success");

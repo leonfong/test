@@ -534,7 +534,7 @@ before_filter :authenticate_user!
 	    @parse_result.each do |item| #处理每一行的数据
                 other_baojia = PDn.new()
                 other_baojia.email = current_user.email
-                other_baojia.item_id = item["MOKO_ID"]
+                other_baojia.p_item_id = item["MOKO_ID"]
                 other_baojia.date = Time.new
 	        #other_baojia.part_code = item["Ref"]
 		#other_baojia.desc = item["描述"]
@@ -1609,7 +1609,7 @@ before_filter :authenticate_user!
             @dn = PDn.new
             @dn.email = current_user.email
             @dn.cost = params["#{params[:dn_itemid]}p"]
-            @dn.item_id = @pitem.id
+            @dn.p_item_id = @pitem.id
             @dn.remark = params[:dn_remark]
             @dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
             @dn.color = "y"
@@ -2240,7 +2240,7 @@ before_filter :authenticate_user!
                                 if not all_dns.blank?
                                     add_dns = PDn.new
                                     add_dns.email = current_user.email
-                                    add_dns.item_id = @item.id
+                                    add_dns.p_item_id = @item.id
                                     add_dns.date = all_dns.date
                                     add_dns.part_code = all_dns.part_code
                                     add_dns.dn = all_dns.dn
@@ -2278,7 +2278,7 @@ before_filter :authenticate_user!
                                         Rails.logger.info("qqqqqq-----------------------222222222222----------------------qqqqqq")
                                         add_dns = PDn.new
                                         add_dns.email = current_user.email
-                                        add_dns.item_id = item.id
+                                        add_dns.p_item_id = item.id
                                         add_dns.date = match_dn.date
                                         add_dns.part_code = match_dn.part_code
                                         add_dns.dn = match_dn.dn
@@ -2323,7 +2323,7 @@ before_filter :authenticate_user!
                                     if not all_dns.blank?
                                         add_dns = PDn.new
                                         add_dns.email = current_user.email
-                                        add_dns.item_id = @item.id
+                                        add_dns.p_item_id = @item.id
                                         add_dns.date = all_dns.date
                                         add_dns.part_code = all_dns.part_code
                                         add_dns.dn = all_dns.dn
@@ -2414,7 +2414,7 @@ before_filter :authenticate_user!
                                     Rails.logger.info("1111-------------------------------------------------------222")
                                     add_dns = PDn.new
                                     add_dns.email = current_user.email
-                                    add_dns.item_id = item.id
+                                    add_dns.p_item_id = item.id
                                     add_dns.date = match_dn.date
                                     add_dns.part_code = match_dn.part_code
                                     add_dns.dn = match_dn.dn
@@ -2447,7 +2447,7 @@ before_filter :authenticate_user!
                                 else
                                     add_dns = PDn.new
                                     add_dns.email = current_user.email
-                                    add_dns.item_id = item.id
+                                    add_dns.p_item_id = item.id
                                     add_dns.date = Time.new
                                     add_dns.part_code = match_product_old.moko_part
                                     add_dns.dn = match_product_old.dn
@@ -2496,7 +2496,7 @@ before_filter :authenticate_user!
                                 if not all_dns.blank?
                                     add_dns = PDn.new
                                     add_dns.email = current_user.email
-                                    add_dns.item_id = @item.id
+                                    add_dns.p_item_id = @item.id
                                     add_dns.date = all_dns.date
                                     add_dns.part_code = all_dns.part_code
                                     add_dns.dn = all_dns.dn
@@ -3071,7 +3071,7 @@ before_filter :authenticate_user!
                 else
                     add_dns = PDn.new
                     add_dns.email = current_user.email
-                    add_dns.item_id = params[:id]
+                    add_dns.p_item_id = params[:id]
                 end
                  
                 
@@ -3488,7 +3488,7 @@ WHERE
             #Rails.logger.info("--------------------------")
             #Rails.logger.info(p_dn.info.current_path.inspect)
             #Rails.logger.info("--------------------------")
-            p_dn.item_id = params[:item_id]
+            p_dn.p_item_id = params[:item_id]
             p_dn.cost = params[:cost]
             p_dn.part_code = @bom_item.moko_part
 =begin
@@ -3624,7 +3624,7 @@ WHERE
             if not params[:bom_version].blank? 
                 @bom_item = PVersionItem.find(dn.p_version_item_id)
             else
-                @bom_item = PItem.find(dn.item_id)
+                @bom_item = PItem.find(dn.p_item_id)
             end
             #@bom_item.sell_feed_back_tag = "sell"
             #@bom_item.save
@@ -3728,7 +3728,7 @@ WHERE
 =end
             dn = PDn.new
             dn.email = current_user.email
-            dn.item_id = @pitem.id
+            dn.p_item_id = @pitem.id
             dn.part_code = Product.find_by_id(@pitem.product_id).name
             dn.date = Time.new
             dn.dn = dn_old.dn
@@ -3777,7 +3777,7 @@ WHERE
             dn.email = current_user.email
             dn.part_code = Product.find_by_id(@pitem.product_id).name
             dn.cost = params["#{params[:dn_itemid]}p"]
-            dn.item_id = @pitem.id
+            dn.p_item_id = @pitem.id
             dn.qty = @pitem.quantity * ProcurementBom.find(@pitem.procurement_bom_id).qty
             dn.color = "b"
             dn.tag = "a"

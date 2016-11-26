@@ -75,13 +75,13 @@
                                     <%= part.quantity * ProcurementBom.find(part.procurement_bom_id).qty %>
                                 </td>
                                 <td id="<%= part.id.to_s %>cost">
-                                    <% if not PDn.find_by(item_id: part.id,color: "y").blank? %>
-                                        <%= PDn.where(item_id: part.id,color: "y").last!.cost %>
+                                    <% if not PDn.find_by(p_item_id: part.id,color: "y").blank? %>
+                                        <%= PDn.where(p_item_id: part.id,color: "y").last!.cost %>
                                     <% end %>
                                 </td>
                                 <td id="<%= part.id.to_s %>remark">
-                                    <% if not PDn.find_by(item_id: part.id,color: "y").blank? %>
-                                        <%= PDn.where(item_id: part.id,color: "y").last!.remark %>
+                                    <% if not PDn.find_by(p_item_id: part.id,color: "y").blank? %>
+                                        <%= PDn.where(p_item_id: part.id,color: "y").last!.remark %>
                                     <% end %>
                                 </td>
                                 <td>

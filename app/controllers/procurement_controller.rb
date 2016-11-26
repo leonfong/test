@@ -99,6 +99,7 @@ before_filter :authenticate_user!
     def bom_v_up
         find_bom = ProcurementBom.find_by_id(params[:bom_id])
         if not find_bom.blank?
+=begin
             bom_version_find = ProcurementVersionBom.where(procurement_bom_id: find_bom.id)
             if not bom_version_find.blank?
                 bom_version = bom_version_find.last.bom_version.to_i + 1
@@ -106,6 +107,10 @@ before_filter :authenticate_user!
                 bom_version = 1
             end
             up_bom = ProcurementVersionBom.new
+=end
+
+            up_bom = ProcurementBom.new
+            up_bom.bom_id = find_bom.bom_id
             up_bom.procurement_bom_id = find_bom.id
             up_bom.bom_version = bom_version
             up_bom.erp_id = find_bom.erp_id
@@ -2151,6 +2156,8 @@ before_filter :authenticate_user!
         @bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
         #如果上传成功
 	if @bom.save
+           @bom.bom_id = @bom.id
+           @bom.save
             if params[:erp_item_id] != ""
                 upstart = PcbOrderItem.find_by_id(params[:erp_item_id])
                 upstart.state = "quote"

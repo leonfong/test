@@ -108,10 +108,15 @@ before_filter :authenticate_user!
             end
             up_bom = ProcurementVersionBom.new
 =end
-
+            bom_version_find = ProcurementBom.where(bom_id: find_bom.bom_id)
+            if not bom_version_find.blank?
+                bom_version = bom_version_find.last.bom_version.to_i + 1
+            else
+                bom_version = 999
+            end
             up_bom = ProcurementBom.new
             up_bom.bom_id = find_bom.bom_id
-            up_bom.procurement_bom_id = find_bom.id
+            #up_bom.procurement_bom_id = find_bom.id
             up_bom.bom_version = bom_version
             up_bom.erp_id = find_bom.erp_id
             up_bom.erp_item_id = find_bom.erp_item_id
@@ -163,7 +168,7 @@ before_filter :authenticate_user!
                 find_bom_item = PItem.where(procurement_bom_id: find_bom.id)
                 if not find_bom_item.blank?
                     find_bom_item.each do |item|
-                        up_item = up_bom.p_version_items.build()
+                        up_item = up_bom.p_items.build()
                         up_item.bom_version = bom_version
                         up_item.p_type = item.p_type
                         up_item.buy = item.buy
@@ -204,10 +209,10 @@ before_filter :authenticate_user!
                         up_item.supplier_out_tag = item.supplier_out_tag
                         up_item.sell_feed_back_tag = item.sell_feed_back_tag
                         if up_item.save
-                            find_item_dn = PDn.where(item_id: item.id)
+                            find_item_dn = PDn.where(p_item_id: item.id)
                             if not find_item_dn.blank?
                                 find_item_dn.each do |item|
-                                    up_item_dn = up_item.p_version_dns.build()
+                                    up_item_dn = up_item.p_dns.build()
                                     #up_item_dn.p_version_item_id = 
                                     up_item_dn.part_code = item.part_code
                                     up_item_dn.date = item.date
@@ -225,7 +230,7 @@ before_filter :authenticate_user!
                             find_item_remark = PItemRemark.where(p_item_id: item.id)
                             if not find_item_remark.blank?
                                 find_item_remark.each do |item|
-                                    up_item_remark = up_item.p_version_item_remarks.build()
+                                    up_item_remark = up_item.p_item_remarks.build()
                                     #up_item_remark.p_version_item_id = 
                                     up_item_remark.user_id = item.user_id
                                     up_item_remark.user_name = item.user_name
@@ -617,8 +622,8 @@ before_filter :authenticate_user!
                     row.push(item.mpn)
 		    row.push(item.description)
                     row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
-                    if not PDn.find_by(item_id: item.id,color: "y").blank?
-                        row.push(PDn.where(item_id: item.id,color: "y").last!.cost)
+                    if not PDn.find_by(p_item_id: item.id,color: "y").blank?
+                        row.push(PDn.where(p_item_id: item.id,color: "y").last!.cost)
                     else
                         row.push("")
                     end
@@ -1492,8 +1497,8 @@ before_filter :authenticate_user!
             
             if params[:complete]
                 @part = PItem.where(user_do: '999',supplier_tag: 'done').order("mpn","created_at").paginate(:page => params[:page], :per_page => 10)             
-                #@part = PItem.joins("JOIN p_dns ON p_items.id = p_dns.item_id").where("p_items.user_do = '999' AND p_dns.color = 'y'").group("p_items.id").paginate(:page => params[:page], :per_page => 10)
-                #@part = PItem.find_by_sql("﻿SELECT p_items.* FROM p_items INNER JOIN p_dns ON p_items.id = p_dns.item_id WHERE p_items.user_do = '999' AND p_dns.color = 'y' GROUP BY p_items.id").paginate(:page => params[:page], :per_page => 10)
+                #@part = PItem.joins("JOIN p_dns ON p_items.id = p_dns.p_item_id").where("p_items.user_do = '999' AND p_dns.color = 'y'").group("p_items.id").paginate(:page => params[:page], :per_page => 10)
+                #@part = PItem.find_by_sql("﻿SELECT p_items.* FROM p_items INNER JOIN p_dns ON p_items.id = p_dns.p_item_id WHERE p_items.user_do = '999' AND p_dns.color = 'y' GROUP BY p_items.id").paginate(:page => params[:page], :per_page => 10)
             elsif params[:undone]
                 @part = PItem.where(user_do: '999',supplier_tag: nil).order("mpn","created_at").paginate(:page => params[:page], :per_page => 10)
             elsif params[:key_mpn]
@@ -1575,8 +1580,8 @@ before_filter :authenticate_user!
                     row.push(item.mpn)
 		    row.push(item.description)
                     row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
-                    if not PDn.find_by(item_id: item.id,color: "y").blank?
-                        row.push(PDn.where(item_id: item.id,color: "y").last!.cost)
+                    if not PDn.find_by(p_item_id: item.id,color: "y").blank?
+                        row.push(PDn.where(p_item_id: item.id,color: "y").last!.cost)
                     else
                         row.push("")
                     end
@@ -3027,7 +3032,7 @@ before_filter :authenticate_user!
             if not params[:bom_version].blank?
                 del_dn = PVersionDn.find_by_sql("SELECT * FROM p_version_dns WHERE p_version_dns.p_version_item_id = '#{params[:id]}' AND p_version_dns.tag IS NULL")
             else
-                del_dn = PDn.find_by_sql("SELECT * FROM p_dns WHERE p_dns.item_id = '#{params[:id]}' AND p_dns.tag IS NULL")
+                del_dn = PDn.find_by_sql("SELECT * FROM p_dns WHERE p_dns.p_item_id = '#{params[:id]}' AND p_dns.tag IS NULL")
             end
             #del_dn = PDn.find_by(item_id: params[:id], tag: nil)
             if not del_dn.blank?
@@ -3048,7 +3053,7 @@ before_filter :authenticate_user!
             if not params[:bom_version].blank?
                 PVersionDn.where(p_version_item_id: params[:id]).update_all "color=NULL"
             else
-                PDn.where(item_id: params[:id]).update_all "color=NULL"
+                PDn.where(p_item_id: params[:id]).update_all "color=NULL"
             end
             if not params[:bom_version].blank?
                 @bom_item = PVersionItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
@@ -3123,7 +3128,7 @@ before_filter :authenticate_user!
                     @view_dns += '</tr>'
                 end
             else
-                PDn.where(item_id: params[:id]).each do |dn|
+                PDn.where(p_item_id: params[:id]).each do |dn|
                     @view_dns += '<tr id="' + params[:id].to_s + '_' + dn.id.to_s + '" '
                     if dn.color == "b"
                         @view_dns += ' class="bg-info">'
@@ -3293,13 +3298,13 @@ WHERE
         if not params[:bom_version].blank?
             dell_dns_color = PVersionDn.where(p_version_item_id: params[:id])
         else
-            dell_dns_color = PDn.where(p_version_item_id: params[:id])
+            dell_dns_color = PDn.where(p_item_id: params[:id])
         end
         c_color = nil
         if not params[:bom_version].blank?
             dell_dns_color = PVersionDn.where("p_version_item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
         else
-            dell_dns_color = PDn.where("item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
+            dell_dns_color = PDn.where("p_item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
         end
         if params[:product_name] != ""
             if not params[:bom_version].blank?
@@ -3529,7 +3534,7 @@ WHERE
             @view_dns = ''
             @view_dns += '<table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">'
             @view_dns += '<tbody >'
-            PDn.where(item_id: params[:item_id]).each do |dn|
+            PDn.where(p_item_id: params[:item_id]).each do |dn|
                 @view_dns += '<tr id="' + params[:item_id].to_s + '_' + dn.id.to_s + '" '
                 if dn.color == "b"
                     @view_dns += ' class="bg-info">'
@@ -3784,7 +3789,7 @@ WHERE
             @view_dns = ''
             @view_dns += '<table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">'
             @view_dns += '<tbody >'
-            PDn.where(item_id: @itemid).each do |dn|
+            PDn.where(p_item_id: @itemid).each do |dn|
                 @view_dns += '<tr id="' + @itemid.to_s + '_' + dn.id.to_s + '" '
                 if dn.color == "b"
                     @view_dns += ' class="bg-info">'
@@ -4084,7 +4089,7 @@ WHERE
         if not params[:bom_version].blank?
             PVersionDn.where(p_version_item_id: params[:id]).update_all "color=NULL"
         else
-            PDn.where(item_id: params[:id]).update_all "color=NULL"
+            PDn.where(p_item_id: params[:id]).update_all "color=NULL"
         end
         if not params[:bom_version].blank?
             @bom = ProcurementVersionBom.find(@p_item.procurement_bom_id)

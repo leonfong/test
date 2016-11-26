@@ -409,7 +409,7 @@ before_filter :authenticate_user!
                 
                     put_pdn = PDn.new
                     put_pdn.email = current_user.email
-                    put_pdn.item_id = item.p_item_id
+                    put_pdn.p_item_id = item.p_item_id
                     put_pdn.part_code = item.moko_part
                     put_pdn.date = Time.new
                     put_pdn.dn = item.dn
@@ -1712,8 +1712,8 @@ before_filter :authenticate_user!
                     row.push(item.mpn)
 		    row.push(item.description)
                     row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
-                    if not PDn.find_by(item_id: item.id,color: "y").blank?
-                        row.push(PDn.where(item_id: item.id,color: "y").last!.cost)
+                    if not PDn.find_by(p_item_id: item.id,color: "y").blank?
+                        row.push(PDn.where(p_item_id: item.id,color: "y").last!.cost)
                     else
                         row.push("")
                     end

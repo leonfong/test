@@ -9,6 +9,20 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def del_bom_item
+        if can? :work_d, :all or can? :work_admin, :all 
+            if not params[:id].blank?
+                get_data = PItem.find_by_id(params[:id])
+                if not get_data.blank?
+                    if get_data.destroy
+                        render "del_bom_item.js.erb" and return
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def edit_item_qty
         if can? :work_d, :all or can? :work_admin, :all 
             if not params[:item_id].blank?

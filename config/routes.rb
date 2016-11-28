@@ -249,6 +249,8 @@ Rails.application.routes.draw do
   match '/cost_history', to: 'procurement#cost_history', via: 'get'
   match '/sell_feeback_list', to: 'procurement#sell_feeback_list', via: 'get'
   match '/edit_item_qty', to: 'procurement#edit_item_qty', via: 'post'
+  match '/del_bom_item', to: 'procurement#del_bom_item', via: 'get'
+
 
 
 

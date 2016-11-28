@@ -9,7 +9,8 @@
                     <h1><img  src="/uploads/lock.png" >
 -->
                     <button type="submit" class="btn btn-danger btn-lg">复制</button></h1>
-                    <button class="btn btn-warning btn-lg pull-right">编辑</button></h1>
+                    <button id="show_del" type="button" class="btn btn-warning btn-lg pull-right">编辑</button></h1>
+                    <button style="display:none" id="hide_del" type="button" class="btn btn-success btn-lg pull-right">完成</button></h1>
             <% end %>
         </div>
     </div>
@@ -167,6 +168,7 @@
 
                 <thead >
                 <tr style="background-color: #eeeeee"> 
+                    <th width="50" class="del_ctl" style="display:none">删除</th>
                     <th width="80">分配</th> 
                     <th width="150">MPN</th> 
                     <th width="150">描述</th>
@@ -196,11 +198,12 @@
                 </div>  </div>
 
                 <% @bom_item.each_with_index do |item,index| %>
-                <div class="row" style="padding: 0px;">
+                <div id="<%=item.id%>_div" class="row" style="padding: 0px;">
                         <div  class="col-md-7"  style="padding-right: 0px;"> 
                 <small>
                 <table class="table table-hover" style="margin: 0px;"> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
+                    <td style="padding-left: 0px;" width="45" class=" del_ctl" style="display:none"><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-trash text-left text-danger" href="/del_bom_item?id=<%=item.id.to_s%>" data-confirm="确定要删除？"></a></h1></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="80"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
@@ -1111,6 +1114,23 @@ function parseLocalObjectData() {
                 }
             });
         }
+
+$(document).ready(function(){
+   $(".del_ctl").hide();
+   $("#hide_del").hide();
+   $("#show_del").show();
+});
+
+$("#show_del").click(function(){
+   $(".del_ctl").show();
+   $("#show_del").hide();
+   $("#hide_del").show();
+});
+$("#hide_del").click(function(){
+   $(".del_ctl").hide();
+   $("#hide_del").hide();
+   $("#show_del").show();
+});
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

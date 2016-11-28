@@ -1735,7 +1735,20 @@ before_filter :authenticate_user!
         bom.qty = params[:pj_qty]
         bom.remark = params[:pj_remark]
         bom.att = params[:att]
-        bom.save
+        if bom.save
+            bom_item = PItem.where(procurement_bom_id: bom.id)
+            if not bom_item.blank?
+            t_p = 0
+                bom_item.each do |item|
+                    item.pmc_qty = bom.qty*item.quantity
+                    if not item.cost.blank?
+                        t_p = t_p + bom.qty*item.quantity*item.cost
+                    end
+                end
+            end
+            bom.t_p = t_p
+            bom.save
+        end
         redirect_to :back  
     end
 

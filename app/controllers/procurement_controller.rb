@@ -161,8 +161,8 @@ before_filter :authenticate_user!
             up_bom.user_id = find_bom.user_id
             up_bom.all_title = find_bom.all_title
             up_bom.row_use = find_bom.row_use
-            up_bom.bom_eng_up = find_bom.bom_eng_up
-            up_bom.bom_eng = find_bom.bom_eng
+            up_bom.bom_eng_up = current_user.full_name
+            #up_bom.bom_eng = find_bom.bom_eng
             up_bom.bom_team_ck = find_bom.bom_team_ck
             up_bom.remark_to_sell = find_bom.remark_to_sell
             up_bom.sell_feed_back_tag = find_bom.sell_feed_back_tag

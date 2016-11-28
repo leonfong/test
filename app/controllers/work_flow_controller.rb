@@ -5363,7 +5363,7 @@ before_filter :authenticate_user!
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '&state=' + cu.remark_to_sell.to_s + '" data-confirm="确定要关联?"><div>' + cu.p_name_mom.to_s + '</div></a></td>'
+                    @c_table += '<td>' + cu.p_name_mom.to_s + '</td>'
                     
                     @c_table += '<td>'
                     @c_table += '<form action="/bom_v_up" method="post" >'

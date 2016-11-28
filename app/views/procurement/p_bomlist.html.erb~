@@ -149,7 +149,7 @@
       </tr>
 
       <tr>
-          <td colSpan="13" style="padding: 0px;margin: 0px;">
+          <td colSpan="14" style="padding: 0px;margin: 0px;">
               <div class="collapse" id="bom_version_<%= bom.id.to_s %>">
                   <div  style="padding: 0px;margin: 0px;">
                       <table class="table " style="padding: 0px;margin: 0px;">  

@@ -73,7 +73,7 @@
       <th width="130">Order No.</th>
       <th width="50">版本</th>
       <th width="170">BOM创建日期</th>
-      <th width="200">子项目名称</th>
+      <th width="200">文件名</th>
       <th width="100">数量</th>
       <th width="80">上传</th>
       <th width="80">审核</th>
@@ -111,7 +111,7 @@
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.erp_no_son.to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.excel_file_identifier %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">
         <% if bom.bom_eng_up == nil %>
@@ -149,7 +149,7 @@
       </tr>
 
       <tr>
-          <td colSpan="13" style="padding: 0px;margin: 0px;">
+          <td colSpan="14" style="padding: 0px;margin: 0px;">
               <div class="collapse" id="bom_version_<%= bom.id.to_s %>">
                   <div  style="padding: 0px;margin: 0px;">
                       <table class="table " style="padding: 0px;margin: 0px;">  

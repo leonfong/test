@@ -14,6 +14,14 @@ before_filter :authenticate_user!
             if not params[:id].blank?
                 get_data = PItem.find_by_id(params[:id])
                 if not get_data.blank?
+                    if not get_data.cost.blank? and not get_data.pmc_qty.blank?
+                        del_t_p = get_data.pmc_qty*get_data.cost
+                        get_bom = ProcurementBom.find_by_id(get_data.procurement_bom_id)  
+                        if not get_bom.blank?
+                            get_bom.t_p = get_bom.t_p - del_t_p
+                            get_bom.save
+                        end
+                    end
                     if get_data.destroy
                         render "del_bom_item.js.erb" and return
                     end

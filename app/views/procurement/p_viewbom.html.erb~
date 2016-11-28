@@ -3,12 +3,13 @@
 <% if can? :work_admin, :all %>
     <div class="row" style="padding: 10px;">
         <div class="col-md-12">
-            <%= form_tag({action: :bom_v_up},method:"post") do %>
+            <%= form_tag({controller: :procurement, action: :bom_v_up},method:"post") do %>
                     <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
 <!--
                     <h1><img  src="/uploads/lock.png" >
 -->
                     <button type="submit" class="btn btn-danger btn-lg">复制</button></h1>
+                    <button class="btn btn-warning btn-lg pull-right">编辑</button></h1>
             <% end %>
         </div>
     </div>
@@ -525,11 +526,7 @@ function change_<%= item.id.to_s %>(){
 
                                 <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.dn %> 
 <% if dn.qty.blank?%>
-    <% if not params[:bom_version].blank? %>
-                <%= PVersionItem.find_by_id(dn.p_version_item_id).quantity*ProcurementVersionBom.find_by_id(PVersionItem.find_by_id(dn.p_version_item_id).procurement_version_bom_id).qty %>
-    <% else %> 
-        <%= PItem.find_by_id(dn.item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.item_id).procurement_bom_id).qty %>
-    <% end %>
+        <%= PItem.find_by_id(dn.p_item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.p_item_id).procurement_bom_id).qty %>
 <% else %>
 <%= dn.qty %>
 <% end %>
@@ -554,11 +551,7 @@ function change_<%= item.id.to_s %>(){
 
                                 <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a class="a_ctl" rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse<% if not params[:bom_version].blank? %>&bom_version=<%= params[:bom_version] %><% end %>" ><div><%= dn.dn %> 
 <% if dn.qty.blank?%>
-    <% if not params[:bom_version].blank? %>
-        <%= PVersionItem.find_by_id(dn.p_version_item_id).quantity*ProcurementVersionBom.find_by_id(PVersionItem.find_by_id(dn.p_version_item_id).procurement_version_bom_id).qty %>
-    <% else %> 
-        <%= PItem.find_by_id(dn.item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.item_id).procurement_bom_id).qty %>
-    <% end %>
+        <%= PItem.find_by_id(dn.p_item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.p_item_id).procurement_bom_id).qty %>
 <% else %>
 <%= dn.qty %>
 <% end %>

@@ -129,7 +129,13 @@ before_filter :authenticate_user!
             #up_bom.sell_remark = find_bom.sell_remark
             #up_bom.sell_manager_remark = find_bom.sell_manager_remark
             up_bom.check = find_bom.check
-            up_bom.no = find_bom.no
+            if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?
+            order_n =1
+            else
+
+                order_n = ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').last.no.split("B")[-1].to_i + 1
+            end
+            up_bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
             #up_bom.name = find_bom.name
             #up_bom.p_name_mom = find_bom.p_name_mom
             #up_bom.p_name = find_bom.p_name

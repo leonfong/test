@@ -70,7 +70,8 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="110">BOM No.</th>
-      <th width="80">版本</th>
+      <th width="110">Order No.</th>
+      <th width="50">版本</th>
       <th width="170">BOM创建日期</th>
       <th width="200">子项目名称</th>
       <th width="100">数量</th>
@@ -107,6 +108,7 @@
     <% end %>
             <%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %>
         </td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.erp_no_son.to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name %></td>
@@ -147,13 +149,14 @@
       </tr>
 
       <tr>
-          <td colSpan="12" style="padding: 0px;margin: 0px;">
+          <td colSpan="13" style="padding: 0px;margin: 0px;">
               <div class="collapse" id="bom_version_<%= bom.id.to_s %>">
                   <div  style="padding: 0px;margin: 0px;">
                       <table class="table " style="padding: 0px;margin: 0px;">  
-                          <% ProcurementVersionBom.where(procurement_bom_id: bom.id).each do |bom_v| %>
+                          <% ProcurementBom.where(bom_id: bom.bom_id).each do |bom_v| %>
                               <tr class="bg-warning">
-                                  <td width="50"><%= link_to "查看", p_viewbom_path(bom_id: bom_v.id,bom_version: bom_v.bom_version) %></td>
+                                  <td width="50"><%= link_to "查看", p_viewbom_path(bom_id: bom_v.id) %></td>
+                                  <td width="300"><strong>关联Order NO: </strong><%= bom_v.erp_no_son %></td>
                                   <td width="100"><strong>BOM版本: </strong>V<%= bom_v.bom_version %></td>
                                   <td width="200"><strong>创建日期: </strong><%= bom_v.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
                                   <td width="100"><strong>上传: </strong>

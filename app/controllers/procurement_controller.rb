@@ -118,21 +118,23 @@ before_filter :authenticate_user!
             up_bom.bom_id = find_bom.bom_id
             #up_bom.procurement_bom_id = find_bom.id
             up_bom.bom_version = bom_version
-            up_bom.erp_id = find_bom.erp_id
-            up_bom.erp_item_id = find_bom.erp_item_id
-            up_bom.erp_no = find_bom.erp_no
-            up_bom.erp_no_son = find_bom.erp_no_son
-            up_bom.erp_qty = find_bom.erp_qty
-            up_bom.order_do = find_bom.order_do
+            #up_bom.erp_id = find_bom.erp_id
+            #up_bom.erp_item_id = find_bom.erp_item_id
+            #up_bom.erp_no = find_bom.erp_no
+            #up_bom.erp_no_son = find_bom.erp_no_son
+            #up_bom.erp_qty = find_bom.erp_qty
+            #up_bom.order_do = find_bom.order_do
             up_bom.order_country = find_bom.order_country
-            up_bom.star = find_bom.star
-            up_bom.sell_remark = find_bom.sell_remark
-            up_bom.sell_manager_remark = find_bom.sell_manager_remark
+            #up_bom.star = find_bom.star
+            #up_bom.sell_remark = find_bom.sell_remark
+            #up_bom.sell_manager_remark = find_bom.sell_manager_remark
             up_bom.check = find_bom.check
             up_bom.no = find_bom.no
-            up_bom.name = find_bom.name
-            up_bom.p_name_mom = find_bom.p_name_mom
-            up_bom.p_name = find_bom.p_name
+            #up_bom.name = find_bom.name
+            #up_bom.p_name_mom = find_bom.p_name_mom
+            #up_bom.p_name = find_bom.p_name
+            up_bom.p_name_mom = "COPY"
+            up_bom.p_name = "COPY"
             up_bom.qty = find_bom.qty
             up_bom.remark = find_bom.remark
             up_bom.t_p = find_bom.t_p
@@ -172,14 +174,16 @@ before_filter :authenticate_user!
                         up_item.bom_version = bom_version
                         up_item.p_type = item.p_type
                         up_item.buy = item.buy
-                        up_item.erp_id = item.erp_id
-                        up_item.erp_no = item.erp_no
+                        #up_item.erp_id = item.erp_id
+                        #up_item.erp_no = item.erp_no
                         up_item.user_do = item.user_do
                         up_item.user_do_change = item.user_do_change
                         up_item.check = item.check
                         #up_item.procurement_version_bom_id =
-                        up_item.procurement_bom_id = item.procurement_bom_id
+                        #up_item.procurement_bom_id = item.procurement_bom_id
                         up_item.quantity = item.quantity
+                        up_item.pmc_qty = item.pmc_qty
+                        up_item.customer_qty = item.customer_qty
                         up_item.description = item.description
                         up_item.part_code = item.part_code
                         up_item.fengzhuang = item.fengzhuang
@@ -246,7 +250,29 @@ before_filter :authenticate_user!
                 end
             end 
         end
-        redirect_to :back
+        if not params[:order_id].blank?
+            upstart = PcbOrderItem.find_by_id(params[:order_id])
+            if params[:state] == "mark"
+                upstart.state = "quotechked"
+            else
+                upstart.state = "quote"
+            end
+            upstart.p_type = "PCBA"
+            upstart.bom_id = up_bom.id
+            if upstart.save
+                up_bom.erp_id = upstart.pcb_order_id
+                up_bom.erp_item_id = upstart.id
+                up_bom.erp_no = upstart.pcb_order_no
+                up_bom.erp_no_son = upstart.pcb_order_no_son
+                up_bom.erp_qty = upstart.qty
+                #up_bom.name = find_bom.name
+                up_bom.p_name_mom = upstart.pcb_order_no
+                up_bom.p_name = upstart.pcb_order_no_son
+                up_bom.save
+                up_bom_item = PItem.where(procurement_bom_id: up_bom.id).update_all(erp_id: upstart.id,erp_no: upstart.pcb_order_no_son)
+            end
+        end
+        redirect_to p_viewbom_path(bom_id: up_bom.id)
     end
 
     def pcb_list
@@ -2620,6 +2646,7 @@ before_filter :authenticate_user!
             @all_dn += "&quot;,&quot;" + dn.dn.to_s
         end
         @all_dn += "&quot;]"
+=begin
         @bom_version = nil
         if not params[:bom_version].blank?
             @bom_version = params[:bom_version]
@@ -2641,28 +2668,29 @@ before_filter :authenticate_user!
                 @bom_item = PVersionItem.where(procurement_version_bom_id: params[:bom_id])
             end
         else
-            @boms = ProcurementBom.find_by_id(params[:bom_id])
-            if can? :work_g_all, :all
-                @user_do = "7"
-                @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
-            elsif can? :work_g_a, :all
-                @user_do = "77"
-                @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
-                #@bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '77' OR user_do = '9999')")
-            elsif can? :work_g_b, :all
-                @user_do = "75"
-                @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
-            elsif can? :work_g_c, :all
-                @user_do = "9999"
-                @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND user_do = '9999'")
-            elsif can? :work_d, :all
-                @user_do = "7"
-                @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+=end
+        @boms = ProcurementBom.find_by_id(params[:bom_id])
+        if can? :work_g_all, :all
+            @user_do = "7"
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+        elsif can? :work_g_a, :all
+            @user_do = "77"
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
+            #@bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '77' OR user_do = '9999')")
+        elsif can? :work_g_b, :all
+            @user_do = "75"
+            @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '75' OR user_do = '9999')")
+        elsif can? :work_g_c, :all
+            @user_do = "9999"
+            @bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND user_do = '9999'")
+        elsif can? :work_d, :all
+            @user_do = "7"
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id])
                 #Rails.logger.info("--------------------------1")
                 #Rails.logger.info(@bom_item.inspect)
                 #Rails.logger.info("--------------------------1")
-            end
         end
+
         #@user_do = "7"
         #@bom_item = PItem.where(procurement_bom_id: params[:bom_id])
         if  params[:ajax]

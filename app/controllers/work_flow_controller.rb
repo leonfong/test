@@ -5348,7 +5348,7 @@ before_filter :authenticate_user!
 
     def find_linkbom
         if params[:c_code] != ""
-            @c_info = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`  WHERE `procurement_boms`.`erp_no_son` LIKE '%#{params[:c_code]}%'")
+            @c_info = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms`  WHERE `procurement_boms`.`erp_no_son` LIKE '%#{params[:c_code].strip}%'")
             if not @c_info.blank?
                 @c_table = '<br>'
                 @c_table += '<small>'
@@ -5364,7 +5364,14 @@ before_filter :authenticate_user!
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
                     @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '&state=' + cu.remark_to_sell.to_s + '" data-confirm="确定要关联?"><div>' + cu.p_name_mom.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_linkbom_link?id='+ cu.id.to_s + '&order_id=' + params[:find_linkbom_id].to_s + '&state=' + cu.remark_to_sell.to_s + '" data-confirm="确定要关联?"><div>' + cu.no.to_s + '</div></a></td>'
+                    
+                    @c_table += '<td>'
+                    @c_table += '<form action="/bom_v_up" method="post" >'
+                    @c_table += '<input type="text" name="order_id" id="order_id" value="' + params[:find_linkbom_id].to_s + '" class="sr-only" >'
+                    @c_table += '<input type="text" name="bom_id" id="bom_id" value="' + cu.id.to_s + '" class="sr-only" >'
+                    @c_table += '<button type="submit" class="btn btn-link btn-sm" data-confirm="确定要关联?">' + cu.p_name.to_s + '</button>'
+                    @c_table += '</form>'
+                    @c_table += '</td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'

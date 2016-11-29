@@ -332,11 +332,14 @@ before_filter :authenticate_user!
         else
             upstart = PcbOrderItem.find_by_id(up_bom.erp_item_id)
             upstart.bom_id = up_bom.id
-            if upstart.save
-                pi_draft = PiInfo.find_by_id(pi_no: upstart.pcb_order_id)
-                pi_draft.state = "check"
-                pi_draft.bom_state = nil
-                pi_draft.save
+            upstart.save
+            pi_draft = PiItem.find_by_id(params[:pi_item_id])
+            pi_draft.bom_id = up_bom.id
+            if pi_draft.save
+                pi_data = PiInfo.find_by_id(pi_draft.pi_info_id)
+                pi_data.state = "check"
+                pi_data.bom_state = nil
+                pi_data.save
             end
         end
         redirect_to p_viewbom_path(bom_id: up_bom.id)

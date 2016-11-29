@@ -7,8 +7,10 @@
                     <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
                     <%= text_field_tag :bom_unlock, "unlock", class:"sr-only" %>
                     <h1><img  src="/uploads/lock.png" >
-
+                    <% if not params[:pi_item_id].blank?%>
+                    <%= text_field_tag :pi_item_id, params[:pi_item_id], class:"sr-only" %>
                     <button type="submit" class="btn btn-danger btn-lg" data-confirm="确定要解锁？">解锁</button></h1>
+                    <% end %>
 <!--
                     <button id="show_del" type="button" class="btn btn-warning btn-lg pull-right">编辑</button></h1>
                     <button style="display:none" id="hide_del" type="button" class="btn btn-success btn-lg pull-right">完成</button></h1>

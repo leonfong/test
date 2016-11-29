@@ -157,7 +157,7 @@
                                 <% if pi_item.bom_id.blank? %>
                                     <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
                                 <% else %>
-                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id) %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
                                 <% end %>
                             </td>
                             <td><%= pi_item.c_p_no %></td>

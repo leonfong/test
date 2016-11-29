@@ -2,6 +2,10 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "bom_list"} %>
+        </div>
+<!--
+        <div class="col-md-1 list-group" style="padding: 0px;">
             <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCBA业务</strong></h4></div>
             <% if can? :pcb_review, :all %>
             <%= link_to "订单检查", order_review_list_path ,class: "list-group-item"%>
@@ -14,6 +18,7 @@
             <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%> 
             <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item "%>     
         </div>
+-->
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
             <div class="col-md-6 col-sm-6 form-inline" >
@@ -70,13 +75,13 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="110">BOM No.</th>
-      <th width="130">Order No.</th>
+      <th width="200">Order No.</th>
       <th width="50">版本</th>
       <th width="170">BOM创建日期</th>
       <th width="200">文件名</th>
       <th width="100">数量</th>
-      <th width="80">上传</th>
-      <th width="80">审核</th>
+      <th width="70">上传</th>
+      <th width="70">审核</th>
       <th width="100">采购工程师</th>
       <th >工程师备注</th>
       <th >业务备注</th>

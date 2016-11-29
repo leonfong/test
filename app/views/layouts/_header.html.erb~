@@ -37,7 +37,11 @@
             <% end %>
             <% if can? :work_up, :all %>
                 <li id="m">
-                    <%= link_to 'ERP系统',pcb_order_list_path(new: true), data: { no_turbolink: true } %>
+                    <% if can? :work_baojia, :all %>
+                        <%= link_to 'ERP系统',pcb_order_list_path(bom_chk: true), data: { no_turbolink: true } %>
+                    <% else %>
+                        <%= link_to 'ERP系统',pcb_order_list_path(new: true), data: { no_turbolink: true } %>
+                    <% end %>
                 </li>
             <% end %>
             <% if can? :work_suppliers, :all %>

@@ -162,18 +162,25 @@ before_filter :authenticate_user!
             end
             up_bom = ProcurementBom.new
             up_bom.bom_id = find_bom.bom_id
-            #up_bom.procurement_bom_id = find_bom.id
             up_bom.bom_version = bom_version
-            #up_bom.erp_id = find_bom.erp_id
-            #up_bom.erp_item_id = find_bom.erp_item_id
-            #up_bom.erp_no = find_bom.erp_no
-            #up_bom.erp_no_son = find_bom.erp_no_son
-            #up_bom.erp_qty = find_bom.erp_qty
-            #up_bom.order_do = find_bom.order_do
             up_bom.order_country = find_bom.order_country
-            #up_bom.star = find_bom.star
-            #up_bom.sell_remark = find_bom.sell_remark
-            #up_bom.sell_manager_remark = find_bom.sell_manager_remark
+            if not params[:bom_unlock].blank?
+                up_bom.erp_id = find_bom.erp_id
+                up_bom.erp_item_id = find_bom.erp_item_id
+                up_bom.erp_no = find_bom.erp_no
+                up_bom.erp_no_son = find_bom.erp_no_son
+                up_bom.erp_qty = find_bom.erp_qty
+                up_bom.order_do = find_bom.order_do
+                up_bom.star = find_bom.star
+                up_bom.sell_remark = find_bom.sell_remark
+                up_bom.sell_manager_remark = find_bom.sell_manager_remark
+                up_bom.name = find_bom.name
+                up_bom.p_name_mom = find_bom.p_name_mom
+                up_bom.p_name = find_bom.p_name
+                up_bom.bom_eng = find_bom.bom_eng
+                up_bom.bom_eng_up = current_user.full_name
+                up_bom.remark_to_sell = find_bom.remark_to_sell
+            end
             up_bom.check = find_bom.check
             if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?
             order_n =1
@@ -182,9 +189,7 @@ before_filter :authenticate_user!
                 order_n = ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').last.no.split("B")[-1].to_i + 1
             end
             up_bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
-            #up_bom.name = find_bom.name
-            #up_bom.p_name_mom = find_bom.p_name_mom
-            #up_bom.p_name = find_bom.p_name
+
             up_bom.p_name_mom = "COPY"
             up_bom.p_name = "COPY"
             up_bom.qty = find_bom.qty
@@ -214,9 +219,9 @@ before_filter :authenticate_user!
             up_bom.all_title = find_bom.all_title
             up_bom.row_use = find_bom.row_use
             up_bom.bom_eng_up = current_user.full_name
-            #up_bom.bom_eng = find_bom.bom_eng
+
             up_bom.bom_team_ck = find_bom.bom_team_ck
-            #up_bom.remark_to_sell = find_bom.remark_to_sell
+
             up_bom.sell_feed_back_tag = find_bom.sell_feed_back_tag
             if up_bom.save 
                 find_bom_item = PItem.where(procurement_bom_id: find_bom.id)
@@ -226,13 +231,14 @@ before_filter :authenticate_user!
                         up_item.bom_version = bom_version
                         up_item.p_type = item.p_type
                         up_item.buy = item.buy
-                        #up_item.erp_id = item.erp_id
-                        #up_item.erp_no = item.erp_no
+                        if not params[:bom_unlock].blank?
+                            up_item.erp_id = item.erp_id
+                            up_item.erp_no = item.erp_no
+                        end
                         up_item.user_do = item.user_do
                         up_item.user_do_change = item.user_do_change
                         up_item.check = item.check
                         #up_item.procurement_version_bom_id =
-                        #up_item.procurement_bom_id = item.procurement_bom_id
                         up_item.quantity = item.quantity
                         up_item.pmc_qty = item.pmc_qty
                         up_item.customer_qty = item.customer_qty
@@ -322,6 +328,15 @@ before_filter :authenticate_user!
                 up_bom.p_name = upstart.pcb_order_no_son
                 up_bom.save
                 up_bom_item = PItem.where(procurement_bom_id: up_bom.id).update_all(erp_id: upstart.id,erp_no: upstart.pcb_order_no_son)
+            end
+        else
+            upstart = PcbOrderItem.find_by_id(up_bom.erp_item_id)
+            upstart.bom_id = up_bom.id
+            if upstart.save
+                pi_draft = PiInfo.find_by_id(pi_no: upstart.pcb_order_id)
+                pi_draft.state = "check"
+                pi_draft.bom_state = nil
+                pi_draft.save
             end
         end
         redirect_to p_viewbom_path(bom_id: up_bom.id)

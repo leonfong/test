@@ -4781,6 +4781,16 @@ before_filter :authenticate_user!
             pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
             if can? :work_e, :all and pi_draft.state == "new"
                 pi_draft.state = "check"
+                
+            end
+            
+            if can? :work_d, :all 
+                if pi_draft.finance_state == "checked"
+                    pi_draft.state = "checked"
+                else
+                    pi_draft.state = "check"
+                end
+                pi_draft.bom_state = "checked"
                 set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
                 if not set_lock.blank?
                     set_lock.each do |item|
@@ -4791,15 +4801,6 @@ before_filter :authenticate_user!
                         end
                     end
                 end
-            end
-            
-            if can? :work_d, :all 
-                if pi_draft.finance_state == "checked"
-                    pi_draft.state = "checked"
-                else
-                    pi_draft.state = "check"
-                end
-                pi_draft.bom_state = "checked"
             end
             if can? :work_finance, :all 
                 if pi_draft.bom_state == "checked"

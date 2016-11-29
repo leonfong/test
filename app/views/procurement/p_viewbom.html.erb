@@ -1,31 +1,38 @@
 <small><div class="container-fluid" >
-<% #if @boms.bom_lock == "lock" %>
-<% if can? :work_admin, :all %>
+<% if @boms.bom_lock == "lock" %>
+<% #if can? :work_admin, :all %>
     <div class="row" style="padding: 10px;">
         <div class="col-md-12">
             <%= form_tag({controller: :procurement, action: :bom_v_up},method:"post") do %>
                     <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-<!--
+                    <%= text_field_tag :bom_unlock, "unlock", class:"sr-only" %>
                     <h1><img  src="/uploads/lock.png" >
--->
-                    <button type="submit" class="btn btn-danger btn-lg">复制</button></h1>
+
+                    <button type="submit" class="btn btn-danger btn-lg" data-confirm="确定要解锁？">解锁</button></h1>
+<!--
                     <button id="show_del" type="button" class="btn btn-warning btn-lg pull-right">编辑</button></h1>
                     <button style="display:none" id="hide_del" type="button" class="btn btn-success btn-lg pull-right">完成</button></h1>
+-->
             <% end %>
         </div>
     </div>
 
-<fieldset>
-<!--
+
 ﻿<fieldset disabled>
--->
+
 <script> 
-//$(document).ready(function() {
-//    $(".a_ctl").attr("href","");
+$(document).ready(function() {
+    $(".a_ctl").attr("href","");
     
-//});
+});
 </script>
 <% else %>
+    <div class="row" style="padding: 10px;">
+        <div class="col-md-12">
+            <button id="show_del" type="button" class="btn btn-warning btn-lg pull-right">编辑</button></h1>
+            <button style="display:none" id="hide_del" type="button" class="btn btn-success btn-lg pull-right">完成</button></h1>
+        </div>
+    </div>
     <div class="row" style="padding: 0px;">
         <div class="col-md-2">
             <% if can? :work_g_all, :all%>

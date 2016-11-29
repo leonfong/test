@@ -5952,7 +5952,27 @@ before_filter :authenticate_user!
         edit_pi_item.com_cost = params[:edit_com_cost]
         edit_pi_item.pcba = params[:edit_pcba]
         edit_pi_item.t_p = params[:edit_t_p]
-        edit_pi_item.save
+        if edit_pi_item.save
+            if edit_pi_item.p_type == "PCBA"
+                get_bom = ProcurementBom.find_by_id(edit_pi_item.bom_id)
+                if not get_bom.blank?
+                    bom_item = PItem.where(procurement_bom_id: get_bom.id)
+                    if not bom_item.blank?
+                        t_p = 0
+                        bom_item.each do |item|
+                            item.pmc_qty = get_bom.qty.to_i*item.quantity.to_i
+                            item.save
+                            if not item.cost.blank?
+                                t_p = t_p + (item.pmc_qty*item.cost)
+                            end
+                        end
+                        get_bom.t_p = t_p
+                    end
+                    get_bom.qty = edit_pi_item.qty
+                    get_bom.save
+                end
+            end
+        end
         redirect_to :back
     end
 

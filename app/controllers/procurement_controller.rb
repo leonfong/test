@@ -190,8 +190,8 @@ before_filter :authenticate_user!
             end
             up_bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
 
-            up_bom.p_name_mom = "COPY"
-            up_bom.p_name = "COPY"
+            #up_bom.p_name_mom = "COPY"
+            #up_bom.p_name = "COPY"
             up_bom.qty = find_bom.qty
             up_bom.remark = find_bom.remark
             up_bom.t_p = find_bom.t_p

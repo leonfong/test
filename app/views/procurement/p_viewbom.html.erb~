@@ -136,7 +136,7 @@
                                <% end %>
                                <% end %> 
                            </td> 
-                           <% if @boms.row_use != nil %>
+                           <% if @boms.change_flag == "" %>
                            <td width="100"><%= link_to "导出测试", p_excel_add_path(:bom_id =>@boms.id) %></td>
                            <% end %>
                            <% if @boms.excel_file_url != nil %>
@@ -203,7 +203,7 @@
                 <small>
                 <table class="table table-hover" style="margin: 0px;"> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
-                    <td style="display:none padding-left: 0px;" width="45" class=" del_ctl" ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-trash text-left text-danger" href="/del_bom_item?id=<%=item.id.to_s%>" data-confirm="确定要删除？"></a></h1></td>
+                    <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-trash text-left text-danger" href="/del_bom_item?id=<%=item.id.to_s%>" data-confirm="确定要删除？"></a></h1></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="80"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>

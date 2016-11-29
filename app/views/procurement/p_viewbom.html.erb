@@ -136,7 +136,7 @@
                                <% end %>
                                <% end %> 
                            </td> 
-                           <% if @boms.row_use != nil %>
+                           <% if @boms.row_use != nil and @boms.change_flag == ""%>
                            <td width="100"><%= link_to "导出测试", p_excel_add_path(:bom_id =>@boms.id) %></td>
                            <% end %>
                            <% if @boms.excel_file_url != nil %>

@@ -9,6 +9,30 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def p_add_bom
+        get_bom = ProcurementBom.find_by_id(params[:p_id])
+        if not get_bom.blank?
+            bom_item = PItem.new
+            bom_item.bom_version = get_bom.bom_version
+            bom_item.pmc_qty = params[:p_qty].to_i*get_bom.qty.to_i
+            bom_item.procurement_bom_id = params[:p_id]
+            bom_item.quantity = params[:p_qty]
+            if not params[:p_mpn].blank?
+                bom_item.mpn = params[:p_mpn]
+            end
+            bom_item.part_code = params[:p_code]
+            if not params[:p_des].blank?
+                bom_item.description = params[:p_des]
+            end
+            bom_item.user_id = current_user.id
+            if bom_item.save
+                get_bom.change_flag = "done"
+                get_bom.save
+            end
+        end
+        redirect_to :back
+    end
+
     def del_bom_item
         if can? :work_d, :all or can? :work_admin, :all 
             if not params[:id].blank?
@@ -434,22 +458,6 @@ before_filter :authenticate_user!
             end
         end     
         #render "p_edit_supplier_dn.js.erb"
-    end
-
-    def p_add_bom
-        bom_item = PItem.new
-        bom_item.procurement_bom_id = params[:p_id]
-        bom_item.quantity = params[:p_qty]
-        if not params[:p_mpn].blank?
-            bom_item.mpn = params[:p_mpn]
-        end
-        bom_item.part_code = params[:p_code]
-        if not params[:p_des].blank?
-            bom_item.description = params[:p_des]
-        end
-        bom_item.user_id = current_user.id
-        bom_item.save
-        redirect_to :back
     end
 
     def add_dn
@@ -4002,7 +4010,8 @@ WHERE
                 all_title << "MPN"
                 all_title << "MOKO物料名称"
                 all_title << "MOKO物料描述"
-                all_title << "成本价"
+                all_title << "数量"
+                all_title << "成本单价"
                 all_title << "报价"
                 all_title << "备注"
                 sheet1.row(0).concat all_title
@@ -4028,6 +4037,9 @@ WHERE
                     title_format = Spreadsheet::Format.new({
                     :text_wrap => 1,:size => 8
                     })
+                    add_format = Spreadsheet::Format.new({
+                    :text_wrap => 1,:size => 8,:pattern_fg_color => :builtin_red
+                    })
 		    row = sheet1.row(rowNum)
                     row.set_format(2,title_format)
                     set_f = 0  
@@ -4045,6 +4057,13 @@ WHERE
                         item.all_info.split("|",-1).each do |info|
                             row.push(info.to_s)
                         end
+                    else
+                        all_title.each_with_index do |set_color,index|
+                            row.set_format(index,ColorFormat.new(:red,:white))
+                        end
+                        @bom.all_title.split("|",-1).each do |do_it|
+                            row.push("")
+                        end
                     end
 		    #row.push(rowNum)
 		    #row.push(item.description)
@@ -4060,7 +4079,9 @@ WHERE
                     if can? :work_d, :all
                         row.push(" ")
                         row.push(" ")
+                        row.push(" ")
                     else
+                        row.push("#{item.quantity}")
                         row.push("#{item.cost}")
                         row.push("#{item.price}")
                     end

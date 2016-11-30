@@ -987,7 +987,7 @@ function change_<%= item.id.to_s %>(){
             <input type="text" class="form-control" id="item_ref_id" name="item_id">
           </div>
           <div class="form-group">
-            <label for="ref_quantity" class="control-label">采购量:</label>
+            <label for="ref_quantity" class="control-label">用量:</label>
             <input class="form-control" name="ref_quantity" id="ref_quantity" type="number">
           </div>
           <div class="form-group">

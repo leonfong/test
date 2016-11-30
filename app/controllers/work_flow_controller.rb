@@ -7112,7 +7112,11 @@ before_filter :authenticate_user!
                 if not params[:smd_end_date].blank?
                     work_up.smd_end_date = params[:smd_end_date].strip
                 end
-                work_up.smd_state = params[:smd_state].strip
+                if not params[:smd_state].blank?
+                    work_up.smd_state = params[:smd_state].strip
+                else
+                    work_up.smd_state = ""
+                end
                 if not params[:dip_start_date].blank?
                     work_up.dip_start_date = params[:dip_start_date].strip
                 end

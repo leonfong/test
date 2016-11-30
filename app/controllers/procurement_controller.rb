@@ -28,6 +28,7 @@ before_filter :authenticate_user!
                             end
                         end
                         @bom.t_p = @total_p
+                        @bom.change_flag = "done"
                         @bom.save
                     end
                 end

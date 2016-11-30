@@ -207,7 +207,7 @@ before_filter :authenticate_user!
                 up_bom.p_name = find_bom.p_name
                 up_bom.bom_eng = find_bom.bom_eng
                 up_bom.bom_eng_up = current_user.full_name
-                up_bom.remark_to_sell = find_bom.remark_to_sell
+                #up_bom.remark_to_sell = find_bom.remark_to_sell
             end
             up_bom.check = find_bom.check
             if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?

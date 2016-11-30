@@ -184,7 +184,9 @@ $(document).ready(function() {
                     <th <% if can? :work_d, :all %><% else %>width="150"<% end %>>描述</th>
                     <th >MOKO 描述</th>
                     <th width="50">位号</th>
+                    <% if can? :work_d, :all %>
                     <th width="50">用量</th>
+                    <% end %>
                     <th width="50">采购</th>
                     <th width="50">客供</th>
                     <th width="25"></th>
@@ -457,7 +459,7 @@ function change_<%= item.id.to_s %>(){
 <% if PDn.find(item.dn_id).email.blank? %>
 采购工程师:
 <% else %> 
-采购工程师:<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>
+<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>:
 <% end %> 
 </strong>
 <%= PDn.find(item.dn_id).remark %>

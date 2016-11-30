@@ -9,6 +9,33 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def edit_item_ref
+        if can? :work_d, :all or can? :work_admin, :all 
+            if not params[:item_id].blank?
+                get_item_data = PItem.find_by_id(params[:item_id])
+                if not get_item_data.blank?
+                    @bom = ProcurementBom.find(get_item_data.procurement_bom_id) 
+                    get_item_data.part_code = params[:item_ref]
+                    get_item_data.quantity = params[:ref_quantity]
+                    get_item_data.pmc_qty = @bom.qty.to_i*params[:ref_quantity].to_i
+                    if get_item_data.save
+                        #@bom = ProcurementBom.find(get_item_data.procurement_bom_id)  
+                        @bom_item = PItem.where(procurement_bom_id: get_item_data.procurement_bom_id)
+                        @total_p = 0
+                        @bom_item.each do |bomitem|
+                            if not bomitem.cost.blank?
+                                @total_p += bomitem.cost*bomitem.pmc_qty
+                            end
+                        end
+                        @bom.t_p = @total_p
+                        @bom.save
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def p_add_bom
         get_bom = ProcurementBom.find_by_id(params[:p_id])
         if not get_bom.blank?

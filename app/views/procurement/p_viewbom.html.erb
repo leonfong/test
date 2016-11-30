@@ -171,18 +171,20 @@ $(document).ready(function() {
                 </div>
             </div>
             <div class="row" style="padding: 0px;">
-                <div <% if can? :work_d, :all %>class="col-md-12"<% else %>class="col-md-7"<% end %> style="padding-right: 0px;">
+                <div <% if can? :work_d, :all %>class="col-md-12"<% else %>class="col-md-7" style="padding-right: 0px;"<% end %> >
             <small>
             <table class="table table-hover" style="margin: 0px;"> 
 
                 <thead >
                 <tr style="background-color: #eeeeee"> 
                     <th width="50" class="del_ctl" style="display:none">删除</th>
+                    <th width="50" class="del_ctl" style="display:none">编辑</th>
                     <th width="80">分配</th> 
                     <th width="150">MPN</th> 
-                    <th width="150">描述</th>
+                    <th <% if can? :work_d, :all %><% else %>width="150"<% end %>>描述</th>
                     <th >MOKO 描述</th>
                     <th width="50">位号</th>
+                    <th width="50">用量</th>
                     <th width="50">采购</th>
                     <th width="50">客供</th>
                     <th width="25"></th>
@@ -208,11 +210,12 @@ $(document).ready(function() {
 
                 <% @bom_item.each_with_index do |item,index| %>
                 <div id="<%=item.id%>_div" class="row" style="padding: 0px;">
-                        <div <% if can? :work_d, :all %>class="col-md-12"<% else %>class="col-md-7"<% end %>  style="padding-right: 0px;"> 
+                        <div <% if can? :work_d, :all %>class="col-md-12"<% else %>class="col-md-7" style="padding-right: 0px;"<% end %> > 
                 <small>
                 <table class="table table-hover" style="margin: 0px;"> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
                     <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-trash text-left text-danger" href="/del_bom_item?id=<%=item.id.to_s%>" data-confirm="确定要删除？"></a></h1></td>
+                    <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><div ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-edit text-left text-success" data-toggle="modal" data-target="#edit_item_ref" data-item_id="<%= item.id %>" data-item_ref="<%= item.part_code %>" data-ref_quantity="<%= item.quantity %>" data-moko_part="<%= item.moko_part %>" ></a></h1></div></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="80"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
@@ -324,7 +327,7 @@ function change_<%= item.id.to_s %>(){
     }
 </script>
                     
-                    <td width="150" style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><small><%= item.description %></small></td> 
+                    <td <% if can? :work_d, :all %><% else %>width="150"<% end %> style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><small><%= item.description %></small></td> 
 
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
@@ -348,7 +351,7 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
-                   
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                     <% if not item.pmc_qty.blank? %>
                         <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.pmc_qty %></div>
@@ -467,7 +470,7 @@ function change_<%= item.id.to_s %>(){
 
 
 
-                   <div  class="col-md-5" <% if can? :work_d, :all %>style="display:none;padding-left: 0px;"<% else %>style="margin-left: 0px;"<% end %>>
+                   <div  class="col-md-5" <% if can? :work_d, :all %>style="display:none;padding-left: 0px;"<% else %>style="padding-left: 0px;"<% end %>>
                    <table style="margin: 0px;">
                    <tr>
                    <td style="padding: 0px;margin: 0px;">
@@ -970,6 +973,37 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
+<div class="modal fade" id="edit_item_ref" tabindex="-1" role="dialog" aria-labelledby="edit_item_refLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_item_refLabel">编辑位号数量</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_item_ref},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="item_ref_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="item_ref_id" name="item_id">
+          </div>
+          <div class="form-group">
+            <label for="ref_quantity" class="control-label">用量:</label>
+            <input class="form-control" name="ref_quantity" id="ref_quantity" type="number">
+          </div>
+          <div class="form-group">
+            <label for="item_ref" class="control-label">位号:</label>
+            <textarea class="form-control" id="item_ref"  name="item_ref"></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
 
 
 ﻿</fieldset>
@@ -1017,6 +1051,18 @@ $(document).ready(function() {
     });
 });
 
+$('#edit_item_ref').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var item_id = button.data('item_id');
+  var item_ref = button.data('item_ref');
+  var ref_quantity = button.data('ref_quantity');
+  var item_moko_part = button.data('moko_part');
+  var modal = $(this);
+  modal.find('.modal-title').text('编辑位号 ' + item_moko_part);
+  modal.find($("#item_ref_id")).val(item_id);
+  modal.find($("#item_ref")).text(item_ref);
+  modal.find($("#ref_quantity")).val(ref_quantity);
+})
 $('#edit_item_qty').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var item_id = button.data('item_id');

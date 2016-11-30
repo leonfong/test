@@ -148,10 +148,10 @@ $(document).ready(function() {
                            <% if @boms.row_use != nil and @boms.change_flag == ""%>
                            <td width="100"><%= link_to "导出测试", p_excel_add_path(:bom_id =>@boms.id) %></td>
                            <% end %>
-                           <% if @boms.excel_file_url != nil %>
+                           <% #if @boms.excel_file_url != nil %>
                            <td width="100"><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
                            <td width="100"><%= link_to "导出源文件", @boms.excel_file_url %></td> 
-                           <% end %>
+                           <% #end %>
                        </tr>
                     </table>    
                 </div>
@@ -171,7 +171,7 @@ $(document).ready(function() {
                 </div>
             </div>
             <div class="row" style="padding: 0px;">
-                <div class="col-md-7" style="padding-right: 0px;">
+                <div <% if can? :work_d, :all %>class="col-md-12"<% else %>class="col-md-7"<% end %> style="padding-right: 0px;">
             <small>
             <table class="table table-hover" style="margin: 0px;"> 
 
@@ -194,7 +194,7 @@ $(document).ready(function() {
                 </thead>
             </table>  </small> 
                 </div>  
-                <div class="col-md-5" style="padding-left: 0px;">
+                <div class="col-md-5" <% if can? :work_d, :all %>style="display:none;padding-left: 0px;"<% else %>style="padding-left: 0px;"<% end %> >
             <small>
             <table class="table table-hover" style="margin: 0px;"> 
 
@@ -208,7 +208,7 @@ $(document).ready(function() {
 
                 <% @bom_item.each_with_index do |item,index| %>
                 <div id="<%=item.id%>_div" class="row" style="padding: 0px;">
-                        <div  class="col-md-7"  style="padding-right: 0px;"> 
+                        <div <% if can? :work_d, :all %>class="col-md-12"<% else %>class="col-md-7"<% end %>  style="padding-right: 0px;"> 
                 <small>
                 <table class="table table-hover" style="margin: 0px;"> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
@@ -401,7 +401,8 @@ function change_<%= item.id.to_s %>(){
                     <td width="30" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a class="btn btn-info btn-xs a_ctl" data-toggle="modal" data-target="#remarkitem" data-itempid="<%= item.id %>" >备<br>注</a></small></td>
                    </tr></table></small>
 
-<div class="row" style="margin: 0px;" >
+
+<div class="row" style="margin: 0px;">
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" id="<%= item.id %>_item_remark">
 <% PItemRemark.where(p_item_id: item.id).each do |remark_item| %>
 <div class="row" style="margin: 0px;" >
@@ -466,7 +467,7 @@ function change_<%= item.id.to_s %>(){
 
 
 
-                   <div  class="col-md-5" style="padding-left: 0px;">
+                   <div  class="col-md-5" <% if can? :work_d, :all %>style="display:none;padding-left: 0px;"<% else %>style="margin-left: 0px;"<% end %>>
                    <table style="margin: 0px;">
                    <tr>
                    <td style="padding: 0px;margin: 0px;">
@@ -836,9 +837,6 @@ function change_<%= item.id.to_s %>(){
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">
-            <% if not params[:bom_version].blank? %>
-                <input type="text" class="form-control" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
-            <% end %>
           </div>
                  
           <div class="form-group">

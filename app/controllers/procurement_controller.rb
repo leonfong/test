@@ -1788,7 +1788,9 @@ before_filter :authenticate_user!
         bom.p_name_mom = params[:pj_name_mom]
         bom.qty = params[:pj_qty]
         bom.remark = params[:pj_remark]
-        bom.att = params[:att]
+        if not bom.att.blank?
+            bom.att = params[:att]
+        end
         if bom.save
             bom_item = PItem.where(procurement_bom_id: bom.id)
             if not bom_item.blank?
@@ -1798,6 +1800,7 @@ before_filter :authenticate_user!
                     if not item.cost.blank?
                         t_p = t_p + bom.qty*item.quantity*item.cost
                     end
+                    item.save
                 end
             end
             bom.t_p = t_p

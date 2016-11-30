@@ -4754,9 +4754,9 @@ before_filter :authenticate_user!
                 render "pi_list.html.erb" and return
             elsif params[:finance_chk]
                 if can? :work_e, :all
-                    @pilist = PiInfo.where(state: "check",finance_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiInfo.where(state: "check",bom_state: "checked",finance_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pilist = PiInfo.where(state: "check",finance_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiInfo.where(state: "check",bom_state: "checked",finance_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pi_list.html.erb" and return     
             elsif params[:checked]

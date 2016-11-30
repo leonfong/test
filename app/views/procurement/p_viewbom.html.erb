@@ -457,7 +457,7 @@ function change_<%= item.id.to_s %>(){
 <% if PDn.find(item.dn_id).email.blank? %>
 采购工程师:
 <% else %> 
-采购工程师:<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>
+<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>:
 <% end %> 
 </strong>
 <%= PDn.find(item.dn_id).remark %>

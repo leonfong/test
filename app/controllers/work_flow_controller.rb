@@ -5298,6 +5298,9 @@ before_filter :authenticate_user!
             if not @bom_item.blank?
                 @bom_item = @bom_item.select {|item| item.quantity != 0 }
             end
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@boms.inspect)
+            Rails.logger.info("add-------------------------------------12")
             render "edit_pcb_pi_eng.html.erb" and return 
         end
     end

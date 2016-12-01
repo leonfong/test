@@ -2359,7 +2359,9 @@ before_filter :authenticate_user!
                                 #all_dns.each do |dns|
                                 if not all_dns.blank?
                                     add_dns = PDn.new
-                                    add_dns.email = current_user.email
+                                    if not can? :work_d, :all
+                                        add_dns.email = current_user.email
+                                    end
                                     add_dns.p_item_id = @item.id
                                     add_dns.date = all_dns.date
                                     add_dns.part_code = all_dns.part_code
@@ -2397,7 +2399,7 @@ before_filter :authenticate_user!
                                     if not match_dn.blank?
                                         Rails.logger.info("qqqqqq-----------------------222222222222----------------------qqqqqq")
                                         add_dns = PDn.new
-                                        add_dns.email = current_user.email
+                                        add_dns.email = match_dn.email
                                         add_dns.p_item_id = item.id
                                         add_dns.date = match_dn.date
                                         add_dns.part_code = match_dn.part_code
@@ -2442,7 +2444,7 @@ before_filter :authenticate_user!
                                     end
                                     if not all_dns.blank?
                                         add_dns = PDn.new
-                                        add_dns.email = current_user.email
+                                        #add_dns.email = current_user.email
                                         add_dns.p_item_id = @item.id
                                         add_dns.date = all_dns.date
                                         add_dns.part_code = all_dns.part_code
@@ -2533,7 +2535,7 @@ before_filter :authenticate_user!
                                 if not match_dn.blank?
                                     Rails.logger.info("1111-------------------------------------------------------222")
                                     add_dns = PDn.new
-                                    add_dns.email = current_user.email
+                                    add_dns.email = match_dn.email
                                     add_dns.p_item_id = item.id
                                     add_dns.date = match_dn.date
                                     add_dns.part_code = match_dn.part_code
@@ -2566,7 +2568,7 @@ before_filter :authenticate_user!
                                     render "p_search_part.js.erb" and return 
                                 else
                                     add_dns = PDn.new
-                                    add_dns.email = current_user.email
+                                    #add_dns.email = current_user.email
                                     add_dns.p_item_id = item.id
                                     add_dns.date = Time.new
                                     add_dns.part_code = match_product_old.moko_part
@@ -2615,7 +2617,7 @@ before_filter :authenticate_user!
                                 #all_dns.each do |dns|
                                 if not all_dns.blank?
                                     add_dns = PDn.new
-                                    add_dns.email = current_user.email
+                                    #add_dns.email = current_user.email
                                     add_dns.p_item_id = @item.id
                                     add_dns.date = all_dns.date
                                     add_dns.part_code = all_dns.part_code
@@ -3898,7 +3900,9 @@ WHERE
             #else
         else
             dn = PDn.new
-            dn.email = current_user.email
+            if not can? :work_d, :all
+                dn.email = current_user.email
+            end
             dn.part_code = Product.find_by_id(@pitem.product_id).name
             dn.cost = params["#{params[:dn_itemid]}p"]
             dn.p_item_id = @pitem.id

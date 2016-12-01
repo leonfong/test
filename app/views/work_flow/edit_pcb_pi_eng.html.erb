@@ -87,11 +87,11 @@
 
 
 
-
-
-
-
-
+            <% @pi_item.each do |pi_item| %>
+            <div class="row "><div class="col-md-12">
+                <%= render partial: "procurement/viewbom", locals: {boms_ctl: ProcurementBom.find_by_id(pi_item.bom_id),bom_item_ctl: PItem.where(procurement_bom_id: pi_item.bom_id)} %>
+            </div></div>
+            <% end %>
 
 
 

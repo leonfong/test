@@ -4,7 +4,25 @@
             <%= render partial: "work_flow/menu", locals: {selected: "pi_draft_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
-
+            <div class="row "><div class="col-md-12">   
+                <div class="modal-footer">
+                    
+                    <%= form_tag('/pi_draft', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
+                        
+                    <% if can? :work_e, :all and @pi_info.state == "new"%>
+                        <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
+                    <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% if can? :work_admin, :all %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% end %>
+                </div>
+            </div></div>
            
 
             <div class="row "><div class="col-md-12">
@@ -113,25 +131,7 @@
 
 
 
-            <div class="row "><div class="col-md-12">   
-                <div class="modal-footer">
-                    
-                    <%= form_tag('/pi_draft', method:"post") do %>
-                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
-                        
-                    <% if can? :work_e, :all and @pi_info.state == "new"%>
-                        <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
-                    <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
-                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
-                    <% end %>
-                    <% if can? :work_admin, :all %>
-                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
-                    <% end %>
-                    <% end %>
-                </div>
-            </div></div>
+
             
 
        

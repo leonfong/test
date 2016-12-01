@@ -3849,7 +3849,9 @@ WHERE
             dn.save
 =end
             dn = PDn.new
-            dn.email = current_user.email
+            if not can? :work_d, :all
+                dn.email = current_user.email
+            end
             dn.p_item_id = @pitem.id
             dn.part_code = Product.find_by_id(@pitem.product_id).name
             dn.date = Time.new

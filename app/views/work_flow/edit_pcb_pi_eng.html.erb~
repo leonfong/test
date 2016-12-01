@@ -1,0 +1,139 @@
+<div class="container-fluid" >
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "pi_draft_list"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;"><small>
+
+           
+
+            <div class="row "><div class="col-md-12">
+            <div class="panel panel-info">                
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th>Order No.</th>
+                            <th>Customer Part No.</th>
+                            <th>PCB Size(mm)</th>
+                            <th width="100">Quantity(PCS)</th>
+                            <th width="50">Layer</th>
+                            <th>Description</th>
+                            <th>PCB Price</th>
+                            <th>Components Cost</th>
+                            <th>PCBA</th>
+                            <th>Unit Price</th>
+                            <th>Total Price(USD)</th>
+                            <th width="40">删除</th>
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @pi_item %>
+                        <% @pi_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if pi_item.bom_id.blank? %>
+                                    <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
+                                <% else %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
+                                <% end %>
+                            </td>
+                            <td><%= pi_item.c_p_no %></td>
+                            <td><%= pi_item.pcb_size %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.layer %></td>
+                            <td><%= pi_item.des %></td>
+                            <td><%= pi_item.pcb_price %></td>
+                            <td><%= pi_item.com_cost %></td>
+                            <td><%= pi_item.pcba %></td>
+                            <td><%= pi_item.unit_price %></td>
+                            <td><%= pi_item.t_p %></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
+                                <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                        <% end %> 
+
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                                <% end %>
+                            </td>
+                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
+                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td>金额: <%= pi_item.t_p %></td>
+                            <td colSpan="3"></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
+                                <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                                     
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+
+
+
+            <div class="row "><div class="col-md-12">   
+                <div class="modal-footer">
+                    
+                    <%= form_tag('/pi_draft', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
+                        
+                    <% if can? :work_e, :all and @pi_info.state == "new"%>
+                        <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
+                    <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% if can? :work_admin, :all %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% end %>
+                </div>
+            </div></div>
+            
+
+       
+       </small></div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

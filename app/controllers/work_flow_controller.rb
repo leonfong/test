@@ -5292,6 +5292,14 @@ before_filter :authenticate_user!
         @pi_item = PiItem.where(pi_no: params[:pi_no])
         @pi_other_item = PiOtherItem.where(pi_no: params[:pi_no])
         @total_p = PiItem.where(pi_no: params[:pi_no]).sum("t_p") + PiOtherItem.where(pi_no: params[:pi_no]).sum("t_p")
+        if can? :work_d, :all 
+            @boms = ProcurementBom.find_by_id(@pi_info.pcb_customer_id)
+            @bom_item = PItem.where(procurement_bom_id: @pi_info.pcb_customer_id)
+            if not @bom_item.blank?
+                @bom_item = @bom_item.select {|item| item.quantity != 0 }
+            end
+            render "edit_pcb_pi_eng.html.erb" and return 
+        end
     end
 
     def del_pcb_follow

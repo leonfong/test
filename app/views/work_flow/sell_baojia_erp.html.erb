@@ -3,7 +3,7 @@
 <br>
   <ul class="nav nav-tabs">
       <li role="presentation" ><a href="/work_flow"><h4 ><strong><p class="text-primary"  >业务部问题跟踪&反馈</p></strong></h4></a></li>
-      <li role="presentation" class="active"><a href="/sell_baojia"><h4 ><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><h4 ><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
       <li role="presentation" class="active"><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >报价列表(新)</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_pcb_baojia"><h4 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
       <% if can? :work_pcb_business, :all %>
@@ -86,20 +86,10 @@
 <% @quate.each do |q_order| %>
                             <tr data-toggle="collapse" href="#order_son_<%= q_order.id.to_s %>" aria-expanded="false" aria-controls="order_son_<%= q_order.id %>">
                                 <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
-                                <td><%=  q_order.p_name_mom %></td>
+                                <td><%=  q_order.order_no %></td>
                                 <td><%= q_order.qty %></td>
-                                <td>￥<%= q_order.sum_t_p %></td>
-                                <td >
-                                    <% if not PcbOrderItem.find_by_id(q_order.erp_item_id).blank? %>
-                                        <% if not PcbOrder.find_by_id(PcbOrderItem.find_by_id(q_order.erp_item_id).pcb_order_id).blank? %>
-                                            <%= PcbOrder.find_by_id(PcbOrderItem.find_by_id(q_order.erp_item_id).pcb_order_id).c_country %>
-                                        <% else %>
-                                            <%= q_order.order_country %>
-                                        <% end %>
-                                    <% else %>
-                                        <%= q_order.order_country %>
-                                    <% end %>
-                                </td>
+                                <td>￥</td>
+                                <td ><%= q_order.c_country %></td>
                                 <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
                                 <td><%= q_order.sell_remark %></td>
                                 <td><%= q_order.sell_manager_remark %></td>

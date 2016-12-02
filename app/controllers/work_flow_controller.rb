@@ -5,6 +5,97 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def sell_baojia_erp
+        @quate = PcbOrder.where("state <> 'new' AND order_sell <> '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+
+    end
+
+    def sell_baojia
+        where_p = ""
+        where_date = ""
+        where_5star = ""
+        if params[:complete]
+            where_5star = " AND procurement_boms.star = 5"
+        else
+            where_5star = " AND (procurement_boms.star <> 5 OR procurement_boms.star IS NULL)"
+        end
+        if not current_user.s_name.blank?
+            if current_user.s_name.size == 1
+                s_name = current_user.s_name
+               
+                #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
+                where_p = " ((POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$' and RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$'))"
+                
+            elsif current_user.s_name.size == 2
+                s_name = current_user.s_name
+               
+                #where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
+                where_p = "  (POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 or POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 9)  "
+            elsif current_user.s_name.size > 2
+                if params[:sell] == "" or params[:sell] == nil
+                    where_p = "("
+                    current_user.s_name.split(",").each_with_index do |item,index|
+                        s_name = item
+                        if s_name.size == 1
+                            if current_user.s_name.split(",").size > (index+1)
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                            else
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$'))"
+                            end
+                        elsif s_name.size == 2
+                            if current_user.s_name.split(",").size > (index+1)
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                            else
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
+                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$'))"
+                            end
+                        end
+                    end
+                else
+                    if params[:sell].size == 1
+                        s_name = params[:sell]
+               
+                        #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
+                        where_p = " ((POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$' and RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$'))"
+                    elsif params[:sell].size == 2
+                        s_name = params[:sell]
+               
+                        #where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
+                        where_p = "  (POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 or POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 9)  "
+                    end
+                end
+            end
+            if params[:start_date] != "" and  params[:start_date] != nil
+                where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" and  params[:end_date] != nil
+                where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
+            end
+            @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
+        else
+            if params[:start_date] != "" and  params[:start_date] != nil
+                where_date += " procurement_boms.created_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" and  params[:start_date] != nil
+                where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
+            end
+            if where_date != ""
+                @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
+            else
+                if params[:complete]
+                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE procurement_boms.star = 5   GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
+                else
+                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms`   GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
+                end
+            end
+        end
+        
+        #@quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
+    end
+
     def edit_pmc_add_buy_user
         if can? :work_d, :all or can? :work_admin, :all 
             if not params[:item_id].blank?
@@ -5596,7 +5687,9 @@ before_filter :authenticate_user!
     def del_pcb_order
         pcb_order = PcbOrder.find(params[:order_id])
         if can? :work_e, :all or can? :work_d, :all
-            pcb_order.destroy
+            pcb_order.del_flag = "inactive"
+            pcb_order.save
+            #pcb_order.destroy
         end
         redirect_to :back
     end
@@ -5661,65 +5754,65 @@ before_filter :authenticate_user!
     def pcb_order_list
         if params[:key_order]
             if can? :work_a, :all
-                @pcblist = PcbOrder.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             elsif can? :work_e, :all
-                @pcblist = PcbOrder.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             else
-                @pcblist = PcbOrder.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             end
         else
             if params[:new] 
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "new",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "new",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "new_pcb_order_list.html.erb" and return
             elsif params[:quote]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quote",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "quote",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quote",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where(state: "quote").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quote",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:bom_chk]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "bom_chk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where(state: "bom_chk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:place_an_order]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "order",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "order",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "order",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where(state: "order").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "order",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:quotechk]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quotechk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "quotechk",order_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quotechk",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quotechk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             else
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where("state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where("state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where("state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end
         end
@@ -6332,92 +6425,6 @@ before_filter :authenticate_user!
             @quate = ProcurementBom.find_by_sql("SELECT procurement_boms.`p_name`,p_items.*  FROM procurement_boms INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id WHERE p_items.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 10)
         end 
 =end   
-    end
-
-    def sell_baojia
-        where_p = ""
-        where_date = ""
-        where_5star = ""
-        if params[:complete]
-            where_5star = " AND procurement_boms.star = 5"
-        else
-            where_5star = " AND (procurement_boms.star <> 5 OR procurement_boms.star IS NULL)"
-        end
-        if not current_user.s_name.blank?
-            if current_user.s_name.size == 1
-                s_name = current_user.s_name
-               
-                #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
-                where_p = " ((POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$' and RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$'))"
-                
-            elsif current_user.s_name.size == 2
-                s_name = current_user.s_name
-               
-                #where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
-                where_p = "  (POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 or POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 9)  "
-            elsif current_user.s_name.size > 2
-                if params[:sell] == "" or params[:sell] == nil
-                    where_p = "("
-                    current_user.s_name.split(",").each_with_index do |item,index|
-                        s_name = item
-                        if s_name.size == 1
-                            if current_user.s_name.split(",").size > (index+1)
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') OR"
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
-                            else
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$'))"
-                            end
-                        elsif s_name.size == 2
-                            if current_user.s_name.split(",").size > (index+1)
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$') OR"
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
-                            else
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 9 AND RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$') OR"
-                                where_p += "  (LOCATE('" + s_name + "', procurement_boms.p_name_mom,3) = 8 AND RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$'))"
-                            end
-                        end
-                    end
-                else
-                    if params[:sell].size == 1
-                        s_name = params[:sell]
-               
-                        #where_p = " POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$' "
-                        where_p = " ((POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 6 and RIGHT(LEFT(procurement_boms.p_name_mom,9),1) REGEXP '^[0-9]+$') or (POSITION('" + s_name + "' IN RIGHT(LEFT(procurement_boms.p_name_mom,9),7)) = 7 and RIGHT(LEFT(procurement_boms.p_name_mom,10),1) REGEXP '^[0-9]+$' and RIGHT(LEFT(procurement_boms.p_name_mom,8),1) REGEXP '^[0-9]+$'))"
-                    elsif params[:sell].size == 2
-                        s_name = params[:sell]
-               
-                        #where_p = "  POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 "
-                        where_p = "  (POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 8 or POSITION('" + s_name + "' IN procurement_boms.p_name_mom) = 9)  "
-                    end
-                end
-            end
-            if params[:start_date] != "" and  params[:start_date] != nil
-                where_date += " AND procurement_boms.created_at > '#{params[:start_date]}'"
-            end
-            if params[:end_date] != "" and  params[:end_date] != nil
-                where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
-            end
-            @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_p + where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
-        else
-            if params[:start_date] != "" and  params[:start_date] != nil
-                where_date += " procurement_boms.created_at > '#{params[:start_date]}'"
-            end
-            if params[:end_date] != "" and  params[:start_date] != nil
-                where_date += " AND procurement_boms.created_at < '#{params[:end_date]}'"
-            end
-            if where_date != ""
-                @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE #{where_date + where_5star}  GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
-            else
-                if params[:complete]
-                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE procurement_boms.star = 5   GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
-                else
-                    @quate = ProcurementBom.find_by_sql("SELECT *,SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms`   GROUP BY procurement_boms.p_name_mom ORDER BY created_at DESC").paginate(:page => params[:page], :per_page => 10)
-                end
-            end
-        end
-        
-        #@quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE #{where_p + where_date}  ").paginate(:page => params[:page], :per_page => 10)
     end
 
     def index

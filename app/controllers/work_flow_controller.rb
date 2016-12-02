@@ -484,7 +484,7 @@ before_filter :authenticate_user!
                             #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
                             
                             get_wh.true_buy_qty = get_wh.true_buy_qty + (item.buy_qty - item.pmc_qty)
-                            if item.flag == "pmc"
+                            if item.pmc_flag == "pmc"
                                 get_wh.future_qty = get_wh.future_qty + item.buy_qty
                             else
                                 get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.pmc_qty)

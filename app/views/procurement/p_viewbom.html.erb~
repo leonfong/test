@@ -353,7 +353,9 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
+                    <% if can? :work_d, :all %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
+                    <% end %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                     <% if not item.pmc_qty.blank? %>
                         <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.pmc_qty %></div>

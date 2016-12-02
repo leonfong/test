@@ -1175,6 +1175,12 @@ before_filter :authenticate_user!
 
                         moko_data = Product.find_by_id(item_buy.product_id)
                         wh_data = WarehouseInfo.find_by_moko_part(item_data.moko_part)
+                        if wh_data.blank?
+                            wh_data = WarehouseInfo.new
+                            wh_data.moko_part = item_data.moko_part
+                            wh_data.moko_des = item_data.moko_des
+                            wh_data.save
+                        end
                         use_data = WhChkInfo.find_by_sql("SELECT SUM(wh_chk_infos.chk_qty) AS use_qty FROM wh_chk_infos WHERE (wh_chk_infos.state = 'new' OR wh_chk_infos.state = 'applying') AND wh_chk_infos.moko_part = '#{item_data.moko_part}'")
                         use_qty = 0
                         if not use_data.blank?
@@ -1261,6 +1267,10 @@ before_filter :authenticate_user!
                                 end
                             else
                                 Rails.logger.info("pmc_new--------------------------------------12")
+                                wh_data = WarehouseInfo.new
+                                wh_data.moko_part = item_data.moko_part
+                                wh_data.moko_des = item_data.moko_des
+                                wh_data.save
                                 add_buy_data.buy_qty = sell_qty
                                 add_buy_data.pmc_qty = sell_qty
                             

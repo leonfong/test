@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pi_buy_list"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "buy_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
             <div style="padding: 10px;">
@@ -22,6 +22,9 @@
       <th  >供应商</th>
       <th width="230">Created Date</th>
       <th width="190">采购工程师</th>
+      <% if can? :work_g, :all or can? :work_admin, :all%>
+      <th width="70">操作</th>
+      <% end %>
     </tr>
   </thead>
   <tbody><small>
@@ -29,10 +32,134 @@
   <%= will_paginate(@pi_buy_list) %> 
   <% @pi_buy_list.each do |buy_list| %>
   <tr>
-      <td><%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %></td>
-      <td><%= buy_list.dn_long %></td>
-      <td><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-      <td><%= buy_list.user %></td>
+      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %></td>
+      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.dn_long %></td>
+      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.user %></td>
+      <% if can? :work_g, :all or can? :work_admin, :all%>
+      <td>    
+          <%= link_to "提交", send_pi_buy_check_path(pi_buy_no: buy_list.pi_buy_no), class: "btn btn-info btn-xs",data: {confirm: "确定要提交？"}%> 
+      </td>           
+      <% end %>
+  </tr>
+  <tr>
+      <td colSpan="5" style="padding: 0px;margin: 0px;">
+          <div class="collapse" id="buy_<%= buy_list.id %>">
+
+
+
+
+<div class="row "><div class="col-md-12 col-sm-12 form-inline" >
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="150">PI No.</th>
+      <th width="220">MPN</th>
+      <th width="150">MOKO PART</th>
+      <th >MOKO DES</th>
+      <th width="80">需求数量</th>
+      <th width="80">购买数量</th>
+      <th width="80">单价￥</th>
+      <th >供应商</th>
+      <th >备注</th>
+    </tr>
+  </thead>
+  <tbody><small>
+<% if not PiBuyItem.where(pi_buy_info_id: buy_list.id).blank? %>
+  <% PiBuyItem.where(pi_buy_info_id: buy_list.id).each do |buy| %>
+  <tr>
+      <td><%= buy.erp_no_son %></td>
+      <td><%= buy.mpn %></td>
+      <td>
+          <a class="text-info" data-method='get' data-remote='true' href="/cost_history_buy?part_code=<%= buy.moko_part.to_s%>&item_id=<%= buy.id.to_s %>"><%= buy.moko_part %></a>
+      </td>
+      <td><%= buy.moko_des %></td>
+      <td><%= buy.pmc_qty %></td>
+      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>"><%= buy.buy_qty %></div></td>
+      <td><%= buy.cost %></td>
+      <td><%= buy.dn_long %></td>
+      <td>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >
+<% PItemRemark.where(p_item_id: buy.p_item_id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+</div>
+
+<% if not buy.dn_id.blank? %>
+<% if not PDn.find_by_id(buy.dn_id).blank? %>
+<% if not PDn.find(buy.dn_id).remark.blank? %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<% if not PDn.find(buy.dn_id).info.blank? %>                 
+<a class="btn btn-info btn-xs" href="<%= PDn.find(buy.dn_id).info %>" target="_blank">下载</a>
+<% end %>
+<strong>采购工程师: </strong>
+<%= PDn.find(buy.dn_id).remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% end %>
+<% end %>
+</div>
+      </td>
+
+
+
+  </tr>
+  <% end %>
+<% end %> 
+  </small>   
+  </tbody>
+</table>
+            </div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+      </td>
   </tr>
   <% end %>
 <% end %> 

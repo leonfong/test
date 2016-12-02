@@ -23,7 +23,7 @@
       <th width="230">Created Date</th>
       <th width="190">采购工程师</th>
       <% if can? :work_g, :all or can? :work_admin, :all%>
-      <th width="70">操作</th>
+      <th width="50">操作</th>
       <% end %>
     </tr>
   </thead>
@@ -67,7 +67,7 @@
   <tbody><small>
 <% if not PiBuyItem.where(pi_buy_info_id: buy_list.id).blank? %>
   <% PiBuyItem.where(pi_buy_info_id: buy_list.id).each do |buy| %>
-  <tr>
+  <tr class="warning">
       <td><%= buy.erp_no_son %></td>
       <td><%= buy.mpn %></td>
       <td>

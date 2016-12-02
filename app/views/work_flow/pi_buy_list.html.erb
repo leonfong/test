@@ -52,7 +52,7 @@
 <div class="row "><div class="col-md-12 col-sm-12 form-inline" >
 <table class="table table-hover">
   <thead>
-    <tr style="background-color: #eeeeee">
+    <tr class="active">
       <th width="150">PI No.</th>
       <th width="220">MPN</th>
       <th width="150">MOKO PART</th>
@@ -67,7 +67,7 @@
   <tbody><small>
 <% if not PiBuyItem.where(pi_buy_info_id: buy_list.id).blank? %>
   <% PiBuyItem.where(pi_buy_info_id: buy_list.id).each do |buy| %>
-  <tr>
+  <tr class="warning">
       <td><%= buy.erp_no_son %></td>
       <td><%= buy.mpn %></td>
       <td>

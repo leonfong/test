@@ -5,7 +5,53 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def edit_orderinfo_erp
+        if params[:hint] == ""
+           hint = 1
+        else
+           hint = params[:hint]
+        end
+        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{hint}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
+        if not params[:order_country].blank?
+            a = ProcurementBom.find_by(p_name_mom: params[:itemp_id])
+            if not a.erp_item_id.blank?
+                b = PcbOrderItem.find_by_id(a.erp_item_id)
+                if not b.pcb_order_id.blank?
+                    c = PcbOrder.find_by_id(b.pcb_order_id)
+                    c.c_country = params[:order_country]
+                    c.save
+                end
+            end       
+        end
+        if params[:sell_remark] != ""
+            open_id = "6ab2628d9a320296032f6a6f5495582b,5c1c9ba5ef315dcaac48cb9c1fb9731a"
+            Rails.logger.info("oauth-------------------------")
+            Rails.logger.info(open_id.inspect)   
+            Rails.logger.info("oauth----------------------------------")
+            oauth = Oauth.find(1)
+            company_id = oauth.company_id
+            company_token = oauth.company_token
+            url = 'https://openapi.b.qq.com/api/tips/send'
+            if not open_id.blank? 
+                url += '?company_id='+company_id
+                url += '&company_token='+company_token
+                url += '&app_id=200710667'
+                url += '&client_ip=120.25.151.208'
+                url += '&oauth_version=2'
+                url += '&to_all=0'  
+                url += '&receivers='+open_id
+                url += '&window_title=Fastbom-PCB AND PCBA'
+                url += '&tips_title='+URI.encode('黄朝锐宝宝，马凤华宝宝，'+current_user.full_name+'宝宝回复了你们的报价请查看')
+                url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                url += '&tips_url=erp.fastbom.com/p_bomlist?key_order='+params[:itemp_id].to_s 
+                resp = Net::HTTP.get_response(URI(url))
+            end 
+        end
+        redirect_to :back 
+    end
+
     def sell_baojia_erp
+        
         @quate = PcbOrder.where("state <> 'new' AND order_sell <> '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
 
     end

@@ -17,7 +17,7 @@
 
 
 <div class="row"style="padding: 5px;">
-    <%= form_tag('/sell_baojia', method:"get", class:"form-inline") do %>
+    <%= form_tag('/sell_baojia_erp', method:"get", class:"form-inline") do %>
        <div class="col-md-9 form-group  nav navbar-nav navbar-left">
           <lable for="order" , class="sr-only">Qrder : </lable>
           <div class="input-group input-group-sm"> 
@@ -44,10 +44,16 @@
               <% if not current_user.s_name.blank? %> 
                 <% if current_user.s_name.size > 2 %>   
                 <div class="input-group-addon " >业务员 : </div>         
-                <% members = current_user.s_name.split(",").collect { |c| [User.find_by(s_name_self: c).full_name,c] }%>
-                <%= select  '', :sell,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
+                <% members = current_user.s_name.split(",").collect { |c| [User.find_by(s_name_self: c).full_name,User.find_by(s_name_self: c).email] }%>
+                <%= select  params[:sell], :sell,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
                 <% end %>
               <% end %>
+              <div class="input-group-addon " >订单状态 : </div> 
+              <select onchange="get_options(this.value)" class="form-control" name="[order_state]" id="_order_state">
+                  <option value="all" <% if params[:order_state]=="all" %>selected<% end %>>全部</option>
+                  <option value="done" <% if params[:order_state]=="done" %>selected<% end %>>已下单</option>
+                  <option value="undone" <% if params[:order_state]=="undone" %>selected<% end %>>未下单</option>
+             </select>
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
@@ -73,8 +79,10 @@
                                 <th width="70">日期</th>
                                 <th width="150">Order No.</th>
                                 <th width="100">数量</th>
-                                <th width="150">价格</th>  
+                                <th width="150">价格</th> 
+                                <th width="140">客户信息</th> 
                                 <th width="140">国家</th>
+                                <th >地址</th>
                                 <th width="150">成功几率</th>
                                 <th>业务备注</th>
                                 <th>主管备注</th>
@@ -89,20 +97,25 @@
                                 <td><%=  q_order.order_no %></td>
                                 <td><%= q_order.qty %></td>
                                 <td>￥</td>
+                                <td ><%= q_order.c_des %></td>
                                 <td ><%= q_order.c_country %></td>
+                                <td ><%= q_order.c_shipping_address %></td>
                                 <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
-                                <td><%= q_order.sell_remark %></td>
-                                <td><%= q_order.sell_manager_remark %></td>
-                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.p_name_mom %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.order_country %>" data-sellremark="<%= q_order.sell_remark %>" data-sellmanagerremark="<%= q_order.sell_manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
+                                <td><%= q_order.remark %></td>
+                                <td><%= q_order.manager_remark %></td>
+                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.order_no %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.c_country %>" data-sellremark="<%= q_order.remark %>" data-sellmanagerremark="<%= q_order.manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
                             </tr>
 
                             <tr>
-                                <td colSpan="9" style="padding: 0px;margin: 0px;">
+                                <td colSpan="11" style="padding: 0px;margin: 0px;">
                                     <div class="collapse" id="order_son_<%= q_order.id.to_s %>">
                                     <div  style="padding: 0px;margin: 0px;">
                                     
                                     <table class="table table-bordered" style="padding: 0px;margin: 0px;">  
-                                    <% ProcurementBom.where(p_name_mom: q_order.p_name_mom).each do |order_son| %>
+                                    <% PcbOrderItem.where(pcb_order_id: q_order.id).each do |order_item| %>
+                                    
+                                    <% order_son = ProcurementBom.find_by_id(order_item.bom_id) %>
+                                    <% if not order_son.blank? %>
                                         <tr class="bg-success">
                                             <td width="70"><%= order_son.created_at.localtime.strftime('%y-%m-%d') %></td>
                                             <td width="150"><%= link_to order_son.p_name, sell_view_baojia_path(:bom_id =>order_son.id) %></td>
@@ -124,6 +137,7 @@
                                             <td><%= order_son.sell_manager_remark %></td>
                                             <td width="50"></td>
                                         </tr>
+                                    <% end %>
                                     <% end %>
                                     </table>
                                     </div>
@@ -148,7 +162,7 @@
         <h4 class="modal-title" id="editModalLabel">Update Order Info</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :edit_orderinfo},method:"post",id: "order_form",onsubmit: "ordersub()") do %>
+        <%= form_tag({action: :edit_orderinfo_erp},method:"post",id: "order_form",onsubmit: "ordersub()") do %>
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">

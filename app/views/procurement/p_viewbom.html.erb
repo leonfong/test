@@ -171,7 +171,7 @@ $(document).ready(function() {
                 </div>
             </div>
             <div class="row" style="padding: 0px;">
-                <div <% if can? :work_dd, :all %>class="col-md-12"<% else %>class="col-md-7" style="padding-right: 0px;"<% end %> >
+                <div <% if can? :work_dd, :all %>class="col-md-12"<% else %>class="col-md-8" style="padding-right: 0px;"<% end %> >
             <small>
             <table class="table table-hover" style="margin: 0px;"> 
 
@@ -183,7 +183,7 @@ $(document).ready(function() {
                     <th width="150">MPN</th> 
                     <th <% if can? :work_dd, :all %><% else %>width="150"<% end %>>描述</th>
                     <th >MOKO 描述</th>
-                    <th width="50">位号</th>
+                    <th width="100">位号</th>
                     <% if can? :work_dd, :all %>
                     <th width="50">用量</th>
                     <% end %>
@@ -198,7 +198,7 @@ $(document).ready(function() {
                 </thead>
             </table>  </small> 
                 </div>  
-                <div class="col-md-5" <% if can? :work_dd, :all %>style="display:none;padding-left: 0px;"<% else %>style="padding-left: 0px;"<% end %> >
+                <div class="col-md-4" <% if can? :work_dd, :all %>style="display:none;padding-left: 0px;"<% else %>style="padding-left: 0px;"<% end %> >
             <small>
             <table class="table table-hover" style="margin: 0px;"> 
 
@@ -212,7 +212,7 @@ $(document).ready(function() {
 
                 <% @bom_item.each_with_index do |item,index| %>
                 <div id="<%=item.id%>_div" class="row" style="padding: 0px;">
-                        <div <% if can? :work_dd, :all %>class="col-md-12"<% else %>class="col-md-7" style="padding-right: 0px;"<% end %> > 
+                        <div <% if can? :work_dd, :all %>class="col-md-12"<% else %>class="col-md-8" style="padding-right: 0px;"<% end %> > 
                 <small>
                 <table class="table table-hover" style="margin: 0px;"> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
@@ -348,10 +348,10 @@ function change_<%= item.id.to_s %>(){
                         </td>
                         
                     <% end %>
-                    <% if item.part_code.to_s.size > 5 %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,3]+"..." %></small></td>
+                    <% if item.part_code.to_s.size > 10 %>
+                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,10]+"..." %></small></td>
                     <% else %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
+                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
                     <% if can? :work_dd, :all %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
@@ -511,7 +511,7 @@ function change_<%= item.id.to_s %>(){
 
 
 
-                   <div  class="col-md-5" <% if can? :work_dd, :all %>style="display:none;padding-left: 0px;"<% else %>style="padding-left: 0px;"<% end %>>
+                   <div  class="col-md-4" <% if can? :work_dd, :all %>style="display:none;padding-left: 0px;"<% else %>style="padding-left: 0px;"<% end %>>
                    <table style="margin: 0px;">
                    <tr>
                    <td style="padding: 0px;margin: 0px;">

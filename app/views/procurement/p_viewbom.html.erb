@@ -348,8 +348,8 @@ function change_<%= item.id.to_s %>(){
                         </td>
                         
                     <% end %>
-                    <% if item.part_code.to_s.size > 10 %>
-                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,10]+"..." %></small></td>
+                    <% if item.part_code.to_s.size > 20 %>
+                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,20]+"..." %></small></td>
                     <% else %>
                     <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
@@ -443,39 +443,7 @@ function change_<%= item.id.to_s %>(){
 <% end %>
 </div>
 
-<% if not item.dn_id.blank? %>
-<% if not PDn.find_by_id(item.dn_id).blank? %>
-<% if not PDn.find(item.dn_id).remark.blank? %>
 
-<div class="row" style="margin: 0px;" >
-<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
-<table style="margin: 0px;" >
-<tr>
-<td style="padding: 0px;margin: 0px;" >
-<p style="padding: 0px;margin: 0px;" >
-<small >
-<% if not PDn.find(item.dn_id).info.blank? %>                 
-<a class="btn btn-info btn-xs" href="<%= PDn.find(item.dn_id).info %>" target="_blank">下载</a>
-<% end %>
-<strong>
-<% if PDn.find(item.dn_id).email.blank? %>
-采购工程师:
-<% else %> 
-<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>:
-<% end %> 
-</strong>
-<%= PDn.find(item.dn_id).remark %>
-</small>
-</p>
-</td>
-</tr>
-</table>
-</div>
-</div>
-
-<% end %>
-<% end %>
-<% end %>
 
 
 </div>

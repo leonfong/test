@@ -258,7 +258,7 @@ before_filter :authenticate_user!
                         up_item = up_bom.p_items.build()
                         up_item.bom_version = bom_version
                         up_item.p_type = item.p_type
-                        up_item.buy = item.buy
+                        #up_item.buy = item.buy
                         if not params[:bom_unlock].blank?
                             up_item.erp_id = item.erp_id
                             up_item.erp_no = item.erp_no

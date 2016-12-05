@@ -77,7 +77,11 @@
       <th width="110">BOM No.</th>
       <th width="200">Order No.</th>
       <th width="50">版本</th>
+      <% if can? :work_d, :all %>
+      <th width="170">BOM上传日期</th>
+      <% else %>
       <th width="170">BOM审核日期</th>
+      <% end %>
       <th width="200">文件名</th>
       <th width="100">数量</th>
       <th width="70">上传</th>

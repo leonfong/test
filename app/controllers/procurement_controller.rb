@@ -220,7 +220,8 @@ before_filter :authenticate_user!
 
             #up_bom.p_name_mom = "COPY"
             #up_bom.p_name = "COPY"
-            up_bom.qty = find_bom.qty
+            #up_bom.qty = find_bom.qty
+            up_bom.qty = find_bom.erp_qty
             up_bom.remark = find_bom.remark
             up_bom.t_p = find_bom.t_p
             up_bom.profit = find_bom.profit
@@ -355,7 +356,7 @@ before_filter :authenticate_user!
                 up_bom.p_name_mom = upstart.pcb_order_no
                 up_bom.p_name = upstart.pcb_order_no_son
                 up_bom.save
-                up_bom_item = PItem.where(procurement_bom_id: up_bom.id).update_all(erp_id: upstart.id,erp_no: upstart.pcb_order_no_son)
+                up_bom_item = PItem.where(procurement_bom_id: up_bom.id).update_all(erp_id: upstart.id,erp_no: upstart.pcb_order_no_son,pmc_qty: upstart.qty*quantity)
             end
         else
             upstart = PcbOrderItem.find_by_id(up_bom.erp_item_id)

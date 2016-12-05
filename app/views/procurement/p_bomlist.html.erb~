@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "bom_list"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "bomlist"} %>
         </div>
 <!--
         <div class="col-md-1 list-group" style="padding: 0px;">
@@ -115,7 +115,7 @@
         </td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name.to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.excel_file_identifier %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">

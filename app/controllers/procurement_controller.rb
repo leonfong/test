@@ -1589,6 +1589,7 @@ before_filter :authenticate_user!
     def send_order_to_p
         check = ProcurementBom.find(params[:bom_id])
         check.bom_team_ck = "do"
+        check.bom_team_ck_at = Time.new()
         check.bom_eng = current_user.full_name
         if check.save
             q_order = PcbOrder.find_by_order_no(check.erp_no)
@@ -2831,23 +2832,23 @@ before_filter :authenticate_user!
 
     def p_bomlist        
         if params[:order_list]
-            @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` = 'do' ORDER BY `check` DESC,`updated_at` DESC ").paginate(:page => params[:page], :per_page => 12)
+            @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` = 'do' ORDER BY `check` DESC,`bom_team_ck_at` DESC ").paginate(:page => params[:page], :per_page => 12)
             render "p_order_list.html.erb"
         else
             if params[:key_order]
                 @key_order = params[:key_order].strip
-                @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `p_name` LIKE '%#{params[:key_order].strip}%' AND `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 15)
+                @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `p_name` LIKE '%#{params[:key_order].strip}%' AND `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`bom_team_ck_at` DESC ").paginate(:page => params[:page], :per_page => 15)
             else
                 if params[:complete]
-                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC,`created_at` DESC ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? }
+                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC,`bom_team_ck_at` DESC ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? }
                     @boms = boms.paginate(:page => params[:page], :per_page => 15)
                 elsif params[:undone]
-                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC,`created_at` DESC ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank?  }
+                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC,`bom_team_ck_at` DESC ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank?  }
                     @boms = boms.paginate(:page => params[:page], :per_page => 15)
                 elsif params[:sent_to_sell]
-                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `remark_to_sell` = 'mark' ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 15)
+                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `remark_to_sell` = 'mark' ORDER BY `check` DESC,`bom_team_ck_at` DESC ").paginate(:page => params[:page], :per_page => 15)
                 else
-                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`created_at` DESC ").paginate(:page => params[:page], :per_page => 15)
+                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC,`bom_team_ck_at` DESC ").paginate(:page => params[:page], :per_page => 15)
                 end
             end
         end

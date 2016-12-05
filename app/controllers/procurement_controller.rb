@@ -171,6 +171,9 @@ before_filter :authenticate_user!
 
 
     def bom_v_up
+        if not params[:order_id].blank?
+            upstart = PcbOrderItem.find_by_id(params[:order_id])
+        end
         find_bom = ProcurementBom.find_by_id(params[:bom_id])
         if not find_bom.blank?
 =begin
@@ -269,7 +272,11 @@ before_filter :authenticate_user!
                         up_item.check = item.check
                         #up_item.procurement_version_bom_id =
                         up_item.quantity = item.quantity
-                        up_item.pmc_qty = item.pmc_qty
+                        if not params[:order_id].blank?
+                            up_item.pmc_qty = upstart.qty*item.quantity
+                        else
+                            up_item.pmc_qty = item.pmc_qty
+                        end
                         up_item.customer_qty = item.customer_qty
                         up_item.description = item.description
                         up_item.part_code = item.part_code
@@ -356,7 +363,7 @@ before_filter :authenticate_user!
                 up_bom.p_name_mom = upstart.pcb_order_no
                 up_bom.p_name = upstart.pcb_order_no_son
                 up_bom.save
-                up_bom_item = PItem.where(procurement_bom_id: up_bom.id).update_all(erp_id: upstart.id,erp_no: upstart.pcb_order_no_son,pmc_qty: upstart.qty*up_bom_item.quantity)
+                up_bom_item = PItem.where(procurement_bom_id: up_bom.id).update_all(erp_id: upstart.id,erp_no: upstart.pcb_order_no_son)
             end
         else
             upstart = PcbOrderItem.find_by_id(up_bom.erp_item_id)

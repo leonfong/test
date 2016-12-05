@@ -1112,22 +1112,22 @@ before_filter :authenticate_user!
                         if wh_data.qty.to_i - pmc_data.qty.to_i >= 0
                             pmc_data.buy_qty = pmc_data.qty
                             pmc_data.pmc_qty = pmc_data.qty
-                            wh_data.qty = wh_data.qty - pmc_data.qty
-                            wh_data.temp_moko_qty = wh_data.temp_moko_qty + pmc_data.qty
+                            wh_data.qty = wh_data.qty.to_i - pmc_data.qty.to_i
+                            wh_data.temp_moko_qty = wh_data.temp_moko_qty.to_i + pmc_data.qty.to_i
                             #wh_data.wh_qty = wh_data.wh_qty - pmc_data.qty
                             #wh_data.wh_f_qty = wh_data.wh_f_qty - pmc_data.qty
                         #如果实际库存不满足需求
                         else wh_data.qty.to_i - pmc_data.qty.to_i < 0
                             pmc_data.buy_qty = wh_data.qty
                             pmc_data.pmc_qty = wh_data.qty
-                            wh_data.temp_moko_qty = wh_data.temp_moko_qty + wh_data.qty
+                            wh_data.temp_moko_qty = wh_data.temp_moko_qty.to_i + wh_data.qty.to_i
                             #wh_data.wh_qty = wh_data.wh_qty - wh_data.qty
                             #wh_data.wh_f_qty = wh_data.wh_f_qty - wh_data.qty
                             wh_data.qty = 0
                         end
                         pmc_data.save
                         wh_data.save
-                        temp_qty = temp_qty - pmc_data.buy_qty
+                        temp_qty = temp_qty.to_i - pmc_data.buy_qty.to_i
                     end
                     #2再判断是否要减去虚拟库存 
                     if temp_qty > 0 and wh_data.future_qty > 0
@@ -1137,14 +1137,14 @@ before_filter :authenticate_user!
                             if wh_data.future_qty - pmc_data.qty >= 0
                                 pmc_data.buy_qty = pmc_data.qty
                                 pmc_data.pmc_qty = pmc_data.qty
-                                wh_data.future_qty = wh_data.future_qty - pmc_data.qty
-                                wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
+                                wh_data.future_qty = wh_data.future_qty.to_i - pmc_data.qty.to_i
+                                wh_data.temp_future_qty = wh_data.temp_future_qty.to_i + pmc_data.qty.to_i
                             #如果虚拟库存不满足需求
                             else wh_data.future_qty - pmc_data.qty < 0
                                 pmc_data.buy_qty = wh_data.future_qty
                                 pmc_data.pmc_qty = wh_data.future_qty
                                 wh_data.future_qty = 0
-                                wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
+                                wh_data.temp_future_qty = wh_data.temp_future_qty.to_i + wh_data.future_qty.to_i
                             end
                             pmc_data.save
                             wh_data.save
@@ -1163,17 +1163,17 @@ before_filter :authenticate_user!
                             add_future_data.qty_in = pmc_data.qty
                             add_future_data.buy_user = "MOKO_TEMP"
                             #如果虚拟库存满足需求
-                            if wh_data.future_qty - temp_qty >= 0
+                            if wh_data.future_qty.to_i - temp_qty.to_i >= 0
                                 add_future_data.buy_qty = temp_qty
                                 add_future_data.pmc_qty = temp_qty
-                                wh_data.future_qty = wh_data.future_qty - pmc_data.qty
-                                wh_data.temp_future_qty = wh_data.temp_future_qty + pmc_data.qty
+                                wh_data.future_qty = wh_data.future_qty.to_i - pmc_data.qty.to_i
+                                wh_data.temp_future_qty = wh_data.temp_future_qt.to_iy + pmc_data.qty.to_i
                             #如果虚拟库存不满足需求
-                            else wh_data.future_qty - temp_qty < 0
+                            else wh_data.future_qty.to_i - temp_qty.to_i < 0
                                 add_future_data.buy_qty = wh_data.future_qty
                                 add_future_data.pmc_qty = wh_data.future_qty
                                 wh_data.future_qty = 0
-                                wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.future_qty
+                                wh_data.temp_future_qty = wh_data.temp_future_qty.to_i + wh_data.future_qty.to_i
                             end
                             add_future_data.remark = pmc_data.remark
                             add_future_data.p_item_id = pmc_data.p_item_id
@@ -1210,7 +1210,7 @@ before_filter :authenticate_user!
                             add_future_data.sell_feed_back_tag = pmc_data.sell_feed_back_tag
                             add_future_data.save
                             wh_data.save
-                            temp_qty = temp_qty - add_future_data.buy_qty
+                            temp_qty = temp_qty.to_i - add_future_data.buy_qty.to_i
                         end
                     end
                     #3再判断是否要外购
@@ -1283,8 +1283,8 @@ before_filter :authenticate_user!
                         end
                         #wh_data.temp_buy_qty = wh_data.temp_buy_qty + pmc_data.qty
                         #wh_data.true_buy_qty = wh_data.true_buy_qty + pmc_data.qty
-                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + temp_qty
-                        wh_data.true_buy_qty = wh_data.true_buy_qty + temp_qty
+                        wh_data.temp_buy_qty = wh_data.temp_buy_qty.to_i + temp_qty.to_i
+                        wh_data.true_buy_qty = wh_data.true_buy_qty.to_i + temp_qty.to_i
                         wh_data.save
                     end
                     wh_chk.state = "pass"

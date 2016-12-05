@@ -5,12 +5,59 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def edit_orderinfo
+        if params[:hint] == ""
+           hint = 1
+        else
+           hint = params[:hint]
+        end
+        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{hint}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
+        if not params[:order_country].blank?
+            a = ProcurementBom.find_by(p_name_mom: params[:itemp_id])
+            if not a.erp_item_id.blank?
+                b = PcbOrderItem.find_by_id(a.erp_item_id)
+                if not b.pcb_order_id.blank?
+                    c = PcbOrder.find_by_id(b.pcb_order_id)
+                    c.c_country = params[:order_country]
+                    c.save
+                end
+            end       
+        end
+        if params[:sell_remark] != ""
+            open_id = "6ab2628d9a320296032f6a6f5495582b,5c1c9ba5ef315dcaac48cb9c1fb9731a"
+            Rails.logger.info("oauth-------------------------")
+            Rails.logger.info(open_id.inspect)   
+            Rails.logger.info("oauth----------------------------------")
+            oauth = Oauth.find(1)
+            company_id = oauth.company_id
+            company_token = oauth.company_token
+            url = 'https://openapi.b.qq.com/api/tips/send'
+            if not open_id.blank? 
+                url += '?company_id='+company_id
+                url += '&company_token='+company_token
+                url += '&app_id=200710667'
+                url += '&client_ip=120.25.151.208'
+                url += '&oauth_version=2'
+                url += '&to_all=0'  
+                url += '&receivers='+open_id
+                url += '&window_title=Fastbom-PCB AND PCBA'
+                url += '&tips_title='+URI.encode('黄朝锐宝宝，马凤华宝宝，'+current_user.full_name+'宝宝回复了你们的报价请查看')
+                url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                url += '&tips_url=erp.fastbom.com/p_bomlist?key_order='+params[:itemp_id].to_s 
+                resp = Net::HTTP.get_response(URI(url))
+            end 
+        end
+
+        redirect_to :back 
+    end
+
     def edit_orderinfo_erp
         if params[:hint] == ""
            hint = 1
         else
            hint = params[:hint]
         end
+
         pcb_order = PcbOrder.find_by_id(params[:itemp_id])
         pcb_order.c_country = params[:order_country]
         pcb_order.star = hint
@@ -18,12 +65,13 @@ before_filter :authenticate_user!
             pcb_order.remark = params[:sell_remark]
             pcb_order.remark_at = Time.new()
         end
-        if not params[:sell_remark].blank?
+        if not params[:sell_manager_remark].blank?
             pcb_order.manager_remark = params[:sell_manager_remark]
             pcb_order.manager_remark_at = Time.new()
         end
-        pcb_order.save
-
+        if pcb_order.save
+            order_info = ProcurementBom.where(p_name_mom: pcb_order.order_no).update_all "order_country = '#{params[:order_country]}', star = '#{hint}', sell_remark = '#{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
+        end
         redirect_to :back 
     end
 
@@ -6369,54 +6417,6 @@ before_filter :authenticate_user!
     def sell_view_baojia
         @boms = ProcurementBom.find(params[:bom_id])
         @baojia = PItem.where(procurement_bom_id: params[:bom_id])
-    end
-
-
-
-    def edit_orderinfo
-        if params[:hint] == ""
-           hint = 1
-        else
-           hint = params[:hint]
-        end
-        order_info = ProcurementBom.where(p_name_mom: params[:itemp_id]).update_all "order_country = '#{params[:order_country]}', star = '#{hint}', sell_remark = '#{Time.new().localtime.strftime('%y-%m-%d')} #{params[:sell_remark]}', sell_manager_remark = '#{params[:sell_manager_remark]}'"
-        if not params[:order_country].blank?
-            a = ProcurementBom.find_by(p_name_mom: params[:itemp_id])
-            if not a.erp_item_id.blank?
-                b = PcbOrderItem.find_by_id(a.erp_item_id)
-                if not b.pcb_order_id.blank?
-                    c = PcbOrder.find_by_id(b.pcb_order_id)
-                    c.c_country = params[:order_country]
-                    c.save
-                end
-            end       
-        end
-        if params[:sell_remark] != ""
-            open_id = "6ab2628d9a320296032f6a6f5495582b,5c1c9ba5ef315dcaac48cb9c1fb9731a"
-            Rails.logger.info("oauth-------------------------")
-            Rails.logger.info(open_id.inspect)   
-            Rails.logger.info("oauth----------------------------------")
-            oauth = Oauth.find(1)
-            company_id = oauth.company_id
-            company_token = oauth.company_token
-            url = 'https://openapi.b.qq.com/api/tips/send'
-            if not open_id.blank? 
-                url += '?company_id='+company_id
-                url += '&company_token='+company_token
-                url += '&app_id=200710667'
-                url += '&client_ip=120.25.151.208'
-                url += '&oauth_version=2'
-                url += '&to_all=0'  
-                url += '&receivers='+open_id
-                url += '&window_title=Fastbom-PCB AND PCBA'
-                url += '&tips_title='+URI.encode('黄朝锐宝宝，马凤华宝宝，'+current_user.full_name+'宝宝回复了你们的报价请查看')
-                url += '&tips_content='+URI.encode('有新的回复，点击查看。')
-                url += '&tips_url=erp.fastbom.com/p_bomlist?key_order='+params[:itemp_id].to_s 
-                resp = Net::HTTP.get_response(URI(url))
-            end 
-        end
-
-        redirect_to :back 
     end
     
     def sell_baojia_q

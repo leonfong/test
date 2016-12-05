@@ -1106,10 +1106,10 @@ before_filter :authenticate_user!
                 all_pmc_data.each do |pmc_data|
                     temp_qty = pmc_data.qty
                     #1先减去实际库存
-                    if wh_data.qty > 0
+                    if wh_data.qty.to_i > 0
                         pmc_data.buy_user = "MOKO"
                         #如果实际库存满足需求
-                        if wh_data.qty - pmc_data.qty >= 0
+                        if wh_data.qty.to_i - pmc_data.qty.to_i >= 0
                             pmc_data.buy_qty = pmc_data.qty
                             pmc_data.pmc_qty = pmc_data.qty
                             wh_data.qty = wh_data.qty - pmc_data.qty
@@ -1117,7 +1117,7 @@ before_filter :authenticate_user!
                             #wh_data.wh_qty = wh_data.wh_qty - pmc_data.qty
                             #wh_data.wh_f_qty = wh_data.wh_f_qty - pmc_data.qty
                         #如果实际库存不满足需求
-                        else wh_data.qty - pmc_data.qty < 0
+                        else wh_data.qty.to_i - pmc_data.qty.to_i < 0
                             pmc_data.buy_qty = wh_data.qty
                             pmc_data.pmc_qty = wh_data.qty
                             wh_data.temp_moko_qty = wh_data.temp_moko_qty + wh_data.qty

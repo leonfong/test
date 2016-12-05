@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs">
       <li role="presentation" ><a href="/work_flow"><h4 ><strong><p class="text-primary"  >业务部问题跟踪&反馈</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_baojia"><h4 ><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
-      <li role="presentation" class="active"><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >报价列表(新)</p></strong></h4></a></li>
+      <li role="presentation" class="active"><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >PCBA报价列表(新)</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_pcb_baojia"><h4 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
       <% if can? :work_pcb_business, :all %>
       <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
@@ -102,7 +102,7 @@
                                 <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
                                 <td><%=  q_order.order_no %></td>
                                 <td><%= q_order.qty %></td>
-                                <td>￥</td>
+                                <td>￥<%= (ProcurementBom.find_by_sql("SELECT SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE procurement_boms.p_name_mom = '#{q_order.order_no}'")).sum_t_p %></td>
                                 <td ><%= q_order.c_des %></td>
                                 <td ><%= q_order.c_country %></td>
                                 <td ><%= q_order.c_shipping_address %></td>

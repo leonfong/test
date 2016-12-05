@@ -102,7 +102,7 @@
                                 <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
                                 <td><%=  q_order.order_no %></td>
                                 <td><%= q_order.qty %></td>
-                                <td>￥</td>
+                                <td>￥<%= ProcurementBom.find_by_sql("SELECT SUM(procurement_boms.t_p) AS sum_t_p FROM `procurement_boms` WHERE procurement_boms.p_name_mom = '#{q_order.order_no}'").first.sum_t_p %></td>
                                 <td ><%= q_order.c_des %></td>
                                 <td ><%= q_order.c_country %></td>
                                 <td ><%= q_order.c_shipping_address %></td>

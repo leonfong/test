@@ -118,7 +118,7 @@
         <% if can? :work_d, :all %>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% else %>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% end %>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.excel_file_identifier %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>

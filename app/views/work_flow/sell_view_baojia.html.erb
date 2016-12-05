@@ -25,8 +25,14 @@
             
             <div class="row">
                 <div class="col-md-3 col-sm-3 " >
-                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>BOM No. <%= @boms.no %></strong></h4>
+                    <h4 style="color: #32aacb;margin-top: 0px;">
+                        <strong>BOM No. <%= @boms.no %></strong>
+
+                        <span class="text-danger"><strong>版本 V<%= @boms.bom_version %></strong></span>
+
+                    </h4>
                 </div>
+
 <!--
                 <small><div class="col-md-9 col-sm-9 pull-right" style="color:#999;">
                     PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>

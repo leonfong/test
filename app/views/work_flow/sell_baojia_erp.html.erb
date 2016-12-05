@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs">
       <li role="presentation" ><a href="/work_flow"><h4 ><strong><p class="text-primary"  >业务部问题跟踪&反馈</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_baojia"><h4 ><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
-      <li role="presentation" class="active"><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >报价列表(新)</p></strong></h4></a></li>
+      <li role="presentation" class="active"><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >PCBA报价列表(新)</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_pcb_baojia"><h4 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
       <% if can? :work_pcb_business, :all %>
       <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
@@ -45,7 +45,10 @@
                 <% if current_user.s_name.size > 2 %>   
                 <div class="input-group-addon " >业务员 : </div>         
                 <% members = current_user.s_name.split(",").collect { |c| [User.find_by(s_name_self: c).full_name,User.find_by(s_name_self: c).email] }%>
+<!--
                 <%= select  '', :sell,members,{:include_blank => '--请选择--'}, { "onchange" => "get_options(this.value)", class:"form-control"}  %>
+-->
+                <%= select_tag(:sell,options_for_select(members,params[:sell]),{:include_blank => '--请选择--',:class =>"form-control"})  %>
                 <% end %>
               <% end %>
               <div class="input-group-addon " >订单状态 : </div> 
@@ -58,8 +61,11 @@
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
           </div>
+<!--
           <a type="button" class="btn btn-success btn-sm" href="/sell_baojia?complete=true">已经下单的order</a>
+
           <a type="button" class="btn btn-danger btn-sm" href="/sell_baojia_q">需要关注的物料</a>
+-->
         </div>
       <% end %>
 </div>
@@ -101,9 +107,9 @@
                                 <td ><%= q_order.c_country %></td>
                                 <td ><%= q_order.c_shipping_address %></td>
                                 <td><stardef ccc="<%= q_order.star %>" id="<%= q_order.id %>"></stardef>
-                                <td><%= q_order.remark %></td>
-                                <td><%= q_order.manager_remark %></td>
-                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.order_no %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.c_country %>" data-sellremark="<%= q_order.remark %>" data-sellmanagerremark="<%= q_order.manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
+                                <td><%= q_order.remark_at.blank?? "":q_order.remark_at.localtime.strftime('%y-%m-%d') + q_order.remark.to_s %></td>
+                                <td><%= q_order.manager_remark_at.blank?? "":q_order.manager_remark_at.localtime.strftime('%y-%m-%d') + q_order.manager_remark.to_s %></td>
+                                <td><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editOrder" data-itempid="<%= q_order.id %>" data-starval="<%= q_order.star %>" data-ocountry="<%= q_order.c_country %>" data-sellremark="<%= q_order.remark %>" data-sellmanagerremark="<%= q_order.manager_remark %>" id="<%= q_order.id.to_s + '_mpn' %>" ></a></td>
                             </tr>
 
                             <tr>
@@ -121,20 +127,7 @@
                                             <td width="150"><%= link_to order_son.p_name, sell_view_baojia_path(:bom_id =>order_son.id) %></td>
                                             <td width="100"><%= order_son.qty %></td>
                                             <td width="150">￥<%= order_son.t_p %></td>
-                                            <td width="140">
-                                            <% if not PcbOrderItem.find_by_id(order_son.erp_item_id).blank? %>
-                                                <% if not PcbOrder.find_by_id(PcbOrderItem.find_by_id(order_son.erp_item_id).pcb_order_id).blank? %>
-                                                    <%= PcbOrder.find_by_id(PcbOrderItem.find_by_id(order_son.erp_item_id).pcb_order_id).c_country %>
-                                                <% else %>
-                                                    <%= order_son.order_country %>
-                                                <% end %>
-                                            <% else %>
-                                                <%= order_son.order_country %>
-                                            <% end %>
-                                            </td>
-                                            <td width="150"><stardef ccc="<%= order_son.star %>" id="<%= order_son.id %>"></stardef>
-                                            <td><%= order_son.sell_remark %></td>
-                                            <td><%= order_son.sell_manager_remark %></td>
+                                            <td ><%= order_son.sell_remark %></td>
                                             <td width="50"></td>
                                         </tr>
                                     <% end %>

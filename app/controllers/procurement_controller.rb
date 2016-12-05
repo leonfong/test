@@ -2832,7 +2832,7 @@ before_filter :authenticate_user!
 
     def p_bomlist   
         if can? :work_d, :all
-            order_ctl = ",`updated_at` DESC"
+            order_ctl = ",`created_at` DESC"
         else
             order_ctl = ",`bom_team_ck_at` DESC"
         end  

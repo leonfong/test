@@ -1451,8 +1451,8 @@ before_filter :authenticate_user!
                                         elsif moko_data.package1 == "PZ"
                                             add_buy_data.buy_user = "B"
                                         end
-                                        wh_data.temp_buy_qty = wh_data.temp_buy_qty + sell_qty
-                                        wh_data.true_buy_qty = wh_data.true_buy_qty + sell_qty
+                                        wh_data.temp_buy_qty = wh_data.temp_buy_qty.to_i + sell_qty.to_i
+                                        wh_data.true_buy_qty = wh_data.true_buy_qty.to_i + sell_qty.to_i
                                         wh_data.save
                                     end
                                 end

@@ -715,6 +715,7 @@ before_filter :authenticate_user!
                     add_buy_data.procurement_bom_id = item_data.procurement_bom_id
                     add_buy_data.quantity = item_data.quantity
                     add_buy_data.qty = item_data.qty
+                    add_buy_data.pmc_qty = item_data.pmc_qty
                     add_buy_data.buy_qty = item_data.buy_qty
                     add_buy_data.description = item_data.description
                     add_buy_data.part_code = item_data.part_code

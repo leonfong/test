@@ -224,7 +224,11 @@ before_filter :authenticate_user!
             #up_bom.p_name_mom = "COPY"
             #up_bom.p_name = "COPY"
             #up_bom.qty = find_bom.qty
-            up_bom.qty = find_bom.erp_qty
+            if not params[:order_id].blank?
+                up_bom.qty = upstart.qty
+            else
+                up_bom.qty = find_bom.erp_qty
+            end
             up_bom.remark = find_bom.remark
             up_bom.t_p = find_bom.t_p
             up_bom.profit = find_bom.profit

@@ -397,6 +397,8 @@ before_filter :authenticate_user!
             where_state = " AND pcb_order_items.state = 'quotechked'"
             if not params[:key_order].blank?
                 where_state = where_state + " AND pcb_order_items.pcb_order_no LIKE '%#{params[:key_order]}%'"
+            else
+                where_state = where_state + " AND to_days(pcb_item_infos.updated_at) = to_days(now())"
             end
             @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.att,pcb_order_items.des_cn,pcb_order_items.pcb_order_no_son,pcb_order_items.pcb_order_id,pcb_item_infos.id AS pcb_item_infos_id FROM pcb_order_items RIGHT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.updated_at DESC,pcb_item_infos.pcb_order_no DESC")
             render "pcb_list.html.erb" and return

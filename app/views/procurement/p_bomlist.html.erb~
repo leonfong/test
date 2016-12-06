@@ -77,7 +77,11 @@
       <th width="110">BOM No.</th>
       <th width="200">Order No.</th>
       <th width="50">版本</th>
+      <% if can? :work_d, :all %>
+      <th width="170">BOM上传日期</th>
+      <% else %>
       <th width="170">BOM审核日期</th>
+      <% end %>
       <th width="200">文件名</th>
       <th width="100">数量</th>
       <th width="70">上传</th>
@@ -117,7 +121,7 @@
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
         <% if can? :work_d, :all %>
 
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% else %>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% end %>

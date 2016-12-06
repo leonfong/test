@@ -385,6 +385,14 @@ before_filter :authenticate_user!
         redirect_to p_viewbom_path(bom_id: up_bom.id)
     end
 
+    def pcb_list_del
+        if can? :work_baojia, :all or can? :work_admin, :all
+            get_data = PcbItemInfo.find_by_id(params[:del_id])
+            get_data.destroy
+        end
+        redirect :back
+    end
+
     def pcb_list
         @all_pcb_dn = "[&quot;"
         all_s_dn = PcbSupplier.find_by_sql("SELECT DISTINCT pcb_suppliers.name FROM pcb_suppliers GROUP BY pcb_suppliers.name")

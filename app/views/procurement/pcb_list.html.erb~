@@ -15,7 +15,7 @@
                       <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号"%>
                   <% end %>        
                   <span class="input-group-addon">
-                      已经报价：<input type="checkbox" name="complete" >
+                      已经报价：<input type="checkbox" name="complete" <% if params[:complete] %>checked<% end %>>
                   </span>       
                   <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
@@ -83,7 +83,10 @@
                                 <input type="text" class="form-control" id="pcb_qty" name="pcb_qty" value="<%= part.qty %>">
 -->
                             </div>
-                            <a class="btn btn-info btn-xs" href="<%= PcbOrderItem.find_by_id(part.pcb_order_item_id).att %>" target="_blank">下<br>载</a>
+                            <a class="btn btn-info btn-xs" href="<%= PcbOrderItem.find_by_id(part.pcb_order_item_id).att %>" target="_blank">下<br>载</a><br>
+                            <% if params[:complete] %>
+                            <a class="btn btn-danger btn-xs" data-method='get'  href="/pcb_list_del?del_id=<%= part.id.to_s %>" data-confirm="确定要删除?">删</a>
+                            <% end %>
                         </td>
                         <td>
                             <label for="dn" class="control-label sr-only">供应商简称:</label>

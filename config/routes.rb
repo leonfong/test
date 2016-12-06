@@ -255,6 +255,7 @@ Rails.application.routes.draw do
   match '/edit_item_qty', to: 'procurement#edit_item_qty', via: 'post'
   match '/del_bom_item', to: 'procurement#del_bom_item', via: 'get'
   match '/edit_item_ref', to: 'procurement#edit_item_ref', via: 'post'
+  match '/pcb_list_del', to: 'procurement#pcb_list_del', via: 'get'
 
 
 

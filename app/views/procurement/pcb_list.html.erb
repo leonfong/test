@@ -84,6 +84,9 @@
 -->
                             </div>
                             <a class="btn btn-info btn-xs" href="<%= PcbOrderItem.find_by_id(part.pcb_order_item_id).att %>" target="_blank">下<br>载</a>
+                            <% if params[:complete] %>
+                            <br><a class="btn btn-danger btn-xs" data-method='get'  href="/pcb_list_del?del_id=<%= part.id.to_s %>" data-confirm="确定要删除?">删</a>
+                            <% end %>
                         </td>
                         <td>
                             <label for="dn" class="control-label sr-only">供应商简称:</label>

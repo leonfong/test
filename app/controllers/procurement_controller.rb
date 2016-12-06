@@ -390,7 +390,7 @@ before_filter :authenticate_user!
             get_data = PcbItemInfo.find_by_id(params[:del_id])
             get_data.destroy
         end
-        redirect :back
+        redirect_to :back
     end
 
     def pcb_list

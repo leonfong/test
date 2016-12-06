@@ -490,7 +490,7 @@ before_filter :authenticate_user!
         Rails.logger.info(@pcb_info.pcb_order_item_id)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
 
-        redirect_to pcb_list_path(complete: true)
+        redirect_to :back
     end
 
     def com_part_list

@@ -600,9 +600,10 @@ before_filter :authenticate_user!
         @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
         @all_dn = "[&quot;"
-        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
+        #all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn = SupplierList.find_by_sql("SELECT  supplier_name, supplier_name_long FROM supplier_lists ")
         all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.dn.to_s + "&#{dn.dn_long.to_s}"
+            @all_dn += "&quot;,&quot;" + dn.supplier_name.to_s + "&#{dn.supplier_name_long.to_s}"
         end
         @all_dn += "&quot;]"
         if @pi_buy_info.state == "check"
@@ -805,9 +806,10 @@ before_filter :authenticate_user!
 
     def find_dn_ch
         up_dn = PiBuyInfo.find_by(pi_buy_no: params[:pi_buy_no])
-        up_dn.dn = AllDn.find_by_id(params[:id]).dn
-        up_dn.dn_long = AllDn.find_by_id(params[:id]).dn_long
-        up_dn.save     
+        up_dn.dn = SupplierList.find_by_id(params[:id]).supplier_name
+        up_dn.dn_long = SupplierList.find_by_id(params[:id]).supplier_name_long
+        up_dn.save 
+=begin
         pmc_data = PiPmcItem.where(dn: up_dn.dn,state: "pass")
         if not pmc_data.blank?
             pmc_data.each do |item_data|
@@ -871,7 +873,7 @@ before_filter :authenticate_user!
                 end
             end
         end
-
+=end
         redirect_to edit_pi_buy_path(pi_buy_no: params[:pi_buy_no])
     end
 
@@ -4632,9 +4634,10 @@ before_filter :authenticate_user!
         @wh_info = PiWhInfo.find_by(pi_wh_no: params[:pi_wh_no])
         @wh_item = PiWhItem.where(pi_wh_info_no: params[:pi_wh_no])
         @all_dn = "[&quot;"
-        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long,all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+        #all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn = SupplierList.find_by_sql("SELECT  supplier_name, supplier_name_long FROM supplier_lists ")
         all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.dn.to_s + "&#{dn.dn_long.to_s}"
+            @all_dn += "&quot;,&quot;" + dn.supplier_name.to_s + "&#{dn.supplier_name_long.to_s}"
         end
         @all_dn += "&quot;]"
     end
@@ -4990,7 +4993,8 @@ before_filter :authenticate_user!
             else
                 key_word = params[:dn_code]
             end
-            @c_info = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn,all_dns.dn_long,id FROM all_dns WHERE all_dns.dn LIKE '%#{key_word}%' GROUP BY all_dns.dn")
+            #@c_info = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn,all_dns.dn_long,id FROM all_dns WHERE all_dns.dn LIKE '%#{key_word}%' GROUP BY all_dns.dn")
+            @c_info = AllDn.find_by_sql("SELECT  supplier_name,supplier_name_long,id FROM supplier_lists WHERE supplier_name LIKE '%#{key_word}%'")
             #@c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:dn_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:dn_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@c_info.inspect)
@@ -5011,8 +5015,8 @@ before_filter :authenticate_user!
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_dn_ch?id='+ cu.id.to_s + '&pi_buy_no=' + params[:pi_buy_no] + '"><div>' + cu.dn + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_dn_ch?id='+ cu.id.to_s + '&pi_buy_no=' + params[:pi_buy_no] + '"><div>' + cu.dn_long.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_dn_ch?id='+ cu.id.to_s + '&pi_buy_no=' + params[:pi_buy_no] + '"><div>' + cu.supplier_name + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_dn_ch?id='+ cu.id.to_s + '&pi_buy_no=' + params[:pi_buy_no] + '"><div>' + cu.supplier_name_long.to_s + '</div></a></td>'
                     @c_table += '</tr>'
                 end
                 @c_table += '</tbody>'

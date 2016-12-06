@@ -20,7 +20,7 @@
                                 <th width="80">总量</th>
                                 <th width="90">公司仓库数量</th>
                                 <th width="90">工厂仓库数量</th>
-                                <th width="80">工厂实际数量</th>
+                                <th width="90">工厂实际数量</th>
                                 <th width="80">申请盘点</th>
                             <tr>
                         </thead>
@@ -33,7 +33,7 @@
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
                                 <td><%= item.chk_qty %></td>
-                                <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %></td>
+                                <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).qty.to_i %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_qty %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_c_qty %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_f_qty %></td>

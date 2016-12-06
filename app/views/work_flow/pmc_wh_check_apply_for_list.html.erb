@@ -33,14 +33,14 @@
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
                                 <td><%= item.chk_qty %></td>
-                                <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %></td>
+                                <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).qty.to_i %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_qty %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_c_qty %></td>
                                 <td><%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_f_qty %></td>
                                 <%= form_tag('/pmc_wh_check_apply_for', class:"form-inline") do %>
                                 <td>
                                     <input name="chk_id" type="text" class="sr-only"  value="<%= item.id %>">
-                                    <input name="apply_for_qty" type="number" class="form-control input-sm"  value="">
+                                    <input name="apply_for_qty" type="number" class="form-control input-sm"  value="<%= WarehouseInfo.find_by_moko_part(item.moko_part).wh_f_qty %>">
                                 </td>
                                 <td><button type="submit" class="btn btn-primary btn-sm" >申请</button></td>
                                 <% end %>

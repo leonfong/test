@@ -386,24 +386,30 @@ before_filter :authenticate_user!
     end
 
     def pcb_list
-        if params[:complete]
-            where_state = " AND pcb_order_items.state = 'quotechked'"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.att,pcb_order_items.des_cn,pcb_order_items.pcb_order_no_son,pcb_order_items.pcb_order_id,pcb_item_infos.id AS pcb_item_infos_id FROM pcb_order_items RIGHT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.updated_at DESC,pcb_item_infos.pcb_order_no DESC")
-        end
-        if params[:undone]
-            where_state = " AND pcb_order_items.state = ''"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id,pcb_item_infos.id AS pcb_item_infos_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.pcb_order_no DESC,pcb_order_items.updated_at DESC")
-        end
-        if params[:key_order]
-            where_state = " AND pcb_order_items.pcb_order_no LIKE '%#{params[:key_order]}%'"
-            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id,pcb_item_infos.id AS pcb_item_infos_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.pcb_order_no DESC,pcb_item_infos.updated_at DESC")
-        end
         @all_pcb_dn = "[&quot;"
         all_s_dn = PcbSupplier.find_by_sql("SELECT DISTINCT pcb_suppliers.name FROM pcb_suppliers GROUP BY pcb_suppliers.name")
         all_s_dn.each do |dn|
             @all_pcb_dn += "&quot;,&quot;" + dn.name.to_s
         end
         @all_pcb_dn += "&quot;]"
+        where_state = ""
+        if params[:complete]
+            where_state = " AND pcb_order_items.state = 'quotechked'"
+            if params[:key_order]
+                where_state = where_state + " AND pcb_order_items.pcb_order_no LIKE '%#{params[:key_order]}%'"
+            end
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_item_infos.*,pcb_order_items.att,pcb_order_items.des_cn,pcb_order_items.pcb_order_no_son,pcb_order_items.pcb_order_id,pcb_item_infos.id AS pcb_item_infos_id FROM pcb_order_items RIGHT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.updated_at DESC,pcb_item_infos.pcb_order_no DESC")
+            render "pcb_list.html.erb" and return
+        end
+        if params[:undone]
+            where_state = " AND pcb_order_items.state = ''"
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id,pcb_item_infos.id AS pcb_item_infos_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.pcb_order_no DESC,pcb_order_items.updated_at DESC")
+        end
+        if params[:key_order]
+            where_state = where_state + " AND pcb_order_items.pcb_order_no LIKE '%#{params[:key_order]}%'"
+            @part = PcbOrderItem.find_by_sql("SELECT pcb_order_items.id AS pcb_order_item_id,pcb_item_infos.id AS pcb_item_infos_id, pcb_order_items.*,pcb_item_infos.pcb_supplier,pcb_item_infos.pcb_length,pcb_item_infos.pcb_width,pcb_item_infos.pcb_thickness,pcb_item_infos.pcb_panel,pcb_item_infos.pcb_layer,pcb_item_infos.pcb_gongyi,pcb_item_infos.pcb_area,pcb_item_infos.pcb_area_price,pcb_item_infos.eng_price,pcb_item_infos.test_price,pcb_item_infos.m_price FROM pcb_order_items LEFT JOIN pcb_item_infos ON pcb_order_items.id = pcb_item_infos.pcb_order_item_id WHERE pcb_order_items.p_type = 'pcb' #{where_state} ORDER BY pcb_item_infos.pcb_order_no DESC,pcb_item_infos.updated_at DESC")
+        end
+        
     end
 
     def copy_pcb_item_info
@@ -446,11 +452,19 @@ before_filter :authenticate_user!
         @pcb_info.pcb_gongyi = params[:pcb_gongyi]
         @pcb_info.qty = params[:pcb_qty]
         @pcb_info.pcb_area = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000/params[:pcb_panel].to_i*params[:pcb_qty].to_i
-        @pcb_info.pcb_area_price = params[:pcb_area_price]
+        if not params[:pcb_area_price].blank?
+            @pcb_info.pcb_area_price = params[:pcb_area_price]
+        end
         @pcb_info.price = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000/params[:pcb_panel].to_i*params[:pcb_area_price].to_i
-        @pcb_info.eng_price = params[:eng_price]
-        @pcb_info.test_price = params[:test_price]
-        @pcb_info.m_price = params[:mould_price]
+        if not params[:eng_price].blank?
+            @pcb_info.eng_price = params[:eng_price].to_i
+        end
+        if not params[:test_price].blank?
+            @pcb_info.test_price = params[:test_price].to_i
+        end
+        if not params[:mould_price].blank?
+            @pcb_info.m_price = params[:mould_price].to_i
+        end
         #@pcb_info.t_p = BigDecimal.new(params[:pcb_length].to_i*params[:pcb_width].to_i)/1000000*params[:pcb_panel].to_i*params[:pcb_area_price].to_i*params[:pcb_qty].to_i + params[:eng_price].to_i + params[:test_price].to_i + params[:mould_price].to_i
         @pcb_info.t_p = @pcb_info.price*params[:pcb_qty].to_i + params[:eng_price].to_i + params[:test_price].to_i + params[:mould_price].to_i
         @pcb_info.remark = params[:pcb_remark]

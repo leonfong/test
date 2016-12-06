@@ -13,13 +13,18 @@
                       <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
                   <% else %> 
                       <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号"%>
-                  <% end %>               
+                  <% end %>        
+                  <span class="input-group-addon">
+                      已经报价：<input type="checkbox" name="complete" >
+                  </span>       
                   <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                   
                 </div>
+<!--
                 <a type="button" class="btn btn-success btn-sm" href="/pcb_list?complete=true">已经报价的物料</a>
+-->
                 <a type="button" class="btn btn-warning btn-sm" href="/pcb_list?undone=true">等待报价的物料</a>
             </div>
             <% end %>                       

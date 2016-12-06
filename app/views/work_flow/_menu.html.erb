@@ -101,6 +101,13 @@
         <li><a <% if selected == "new_part_manage" %>style="background-color: #d9edf7;"<% end %> href="/new_moko_part"><i></i>新建物料</a></li>
     </ul>
 <% end %>
+
+<% if can? :work_admin, :all %>
+    <a style="background-color: #ddd;" href="#Supplier_Menu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> MOKO供应商管理</a>
+    <ul id="Supplier_Menu" class="nav nav-list  menu-second <% if selected =~ /supplier_manage/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "supplier_manage_list" %>style="background-color: #d9edf7;"<% end %> href="/moko_supplier_list"><i></i>供应商列表</a></li>
+    </ul>
+<% end %>
 </div>
 
 
@@ -114,6 +121,7 @@ $(".menu-first").click(function(){
   $('#pmcMenu').collapse('hide');
   $('#buyMenu').collapse('hide');
   $('#factoryMenu').collapse('hide');
+  $('#Supplier_Menu').collapse('hide');
 });
 </script>
 

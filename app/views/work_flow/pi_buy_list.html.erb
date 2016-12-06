@@ -32,7 +32,7 @@
   <%= will_paginate(@pi_buy_list) %> 
   <% @pi_buy_list.each do |buy_list| %>
   <tr>
-      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %></td>
+      <td ><%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.dn_long %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.user %></td>

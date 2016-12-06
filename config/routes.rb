@@ -176,8 +176,9 @@ Rails.application.routes.draw do
   match '/send_to_pi_pmc_item', to: 'work_flow#send_to_pi_pmc_item', via: 'post'
   match '/edit_pmc_add_buy_user', to: 'work_flow#edit_pmc_add_buy_user', via: 'post'
   match '/send_pi_buy_checked', to: 'work_flow#send_pi_buy_checked', via: 'post'
-
-
+  match '/new_moko_supplier', to: 'work_flow#new_moko_supplier', via: 'post'
+  match '/edit_moko_supplier', to: 'work_flow#edit_moko_supplier', via: 'post'
+  match '/moko_supplier_list', to: 'work_flow#moko_supplier_list', via: 'get'
 
 
 

@@ -5,6 +5,120 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def edit_moko_supplier
+        if can? :work_admin, :all
+            if not params[:supplier_id].blank?
+                new_su = SupplierList.find_by_id(params[:supplier_id])
+                if not new_su.blank?
+                    if not params[:supplier_name].blank?
+                        new_su.supplier_name = params[:supplier_name].strip
+                    end
+                    if not params[:supplier_code].blank?
+                        new_su.supplier_code = params[:supplier_code].strip
+                    end
+                    if not params[:supplier_part_type_code].blank?
+                        new_su.supplier_part_type_code = params[:supplier_part_type_code].strip
+                    end
+                    if not params[:supplier_part_type].blank?
+                        new_su.supplier_part_type = params[:supplier_part_type].strip
+                    end
+                    if not params[:supplier_tax].blank?
+                        new_su.supplier_tax = params[:supplier_tax].strip
+                    end
+                    if not params[:supplier_clearing].blank?
+                        new_su.supplier_clearing = params[:supplier_clearing].strip
+                    end
+                    if not params[:supplier_remark].blank?
+                        new_su.supplier_remark = params[:supplier_remark].strip
+                    end
+                    if not params[:supplier_name_long].blank?
+                        new_su.supplier_name_long = params[:supplier_name_long].strip
+                    end
+                    if not params[:supplier_label].blank?
+                        new_su.supplier_label = params[:supplier_label].strip
+                    end
+                    if not params[:supplier_type].blank?
+                        new_su.supplier_type = params[:supplier_type].strip
+                    end
+                    if not params[:supplier_address].blank?
+                        new_su.supplier_address = params[:supplier_address].strip
+                    end
+                    if not params[:supplier_invoice_fullname].blank?
+                        new_su.supplier_invoice_fullname = params[:supplier_invoice_fullname].strip
+                    end
+                    if not params[:supplier_contacts].blank?
+                        new_su.supplier_contacts = params[:supplier_contacts].strip
+                    end
+                    if not params[:supplier_phone].blank?
+                        new_su.supplier_phone = params[:supplier_phone].strip
+                    end
+                    if not params[:supplier_qq].blank?
+                        new_su.supplier_qq = params[:supplier_qq].strip
+                    end
+                    new_su.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
+    def new_moko_supplier
+        if can? :work_admin, :all
+            new_su = SupplierList.new
+            if not params[:supplier_name].blank?
+                new_su.supplier_name = params[:supplier_name].strip
+            end
+            if not params[:supplier_code].blank?
+                new_su.supplier_code = params[:supplier_code].strip
+            end
+            if not params[:supplier_part_type_code].blank?
+                new_su.supplier_part_type_code = params[:supplier_part_type_code].strip
+            end
+            if not params[:supplier_part_type].blank?
+                new_su.supplier_part_type = params[:supplier_part_type].strip
+            end
+            if not params[:supplier_tax].blank?
+                new_su.supplier_tax = params[:supplier_tax].strip
+            end
+            if not params[:supplier_clearing].blank?
+                new_su.supplier_clearing = params[:supplier_clearing].strip
+            end
+            if not params[:supplier_remark].blank?
+                new_su.supplier_remark = params[:supplier_remark].strip
+            end
+            if not params[:supplier_name_long].blank?
+                new_su.supplier_name_long = params[:supplier_name_long].strip
+            end
+            if not params[:supplier_label].blank?
+                new_su.supplier_label = params[:supplier_label].strip
+            end
+            if not params[:supplier_type].blank?
+                new_su.supplier_type = params[:supplier_type].strip
+            end
+            if not params[:supplier_address].blank?
+                new_su.supplier_address = params[:supplier_address].strip
+            end
+            if not params[:supplier_invoice_fullname].blank?
+                new_su.supplier_invoice_fullname = params[:supplier_invoice_fullname].strip
+            end
+            if not params[:supplier_contacts].blank?
+                new_su.supplier_contacts = params[:supplier_contacts].strip
+            end
+            if not params[:supplier_phone].blank?
+                new_su.supplier_phone = params[:supplier_phone].strip
+            end
+            if not params[:supplier_qq].blank?
+                new_su.supplier_qq = params[:supplier_qq].strip
+            end
+            new_su.save
+        end
+        redirect_to :back
+    end
+
+    def moko_supplier_list
+        @supplier=SupplierList.all
+    end
+
     def edit_orderinfo
         if params[:hint] == ""
            hint = 1

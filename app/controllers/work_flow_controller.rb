@@ -618,11 +618,13 @@ before_filter :authenticate_user!
     end
 
     def pi_buy_check_list
-        @w_wh = PiBuyInfo.where(state: "check")
+        #@w_wh = PiBuyInfo.where(state: "check")
+        @w_wh = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'check' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
     end
 
     def pi_buy_checked_list
-        @w_wh = PiBuyInfo.where(state: "checked")
+        #@w_wh = PiBuyInfo.where(state: "checked")
+        @w_wh = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'checked' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
     end
 
     def send_pi_buy_check
@@ -5058,8 +5060,9 @@ before_filter :authenticate_user!
     end
 
     def pi_buy_list
-        @pi_buy_list = PiBuyInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
-        @pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
+        #@pi_buy_list = PiBuyInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
+        @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'new' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
+        #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 
     def pi_waitfor_buy

@@ -5734,7 +5734,6 @@ before_filter :authenticate_user!
             Rails.logger.info(@c_info.inspect)
             Rails.logger.info("add-------------------------------------12")
             if not @c_info.blank?
-                
                 Rails.logger.info("add-------------------------------------12")
                 @c_table = '<br>'
                 @c_table += '<small>'
@@ -5898,7 +5897,15 @@ before_filter :authenticate_user!
             elsif can? :work_g, :all 
                 q_order.state = "quotechk"
             end
-            q_order.save
+            if q_order.save
+                if q_order.state == "bom_chk"
+                    get_cu = PcbCustomer.find_by_id(q_order.pcb_customer_id)
+                    if not get_cu.blank?
+                        get_cu.c_time = get_cu.c_time + 1
+                        get_cu.save
+                    end
+                end
+            end
             redirect_to pcb_order_list_path(quote: true) and return
         end
     end
@@ -5907,8 +5914,14 @@ before_filter :authenticate_user!
         pcb_order = PcbOrder.find(params[:order_id])
         if can? :work_e, :all or can? :work_d, :all
             pcb_order.del_flag = "inactive"
-            pcb_order.save
+            if pcb_order.save
             #pcb_order.destroy
+                get_cu = PcbCustomer.find_by_id(pcb_order.pcb_customer_id)
+                    if not get_cu.blank?
+                        get_cu.c_time = get_cu.c_time - 1
+                        get_cu.save
+                    end
+            end
         end
         redirect_to :back
     end

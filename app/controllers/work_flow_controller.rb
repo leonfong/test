@@ -598,7 +598,7 @@ before_filter :authenticate_user!
     def edit_pi_buy  
         @pi_buy_find = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL")   
         @pi_buy_info = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
-        @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id)
+        @pi_buy = PiBuyItem.where(pi_buy_info_id: @pi_buy_info.id).order("moko_part")
         @all_dn = "[&quot;"
         #all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
         all_s_dn = SupplierList.find_by_sql("SELECT  supplier_name, supplier_name_long FROM supplier_lists ")
@@ -4908,9 +4908,9 @@ before_filter :authenticate_user!
                         where_des += " AND "
                     end
                 end 
-                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' AND `pi_pmc_items`.`buy_user` <> 'MOKO' ")
+                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' AND `pi_pmc_items`.`buy_user` <> 'MOKO' ORDER BY 'moko_part'")
             else
-                @pi_buy = PiPmcItem.where("state = 'pass' AND `buy_user` <> 'MOKO'")
+                @pi_buy = PiPmcItem.where("state = 'pass' AND `buy_user` <> 'MOKO'").order("moko_part")
             end
             #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE (p_items.moko_part LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND pi_infos.state = 'checked' AND p_items.buy IS NULL")    
             #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' ") 

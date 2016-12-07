@@ -683,9 +683,11 @@ before_filter :authenticate_user!
         if not up_state.blank?
             up_state.state = "buy"
             up_state.save
+            t_p = 0
             PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
                 item.state = "buying"
                 item.save
+                t_p = t_p + item.buy_qty*item.cost
                 pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
                 #pmc_data.buy_qty = item.qty
                 pmc_data.state = "buying" 
@@ -732,6 +734,8 @@ before_filter :authenticate_user!
                 end
 
             end
+            up_state.t_p = t_p
+            up_state.save
         end
         redirect_to pi_buy_checked_list_path()
     end

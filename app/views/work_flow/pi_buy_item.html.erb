@@ -41,7 +41,7 @@
       <td><%= buy.cost %></td>
       <td>
           <% if not buy.cost.blank? %>
-              <%= buy.qty*buy.cost %>
+              <%= buy.buy_qty*buy.cost %>
           <% end %>
       </td>
       <td>

@@ -726,6 +726,7 @@ before_filter :authenticate_user!
                     put_pdn.dn_long = item.dn_long
                     put_pdn.cost = item.cost
                     put_pdn.qty = item.buy_qty
+                    put_pdn.dn_type = "B"
                     put_pdn.save
                     #更新所有价格
                     change_pmc_cost = PiPmcItem.where("moko_part = '#{item.moko_part}' AND (state = 'buy_adding' OR state = 'new' OR state = 'pass')")
@@ -749,6 +750,7 @@ before_filter :authenticate_user!
             get_item.cost = params[:buy_cost]
             get_item.dn = params[:buy_dn]
             get_item.dn_long = params[:buy_dn_long]
+            #get_item.type = "B"
             get_item.save
 
         end
@@ -783,7 +785,11 @@ before_filter :authenticate_user!
             @c_table += '</thead>'
             @c_table += '<tbody>'
             @history_list.each do |item|
-                @c_table += '<tr>'
+                if item.dn_type == "B"
+                    @c_table += '<tr class="danger">'
+                else
+                    @c_table += '<tr>'
+                end
                 if not item.created_at.blank?
                     @c_table += '<td>' + item.created_at.localtime.strftime('%Y-%m-%d').to_s + '</td>'
                 else

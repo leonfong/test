@@ -1838,10 +1838,12 @@ before_filter :authenticate_user!
                     end
                 end 
                 @p_history = PItem.find_by_sql("SELECT *,p_items.description AS des, p_items.moko_des, p_items.created_at AS c_time FROM `p_items` LEFT JOIN `p_dns` ON `p_items`.`dn_id` = `p_dns`.`id` WHERE `p_items`.`mpn` LIKE '%#{params[:part_name].strip}%' or (#{where_des}) or (#{where_moko_des}) or (#{where_remark}) ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+=begin
             else
                 where_des = "p_items.description LIKE '%%'"
                 where_des = "p_items.moko_des LIKE '%%'"
                 @p_history = PItem.find_by_sql("SELECT *,p_items.description AS des, p_items.moko_des, p_items.created_at AS c_time FROM `p_items` LEFT JOIN `p_dns` ON `p_items`.`dn_id` = `p_dns`.`id`  ORDER BY p_items.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+=end
             end     
             render "p_history.html.erb" and return
         else

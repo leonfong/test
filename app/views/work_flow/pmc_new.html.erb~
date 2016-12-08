@@ -16,7 +16,7 @@
             </div>
 
             <%= form_tag('/pmc_new', method:"get", class:"form-inline") do %>
-            <div class="row" style="padding-top: 10px;">
+            <div class="row" style="padding-top: 10px;padding-bottom: 2px;">
                 
                 <div class="col-md-2 col-sm-2 form-inline" >
                     <span  style="color:#999;">
@@ -100,7 +100,6 @@
                                 </th>
                                 <th width="150">
                                     <%= link_to "MOKO ID",  {action: "pmc_new", sort_data: "moko_part",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
-                               
                                 </th>
                                 <th width="350">
                                     <%= link_to "物料名称",  {action: "pmc_new", sort_data: "moko_des",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>

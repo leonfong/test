@@ -101,6 +101,7 @@
                     <thead>
                         <tr style="background-color: #eeeeee">
                             <th width="40">操作</th>
+                            <th width="40">删除</th>
 <!--
                             <th width="150">物料编码</th>
                             <th >物料名称</th>
@@ -113,7 +114,7 @@
                             <th width="50">附件</th>
                             <th >备注</th>
 -->
-                            <th>Order No.</th>
+                            <th>询价单号</th>
                             <th>Customer Part No.</th>
                             <th>PCB Size(mm)</th>
                             <th width="100">Quantity(PCS)</th>
@@ -124,7 +125,7 @@
                             <th>PCBA</th>
                             <th>Unit Price</th>
                             <th>Total Price(USD)</th>
-                            <th width="40">删除</th>
+                            <th width="50">提交</th>
                         </tr>
                     </thead>
                     <tbody id="biaoge">
@@ -134,6 +135,11 @@
                             <td>
                                 <% if @pi_info.state == "new" %>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>"  data-edit_follow_remark="<%= pi_item.remark %>"  data-edit_price="<%= pi_item.price %>" data-edit_c_p_no="<%= pi_item.c_p_no %>" data-edit_pcb_size="<%= pi_item.pcb_size %>" data-edit_qty="<%= pi_item.qty %>" data-edit_layer="<%= pi_item.layer %>" data-edit_des="<%= pi_item.des %>" data-edit_unit_price="<%= pi_item.unit_price %>" data-edit_pcb_price="<%= pi_item.pcb_price %>" data-edit_com_cost="<%= pi_item.com_cost %>" data-edit_pcba="<%= pi_item.pcba %>" data-edit_t_p="<%= pi_item.t_p %>"  ></a>
+                                <% end %>
+                            </td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
                                 <% end %>
                             </td>
 <!--
@@ -157,7 +163,7 @@
                                 <% if pi_item.bom_id.blank? %>
                                     <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
                                 <% else %>
-                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id) %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
                                 <% end %>
                             </td>
                             <td><%= pi_item.c_p_no %></td>
@@ -170,11 +176,7 @@
                             <td><%= pi_item.pcba %></td>
                             <td><%= pi_item.unit_price %></td>
                             <td><%= pi_item.t_p %></td>
-                            <td>
-                                <% if @pi_info.state == "new" %>
-                                <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
-                                <% end %>
-                            </td>
+                            <td><a class="btn btn-success btn-xs" data-confirm="确定要提交PI?" >提交</a></td>
                         </tr>
                         <% end %>
                         <% end %> 
@@ -200,19 +202,19 @@
                         <% end %>
                         <% end %>
                         <tr>
-                            <td colSpan="11"></td>
+                            <td colSpan="13"></td>
                             <td colSpan="2"><strong>Shipping Cost: <%= @pi_info.pi_shipping_cost %></strong></td>
                         </tr>
                         <tr>
-                            <td colSpan="11"></td>
+                            <td colSpan="13"></td>
                             <td colSpan="2"><strong>Bank Fee: <%= @pi_info.pi_bank_fee %></strong></td>
                         </tr>
                         <tr>
-                            <td colSpan="11"></td>
+                            <td colSpan="13"></td>
                             <td colSpan="2"><strong>Total: <%= @pi_info.t_p %></strong></td>
                         </tr>    
                         <tr>
-                            <td colSpan="11"></td>
+                            <td colSpan="13"></td>
                             <td colSpan="2"><strong>Total RMB: <%= @pi_info.t_p_rmb %></strong></td>
                         </tr>                 
                     </tbody>

@@ -57,6 +57,8 @@
                   <option value="done" <% if params[:order_state]=="done" %>selected<% end %>>已下单</option>
                   <option value="undone" <% if params[:order_state]=="undone" %>selected<% end %>>未下单</option>
              </select>
+             <div class="input-group-addon " >订单号 : </div>
+             <%= text_field_tag :order_no, params[:order_no],class:"form-control input-sm", size:"10" %>
             <div class="input-group-btn">
               <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
             </div>
@@ -98,7 +100,7 @@
                         <tbody>
 <% if not @quate.blank?%>
 <% @quate.each do |q_order| %>
-                            <tr <% if PcbCustomer.find_by_id(q_order.pcb_customer_id).c_time == 0 %>class="success"<% end %> data-toggle="collapse" href="#order_son_<%= q_order.id.to_s %>" aria-expanded="false" aria-controls="order_son_<%= q_order.id %>">
+                            <tr <% if PcbCustomer.find_by_id(q_order.pcb_customer_id).c_time == 1 %>class="success"<% end %> data-toggle="collapse" href="#order_son_<%= q_order.id.to_s %>" aria-expanded="false" aria-controls="order_son_<%= q_order.id %>">
                                 <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
                                 <td><%=  q_order.order_no %></td>
                                 <td><%= q_order.qty %></td>

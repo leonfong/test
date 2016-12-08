@@ -190,6 +190,10 @@ before_filter :authenticate_user!
     end
 
     def sell_baojia_erp
+        where_order_no = ""
+        if not params[:order_no].blank?
+             where_order_no = " AND pcb_orders.order_no LIKE '%#{params[:order_no]}%'"
+        end
         where_sell = ""
         if not params[:sell].blank?
             where_sell = " AND pcb_orders.order_sell = '#{params[:sell]}'"
@@ -213,12 +217,12 @@ before_filter :authenticate_user!
         end
         if not current_user.s_name.blank?
             if current_user.s_name.size == 1
-                @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'").order("pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'#{where_order_no}").order("pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             else 
                 if can? :work_admin, :all
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no}").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no}").paginate(:page => params[:page], :per_page => 20)
                 end
             end
         end

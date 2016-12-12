@@ -25,6 +25,7 @@ before_filter :authenticate_user!
                         @bom_item.each do |bomitem|
                             if not bomitem.cost.blank?
                                 @total_p += bomitem.cost*bomitem.pmc_qty
+                                #@total_p += bomitem.cost*bomitem.quantity*@bom.qty
                             end
                         end
                         @bom.t_p = @total_p

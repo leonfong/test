@@ -220,9 +220,9 @@ before_filter :authenticate_user!
                 @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'#{where_order_no}").order("pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             else 
                 if can? :work_admin, :all
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no}").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no} ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no}").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no} ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end
         end
@@ -5118,13 +5118,49 @@ before_filter :authenticate_user!
     end
 
     def pi_draft  
-        if params[:commit] == "提交"
-            pi_draft = PiInfo.find_by(pi_no: params[:p_pi])
+        pi_draft = PiInfo.find_by_id(params[:p_pi])
+        if params[:commit] == "提交" and pi_draft.pi_lock != "lock"
+            if can? :work_admin, :all 
+                pi_draft.state = "checked"
+                pi_draft.bom_state = "checked"
+                pi_draft.finance_state = "checked"
+                pi_draft.save
+                redirect_to pi_list_path() and return
+            end
+=begin
             if can? :work_e, :all and pi_draft.state == "new"
                 pi_draft.state = "check"
-                
+                pi_draft.save
+                redirect_to pi_list_path() and return                
             end
-            
+=end
+            if can? :work_e, :all 
+                pi_item_data = PiItem.find_by_id(params[:p_item])
+                if pi_item_data.state.blank?
+                    if not pi_item_data.bom_id.blank?
+                        get_bom_data = ProcurementBom.find_by_id(pi_item_data.bom_id)
+                        if not get_bom_data.blank?
+                            get_bom_data.pi_lock = "lock"
+                            if get_bom_data.save
+                                if not get_bom_data.erp_item_id.blank?
+                                    get_otder_item = PcbOrderItem.find_by_id(get_bom_data.erp_item_id) 
+                                    if not get_otder_item.blank?
+                                        get_otder_item.pi_lock == "lock"
+                                        get_otder_item.save
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    pi_draft.pi_lock = "lock"
+                    pi_item_data.state = "check"
+                    pi_item_data.save
+                    pi_draft.state = "check"
+                    pi_draft.save
+                end
+                redirect_to pi_list_path() and return                
+            end
+
             if can? :work_d, :all 
                 if pi_draft.finance_state == "checked"
                     pi_draft.state = "checked"
@@ -5142,6 +5178,8 @@ before_filter :authenticate_user!
                         end
                     end
                 end
+                pi_draft.save
+                redirect_to pi_list_path() and return
             end
             if can? :work_finance, :all 
                 if pi_draft.bom_state == "checked"
@@ -5150,13 +5188,8 @@ before_filter :authenticate_user!
                     pi_draft.state = "check"
                 end
                 pi_draft.finance_state = "checked"
-            end
-            pi_draft.save
-            if can? :work_admin, :all 
-                pi_draft.state = "checked"
-                pi_draft.bom_state = "checked"
-                pi_draft.finance_state = "checked"
                 pi_draft.save
+                redirect_to pi_list_path() and return
             end
         end
         redirect_to pi_list_path() and return
@@ -5336,6 +5369,9 @@ before_filter :authenticate_user!
     def find_order_check
         @find_order_info = PcbOrder.find(params[:id])
         @find_pi_info = PiInfo.find_by(pi_no: params[:pi])
+        if @find_pi_info.pi_lock == "lock"
+            redirect_to :back and return
+        end
         @find_pi_info.pcb_customer_id = @find_order_info.pcb_customer_id
         @find_pi_info.c_code = @find_order_info.c_code
         @find_pi_info.c_des = @find_order_info.c_des
@@ -5363,12 +5399,14 @@ before_filter :authenticate_user!
             
 
             #pi_item.unit_price
+=begin
             if not q_item.bom_id.blank?
                 find_bom = ProcurementBom.find_by_id(q_item.bom_id)
                 if not find_bom.blank?
                     pi_item.com_cost = find_bom.t_p
                 end
             end
+=end
             #pi_item.pcba
 
 
@@ -5381,7 +5419,7 @@ before_filter :authenticate_user!
             pi_item.moko_des = q_item.moko_des
             pi_item.des_en = q_item.des_en
             pi_item.des_cn = q_item.des_cn
-            pi_item.qty = q_item.qty
+            #pi_item.qty = q_item.qty
             pi_item.p_type = q_item.p_type
             pi_item.att = q_item.att
             pi_item.remark =  q_item.remark    
@@ -6324,20 +6362,30 @@ before_filter :authenticate_user!
             if edit_pi_item.p_type == "PCBA"
                 get_bom = ProcurementBom.find_by_id(edit_pi_item.bom_id)
                 if not get_bom.blank?
+                    if get_bom.pi_lock == "lock"
+                        redirect_to :back and return
+                    end
                     bom_item = PItem.where(procurement_bom_id: get_bom.id)
                     if not bom_item.blank?
                         t_p = 0
                         bom_item.each do |item|
-                            item.pmc_qty = get_bom.qty.to_i*item.quantity.to_i
+                            #item.pmc_qty = get_bom.qty.to_i*item.quantity.to_i
+                            item.pi_qty = PiItem.find_by_sql("SELECT SUM(qty) AS qty FROM pi_items WHERE pi_info_id = #{edit_pi_item.pi_info_id}").first.qty.to_i*item.quantity.to_i
                             item.save
                             if not item.cost.blank?
-                                t_p = t_p + (item.pmc_qty*item.cost)
+                                t_p = t_p + (params[:edit_qty].to_i*item.quantity.to_i*item.cost)
                             end
                         end
-                        get_bom.t_p = t_p
+                        #get_bom.t_p = t_p
+                        if params[:edit_com_cost].blank?
+                            edit_pi_item.com_cost = t_p
+                        else 
+                            edit_pi_item.com_cost = params[:edit_com_cost]
+                        end
+                        edit_pi_item.save
                     end
-                    get_bom.qty = edit_pi_item.qty
-                    get_bom.save
+                    #get_bom.qty = edit_pi_item.qty
+                    #get_bom.save
                 end
             end
         end

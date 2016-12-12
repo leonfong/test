@@ -176,7 +176,11 @@
                             <td><%= pi_item.pcba %></td>
                             <td><%= pi_item.unit_price %></td>
                             <td><%= pi_item.t_p %></td>
-                            <td><a class="btn btn-success btn-xs" data-confirm="确定要提交PI?" >提交</a></td>
+                            <td>
+                            <% if pi_item.state.blank? %>
+                                <a href="/pi_draft?p_pi=<%= @pi_info.id %>&p_item=<%= pi_item.id %>&commit=提交" class="btn btn-success btn-xs" data-confirm="确定要提交PI?" >提交</a>
+                            <% end %>
+                            </td>
                         </tr>
                         <% end %>
                         <% end %> 
@@ -202,19 +206,19 @@
                         <% end %>
                         <% end %>
                         <tr>
-                            <td colSpan="13"></td>
+                            <td colSpan="12"></td>
                             <td colSpan="2"><strong>Shipping Cost: <%= @pi_info.pi_shipping_cost %></strong></td>
                         </tr>
                         <tr>
-                            <td colSpan="13"></td>
+                            <td colSpan="12"></td>
                             <td colSpan="2"><strong>Bank Fee: <%= @pi_info.pi_bank_fee %></strong></td>
                         </tr>
                         <tr>
-                            <td colSpan="13"></td>
+                            <td colSpan="12"></td>
                             <td colSpan="2"><strong>Total: <%= @pi_info.t_p %></strong></td>
                         </tr>    
                         <tr>
-                            <td colSpan="13"></td>
+                            <td colSpan="12"></td>
                             <td colSpan="2"><strong>Total RMB: <%= @pi_info.t_p_rmb %></strong></td>
                         </tr>                 
                     </tbody>
@@ -267,7 +271,7 @@
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
                     <%= form_tag('/pi_draft', method:"post") do %>
-                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
                         <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
@@ -769,7 +773,7 @@ $('#edititem').on('show.bs.modal', function (event) {
   modal.find($("#edit_des")).val(edit_des);
   modal.find($("#edit_unit_price")).val(edit_unit_price);
   modal.find($("#edit_pcb_price")).val(edit_pcb_price);
-  modal.find($("#edit_com_cost")).val(edit_com_cost);
+  //modal.find($("#edit_com_cost")).val(edit_com_cost);
   modal.find($("#edit_pcba")).val(edit_pcba);
   modal.find($("#edit_t_p")).val(edit_t_p);
 

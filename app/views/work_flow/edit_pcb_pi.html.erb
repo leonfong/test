@@ -176,7 +176,11 @@
                             <td><%= pi_item.pcba %></td>
                             <td><%= pi_item.unit_price %></td>
                             <td><%= pi_item.t_p %></td>
-                            <td><a class="btn btn-success btn-xs" data-confirm="确定要提交PI?" >提交</a></td>
+                            <td>
+                            <% if pi_item.state.blank? %>
+                                <a href="/pi_draft?p_pi=<%= @pi_info.id %>&p_item=<%= pi_item.id %>&commit=提交" class="btn btn-success btn-xs" data-confirm="确定要提交PI?" >提交</a>
+                            <% end %>
+                            </td>
                         </tr>
                         <% end %>
                         <% end %> 
@@ -267,7 +271,7 @@
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
                     <%= form_tag('/pi_draft', method:"post") do %>
-                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
                         <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
@@ -385,7 +389,7 @@
               </thead>
               <tbody>
               <% #PcbOrderItem.where(c_id: params[:c_id],state: "quotechked").each do |pi_item_f| %>
-              <% PcbOrderItem.find_by_sql("SELECT DISTINCT pcb_order_items.pcb_order_sell_item_id, pcb_order_sell_items.* FROM pcb_order_items INNER JOIN pcb_order_sell_items ON pcb_order_sell_items.id = pcb_order_items.pcb_order_sell_item_id WHERE pcb_order_items.state = 'quotechked' AND pcb_order_items.c_id = #{params[:c_id]}").each do |pi_item_f| %>
+              <% PcbOrderItem.find_by_sql("SELECT DISTINCT pcb_order_items.pcb_order_sell_item_id, pcb_order_sell_items.* FROM pcb_order_items INNER JOIN pcb_order_sell_items ON pcb_order_sell_items.id = pcb_order_items.pcb_order_sell_item_id WHERE pcb_order_items.state = 'quotechked' AND pcb_order_items.c_id = #{params[:c_id]} AND pcb_order_items.pi_lock = ''").each do |pi_item_f| %>
                     <tr>
                     <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
                     <td><div><%= pi_item_f.remark.to_s %></div></td>
@@ -769,7 +773,7 @@ $('#edititem').on('show.bs.modal', function (event) {
   modal.find($("#edit_des")).val(edit_des);
   modal.find($("#edit_unit_price")).val(edit_unit_price);
   modal.find($("#edit_pcb_price")).val(edit_pcb_price);
-  modal.find($("#edit_com_cost")).val(edit_com_cost);
+  //modal.find($("#edit_com_cost")).val(edit_com_cost);
   modal.find($("#edit_pcba")).val(edit_pcba);
   modal.find($("#edit_t_p")).val(edit_t_p);
 

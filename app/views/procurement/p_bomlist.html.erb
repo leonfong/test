@@ -76,14 +76,15 @@
     <tr style="background-color: #eeeeee">
       <th width="110">BOM No.</th>
       <th width="200">Order No.</th>
-      <th width="50">版本</th>
+
       <% if can? :work_d, :all %>
       <th width="170">BOM上传日期</th>
       <% else %>
       <th width="170">BOM审核日期</th>
       <% end %>
       <th width="200">文件名</th>
-      <th width="100">数量</th>
+      <th width="70">数量</th>
+      <th width="50">版本</th>
       <th width="70">上传</th>
       <th width="70">审核</th>
       <th width="100">采购工程师</th>
@@ -118,7 +119,7 @@
             <%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %>
         </td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name.to_s %></td>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
+
         <% if can? :work_d, :all %>
 
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
@@ -127,6 +128,7 @@
         <% end %>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.excel_file_identifier %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">
         <% if bom.bom_eng_up == nil %>
             <%= User.find(bom.user_id).full_name %>

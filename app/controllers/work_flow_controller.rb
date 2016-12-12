@@ -5140,6 +5140,18 @@ before_filter :authenticate_user!
                     if not pi_item_data.bom_id.blank?
                         get_bom_data = ProcurementBom.find_by_id(pi_item_data.bom_id)
                         if not get_bom_data.blank?
+
+                            #新建数量申请
+                            new_qty_info = PiBomQtyInfo.new
+                            new_qty_info.pi_info_id = pi_draft.id
+                            new_qty_info.pi_item_id = pi_item_data.id
+                            new_qty_info.bom_id = get_bom_data.id
+                            new_qty_info.qty = pi_item_data.qty
+                            new_qty_info.t_qty = PiItem.find_by_sql("SELECT SUM(pi_items.qty) AS qty FROM pi_items WHERE pi_items.pi_info_id = '#{pi_draft.id}'").first.qty
+                            new_qty_info.save
+
+
+
                             get_bom_data.pi_lock = "lock"
                             if get_bom_data.save
                                 if not get_bom_data.erp_item_id.blank?
@@ -5149,7 +5161,28 @@ before_filter :authenticate_user!
                                         get_otder_item.save
                                     end
                                 end
+                                #新建数量申请item
+                                get_bom_item_data = PItem.where(procurement_bom_id: get_bom_data.id)
+                                if not get_bom_item_data.blank?
+                                    get_bom_item_data.each do |item|
+                                        new_qty_info_item = PiBomQtyInfoItem.new
+                                        new_qty_info_item.pi_bom_qty_info_id = new_qty_info.id
+                                        new_qty_info_item.pi_info_id = new_qty_info.pi_info_id
+                                        new_qty_info_item.pi_item_id = new_qty_info.id
+                                        new_qty_info_item.bom_id = new_qty_info.id
+                                        new_qty_info_item.p_item_id = item.id
+                                        new_qty_info_item.qty = new_qty_info.qty
+                                        new_qty_info_item.t_qty = new_qty_info.t_qty
+                                        new_qty_info_item.bom_ctl_qty = new_qty_info.qty*item.quantity
+                                        new_qty_info_item.save
+                                        
+                                    end
+                                end
                             end
+
+
+
+
                         end
                     end
                     pi_draft.pi_lock = "lock"

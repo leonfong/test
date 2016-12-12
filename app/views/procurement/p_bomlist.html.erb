@@ -84,11 +84,12 @@
       <% end %>
       <th width="200">文件名</th>
       <th width="70">数量</th>
+      <th >工程师备注</th>
       <th width="50">版本</th>
       <th width="70">上传</th>
       <th width="70">审核</th>
       <th width="100">采购工程师</th>
-      <th >工程师备注</th>
+
       <th >业务备注</th>
       <th width="50">删除</th>
       <th width="50">编码</th>
@@ -128,6 +129,7 @@
         <% end %>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.excel_file_identifier %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">
         <% if bom.bom_eng_up == nil %>
@@ -138,7 +140,7 @@
         </td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_eng %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark %></td>
+
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
         <% if can? :work_g_all, :all %>
             <% if bom.check == "do" %>

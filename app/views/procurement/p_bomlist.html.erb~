@@ -83,12 +83,13 @@
       <th width="170">BOM审核日期</th>
       <% end %>
       <th width="200">文件名</th>
-      <th width="80">数量</th>
+      <th width="70">数量</th>
+      <th >工程师备注</th>
       <th width="50">版本</th>
       <th width="70">上传</th>
       <th width="70">审核</th>
       <th width="100">采购工程师</th>
-      <th >工程师备注</th>
+
       <th >业务备注</th>
       <th width="50">删除</th>
       <th width="50">编码</th>

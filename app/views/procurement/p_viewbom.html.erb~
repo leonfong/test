@@ -1,6 +1,6 @@
 <small><div class="container-fluid" >
 
-<% if not params[:pi_no].blank? %>
+<% if not params[:pi_info_id].blank? %>
             <div class="row" style="padding: 10px;"><div class="col-md-12">   
                 <div class="pull-right">
                     
@@ -20,6 +20,80 @@
                     <% end %>
                 </div>
             </div></div>
+
+            <div class="row "><div class="col-md-12">
+            <div class="panel panel-info">                
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th>Order No.</th>
+                            <th>Customer Part No.</th>
+                            <th>PCB Size(mm)</th>
+                            <th width="100">Quantity(PCS)</th>
+                            <th width="50">Layer</th>
+                            <th>Description</th>
+                            <th>PCB Price</th>
+                            <th>Components Cost</th>
+                            <th>PCBA</th>
+                            <th>Unit Price</th>
+                            <th>Total Price(USD)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @pi_item %>
+                        <% @pi_item.each do |pi_item| %>
+                        <% if pi_item.state.blank? %>
+                        <tr class="danger">
+                        <% else %>
+                        <tr class="success">      
+                        <% end %>
+                            <td>
+                                <% if pi_item.bom_id.blank? %>
+                                    <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
+                                <% else %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
+                                <% end %>
+                            </td>
+                            <td><%= pi_item.c_p_no %></td>
+                            <td><%= pi_item.pcb_size %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.layer %></td>
+                            <td><%= pi_item.des %></td>
+                            <td><%= pi_item.pcb_price %></td>
+                            <td><%= pi_item.com_cost %></td>
+                            <td><%= pi_item.pcba %></td>
+                            <td><%= pi_item.unit_price %></td>
+                            <td><%= pi_item.t_p %></td>
+                        </tr>
+                        <% end %>
+                        <% end %> 
+
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                                <% end %>
+                            </td>
+                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
+                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td>金额: <%= pi_item.t_p %></td>
+                            <td colSpan="3"></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
+                                <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                                     
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+
 <% end %>
 
 
@@ -192,10 +266,10 @@ $(document).ready(function() {
                     <th <% if can? :work_dd, :all %><% else %>width="150"<% end %>>描述</th>
                     <th >MOKO 描述</th>
                     <th width="100">位号</th>
-                    <% if can? :work_dd, :all %>
-                    <th width="50">用量</th>
-                    <% end %>
+                    <% if not params[:pi_info_id].blank? %>
+                    <th width="50">总量</th>
                     <th width="50">采购</th>
+                    <% end %>
                     <th width="50">客供</th>
                     <th width="25"></th>
                     <th width="110">成本价￥</th>
@@ -361,14 +435,10 @@ function change_<%= item.id.to_s %>(){
                     <% else %>
                     <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
-                    <% if can? :work_dd, :all %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
-                    <% end %>
+                    <% if not params[:pi_info_id].blank? %>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= @pi_bom_qty_info.t_qty.to_i*item.quantity %></small></td>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
-                    <% if not item.pmc_qty.blank? %>
-                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.id %>" data-pmc_qty="<%= item.pmc_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.pmc_qty %></div>
-                    <% else %> 
-                        <%= item.quantity*@boms.qty %>
+                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.pi_item_qty %>" data-pmc_qty="<%= item.bom_ctl_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.bom_ctl_qty %></div> 
                     <% end %>
                     </small>
                     </td> 

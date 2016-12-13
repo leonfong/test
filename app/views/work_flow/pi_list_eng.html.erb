@@ -73,9 +73,9 @@
       <tr >
         
         <% if not pcb.pcb_customer_id.blank? %>
-            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id,pi_item_id: pcb.id) %></td>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id,pi_item_id: pcb.id,pi_info_id: pcb.pi_info_id) %></td>
         <% else %>
-            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no) %></td>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,pi_info_id: pcb.pi_info_id) %></td>
         <% end %>
         
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>

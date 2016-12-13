@@ -87,11 +87,12 @@ before_filter :authenticate_user!
     def edit_item_qty
         if can? :work_d, :all or can? :work_admin, :all 
             if not params[:item_id].blank?
-                get_item_data = PItem.find_by_id(params[:item_id])
+                get_item_data = PiBomQtyInfoItem.find_by_id(params[:item_id])
                 if not get_item_data.blank?
-                    get_item_data.pmc_qty = params[:pmc_qty]
+                    get_item_data.bom_ctl_qty = params[:pmc_qty]
                     get_item_data.customer_qty = params[:customer_qty]
-                    if get_item_data.save
+                    get_item_data.save
+=begin
                         @bom = ProcurementBom.find(get_item_data.procurement_bom_id)  
                         @bom_item = PItem.where(procurement_bom_id: get_item_data.procurement_bom_id)
                         @total_p = 0
@@ -103,6 +104,7 @@ before_filter :authenticate_user!
                         @bom.t_p = @total_p
                         @bom.save
                     end
+=end
                 end
             end
         end

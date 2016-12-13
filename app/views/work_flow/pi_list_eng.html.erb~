@@ -73,7 +73,7 @@
       <tr >
         
         <% if not pcb.pcb_customer_id.blank? %>
-            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id) %></td>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id,pi_item_id: pcb.id,pi_info_id: pcb.pi_info_id) %></td>
         <% else %>
             <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no) %></td>
         <% end %>

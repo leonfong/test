@@ -43,7 +43,7 @@ before_filter :authenticate_user!
     end
 
     def edit_pcb_pi
-        @pi_info = PiInfo.find_by(pi_no: params[:pi_no])
+        @pi_info = PiInfo.find_by_id(params[:pi_info_id])
         @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
         @pi_info_c_c_no = ""
         @pi_info_c_customer = ""
@@ -63,14 +63,16 @@ before_filter :authenticate_user!
             @pi_info_c_email = @pi_info_c.email
             @pi_info_c_shipping_address = @pi_info_c.shipping_address
         end
-        @pi_item = PiItem.where(pi_no: params[:pi_no])
-        @pi_item_bom = PiItem.where(pi_no: params[:pi_no],state: "check")
-        @pi_other_item = PiOtherItem.where(pi_no: params[:pi_no])
-        @total_p = PiItem.where(pi_no: params[:pi_no]).sum("t_p") + PiOtherItem.where(pi_no: params[:pi_no]).sum("t_p")
+        @pi_item = PiItem.where(pi_info_id: params[:pi_info_id])
+        @pi_item_bom = PiItem.where(pi_info_id: params[:pi_info_id],state: "check")
+        @pi_other_item = PiOtherItem.where(pi_info_id: params[:pi_info_id])
+        @total_p = PiItem.where(pi_info_id: params[:pi_info_id]).sum("t_p") + PiOtherItem.where(pi_info_id: params[:pi_info_id]).sum("t_p")
         if can? :work_d, :all 
             pi_item = PiItem.find_by_id(params[:pi_item_id])
             @boms = ProcurementBom.find_by_id(pi_item.bom_id)
-            @bom_item = PItem.where(procurement_bom_id: @boms.id)
+            #@bom_item = PItem.where(procurement_bom_id: @boms.id)
+            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
+            @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(params[:pi_item_id])
             if not @bom_item.blank?
                 @bom_item = @bom_item.select {|item| item.quantity != 0 }
             end
@@ -5210,8 +5212,8 @@ before_filter :authenticate_user!
                                         new_qty_info_item = PiBomQtyInfoItem.new
                                         new_qty_info_item.pi_bom_qty_info_id = new_qty_info.id
                                         new_qty_info_item.pi_info_id = new_qty_info.pi_info_id
-                                        new_qty_info_item.pi_item_id = new_qty_info.id
-                                        new_qty_info_item.bom_id = new_qty_info.id
+                                        new_qty_info_item.pi_item_id = item.id
+                                        new_qty_info_item.bom_id = new_qty_info.bom_id
                                         new_qty_info_item.p_item_id = item.id
                                         new_qty_info_item.qty = new_qty_info.qty
                                         new_qty_info_item.t_qty = new_qty_info.t_qty

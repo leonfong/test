@@ -50,7 +50,7 @@
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="130">Order No.</th>
+      <th width="130">PI No.</th>
       <th width="150">Created Date</th>
       <th width="80">BOM审核</th>
       <th width="80">财务审核</th>

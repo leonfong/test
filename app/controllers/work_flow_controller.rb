@@ -12,7 +12,7 @@ before_filter :authenticate_user!
             if params[:bom_chk]
                 if can? :work_e, :all
                     #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.finance_state,pi_infos.bom_state,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = #{current_user.email} ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.finance_state,pi_infos.bom_state,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.finance_state,pi_infos.bom_state,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)

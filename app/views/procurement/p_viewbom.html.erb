@@ -1,4 +1,109 @@
 <small><div class="container-fluid" >
+
+<% if not params[:pi_no].blank? %>
+            <div class="row" style="padding: 10px;"><div class="col-md-12">   
+                <div class="pull-right">
+                    
+                    <%= form_tag('/pi_draft', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
+                        
+                    <% if can? :work_e, :all and @pi_info.state == "new"%>
+                        <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
+                    <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
+                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% if can? :work_admin, :all %>
+                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% end %>
+                </div>
+            </div></div>
+
+            <div class="row "><div class="col-md-12">
+            <div class="panel panel-info">                
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th>Order No.</th>
+                            <th>Customer Part No.</th>
+                            <th>PCB Size(mm)</th>
+                            <th width="100">Quantity(PCS)</th>
+                            <th width="50">Layer</th>
+                            <th>Description</th>
+                            <th>PCB Price</th>
+                            <th>Components Cost</th>
+                            <th>PCBA</th>
+                            <th>Unit Price</th>
+                            <th>Total Price(USD)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @pi_item %>
+                        <% @pi_item.each do |pi_item| %>
+                        <% if pi_item.state.blank? %>
+                        <tr class="danger">
+                        <% else %>
+                        <tr class="success">      
+                        <% end %>
+                            <td>
+                                <% if pi_item.bom_id.blank? %>
+                                    <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
+                                <% else %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
+                                <% end %>
+                            </td>
+                            <td><%= pi_item.c_p_no %></td>
+                            <td><%= pi_item.pcb_size %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.layer %></td>
+                            <td><%= pi_item.des %></td>
+                            <td><%= pi_item.pcb_price %></td>
+                            <td><%= pi_item.com_cost %></td>
+                            <td><%= pi_item.pcba %></td>
+                            <td><%= pi_item.unit_price %></td>
+                            <td><%= pi_item.t_p %></td>
+                        </tr>
+                        <% end %>
+                        <% end %> 
+
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                                <% end %>
+                            </td>
+                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
+                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td>金额: <%= pi_item.t_p %></td>
+                            <td colSpan="3"></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
+                                <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                                     
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+
+<% end %>
+
+
+
+
+
+
+
+
+
 <% if @boms.bom_lock == "lock" %>
 <% #if can? :work_admin, :all %>
     <div class="row" style="padding: 10px;">
@@ -29,61 +134,38 @@ $(document).ready(function() {
 });
 </script>
 <% else %>
+<!--
     <div class="row" style="padding: 10px;">
         <div class="col-md-12">
             <button id="show_del" type="button" class="btn btn-warning btn-lg pull-right">编辑</button></h1>
             <button style="display:none" id="hide_del" type="button" class="btn btn-success btn-lg pull-right">完成</button></h1>
         </div>
     </div>
-    <div class="row" style="padding: 0px;">
-        <div class="col-md-2">
-            <% if can? :work_g_all, :all%>
-                <h3><strong>权限-采购主管</h3></strong>
-            <% else %>
-                <h3><strong>权限-采购工程师</strong></h3>
-            <% end %>
-        </div>
-        <div class="col-md-2">
-
-        </div>
-    </div>
-﻿<fieldset>
-<% end %>
-
-
-  
-    <div class="row" style="padding: 0px;">
-
-<!--
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <% if can? :pcb_review, :all %>
-            <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
-            <% end %>
-            <% if can? :pcb_dc, :all %>
-            <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
-            <% end %>
-            <%= link_to "My Order", p_bomlist_path ,class: "list-group-item "%>
-            <%= link_to "New BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
-            <%= link_to "My BOM", p_bomlist_path ,class: "list-group-item active"%>
-        </div>
 -->
-        <div class="col-md-12">           
-            
-            <div class="row">
+            <div class="row" style="padding-top: 10px;">
                 <div class="col-md-6 col-sm-6 " >
-                    <h4 style="color: #32aacb;margin-top: 0px;">
+                    <h4 style="color: #32aacb;margin-top: 0px;padding: 0px;margin-bottom: 0px;">
                         <strong>BOM No. <%= @boms.no %></strong>
 
                         <span class="text-danger"><strong>版本 V<%= @boms.bom_version %></strong></span>
 
                     </h4>
                 </div>
-<!--
-                <small><div class="col-md-9 col-sm-9 pull-right" style="color:#999;">
-                    PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a   class="a_ctl" href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a class="a_ctl" href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>
-                </div></small>
--->
+                <div class="col-md-6 col-sm-6 " >
+                    <button style="margin-bottom: 10px;" id="show_del" type="button" class="btn btn-warning  pull-right">编辑</button></h1>
+                    <button style="display:none;margin-bottom: 10px;"  id="hide_del" type="button" class="btn btn-success btn-lg pull-right">完成</button></h1>
+                </div>
             </div>
+﻿<fieldset>
+<% end %>
+
+
+  
+    <div class="row" style="padding-bottom: 0px;">
+
+        <div class="col-md-12">           
+            
+
 
             <div class="row">
                 <div class="col-md-12">
@@ -132,7 +214,7 @@ $(document).ready(function() {
                            </td>
                            <td width="200">
                                <% if can? :work_g_all, :all%>
-                               <%= form_tag({action: :p_profit},method:"post",class:"form-inline") do %>
+                               <%= form_tag({action: :p_profit,controller: :procurement},method:"post",class:"form-inline") do %>
                                    <div class="form-group">
                                        <% if not params[:bom_version].blank? %>
                                           <input type="text" class="sr-only" id="bom_version" name="bom_version" value="<%= params[:bom_version] %>">
@@ -372,7 +454,7 @@ function change_<%= item.id.to_s %>(){
                     </td>
                     <td width="110" style="padding: 5px 0px 5px 0px;margin: 0px;">
                         <small>
-                            <%= form_tag({action: :p_edit_cost_dn},method:"post",remote:"ture",class:"form-inline") do %>
+                            <%= form_tag({action: :p_edit_cost_dn,controller: :procurement},method:"post",remote:"ture",class:"form-inline") do %>
                                <div class="form-group sr-only">
                                    <label for="dn_itemid" class="control-label">itemid:</label>
                                    <input type="text" class="form-control" id="dn_itemid" name="dn_itemid" value="<%= item.id.to_s %>">
@@ -485,7 +567,7 @@ function change_<%= item.id.to_s %>(){
                    <td style="padding: 0px;margin: 0px;">
    <table class="table table-hover table-bordered " style="padding: 0px;margin: 0px;">  
    <tbody >             
-        <%= form_tag({action: :p_edit},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
+        <%= form_tag({action: :p_edit,controller: :procurement},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
         <tr style="padding: 0px;margin: 0px;" >
           <td width="100" style="padding: 0px;margin: 0px;">
             <% if not params[:bom_version].blank? %>
@@ -651,7 +733,7 @@ function change_<%= item.id.to_s %>(){
                 </div>
             </div>
             <div class="collapse" id="shipping" style="padding-bottom: 20px;">
-                <%= form_tag({action: :p_add_bom},method:"post",class:"form-inline") do %>
+                <%= form_tag({action: :p_add_bom,controller: :procurement},method:"post",class:"form-inline") do %>
                     <div class="form-group sr-only">
                         <label for="part">p_id</label>
                         <input type="text" class="form-control" id="p_id" name="p_id" placeholder="p_id" value="<%= @boms.id %>">
@@ -700,7 +782,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="exampleModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit},method:"post",multipart:"ture") do %>
+        <%= form_tag({action: :p_edit,controller: :procurement},method:"post",multipart:"ture") do %>
           <div class="form-group sr-only">
             <label for="item_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="item_id" name="item_id">
@@ -755,7 +837,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editModalLabel">New message</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_dn},method:"post",remote: true,multipart:"ture") do %>
+        <%= form_tag({action: :p_edit_dn,controller: :procurement},method:"post",remote: true,multipart:"ture") do %>
           <div class="form-group sr-only">
             <label for="dn_id" class="control-label">id:</label>
             <input type="text" class="form-control" id="dn_id" name="dn_id">
@@ -812,7 +894,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editMpnLabel">Update MPN</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_edit_mpn},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_edit_mpn,controller: :procurement},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">
@@ -845,7 +927,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="editPrderLabel">Update Order Info</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :pj_edit},method:"post",multipart:"true") do %>
+        <%= form_tag({action: :pj_edit,controller: :procurement},method:"post",multipart:"true") do %>
           <div class="form-group sr-only">
             <label for="itemp_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id" name="itemp_id">
@@ -890,7 +972,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="remarkitemLabel">备注</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_item_remark},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_item_remark,controller: :procurement},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id_remark" name="itemp_id">
@@ -922,7 +1004,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="remarkupdateLabel">备注更新</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :p_item_remark_up},method:"post",remote: true) do %>
+        <%= form_tag({action: :p_item_remark_up,controller: :procurement},method:"post",remote: true) do %>
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="itemp_id_remark_up" name="itemp_id">
@@ -959,7 +1041,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="edit_item_qtyLabel">编辑数量</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :edit_item_qty},method:"post") do %>
+        <%= form_tag({action: :edit_item_qty,controller: :procurement},method:"post") do %>
           <div class="form-group sr-only">
             <label for="item_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="item_pmc_qty_id" name="item_id">
@@ -990,7 +1072,7 @@ function change_<%= item.id.to_s %>(){
         <h4 class="modal-title" id="edit_item_refLabel">编辑位号数量</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag({action: :edit_item_ref},method:"post") do %>
+        <%= form_tag({action: :edit_item_ref,controller: :procurement},method:"post") do %>
           <div class="form-group sr-only">
             <label for="item_ref_id" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="item_ref_id" name="item_id">

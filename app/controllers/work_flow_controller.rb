@@ -5,6 +5,83 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
     
+    def pi_list
+        if params[:key_order]
+            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        else
+            if params[:bom_chk]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.finance_state,pi_infos.bom_state,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = current_user.email ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.finance_state,pi_infos.bom_state,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list_eng.html.erb" and return
+            elsif params[:finance_chk]
+                if can? :work_e, :all
+                    @pilist = PiInfo.where(state: "check",bom_state: "checked",finance_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where(state: "check",bom_state: "checked",finance_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list.html.erb" and return     
+            elsif params[:checked]
+                if can? :work_e, :all
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list.html.erb" and return
+            else
+                if can? :work_e, :all
+                    @pilist = PiInfo.where("state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where("state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+            end
+        end        
+    end
+
+    def edit_pcb_pi
+        @pi_info = PiInfo.find_by(pi_no: params[:pi_no])
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
+        @pi_info_c_c_no = ""
+        @pi_info_c_customer = ""
+        @pi_info_c_customer_com = ""
+        @pi_info_c_customer_country = ""
+        @pi_info_c_tel = ""
+        @pi_info_c_fax = ""
+        @pi_info_c_email = ""
+        @pi_info_c_shipping_address = ""
+        if not @pi_info_c.blank?
+            @pi_info_c_c_no = @pi_info_c.c_no
+            @pi_info_c_customer = @pi_info_c.customer
+            @pi_info_c_customer_com = @pi_info_c.customer_com
+            @pi_info_c_customer_country = @pi_info_c.customer_country
+            @pi_info_c_tel = @pi_info_c.tel
+            @pi_info_c_fax = @pi_info_c.fax
+            @pi_info_c_email = @pi_info_c.email
+            @pi_info_c_shipping_address = @pi_info_c.shipping_address
+        end
+        @pi_item = PiItem.where(pi_no: params[:pi_no])
+        @pi_item_bom = PiItem.where(pi_no: params[:pi_no],state: "check")
+        @pi_other_item = PiOtherItem.where(pi_no: params[:pi_no])
+        @total_p = PiItem.where(pi_no: params[:pi_no]).sum("t_p") + PiOtherItem.where(pi_no: params[:pi_no]).sum("t_p")
+        if can? :work_d, :all 
+            pi_item = PiItem.find_by_id(params[:pi_item_id])
+            @boms = ProcurementBom.find_by_id(pi_item.bom_id)
+            @bom_item = PItem.where(procurement_bom_id: @boms.id)
+            if not @bom_item.blank?
+                @bom_item = @bom_item.select {|item| item.quantity != 0 }
+            end
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@boms.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            #render "edit_pcb_pi_eng.html.erb" and return 
+            render "procurement/p_viewbom.html.erb" and return
+        end
+    end
+
     def edit_moko_supplier
         if can? :work_admin, :all
             if not params[:supplier_id].blank?
@@ -5082,51 +5159,16 @@ before_filter :authenticate_user!
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 
-    def pi_list
-        if params[:key_order]
-            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        else
-            if params[:bom_chk]
-                if can? :work_e, :all
-                    @pilist = PiInfo.where(state: "check",bom_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-                render "pi_list.html.erb" and return
-            elsif params[:finance_chk]
-                if can? :work_e, :all
-                    @pilist = PiInfo.where(state: "check",bom_state: "checked",finance_state: nil,pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiInfo.where(state: "check",bom_state: "checked",finance_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-                render "pi_list.html.erb" and return     
-            elsif params[:checked]
-                if can? :work_e, :all
-                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-                render "pi_list.html.erb" and return
-            else
-                if can? :work_e, :all
-                    @pilist = PiInfo.where("state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiInfo.where("state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-            end
-        end        
-    end
-
     def pi_draft  
         pi_draft = PiInfo.find_by_id(params[:p_pi])
         if params[:commit] == "提交" and pi_draft.pi_lock != "lock"
-            if can? :work_admin, :all 
-                pi_draft.state = "checked"
-                pi_draft.bom_state = "checked"
-                pi_draft.finance_state = "checked"
-                pi_draft.save
-                redirect_to pi_list_path() and return
-            end
+            #if can? :work_admin, :all 
+                #pi_draft.state = "checked"
+                #pi_draft.bom_state = "checked"
+                #pi_draft.finance_state = "checked"
+                #pi_draft.save
+                #redirect_to pi_list_path() and return
+            #end
 =begin
             if can? :work_e, :all and pi_draft.state == "new"
                 pi_draft.state = "check"
@@ -5678,43 +5720,6 @@ before_filter :authenticate_user!
         end
         #@pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         redirect_to edit_pcb_pi_path(pi_no: pi_no) and return    
-    end
-
-    def edit_pcb_pi
-        @pi_info = PiInfo.find_by(pi_no: params[:pi_no])
-        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
-        @pi_info_c_c_no = ""
-        @pi_info_c_customer = ""
-        @pi_info_c_customer_com = ""
-        @pi_info_c_customer_country = ""
-        @pi_info_c_tel = ""
-        @pi_info_c_fax = ""
-        @pi_info_c_email = ""
-        @pi_info_c_shipping_address = ""
-        if not @pi_info_c.blank?
-            @pi_info_c_c_no = @pi_info_c.c_no
-            @pi_info_c_customer = @pi_info_c.customer
-            @pi_info_c_customer_com = @pi_info_c.customer_com
-            @pi_info_c_customer_country = @pi_info_c.customer_country
-            @pi_info_c_tel = @pi_info_c.tel
-            @pi_info_c_fax = @pi_info_c.fax
-            @pi_info_c_email = @pi_info_c.email
-            @pi_info_c_shipping_address = @pi_info_c.shipping_address
-        end
-        @pi_item = PiItem.where(pi_no: params[:pi_no])
-        @pi_other_item = PiOtherItem.where(pi_no: params[:pi_no])
-        @total_p = PiItem.where(pi_no: params[:pi_no]).sum("t_p") + PiOtherItem.where(pi_no: params[:pi_no]).sum("t_p")
-        if can? :work_d, :all 
-            @boms = ProcurementBom.find_by_id(@pi_info.pcb_customer_id)
-            @bom_item = PItem.where(procurement_bom_id: @pi_info.pcb_customer_id)
-            if not @bom_item.blank?
-                @bom_item = @bom_item.select {|item| item.quantity != 0 }
-            end
-            Rails.logger.info("add-------------------------------------12")
-            Rails.logger.info(@boms.inspect)
-            Rails.logger.info("add-------------------------------------12")
-            render "edit_pcb_pi_eng.html.erb" and return 
-        end
     end
 
     def del_pcb_follow

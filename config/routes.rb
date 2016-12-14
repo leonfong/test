@@ -180,6 +180,7 @@ Rails.application.routes.draw do
   match '/edit_moko_supplier', to: 'work_flow#edit_moko_supplier', via: 'post'
   match '/moko_supplier_list', to: 'work_flow#moko_supplier_list', via: 'get'
   match '/pi_draft', to: 'work_flow#pi_draft', via: 'get'
+  match '/pi_to_pmc', to: 'work_flow#pi_to_pmc', via: 'post'
 
 
 

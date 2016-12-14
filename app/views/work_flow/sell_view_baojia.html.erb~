@@ -1,14 +1,104 @@
 <div class="container-fluid" >
 
+<% if not params[:pi_info_id].blank? %>
+            <div class="row" style="padding: 10px;"><div class="col-md-12">   
+                <div class="pull-right">
+                    
+                    <%= form_tag('/pi_to_pmc', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
+                        <input type="text" class="form-control sr-only" id="p_pi_item_id" name="p_pi_item_id" value="<%= params[:pi_item_id] %>">
+                    <% if can? :work_e, :all %>
+                        <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
+                    
+                    <% end %>
 
+                    <% end %>
+                </div>
+            </div></div>
+
+            <div class="row "><div class="col-md-12">
+            <div class="panel panel-info">                
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th>Order No.</th>
+                            <th>Customer Part No.</th>
+                            <th>PCB Size(mm)</th>
+                            <th width="100">Quantity(PCS)</th>
+                            <th width="50">Layer</th>
+                            <th>Description</th>
+                            <th>PCB Price</th>
+                            <th>Components Cost</th>
+                            <th>PCBA</th>
+                            <th>Unit Price</th>
+                            <th>Total Price(USD)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @pi_item %>
+                        <% @pi_item.each do |pi_item| %>
+                        <% if pi_item.state.blank? %>
+                        <tr class="danger">
+                        <% else %>
+                        <tr class="success">      
+                        <% end %>
+                            <td>
+                                <% if pi_item.bom_id.blank? %>
+                                    <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
+                                <% else %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
+                                <% end %>
+                            </td>
+                            <td><%= pi_item.c_p_no %></td>
+                            <td><%= pi_item.pcb_size %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.layer %></td>
+                            <td><%= pi_item.des %></td>
+                            <td><%= pi_item.pcb_price %></td>
+                            <td><%= pi_item.com_cost %></td>
+                            <td><%= pi_item.pcba %></td>
+                            <td><%= pi_item.unit_price %></td>
+                            <td><%= pi_item.t_p %></td>
+                        </tr>
+                        <% end %>
+                        <% end %> 
+
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                                <% end %>
+                            </td>
+                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
+                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td>金额: <%= pi_item.t_p %></td>
+                            <td colSpan="3"></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
+                                <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                                     
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+
+<% end %>
 
 
 
 
   
-    <div class="row" style="padding: 0px;">      
-        <h1><strong>权限-业务部</strong></h1>
+    <div class="row" style="padding-top: 10px;">      
+
 <!--
+        <h1><strong>权限-业务部</strong></h1>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if can? :pcb_review, :all %>
             <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
@@ -25,8 +115,14 @@
             
             <div class="row">
                 <div class="col-md-3 col-sm-3 " >
-                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>BOM No. <%= @boms.no %></strong></h4>
+                    <h4 style="color: #32aacb;margin-top: 0px;">
+                        <strong>BOM No. <%= @boms.no %></strong>
+
+                        <span class="text-danger"><strong>版本 V<%= @boms.bom_version %></strong></span>
+
+                    </h4>
                 </div>
+
 <!--
                 <small><div class="col-md-9 col-sm-9 pull-right" style="color:#999;">
                     PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>
@@ -78,7 +174,11 @@
                     <th width="150">MOKO 编码</th>
                     <th>MOKO 描述</th>
                     <th width="50">位号</th>
-                    <th width="50">数量</th> 
+                    <% if not params[:pi_info_id].blank? %>
+                    <th width="50">总量</th>
+                    <th width="50">采购</th>
+                    <th width="50">客供</th>
+                    <% end %> 
                     <th width="100">成本价</th>
                     <th width="60">报价</th>                 
                     <th >Other</th>
@@ -191,7 +291,16 @@
                     <% else %>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code.to_s %></small></td>
                     <% end %>
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td> 
+
+                    <% if not params[:pi_info_id].blank? %>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= @pi_bom_qty_info.t_qty.to_i*item.quantity %></small></td>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
+                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.pi_item_qty %>" data-pmc_qty="<%= item.bom_ctl_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.bom_ctl_qty %></div> 
+                    
+                    </small>
+                    </td> 
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><%= item.customer_qty %></td>
+                    <% end %>
 
                   
                     
@@ -283,6 +392,7 @@
             </table></small>
                </div>
             </div>
+<% if  params[:pi_info_id].blank? %>
             <div class="row">
                 <div class="col-md-12">
             <table class="table table-striped table-bordered">
@@ -294,12 +404,14 @@
             </table>
                 </div>
             </div>
+<% end %>
             <% end %>
 
-
+<% if  params[:pi_info_id].blank? %>
             <div class="modal-footer">
                 <%= link_to_function "返回上一页", "history.go(-1)",class:"btn btn-danger "%>
             </div>
+<% end %>
         </div>
     </div>
 

@@ -5,8 +5,8 @@
                 <div class="pull-right">
                     
                     <%= form_tag('/pi_draft', method:"post") do %>
-                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
-                        
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
+                        <input type="text" class="form-control sr-only" id="p_pi_item_id" name="p_pi_item_id" value="<%= params[:pi_item_id] %>">
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
                         <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
@@ -269,8 +269,9 @@ $(document).ready(function() {
                     <% if not params[:pi_info_id].blank? %>
                     <th width="50">总量</th>
                     <th width="50">采购</th>
-                    <% end %>
                     <th width="50">客供</th>
+                    <% end %>
+
                     <th width="25"></th>
                     <th width="110">成本价￥</th>
                     <th width="65">小计</th>
@@ -439,10 +440,11 @@ function change_<%= item.id.to_s %>(){
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= @pi_bom_qty_info.t_qty.to_i*item.quantity %></small></td>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.pi_item_qty %>" data-pmc_qty="<%= item.bom_ctl_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.bom_ctl_qty %></div> 
-                    <% end %>
+                    
                     </small>
                     </td> 
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><%= item.customer_qty %></td>
+                    <% end %>
                     <td width="25" style="padding: 5px 0px 5px 0px;margin: 0px;">
                       <small>                      
                           <a class="glyphicon glyphicon-trash a_ctl" data-method='get' data-remote='true' href="/del_cost?id=<%=item.id.to_s%>"></a>
@@ -754,6 +756,7 @@ function change_<%= item.id.to_s %>(){
                     <button type="submit" class="btn btn-warning">SUBMIT</button>
                 <% end %> 
             </div>
+<% if params[:pi_info_id].blank? %>
             <div class="modal-footer">
                 <%= link_to "返回上一步", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-danger pull-left",data:{confirm: "返回上一步会删除这个BOM所有已经匹配的数据，确定要返回上一步吗？"}%>
 <!--                
@@ -765,6 +768,7 @@ function change_<%= item.id.to_s %>(){
                     <a type="button" class="btn btn-default disabled a_ctl"  >已发送</a>
                 <% end %>
             </div>
+<% end %>
         </div>
     </div>
 

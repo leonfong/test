@@ -267,6 +267,7 @@ $(document).ready(function() {
                     <th >MOKO 描述</th>
                     <th width="100">位号</th>
                     <th width="50">用量</th>
+                    <th width="60">报价量</th>
                     <% if not params[:pi_info_id].blank? %>
                     <th width="50">总量</th>
                     <th width="50">采购</th>
@@ -438,6 +439,7 @@ function change_<%= item.id.to_s %>(){
                     <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
                     <% end %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
+                    <td width="60" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td>
                     <% if not params[:pi_info_id].blank? %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= @pi_bom_qty_info.t_qty.to_i*item.quantity %></small></td>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>

@@ -34,9 +34,9 @@
     <% @pilist.each do |pcb| %>   
       <tr >
         <% if not pcb.pcb_customer_id.blank? %>
-            <td><%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id) %></td>
+            <td><%= link_to pcb.pi_no, edit_pcb_pi_path(pi_info_id: pcb.id,pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id) %></td>
         <% else %>
-            <td><%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no) %></td>
+            <td><%= link_to pcb.pi_no, edit_pcb_pi_path(pi_info_id: pcb.id,pi_no: pcb.pi_no) %></td>
         <% end %>
         <td><%= pcb.p_name %></td>
         <td><%= pcb.c_code %></td>

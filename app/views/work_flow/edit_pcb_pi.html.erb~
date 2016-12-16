@@ -83,7 +83,7 @@
             </div>
             </div></div>
 
-
+            <%= render 'layouts/flash_messages' %>
 <% if params[:c_id] and can? :work_e, :all and @pi_info.state == "new" %>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
@@ -270,6 +270,7 @@
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
+<!--
                     <%= form_tag('/pi_draft', method:"post") do %>
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         
@@ -284,6 +285,7 @@
                         <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% end %>
+-->
                 </div>
             </div></div>
             <div class="row "><div class="col-md-12">   
@@ -389,7 +391,7 @@
               </thead>
               <tbody>
               <% #PcbOrderItem.where(c_id: params[:c_id],state: "quotechked").each do |pi_item_f| %>
-              <% PcbOrderItem.find_by_sql("SELECT DISTINCT pcb_order_items.pcb_order_sell_item_id, pcb_order_sell_items.* FROM pcb_order_items INNER JOIN pcb_order_sell_items ON pcb_order_sell_items.id = pcb_order_items.pcb_order_sell_item_id WHERE pcb_order_items.state = 'quotechked' AND pcb_order_items.c_id = #{params[:c_id]}").each do |pi_item_f| %>
+              <% PcbOrderItem.find_by_sql("SELECT DISTINCT pcb_order_items.pcb_order_sell_item_id, pcb_order_sell_items.* FROM pcb_order_items INNER JOIN pcb_order_sell_items ON pcb_order_sell_items.id = pcb_order_items.pcb_order_sell_item_id WHERE pcb_order_items.state = 'quotechked' AND pcb_order_items.c_id = #{params[:c_id]} AND pcb_order_items.pi_lock = ''").each do |pi_item_f| %>
                     <tr>
                     <td><div><%= pi_item_f.pcb_order_no.to_s %></div></td>
                     <td><div><%= pi_item_f.remark.to_s %></div></td>

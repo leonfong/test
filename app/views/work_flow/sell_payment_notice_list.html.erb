@@ -1,0 +1,405 @@
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "pi_sell_paymanet_notice"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/pi_list', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"询价单号，项目名称，项目描述，客户代码，客户名，业务邮箱，备注"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+                <a type="button" class="btn btn-info btn-sm" href="/pi_list?bom_chk=true">等待工程师审批</a>
+                <a type="button" class="btn btn-danger btn-sm" href="/pi_list?finance_chk=true">等待财务审批</a>
+                <a type="button" class="btn btn-success btn-sm" href="/pi_list?checked=true">已经通过审批</a>
+            </div>
+            <% end %>                       
+            </span>
+            </div>
+        </div>
+<br>
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+<% if not @payment.blank? %>        
+<%= will_paginate(@payment) %>            
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="70">状态</th>
+      <th width="80">收款通知号</th>
+      <th width="80">制单人</th>
+      <th width="80">审核人</th>
+      <th width="90">通知日期</th>
+      <th width="80">审批日期</th>
+      <th width="80">收款金额</th>
+      <th width="90">PI总金额</th>
+      <th width="90">客编</th>
+      <th width="90">PI NO.</th>
+      <th width="90">PI日期</th>
+      <th >备注</th>
+      <th width="90">币别</th>
+      <th width="120">Account name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payment.each do |payment| %>   
+      <tr data-toggle="modal" data-target="#view_payment_notice">
+        <td><%= payment.state %></td>
+        <td><%= payment.id %></td>
+        <td><%= payment.sell_full_name_new %></td>
+        <td><%= payment.sell_full_name_up %></td>
+        <td><%= payment.created_at.localtime.strftime('%Y-%m-%d') %></td>
+        <td><%=  %></td>
+        <td><%= payment.pay_p %></td>  
+        <td><%= payment.pi_t_p %></td>
+        <td><%= payment.c_code %></td>
+        <td><%= payment.pi_info_id %></td>
+        <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
+        <td><%= payment.remark %></td> 
+        <td><%= payment.currency_type %></td> 
+        <td><%= payment.pay_account_name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+        </div></div>
+        </div>
+    </div>
+
+
+
+
+<div class="modal fade" id="view_payment_notice" tabindex="-1" role="dialog" aria-labelledby="view_payment_noticeLabel" >
+  <div class="modal-dialog modal-lg" style="width: 1300px;" role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn btn-warning btn-sm pull-right" >编辑</button>
+        <h4 class="modal-title" id="view_payment_noticeLabel">编辑收款通知单 <code>单号：<%= %></code></h4>
+      </div>
+      
+      <%= form_tag({action: :new_payment_notice},method:"post",multipart:"true") do %>
+      <div class="modal-body" >
+          <div class="panel panel-default">
+              <div class="panel-heading"><strong>PI内容</strong></div>
+              <div class="panel-body" style="padding: 15px 15px 1px;">
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label class="col-md-4 control-label" for="pi_no"><code>PI NO.:</code></label>
+                                  <div class="col-md-8">
+                                      <input class="form-control" name="pi_no" id="pi_no" type="text" value="<%=params[:pi_no]%>" readonly>
+                                      <input class="sr-only" name="pi_info_id" id="pi_info_id" type="text" value="<%=params[:pi_info_id]%>">
+                                      <input class="sr-only" name="pi_item_id" id="pi_item_id" type="text" value="<%=params[:pi_item_id]%>">
+                                      <input class="sr-only" name="c_id" id="c_id" type="text" value="<%=params[:c_id]%>">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pi_date" class="col-md-3 control-label">PI日期:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" name="pi_date" id="pi_date" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="c_code" class="col-md-4 control-label">客户代码:</label>
+                                  <div class="col-md-8">
+                                      <input class="form-control" name="c_code" id="c_code" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="c_country" class="col-md-3 control-label">国家:</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="c_country" id="c_country" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+<!--
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label class="col-md-4 control-label" for="payment_way">结算方式:</label>
+                                  <div class="col-md-8">
+                                      <input class="form-control" name="payment_way" id="payment_way" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+-->
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="currency_type" class="col-md-3 control-label"><code>币别:</code></label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" name="currency_type" id="currency_type" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="exchange_rate" class="col-md-4 control-label">汇率:</label>
+                                  <div class="col-md-8">
+                                      <input class="form-control" name="exchange_rate" id="exchange_rate" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pi_t_p" class="col-md-3 control-label">PI总金额:</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="pi_t_p" id="pi_t_p" type="text"  readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-5">
+                  <div class="panel panel-default">
+                      <div class="panel-heading"><strong>收款内容</strong></div>
+                      <div class="panel-body" style="padding: 15px 15px 1px;">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pay_p" class="col-md-3 control-label">收款金额:</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="pay_p" id="pay_p" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pay_type" class="col-md-3 control-label">收款性质:</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="pay_type" id="pay_type" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pay_account_name" class="col-md-3 control-label"><code>Account Name:</code></label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="pay_account_name" id="pay_account_name" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pay_account_number" class="col-md-3 control-label">Account Number:</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="pay_account_number" id="pay_account_number" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pay_swift_code" class="col-md-3 control-label">Swift code:</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="pay_swift_number" id="pay_swift_code" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="pay_bank_name" class="col-md-3 control-label">Bank Name:</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control" name="pay_bank_name" id="pay_bank_name" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="remark" class="col-md-2 control-label">备注:</label>
+                                  <div class="col-md-10">
+                                      <textarea class="form-control" name="remark" id="remark" rows="4" readonly></textarea>
+                                  </div>
+                              </div>
+                          </div>      
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-7">
+                  <div class="panel panel-default">
+                      <div class="panel-heading"><strong>银行水单粘帖处</strong></div>
+                      <div class="panel-body" style="padding: 0px;">
+                          <%= kindeditor_tag :pay_att, '',:editor_id => 'my_feedback',:items => ["image"] %>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="sell_name" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">业务员:</label>
+                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;" >
+                                      <input class="form-control" name="sell_name" id="sell_name" type="text" readonly>
+                                  </div>
+                              </div>
+                          </div>      
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">制单人:</label>
+                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;">
+                                      
+                                  </div>
+                              </div>
+                          </div>      
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">审核人:</label>
+                                  <div class="col-md-9" style="padding-left: 0px;">
+                                      
+                                  </div>
+                              </div>
+                          </div>      
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="sell_team" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">部门:</label>
+                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;">
+                                      <input class="form-control" name="sell_team" id="sell_team" type="text" value="<%= current_user.team.to_s %>" readonly>
+                                  </div>
+                              </div>
+                          </div>      
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">通知日期:</label>
+                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;">
+                                      
+                                  </div>
+                              </div>
+                          </div>      
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">审批日期:</label>
+                                  <div class="col-md-9" style="padding-left: 0px;">
+                                      
+                                  </div>
+                              </div>
+                          </div>      
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary" >审批通过</button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+</small>
+
+
+
+<script>
+function get_options(value){
+    var urla='/work_flow/select_pcbcustomer_ajax?id='+value;
+    $("#change_s").attr("href",urla);
+    $("#change_s").click(); 
+  }
+
+$('#updatePrice').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var order_no = button.data('order_no') 
+  var customer = button.data('customer')
+  var qty = button.data('qty')
+  var sell = button.data('sell')
+  var remark = button.data('remark')
+  var follow_remark = button.data('follow_remark')
+  var order_sell = button.data('order_sell')
+  var modal = $(this)
+  modal.find($("#order_no")).val(order_no)
+  modal.find($("#u_customer")).val(customer)
+  modal.find($("#u_qty")).val(qty)
+  modal.find($("#u_sell")).val(sell)
+  modal.find($("#remark")).html(remark)
+  modal.find($("#follow_remark")).html(follow_remark)
+  modal.find($("#u_order_sell")).val(order_sell)
+})
+</script>
+
+<script type="text/javascript">
+function postform() {  	           
+      if ($("#price").val() == "")
+      {                    
+　　    alert("请选填写报价！");                    
+　　    return false;                
+　     }
+
+}  
+
+$(".menu-first").click(function(){
+  $('#userMeun').collapse('hide');
+  $('#articleMenu').collapse('hide');
+});
+  
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

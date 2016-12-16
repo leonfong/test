@@ -181,7 +181,10 @@ Rails.application.routes.draw do
   match '/moko_supplier_list', to: 'work_flow#moko_supplier_list', via: 'get'
   match '/pi_draft', to: 'work_flow#pi_draft', via: 'get'
   match '/pi_to_pmc', to: 'work_flow#pi_to_pmc', via: 'post'
-
+  match '/new_payment_notice', to: 'work_flow#new_payment_notice', via: 'post'
+  match '/payment_notice_list', to: 'work_flow#payment_notice_list', via: 'get'
+  match '/sell_payment_notice_list', to: 'work_flow#sell_payment_notice_list', via: 'get'
+  match '/new_voucher', to: 'work_flow#new_voucher', via: 'post'
 
 
 

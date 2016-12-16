@@ -31,12 +31,15 @@
     <ul id="articleMenu" class="nav nav-list  menu-second <% if selected =~ /pi/i %>collapse in<% else %>collapse<% end %>">
         <li><a <% if selected == "pi_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_draft_list"><i></i> PI草稿箱</a></li>
         <li><a <% if selected == "pi_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_list" ><i></i>PI查询</a></li>
-<% if can? :work_d, :all or can? :work_admin, :all%>
-        <li><a <% if selected == "pi_list_bom" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> PI工程师审批</a></li>
-        <li><a <% if selected == "pi_list_finance" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?finance_chk=true"><i class="icon-pencil"></i> PI财务审批</a></li>
-<% end %>
+        <li><a <% if selected == "pi_list_bom" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> 待工程师审批</a></li>
+        <li><a <% if selected == "pi_sell_paymanet_notice" %>style="background-color: #d9edf7;"<% end %>href="/sell_payment_notice_list"><i class="icon-pencil"></i>待发送收款通知列表</a></li>
+        <li><a <% if selected == "pi_list_finance" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?finance_chk=true"><i class="icon-pencil"></i> 待财务审批</a></li>
     </ul>
 
+    <a style="background-color: #ddd;" href="#financeMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 财务中心</a>
+    <ul id="financeMenu" class="nav nav-list  menu-second <% if selected =~ /_finance/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "paymanet_notice_finance" %>style="background-color: #d9edf7;"<% end %>href="/payment_notice_list"><i class="icon-pencil"></i>收款通知列表</a></li>
+    </ul>
 
     <a style="background-color: #ddd;" href="#pmcMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> PMC</a>
     <ul id="pmcMenu" class="nav nav-list  menu-second <% if selected =~ /pmc/i %>collapse in<% else %>collapse<% end %>">
@@ -122,6 +125,7 @@ $(".menu-first").click(function(){
   $('#buyMenu').collapse('hide');
   $('#factoryMenu').collapse('hide');
   $('#Supplier_Menu').collapse('hide');
+  $('#financeMenu').collapse('hide');
 });
 </script>
 

@@ -2,13 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <% if not params[:finance_chk].blank? %>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_finance"} %>
-            <% elsif not params[:bom_chk].blank?%>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_bom"} %>
-            <% else %>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list"} %>
-            <% end %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pi_list_paymanet_notice"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -73,7 +67,7 @@
       <tr >
         
         <% if not pcb.pcb_customer_id.blank? %>
-            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id,pi_item_id: pcb.id,pi_info_id: pcb.pi_info_id) %></td>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id,pi_info_id: pcb.pi_info_id,pi_item_id: pcb.id) %></td>
         <% else %>
             <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,pi_info_id: pcb.pi_info_id,pi_item_id: pcb.id) %></td>
         <% end %>
@@ -81,10 +75,8 @@
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td>
             <% if pcb.bom_state.blank? %>
-                未提交
-            <% elsif pcb.bom_state == "check" %>
                 审核中
-            <% elsif pcb.bom_state == "checked" %>
+            <% else %>
                 审核完成
             <% end %>
         </td>

@@ -4,7 +4,112 @@ require 'spreadsheet'
 require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
-    
+
+    def new_voucher
+        if not params[:pay_id].blank?
+            get_payment_notice_data = PaymentNoticeInfo.find_by_id(params[:pay_id])
+            finance_voucher_info = FinanceVoucherInfo.new
+            finance_voucher_info.state = "checked"
+            finance_voucher_info.payment_notice_info_id = get_payment_notice_data.id
+            finance_voucher_info.payment_notice_info_no = get_payment_notice_data.id
+            finance_voucher_info.pi_info_id = get_payment_notice_data.pi_info_id
+            finance_voucher_info.pi_item_id = get_payment_notice_data.pi_item_id
+            finance_voucher_info.c_id = get_payment_notice_data.c_id
+            finance_voucher_info.pi_info_no = get_payment_notice_data.pi_info_no
+            finance_voucher_info.pi_date = get_payment_notice_data.pi_date
+            finance_voucher_info.c_code = get_payment_notice_data.c_code
+            finance_voucher_info.c_des = get_payment_notice_data.c_des
+            finance_voucher_info.c_country = get_payment_notice_data.c_country
+            finance_voucher_info.payment_way = get_payment_notice_data.payment_way
+            finance_voucher_info.currency_type = get_payment_notice_data.currency_type
+            finance_voucher_info.exchange_rate = get_payment_notice_data.exchange_rate
+            finance_voucher_info.pi_t_p = get_payment_notice_data.pi_t_p
+            finance_voucher_info.unreceived_p = get_payment_notice_data.unreceived_p
+            finance_voucher_info.pay_att = get_payment_notice_data.pay_att
+            finance_voucher_info.pay_p = get_payment_notice_data.pay_p
+            finance_voucher_info.pay_type = get_payment_notice_data.pay_type
+            finance_voucher_info.pay_account_name = get_payment_notice_data.pay_account_name
+            finance_voucher_info.pay_account_number = get_payment_notice_data.pay_account_number
+            finance_voucher_info.pay_swift_code = get_payment_notice_data.pay_swift_code
+            finance_voucher_info.pay_bank_name = get_payment_notice_data.pay_bank_name
+            finance_voucher_info.remark = get_payment_notice_data.remark
+            finance_voucher_info.sell_id = get_payment_notice_data.sell_id
+            finance_voucher_info.sell_full_name_new = get_payment_notice_data.sell_full_name_new
+            finance_voucher_info.sell_full_name_up = get_payment_notice_data.sell_full_name_up
+            finance_voucher_info.sell_team = get_payment_notice_data.sell_team
+            finance_voucher_info.send_at = get_payment_notice_data.send_at
+            finance_voucher_info.voucher_item = params[:voucher_item]
+            finance_voucher_info.voucher_way = params[:voucher_way]
+            finance_voucher_info.collection_type = params[:collection_type]
+            finance_voucher_info.xianjin_kemu = params[:xianjin_kemu]
+            finance_voucher_info.voucher_bank_name = params[:voucher_bank_name]
+            finance_voucher_info.voucher_bank_account = params[:voucher_bank_account]
+            finance_voucher_info.get_money = get_payment_notice_data.pay_p
+            finance_voucher_info.get_money_self = params[:get_money_self]
+            finance_voucher_info.voucher_remark = params[:voucher_remark]
+            #finance_voucher_info.voucher_no = params[:voucher_item]
+            finance_voucher_info.voucher_at = Time.new
+            finance_voucher_info.finance_at = params[:finance_at]
+            finance_voucher_info.voucher_currency_type = params[:voucher_currency_type]
+            finance_voucher_info.voucher_exchange_rate = params[:voucher_exchange_rate]
+            finance_voucher_info.voucher_full_name_new = params[:voucher_full_name_new]
+            finance_voucher_info.voucher_full_name_up = params[:voucher_full_name_up]
+            if finance_voucher_info.save
+                payment_voucher_info = FinancePaymentVoucherInfo.new
+                payment_voucher_info.finance_voucher_info_id = finance_voucher_info.id
+                payment_voucher_info.no = 1
+                payment_voucher_info.des = finance_voucher_info.sell_team.to_s + finance_voucher_info.sell_full_name_up.to_s + finance_voucher_info.pi_info_no.to_s
+                payment_voucher_info.kemu = finance_voucher_info.xianjin_kemu.to_s + "---" + finance_voucher_info.c_code
+                payment_voucher_info.jie_fang = finance_voucher_info.get_money_self
+                payment_voucher_info.dai_fang = finance_voucher_info.get_money_self
+                payment_voucher_info.finance_at = params[:finance_at]
+                payment_voucher_info.save
+            end
+        end
+        redirect_to :back
+    end
+
+    def payment_notice_list
+        @payment = PaymentNoticeInfo.where(state: "checking").paginate(:page => params[:page], :per_page => 20)
+    end    
+
+    def sell_payment_notice_list
+        @payment = PaymentNoticeInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def new_payment_notice
+        if not params[:pi_info_id].blank?
+            get_pi_info_data = PiInfo.find_by_id(params[:pi_info_id])
+            new_payment_notice = PaymentNoticeInfo.new
+            new_payment_notice.state = "new"
+            new_payment_notice.pi_info_id = params[:pi_info_id]
+            new_payment_notice.pi_item_id = params[:pi_item_id]
+            new_payment_notice.c_id = params[:c_id]
+            new_payment_notice.pi_info_no = get_pi_info_data.pi_no
+            new_payment_notice.pi_date = get_pi_info_data.created_at
+            new_payment_notice.c_code = get_pi_info_data.c_code
+            new_payment_notice.c_des = get_pi_info_data.c_des
+            new_payment_notice.c_country = get_pi_info_data.c_country
+            new_payment_notice.currency_type = params[:currency_type]
+            new_payment_notice.exchange_rate = params[:exchange_rate]
+            new_payment_notice.pi_t_p = get_pi_info_data.t_p
+            #new_payment_notice.unreceived_p = params[:unreceived_p]
+            new_payment_notice.pay_att = params[:pay_att]
+            new_payment_notice.pay_p = params[:pay_p]
+            new_payment_notice.pay_type = params[:pay_type]
+            new_payment_notice.pay_account_name = params[:pay_account_name]
+            new_payment_notice.pay_account_number = params[:pay_account_number]
+            new_payment_notice.pay_swift_code = params[:pay_swift_code]
+            new_payment_notice.pay_bank_name = params[:pay_bank_name]
+            new_payment_notice.remark = params[:remark]
+            new_payment_notice.sell_id = current_user.id
+            new_payment_notice.sell_full_name_new = current_user.full_name
+            new_payment_notice.sell_team = current_user.team
+            new_payment_notice.save
+        end
+        redirect_to :back
+    end
+
     def pi_to_pmc
         Rails.logger.info("pmc_new--------------------------------------1")
         #@pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy = '' ORDER BY p_items.product_id DESC")
@@ -329,17 +434,17 @@ before_filter :authenticate_user!
             if params[:bom_chk]
                 if can? :work_e, :all
                     #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.bom_state IS NULL ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.bom_state IS NULL ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pi_list_eng.html.erb" and return
             elsif params[:finance_chk]
                 if can? :work_e, :all
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state IS NULL ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state IS NULL ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pi_list_eng.html.erb" and return     
             elsif params[:checked]
@@ -353,7 +458,7 @@ before_filter :authenticate_user!
                 else
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'checked' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
-                render "pi_list.html.erb" and return
+                render "pi_list_paymanet_notice.html.erb" and return
             else
                 if can? :work_e, :all
                     @pilist = PiInfo.where("state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
@@ -391,24 +496,26 @@ before_filter :authenticate_user!
         @total_p = PiItem.where(pi_info_id: params[:pi_info_id]).sum("t_p") + PiOtherItem.where(pi_info_id: params[:pi_info_id]).sum("t_p")
 
 
-
-        pi_item = PiItem.find_by_id(params[:pi_item_id])
-        @boms = ProcurementBom.find_by_id(pi_item.bom_id)
-        #@bom_item = PItem.where(procurement_bom_id: @boms.id)
-        @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
-        @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(params[:pi_item_id])
-        if not @bom_item.blank?
-            @bom_item = @bom_item.select {|item| item.quantity != 0 }
-        end
-        Rails.logger.info("add-------------------------------------12")
-        Rails.logger.info(@boms.inspect)
-        Rails.logger.info("add-------------------------------------12")
-        if can? :work_d, :all  
-            render "procurement/p_viewbom.html.erb" and return
-        end
-        if can? :work_e, :all  
-            @baojia = @bom_item
-            render "sell_view_baojia.html.erb" and return
+        if not params[:pi_item_id].blank?
+            pi_item = PiItem.find_by_id(params[:pi_item_id])
+            @state = pi_item.state
+            @boms = ProcurementBom.find_by_id(pi_item.bom_id)
+            #@bom_item = PItem.where(procurement_bom_id: @boms.id)
+            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
+            @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(params[:pi_item_id])
+            if not @bom_item.blank?
+                @bom_item = @bom_item.select {|item| item.quantity != 0 }
+            end
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@boms.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if can? :work_d, :all  
+                render "procurement/p_viewbom.html.erb" and return
+            end
+            if can? :work_e, :all  
+                @baojia = @bom_item
+                render "sell_view_baojia.html.erb" and return
+            end
         end
     end
 
@@ -5202,6 +5309,10 @@ before_filter :authenticate_user!
 =end
             if can? :work_e, :all 
                 pi_item_data = PiItem.find_by_id(params[:p_item])
+                if pi_item_data.qty.blank?
+                    flash[:error] = "请填写数量!!!"
+                    redirect_to :back and return
+                end
                 if pi_item_data.state.blank?
                     if not pi_item_data.bom_id.blank?
                         get_bom_data = ProcurementBom.find_by_id(pi_item_data.bom_id)
@@ -5234,7 +5345,7 @@ before_filter :authenticate_user!
                                         new_qty_info_item = PiBomQtyInfoItem.new
                                         new_qty_info_item.pi_bom_qty_info_id = new_qty_info.id
                                         new_qty_info_item.pi_info_id = new_qty_info.pi_info_id
-                                        new_qty_info_item.pi_item_id = item.id
+                                        new_qty_info_item.pi_item_id = pi_item_data.id
                                         new_qty_info_item.order_item_id = pi_item_data.order_item_id
                                         new_qty_info_item.bom_id = new_qty_info.bom_id
                                         new_qty_info_item.p_item_id = item.id
@@ -5273,11 +5384,12 @@ before_filter :authenticate_user!
                     end
                     pi_draft.pi_lock = "lock"
                     pi_item_data.state = "check"
+                    pi_item_data.bom_state = "check"
                     pi_item_data.save
                     pi_draft.state = "check"
                     pi_draft.save
                 end
-                redirect_to pi_list_path() and return                
+                redirect_to pi_list_path(bom_chk: true) and return                
             end
 
             if can? :work_d, :all 
@@ -5419,9 +5531,10 @@ before_filter :authenticate_user!
     
     def del_pcb_pi
         pcb_pi = PiInfo.find(params[:pi_id])
-        if can? :work_pcb_business, :all
+        if can? :work_pcb_business, :all or pcb_pi.state == "new"
             pcb_pi.destroy
         end
+        
         redirect_to :back
     end
 
@@ -5770,11 +5883,12 @@ before_filter :authenticate_user!
             pi_info.state = "new"
             pi_info.save
             pi_no = pi_info.pi_no
+            pi_id = pi_info.id
         else
             pi_no = params[:pi_no]
         end
         #@pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        redirect_to edit_pcb_pi_path(pi_no: pi_no) and return    
+        redirect_to edit_pcb_pi_path(pi_info_id: pi_id,pi_no: pi_no) and return    
     end
 
     def del_pcb_follow
@@ -5827,7 +5941,7 @@ before_filter :authenticate_user!
                 del_item.destroy
             end
         end
-        redirect_to edit_pcb_pi_path(pi_no: params[:c_pi_no],c_id: params[:id])
+        redirect_to edit_pcb_pi_path(pi_info_id: up_c.id,pi_no: params[:c_pi_no],c_id: params[:id])
     end
 
     def find_linkbom

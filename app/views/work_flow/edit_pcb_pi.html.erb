@@ -83,7 +83,7 @@
             </div>
             </div></div>
 
-
+            <%= render 'layouts/flash_messages' %>
 <% if params[:c_id] and can? :work_e, :all and @pi_info.state == "new" %>
             <div class="row "><div class="col-md-12">
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addOrdert" >添加已询价物料</button>
@@ -270,6 +270,7 @@
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
+<!--
                     <%= form_tag('/pi_draft', method:"post") do %>
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         
@@ -284,6 +285,7 @@
                         <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% end %>
+-->
                 </div>
             </div></div>
             <div class="row "><div class="col-md-12">   
@@ -472,7 +474,7 @@
               <input type="text" class="form-control" id="edit_pcb_size" name="edit_pcb_size" >
             </div>
             <div class="form-group">         
-              <label for="p_name" class="control-label">Quantity(PCS):</label>
+              <label for="p_name" class="control-label"><code>必填</code>Quantity(PCS):</label>
               <input type="text" class="form-control" id="edit_qty" name="edit_qty" >
             </div>
             <div class="form-group">         

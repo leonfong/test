@@ -62,7 +62,7 @@
   </thead>
   <tbody>
     <% @payment.each do |payment| %>   
-      <tr data-toggle="modal" data-backdrop="static" data-target="#view_payment_notice">
+      <tr data-toggle="modal" data-backdrop="static" data-target="#view_payment_notice" data-payment_id="<%= payment.id %>" data-payment_pi_info_no="<%= payment.pi_info_no %>" data-payment_pi_date="<%= payment.pi_date.localtime.strftime('%Y-%m-%d') %>" data-payment_c_code="<%= payment.c_code %>" data-payment_c_country="<%= payment.c_country %>" data-payment_currency_type="<%= payment.currency_type %>" data-payment_exchange_rate="<%= payment.exchange_rate %>" data-payment_pi_t_p="<%= payment.pi_t_p %>" data-payment_pay_p="<%= payment.pay_p %>" data-payment_pay_type="<%= payment.pay_type %>" data-payment_pay_account_name="<%= payment.pay_account_name %>" data-payment_pay_account_number="<%= payment.pay_account_number %>" data-payment_pay_swift_code="<%= payment.pay_swift_code %>" data-payment_pay_bank_name="<%= payment.pay_bank_name %>" data-payment_remark="<%= payment.remark %>" data-payment_pay_att="<%= payment.pay_att %>" data-payment_sell_full_name_new="<%= payment.sell_full_name_new %>" data-payment_sell_team="<%= payment.sell_team %>" data-payment_created_at="<%= payment.created_at.localtime.strftime('%Y-%m-%d') %>" >
         <td><%= payment.state %></td>
         <td><%= payment.id %></td>
         <td><%= payment.sell_full_name_new %></td>
@@ -89,15 +89,15 @@
 
 
 
-<div class="modal fade" id="view_payment_notice" tabindex="-1" role="dialog" aria-labelledby="view_payment_noticeLabel" >
+<div class="modal fade" id="view_payment_notice" tabindex="-1" role="dialog" aria-labelledby="view_payment_notice_Label" >
   <div class="modal-dialog modal-lg" style="width: 1300px;" role="document" >
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="btn btn-warning btn-sm pull-right" >编辑</button>
-        <h4 class="modal-title" id="view_payment_noticeLabel">编辑收款通知单 <code>单号：<%= %></code></h4>
+        <button type="button" id="show_del" class="btn btn-warning btn-sm pull-right" >编辑</button>
+        <h4 class="modal-title" >编辑收款通知单 <code id="view_payment_notice_Label" ></code></h4>
       </div>
       
-      <%= form_tag({action: :new_payment_notice},method:"post",multipart:"true") do %>
+      <%= form_tag({action: :edit_payment_notice},method:"post",multipart:"true") do %>
       <div class="modal-body" >
           <div class="panel panel-default">
               <div class="panel-heading"><strong>PI内容</strong></div>
@@ -108,10 +108,7 @@
                               <div class="form-group form-group-sm">
                                   <label class="col-md-4 control-label" for="pi_no"><code>PI NO.:</code></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" name="pi_no" id="pi_no" type="text" value="<%=params[:pi_no]%>" readonly>
-                                      <input class="sr-only" name="pi_info_id" id="pi_info_id" type="text" value="<%=params[:pi_info_id]%>">
-                                      <input class="sr-only" name="pi_item_id" id="pi_item_id" type="text" value="<%=params[:pi_item_id]%>">
-                                      <input class="sr-only" name="c_id" id="c_id" type="text" value="<%=params[:c_id]%>">
+                                      <p class="form-control-static" id="pi_no"></p>
                                   </div>
                               </div>
                           </div>
@@ -121,7 +118,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pi_date" class="col-md-3 control-label">PI日期:</label>
                                   <div class="col-md-9" >
-                                      <input class="form-control" name="pi_date" id="pi_date" type="text" readonly>
+                                      <p class="form-control-static" id="pi_date"></p>
                                   </div>
                               </div>
                           </div>
@@ -131,7 +128,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="c_code" class="col-md-4 control-label">客户代码:</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" name="c_code" id="c_code" type="text" readonly>
+                                      <p class="form-control-static" id="c_code"></p>
                                   </div>
                               </div>
                           </div>
@@ -141,7 +138,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="c_country" class="col-md-3 control-label">国家:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="c_country" id="c_country" type="text" readonly>
+                                      <p class="form-control-static" id="c_country"></p>
                                   </div>
                               </div>
                           </div>
@@ -165,7 +162,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="currency_type" class="col-md-3 control-label"><code>币别:</code></label>
                                   <div class="col-md-9" >
-                                      <input class="form-control" name="currency_type" id="currency_type" type="text" readonly>
+                                      <p class="form-control-static" id="currency_type"></p>
                                   </div>
                               </div>
                           </div>
@@ -175,7 +172,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="exchange_rate" class="col-md-4 control-label">汇率:</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" name="exchange_rate" id="exchange_rate" type="text" readonly>
+                                      <p class="form-control-static" id="exchange_rate"></p>
                                   </div>
                               </div>
                           </div>
@@ -185,7 +182,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pi_t_p" class="col-md-3 control-label">PI总金额:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pi_t_p" id="pi_t_p" type="text"  readonly>
+                                      <p class="form-control-static" id="pi_t_p"></p>
                                   </div>
                               </div>
                           </div>
@@ -202,7 +199,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_p" class="col-md-3 control-label">收款金额:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_p" id="pay_p" type="text" readonly>
+                                      <p class="form-control-static pay_hide" id="pay_p_show"></p>
+                                      <input class="form-control pay_show" name="pay_p" id="pay_p" type="text" style="display:none;">
                                   </div>
                               </div>
                           </div>
@@ -210,7 +208,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_type" class="col-md-3 control-label">收款性质:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_type" id="pay_type" type="text" readonly>
+                                      <p class="form-control-static pay_hide" id="pay_type_show"></p>
+                                      <input class="form-control pay_show" name="pay_type" id="pay_type" type="text" style="display:none;">
                                   </div>
                               </div>
                           </div>
@@ -218,7 +217,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_account_name" class="col-md-3 control-label"><code>Account Name:</code></label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_account_name" id="pay_account_name" type="text" readonly>
+                                      <p class="form-control-static pay_hide" id="pay_account_name_show"></p>
+                                      <input class="form-control pay_show" name="pay_account_name" id="pay_account_name" type="text" style="display:none;">
                                   </div>
                               </div>
                           </div>
@@ -226,7 +226,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_account_number" class="col-md-3 control-label">Account Number:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_account_number" id="pay_account_number" type="text" readonly>
+                                      <p class="form-control-static pay_hide" id="pay_account_number_show"></p>
+                                      <input class="form-control pay_show" name="pay_account_number" id="pay_account_number" type="text" style="display:none;">
                                   </div>
                               </div>
                           </div>
@@ -234,7 +235,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_swift_code" class="col-md-3 control-label">Swift code:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_swift_number" id="pay_swift_code" type="text" readonly>
+                                      <p class="form-control-static pay_hide" id="pay_swift_number_show"></p>
+                                      <input class="form-control pay_show" name="pay_swift_number" id="pay_swift_code" type="text" style="display:none;">
                                   </div>
                               </div>
                           </div>
@@ -242,7 +244,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_bank_name" class="col-md-3 control-label">Bank Name:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_bank_name" id="pay_bank_name" type="text" readonly>
+                                      <p class="form-control-static pay_hide" id="pay_bank_name_show"></p>
+                                      <input class="form-control pay_show" name="pay_bank_name" id="pay_bank_name" type="text" style="display:none;">
                                   </div>
                               </div>
                           </div>
@@ -254,7 +257,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="remark" class="col-md-2 control-label">备注:</label>
                                   <div class="col-md-10">
-                                      <textarea class="form-control" name="remark" id="remark" rows="4" readonly></textarea>
+                                      <p class="form-control-static pay_hide" id="remark_show"></p>
+                                      <textarea class="form-control pay_show" name="remark" id="remark" rows="4" style="display:none;"></textarea>
                                   </div>
                               </div>
                           </div>      
@@ -264,8 +268,13 @@
               <div class="col-md-7">
                   <div class="panel panel-default">
                       <div class="panel-heading"><strong>银行水单粘帖处</strong></div>
-                      <div class="panel-body" style="padding: 0px;">
-                          <%= kindeditor_tag :pay_att, '',:editor_id => 'my_feedback',:items => ["image"] %>
+                      <div class="panel-body"  style="padding: 0px;">
+                          <div class="pay_show" style="display:none;">
+                              <%= kindeditor_tag :pay_att, '',:editor_id => 'my_feedback',:items => ["image"] %>
+                          </div>
+
+                          <div id="pay_att_show" class="payment-img pay_hide" ></div>
+
                       </div>
                   </div>
                   <div class="row">
@@ -274,7 +283,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="sell_name" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">业务员:</label>
                                   <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;" >
-                                      <input class="form-control" name="sell_name" id="sell_name" type="text" readonly>
+                                      <p class="form-control-static" id="sell_name"></p>
                                   </div>
                               </div>
                           </div>      
@@ -283,8 +292,8 @@
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
                                   <label for="" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">制单人:</label>
-                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;">
-                                      
+                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;" >
+                                      <p class="form-control-static" id="sell_full_name_new"></p>
                                   </div>
                               </div>
                           </div>      
@@ -305,8 +314,8 @@
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
                                   <label for="sell_team" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">部门:</label>
-                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;">
-                                      <input class="form-control" name="sell_team" id="sell_team" type="text" value="<%= current_user.team.to_s %>" readonly>
+                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;" >
+                                      <p class="form-control-static" id="sell_team"></p>
                                   </div>
                               </div>
                           </div>      
@@ -315,8 +324,8 @@
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
                                   <label for="" class="col-md-3 control-label" style="padding-left: 0px;padding-right: 0px;">通知日期:</label>
-                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;">
-                                      
+                                  <div class="col-md-9" style="padding-left: 0px;padding-right: 0px;" >
+                                      <p class="form-control-static" id="created_at"></p>
                                   </div>
                               </div>
                           </div>      
@@ -337,7 +346,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary" >审批通过</button>
+        <input type="submit" class="btn btn-primary pay_hide" name="commit" value="审批通过" data-confirm="确定审批通过？">
+        <input type="submit" class="btn btn-success pay_show" name="commit" value="保存" style="display:none;">
       </div>
       <% end %>
     </div>
@@ -362,41 +372,84 @@ function get_options(value){
     $("#change_s").click(); 
   }
 
-$('#updatePrice').on('show.bs.modal', function (event) {
+$('#view_payment_notice').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
-  var order_no = button.data('order_no') 
-  var customer = button.data('customer')
-  var qty = button.data('qty')
-  var sell = button.data('sell')
-  var remark = button.data('remark')
-  var follow_remark = button.data('follow_remark')
-  var order_sell = button.data('order_sell')
+  var payment_id = button.data('payment_id') 
+  var payment_pi_info_no = button.data('payment_pi_info_no')
+  var payment_pi_date = button.data('payment_pi_date')
+  var payment_c_code = button.data('payment_c_code')
+  var payment_c_country = button.data('payment_c_country')
+  var payment_currency_type = button.data('payment_currency_type')
+  var payment_exchange_rate = button.data('payment_exchange_rate')
+  var payment_pi_t_p = button.data('payment_pi_t_p')
+  var payment_pay_p = button.data('payment_pay_p')
+  var payment_pay_type = button.data('payment_pay_type')
+  var payment_pay_account_name = button.data('payment_pay_account_name')
+  var payment_pay_account_number = button.data('payment_pay_account_number')
+  var payment_pay_swift_code = button.data('payment_pay_swift_code')
+  var payment_pay_bank_name = button.data('payment_pay_bank_name')
+  var payment_remark = button.data('payment_remark')
+
+
+  var payment_pay_att = button.data('payment_pay_att')
+  var payment_sell_full_name_new = button.data('payment_sell_full_name_new')
+  var payment_sell_team = button.data('payment_sell_team')
+  var payment_created_at = button.data('payment_created_at')
+
   var modal = $(this)
-  modal.find($("#order_no")).val(order_no)
-  modal.find($("#u_customer")).val(customer)
-  modal.find($("#u_qty")).val(qty)
-  modal.find($("#u_sell")).val(sell)
-  modal.find($("#remark")).html(remark)
-  modal.find($("#follow_remark")).html(follow_remark)
-  modal.find($("#u_order_sell")).val(order_sell)
+  modal.find($("#pi_no")).html(payment_pi_info_no)
+  modal.find($("#pi_date")).html(payment_pi_date)
+  modal.find($("#c_code")).html(payment_c_code)
+  modal.find($("#c_country")).html(payment_c_country)
+  modal.find($("#currency_type")).html(payment_currency_type)
+  modal.find($("#exchange_rate")).html(payment_exchange_rate)
+  modal.find($("#pi_t_p")).html(payment_pi_t_p)
+  modal.find($("#pay_p")).val(payment_pay_p)
+  modal.find($("#pay_type")).val(payment_pay_type)
+  modal.find($("#pay_account_name")).val(payment_pay_account_name)
+  modal.find($("#pay_account_number")).val(payment_pay_account_number)
+  modal.find($("#pay_swift_code")).val(payment_pay_swift_code)
+  modal.find($("#pay_bank_name")).val(payment_pay_bank_name)
+  modal.find($("#remark")).val(payment_remark)
+
+  modal.find($("#pay_p_show")).html(payment_pay_p)
+  modal.find($("#pay_type_show")).html(payment_pay_type)
+  modal.find($("#pay_account_name_show")).html(payment_pay_account_name)
+  modal.find($("#pay_account_number_show")).html(payment_pay_account_number)
+  modal.find($("#pay_swift_code_show")).html(payment_pay_swift_code)
+  modal.find($("#pay_bank_name_show")).html(payment_pay_bank_name)
+  modal.find($("#remark_show")).html(payment_remark)
+
+
+  modal.find($("#pay_att")).html(payment_pay_att)
+  modal.find($("#sell_name")).html(payment_sell_full_name_new)
+  modal.find($("#sell_full_name_new")).html(payment_sell_full_name_new)
+  modal.find($("#sell_team")).html(payment_sell_team)
+  modal.find($("#created_at")).html(payment_created_at)
+  modal.find($("#view_payment_notice_Label")).html("单号：" + payment_id)
+
+  my_feedback.html(payment_pay_att);
+
+
 })
 </script>
 
 <script type="text/javascript">
-function postform() {  	           
-      if ($("#price").val() == "")
-      {                    
-　　    alert("请选填写报价！");                    
-　　    return false;                
-　     }
 
-}  
 
-$(".menu-first").click(function(){
-  $('#userMeun').collapse('hide');
-  $('#articleMenu').collapse('hide');
+$("#show_del").click(function(){
+   $(".pay_show").show();
+   $(".pay_hide").hide();
+   $("#show_del").hide();
+   $("#hide_del").show();
 });
-  
+$("#hide_del").click(function(){
+   $(".pay_show").hide();
+   $(".pay_hide").show();
+   $("#hide_del").hide();
+   $("#show_del").show();
+});
+</script>
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

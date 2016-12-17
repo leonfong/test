@@ -77,6 +77,10 @@ before_filter :authenticate_user!
         @payment = PaymentNoticeInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
     end
 
+    def edit_payment_notice
+        redirect_to :back
+    end
+
     def new_payment_notice
         if not params[:pi_info_id].blank?
             get_pi_info_data = PiInfo.find_by_id(params[:pi_info_id])

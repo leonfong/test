@@ -185,6 +185,7 @@ Rails.application.routes.draw do
   match '/payment_notice_list', to: 'work_flow#payment_notice_list', via: 'get'
   match '/sell_payment_notice_list', to: 'work_flow#sell_payment_notice_list', via: 'get'
   match '/new_voucher', to: 'work_flow#new_voucher', via: 'post'
+  match '/edit_payment_notice', to: 'work_flow#edit_payment_notice', via: 'post'
 
 
 

@@ -90,8 +90,10 @@
         </td>
         <td>
             <% if pcb.finance_state.blank? %>
+                未提交
+            <% elsif pcb.finance_state == "check" %>
                 审核中
-            <% else %>
+            <% elsif pcb.finance_state == "checked" %>
                 审核完成
             <% end %>
         </td>

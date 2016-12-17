@@ -62,7 +62,7 @@
   </thead>
   <tbody>
     <% @payment.each do |payment| %>   
-      <tr data-toggle="modal" data-target="#view_payment_notice">
+      <tr data-toggle="modal" data-backdrop="static" data-target="#view_payment_notice" data-payment_id="<%= payment.id %>" data-payment_pi_info_no="<%= payment.pi_info_no %>" data-payment_pi_date="<%= payment.pi_date %>" data-payment_c_code="<%= payment.c_code %>" >
         <td><%= payment.state %></td>
         <td><%= payment.id %></td>
         <td><%= payment.sell_full_name_new %></td>

@@ -3,7 +3,7 @@
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <% if not params[:finance_chk].blank? %>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_finance"} %>
+                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_f"} %>
             <% elsif not params[:bom_chk].blank?%>
                 <%= render partial: "work_flow/menu", locals: {selected: "pi_list_bom"} %>
             <% else %>

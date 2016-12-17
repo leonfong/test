@@ -62,7 +62,7 @@
   </thead>
   <tbody>
     <% @payment.each do |payment| %>   
-      <tr data-toggle="modal" data-target="#view_payment_notice">
+      <tr data-toggle="modal" data-backdrop="static" data-target="#view_payment_notice">
         <td><%= payment.state %></td>
         <td><%= payment.id %></td>
         <td><%= payment.sell_full_name_new %></td>
@@ -254,7 +254,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="remark" class="col-md-2 control-label">备注:</label>
                                   <div class="col-md-10">
-                                      <textarea class="form-control" name="remark" id="remark" rows="3" readonly></textarea>
+                                      <textarea class="form-control" name="remark" id="remark" rows="4" readonly></textarea>
                                   </div>
                               </div>
                           </div>      

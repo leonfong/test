@@ -34,7 +34,7 @@
                   <% if @key_order %>   
                       <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
                   <% else %> 
-                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号"%>
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号/文件名"%>
                   <% end %>               
                   <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>

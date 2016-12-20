@@ -536,7 +536,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="currency_type" class="col-md-3 control-label"><code>币别:</code></label>
                                   <div class="col-md-9" >
-                                      <input class="form-control" name="currency_type" id="currency_type" type="text">
+                                      <p class="form-control-static" >美金</p>
                                   </div>
                               </div>
                           </div>
@@ -546,7 +546,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="exchange_rate" class="col-md-4 control-label">汇率:</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" name="exchange_rate" id="exchange_rate" type="text">
+                                      <p class="form-control-static" ><%= @dollar_rate %></p>
                                   </div>
                               </div>
                           </div>
@@ -581,7 +581,12 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_type" class="col-md-3 control-label">收款性质:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_type" id="pay_type" type="text">
+                                      <select class="form-control" name="pay_type" id="pay_type" >
+                                          <option value="">--请选择--</option>
+                                          <option value="定金">定金</option>
+                                          <option value="尾款">尾款</option>
+                                          <option value="应收款">应收款</option>
+                                      </select>
                                   </div>
                               </div>
                           </div>
@@ -605,7 +610,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_swift_code" class="col-md-3 control-label">Swift code:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_swift_number" id="pay_swift_code" type="text">
+                                      <input class="form-control" name="pay_swift_code" id="pay_swift_code" type="text">
                                   </div>
                               </div>
                           </div>
@@ -708,7 +713,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary" >保存</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()">保存</button>
       </div>
       <% end %>
     </div>
@@ -721,11 +726,13 @@
 </small>
 
 
-<script>$(function () 
+<script>
+$(function () 
       { $("[data-toggle='popover']").popover();
       });
 </script>
-<script>$(function () 
+<script>
+$(function () 
       { $("[data-toggle='popoverii']").popover({
        html: true,
        trigger: 'hover',
@@ -741,7 +748,14 @@ $('#remarkitem').on('show.bs.modal', function (event) {
   var modal = $(this);
   modal.find($("#itemp_id_remark")).val(itempid);
 })
+function postform() {  	           
+      if ($("#pay_type").val() == "" )
+      {                    
+　　    alert("请选填收款性质！");                    
+　　    return false;                
+　     }
 
+}
 </script>
 
 

@@ -64,7 +64,7 @@
   <tbody>
     <% @payment.each do |payment| %>   
       <tr>
-        <td><button type="button" class="btn btn-info btn-xs" data-backdrop="static" data-toggle="modal" data-target="#new_voucher" data-c_code="<%= payment.c_code %>" data-pay_id="<%= payment.id %>" data-pi_info_no="<%= payment.pi_info_no %>" data-pay_p="<%= payment.pay_p %>" data-sell_full_name_up="<%= payment.sell_full_name_up %>" data-sell_team="<%= payment.sell_team %>" >新建收款单</button></td>
+        <td><button type="button" class="btn btn-info btn-xs" data-backdrop="static" data-toggle="modal" data-target="#new_voucher" data-c_code="<%= payment.c_code %>" data-pay_id="<%= payment.id %>" data-pi_info_no="<%= payment.pi_info_no %>" data-pay_p="<%= payment.pay_p %>" data-sell_full_name_up="<%= payment.sell_full_name_up %>" data-sell_team="<%= payment.sell_team %>" data-pay_type="<%= payment.pay_type %>" >新建收款单</button></td>
         <td><%= payment.state %></td>
         <td><%= payment.id %></td>
         <td><%= payment.sell_full_name_new %></td>
@@ -109,14 +109,16 @@
                               <div class="form-group form-group-sm">
                                   <label class="col-md-4 control-label" for="c_code">核算项目类别:</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" name="c_code" id="c_code" type="text" disabled>
+                                      <input class="sr-only" name="voucher_item" id="voucher_item" type="text" value="客户">
+                                      <p class="form-control-static" >客户</p>
                                       <input class="sr-only" name="pay_id" id="pay_id" type="text" >
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
                                   <label for="voucher_item" class="col-md-4 control-label"><code>核算项目:</code></label>
                                   <div class="col-md-8" >
-                                      <input class="form-control" name="voucher_item" id="voucher_item" type="text" >
+                                      <p class="form-control-static" id="c_code_show" ></p>
+                                      <input class="sr-only" name="c_code" id="c_code" type="text">
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
@@ -126,19 +128,19 @@
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
-                                  <label for="collection_type" class="col-md-4 control-label">收款性质:</label>
+                                  <label for="pay_type" class="col-md-4 control-label">收款性质:</label>
                                   <div class="col-md-8" >
-                                      <input class="form-control" name="collection_type" id="collection_type" type="text" >
+                                      <p class="form-control-static" id="pay_type"></p>
                                   </div>
                               </div>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-horizontal">
-                              <div class="form-group form-group-sm">
-                                  <label for="xianjin_kemu" class="col-md-3 control-label">现金类科目:</label>
-                                  <div class="col-md-9" >
-                                      <input class="form-control" name="xianjin_kemu" id="xianjin_kemu" type="text" >
+                              <div class="form-group form-group-sm ">
+                                  <label for="xianjin_kemu" class="col-md-3 control-label">现金类科目:</label>   
+                                  <div class="col-md-9">
+                                      <input id="xianjin_kemu" autocomplete="off" name="xianjin_kemu" type="text" class="form-control" data-provide="typeahead" data-items="100" data-source="<%= raw @type_b %>" >     
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
@@ -192,7 +194,7 @@
                           </div>
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
-                                  <label for="funance_at" class="col-md-4 control-label">财务日期:</label>
+                                  <label for="finance_at" class="col-md-4 control-label">财务日期:</label>
                                   <div class="col-md-8">
                                       <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
 <script type="text/javascript">
@@ -210,7 +212,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="voucher_currency_type" class="col-md-4 control-label"><code>币别:</code></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" name="voucher_currency_type" id="voucher_currency_type" type="text" >
+                                      <p class="form-control-static" >美金</p>
                                   </div>
                               </div>
                           </div>
@@ -218,7 +220,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="voucher_currency_rate" class="col-md-4 control-label"><code>汇率:</code></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" name="voucher_currency_rate" id="voucher_currency_rate" type="text" >
+                                      <p class="form-control-static" ><%= @dollar_rate %></p>
                                   </div>
                               </div>
                           </div>
@@ -240,9 +242,9 @@
                           </thead>
                           <tbody>  
                               <tr> 
-                                  <td id="pay_no"></td>
-                                  <td id="pi_info_no"></td>
-                                  <td id="pay_p"></td>
+                                  <td><p class="form-control-static" id="pay_no"></p></td>
+                                  <td><p class="form-control-static" id="pi_info_no"></p></td>
+                                  <td><p class="form-control-static" id="pay_p"></p></td>
                                   <td><input class="form-control input-sm" name="get_money_self" id="get_money_self" type="text" ></td>
                               </tr> 
                           </tbody>  
@@ -295,7 +297,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary" >保存</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()" >保存</button>
       </div>
       <% end %>
     </div>
@@ -314,11 +316,6 @@
 
 
 <script>
-function get_options(value){
-    var urla='/work_flow/select_pcbcustomer_ajax?id='+value;
-    $("#change_s").attr("href",urla);
-    $("#change_s").click(); 
-  }
 
 $('#new_voucher').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
@@ -326,13 +323,16 @@ $('#new_voucher').on('show.bs.modal', function (event) {
   var pay_id = button.data('pay_id')
   var pi_info_no = button.data('pi_info_no')
   var pay_p = button.data('pay_p')
+  var pay_type = button.data('pay_type')
   var sell_full_name_up = button.data('sell_full_name_up')
   var sell_team = button.data('sell_team')
 
   var modal = $(this)
   modal.find($("#c_code")).val(c_code)
+  modal.find($("#c_code_show")).html(c_code)
   modal.find($("#pay_id")).val(pay_id)
   modal.find($("#pay_no")).html(pay_id)
+  modal.find($("#pay_type")).html(pay_type)
   modal.find($("#pi_info_no")).html(pi_info_no)
   modal.find($("#pay_p")).html(pay_p)
   modal.find($("#sell_full_name_up")).val(sell_full_name_up)
@@ -342,9 +342,9 @@ $('#new_voucher').on('show.bs.modal', function (event) {
 
 <script type="text/javascript">
 function postform() {  	           
-      if ($("#price").val() == "")
+      if ($("#xianjin_kemu").val().length < 7 )
       {                    
-　　    alert("请选填写报价！");                    
+　　    alert("请选填正确的现金科目！");                    
 　　    return false;                
 　     }
 

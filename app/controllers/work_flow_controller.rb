@@ -5,7 +5,50 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_setup_finance
+        if not params[:dollar_rate].blank?
+            get_data = SetupFinanceInfo.find_by_id(1)
+            get_data.dollar_rate = params[:dollar_rate]
+            get_data.save
+        end 
+        redirect_to :back
+    end
+
+    def setup_finance
+        @setup_finance=SetupFinanceInfo.find_by_id(1)
+    end
+
+    def edit_voucher
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
+        if not params[:voucher_id].blank?
+            get_voucher_data = FinanceVoucherInfo.find_by_id(params[:voucher_id])
+            get_voucher_data.voucher_item = params[:voucher_item]
+            get_voucher_data.voucher_way = params[:voucher_way]
+            get_voucher_data.collection_type = params[:collection_type]
+            get_voucher_data.xianjin_kemu = params[:xianjin_kemu]
+            get_voucher_data.voucher_bank_name = params[:voucher_bank_name]
+            get_voucher_data.voucher_bank_account = params[:voucher_bank_account]
+            get_voucher_data.get_money = params[:get_money]
+            get_voucher_data.get_money_self = BigDecimal.new(params[:get_money])*BigDecimal.new(@dollar_rate)
+            get_voucher_data.loss_money = BigDecimal.new(get_voucher_data.pay_p)-BigDecimal.new(params[:get_money])
+            get_voucher_data.loss_money_self = (BigDecimal.new(get_voucher_data.pay_p)-BigDecimal.new(params[:get_money]))*BigDecimal.new(@dollar_rate)
+            get_voucher_data.voucher_remark = params[:voucher_remark]
+            get_voucher_data.finance_at = params[:finance_at]
+            get_voucher_data.voucher_currency_type = params[:voucher_currency_type]
+            get_voucher_data.voucher_exchange_rate = params[:voucher_exchange_rate]
+            get_voucher_data.voucher_full_name_up = current_user.full_name
+            if get_voucher_data.save
+                get_finance_payment_voucher = FinancePaymentVoucherInfo.find_finance_voucher_info_id(get_voucher_data.id)
+                get_finance_payment_voucher.jie_fang = get_voucher_data.get_money_self
+                get_finance_payment_voucher.dai_fang = get_voucher_data.get_money_self
+                get_finance_payment_voucher.save
+            end
+        end
+        redirect_to :back 
+    end
+
     def new_voucher
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         if not params[:pay_id].blank?
             get_payment_notice_data = PaymentNoticeInfo.find_by_id(params[:pay_id])
             finance_voucher_info = FinanceVoucherInfo.new
@@ -44,16 +87,18 @@ before_filter :authenticate_user!
             finance_voucher_info.xianjin_kemu = params[:xianjin_kemu]
             finance_voucher_info.voucher_bank_name = params[:voucher_bank_name]
             finance_voucher_info.voucher_bank_account = params[:voucher_bank_account]
-            finance_voucher_info.get_money = get_payment_notice_data.pay_p
-            finance_voucher_info.get_money_self = params[:get_money_self]
+            finance_voucher_info.get_money = params[:get_money]
+            finance_voucher_info.get_money_self = BigDecimal.new(params[:get_money])*BigDecimal.new(@dollar_rate)
+            finance_voucher_info.loss_money = BigDecimal.new(get_payment_notice_data.pay_p)-BigDecimal.new(params[:get_money])
+            finance_voucher_info.loss_money_self = (BigDecimal.new(get_payment_notice_data.pay_p)-BigDecimal.new(params[:get_money]))*BigDecimal.new(@dollar_rate)
             finance_voucher_info.voucher_remark = params[:voucher_remark]
             #finance_voucher_info.voucher_no = params[:voucher_item]
             finance_voucher_info.voucher_at = Time.new
             finance_voucher_info.finance_at = params[:finance_at]
             finance_voucher_info.voucher_currency_type = params[:voucher_currency_type]
             finance_voucher_info.voucher_exchange_rate = params[:voucher_exchange_rate]
-            finance_voucher_info.voucher_full_name_new = params[:voucher_full_name_new]
-            finance_voucher_info.voucher_full_name_up = params[:voucher_full_name_up]
+            finance_voucher_info.voucher_full_name_new = current_user.full_name
+            finance_voucher_info.voucher_full_name_up = current_user.full_name
             if finance_voucher_info.save
                 payment_voucher_info = FinancePaymentVoucherInfo.new
                 payment_voucher_info.finance_voucher_info_id = finance_voucher_info.id
@@ -70,18 +115,48 @@ before_filter :authenticate_user!
     end
 
     def payment_notice_list
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         @payment = PaymentNoticeInfo.where(state: "checking").paginate(:page => params[:page], :per_page => 20)
+        @type_b = "[&quot;"
+        
+        all_type_b = KuaijikemuInfo.find_by_sql("select CONCAT(code_a_name,'-',code_b_name,'-',code_c_name) AS c_name,CONCAT(code_a,' ',code_b,' ',code_c) AS c_code from kuaijikemu_infos")
+        all_type_b.each do |type_b|
+            @type_b += "&quot;,&quot;" + type_b.c_code.strip.split(" ")[-1] + "-" + type_b.c_name.split("-").join(" ").strip.split(" ").join("-")
+        end
+        @type_b += "&quot;]"
     end    
 
+    def payment_voucher_list
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
+        @payment = FinanceVoucherInfo.where("DATE_FORMAT(created_at, '%Y%m') = DATE_FORMAT(CURDATE() , '%Y%m')").paginate(:page => params[:page], :per_page => 20)
+    end
+
     def sell_payment_notice_list
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         @payment = PaymentNoticeInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
     end
 
     def edit_payment_notice
-        redirect_to :back
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
+        @payment_date = PaymentNoticeInfo.find_by_id(params[:payment_id])
+        if not @payment_date.blank?
+            @payment_date.pay_p = params[:pay_p]
+            @payment_date.pay_type = params[:pay_type] 
+            @payment_date.pay_account_name = params[:pay_account_name] 
+            @payment_date.pay_account_number = params[:pay_account_number]
+            @payment_date.pay_swift_code = params[:pay_swift_code]
+            @payment_date.pay_bank_name = params[:pay_bank_name]
+            @payment_date.remark = params[:remark]
+            @payment_date.pay_att = params[:pay_att]
+            @payment_date.save
+        else
+            redirect_to :back
+        end
+
     end
 
     def new_payment_notice
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         if not params[:pi_info_id].blank?
             get_pi_info_data = PiInfo.find_by_id(params[:pi_info_id])
             new_payment_notice = PaymentNoticeInfo.new
@@ -474,6 +549,7 @@ before_filter :authenticate_user!
     end
 
     def edit_pcb_pi
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         @pi_info = PiInfo.find_by_id(params[:pi_info_id])
         @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
         @pi_info_c_c_no = ""
@@ -6827,6 +6903,7 @@ before_filter :authenticate_user!
     end
 
     def sell_view_baojia
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         @boms = ProcurementBom.find(params[:bom_id])
         @baojia = PItem.where(procurement_bom_id: params[:bom_id])
     end

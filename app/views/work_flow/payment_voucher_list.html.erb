@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "paymanet_notice_finance"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "paymanet_voucher_finance"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
@@ -45,7 +45,7 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="80">操作</th>
-      <th width="70">状态</th>
+      <th width="70">序号</th>
       <th width="80">收款通知号</th>
       <th width="80">制单人</th>
       <th width="80">审核人</th>
@@ -62,10 +62,10 @@
     </tr>
   </thead>
   <tbody>
-    <% @payment.each do |payment| %>   
+    <% @payment.each_with_index do |payment,index| %>   
       <tr>
-        <td><button type="button" class="btn btn-info btn-xs" data-backdrop="static" data-toggle="modal" data-target="#new_voucher" data-c_code="<%= payment.c_code %>" data-pay_id="<%= payment.id %>" data-pi_info_no="<%= payment.pi_info_no %>" data-pay_p="<%= payment.pay_p %>" data-sell_full_name_up="<%= payment.sell_full_name_up %>" data-sell_team="<%= payment.sell_team %>" data-pay_type="<%= payment.pay_type %>" >新建收款单</button></td>
-        <td><%= payment.state %></td>
+        <td><button type="button" class="btn btn-info btn-xs" data-backdrop="static" data-toggle="modal" data-target="#edit_voucher" data-pay_id="<%= payment.payment_notice_info_id %>" data-voucher_id="<%= payment.id %>" data-c_code="<%= payment.c_code %>" data-voucher_item="<%= payment.voucher_item %>" data-voucher_way="<%= payment.voucher_way %>" data-pay_type="<%= payment.pay_type %>" data-xianjin_kemu="<%= payment.xianjin_kemu %>" data-voucher_bank_name="<%= payment.voucher_bank_name %>" data-voucher_bank_account="<%= payment.voucher_bank_account %>" data-get_money="<%= payment.get_money %>" data-get_money_self="<%= payment.get_money_self %>" data-loss_money="<%= payment.loss_money %>" data-voucher_remark="<%= payment.voucher_remark %>" data-voucher_no="<%= payment.voucher_no %>" data-voucher_at="<%= payment.voucher_at.blank?? payment.voucher_at: payment.voucher_at.localtime.strftime('%Y-%m-%d') %>" data-finance_at="<%= payment.finance_at.blank?? payment.finance_at: payment.finance_at.localtime.strftime('%Y-%m-%d') %>" data-voucher_currency_type="<%= payment.voucher_currency_type %>" data-voucher_exchange_rate="<%= payment.voucher_exchange_rate %>" data-voucher_full_name_new="<%= payment.voucher_full_name_new %>" data-voucher_full_name_up="<%= payment.voucher_full_name_up %>" data-pi_info_no="<%= payment.pi_info_no %>" data-pay_p="<%= payment.pay_p %>" data-sell_full_name_up="<%= payment.sell_full_name_up %>" data-sell_team="<%= payment.sell_team %>" >编辑收款单</button></td>
+        <td><%= index+1 %></td>
         <td><%= payment.id %></td>
         <td><%= payment.sell_full_name_new %></td>
         <td><%= payment.sell_full_name_up %></td>
@@ -91,15 +91,15 @@
 
 
 
-<div class="modal fade" id="new_voucher" tabindex="-1" role="dialog" aria-labelledby="new_voucherLabel" >
+<div class="modal fade" id="edit_voucher" tabindex="-1" role="dialog" aria-labelledby="edit_voucherLabel" >
   <div class="modal-dialog modal-lg" style="width: 1300px;" role="document" >
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="voucherLabel">新建收款单</h4>
+        <h4 class="modal-title" >编辑收款单</h4>
       </div>
       
-      <%= form_tag({action: :new_voucher},method:"post",multipart:"true") do %>
+      <%= form_tag({action: :edit_voucher},method:"post",multipart:"true") do %>
       <div class="modal-body" >
           <div class="panel panel-default">
               <div class="panel-body" style="padding: 15px 15px 1px;">
@@ -109,16 +109,14 @@
                               <div class="form-group form-group-sm">
                                   <label class="col-md-4 control-label" for="c_code">核算项目类别:</label>
                                   <div class="col-md-8">
-                                      <input class="sr-only" name="voucher_item" id="voucher_item" type="text" value="客户">
-                                      <p class="form-control-static" >客户</p>
-                                      <input class="sr-only" name="pay_id" id="pay_id" type="text" >
+                                      <input class="form-control" name="c_code" id="c_code" type="text" disabled>
+                                      <input class="sr-only" name="voucher_id" id="voucher_id" type="text" >
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
                                   <label for="voucher_item" class="col-md-4 control-label"><code>核算项目:</code></label>
                                   <div class="col-md-8" >
-                                      <p class="form-control-static" id="c_code_show" ></p>
-                                      <input class="sr-only" name="c_code" id="c_code" type="text">
+                                      <input class="form-control" name="voucher_item" id="voucher_item" type="text" >
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
@@ -130,17 +128,17 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_type" class="col-md-4 control-label">收款性质:</label>
                                   <div class="col-md-8" >
-                                      <p class="form-control-static" id="pay_type"></p>
+                                      <input class="form-control" name="pay_type" id="pay_type" type="text" >
                                   </div>
                               </div>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-horizontal">
-                              <div class="form-group form-group-sm ">
-                                  <label for="xianjin_kemu" class="col-md-3 control-label">现金类科目:</label>   
-                                  <div class="col-md-9">
-                                      <input id="xianjin_kemu" autocomplete="off" name="xianjin_kemu" type="text" class="form-control" data-provide="typeahead" data-items="100" data-source="<%= raw @type_b %>" >     
+                              <div class="form-group form-group-sm">
+                                  <label for="xianjin_kemu" class="col-md-3 control-label">现金类科目:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" name="xianjin_kemu" id="xianjin_kemu" type="text" >
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
@@ -158,13 +156,13 @@
                               <div class="form-group form-group-sm">
                                   <label for="" class="col-md-3 control-label">实收金额:</label>
                                   <div class="col-md-9" >
-                                      <input class="form-control" type="text" disabled>
+                                      <input class="form-control" type="text" id="get_money_show" disabled>
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
                                   <label for="" class="col-md-3 control-label">实收金额（本位币）:</label>
                                   <div class="col-md-9" >
-                                      <input class="form-control" type="text" disabled> 
+                                      <input class="form-control" type="text" id="get_money_self" disabled> 
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
@@ -178,9 +176,9 @@
                       <div class="col-md-3">
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
-                                  <label for="" class="col-md-4 control-label">单据号:</label>
+                                  <label for="voucher_id_show" class="col-md-4 control-label">单据号:</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" disabled>
+                                      <input class="form-control" type="text" id="voucher_id_show" disabled>
                                   </div>
                               </div>
                           </div>
@@ -188,7 +186,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="" class="col-md-4 control-label">单据日期:</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" disabled>
+                                      <input class="form-control" type="text" id="voucher_at" disabled>
                                   </div>
                               </div>
                           </div>
@@ -237,7 +235,8 @@
                                   <th width="80">收款通知号</th>
                                   <th width="80">PI NO.</th>
                                   <th width="80">通知金额</th>
-                                  <th width="90">实收金额</th>    
+                                  <th width="90">实收金额</th> 
+                                  <th width="90">差价</th>   
                               </tr>
                           </thead>
                           <tbody>  
@@ -246,6 +245,7 @@
                                   <td><p class="form-control-static" id="pi_info_no"></p></td>
                                   <td><p class="form-control-static" id="pay_p"></p></td>
                                   <td><input class="form-control input-sm" name="get_money" id="get_money" type="text" ></td>
+                                  <td><p class="form-control-static" id="loss_money"></p></td>
                               </tr> 
                           </tbody>  
                       </table>
@@ -258,7 +258,7 @@
                       <div class="form-group form-group-sm">
                           <label class="col-md-3 control-label" for="">审核人:</label>
                           <div class="col-md-9">
-                              <input class="form-control" type="text" disabled>
+                              <input class="form-control" type="text" id="voucher_full_name_up" disabled>
                           </div>
                       </div>
                   </div>
@@ -268,7 +268,7 @@
                       <div class="form-group form-group-sm">
                           <label class="col-md-3 control-label" for="">制单人:</label>
                           <div class="col-md-9">
-                              <input class="form-control"  type="text" value="<%=current_user.full_name%>" disabled>
+                              <input class="form-control"  type="text" id="voucher_full_name_new" disabled>
                           </div>
                       </div>
                   </div>
@@ -297,7 +297,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary" onclick="return postform()" >保存</button>
+        <button type="submit" class="btn btn-primary" >保存</button>
       </div>
       <% end %>
     </div>
@@ -316,23 +316,68 @@
 
 
 <script>
+function get_options(value){
+    var urla='/work_flow/select_pcbcustomer_ajax?id='+value;
+    $("#change_s").attr("href",urla);
+    $("#change_s").click(); 
+  }
 
-$('#new_voucher').on('show.bs.modal', function (event) {
+$('#edit_voucher').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var c_code = button.data('c_code') 
   var pay_id = button.data('pay_id')
+
+  var voucher_id = button.data('voucher_id')
+  var voucher_item = button.data('voucher_item')
+  var voucher_way = button.data('voucher_way')
+  var pay_type = button.data('pay_type')
+  var xianjin_kemu = button.data('xianjin_kemu')
+  var voucher_bank_name = button.data('voucher_bank_name')
+  var voucher_bank_account = button.data('voucher_bank_account')
+  var get_money = button.data('get_money')
+  var get_money_self = button.data('get_money_self')
+  var loss_money = button.data('loss_money')
+  var voucher_remark = button.data('voucher_remark')
+  var voucher_no = button.data('voucher_no')
+  var voucher_at = button.data('voucher_at')
+  var finance_at = button.data('finance_at')
+  var voucher_currency_type = button.data('voucher_currency_type')
+  var voucher_exchange_rate = button.data('voucher_exchange_rate')
+  var voucher_full_name_new = button.data('voucher_full_name_new')
+  var voucher_full_name_up = button.data('voucher_full_name_up')
+
   var pi_info_no = button.data('pi_info_no')
   var pay_p = button.data('pay_p')
-  var pay_type = button.data('pay_type')
   var sell_full_name_up = button.data('sell_full_name_up')
   var sell_team = button.data('sell_team')
 
   var modal = $(this)
   modal.find($("#c_code")).val(c_code)
-  modal.find($("#c_code_show")).html(c_code)
   modal.find($("#pay_id")).val(pay_id)
+  modal.find($("#voucher_id")).val(voucher_id)
+  modal.find($("#voucher_id_show")).val(voucher_id)
+
+  modal.find($("#voucher_item")).val(voucher_item)
+  modal.find($("#voucher_way")).val(voucher_way)
+  modal.find($("#pay_type")).val(pay_type)
+  modal.find($("#xianjin_kemu")).val(xianjin_kemu)
+  modal.find($("#voucher_bank_name")).val(voucher_bank_name)
+  modal.find($("#voucher_bank_account")).val(voucher_bank_account)
+  modal.find($("#get_money_show")).val(get_money)
+  modal.find($("#get_money")).val(get_money)
+  modal.find($("#loss_money")).html(loss_money)
+  modal.find($("#get_money_self")).val(get_money_self)
+  modal.find($("#voucher_remark")).val(voucher_remark)
+  modal.find($("#voucher_no")).val(voucher_no)
+  modal.find($("#voucher_at")).val(voucher_at)
+  modal.find($("#finance_at")).val(finance_at)
+  modal.find($("#voucher_currency_type")).val(voucher_currency_type)
+  modal.find($("#voucher_exchange_rate")).val(voucher_exchange_rate)
+  modal.find($("#voucher_full_name_new")).val(voucher_full_name_new)
+  modal.find($("#voucher_full_name_up")).val(voucher_full_name_up)
+
+
   modal.find($("#pay_no")).html(pay_id)
-  modal.find($("#pay_type")).html(pay_type)
   modal.find($("#pi_info_no")).html(pi_info_no)
   modal.find($("#pay_p")).html(pay_p)
   modal.find($("#sell_full_name_up")).val(sell_full_name_up)
@@ -342,9 +387,9 @@ $('#new_voucher').on('show.bs.modal', function (event) {
 
 <script type="text/javascript">
 function postform() {  	           
-      if ($("#xianjin_kemu").val().length < 7 )
+      if ($("#price").val() == "")
       {                    
-　　    alert("请选填正确的现金科目！");                    
+　　    alert("请选填写报价！");                    
 　　    return false;                
 　     }
 

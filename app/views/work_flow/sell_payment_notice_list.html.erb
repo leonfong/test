@@ -62,7 +62,7 @@
   </thead>
   <tbody>
     <% @payment.each do |payment| %>   
-      <tr data-toggle="modal" data-backdrop="static" data-target="#view_payment_notice" data-payment_id="<%= payment.id %>" data-payment_pi_info_no="<%= payment.pi_info_no %>" data-payment_pi_date="<%= payment.pi_date.localtime.strftime('%Y-%m-%d') %>" data-payment_c_code="<%= payment.c_code %>" data-payment_c_country="<%= payment.c_country %>" data-payment_currency_type="<%= payment.currency_type %>" data-payment_exchange_rate="<%= payment.exchange_rate %>" data-payment_pi_t_p="<%= payment.pi_t_p %>" data-payment_pay_p="<%= payment.pay_p %>" data-payment_pay_type="<%= payment.pay_type %>" data-payment_pay_account_name="<%= payment.pay_account_name %>" data-payment_pay_account_number="<%= payment.pay_account_number %>" data-payment_pay_swift_code="<%= payment.pay_swift_code %>" data-payment_pay_bank_name="<%= payment.pay_bank_name %>" data-payment_remark="<%= payment.remark %>" data-payment_pay_att="<%= payment.pay_att %>" data-payment_sell_full_name_new="<%= payment.sell_full_name_new %>" data-payment_sell_team="<%= payment.sell_team %>" data-payment_created_at="<%= payment.created_at.localtime.strftime('%Y-%m-%d') %>" >
+      <tr data-toggle="modal" data-backdrop="static" data-target="#view_payment_notice" data-payment_id="<%= payment.id %>" data-payment_pi_info_no="<%= payment.pi_info_no %>" data-payment_pi_date="<%= payment.pi_date.localtime.strftime('%Y-%m-%d') %>" data-payment_c_code="<%= payment.c_code %>" data-payment_c_country="<%= payment.c_country %>" data-payment_currency_type="<%= payment.currency_type %>" data-payment_pi_t_p="<%= payment.pi_t_p %>" data-payment_pay_p="<%= payment.pay_p %>" data-payment_pay_type="<%= payment.pay_type %>" data-payment_pay_account_name="<%= payment.pay_account_name %>" data-payment_pay_account_number="<%= payment.pay_account_number %>" data-payment_pay_swift_code="<%= payment.pay_swift_code %>" data-payment_pay_bank_name="<%= payment.pay_bank_name %>" data-payment_remark="<%= payment.remark %>" data-payment_pay_att="<%= payment.pay_att %>" data-payment_sell_full_name_new="<%= payment.sell_full_name_new %>" data-payment_sell_team="<%= payment.sell_team %>" data-payment_created_at="<%= payment.created_at.localtime.strftime('%Y-%m-%d') %>" >
         <td><%= payment.state %></td>
         <td><%= payment.id %></td>
         <td><%= payment.sell_full_name_new %></td>
@@ -97,7 +97,7 @@
         <h4 class="modal-title" >编辑收款通知单 <code id="view_payment_notice_Label" ></code></h4>
       </div>
       
-      <%= form_tag({action: :edit_payment_notice},method:"post",multipart:"true") do %>
+      <%= form_tag({action: :edit_payment_notice},method:"post",multipart:"true",remote:"ture") do %>
       <div class="modal-body" >
           <div class="panel panel-default">
               <div class="panel-heading"><strong>PI内容</strong></div>
@@ -109,6 +109,7 @@
                                   <label class="col-md-4 control-label" for="pi_no"><code>PI NO.:</code></label>
                                   <div class="col-md-8">
                                       <p class="form-control-static" id="pi_no"></p>
+                                      <input class="form-control sr-only" name="payment_id" id="payment_id" type="text" >
                                   </div>
                               </div>
                           </div>
@@ -170,9 +171,9 @@
                       <div class="col-md-2">
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
-                                  <label for="exchange_rate" class="col-md-4 control-label">汇率:</label>
+                                  <label for="" class="col-md-4 control-label">汇率:</label>
                                   <div class="col-md-8">
-                                      <p class="form-control-static" id="exchange_rate"></p>
+                                      <p class="form-control-static" ><%= @dollar_rate %></p>
                                   </div>
                               </div>
                           </div>
@@ -209,7 +210,12 @@
                                   <label for="pay_type" class="col-md-3 control-label">收款性质:</label>
                                   <div class="col-md-9">
                                       <p class="form-control-static pay_hide" id="pay_type_show"></p>
-                                      <input class="form-control pay_show" name="pay_type" id="pay_type" type="text" style="display:none;">
+                                      <select class="form-control pay_show" name="pay_type" id="pay_type" style="display:none;">
+                                          <option value="">--请选择--</option>
+                                          <option value="定金">定金</option>
+                                          <option value="尾款">尾款</option>
+                                          <option value="应收款">应收款</option>
+                                      </select>
                                   </div>
                               </div>
                           </div>
@@ -235,8 +241,8 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_swift_code" class="col-md-3 control-label">Swift code:</label>
                                   <div class="col-md-9">
-                                      <p class="form-control-static pay_hide" id="pay_swift_number_show"></p>
-                                      <input class="form-control pay_show" name="pay_swift_number" id="pay_swift_code" type="text" style="display:none;">
+                                      <p class="form-control-static pay_hide" id="pay_swift_code_show"></p>
+                                      <input class="form-control pay_show" name="pay_swift_code" id="pay_swift_code" type="text" style="display:none;">
                                   </div>
                               </div>
                           </div>
@@ -269,7 +275,7 @@
                   <div class="panel panel-default">
                       <div class="panel-heading"><strong>银行水单粘帖处</strong></div>
                       <div class="panel-body"  style="padding: 0px;">
-                          <div class="pay_show" style="display:none;">
+                          <div class="pay_show " style="display:none;">
                               <%= kindeditor_tag :pay_att, '',:editor_id => 'my_feedback',:items => ["image"] %>
                           </div>
 
@@ -345,9 +351,10 @@
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         <input type="submit" class="btn btn-primary pay_hide" name="commit" value="审批通过" data-confirm="确定审批通过？">
-        <input type="submit" class="btn btn-success pay_show" name="commit" value="保存" style="display:none;">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        
+        <input type="submit" class="btn btn-success pay_show" id="hide_del" name="commit" value="保存" style="display:none;">
       </div>
       <% end %>
     </div>
@@ -380,7 +387,6 @@ $('#view_payment_notice').on('show.bs.modal', function (event) {
   var payment_c_code = button.data('payment_c_code')
   var payment_c_country = button.data('payment_c_country')
   var payment_currency_type = button.data('payment_currency_type')
-  var payment_exchange_rate = button.data('payment_exchange_rate')
   var payment_pi_t_p = button.data('payment_pi_t_p')
   var payment_pay_p = button.data('payment_pay_p')
   var payment_pay_type = button.data('payment_pay_type')
@@ -402,8 +408,8 @@ $('#view_payment_notice').on('show.bs.modal', function (event) {
   modal.find($("#c_code")).html(payment_c_code)
   modal.find($("#c_country")).html(payment_c_country)
   modal.find($("#currency_type")).html(payment_currency_type)
-  modal.find($("#exchange_rate")).html(payment_exchange_rate)
   modal.find($("#pi_t_p")).html(payment_pi_t_p)
+
   modal.find($("#pay_p")).val(payment_pay_p)
   modal.find($("#pay_type")).val(payment_pay_type)
   modal.find($("#pay_account_name")).val(payment_pay_account_name)
@@ -422,13 +428,17 @@ $('#view_payment_notice').on('show.bs.modal', function (event) {
 
 
   modal.find($("#pay_att_show")).html(payment_pay_att)
+  my_feedback.html(payment_pay_att);
+
+
   modal.find($("#sell_name")).html(payment_sell_full_name_new)
   modal.find($("#sell_full_name_new")).html(payment_sell_full_name_new)
   modal.find($("#sell_team")).html(payment_sell_team)
   modal.find($("#created_at")).html(payment_created_at)
   modal.find($("#view_payment_notice_Label")).html("单号：" + payment_id)
+  modal.find($("#payment_id")).val(payment_id)
 
-  my_feedback.html(payment_pay_att);
+
 
 
 })

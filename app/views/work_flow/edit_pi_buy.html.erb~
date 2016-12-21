@@ -30,6 +30,12 @@
                     <div class="row ">
                         <div class="col-md-2"><strong>供应商简称：</strong><ins id="daima_show" name="daima_show"><%= @pi_buy_info.dn %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
                         <div class="col-md-4"><strong>供应商全称：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
+                        <div class="col-md-2"><strong>联系人：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
+                        <div class="col-md-4"><strong>电话：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
+                    
+                        <div class="col-md-7"><strong>地址：</strong><ins id="daima_show" name="daima_show"><%= @pi_buy_info.dn %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
+                        <div class="col-md-3"><strong>结算方式：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
+                        <div class="col-md-2"><strong>币别：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
                     </div>
                     
                 </div>
@@ -41,7 +47,9 @@
 
 
             <div class="row "><div class="col-md-12">
-                <button  type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addbuy" >添加采购物料</button>
+                <% if not @pi_buy_info.dn.blank? %>
+                    <button  type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addbuy" >添加采购物料</button>
+                <% end %>
             </div></div>
 
 
@@ -79,7 +87,10 @@
       <th width="80">需求数量</th>
       <th width="80">购买数量</th>
       <th width="80">单价￥</th>
-      <th >供应商</th>
+      <th >含税单价</th>
+      <th >税率</th>
+      <th >价税合计</th>
+      <th >交货日期</th>
       <th >备注</th>
     </tr>
   </thead>
@@ -95,9 +106,12 @@
       </td>
       <td><%= buy.moko_des %></td>
       <td><%= buy.pmc_qty %></td>
-      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>"><%= buy.buy_qty %></div></td>
+      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>" data-delivery_date="<%= buy.delivery_date %>"><%= buy.buy_qty %></div></td>
       <td><%= buy.cost %></td>
-      <td><%= buy.dn_long %></td>
+      <td><%= buy.tax_cost %></td>
+      <td><%= buy.tax %></td>
+      <td><%= buy.tax_t_p %></td>
+      <td><%= buy.delivery_date.localtime.strftime('%Y-%m-%d') %></td>
       <td>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >
@@ -429,7 +443,19 @@
           <div class="form-group">
             <label for="buy_cost">价格：</label>
             <input class="form-control" name="buy_cost" id="buy_cost" type="text">
-          </div>             
+          </div> 
+          <div class="form-group">
+            <label for="buy_cost">交货日期：</label>
+            <%= text_field_tag :delivery_date, params[:delivery_date], id: "delivery_date",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#delivery_date').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+          </div>            
         
       </div>
       <div class="modal-footer">
@@ -465,6 +491,7 @@ $('#edit_buy_qty').on('show.bs.modal', function (event) {
   var buy_id = button.data('buy_id');
   var buy_qty = button.data('buy_qty');
   var buy_cost = button.data('buy_cost');
+  var delivery_date = button.data('delivery_date');
   //var buy_dn = button.data('buy_dn');
   //var buy_dn_long = button.data('buy_dn_long');
   var buy_moko_des = button.data('buy_moko_des');
@@ -473,6 +500,8 @@ $('#edit_buy_qty').on('show.bs.modal', function (event) {
   modal.find($("#buy_id")).val(buy_id);
   modal.find($("#buy_qty")).val(buy_qty);
   modal.find($("#buy_cost")).val(buy_cost);
+  modal.find($("#delivery_date")).val(delivery_date);
+  
   //modal.find($("#buy_dn")).val(buy_dn);
   //modal.find($("#buy_dn_long")).val(buy_dn_long);
 })

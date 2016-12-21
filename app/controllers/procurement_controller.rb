@@ -53,6 +53,9 @@ before_filter :authenticate_user!
             if not params[:p_des].blank?
                 bom_item.description = params[:p_des]
             end
+            if not params[:p_link].blank?
+                bom_item.link = params[:p_link]
+            end
             bom_item.user_id = current_user.id
             if bom_item.save
                 get_bom.change_flag = "done"

@@ -1348,6 +1348,7 @@ before_filter :authenticate_user!
             get_item.cost = params[:buy_cost]
             get_item.dn = params[:buy_dn]
             get_item.dn_long = params[:buy_dn_long]
+            get_item.delivery_date = params[:delivery_date]
             #get_item.type = "B"
             get_item.save
 
@@ -1418,6 +1419,7 @@ before_filter :authenticate_user!
         up_dn = PiBuyInfo.find_by(pi_buy_no: params[:pi_buy_no])
         up_dn.dn = SupplierList.find_by_id(params[:id]).supplier_name
         up_dn.dn_long = SupplierList.find_by_id(params[:id]).supplier_name_long
+        
         up_dn.save 
 =begin
         pmc_data = PiPmcItem.where(dn: up_dn.dn,state: "pass")
@@ -1519,6 +1521,12 @@ before_filter :authenticate_user!
                         add_buy_data.fengzhuang = item_data.fengzhuang
                         add_buy_data.link = item_data.link
                         add_buy_data.cost = item_data.cost
+
+                        add_buy_data.tax_cost = item_data.cost
+                        add_buy_data.tax = item_data.cost
+                        add_buy_data.tax_t_p = item_data.cost
+                        #add_buy_data.delivery_date = item_data.created_at
+
                         add_buy_data.info = item_data.info
                         add_buy_data.product_id = item_data.product_id
                         add_buy_data.moko_part = item_data.moko_part

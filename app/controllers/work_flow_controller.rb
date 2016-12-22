@@ -5,6 +5,14 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def fu_kuan_shen_qing_list
+
+    end
+
+    def fu_kuan_shen_qing_type
+
+    end
+
     def edit_setup_finance
         if not params[:dollar_rate].blank?
             get_data = SetupFinanceInfo.find_by_id(1)
@@ -1416,10 +1424,15 @@ before_filter :authenticate_user!
     end
 
     def find_dn_ch
+        get_supplier_data = SupplierList.find_by_id(params[:id])
         up_dn = PiBuyInfo.find_by(pi_buy_no: params[:pi_buy_no])
-        up_dn.dn = SupplierList.find_by_id(params[:id]).supplier_name
-        up_dn.dn_long = SupplierList.find_by_id(params[:id]).supplier_name_long
-        
+        up_dn.dn = get_supplier_data.supplier_name
+        up_dn.dn_long = get_supplier_data.supplier_name_long
+        up_dn.supplier_list_id = get_supplier_data.id
+        up_dn.supplier_clearing = get_supplier_data.supplier_clearing
+        up_dn.supplier_address = get_supplier_data.supplier_address
+        up_dn.supplier_contacts = get_supplier_data.supplier_contacts
+        up_dn.supplier_phone = get_supplier_data.supplier_phone
         up_dn.save 
 =begin
         pmc_data = PiPmcItem.where(dn: up_dn.dn,state: "pass")

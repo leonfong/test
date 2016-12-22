@@ -190,6 +190,8 @@ Rails.application.routes.draw do
   match '/payment_voucher_list', to: 'work_flow#payment_voucher_list', via: 'get'
   match '/setup_finance', to: 'work_flow#setup_finance', via: 'get'
   match '/edit_setup_finance', to: 'work_flow#edit_setup_finance', via: 'post'
+  match '/fu_kuan_shen_qing_list', to: 'work_flow#fu_kuan_shen_qing_list', via: 'get'
+  match '/fu_kuan_shen_qing_type', to: 'work_flow#fu_kuan_shen_qing_type', via: 'post'
 
 
 

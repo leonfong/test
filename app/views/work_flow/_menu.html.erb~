@@ -38,8 +38,10 @@
 
     <a style="background-color: #ddd;" href="#financeMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 财务中心</a>
     <ul id="financeMenu" class="nav nav-list  menu-second <% if selected =~ /_finance/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "setup_finance" %>style="background-color: #d9edf7;"<% end %>href="/setup_finance"><i class="icon-pencil"></i>财务设置</a></li>
         <li><a <% if selected == "paymanet_notice_finance" %>style="background-color: #d9edf7;"<% end %>href="/payment_notice_list"><i class="icon-pencil"></i>收款通知列表</a></li>
         <li><a <% if selected == "paymanet_voucher_finance" %>style="background-color: #d9edf7;"<% end %>href="/payment_voucher_list"><i class="icon-pencil"></i>收款单列表</a></li>
+        <li><a <% if selected == "paymanet_voucher_finance" %>style="background-color: #d9edf7;"<% end %>href="/payment_voucher_list"><i class="icon-pencil"></i>付款申请</a></li>
     </ul>
 
     <a style="background-color: #ddd;" href="#pmcMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> PMC</a>

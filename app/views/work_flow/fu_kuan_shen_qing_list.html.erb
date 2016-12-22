@@ -1,0 +1,65 @@
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "fu_kuan_shen_qing_finance"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 form-inline" >
+                    <div style="padding: 10px;">
+                        <button type="button" class="btn btn-primary btn-sm" data-backdrop="static" data-toggle="modal" data-target="#new_fu_kuan_shen_qing" >新建付款申请单</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="modal fade" id="new_fu_kuan_shen_qing" tabindex="-1" role="dialog" aria-labelledby="new_fu_kuan_shen_qingLabel" >
+  <div class="modal-dialog"  role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="new_fu_kuan_shen_qingLabel">选择结算方式</h4>
+      </div>
+      
+      <%= form_tag({action: :fu_kuan_shen_qing_type},method:"post",multipart:"true") do %>
+      <div class="modal-body" >
+          <div class="panel panel-default">
+              <div class="panel-body" style="padding: 15px 15px 1px;">
+
+
+          </div>
+          
+          <div class="row">
+
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()" >下一步</button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</div>
+</small>
+
+
+
+<script type="text/javascript">
+
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

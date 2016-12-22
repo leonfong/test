@@ -1,7 +1,7 @@
 <div class="container-fluid" >
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pcb"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pcb_draft_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
         

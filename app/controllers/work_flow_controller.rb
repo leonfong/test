@@ -6117,9 +6117,9 @@ before_filter :authenticate_user!
                 @c_info.each do |cu|
                     @c_table += '<tr>'
                     #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s.gsub(/'/,'') + '</div></a></td>'
                     @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
                     @c_table += '</tr>'
                 end
@@ -6744,15 +6744,15 @@ before_filter :authenticate_user!
         else
             @pcb.c_no = "pcb" + (PcbCustomer.maximum("id") + 1).to_s
         end
-        @pcb.customer = params[:customer]
-        @pcb.customer_com = params[:customer_com]
-        @pcb.email = params[:email] 
-        @pcb.sell = current_user.email 
-        @pcb.qty = params[:qty]
-        @pcb.att = params[:att]
-        @pcb.remark= params[:remark]
-        @pcb.customer_country = params[:customer_country]
-        @pcb.shipping_address = params[:shipping_address]      
+        @pcb.customer = params[:customer].to_s.gsub(/'/,'')
+        @pcb.customer_com = params[:customer_com].to_s.gsub(/'/,'')
+        @pcb.email = params[:email] .to_s.gsub(/'/,'')
+        @pcb.sell = current_user.email .to_s.gsub(/'/,'')
+        @pcb.qty = params[:qty].to_s.gsub(/'/,'')
+        @pcb.att = params[:att].to_s.gsub(/'/,'')
+        @pcb.remark= params[:remark].to_s.gsub(/'/,'')
+        @pcb.customer_country = params[:customer_country].to_s.gsub(/'/,'')
+        @pcb.shipping_address = params[:shipping_address]   .to_s.gsub(/'/,'')   
         if not params[:c_order_no].blank?
             @pcb.follow = current_user.email           
         end

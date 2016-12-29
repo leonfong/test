@@ -206,8 +206,8 @@ Rails.application.routes.draw do
   match '/edit_fu_kuan_p', to: 'work_flow#edit_fu_kuan_p', via: 'post'
   match '/edit_fukuandan_finance_at', to: 'work_flow#edit_fukuandan_finance_at', via: 'post'
   match '/edit_fukuandan_xianjin_kemu', to: 'work_flow#edit_fukuandan_xianjin_kemu', via: 'post'
-
-
+  match '/fu_kuan_dan_to_check', to: 'work_flow#fu_kuan_dan_to_check', via: 'post'
+  match '/fu_kuan_dan_to_checked', to: 'work_flow#fu_kuan_dan_to_checked', via: 'post'
 
 
 

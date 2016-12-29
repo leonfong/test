@@ -148,7 +148,7 @@
                           </div>
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
-                                  <label for="voucher_currency_type" class="col-md-4 control-label"><code>审批人:</code></label>
+                                  <label for="voucher_currency_type" class="col-md-4 control-label">审批人:</label>
                                   <div class="col-md-8">
                                       <p class="form-control-static" ><%= @fu_kuan.user_checked %></p>
                                   </div>

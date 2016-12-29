@@ -4,16 +4,47 @@
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "fu_kuan_dan_finance"} %>
         </div>
-        <div class="col-md-11" style="padding-top: 10px;">
-            
+        <div class="col-md-11" >
+            <div class="row" >
+                <div class="col-md-6" >
+                    <h2><span class="label label-default">新建付款单</span></h2>
+                </div>
+<% if @fu_kuan_dan.state == "new" %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <%= form_tag('/fu_kuan_dan_to_check', method:"post") do %>
+                        <input type="text" class="form-control sr-only" name="fu_kuan_dan_to_check_id" value="<%= @fu_kuan_dan.id %>">
+                        <%= submit_tag "提交审批", class:"btn btn-danger" ,data:{confirm: "确定要提交审批?"} %>
+                    <% end %>
+                    </div>
+                </div>
+<% end %>
+<% if @fu_kuan_dan.state == "check" and can? :work_admin, :all %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <%= form_tag('/fu_kuan_dan_to_checked', method:"post") do %>
+                        <input type="text" class="form-control sr-only" name="u_kuan_dan_to_check_id" value="<%= @fu_kuan_dan.id %>">
+                        <%= submit_tag "审批通过", class:"btn btn-success" ,data:{confirm: "确定要审批通过?"} %>
+                    <% end %>
+                    </div>
+                </div>
+<% end %>
+<% if @fu_kuan_dan.state == "checked" %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <h1><img src="/assets/shen_he.png" width="75" height="50"></h1>
+                    </div>
+                </div>
+<% end %>
+            </div>
 
             <div class="row">
                 <div class="col-md-12" >
 
                         
 
-      <div class="modal-header">
-        <h4 class="modal-title" id="voucherLabel">新建付款单</h4>
+      <div class="modal-header" style="padding: 0px;">
+          
       </div>
       
       <div class="modal-body" >
@@ -176,7 +207,7 @@
           <div class="row">
               <div class="col-md-12">
                   <div class="panel panel-default">
-                      <table class="table table-bordered" >
+                      <table class="table table-hover" >
                           <thead>
                               <tr class="active">
                                   <th width="80">付款申请单号</th>
@@ -190,9 +221,9 @@
                           <% if not @fu_kuan_dan_item.blank? %> 
                               <% @fu_kuan_dan_item.each do |item| %>
                               <tr> 
-                                  <td><p class="form-control-static" ><%= @fu_kuan_dan.fu_kuan_shen_qing_dan_info_id %></p></td>
-                                  <td><p class="form-control-static" ><%= PiInfo.find_by_id(item.pi_info_id).pi_no %></p></td>
-                                  <td><p class="form-control-static" ><%= item.ding_dan_zhi_fu_bi_li %></p></td>
+                                  <td><%= @fu_kuan_dan.fu_kuan_shen_qing_dan_info_id %></td>
+                                  <td><%= PiInfo.find_by_id(item.pi_info_id).pi_no %></td>
+                                  <td><%= item.ding_dan_zhi_fu_bi_li %></td>
 
 <% if @fu_kuan_dan.state == "new" %>
 <script type="text/javascript">
@@ -221,7 +252,7 @@ $(document).ready(function(){
                                       </div>
                                   </td>
 
-                                  <td><p class="form-control-static" ><%= item.zhe_kou_p %></p></td>
+                                  <td><%= item.zhe_kou_p %></td>
                               </tr>
                               <% end %>
                           <% end %> 
@@ -236,7 +267,7 @@ $(document).ready(function(){
                       <div class="form-group form-group-sm">
                           <label class="col-md-3 control-label" for="">审核人:</label>
                           <div class="col-md-9">
-                              <input class="form-control" type="text" disabled>
+                              <input class="form-control" type="text" value="<%=@fu_kuan_dan.user_checked%>" disabled>
                           </div>
                       </div>
                   </div>
@@ -266,7 +297,7 @@ $(document).ready(function(){
                       <div class="form-group form-group-sm">
                           <label class="col-md-3 control-label" for="pi_no">业务员:</label>
                           <div class="col-md-9">
-                              <input class="form-control" name="sell_full_name_up" id="sell_full_name_up" type="text"  disabled>
+                              <input class="form-control" name="sell_full_name_up" id="sell_full_name_up" type="text" value="<%=@fu_kuan_dan.user_fu_kuan_shen_qing_dan%>"  disabled>
                           </div>
                       </div>
                   </div>

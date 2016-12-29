@@ -5,6 +5,43 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def fu_kuan_dan_to_check
+        if not params[:fu_kuan_dan_to_check_id].blank?
+            get_fukuan = FuKuanDanInfo.find_by_id(params[:fu_kuan_dan_to_check_id])
+            get_fukuan.state = "check"
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def fu_kuan_dan_to_checked
+        if not params[:fu_kuan_dan_to_check_id].blank?
+            get_fukuan = FuKuanDanInfo.find_by_id(params[:fu_kuan_dan_to_check_id])
+            get_fukuan.state = "checked"
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def fu_kuan_shen_qing_to_check
+        if not params[:fu_kuan_shen_qing_to_check_id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_to_check_id])
+            get_fukuan.state = "check"
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def fu_kuan_shen_qing_to_checked
+        if not params[:fu_kuan_shen_qing_to_check_id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_to_check_id])
+            get_fukuan.user_checked = current_user.full_name
+            get_fukuan.state = "checked"
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
     def edit_fukuandan_xianjin_kemu
         if not params[:fu_kuan_dan_id].blank?
             get_data = FuKuanDanInfo.find_by_id(params[:fu_kuan_dan_id])

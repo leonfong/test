@@ -80,16 +80,16 @@
         
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <td>
-            <% if pcb.bom_state.blank? %>
+            <% if pcb.bom_state == "check" %>
                 审核中
-            <% else %>
+            <% elsif pcb.bom_state == "checked" %>
                 审核完成
             <% end %>
         </td>
         <td>
-            <% if pcb.finance_state.blank? %>
+            <% if pcb.finance_state == "check" %>
                 审核中
-            <% else %>
+            <% elsif pcb.finance_state == "checked" %>
                 审核完成
             <% end %>
         </td>

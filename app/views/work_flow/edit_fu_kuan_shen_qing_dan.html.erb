@@ -1,0 +1,348 @@
+<small><div class="container-fluid" >
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "fu_kuan_shen_qing_finance"} %>
+        </div>
+        <div class="col-md-11" >
+            <div class="row" >
+                <div class="col-md-6" >
+                    <h2><span class="label label-default">付款申请单</span></h2>
+                </div>
+<% if @fu_kuan.state == "" %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <%= form_tag('/fu_kuan_shen_qing_to_check', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="fu_kuan_shen_qing_to_check_id" name="fu_kuan_shen_qing_to_check_id" value="<%= @fu_kuan.id %>">
+                        <%= submit_tag "提交审批", class:"btn btn-danger" ,data:{confirm: "确定要提交审批?"} %>
+                    <% end %>
+                    </div>
+                </div>
+<% end %>
+<% if @fu_kuan.state == "check" and can? :work_admin, :all %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <%= form_tag('/fu_kuan_shen_qing_to_checked', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="fu_kuan_shen_qing_to_check_id" name="fu_kuan_shen_qing_to_check_id" value="<%= @fu_kuan.id %>">
+                        <%= submit_tag "审批通过", class:"btn btn-success" ,data:{confirm: "确定要审批通过?"} %>
+                    <% end %>
+                    </div>
+                </div>
+<% end %>
+<% if @fu_kuan.state == "checked" %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <h1><img src="/assets/shen_he.png" width="75" height="50"></h1>
+                    </div>
+                </div>
+<% end %>
+
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading"><strong>供应商信息</strong>
+              </div>
+              <div class="panel-body" style="padding: 15px 15px 1px;">
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label class="col-md-4 control-label" for="">核算项目类别:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" >供应商</p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label"><code>核算项目:</code></label>
+                                  <div class="col-md-8" >
+                                      <p class="form-control-static"  ><%= @fu_kuan.supplier_name %></p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">供应商全称:</label>
+                                  <div class="col-md-8" >
+                                      <p class="form-control-static" ><%= @fu_kuan.supplier_name_long %></p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label">申请金额:</label>
+                                  <div class="col-md-9" >
+                                      <p class="form-control-static" ><%= @t_p %></p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm ">
+                                  <label for="" class="col-md-3 control-label">付款户名:</label>   
+                                  <div class="col-md-9">
+                                      <p class="form-control-static" ><%= @fu_kuan.supplier_bank_account %></p>     
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label">供应商开户银行:</label>
+                                  <div class="col-md-9" >
+                                      <p class="form-control-static" ><%= @fu_kuan.supplier_bank_name %></p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label">供应商银行帐号:</label>
+                                  <div class="col-md-9" >
+                                      <p class="form-control-static" ><%= @fu_kuan.supplier_bank_account %></p>
+                                  </div>
+                              </div>
+                              
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_remark" class="col-md-3 control-label" id="remark_label">付款理由:</label>
+                                  <div class="col-md-9" >
+                                      <div id="remark_show">
+                                          <%= @fu_kuan.remark %>
+                                      </div>
+                                      <div style="display:none;" id="remark_edit">
+                                      <%= form_tag({action: :edit_fu_kuan_remark},method:"post") do %>
+                                          <input class="form-control sr-only" name="zhi_fu_id"  type="text" value="<%=@fu_kuan.id%>">
+                                          <div class="input-group input-group-sm">
+                                              <textarea  class="form-control" name="remark_edit"  rows="3" ><%= @fu_kuan.remark %></textarea>
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">单据号:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @fu_kuan.id %></p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">单据日期:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @fu_kuan.created_at.localtime.strftime('%Y-%m-%d') %></p>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_currency_type" class="col-md-4 control-label"><code>币别:</code></label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" >人民币</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_currency_type" class="col-md-4 control-label">制单人:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @fu_kuan.user_new %></p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_currency_type" class="col-md-4 control-label">审批人:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @fu_kuan.user_checked %></p>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row "><div class="col-md-12">
+            <%= render 'layouts/flash_messages' %>
+            </div></div>
+            <div class="row "><div class="col-md-12">
+<% if @fu_kuan.state == "" %>
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-target="#add_buy_order" >添加采购订单</button>
+<% end %>
+            </div></div>
+            <div class="panel panel-default">
+<!--
+                <div class="panel-heading"><strong>订单信息</strong>
+                </div>
+-->
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="info">
+                            <th width="120">订单单号</th>
+                            <th width="120">选单单据金额</th>
+                            <th width="120">订单支付比例</th>
+                            <th width="120">申请付款金额</th>
+
+                            <th>产品代码</th>
+                            <th>产品名称</th>
+                            <th>PI单号</th>
+                            <th width="90">已付款</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if not @fu_kuan_item.blank? %>
+                        <% @fu_kuan_item.each do |item| %>
+                        <tr>
+                            <td><%= item.pi_buy_no %></td>
+                            <td><%= item.t_p %></td>
+<% if @fu_kuan.state == "" %>
+                            <script type="text/javascript">
+                            $(document).ready(function(){
+                                $("#<%=item.id%>_bi_li_show").dblclick(function(){
+                                    $("#<%=item.id%>_bi_li_show").hide();
+                                    $("#<%=item.id%>_bi_li_edit").show();
+                                });
+                            });
+                            </script>
+<% end %>
+                            <td>
+                                <div id="<%=item.id%>_bi_li_show">
+                                    <%= item.ding_dan_zhi_fu_bi_li %>
+                                </div>
+                                <div id="<%=item.id%>_bi_li_edit" style="display:none;">
+                                    <%= form_tag({action: :edit_zhi_fu_bi_li},method:"post") do %>
+                                    <input class="form-control sr-only" name="zhi_fu_bi_li_id"  type="text" value="<%=item.id%>">
+                                    <div class="input-group input-group-sm">
+                                        
+                                        <input class="form-control" name="zhi_fu_bi_li"  type="text" value="<%= item.ding_dan_zhi_fu_bi_li %>">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                        </span>
+                                    </div>
+                                    <% end %>
+                                </div>
+                            </td>
+                            <td><%= item.shen_qing_p %></td>
+
+                            <td><%= item.moko_part %></td>
+                            <td><%= item.moko_des %></td>
+                            <td><%= PiInfo.find_by_id(item.pi_info_id).pi_no.to_s %></td>
+                            <td></td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="add_buy_order" tabindex="-1" role="dialog" aria-labelledby="add_buy_order_Label">
+    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="add_buy_order_Label"><strong>选择采购物料</strong></h4>
+            </div>
+      
+            <div class="modal-body">        
+                <%= form_tag('/add_fu_kuan_shen_qing_dan_item', method:"get") do %>
+                <%= text_field_tag :fu_kuan_shen_qing_dan_id, params[:fu_kuan_shen_qing_dan_id], class:"sr-only", value:@fu_kuan.id %>
+                <div >
+                        <input style="margin-right: 5px;" type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+                        <input style="margin-right: 5px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+                        <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
+                        <button type="submit" class="btn btn-danger sr-only " >提交</button>
+                        <%= submit_tag "提交", class:"btn btn-danger pull-right",style:"margin-bottom: 5px;" %>
+                <div>
+
+                <div class="form-group" id="table_buy">
+                    
+                    <table class="table table-hover">
+                    <thead>
+                    <tr style="background-color: #eeeeee">
+                    <th width="20"></th>
+                    <th>订单单号</th>
+                    <th>选单单据金额</th>
+                    <th>产品代码</th>
+                    <th>产品名称</th>
+                    <th>已付款</th>
+                    </tr>
+                    </thead>
+                    <tbody><small>
+                    <% if not @buy_item.blank? %>
+                        <% @buy_item.each do |buy| %>
+                                <tr>
+                                <td><input class="chk_all" type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
+                                <td><%= PiInfo.find_by_id(buy.pi_info_id).pi_no.to_s %></td>
+                                <td><%= buy.buy_qty*buy.cost %></td>
+                                <td><%= buy.moko_part %></td>
+                                <td><%= buy.moko_des %></td>
+                                <td></td>
+                                </tr>
+                        <% end %>
+                    <% end %>
+                    </small></tbody>
+                    </table>
+
+                </div>
+                
+                <% end %>
+            </div>
+        </div></small>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</small>
+
+
+
+<script type="text/javascript">
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    });
+<% if @fu_kuan.state == "" %>
+$(document).ready(function(){
+    $("#remark_label").dblclick(function(){
+        $("#remark_show").hide();
+        $("#remark_edit").show();
+    });
+});
+<% end %>
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

@@ -192,6 +192,20 @@ Rails.application.routes.draw do
   match '/edit_setup_finance', to: 'work_flow#edit_setup_finance', via: 'post'
   match '/fu_kuan_shen_qing_list', to: 'work_flow#fu_kuan_shen_qing_list', via: 'get'
   match '/fu_kuan_shen_qing_type', to: 'work_flow#fu_kuan_shen_qing_type', via: 'post'
+  match '/find_supplier', to: 'work_flow#find_supplier', via: 'post'
+  match '/new_fu_kuan_shen_qing_dan', to: 'work_flow#new_fu_kuan_shen_qing_dan', via: 'get'
+  match '/edit_fu_kuan_shen_qing_dan', to: 'work_flow#edit_fu_kuan_shen_qing_dan', via: 'get'
+  match '/add_fu_kuan_shen_qing_dan_item', to: 'work_flow#add_fu_kuan_shen_qing_dan_item', via: 'get'
+  match '/edit_zhi_fu_bi_li', to: 'work_flow#edit_zhi_fu_bi_li', via: 'post'
+  match '/edit_fu_kuan_remark', to: 'work_flow#edit_fu_kuan_remark', via: 'post'
+  match '/fu_kuan_shen_qing_to_check', to: 'work_flow#fu_kuan_shen_qing_to_check', via: 'post'
+  match '/fu_kuan_shen_qing_to_checked', to: 'work_flow#fu_kuan_shen_qing_to_checked', via: 'post'
+  match '/fu_kuan_dan_list', to: 'work_flow#fu_kuan_dan_list', via: 'get'
+  match '/new_fu_kuan_dan', to: 'work_flow#new_fu_kuan_dan', via: 'get'
+  match '/edit_fu_kuan_dan', to: 'work_flow#edit_fu_kuan_dan', via: 'get'
+  match '/edit_fu_kuan_p', to: 'work_flow#edit_fu_kuan_p', via: 'post'
+  match '/edit_fukuandan_finance_at', to: 'work_flow#edit_fukuandan_finance_at', via: 'post'
+  match '/edit_fukuandan_xianjin_kemu', to: 'work_flow#edit_fukuandan_xianjin_kemu', via: 'post'
 
 
 

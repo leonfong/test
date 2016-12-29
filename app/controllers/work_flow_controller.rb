@@ -5,8 +5,313 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
-    def fu_kuan_shen_qing_list
+    def edit_fukuandan_xianjin_kemu
+        if not params[:fu_kuan_dan_id].blank?
+            get_data = FuKuanDanInfo.find_by_id(params[:fu_kuan_dan_id])
+            get_data.xianjin_kemu = params[:xianjin_kemu]
+            get_data.save
+        end
+        redirect_to :back and return
+    end
 
+    def edit_fukuandan_finance_at
+        if not params[:fu_kuan_dan_id].blank?
+            get_data = FuKuanDanInfo.find_by_id(params[:fu_kuan_dan_id])
+            get_data.finance_at = params[:finance_at]
+            get_data.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_fu_kuan_p
+        if not params[:fu_kuan_p_id].blank?
+            get_item = FuKuanDanItem.find_by_id(params[:fu_kuan_p_id])
+            get_item.fu_kuan_p = params[:fu_kuan_p]
+            get_item.zhe_kou_p = BigDecimal.new(get_item.shen_qing_p) - BigDecimal.new(params[:fu_kuan_p])
+            get_item.save
+        end
+        redirect_to :back and return
+    end
+
+    def new_fu_kuan_dan
+        if not params[:id].blank?
+            check_data = FuKuanDanInfo.find_by_fu_kuan_shen_qing_dan_info_id(params[:id])
+            if check_data.blank?
+                copy_data = FuKuanShenQingDanInfo.find_by_id(params[:id])
+                new_fu_kuan_dan = FuKuanDanInfo.new
+                new_fu_kuan_dan.fu_kuan_shen_qing_dan_info_id = params[:id]
+                new_fu_kuan_dan.user_new = current_user.full_name
+                new_fu_kuan_dan.user_fu_kuan_shen_qing_dan = copy_data.user_new
+                new_fu_kuan_dan.state = "new"
+                new_fu_kuan_dan.t_p = copy_data.t_p
+                new_fu_kuan_dan.supplier_name = copy_data.supplier_name
+                new_fu_kuan_dan.supplier_name_long = copy_data.supplier_name_long
+                new_fu_kuan_dan.supplier_list_id = copy_data.supplier_list_id
+                new_fu_kuan_dan.supplier_clearing = copy_data.supplier_clearing
+                new_fu_kuan_dan.supplier_address = copy_data.supplier_address
+                new_fu_kuan_dan.supplier_contacts = copy_data.supplier_contacts
+                new_fu_kuan_dan.supplier_phone = copy_data.supplier_phone
+                new_fu_kuan_dan.supplier_bank_user = copy_data.supplier_bank_user
+                new_fu_kuan_dan.supplier_bank_account = copy_data.supplier_bank_account
+                new_fu_kuan_dan.supplier_bank_name = copy_data.supplier_bank_name
+                new_fu_kuan_dan.shen_qing_jiner = copy_data.shen_qing_jiner
+                new_fu_kuan_dan.shen_pi_jiner = copy_data.shen_pi_jiner
+                new_fu_kuan_dan.remark = copy_data.remark
+                new_fu_kuan_dan.kuai_ji_ke_mu = params[:kuai_ji_ke_mu]
+                new_fu_kuan_dan.finance_at = params[:finance_at]
+                if new_fu_kuan_dan.save
+                    copy_data.fu_kuan_dan_state = "done"
+                    copy_data.save
+                    copy_data_item = FuKuanShenQingDanItem.where(fu_kuan_shen_qing_dan_info_id: params[:id])
+                    if not copy_data_item.blank?
+                        copy_data_item.each do |item|
+                            new_fu_kuan_dan_item = FuKuanDanItem.new
+                            new_fu_kuan_dan_item.pi_info_id = item.pi_info_id
+                            new_fu_kuan_dan_item.pi_item_id = item.pi_item_id
+                            new_fu_kuan_dan_item.fu_kuan_dan_info_id = new_fu_kuan_dan.id
+                            new_fu_kuan_dan_item.pi_buy_info_id = item.pi_buy_info_id
+                            new_fu_kuan_dan_item.pi_buy_item_id = item.pi_buy_item_id
+                            new_fu_kuan_dan_item.pi_buy_no = item.pi_buy_no
+                            new_fu_kuan_dan_item.t_p = item.t_p
+                            new_fu_kuan_dan_item.ding_dan_zhi_fu_bi_li = item.ding_dan_zhi_fu_bi_li
+                            new_fu_kuan_dan_item.shen_qing_p = item.shen_qing_p
+                            new_fu_kuan_dan_item.fu_kuan_p = item.shen_qing_p
+                            #new_fu_kuan_dan_item.zhe_kou_p = params[:zhe_kou_p]
+                            new_fu_kuan_dan_item.shen_pi_p = item.shen_pi_p
+                            new_fu_kuan_dan_item.moko_part = item.moko_part
+                            new_fu_kuan_dan_item.moko_des = item.moko_des
+                            new_fu_kuan_dan_item.save
+                        end
+                    end
+                end
+                redirect_to edit_fu_kuan_dan_path(id: new_fu_kuan_dan.id) and return
+            else
+                redirect_to :back, :flash => {:error => "这个付款申请单已经做了付款单！"} and return
+            end
+        end
+        redirect_to :back, :flash => {:error => "付款申请单异常！"} and return
+    end
+
+    def edit_fu_kuan_dan
+        @type_b = "[&quot;"
+        
+        all_type_b = KuaijikemuInfo.find_by_sql("select CONCAT(code_a_name,'-',code_b_name,'-',code_c_name) AS c_name,CONCAT(code_a,' ',code_b,' ',code_c) AS c_code from kuaijikemu_infos")
+        all_type_b.each do |type_b|
+            @type_b += "&quot;,&quot;" + type_b.c_code.strip.split(" ")[-1] + "-" + type_b.c_name.split("-").join(" ").strip.split(" ").join("-")
+        end
+        @type_b += "&quot;]"
+        if not params[:id].blank?
+            @fu_kuan_dan = FuKuanDanInfo.find_by_id(params[:id])
+            @fu_kuan_dan_item = FuKuanDanItem.where(fu_kuan_dan_info_id: params[:id])
+        end
+    end
+
+    def fu_kuan_shen_qing_to_check
+        if not params[:fu_kuan_shen_qing_to_check_id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_to_check_id])
+            get_fukuan.state = "check"
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def fu_kuan_shen_qing_to_checked
+        if not params[:fu_kuan_shen_qing_to_check_id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_to_check_id])
+            get_fukuan.user_checked = current_user.full_name
+            get_fukuan.state = "checked"
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_fu_kuan_remark
+        if not params[:zhi_fu_id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:zhi_fu_id])
+            get_fukuan.remark = params[:remark_edit]
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_zhi_fu_bi_li
+        if not params[:zhi_fu_bi_li_id].blank?
+            get_fukuan = FuKuanShenQingDanItem.find_by_id(params[:zhi_fu_bi_li_id])
+            get_buyitem = PiBuyItem.find_by_id(get_fukuan.pi_buy_item_id)
+            shen_qing_p = BigDecimal.new(get_buyitem.buy_qty)*BigDecimal.new(get_buyitem.cost)*BigDecimal.new(params[:zhi_fu_bi_li])/100
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(shen_qing_p.to_i.inspect)
+            Rails.logger.info((BigDecimal.new(get_buyitem.buy_qty)*BigDecimal.new(get_buyitem.cost)).to_i.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if (BigDecimal.new(get_buyitem.buy_qty)*BigDecimal.new(get_buyitem.cost)-(BigDecimal.new(get_buyitem.yi_fu_kuan_p) - BigDecimal.new(get_fukuan.shen_qing_p))) >= shen_qing_p
+                get_buyitem.yi_fu_kuan_p = BigDecimal.new(get_buyitem.yi_fu_kuan_p) - BigDecimal.new(get_fukuan.shen_qing_p)
+                get_buyitem.save
+                get_fukuan.ding_dan_zhi_fu_bi_li = BigDecimal.new(params[:zhi_fu_bi_li])
+                get_fukuan.shen_qing_p = BigDecimal.new(get_buyitem.buy_qty)*BigDecimal.new(get_buyitem.cost)*BigDecimal.new(params[:zhi_fu_bi_li])/100
+                get_fukuan.save
+                get_buyitem.yi_fu_kuan_p = BigDecimal.new(get_buyitem.yi_fu_kuan_p) + BigDecimal.new(get_fukuan.shen_qing_p)
+                get_buyitem.save
+                redirect_to :back and return
+            else
+                redirect_to :back, :flash => {:error => "请款比例超过100%！"} and return
+            end
+        end
+    end
+
+    def add_fu_kuan_shen_qing_dan_item
+        if not params[:fu_kuan_shen_qing_dan_id].blank?
+            get_fu_kuan_info = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_dan_id])
+            if not params[:roles].blank?
+                params[:roles].each do |id|
+                    buy_data = PiBuyItem.find_by_id(id)
+                    new_fu_kuan_item = FuKuanShenQingDanItem.new
+                    new_fu_kuan_item.pi_info_id = buy_data.pi_info_id
+                    new_fu_kuan_item.pi_item_id = buy_data.pi_item_id
+                    new_fu_kuan_item.fu_kuan_shen_qing_dan_info_id = params[:fu_kuan_shen_qing_dan_id]
+                    new_fu_kuan_item.pi_buy_info_id = buy_data.pi_buy_info_id
+                    new_fu_kuan_item.pi_buy_item_id = buy_data.id
+                    new_fu_kuan_item.pi_buy_no = PiBuyInfo.find_by_id(buy_data.pi_buy_info_id).pi_buy_no
+                    new_fu_kuan_item.t_p = buy_data.buy_qty*buy_data.cost
+                    new_fu_kuan_item.ding_dan_zhi_fu_bi_li = (buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p)/(buy_data.buy_qty*buy_data.cost)*100
+                    new_fu_kuan_item.shen_qing_p = buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p
+                    new_fu_kuan_item.moko_part = buy_data.moko_part
+                    new_fu_kuan_item.moko_des = buy_data.moko_des
+                    if new_fu_kuan_item.save
+                        buy_data.yi_fu_kuan_p = buy_data.yi_fu_kuan_p + new_fu_kuan_item.shen_qing_p
+                        buy_data.save
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
+    def new_fu_kuan_shen_qing_dan
+        if not params[:id].blank?
+            get_supplier_data = SupplierList.find_by_id(params[:id])
+            new_fu_kuan = FuKuanShenQingDanInfo.new
+            new_fu_kuan.user_new = current_user.full_name
+            new_fu_kuan.supplier_name = get_supplier_data.supplier_name
+            new_fu_kuan.supplier_name_long = get_supplier_data.supplier_name_long
+            new_fu_kuan.supplier_list_id = get_supplier_data.id
+            new_fu_kuan.supplier_clearing = get_supplier_data.supplier_clearing
+            new_fu_kuan.supplier_address = get_supplier_data.supplier_address
+            new_fu_kuan.supplier_contacts = get_supplier_data.supplier_contacts
+            new_fu_kuan.supplier_phone = get_supplier_data.supplier_phone
+            new_fu_kuan.supplier_bank_user = get_supplier_data.supplier_bank_user
+            new_fu_kuan.supplier_bank_name = get_supplier_data.supplier_bank_name
+            new_fu_kuan.supplier_bank_account = get_supplier_data.supplier_bank_account
+            new_fu_kuan.save
+        end
+        redirect_to edit_fu_kuan_shen_qing_dan_path(id: new_fu_kuan.id)
+    end
+
+    def edit_fu_kuan_shen_qing_dan
+        if not params[:id].blank?
+            @fu_kuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
+            @fu_kuan_item = FuKuanShenQingDanItem.where(fu_kuan_shen_qing_dan_info_id: params[:id])
+            @buy_item = PiBuyItem.where("supplier_list_id = '#{@fu_kuan.supplier_list_id}' AND yi_fu_kuan_p < buy_qty*cost")
+            @t_p = FuKuanShenQingDanItem.find_by_sql("SELECT SUM(shen_qing_p) AS t_p FROM fu_kuan_shen_qing_dan_items WHERE fu_kuan_shen_qing_dan_info_id = '#{params[:id]}'").first.t_p
+        end
+    end
+
+    def find_supplier
+        if params[:supplier_code] != ""
+            @supplier_info = PcbCustomer.find_by_sql("SELECT * FROM `supplier_lists`  WHERE `supplier_lists`.`supplier_name` LIKE '%#{params[:supplier_code]}%' OR `supplier_lists`.`supplier_name_long` LIKE '%#{params[:supplier_code]}%'")
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@supplier_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @supplier_info.blank?
+                Rails.logger.info("add-------------------------------------12")
+                @supplier_table = '<br>'
+                @supplier_table += '<small>'
+                @supplier_table += '<table class="table table-bordered">'
+                @supplier_table += '<thead>'
+                @supplier_table += '<tr class="active">'
+                @supplier_table += '<th width="70">供简称</th>'
+                @supplier_table += '<th>供简全称</th>'
+                @supplier_table += '<th>默认结算方式</th>'
+                @supplier_table += '<tr>'
+                @supplier_table += '</thead>'
+                @supplier_table += '<tbody>'
+                @supplier_info.each do |cu|
+                    @supplier_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @supplier_table += '<td><a rel="nofollow" data-method="get"  href="/new_fu_kuan_shen_qing_dan?id='+ cu.id.to_s + '"><div>' + cu.supplier_name.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @supplier_table += '<td><a rel="nofollow" data-method="get"  href="/new_fu_kuan_shen_qing_dan?id='+ cu.id.to_s + '"><div>' + cu.supplier_name_long.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @supplier_table += '<td><a rel="nofollow" data-method="get"  href="/new_fu_kuan_shen_qing_dan?id='+ cu.id.to_s + '"><div>' + cu.supplier_clearing.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @supplier_table += '</tr>'
+                end
+                @supplier_table += '</tbody>'
+                @supplier_table += '</table>'
+                @supplier_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@supplier_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
+    def find_c
+        if params[:c_code] != ""
+            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@c_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @c_info.blank?
+                Rails.logger.info("add-------------------------------------12")
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th width="70">客户代码</th>'
+                @c_table += '<th>客户名</th>'
+                @c_table += '<th>客户公司名</th>'
+                @c_table += '<th width="70">所属</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '</tr>'
+                end
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@c_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
+    def fu_kuan_dan_list
+        if not params[:state].blank?
+            if params[:state] == "new"
+                @list = FuKuanShenQingDanInfo.where(state: "checked",fu_kuan_dan_state: "")
+            end
+        end
+    end
+
+    def fu_kuan_shen_qing_list
+        if not params[:state].blank?
+            if params[:state] == "new"
+                @list = FuKuanShenQingDanInfo.where(state: "")
+            elsif params[:state] == "check"
+                @list = FuKuanShenQingDanInfo.where(state: "check")
+            elsif params[:state] == "checked"
+                @list = FuKuanShenQingDanInfo.where(state: "checked")
+            end
+        else 
+            @list = FuKuanShenQingDanInfo.all
+        end
     end
 
     def fu_kuan_shen_qing_type
@@ -146,6 +451,14 @@ before_filter :authenticate_user!
 
     def edit_payment_notice
         @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
+        if params[:commit] == "审批通过"
+            @payment_date = PaymentNoticeInfo.find_by_id(params[:payment_id_set])
+            if not @payment_date.blank?
+                @payment_date.state = "checking"
+                @payment_date.save
+            end
+            redirect_to :back and return
+        end
         @payment_date = PaymentNoticeInfo.find_by_id(params[:payment_id])
         if not @payment_date.blank?
             @payment_date.pay_p = params[:pay_p]
@@ -157,10 +470,7 @@ before_filter :authenticate_user!
             @payment_date.remark = params[:remark]
             @payment_date.pay_att = params[:pay_att]
             @payment_date.save
-        else
-            redirect_to :back
         end
-
     end
 
     def new_payment_notice
@@ -200,7 +510,7 @@ before_filter :authenticate_user!
     def pi_to_pmc
         Rails.logger.info("pmc_new--------------------------------------1")
         #@pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy = '' ORDER BY p_items.product_id DESC")
-        @pi_buy = PiBomQtyInfoItem.find_by_sql("SELECT pi_bom_qty_info_items.bom_ctl_qty AS pmc_qty,pi_bom_qty_info_items.customer_qty,pi_bom_qty_info_items.p_item_id,pi_bom_qty_info_items.order_item_id,pi_bom_qty_info_items.id AS qty_item_id FROM pi_bom_qty_info_items INNER JOIN p_items ON pi_bom_qty_info_items.p_item_id = p_items.id WHERE pi_bom_qty_info_items.pi_item_id = '#{params[:p_pi_item_id]}' AND pi_bom_qty_info_items.buy = '' ")
+        @pi_buy = PiBomQtyInfoItem.find_by_sql("SELECT pi_bom_qty_info_items.pi_item_id,pi_bom_qty_info_items.pi_info_id,pi_bom_qty_info_items.bom_ctl_qty AS pmc_qty,pi_bom_qty_info_items.customer_qty,pi_bom_qty_info_items.p_item_id,pi_bom_qty_info_items.order_item_id,pi_bom_qty_info_items.id AS qty_item_id FROM pi_bom_qty_info_items INNER JOIN p_items ON pi_bom_qty_info_items.p_item_id = p_items.id WHERE pi_bom_qty_info_items.pi_item_id = '#{params[:p_pi_item_id]}' AND pi_bom_qty_info_items.buy = '' ")
         if not @pi_buy.blank?
             Rails.logger.info("pmc_new--------------------------------------2")
             @pi_buy.each do |item_buy|
@@ -216,6 +526,9 @@ before_filter :authenticate_user!
                         Rails.logger.info("pmc_new--------------------------------------4")
                         add_buy_data = PiPmcItem.new
                         add_buy_data.state = "new"
+                        add_buy_data.pi_info_id = item_buy.pi_info_id
+                        add_buy_data.pi_item_id = item_buy.pi_item_id
+                        add_buy_data.pi_bom_qty_info_item_id = item_buy.qty_item_id
                         add_buy_data.erp_no = item_data.erp_no
                         add_buy_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
                         #add_buy_data.erp_no_son = item_data.erp_no
@@ -392,6 +705,9 @@ before_filter :authenticate_user!
                                 Rails.logger.info("pmc_new--------------------------------------17")
                                 add_buy_do = PiPmcItem.new
                                 add_buy_do.state = "new"
+                                add_buy_do.pi_bom_qty_info_item_id = item_buy.qty_item_id
+                                add_buy_do.pi_info_id = item_buy.pi_info_id
+                                add_buy_do.pi_item_id = item_buy.pi_item_id
                                 add_buy_do.erp_no = add_buy_data.erp_no
                                 add_buy_do.erp_no_son = add_buy_data.erp_no_son
                                 add_buy_do.moko_part = add_buy_data.moko_part
@@ -455,6 +771,9 @@ before_filter :authenticate_user!
                             #if item_data.customer_qty > 0
                             if item_buy.customer_qty.to_i > 0
                                 add_customer_data = PiPmcItem.new
+                                add_customer_data.pi_info_id = item_buy.pi_info_id
+                                add_customer_data.pi_item_id = item_buy.pi_item_id
+                                add_customer_data.pi_bom_qty_info_item_id = item_buy.qty_item_id
                                 add_customer_data.state = "new"
                                 add_customer_data.erp_no = item_data.erp_no
                                 add_customer_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
@@ -547,10 +866,18 @@ before_filter :authenticate_user!
                 end
                 render "pi_list_paymanet_notice.html.erb" and return
             else
+                Rails.logger.info("add-------------------------------------12")
+=begin
                 if can? :work_e, :all
-                    @pilist = PiInfo.where("state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' AND pi_sell = '#{current_user.email}' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pilist = PiInfo.where("state <> 'new'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
+                end
+=end
+                if can? :work_e, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end
         end        
@@ -1434,6 +1761,11 @@ before_filter :authenticate_user!
         up_dn.supplier_contacts = get_supplier_data.supplier_contacts
         up_dn.supplier_phone = get_supplier_data.supplier_phone
         up_dn.save 
+        item_data = PiBuyItem.where(pi_buy_info_id: up_dn.id)
+        if not item_data.blank?
+            item_data.update_all "supplier_list_id = '#{up_dn.supplier_list_id}'"
+
+        end
 =begin
         pmc_data = PiPmcItem.where(dn: up_dn.dn,state: "pass")
         if not pmc_data.blank?
@@ -1512,6 +1844,8 @@ before_filter :authenticate_user!
                     find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
                     if find_buy_data.blank?
                         add_buy_data = PiBuyItem.new
+                        add_buy_data.pi_info_id = item_data.pi_info_id
+                        add_buy_data.pi_item_id = item_data.pi_item_id
                         add_buy_data.pmc_flag = item_data.pmc_flag
                         add_buy_data.buy_user = item_data.buy_user
                         add_buy_data.state = "new"
@@ -1524,6 +1858,7 @@ before_filter :authenticate_user!
                         add_buy_data.user_do_change = item_data.user_do_change
                         add_buy_data.check = item_data.check
                         add_buy_data.pi_buy_info_id = params[:pi_buy_id]
+                        add_buy_data.supplier_list_id = PiBuyInfo.find_by_id(params[:pi_buy_id]).supplier_list_id
                         add_buy_data.procurement_bom_id = item_data.procurement_bom_id
                         add_buy_data.quantity = item_data.quantity
                         add_buy_data.qty = item_data.qty
@@ -1899,6 +2234,9 @@ before_filter :authenticate_user!
                             temp_qty = temp_qty - pmc_data.buy_qty
                         else
                             add_future_data = PiPmcItem.new
+                            add_future_data.pi_info_id = pmc_data.pi_info_id
+                            add_future_data.pi_item_id = pmc_data.pi_item_id
+                            add_future_data.pi_bom_qty_info_item_id = pmc_data.pi_bom_qty_info_item_id
                             add_future_data.pmc_type = "CHK"
                             add_future_data.state = "new"
                             add_future_data.erp_no = pmc_data.erp_no
@@ -1975,6 +2313,9 @@ before_filter :authenticate_user!
                             pmc_data.save
                         else
                             add_buy_data = PiPmcItem.new
+                            add_buy_data.pi_info_id = pmc_data.pi_info_id
+                            add_buy_data.pi_item_id = pmc_data.pi_item_id
+                            add_buy_data.pi_bom_qty_info_item_id = pmc_data.pi_bom_qty_info_item_id
                             add_buy_data.pmc_type = "CHK"
                             add_buy_data.state = "new"
                             add_buy_data.erp_no = pmc_data.erp_no
@@ -5494,7 +5835,7 @@ before_filter :authenticate_user!
             end
 
             if can? :work_d, :all 
-
+                Rails.logger.info("add-------------------------------------5652")
                 pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
                 if pi_item_data.finance_state == "checked"
                     pi_item_data.state = "checked"
@@ -6091,46 +6432,6 @@ before_filter :authenticate_user!
         upstart.bom_id = params[:id]
         upstart.save
         redirect_to :back
-    end
-
-    def find_c
-        if params[:c_code] != ""
-            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
-            Rails.logger.info("add-------------------------------------12")
-            Rails.logger.info(@c_info.inspect)
-            Rails.logger.info("add-------------------------------------12")
-            if not @c_info.blank?
-                Rails.logger.info("add-------------------------------------12")
-                @c_table = '<br>'
-                @c_table += '<small>'
-                @c_table += '<table class="table table-bordered">'
-                @c_table += '<thead>'
-                @c_table += '<tr class="active">'
-                @c_table += '<th width="70">客户代码</th>'
-                @c_table += '<th>客户名</th>'
-                @c_table += '<th>客户公司名</th>'
-                @c_table += '<th width="70">所属</th>'
-                @c_table += '<tr>'
-                @c_table += '</thead>'
-                @c_table += '<tbody>'
-                @c_info.each do |cu|
-                    @c_table += '<tr>'
-                    #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.c_no.to_s.gsub(/'/,'') + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer.to_s.gsub(/'/,'') + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + cu.customer_com.to_s.gsub(/'/,'') + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_ch?id='+ cu.id.to_s + '&c_order_no=' + params[:c_order_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
-                    @c_table += '</tr>'
-                end
-                @c_table += '</tbody>'
-                @c_table += '</table>'
-                @c_table += '</small>'
-                Rails.logger.info("add-------------------------------------12")
-                Rails.logger.info(@c_table.inspect)
-                Rails.logger.info("add-------------------------------------12")
-            end
-        end
     end
 
     def find_c_pi

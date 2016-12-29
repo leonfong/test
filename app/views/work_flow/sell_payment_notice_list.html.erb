@@ -350,11 +350,17 @@
               </div>
           </div>
       </div>
-      <div class="modal-footer">
-        <input type="submit" class="btn btn-primary pay_hide" name="commit" value="审批通过" data-confirm="确定审批通过？">
+      <div class="modal-footer pay_show" style="display:none;">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         
         <input type="submit" class="btn btn-success pay_show" id="hide_del" name="commit" value="保存" style="display:none;">
+      </div>
+      <% end %>
+      <%= form_tag({action: :edit_payment_notice},method:"post",multipart:"true") do %>
+      <div class="modal-footer pay_hide" >
+         <input class="form-control sr-only" name="payment_id_set" id="payment_id_set" type="text" >
+        <input type="submit" class="btn btn-primary pay_hide" name="commit" value="审批通过" data-confirm="确定审批通过？">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
       </div>
       <% end %>
     </div>
@@ -437,7 +443,7 @@ $('#view_payment_notice').on('show.bs.modal', function (event) {
   modal.find($("#created_at")).html(payment_created_at)
   modal.find($("#view_payment_notice_Label")).html("单号：" + payment_id)
   modal.find($("#payment_id")).val(payment_id)
-
+  modal.find($("#payment_id_set")).val(payment_id)
 
 
 

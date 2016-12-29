@@ -30,11 +30,11 @@
                     <div class="row ">
                         <div class="col-md-2"><strong>供应商简称：</strong><ins id="daima_show" name="daima_show"><%= @pi_buy_info.dn %></ins><input type="text" class="input-sm sr-only" style="width:65%" id="daima" name="daima" readonly></div>
                         <div class="col-md-4"><strong>供应商全称：</strong><ins id="kehu_show" name="kehu_show"><%= @pi_buy_info.dn_long %></ins><input type="text" class="input-sm sr-only" style="width:80%" id="kehu" name="kehu" readonly></div>
-                        <div class="col-md-2"><strong>联系人：</strong><ins><%= @pi_buy_info.contacts %></ins></div>
-                        <div class="col-md-4"><strong>电话：</strong><ins><%= @pi_buy_info.phone %></ins></div>
+                        <div class="col-md-2"><strong>联系人：</strong><ins><%= @pi_buy_info.supplier_contacts %></ins></div>
+                        <div class="col-md-4"><strong>电话：</strong><ins><%= @pi_buy_info.supplier_phone %></ins></div>
                     
-                        <div class="col-md-7"><strong>地址：</strong><ins><%= @pi_buy_info.address %></ins></div>
-                        <div class="col-md-3"><strong>结算方式：</strong><ins><%= @pi_buy_info.clearing %></ins></div>
+                        <div class="col-md-7"><strong>地址：</strong><ins><%= @pi_buy_info.supplier_address %></ins></div>
+                        <div class="col-md-3"><strong>结算方式：</strong><ins><%= @pi_buy_info.supplier_clearing %></ins></div>
                         <div class="col-md-2"><strong>币别：</strong><ins>人民币</ins></div>
                     </div>
                     
@@ -106,7 +106,7 @@
       </td>
       <td><%= buy.moko_des %></td>
       <td><%= buy.pmc_qty %></td>
-      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>" data-delivery_date="<%= buy.delivery_date.localtime.strftime('%Y-%m-%d') %>"><%= buy.buy_qty %></div></td>
+      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>" data-delivery_date="<%= buy.delivery_date.blank?? '':buy.delivery_date.localtime.strftime('%Y-%m-%d') %>"><%= buy.buy_qty %></div></td>
       <td><%= buy.cost %></td>
       <td><%= buy.tax_cost %></td>
       <td><%= buy.tax %></td>

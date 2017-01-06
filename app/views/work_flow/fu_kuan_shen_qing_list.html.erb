@@ -62,10 +62,10 @@
 
                   <div class="row">
                       <div class="col-md-6" >
-                          <button type="button" class="btn btn-danger btn-lg center-block" id="new_customer">日结</button>
+                          <button type="button" class="btn btn-danger btn-lg center-block" id="new_customer_d">日结</button>
                       </div>
                       <div class="col-md-6" >
-                          <button type="button" class="btn btn-success btn-lg center-block" id="new_customer">月结</button>
+                          <button type="button" class="btn btn-success btn-lg center-block" id="new_customer_m">月结</button>
                       </div>
                   </div>
 
@@ -87,16 +87,30 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="find_supplierLabel">选择供应商</h4>
+                <h4 class="modal-title" id="find_supplierLabel">选择供应商---结算方式---<code id="pay_type_show"></code></h4>
             </div>
      
             <div class="modal-body" >
                 <div class="form-inline">
+                
                 <%= form_tag('/find_supplier', method:"post", class:"form-inline",remote: true) do %>
                     <div class="form-group ">
-                        <lable for="order" , class="control-label"><strong>供应商: </strong></lable>
+                        <lable id="date_at_label" for="date_at" class="control-label"><strong>日期: </strong></lable>
+                        <%= text_field_tag :date_at, params[:date_at], id: "date_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#date_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM'
+        });    
+    });
+</script>         
+                        <lable for="order"  class="control-label"><strong>供应商: </strong></lable>
                         <div class="input-group input-group-sm">              
-                            <%= text_field_tag :supplier_code, params[:supplier_code], class:"form-control input-lg", size:"60", placeholder:"供应商代码/供应商名"%>               
+                            <%= text_field_tag :supplier_code, params[:supplier_code], class:"form-control input-lg", size:"40", placeholder:"供应商代码/供应商名"%>    
+                             
+                            <%= text_field_tag :pay_type, params[:pay_type], class:"sr-only"%> 
+                            
                             <div class="input-group-btn">
                                 <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
                             </div>
@@ -123,14 +137,31 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#new_customer").click(function(){
+    $("#new_customer_d").click(function(){
         $("#new_fu_kuan_shen_qing").modal('toggle');
         $("#find_supplier").modal({
             toggle: true,
             backdrop: "static"
         });
+        $("#pay_type").val("d");
+        $("#pay_type_show").html("日结");
+        $("#date_at_label").hide();
+        $("#date_at").hide();
     }); 
+    $("#new_customer_m").click(function(){
+        $("#new_fu_kuan_shen_qing").modal('toggle');
+        $("#find_supplier").modal({
+            toggle: true,
+            backdrop: "static"
+        });
+        $("#pay_type").val("m");
+        $("#pay_type_show").html("月结");
+        $("#table_code_supplier").html("");
+        $("#date_at_label").show();
+        $("#date_at").show();
+    });
 });
+
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

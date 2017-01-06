@@ -250,7 +250,28 @@
                 <h4 class="modal-title" id="add_buy_order_Label"><strong>选择采购物料</strong></h4>
             </div>
       
-            <div class="modal-body">        
+            <div class="modal-body">
+                <div class="form-inline">
+                <%= form_tag('/find_fu_kuan_item', method:"post", class:"form-inline",remote: true) do %>
+                    <div class="form-group" style="padding-bottom: 10px;">
+                        <lable id="date_at_label" for="date_at" class="control-label sr-only"><strong>日期: </strong></lable>
+                        <input class="control-label sr-only" name="upplier_list_id" value="<%= @fu_kuan.supplier_list_id %>"
+                        <%= text_field_tag :date_at, params[:date_at], id: "date_at",class:"form-control input-sm", size:"10",placeholder:"日期"%>
+        
+                        <lable for="order"  class="control-label sr-only"><strong>信息: </strong></lable>
+                        <div class="input-group input-group-sm">              
+                            <%= text_field_tag :supplier_code, params[:supplier_code], class:"form-control input-lg", size:"40", placeholder:"PI/MOKO PART"%>     
+                            
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                            </div>
+                            
+                        </div>
+                    </div>
+                <% end %>             
+                </div>     
+
+   
                 <%= form_tag('/add_fu_kuan_shen_qing_dan_item', method:"get") do %>
                 <%= text_field_tag :fu_kuan_shen_qing_dan_id, params[:fu_kuan_shen_qing_dan_id], class:"sr-only", value:@fu_kuan.id %>
                 <div >
@@ -274,7 +295,7 @@
                     <th>已付款</th>
                     </tr>
                     </thead>
-                    <tbody><small>
+                    <tbody id="buy_item">
                     <% if not @buy_item.blank? %>
                         <% @buy_item.each do |buy| %>
                                 <tr>
@@ -287,7 +308,7 @@
                                 </tr>
                         <% end %>
                     <% end %>
-                    </small></tbody>
+                    </tbody>
                     </table>
 
                 </div>
@@ -314,7 +335,14 @@
 </small>
 
 
-
+<script type="text/javascript">
+    $(function () {
+        $('#date_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM'
+        });    
+    });
+</script> 
 <script type="text/javascript">
 $("#selectAll").click(function () {   
         $(".chk_all").each(function () {     

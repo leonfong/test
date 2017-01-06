@@ -24,7 +24,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr style="background-color: #eeeeee">
-                                    <th width="100">编辑付款单</th>
+                                    <th width="100">新建付款单</th>
                                     <th width="70">编号</th>     
                                     <th width="70">状态</th>
                                     <th width="70">借款方式</th>
@@ -36,7 +36,11 @@
 <% if not @list.blank? %>
                             <% @list.each do |item| %>  
                                 <tr>
-                                    <td><%= link_to "编辑",  {action: "edit_fu_kuan_dan", id: item.id} %></td>
+                                    <% if item.fu_kuan_dan_state == "done" %>
+                                    <td><a style="margin-right: 100px;" type="button" class="btn btn-success btn-xs" >已建付款单</a></td>
+                                    <% else %>
+                                    <td><a style="margin-right: 100px;" type="button" class="btn btn-primary btn-xs" href="/new_fu_kuan_dan?id=<%= item.id %>" >新建付款单</a></td>
+                                    <% end %>
                                     <td><%= "FK_"+item.id.to_s %></td>
                                     <td><%= item.state %></td>
                                     <td><%= item.supplier_clearing %></td>

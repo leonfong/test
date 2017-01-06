@@ -9,10 +9,10 @@
                 <div class="col-md-12 col-sm-12 form-inline" >
                     <div style="padding-bottom: 10px;">
                         <ul class="nav nav-tabs" >
-                            <li class="active"><a href="/fu_kuan_dan_list?state=new">新建付款单</a></li>
-                            <li><a href="/fu_kuan_dan_list?state=check">未提交审批的付款单</a></li>
-                            <li><a href="/fu_kuan_dan_list?state=check">等待审批的付款单</a></li>
-                            <li><a href="/fu_kuan_dan_list?state=checked">已经审批的付款单</a></li>
+                            <li <% if params[:state] == "none" %>class="active"<% end %> ><a href="/fu_kuan_dan_list?state=none">新建付款单</a></li>
+                            <li <% if params[:state] == "new" %>class="active"<% end %> ><a href="/fu_kuan_dan_list?state=new">未提交审批的付款单</a></li>
+                            <li <% if params[:state] == "check" %>class="active"<% end %> ><a href="/fu_kuan_dan_list?state=check">等待审批的付款单</a></li>
+                            <li <% if params[:state] == "checked" %>class="active"<% end %> ><a href="/fu_kuan_dan_list?state=checked">已经审批的付款单</a></li>
                         </ul>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr style="background-color: #eeeeee">
-                                    <th width="100">新建付款单</th>
+                                    <th width="100">编辑付款单</th>
                                     <th width="70">编号</th>     
                                     <th width="70">状态</th>
                                     <th width="70">借款方式</th>
@@ -36,11 +36,7 @@
 <% if not @list.blank? %>
                             <% @list.each do |item| %>  
                                 <tr>
-                                    <% if item.fu_kuan_dan == "done" %>
-                                    <td><a style="margin-right: 100px;" type="button" class="btn btn-success btn-xs" >已建付款单</a></td>
-                                    <% else %>
-                                    <td><a style="margin-right: 100px;" type="button" class="btn btn-primary btn-xs" href="/new_fu_kuan_dan?id=<%= item.id %>" >新建付款单</a></td>
-                                    <% end %>
+                                    <td><%= link_to "编辑",  {action: "edit_fu_kuan_dan", id: item.id} %></td>
                                     <td><%= "FK_"+item.id.to_s %></td>
                                     <td><%= item.state %></td>
                                     <td><%= item.supplier_clearing %></td>

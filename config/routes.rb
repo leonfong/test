@@ -208,6 +208,10 @@ Rails.application.routes.draw do
   match '/edit_fukuandan_xianjin_kemu', to: 'work_flow#edit_fukuandan_xianjin_kemu', via: 'post'
   match '/fu_kuan_dan_to_check', to: 'work_flow#fu_kuan_dan_to_check', via: 'post'
   match '/fu_kuan_dan_to_checked', to: 'work_flow#fu_kuan_dan_to_checked', via: 'post'
+  match '/find_fu_kuan_item', to: 'work_flow#find_fu_kuan_item', via: 'post'
+  match '/cai_gou_fa_piao_list', to: 'work_flow#cai_gou_fa_piao_list', via: 'get'
+  match '/edit_cai_gou_fa_piao', to: 'work_flow#edit_cai_gou_fa_piao', via: 'post'
+  match '/show_cai_gou_fa_piao', to: 'work_flow#show_cai_gou_fa_piao', via: 'get'
 
 
 

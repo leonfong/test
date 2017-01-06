@@ -7,7 +7,7 @@
         <div class="col-md-11" >
             <div class="row" >
                 <div class="col-md-6" >
-                    <h2><span class="label label-default">新建付款单</span></h2>
+                    <h2><span class="label label-default">付款单</span></h2>
                 </div>
 <% if @fu_kuan_dan.state == "new" %>
                 <div class="col-md-6" >
@@ -23,7 +23,7 @@
                 <div class="col-md-6" >
                     <div class="pull-right" style="padding: 15px 0px 0px 0px;">
                     <%= form_tag('/fu_kuan_dan_to_checked', method:"post") do %>
-                        <input type="text" class="form-control sr-only" name="u_kuan_dan_to_check_id" value="<%= @fu_kuan_dan.id %>">
+                        <input type="text" class="form-control sr-only" name="fu_kuan_dan_to_check_id" value="<%= @fu_kuan_dan.id %>">
                         <%= submit_tag "审批通过", class:"btn btn-success" ,data:{confirm: "确定要审批通过?"} %>
                     <% end %>
                     </div>

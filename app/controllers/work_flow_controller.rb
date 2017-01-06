@@ -5,22 +5,302 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def cai_gou_fa_piao_list
+        @fa_piao = CaiGouFaPiaoInfo.all
+    end
+
+    def show_cai_gou_fa_piao
+        @fa_piao = CaiGouFaPiaoInfo.find_by_id(params[:id])
+    end
+
+    def edit_cai_gou_fa_piao
+        @fa_piao = CaiGouFaPiaoInfo.find_by_id(params[:id])
+    end
+
+    def edit_wh_order
+        @wh_info = PiWhInfo.find_by(pi_wh_no: params[:pi_wh_no])
+        @wh_item = PiWhItem.where(pi_wh_info_no: params[:pi_wh_no])
+        @all_dn = "[&quot;"
+        #all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
+        all_s_dn = SupplierList.find_by_sql("SELECT  supplier_name, supplier_name_long FROM supplier_lists ")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.supplier_name.to_s + "&#{dn.supplier_name_long.to_s}"
+        end
+        @all_dn += "&quot;]"
+    end
+
+    def wh_draft
+        wh_order = PiWhInfo.find_by_pi_wh_no(params[:wh_no])
+        if not wh_order.blank?
+            if wh_order.state == "new" or wh_order.state == "fail"
+                wh_order.state = "checking"
+                wh_order.save
+            elsif wh_order.state == "checking"
+                if params[:commit] == "PASS"
+                    wh_order.state = "checked"
+                elsif params[:commit] == "FAIL"
+                    wh_order.state = "fail"
+                end
+                wh_order.save
+            end
+            if wh_order.state == "checked"
+                new_fapiao = CaiGouFaPiaoInfo.new
+                new_fapiao.site = wh_order.site
+                new_fapiao.pi_wh_no = wh_order.pi_wh_no
+                new_fapiao.wh_user = wh_order.wh_user
+                new_fapiao.state = wh_order.state
+                new_fapiao.dn = wh_order.dn
+                new_fapiao.dn_long = wh_order.dn_long
+                #new_fapiao.cai_gou_fang_shi = wh_order.
+                new_fapiao.wh_at = wh_order.created_at
+                new_fapiao.save
+            #if wh_order.state == "new"
+                wh_in_data = PiWhItem.where(pi_wh_info_no: params[:wh_no])
+                if not wh_in_data.blank?
+                    wh_in_data.each do |wh_in|
+                        new_fapiao_item = CaiGouFaPiaoItem.new
+                        new_fapiao_item.cai_gou_fa_piao_info_id = new_fapiao.id
+                        new_fapiao_item.pmc_flag = wh_in.pmc_flag
+                        new_fapiao_item.pi_pmc_item_id = wh_in.pi_pmc_item_id
+                        new_fapiao_item.buy_user = wh_in.buy_user
+                        new_fapiao_item.pi_wh_info_id = wh_in.pi_wh_info_id
+                        new_fapiao_item.pi_wh_info_no = wh_in.pi_wh_info_no
+                        new_fapiao_item.pi_buy_item_id = wh_in.pi_buy_item_id
+                        new_fapiao_item.moko_part = wh_in.moko_part
+                        new_fapiao_item.moko_des = wh_in.moko_des
+                        new_fapiao_item.qty_in = wh_in.qty_in
+                        new_fapiao_item.remark = wh_in.remark
+                        new_fapiao_item.p_item_id = wh_in.p_item_id
+                        new_fapiao_item.erp_id = wh_in.erp_id
+                        new_fapiao_item.erp_no = wh_in.erp_no
+                        new_fapiao_item.pi_buy_info_id = wh_in.pi_buy_info_id
+                        new_fapiao_item.procurement_bom_id = wh_in.procurement_bom_id
+                        new_fapiao_item.state = wh_in.state
+                        get_buy_info = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
+                        new_fapiao_item.cost = get_buy_info.cost
+                        new_fapiao_item.tax_cost = get_buy_info.tax_cost
+                        new_fapiao_item.tax = get_buy_info.tax
+                        new_fapiao_item.tax_t_p = get_buy_info.tax_t_p
+                        new_fapiao_item.save               
+
+
+
+
+                        wh_data = WarehouseInfo.find_by_moko_part(wh_in.moko_part)
+                        if not wh_data.blank?
+                            wh_data.wh_qty = wh_data.wh_qty + wh_in.qty_in
+                            #if wh_data.site == "c"
+                                #wh_data.wh_c_qty = wh_data.wh_c_qty + wh_in.qty_in
+                            #elsif wh_data.site == "f"
+                            wh_data.wh_f_qty = wh_data.wh_f_qty + wh_in.qty_in
+                            #end
+                            if wh_in.buy_user == "MOKO"
+                                wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty_in
+                            elsif wh_in.buy_user == "MOKO_TEMP" 
+                                wh_data.temp_future_qty = wh_data.temp_future_qty - wh_in.qty_in
+                            elsif wh_in.buy_user == "CUSTOMER" 
+                                wh_data.temp_customer_qty = wh_data.temp_customer_qty - wh_in.qty_in
+                            else
+                                if wh_data.temp_buy_qty >= wh_in.qty_in
+                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty_in 
+                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
+                                    if  wh_in.pmc_flag == "pmc"
+                                        wh_data.future_qty - wh_data.future_qty - wh_in.qty_in
+                                        wh_data.qty = wh_data.qty + wh_in.qty_in
+                                    end
+                                elsif wh_data.temp_buy_qty < wh_in.qty_in
+                                    if  wh_in.pmc_flag == "pmc"
+                                        wh_data.qty = wh_data.qty + wh_in.qty_in
+                                        if wh_data.future_qty - wh_in.qty_in > 0
+                                            wh_data.future_qty = wh_data.future_qty - wh_in.qty_in
+                                        else
+                                            wh_data.future_qty = 0
+                                        end
+                                    else
+                                        wh_data.qty = wh_data.qty + (wh_in.qty_in - wh_data.temp_buy_qty)
+                                        if wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty) > 0
+                                            wh_data.future_qty = wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty)
+                                        else
+                                            wh_data.future_qty = 0
+                                        end
+                                    end
+                                    wh_data.temp_buy_qty = 0
+                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
+                                     
+                                end 
+                            end
+                            #wh_data.qty = wh_data.qty + wh_in.qty_in
+                            #wh_data.save
+                        else   
+                            wh_data = WarehouseInfo.new
+                            wh_data.moko_part = wh_in.moko_part
+                            wh_data.moko_des = wh_in.moko_des
+                            if wh_in.pmc_flag == "pmc"
+                                wh_data.qty = wh_in.qty_in  
+                            end
+                            wh_data.wh_qty = wh_in.qty_in
+                            wh_data.wh_f_qty = wh_in.qty_in                        
+                            #wh_data.save
+                        end
+                        if wh_data.save
+                            pmc_data = PiPmcItem.find_by_id(wh_in.pi_pmc_item_id)
+                            if pmc_data.qty_in.to_i - wh_in.qty_in.to_i <= 0
+                                pmc_data.buy_type = "done"
+                            end
+                            pmc_data.qty_in = pmc_data.qty_in.to_i - wh_in.qty_in.to_i
+                            pmc_data.save
+                            find_order_done = PiPmcItem.where(erp_no_son: pmc_data.erp_no_son,buy_type: "")
+                            if find_order_done.blank?
+                                get_order_son = PcbOrderItem.find_by_pcb_order_no_son(pmc_data.erp_no_son)
+                                if not get_order_son.blank?
+                                    get_order_son.buy_type = "done"
+                                    get_order_son.save
+                                end
+                            end
+                            uo_buy_item = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
+                            uo_buy_item.qty_done = uo_buy_item.qty_done + wh_in.qty_in
+                            uo_buy_item.qty_wait = uo_buy_item.qty_wait - wh_in.qty_in
+                            uo_buy_item.save
+                            if uo_buy_item.qty_done  >= uo_buy_item.buy_qty 
+                                uo_buy_item.state = "done"
+                                uo_buy_item.save
+                            end
+                            
+                            item_data = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
+                            if not item_data.blank?
+                                add_history_data = WhInHistoryItem.new
+                                add_history_data.wh_qty_in = wh_in.qty_in
+                                add_history_data.p_item_id = item_data.id
+                                add_history_data.erp_id = item_data.erp_id
+                                add_history_data.erp_no = item_data.erp_no
+                                add_history_data.user_do = item_data.user_do
+                                add_history_data.user_do_change = item_data.user_do_change
+                                add_history_data.check = item_data.check
+                                add_history_data.pi_buy_info_id = wh_in.pi_buy_info_id
+                                add_history_data.procurement_bom_id = item_data.procurement_bom_id
+                                add_history_data.quantity = item_data.quantity
+                                add_history_data.qty = item_data.qty
+                                add_history_data.description = item_data.description
+                                add_history_data.part_code = item_data.part_code
+                                add_history_data.fengzhuang = item_data.fengzhuang
+                                add_history_data.link = item_data.link
+                                add_history_data.cost = item_data.cost
+                                add_history_data.info = item_data.info
+                                add_history_data.product_id = item_data.product_id
+                                add_history_data.moko_part = item_data.moko_part
+                                add_history_data.moko_des = item_data.moko_des
+                                add_history_data.warn = item_data.warn
+                                add_history_data.user_id = item_data.user_id
+                                add_history_data.danger = item_data.danger
+                                add_history_data.manual = item_data.manual
+                                add_history_data.mark = item_data.mark
+                                add_history_data.mpn = item_data.mpn
+                                add_history_data.mpn_id = item_data.mpn_id
+                                add_history_data.price = item_data.price
+                                add_history_data.mf = item_data.mf
+                                add_history_data.dn = item_data.dn
+                                add_history_data.dn_id = item_data.dn_id
+                                add_history_data.dn_long = item_data.dn_long
+                                add_history_data.other = item_data.other
+                                add_history_data.all_info = item_data.all_info
+                                add_history_data.remark = item_data.remark
+                                add_history_data.color = item_data.color
+                                add_history_data.supplier_tag = item_data.supplier_tag
+                                add_history_data.supplier_out_tag = item_data.supplier_out_tag
+                                add_history_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                                add_history_data.save
+                            end
+                        end
+                    end
+                end
+                wh_order.state = "done"
+                wh_order.save
+            end            
+        end
+        redirect_to wh_draft_list_path()
+    end
+
+    def find_fu_kuan_item
+        if not params[:date_at].blank?
+            get_item_data = PiBuyItem.where("supplier_list_id = '#{params[:supplier_list_id]}' AND yi_fu_kuan_p < buy_qty*cost")
+        end
+    end
+
+    def edit_fu_kuan_shen_qing_dan
+        if not params[:id].blank?
+            @fu_kuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
+            @fu_kuan_item = FuKuanShenQingDanItem.where(fu_kuan_shen_qing_dan_info_id: params[:id])
+            if @fu_kuan.supplier_clearing == "日结"
+                @buy_item = PiBuyItem.where("supplier_list_id = '#{@fu_kuan.supplier_list_id}' AND yi_fu_kuan_p < buy_qty*cost")
+            elsif @fu_kuan.supplier_clearing == "月结"
+                
+            end
+            @t_p = FuKuanShenQingDanItem.find_by_sql("SELECT SUM(shen_qing_p) AS t_p FROM fu_kuan_shen_qing_dan_items WHERE fu_kuan_shen_qing_dan_info_id = '#{params[:id]}'").first.t_p
+        end
+    end
+
+    def fu_kuan_dan_list
+        if not params[:state].blank?
+            if params[:state] == "none"
+                @list = FuKuanShenQingDanInfo.where(state: "checked",fu_kuan_dan_state: "")
+                render "fu_kuan_dan_list_new.html.erb" and return
+            elsif params[:state] == "new"
+                @list = FuKuanDanInfo.where(state: "new")
+                render "fu_kuan_dan_list.html.erb" and return
+            elsif params[:state] == "check"
+                @list = FuKuanDanInfo.where(state: "check")
+                render "fu_kuan_dan_list.html.erb" and return
+            elsif params[:state] == "checked"
+                @list = FuKuanDanInfo.where(state: "checked")
+                render "fu_kuan_dan_list.html.erb" and return
+            end
+        end
+    end
+
+    def fu_kuan_shen_qing_list
+        if not params[:state].blank?
+            if params[:state] == "new"
+                @list = FuKuanShenQingDanInfo.where(state: "")
+            elsif params[:state] == "check"
+                @list = FuKuanShenQingDanInfo.where(state: "check")
+            elsif params[:state] == "checked"
+                @list = FuKuanShenQingDanInfo.where(state: "checked")
+            end
+        else 
+            @list = FuKuanShenQingDanInfo.all
+        end
+    end
+
     def fu_kuan_dan_to_check
         if not params[:fu_kuan_dan_to_check_id].blank?
             get_fukuan = FuKuanDanInfo.find_by_id(params[:fu_kuan_dan_to_check_id])
             get_fukuan.state = "check"
             get_fukuan.save
         end
-        redirect_to :back and return
+        redirect_to fu_kuan_dan_list_path() and return
     end
 
     def fu_kuan_dan_to_checked
         if not params[:fu_kuan_dan_to_check_id].blank?
+            @t_p = FuKuanDanItem.find_by_sql("SELECT SUM(fu_kuan_p) AS true_t_p FROM fu_kuan_dan_items WHERE fu_kuan_dan_info_id = '#{params[:fu_kuan_dan_to_check_id]}'").first.true_t_p
             get_fukuan = FuKuanDanInfo.find_by_id(params[:fu_kuan_dan_to_check_id])
             get_fukuan.state = "checked"
-            get_fukuan.save
+            get_fukuan.true_t_p = @t_p
+            if get_fukuan.save
+                fu_kuan_ping_zheng_info = FuKuanPingZhengInfo.new
+                fu_kuan_ping_zheng_info.fu_kuan_dan_info_id = get_fukuan.id
+                #fu_kuan_ping_zheng_info.no = 1
+                #fu_kuan_ping_zheng_info.des = finance_voucher_info.sell_team.to_s + finance_voucher_info.sell_full_name_up.to_s + finance_voucher_info.pi_info_no.to_s
+                fu_kuan_ping_zheng_info.remark = get_fukuan.remark
+                fu_kuan_ping_zheng_info.jie_fang_kemu = "2202-应付账款---" + get_fukuan.supplier_code.to_s + "---" + get_fukuan.supplier_name
+                fu_kuan_ping_zheng_info.dai_fang_kemu = get_fukuan.xianjin_kemu.to_s
+                fu_kuan_ping_zheng_info.jie_fang = get_fukuan.true_t_p
+                fu_kuan_ping_zheng_info.dai_fang = get_fukuan.true_t_p
+                fu_kuan_ping_zheng_info.finance_at = get_fukuan.finance_at
+                fu_kuan_ping_zheng_info.save
+            end
         end
-        redirect_to :back and return
+        redirect_to fu_kuan_dan_list_path() and return
     end
 
     def fu_kuan_shen_qing_to_check
@@ -81,6 +361,7 @@ before_filter :authenticate_user!
                 new_fu_kuan_dan.user_fu_kuan_shen_qing_dan = copy_data.user_new
                 new_fu_kuan_dan.state = "new"
                 new_fu_kuan_dan.t_p = copy_data.t_p
+                new_fu_kuan_dan.supplier_code = copy_data.supplier_code
                 new_fu_kuan_dan.supplier_name = copy_data.supplier_name
                 new_fu_kuan_dan.supplier_name_long = copy_data.supplier_name_long
                 new_fu_kuan_dan.supplier_list_id = copy_data.supplier_list_id
@@ -228,6 +509,7 @@ before_filter :authenticate_user!
             get_supplier_data = SupplierList.find_by_id(params[:id])
             new_fu_kuan = FuKuanShenQingDanInfo.new
             new_fu_kuan.user_new = current_user.full_name
+            new_fu_kuan.supplier_code = get_supplier_data.supplier_code
             new_fu_kuan.supplier_name = get_supplier_data.supplier_name
             new_fu_kuan.supplier_name_long = get_supplier_data.supplier_name_long
             new_fu_kuan.supplier_list_id = get_supplier_data.id
@@ -243,18 +525,14 @@ before_filter :authenticate_user!
         redirect_to edit_fu_kuan_shen_qing_dan_path(id: new_fu_kuan.id)
     end
 
-    def edit_fu_kuan_shen_qing_dan
-        if not params[:id].blank?
-            @fu_kuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
-            @fu_kuan_item = FuKuanShenQingDanItem.where(fu_kuan_shen_qing_dan_info_id: params[:id])
-            @buy_item = PiBuyItem.where("supplier_list_id = '#{@fu_kuan.supplier_list_id}' AND yi_fu_kuan_p < buy_qty*cost")
-            @t_p = FuKuanShenQingDanItem.find_by_sql("SELECT SUM(shen_qing_p) AS t_p FROM fu_kuan_shen_qing_dan_items WHERE fu_kuan_shen_qing_dan_info_id = '#{params[:id]}'").first.t_p
-        end
-    end
-
     def find_supplier
         if params[:supplier_code] != ""
-            @supplier_info = PcbCustomer.find_by_sql("SELECT * FROM `supplier_lists`  WHERE `supplier_lists`.`supplier_name` LIKE '%#{params[:supplier_code]}%' OR `supplier_lists`.`supplier_name_long` LIKE '%#{params[:supplier_code]}%'")
+            if params[:pay_type] == "d"
+                pay_type = " AND `supplier_lists`.`supplier_clearing` = '日结'"
+            elsif params[:pay_type] == "m"
+                pay_type = " AND `supplier_lists`.`supplier_clearing` = '月结'"
+            end
+            @supplier_info = SupplierList.find_by_sql("SELECT * FROM `supplier_lists`  WHERE (`supplier_lists`.`supplier_name` LIKE '%#{params[:supplier_code]}%' OR `supplier_lists`.`supplier_name_long` LIKE '%#{params[:supplier_code]}%')#{pay_type}")
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@supplier_info.inspect)
             Rails.logger.info("add-------------------------------------12")
@@ -326,28 +604,6 @@ before_filter :authenticate_user!
                 Rails.logger.info(@c_table.inspect)
                 Rails.logger.info("add-------------------------------------12")
             end
-        end
-    end
-
-    def fu_kuan_dan_list
-        if not params[:state].blank?
-            if params[:state] == "new"
-                @list = FuKuanShenQingDanInfo.where(state: "checked",fu_kuan_dan_state: "")
-            end
-        end
-    end
-
-    def fu_kuan_shen_qing_list
-        if not params[:state].blank?
-            if params[:state] == "new"
-                @list = FuKuanShenQingDanInfo.where(state: "")
-            elsif params[:state] == "check"
-                @list = FuKuanShenQingDanInfo.where(state: "check")
-            elsif params[:state] == "checked"
-                @list = FuKuanShenQingDanInfo.where(state: "checked")
-            end
-        else 
-            @list = FuKuanShenQingDanInfo.all
         end
     end
 
@@ -1516,6 +1772,7 @@ before_filter :authenticate_user!
         wh_item.pi_pmc_item_id = pi_buy_item.pi_pmc_item_id
         wh_item.buy_user = pi_buy_item.buy_user
         wh_item.pi_wh_info_no = params[:wh_order_no]
+        wh_item.pi_wh_info_id = params[:wh_order_id]
         wh_item.pi_buy_item_id = params[:pi_buy_item_id]
         wh_item.moko_part = pi_buy_item.moko_part
         wh_item.moko_des = pi_buy_item.moko_des
@@ -5333,18 +5590,6 @@ before_filter :authenticate_user!
         redirect_to edit_wh_order_path(pi_wh_no: pi_wh_no) and return 
     end
 
-    def edit_wh_order
-        @wh_info = PiWhInfo.find_by(pi_wh_no: params[:pi_wh_no])
-        @wh_item = PiWhItem.where(pi_wh_info_no: params[:pi_wh_no])
-        @all_dn = "[&quot;"
-        #all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
-        all_s_dn = SupplierList.find_by_sql("SELECT  supplier_name, supplier_name_long FROM supplier_lists ")
-        all_s_dn.each do |dn|
-            @all_dn += "&quot;,&quot;" + dn.supplier_name.to_s + "&#{dn.supplier_name_long.to_s}"
-        end
-        @all_dn += "&quot;]"
-    end
-
     def find_w_wh
         if params[:dn_code] != ""
             if params[:dn_code] =~ /&/i
@@ -5402,6 +5647,7 @@ before_filter :authenticate_user!
                             @w_part += '<td><div class="input-group input-group-sm">'
                             @w_part += '<form class="form-inline" action="/add_wh_item" accept-charset="UTF-8" data-remote="true" method="post">'
                             @w_part += '<input id="wh_order_no"  name="wh_order_no" type="text"  class="sr-only"  value="'+params[:pi_wh_no].to_s+'">'
+                            @w_part += '<input id="wh_order_id"  name="wh_order_id" type="text"  class="sr-only"  value="'+params[:pi_wh_info_id].to_s+'">'
                             @w_part += '<input id="pi_buy_item_id"  name="pi_buy_item_id" type="text"  class="sr-only"  value="'+wh_item.id.to_s+'">'
                             @w_part += '<input id="wh_qty_in"  name="wh_qty_in" type="text" size="10" class="form-control input-sm"  value="'+(wh_item.buy_qty-wh_item.qty_wait-wh_item.qty_done).to_s+'">'
                             @w_part += '<span class="input-group-btn "><button type="submit" class="btn btn-link  glyphicon glyphicon-ok " ></button></span>'
@@ -5416,159 +5662,6 @@ before_filter :authenticate_user!
             @w_part += '<table>'
             @w_part += '<small>'
         end
-    end
-
-    def wh_draft
-        wh_order = PiWhInfo.find_by_pi_wh_no(params[:wh_no])
-        if not wh_order.blank?
-            if wh_order.state == "new" or wh_order.state == "fail"
-                wh_order.state = "checking"
-                wh_order.save
-            elsif wh_order.state == "checking"
-                if params[:commit] == "PASS"
-                    wh_order.state = "checked"
-                elsif params[:commit] == "FAIL"
-                    wh_order.state = "fail"
-                end
-                wh_order.save
-            end
-            if wh_order.state == "checked"
-            #if wh_order.state == "new"
-                wh_in_data = PiWhItem.where(pi_wh_info_no: params[:wh_no])
-                if not wh_in_data.blank?
-                    wh_in_data.each do |wh_in|
-                        wh_data = WarehouseInfo.find_by_moko_part(wh_in.moko_part)
-                        if not wh_data.blank?
-                            wh_data.wh_qty = wh_data.wh_qty + wh_in.qty_in
-                            #if wh_data.site == "c"
-                                #wh_data.wh_c_qty = wh_data.wh_c_qty + wh_in.qty_in
-                            #elsif wh_data.site == "f"
-                            wh_data.wh_f_qty = wh_data.wh_f_qty + wh_in.qty_in
-                            #end
-                            if wh_in.buy_user == "MOKO"
-                                wh_data.temp_moko_qty = wh_data.temp_moko_qty - wh_in.qty_in
-                            elsif wh_in.buy_user == "MOKO_TEMP" 
-                                wh_data.temp_future_qty = wh_data.temp_future_qty - wh_in.qty_in
-                            elsif wh_in.buy_user == "CUSTOMER" 
-                                wh_data.temp_customer_qty = wh_data.temp_customer_qty - wh_in.qty_in
-                            else
-                                if wh_data.temp_buy_qty >= wh_in.qty_in
-                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty - wh_in.qty_in 
-                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
-                                    if  wh_in.pmc_flag == "pmc"
-                                        wh_data.future_qty - wh_data.future_qty - wh_in.qty_in
-                                        wh_data.qty = wh_data.qty + wh_in.qty_in
-                                    end
-                                elsif wh_data.temp_buy_qty < wh_in.qty_in
-                                    if  wh_in.pmc_flag == "pmc"
-                                        wh_data.qty = wh_data.qty + wh_in.qty_in
-                                        if wh_data.future_qty - wh_in.qty_in > 0
-                                            wh_data.future_qty = wh_data.future_qty - wh_in.qty_in
-                                        else
-                                            wh_data.future_qty = 0
-                                        end
-                                    else
-                                        wh_data.qty = wh_data.qty + (wh_in.qty_in - wh_data.temp_buy_qty)
-                                        if wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty) > 0
-                                            wh_data.future_qty = wh_data.future_qty - (wh_in.qty_in - wh_data.temp_buy_qty)
-                                        else
-                                            wh_data.future_qty = 0
-                                        end
-                                    end
-                                    wh_data.temp_buy_qty = 0
-                                    wh_data.true_buy_qty = wh_data.true_buy_qty - wh_in.qty_in
-                                     
-                                end 
-                            end
-                            #wh_data.qty = wh_data.qty + wh_in.qty_in
-                            #wh_data.save
-                        else   
-                            wh_data = WarehouseInfo.new
-                            wh_data.moko_part = wh_in.moko_part
-                            wh_data.moko_des = wh_in.moko_des
-                            if wh_in.pmc_flag == "pmc"
-                                wh_data.qty = wh_in.qty_in  
-                            end
-                            wh_data.wh_qty = wh_in.qty_in
-                            wh_data.wh_f_qty = wh_in.qty_in                        
-                            #wh_data.save
-                        end
-                        if wh_data.save
-                            pmc_data = PiPmcItem.find_by_id(wh_in.pi_pmc_item_id)
-                            if pmc_data.qty_in.to_i - wh_in.qty_in.to_i <= 0
-                                pmc_data.buy_type = "done"
-                            end
-                            pmc_data.qty_in = pmc_data.qty_in.to_i - wh_in.qty_in.to_i
-                            pmc_data.save
-                            find_order_done = PiPmcItem.where(erp_no_son: pmc_data.erp_no_son,buy_type: "")
-                            if find_order_done.blank?
-                                get_order_son = PcbOrderItem.find_by_pcb_order_no_son(pmc_data.erp_no_son)
-                                if not get_order_son.blank?
-                                    get_order_son.buy_type = "done"
-                                    get_order_son.save
-                                end
-                            end
-                            uo_buy_item = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
-                            uo_buy_item.qty_done = uo_buy_item.qty_done + wh_in.qty_in
-                            uo_buy_item.qty_wait = uo_buy_item.qty_wait - wh_in.qty_in
-                            uo_buy_item.save
-                            if uo_buy_item.qty_done  >= uo_buy_item.buy_qty 
-                                uo_buy_item.state = "done"
-                                uo_buy_item.save
-                            end
-                            
-                            item_data = PiBuyItem.find_by_id(wh_in.pi_buy_item_id)
-                            if not item_data.blank?
-                                add_history_data = WhInHistoryItem.new
-                                add_history_data.wh_qty_in = wh_in.qty_in
-                                add_history_data.p_item_id = item_data.id
-                                add_history_data.erp_id = item_data.erp_id
-                                add_history_data.erp_no = item_data.erp_no
-                                add_history_data.user_do = item_data.user_do
-                                add_history_data.user_do_change = item_data.user_do_change
-                                add_history_data.check = item_data.check
-                                add_history_data.pi_buy_info_id = wh_in.pi_buy_info_id
-                                add_history_data.procurement_bom_id = item_data.procurement_bom_id
-                                add_history_data.quantity = item_data.quantity
-                                add_history_data.qty = item_data.qty
-                                add_history_data.description = item_data.description
-                                add_history_data.part_code = item_data.part_code
-                                add_history_data.fengzhuang = item_data.fengzhuang
-                                add_history_data.link = item_data.link
-                                add_history_data.cost = item_data.cost
-                                add_history_data.info = item_data.info
-                                add_history_data.product_id = item_data.product_id
-                                add_history_data.moko_part = item_data.moko_part
-                                add_history_data.moko_des = item_data.moko_des
-                                add_history_data.warn = item_data.warn
-                                add_history_data.user_id = item_data.user_id
-                                add_history_data.danger = item_data.danger
-                                add_history_data.manual = item_data.manual
-                                add_history_data.mark = item_data.mark
-                                add_history_data.mpn = item_data.mpn
-                                add_history_data.mpn_id = item_data.mpn_id
-                                add_history_data.price = item_data.price
-                                add_history_data.mf = item_data.mf
-                                add_history_data.dn = item_data.dn
-                                add_history_data.dn_id = item_data.dn_id
-                                add_history_data.dn_long = item_data.dn_long
-                                add_history_data.other = item_data.other
-                                add_history_data.all_info = item_data.all_info
-                                add_history_data.remark = item_data.remark
-                                add_history_data.color = item_data.color
-                                add_history_data.supplier_tag = item_data.supplier_tag
-                                add_history_data.supplier_out_tag = item_data.supplier_out_tag
-                                add_history_data.sell_feed_back_tag = item_data.sell_feed_back_tag
-                                add_history_data.save
-                            end
-                        end
-                    end
-                end
-                wh_order.state = "done"
-                wh_order.save
-            end            
-        end
-        redirect_to wh_draft_list_path()
     end
 
     def del_wh
@@ -8203,7 +8296,7 @@ before_filter :authenticate_user!
                         end 
                     end
                     if topic_up.feedback_receive =~ /engineering/
-                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id = '7'")
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND (users_roles.role_id = '7' OR users_roles.role_id = '22')")
                         open_id = ""
                         all_open_id.each do |item|
                             if not item.open_id.blank?

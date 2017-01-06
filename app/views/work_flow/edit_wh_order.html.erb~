@@ -89,8 +89,8 @@
                         <%= submit_tag "入库", class:"btn btn-primary" ,data:{confirm: "确定要入库?"} %> 
 -->
                     <% elsif can? :work_wh, :all and @wh_info.state == "checking"%>
-                        <%= submit_tag "PASS", class:"btn btn-success" ,data:{confirm: "确定要提交给XXX审批?"} %>  
-                        <%= submit_tag "FAIL", class:"btn btn-danger" ,data:{confirm: "确定要提交给XXX审批?"} %> 
+                        <%= submit_tag "PASS", class:"btn btn-success" ,data:{confirm: "确定收到货?"} %>  
+                        <%= submit_tag "FAIL", class:"btn btn-danger" ,data:{confirm: "没有收到货 驳回?"} %> 
                     <% elsif can? :work_wh, :all and @wh_info.state == "checked"%>
                         <%= submit_tag "入库", class:"btn btn-primary" ,data:{confirm: "确定要入库?"} %>  
                     <% end %>

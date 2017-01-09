@@ -4277,6 +4277,9 @@ WHERE
             @p_item.cost = nil 
             @p_item.price = nil
             @p_item.color = nil
+            @p_item.dn_id = nil
+            @p_item.dn = nil
+            @p_item.dn_long = nil
             @p_item.save
         end 
         if not params[:bom_version].blank?

@@ -46,15 +46,19 @@ before_filter :authenticate_user!
             if wh_order.state == "checked"
                 new_fapiao = CaiGouFaPiaoInfo.new
                 new_fapiao.site = wh_order.site
+                new_fapiao.pi_wh_id = wh_order.id
                 new_fapiao.pi_wh_no = wh_order.pi_wh_no
                 new_fapiao.wh_user = wh_order.wh_user
                 new_fapiao.state = wh_order.state
+                new_fapiao.supplier_list_id = SupplierList.find_supplier_name(wh_order.dn).id
                 new_fapiao.dn = wh_order.dn
                 new_fapiao.dn_long = wh_order.dn_long
                 #new_fapiao.cai_gou_fang_shi = wh_order.
                 new_fapiao.wh_at = wh_order.created_at
                 new_fapiao.save
             #if wh_order.state == "new"
+                new_t_p = 0
+                new_tax_t_p = 0
                 wh_in_data = PiWhItem.where(pi_wh_info_no: params[:wh_no])
                 if not wh_in_data.blank?
                     wh_in_data.each do |wh_in|
@@ -81,7 +85,9 @@ before_filter :authenticate_user!
                         new_fapiao_item.tax_cost = get_buy_info.tax_cost
                         new_fapiao_item.tax = get_buy_info.tax
                         new_fapiao_item.tax_t_p = get_buy_info.tax_t_p
-                        new_fapiao_item.save               
+                        new_fapiao_item.save   
+                        new_t_p += new_fapiao_item.cost
+                        new_tax_t_p += new_fapiao_item.tax_t_p           
 
 
 
@@ -215,14 +221,29 @@ before_filter :authenticate_user!
                 end
                 wh_order.state = "done"
                 wh_order.save
+                new_fapiao.t_p = new_t_p
+                new_fapiao.tax_t_p = new_tax_t_p
+                new_fapiao.save
             end            
         end
         redirect_to wh_draft_list_path()
     end
 
     def find_fu_kuan_item
+        @all_item = ''
         if not params[:date_at].blank?
-            get_item_data = PiBuyItem.where("supplier_list_id = '#{params[:supplier_list_id]}' AND yi_fu_kuan_p < buy_qty*cost")
+            #get_item_data = PiBuyItem.where("supplier_list_id = '#{params[:supplier_list_id]}' AND yi_fu_kuan_p < buy_qty*cost")
+            get_info_data = CaiGouFaPiaoInfo.where("supplier_list_id = '#{params[:supplier_list_id]}' AND date_format(wh_at,'%Y-%m') ='#{params[:date_at]}'")
+            if not get_info_data.blank?
+                get_info_data.each do |item|
+                    @all_item += '<tr>' 
+                    @all_item += '<td><input class="chk_all" type="checkbox" value="' + item.id.to_s + '" name="roles[]" id="roles_" checked></td>'
+                    @all_item += '<td>' + item.wh_at.localtime.strftime('%Y-%m') + '</td>'
+                    @all_item += '<td>' + item.t_p.to_s + '</td>'
+                    @all_item += '<td>' + item.tax_t_p.to_s + '</td>'
+                    @all_item += '</tr>'
+                end
+            end
         end
     end
 
@@ -481,22 +502,49 @@ before_filter :authenticate_user!
             get_fu_kuan_info = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_dan_id])
             if not params[:roles].blank?
                 params[:roles].each do |id|
-                    buy_data = PiBuyItem.find_by_id(id)
-                    new_fu_kuan_item = FuKuanShenQingDanItem.new
-                    new_fu_kuan_item.pi_info_id = buy_data.pi_info_id
-                    new_fu_kuan_item.pi_item_id = buy_data.pi_item_id
-                    new_fu_kuan_item.fu_kuan_shen_qing_dan_info_id = params[:fu_kuan_shen_qing_dan_id]
-                    new_fu_kuan_item.pi_buy_info_id = buy_data.pi_buy_info_id
-                    new_fu_kuan_item.pi_buy_item_id = buy_data.id
-                    new_fu_kuan_item.pi_buy_no = PiBuyInfo.find_by_id(buy_data.pi_buy_info_id).pi_buy_no
-                    new_fu_kuan_item.t_p = buy_data.buy_qty*buy_data.cost
-                    new_fu_kuan_item.ding_dan_zhi_fu_bi_li = (buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p)/(buy_data.buy_qty*buy_data.cost)*100
-                    new_fu_kuan_item.shen_qing_p = buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p
-                    new_fu_kuan_item.moko_part = buy_data.moko_part
-                    new_fu_kuan_item.moko_des = buy_data.moko_des
-                    if new_fu_kuan_item.save
-                        buy_data.yi_fu_kuan_p = buy_data.yi_fu_kuan_p + new_fu_kuan_item.shen_qing_p
-                        buy_data.save
+                    if get_fu_kuan_info.supplier_clearing == "月结"
+                        cai_gou_fa_piao_item_data = CaiGouFaPiaoItem.where(cai_gou_fa_piao_info: id)
+                        if not cai_gou_fa_piao_item_data.blank?
+                            cai_gou_fa_piao_item_data.each do |item|
+                                buy_data = PiBuyItem.find_by_id(item.pi_buy_item_id)
+
+                                new_fu_kuan_item = FuKuanShenQingDanItem.new
+                                new_fu_kuan_item.pi_info_id = buy_data.pi_info_id
+                                new_fu_kuan_item.pi_item_id = buy_data.pi_item_id
+                                new_fu_kuan_item.fu_kuan_shen_qing_dan_info_id = params[:fu_kuan_shen_qing_dan_id]
+                                new_fu_kuan_item.pi_buy_info_id = buy_data.pi_buy_info_id
+                                new_fu_kuan_item.pi_buy_item_id = buy_data.id
+                                new_fu_kuan_item.pi_buy_no = PiBuyInfo.find_by_id(buy_data.pi_buy_info_id).pi_buy_no
+                                new_fu_kuan_item.t_p = buy_data.buy_qty*buy_data.cost
+                                new_fu_kuan_item.ding_dan_zhi_fu_bi_li = (buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p)/(buy_data.buy_qty*buy_data.cost)*100
+                                new_fu_kuan_item.shen_qing_p = buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p
+                                new_fu_kuan_item.moko_part = buy_data.moko_part
+                                new_fu_kuan_item.moko_des = buy_data.moko_des
+                                if new_fu_kuan_item.save
+                                    buy_data.yi_fu_kuan_p = buy_data.yi_fu_kuan_p + new_fu_kuan_item.shen_qing_p
+                                    buy_data.save
+                                end
+
+                            end
+                        end
+                    else
+                        buy_data = PiBuyItem.find_by_id(id)
+                        new_fu_kuan_item = FuKuanShenQingDanItem.new
+                        new_fu_kuan_item.pi_info_id = buy_data.pi_info_id
+                        new_fu_kuan_item.pi_item_id = buy_data.pi_item_id
+                        new_fu_kuan_item.fu_kuan_shen_qing_dan_info_id = params[:fu_kuan_shen_qing_dan_id]
+                        new_fu_kuan_item.pi_buy_info_id = buy_data.pi_buy_info_id
+                        new_fu_kuan_item.pi_buy_item_id = buy_data.id
+                        new_fu_kuan_item.pi_buy_no = PiBuyInfo.find_by_id(buy_data.pi_buy_info_id).pi_buy_no
+                        new_fu_kuan_item.t_p = buy_data.buy_qty*buy_data.cost
+                        new_fu_kuan_item.ding_dan_zhi_fu_bi_li = (buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p)/(buy_data.buy_qty*buy_data.cost)*100
+                        new_fu_kuan_item.shen_qing_p = buy_data.buy_qty*buy_data.cost - buy_data.yi_fu_kuan_p
+                        new_fu_kuan_item.moko_part = buy_data.moko_part
+                        new_fu_kuan_item.moko_des = buy_data.moko_des
+                        if new_fu_kuan_item.save
+                            buy_data.yi_fu_kuan_p = buy_data.yi_fu_kuan_p + new_fu_kuan_item.shen_qing_p
+                            buy_data.save
+                        end
                     end
                 end
             end

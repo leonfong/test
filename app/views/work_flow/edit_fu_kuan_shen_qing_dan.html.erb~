@@ -63,8 +63,14 @@
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
-                                  <label for="" class="col-md-3 control-label">申请金额:</label>
-                                  <div class="col-md-9" >
+                                  <label for="" class="col-md-4 control-label">借款方式:</label>
+                                  <div class="col-md-8" >
+                                      <p class="form-control-static" ><%= @fu_kuan.supplier_clearing %></p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">申请金额:</label>
+                                  <div class="col-md-8" >
                                       <p class="form-control-static" ><%= @t_p %></p>
                                   </div>
                               </div>
@@ -251,25 +257,43 @@
             </div>
       
             <div class="modal-body">
+
                 <div class="form-inline">
                 <%= form_tag('/find_fu_kuan_item', method:"post", class:"form-inline",remote: true) do %>
-                    <div class="form-group" style="padding-bottom: 10px;">
-                        <lable id="date_at_label" for="date_at" class="control-label sr-only"><strong>日期: </strong></lable>
-                        <input class="control-label sr-only" name="upplier_list_id" value="<%= @fu_kuan.supplier_list_id %>"
-                        <%= text_field_tag :date_at, params[:date_at], id: "date_at",class:"form-control input-sm", size:"10",placeholder:"日期"%>
-        
-                        <lable for="order"  class="control-label sr-only"><strong>信息: </strong></lable>
-                        <div class="input-group input-group-sm">              
-                            <%= text_field_tag :supplier_code, params[:supplier_code], class:"form-control input-lg", size:"40", placeholder:"PI/MOKO PART"%>     
-                            
-                            <div class="input-group-btn">
-                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                    <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-md-3" >
+                            <lable id="date_at_label" for="date_at" class="control-label sr-only"><strong>日期: </strong></lable>
+                            <div class="input-group input-group-sm">
+                                <input class="control-label sr-only" name="supplier_list_id" value="<%= @fu_kuan.supplier_list_id %>">
+                                <%= text_field_tag :date_at, params[:date_at], id: "date_at",class:"form-control input-sm", size:"10",placeholder:"日期"%>
+
+<script type="text/javascript">
+    $(function () {
+        $('#date_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM'
+        });    
+    });
+</script>         
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                                </div>
                             </div>
-                            
+                        </div>
+               
+                        <div class="col-md-3" >
+                            <lable for="order"  class="control-label sr-only"><strong>信息: </strong></lable>
+                            <div class="input-group input-group-sm">
+                                <%= text_field_tag :supplier_code, params[:supplier_code], class:"form-control", size:"40", placeholder:"PI/MOKO PART"%>     
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <% end %>             
                 </div>     
+
 
    
                 <%= form_tag('/add_fu_kuan_shen_qing_dan_item', method:"get") do %>
@@ -287,12 +311,19 @@
                     <table class="table table-hover">
                     <thead>
                     <tr style="background-color: #eeeeee">
+<% if @fu_kuan.supplier_clearing == "月结" %>
+                    <th width="20"></th>
+                    <th>入库单号</th>
+                    <th>入库日期</th>
+                    <th>选单单据金额</th>
+<% else %>
                     <th width="20"></th>
                     <th>订单单号</th>
                     <th>选单单据金额</th>
                     <th>产品代码</th>
                     <th>产品名称</th>
                     <th>已付款</th>
+<% end %>
                     </tr>
                     </thead>
                     <tbody id="buy_item">

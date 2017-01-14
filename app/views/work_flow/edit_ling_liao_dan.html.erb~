@@ -1,0 +1,191 @@
+<div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "factory_in_manual"} %>
+        </div>
+        <div class="col-md-11" >
+            <div class="row" >
+                <div class="col-md-6" >
+                    <h2><span class="label label-default">领料单</span></h2>
+                </div>
+<% if @ling_liao_data.ling_liao_state == "new" %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <%= form_tag('/check_ling_liao_dan', method:"post") do %>
+                        <input type="text" class="form-control sr-only" name="ling_liao_dan_id" value="<%= @ling_liao_data.id %>">
+                        <%= submit_tag "审核", class:"btn btn-danger" ,data:{confirm: "确定要审核通过?"} %>
+                    <% end %>
+                    </div>
+                </div>
+<% end %>
+
+<% if @ling_liao_data.ling_liao_state == "checked" %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <h1><img src="/assets/shen_he.png" width="75" height="50"></h1>
+                    </div>
+                </div>
+<% end %>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" >
+
+                        
+
+      <div class="modal-header" style="padding: 0px;">
+          
+      </div>
+      
+      <div class="modal-body" >
+          <div class="panel panel-default">
+              <div class="panel-body" style="padding: 15px 15px 1px;">
+                  <div class="row">
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_way" class="col-md-4 control-label">领料人:</label>
+                                  <div class="col-md-8" >
+                                      <p class="form-control-static" ><%= @ling_liao_data.ling_liao_name %></p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">申请日期:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @ling_liao_data.created_at.localtime.strftime('%Y-%m-%d') %></p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_way" class="col-md-4 control-label">审核人:</label>
+                                  <div class="col-md-8" >
+                                      <p class="form-control-static" ><%= @ling_liao_data.checked_name %></p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">审核日期:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @ling_liao_data.checked_at.blank?? "" : @ling_liao_data.checked_at.localtime.strftime('%Y-%m-%d') %></p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">单据号:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @ling_liao_data.id %></p>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="panel panel-default">
+                      <table class="table table-hover" >
+                          <thead>
+                              <tr class="active">
+                                  <th >物料名称</th>
+                                  <th >物料代码</th>
+                                  <th width="80">申请数量</th>
+                                  <th width="90">实发数量</th>    
+                                  <th width="100">单价</th>
+                                  <th width="100">总价</th>
+                                  <th >PI号</th>
+                              </tr>
+                          </thead>
+                          <tbody> 
+                          <% if not @ling_liao_item.blank? %> 
+                              <% @ling_liao_item.each do |item| %>
+                              <tr> 
+                                  <td><%= item.moko_des %></td>
+                                  <td><%= item.moko_part %></td>
+
+                                  <td><%= item.qty_in %></td>
+                                  <td><%= item.qty_in %></td>
+
+                                  <td><%= item.cost %></td>
+                                  <td><%=  %></td>
+
+                                  <td><%= PiInfo.find_by_id(item.pi_info_id).pi_no %></td>
+
+                              </tr>
+                              <% end %>
+                          <% end %> 
+                          </tbody>  
+                      </table>
+                  </div>
+              </div>
+          </div>
+<!--
+          <div class="row">
+              <div class="col-md-3">
+                  <div class="form-horizontal">
+                      <div class="form-group form-group-sm">
+                          <label class="col-md-3 control-label" for="">业务员:</label>
+                          <div class="col-md-9">
+                              <input class="form-control" type="text" value="" disabled>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-horizontal">
+                      <div class="form-group form-group-sm">
+                          <label class="col-md-3 control-label" for="">审核人:</label>
+                          <div class="col-md-9">
+                              <input class="form-control"  type="text" value="<%=current_user.full_name%>" disabled>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              
+          </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()" >保存</button>
+      </div>
+-->
+
+     
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</small>
+
+
+
+<script type="text/javascript">
+
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

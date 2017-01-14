@@ -14,6 +14,7 @@
                             <thead>
                                 <tr style="background-color: #eeeeee">
                                     <th width="100">编辑</th>
+                                    <th width="100">状态</th>
                                     <th width="70">单号</th>     
                                     <th width="150">供应商简称</th>
                                     <th>供应商全称</th>
@@ -23,10 +24,10 @@
 <% if not @fa_piao.blank? %>
                             <% @fa_piao.each do |item| %>  
                                 <tr>
-                                    <td><%= link_to "编辑",  {action: "show_cai_gou_fa_piao", id: item.id} %></td>
+                                    <td><%= link_to "查看",  {action: "show_cai_gou_fa_piao", id: item.id} %></td>
                                     <td><%= "FK_"+item.id.to_s %></td>
-                                    <td><%= item.supplier_name %></td>
-                                    <td><%= item.supplier_name_long %></td>
+                                    <td><%= item.dn %></td>
+                                    <td><%= item.dn_long %></td>
                                 </tr>
                             <% end %>
 <% end %>

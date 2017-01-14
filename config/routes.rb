@@ -212,6 +212,13 @@ Rails.application.routes.draw do
   match '/cai_gou_fa_piao_list', to: 'work_flow#cai_gou_fa_piao_list', via: 'get'
   match '/edit_cai_gou_fa_piao', to: 'work_flow#edit_cai_gou_fa_piao', via: 'post'
   match '/show_cai_gou_fa_piao', to: 'work_flow#show_cai_gou_fa_piao', via: 'get'
+  match '/factory_in_manual', to: 'work_flow#factory_in_manual', via: 'get'
+  match '/factory_online_manual', to: 'work_flow#factory_online_manual', via: 'get'
+  match '/edit_ling_liao_dan', to: 'work_flow#edit_ling_liao_dan', via: 'get'
+  match '/check_ling_liao_dan', to: 'work_flow#check_ling_liao_dan', via: 'post'
+
+
+
 
 
 

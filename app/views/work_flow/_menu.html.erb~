@@ -43,7 +43,7 @@
         <li><a <% if selected == "paymanet_voucher_finance" %>style="background-color: #d9edf7;"<% end %>href="/payment_voucher_list"><i class="icon-pencil"></i>收款单列表</a></li>
         <li><a <% if selected == "fu_kuan_shen_qing_finance" %>style="background-color: #d9edf7;"<% end %>href="/fu_kuan_shen_qing_list"><i class="icon-pencil"></i>付款申请单列表</a></li>
         <li><a <% if selected == "fu_kuan_dan_finance" %>style="background-color: #d9edf7;"<% end %>href="/fu_kuan_dan_list?state=none"><i class="icon-pencil"></i>付款单列表</a></li>
-        <li><a <% if selected == "cai_gou_fa_piao_finance" %>style="background-color: #d9edf7;"<% end %>href="/cai_gou_fa_piao_list"><i class="icon-pencil"></i>采购发票列表</a></li>
+        <li><a <% if selected == "cai_gou_fa_finance" %>style="background-color: #d9edf7;"<% end %>href="/cai_gou_fa_piao_list"><i class="icon-pencil"></i>采购发票列表</a></li>
     </ul>
 
     <a style="background-color: #ddd;" href="#pmcMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> PMC</a>
@@ -91,6 +91,7 @@
 <% if can? :work_c, :all or can? :work_admin, :all%>
     <a style="background-color: #ddd;" href="#factoryMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 工厂生产流程</a>
     <ul id="factoryMenu" class="nav nav-list  menu-second <% if selected =~ /factory/i %>collapse in<% else %>collapse<% end %>">
+        <li><a <% if selected == "factory_in" %>style="background-color: #d9edf7;"<% end %> href="/factory_in_manual"><i></i> 生产领料</a></li>
         <li><a <% if selected == "factory_in" %>style="background-color: #d9edf7;"<% end %> href="/factory_in"><i></i> 上线生产</a></li>
         <li><a <% if selected == "factory_out" %>style="background-color: #d9edf7;"<% end %> href="/factory_out" ><i></i> 下线发货</a></li>
     </ul>

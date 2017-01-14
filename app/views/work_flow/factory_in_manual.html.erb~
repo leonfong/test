@@ -1,0 +1,93 @@
+<div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "factory_in_manual"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/factory_in', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                      <%= text_field_tag :order_no, params[:order_no], class:"form-control input-lg", size:"20", placeholder:"单号"%>
+             
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+                <a type="button" class="btn btn-success btn-sm" href="/factory_in">料齐的订单</a>
+            </div>
+            <% end %>                       
+            </span>
+            </div>
+        </div>
+<br>
+<%= render 'layouts/flash_messages' %>
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+<% if not @buy_done.blank? %>                   
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th >订单号</th>
+      <th >订单状态</th>
+      <th >领料状态</th>
+      <th >物料状态</th>
+      <th width="80"> </th>
+      <th width="75">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+<% @buy_done.each do |wh| %>
+      <tr >
+        <td><%= wh.pcb_order_no_son %></td>
+        <td><%= wh.state %></td>
+        <td><%= wh.state %></td>
+        <td><%= wh.buy_type %></td>
+        <td> </td>
+        <% if wh.factory_state != "" %>
+            <td></td>
+        <% else %>
+<!--
+            <td><a type="button" class="btn btn-info btn-xs" href="/factory_online?order=<%= wh.pcb_order_no_son %>">上线生产</a></td>
+-->
+            <td><a type="button" class="btn btn-info btn-xs" href="/factory_online_manual?order=<%= wh.pcb_order_no_son %>">申请领料</a></td>
+        <% end %>
+      </tr>
+<% end %>
+  </tbody>
+</table>
+<% end %>
+        </div></div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

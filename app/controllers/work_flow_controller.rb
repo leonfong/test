@@ -5,6 +5,17 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_ling_liao_item_qty
+        if not params[:ling_liao_item_id].blank?
+            get_item_data = LingLiaoDanItem.find_by_id(params[:ling_liao_item_id]) 
+            if not get_item_data.blank?
+                get_item_data.f_qty = params[:ling_liao_qty].to_i
+                get_item_data.save
+            end
+        end
+        redirect_to :back
+    end
+
     def factory_in
         if not params[:order_no].blank?
             @buy_done = PcbOrderItem.where(buy_type: "done",pcb_order_no_son: params[:order_no].strip)
@@ -69,6 +80,7 @@ before_filter :authenticate_user!
                         new_ling_liao_item.moko_des = item.moko_des
                         new_ling_liao_item.part_code = item.part_code
                         new_ling_liao_item.qty = item.qty
+                        new_ling_liao_item.f_qty = item.qty
                         new_ling_liao_item.pmc_qty = item.pmc_qty
                         new_ling_liao_item.qty_in = item.qty_in
                         new_ling_liao_item.remark = item.remark

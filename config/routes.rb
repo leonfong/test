@@ -216,6 +216,7 @@ Rails.application.routes.draw do
   match '/factory_online_manual', to: 'work_flow#factory_online_manual', via: 'get'
   match '/edit_ling_liao_dan', to: 'work_flow#edit_ling_liao_dan', via: 'get'
   match '/check_ling_liao_dan', to: 'work_flow#check_ling_liao_dan', via: 'post'
+  match '/edit_ling_liao_item_qty', to: 'work_flow#edit_ling_liao_item_qty', via: 'post'
 
 
 

@@ -389,6 +389,44 @@
 <% end %>
 <% end %>
 <% end %>
+
+
+<% if not PDn.where(p_item_id: item.id, color: "b").blank? %>
+<% if not PDn.where(p_item_id: item.id, color: "b").first.remark.blank? %>
+
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<% if not PDn.find(item.dn_id).info.blank? %>                 
+<a class="btn btn-info btn-xs" href="<%= PDn.where(p_item_id: item.id, color: "b").first.info %>" target="_blank">下载</a>
+<% end %>
+<strong>
+<% if PDn.where(p_item_id: item.id, color: "b").first.email.blank? %>
+采购工程师:
+<% else %> 
+采购工程师:<%= User.find_by_email(PDn.where(p_item_id: item.id, color: "b").first.email).full_name %>
+<% end %> 
+</strong>
+<%= PDn.where(p_item_id: item.id, color: "b").first.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+
+<% end %>
+<% end %>
+
+
+
+
+
 </div>
                     </td>
 
@@ -546,7 +584,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="exchange_rate" class="col-md-4 control-label">汇率:</label>
                                   <div class="col-md-8">
-                                      <p class="form-control-static" ><%= @ %></p>
+                                      <p class="form-control-static" ><%= @dollar_rate %></p>
                                   </div>
                               </div>
                           </div>

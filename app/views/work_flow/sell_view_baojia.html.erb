@@ -356,9 +356,11 @@
 <% end %>
 </div>
 
-<% if not item.dn_id.blank? %>
-<% if not PDn.find_by_id(item.dn_id).blank? %>
-<% if not PDn.find(item.dn_id).remark.blank? %>
+
+
+
+<% if not PDn.where(p_item_id: item.id, color: "b").blank? %>
+<% if not PDn.where(p_item_id: item.id, color: "b").first.remark.blank? %>
 
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
@@ -368,16 +370,16 @@
 <p style="padding: 0px;margin: 0px;" >
 <small >
 <% if not PDn.find(item.dn_id).info.blank? %>                 
-<a class="btn btn-info btn-xs" href="<%= PDn.find(item.dn_id).info %>" target="_blank">下载</a>
+<a class="btn btn-info btn-xs" href="<%= PDn.where(p_item_id: item.id, color: "b").first.info %>" target="_blank">下载</a>
 <% end %>
 <strong>
-<% if PDn.find(item.dn_id).email.blank? %>
+<% if PDn.where(p_item_id: item.id, color: "b").first.email.blank? %>
 采购工程师:
 <% else %> 
-采购工程师:<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>
+采购工程师:<%= User.find_by_email(PDn.where(p_item_id: item.id, color: "b").first.email).full_name %>
 <% end %> 
 </strong>
-<%= PDn.find(item.dn_id).remark %>
+<%= PDn.where(p_item_id: item.id, color: "b").first.remark %>
 </small>
 </p>
 </td>
@@ -388,7 +390,11 @@
 
 <% end %>
 <% end %>
-<% end %>
+
+
+
+
+
 </div>
                     </td>
 

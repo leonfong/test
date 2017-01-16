@@ -356,39 +356,7 @@
 <% end %>
 </div>
 
-<% if not item.dn_id.blank? %>
-<% if not PDn.find_by_id(item.dn_id).blank? %>
-<% if not PDn.find(item.dn_id).remark.blank? %>
 
-<div class="row" style="margin: 0px;" >
-<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
-<table style="margin: 0px;" >
-<tr>
-<td style="padding: 0px;margin: 0px;" >
-<p style="padding: 0px;margin: 0px;" >
-<small >
-<% if not PDn.find(item.dn_id).info.blank? %>                 
-<a class="btn btn-info btn-xs" href="<%= PDn.find(item.dn_id).info %>" target="_blank">下载</a>
-<% end %>
-<strong>
-<% if PDn.find(item.dn_id).email.blank? %>
-采购工程师:
-<% else %> 
-采购工程师:<%= User.find_by_email(PDn.find(item.dn_id).email).full_name %>
-<% end %> 
-</strong>
-<%= PDn.find(item.dn_id).remark %>
-</small>
-</p>
-</td>
-</tr>
-</table>
-</div>
-</div>
-
-<% end %>
-<% end %>
-<% end %>
 
 
 <% if not PDn.where(p_item_id: item.id, color: "b").blank? %>

@@ -357,7 +357,7 @@
 </div>
 
 
-
+<% get_dn_data = PDn.where(p_item_id: item.id, color: "b") %>
 
 <% if not PDn.where(p_item_id: item.id, color: "b").blank? %>
 <% if not PDn.where(p_item_id: item.id, color: "b").first.remark.blank? %>
@@ -369,7 +369,7 @@
 <td style="padding: 0px;margin: 0px;" >
 <p style="padding: 0px;margin: 0px;" >
 <small >
-<% if not PDn.find(item.dn_id).info.blank? %>                 
+<% if not PDn.where(p_item_id: item.id, color: "b").first.info.blank? %>                 
 <a class="btn btn-info btn-xs" href="<%= PDn.where(p_item_id: item.id, color: "b").first.info %>" target="_blank">下载</a>
 <% end %>
 <strong>

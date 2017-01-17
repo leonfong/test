@@ -91,7 +91,7 @@
 <% if can? :work_c, :all or can? :work_admin, :all%>
     <a style="background-color: #ddd;" href="#factoryMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 工厂生产流程</a>
     <ul id="factoryMenu" class="nav nav-list  menu-second <% if selected =~ /factory/i %>collapse in<% else %>collapse<% end %>">
-        <li><a <% if selected == "factory_in" %>style="background-color: #d9edf7;"<% end %> href="/factory_in_manual"><i></i> 生产领料</a></li>
+        <li><a <% if selected == "factory_in_manual" %>style="background-color: #d9edf7;"<% end %> href="/factory_in_manual"><i></i> 生产领料</a></li>
         <li><a <% if selected == "factory_in" %>style="background-color: #d9edf7;"<% end %> href="/factory_in"><i></i> 上线生产</a></li>
         <li><a <% if selected == "factory_out" %>style="background-color: #d9edf7;"<% end %> href="/factory_out" ><i></i> 下线发货</a></li>
     </ul>

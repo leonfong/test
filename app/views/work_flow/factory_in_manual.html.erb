@@ -34,8 +34,10 @@
 
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
-<% if not @buy_done.blank? %>                   
-<table class="table table-hover">
+<% if not @buy_done.blank? %>   
+<% @buy_done.each do |wh| %>                
+<table class="table" style="padding: 0px;margin: 0px;">
+<!--
   <thead>
     <tr style="background-color: #eeeeee">
       <th >订单号</th>
@@ -46,26 +48,53 @@
       <th width="75">操作</th>
     </tr>
   </thead>
+-->
   <tbody>
-<% @buy_done.each do |wh| %>
+
       <tr >
+<!--
         <td><%= wh.pcb_order_no_son %></td>
         <td><%= wh.state %></td>
         <td><%= wh.factory_state %></td>
         <td><%= wh.buy_type %></td>
         <td> </td>
-        <% if wh.factory_state != "" %>
-            <td></td>
-        <% else %>
-<!--
-            <td><a type="button" class="btn btn-info btn-xs" href="/factory_online?order=<%= wh.pcb_order_no_son %>">上线生产</a></td>
--->
             <td><a type="button" class="btn btn-info btn-xs" href="/factory_online_manual?order=<%= wh.pcb_order_no_son %>">申请领料</a></td>
-        <% end %>
+-->
+
+
+          <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>订单号: </strong><%= wh.pcb_order_no_son %></small></td>
+          <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>订单状态: </strong><%= wh.state %></small></td>
+          <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>领料状态: </strong><%= wh.factory_state %></small></td>
+          <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>物料状态: </strong><%= wh.buy_type %></small></td>
+          <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>操作: </strong><a type="button" class="btn btn-info btn-xs" href="/factory_online_manual?order=<%= wh.pcb_order_no_son %>">申请领料</a></small></td>
       </tr>
-<% end %>
   </tbody>
+
+
+
 </table>
+    <% if not LingLiaoDanInfo.where(pcb_order_no_son: wh.pcb_order_no_son).blank? %>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr style="background-color: #eeeeee">
+                    <th>订单号</th>
+                    <th>领料单号</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% LingLiaoDanInfo.where(pcb_order_no_son: wh.pcb_order_no_son).each do |item| %>
+                <tr>
+                    <td><%= link_to item.pcb_order_no_son, edit_ling_liao_dan_path(id: item.id) %></td>
+                    <td><%= item.id %></td>
+                    <td><%= item.ling_liao_state %></td>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+    <% end %>
+
+<% end %>
 <% end %>
         </div></div>
         </div>

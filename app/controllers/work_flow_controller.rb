@@ -5,6 +5,77 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def add_ling_liao_dan_item
+        if not params[:ling_liao_dan_id].blank?
+            get_ling_liao_info = LingLiaoDanInfo.find_by_id(params[:ling_liao_dan_id])
+            if not params[:roles].blank?
+                params[:roles].each do |id|
+                    get_pmc_data = PiPmcItem.find_by_id(id)
+                    new_ling_liao_item = LingLiaoDanItem.new
+                    new_ling_liao_item.ling_liao_dan_info_id = get_ling_liao_info.id
+                    new_ling_liao_item.pi_bom_qty_info_item_id = get_pmc_data.pi_bom_qty_info_item_id
+                    new_ling_liao_item.pi_info_id = get_pmc_data.pi_info_id
+                    new_ling_liao_item.pi_item_id = get_pmc_data.pi_item_id
+                    new_ling_liao_item.pmc_flag = get_pmc_data.pmc_flag
+                    new_ling_liao_item.state = get_pmc_data.state
+                    new_ling_liao_item.pmc_type = get_pmc_data.pmc_type
+                    new_ling_liao_item.buy_type = get_pmc_data.buy_type
+                    new_ling_liao_item.erp_no = get_pmc_data.erp_no
+                    new_ling_liao_item.erp_no_son = get_pmc_data.erp_no_son
+                    new_ling_liao_item.moko_part = get_pmc_data.moko_part
+                    new_ling_liao_item.moko_des = get_pmc_data.moko_des
+                    new_ling_liao_item.part_code = get_pmc_data.part_code
+                    new_ling_liao_item.qty = get_pmc_data.qty
+                    new_ling_liao_item.f_qty = get_pmc_data.qty
+                    new_ling_liao_item.pmc_qty = get_pmc_data.pmc_qty
+                    new_ling_liao_item.qty_in = get_pmc_data.qty_in
+                    new_ling_liao_item.remark = get_pmc_data.remark
+                    new_ling_liao_item.buy_user = get_pmc_data.buy_user
+                    new_ling_liao_item.buy_qty = get_pmc_data.buy_qty
+                    new_ling_liao_item.p_item_id = get_pmc_data.p_item_id
+                    new_ling_liao_item.erp_id = get_pmc_data.erp_id
+                    new_ling_liao_item.user_do = get_pmc_data.user_do
+                    new_ling_liao_item.user_do_change = get_pmc_data.user_do_change
+                    new_ling_liao_item.check = get_pmc_data.check
+                    new_ling_liao_item.pi_buy_info_id = get_pmc_data.pi_buy_info_id
+                    new_ling_liao_item.procurement_bom_id = get_pmc_data.procurement_bom_id
+                    new_ling_liao_item.quantity = get_pmc_data.quantity
+                    new_ling_liao_item.qty_done = get_pmc_data.qty_done
+                    new_ling_liao_item.qty_wait = get_pmc_data.qty_wait
+                    new_ling_liao_item.wh_qty = get_pmc_data.wh_qty
+                    new_ling_liao_item.description = get_pmc_data.description
+                    new_ling_liao_item.fengzhuang = get_pmc_data.fengzhuang
+                    new_ling_liao_item.link = get_pmc_data.link
+                    new_ling_liao_item.cost = get_pmc_data.cost
+                    new_ling_liao_item.info = get_pmc_data.info
+                    new_ling_liao_item.product_id = get_pmc_data.product_id
+                    new_ling_liao_item.warn = get_pmc_data.warn
+                    new_ling_liao_item.user_id = get_pmc_data.user_id
+                    new_ling_liao_item.danger = get_pmc_data.danger
+                    new_ling_liao_item.manual = get_pmc_data.manual
+                    new_ling_liao_item.mark = get_pmc_data.mark
+                    new_ling_liao_item.mpn = get_pmc_data.mpn
+                    new_ling_liao_item.mpn_id = get_pmc_data.mpn_id
+                    new_ling_liao_item.price = get_pmc_data.price
+                    new_ling_liao_item.mf = get_pmc_data.mf
+                    new_ling_liao_item.dn_id = get_pmc_data.dn_id
+                    new_ling_liao_item.dn = get_pmc_data.dn
+                    new_ling_liao_item.dn_long = get_pmc_data.dn_long
+                    new_ling_liao_item.other = get_pmc_data.other
+                    new_ling_liao_item.all_info = get_pmc_data.all_info
+                    new_ling_liao_item.color = get_pmc_data.color
+                    new_ling_liao_item.supplier_tag = get_pmc_data.supplier_tag
+                    new_ling_liao_item.supplier_out_tag = get_pmc_data.supplier_out_tag
+                    new_ling_liao_item.sell_feed_back_tag = get_pmc_data.sell_feed_back_tag
+                    new_ling_liao_item.pass_at = get_pmc_data.pass_at
+                    new_ling_liao_item.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
+
     def edit_ling_liao_item_qty
         if not params[:ling_liao_item_id].blank?
             get_item_data = LingLiaoDanItem.find_by_id(params[:ling_liao_item_id]) 
@@ -35,7 +106,8 @@ before_filter :authenticate_user!
     def factory_online_manual
         if can? :work_c, :all or can? :work_admin, :all
             set_order_state = PcbOrderItem.find_by_pcb_order_no_son(params[:order])
-            if set_order_state.factory_state == ""
+            #if set_order_state.factory_state == ""
+            if set_order_state.pcb_order_no_son != ""
                 new_ling_liao = LingLiaoDanInfo.new
                 new_ling_liao.ling_liao_user = current_user.email
                 new_ling_liao.ling_liao_user_name = current_user.full_name
@@ -62,6 +134,8 @@ before_filter :authenticate_user!
                 new_ling_liao.state = set_order_state.state
                 new_ling_liao.remark = set_order_state.remark
                 new_ling_liao.p_remark = set_order_state.p_remark
+                new_ling_liao.save
+=begin
                 if new_ling_liao.save
                     get_order_data = PiPmcItem.find_by_sql("SELECT * FROM pi_pmc_items WHERE erp_no_son = '#{params[:order]}'")
                     get_order_data.each do |item|
@@ -125,17 +199,31 @@ before_filter :authenticate_user!
                         new_ling_liao_item.save
                     end
                 end
+=end
                 set_order_state.factory_state = "checking"
                 set_order_state.save
+                redirect_to edit_ling_liao_dan_path(id: new_ling_liao.id) and return
             end
+            
         end
-        #redirect_to :back
-        redirect_to edit_ling_liao_dan_path(id: new_ling_liao.id)
+        redirect_to :back
+        
     end
 
     def edit_ling_liao_dan
         @ling_liao_data = LingLiaoDanInfo.find_by_id(params[:id])
+        @ling_liao_pmc = PiPmcItem.find_by_sql("SELECT * FROM pi_pmc_items WHERE erp_no_son = '#{@ling_liao_data.pcb_order_no_son}'")
         @ling_liao_item = LingLiaoDanItem.where(ling_liao_dan_info_id: params[:id])
+    end
+
+    def up_ling_liao_dan
+        get_data = LingLiaoDanInfo.find_by_id(params[:ling_liao_dan_id])
+        get_data.ling_liao_state = "checking"
+        get_data.checked_user = current_user.email
+        get_data.checked_user = current_user.full_name  
+        get_data.checked_at = Time.new 
+        get_data.save
+        redirect_to :back
     end
 
     def check_ling_liao_dan
@@ -144,7 +232,21 @@ before_filter :authenticate_user!
         get_data.checked_user = current_user.email
         get_data.checked_user = current_user.full_name  
         get_data.checked_at = Time.new 
-        get_data.save
+        if get_data.save
+            set_order_state = PcbOrderItem.find_by_pcb_order_no_son(get_data.pcb_order_no_son)
+            if set_order_state.state != "online"
+                get_order_data = PiPmcItem.find_by_sql("SELECT DISTINCT p_item_id,moko_part FROM pi_pmc_items WHERE erp_no_son = '#{get_data.pcb_order_no_son}'")
+                get_order_data.each do |item|
+                    wh_data = WarehouseInfo.find_by_moko_part(item.moko_part)
+                    wh_data.wh_qty = wh_data.wh_qty - item.qty
+                    wh_data.wh_f_qty = wh_data.wh_f_qty - item.qty
+                    wh_data.save
+                end
+                set_order_state = PcbOrderItem.find_by_pcb_order_no_son(get_data.pcb_order_no_son)
+                set_order_state.state = "online"
+                set_order_state.save
+            end
+        end
         redirect_to :back
     end
 

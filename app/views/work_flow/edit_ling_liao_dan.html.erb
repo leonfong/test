@@ -12,6 +12,17 @@
 <% if @ling_liao_data.ling_liao_state == "new" %>
                 <div class="col-md-6" >
                     <div class="pull-right" style="padding: 15px 0px 0px 0px;">
+                    <%= form_tag('/up_ling_liao_dan', method:"post") do %>
+                        <input type="text" class="form-control sr-only" name="ling_liao_dan_id" value="<%= @ling_liao_data.id %>">
+                        <%= submit_tag "提交申请", class:"btn btn-info" ,data:{confirm: "确定要申请领料?"} %>
+                    <% end %>
+                    </div>
+                </div>
+<% end %>
+
+<% if @ling_liao_data.ling_liao_state == "checking" %>
+                <div class="col-md-6" >
+                    <div class="pull-right" style="padding: 15px 0px 0px 0px;">
                     <%= form_tag('/check_ling_liao_dan', method:"post") do %>
                         <input type="text" class="form-control sr-only" name="ling_liao_dan_id" value="<%= @ling_liao_data.id %>">
                         <%= submit_tag "审核", class:"btn btn-danger" ,data:{confirm: "确定要审核通过?"} %>
@@ -47,7 +58,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="voucher_way" class="col-md-4 control-label">领料人:</label>
                                   <div class="col-md-8" >
-                                      <p class="form-control-static" ><%= @ling_liao_data.ling_liao_name %></p>
+                                      <p class="form-control-static" ><%= @ling_liao_data.ling_liao_user_name %></p>
                                   </div>
                               </div>
                           </div>
@@ -89,11 +100,23 @@
                                   </div>
                               </div>
                           </div>
-                          
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-4 control-label">订单号:</label>
+                                  <div class="col-md-8">
+                                      <p class="form-control-static" ><%= @ling_liao_data.pcb_order_no_son %></p>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
                   </div>
               </div>
           </div>
+          <div class="row "><div class="col-md-12">
+<% if @ling_liao_data.ling_liao_state == "new" %>
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-target="#add_ling_liao_item" >添加物料</button>
+<% end %>
+          </div></div>
           <div class="row">
               <div class="col-md-12">
                   <div class="panel panel-default">
@@ -205,12 +228,135 @@
         </div>
     </div>
 
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="add_ling_liao_item" tabindex="-1" role="dialog" aria-labelledby="add_ling_liao_item_Label">
+    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="add_ling_liao_item_Label"><strong>选择物料</strong></h4>
+            </div>
+      
+            <div class="modal-body">
+
+                <div class="form-inline">
+                <%= form_tag('/find_fu_kuan_item', method:"post", class:"form-inline",remote: true) do %>
+                    <div class="row" style="padding-bottom: 10px;">
+                        
+               
+                        <div class="col-md-3" >
+                            <lable for="order"  class="control-label sr-only"><strong>信息: </strong></lable>
+                            <div class="input-group input-group-sm">
+                                <input class="control-label sr-only" name="supplier_list_id" value="<%= @ling_liao_data.id %>">
+                                <%= text_field_tag :supplier_code, params[:supplier_code], class:"form-control", size:"40", placeholder:"MOKO PART"%>     
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>             
+                </div>     
+
+
+   
+                <%= form_tag('/add_ling_liao_dan_item', method:"post") do %>
+                <%= text_field_tag :ling_liao_dan_id, params[:ling_liao_dan_id], class:"sr-only", value:@ling_liao_data.id %>
+                <div >
+                        <input style="margin-right: 5px;" type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+                        <input style="margin-right: 5px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+                        <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
+                        <button type="submit" class="btn btn-danger sr-only " >提交</button>
+                        <%= submit_tag "提交", class:"btn btn-danger pull-right",style:"margin-bottom: 5px;" %>
+                <div>
+
+                <div class="form-group" id="table_buy">
+                    
+                    <table class="table table-hover">
+                    <thead>
+                    <tr style="background-color: #eeeeee">
+
+                    <th width="20"></th>
+                    <th>订单单号</th>
+                    <th>物料编码</th>
+                    <th>物料描述</th>
+                    <th>数量</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody id="ling_liao_item">
+                    <% if not @ling_liao_pmc.blank? %>
+                        <% @ling_liao_pmc.each do |item| %>
+                                <tr>
+                                <td><input class="chk_all" type="checkbox" value="<%= item.id.to_s %>" name="roles[]" id="roles_" checked></td>
+                                <td><%= item.erp_no_son %></td>
+                                <td><%= item.moko_part %></td>
+                                <td><%= item.moko_des %></td>
+                                <td><%= item.qty %></td>
+                                </tr>
+                        <% end %>
+                    <% end %>
+                    </tbody>
+                    </table>
+
+                </div>
+                
+                <% end %>
+            </div>
+        </div></small>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 </small>
 
 
 
 <script type="text/javascript">
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    });
 
 </script>
 <%

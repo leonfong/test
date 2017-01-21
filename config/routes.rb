@@ -219,6 +219,8 @@ Rails.application.routes.draw do
   match '/up_ling_liao_dan', to: 'work_flow#up_ling_liao_dan', via: 'post'
   match '/edit_ling_liao_item_qty', to: 'work_flow#edit_ling_liao_item_qty', via: 'post'
   match '/add_ling_liao_dan_item', to: 'work_flow#add_ling_liao_dan_item', via: 'post'
+  match '/edit_pi_bank_info', to: 'work_flow#edit_pi_bank_info', via: 'post'
+  match '/edit_pi_info_t_p', to: 'work_flow#edit_pi_info_t_p', via: 'post'
 
 
 

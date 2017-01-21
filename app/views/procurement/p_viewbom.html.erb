@@ -11,7 +11,7 @@
                         <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
                         <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
-                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
+                    <% elsif can? :work_finance, :all and @pi_info.finance_state.blank? %>
                         <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% if can? :work_admin, :all %>
@@ -647,7 +647,7 @@ function change_<%= item.id.to_s %>(){
                             </tr>
                                 <% end %>
                             <% else %>
-                                <% PDn.where(p_item_id: item.id).order('date DESC').each do |dn| %>
+                                <% PDn.where(p_item_id: item.id,state: "").order('date DESC').each do |dn| %>
                             <tr id="<%= item.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% elsif dn.color == "y" %>class="bg-warning"<% end %> >                       
                                 <td style="padding: 0px;margin: 0px;" width="55" id="<%= item.id.to_s + 'edit' %>"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="<%= dn.id %>" data-dn="<%= dn.dn %>" data-dnlong="<%= dn.dn_long %>" data-qty="<%= dn.qty %>" data-cost="<%= dn.cost %>" data-remark="<%= dn.remark %>" data-itemid="<%= item.id %>" > </a>
                                 <% if not dn.info.blank? %>                 

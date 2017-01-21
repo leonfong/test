@@ -5,6 +5,22 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_pi_info_t_p
+        get_pi_data = PiInfo.find_by_id(params[:p_pi_id])
+        get_pi_data.t_p = params[:p_pi_t_p]
+        get_pi_data.save
+        redirect_to :back
+    end
+
+    def edit_pi_bank_info
+        get_pi_data = PiInfo.find_by_id(params[:pi_id])
+        get_bank_info = BankInfo.find_by_id(params[:bank_info])
+
+        get_pi_data.bank_info_id = params[:bank_info]
+        get_pi_data.save
+        redirect_to :back
+    end
+
     def add_ling_liao_dan_item
         if not params[:ling_liao_dan_id].blank?
             get_ling_liao_info = LingLiaoDanInfo.find_by_id(params[:ling_liao_dan_id])
@@ -975,7 +991,7 @@ before_filter :authenticate_user!
             get_voucher_data.voucher_exchange_rate = params[:voucher_exchange_rate]
             get_voucher_data.voucher_full_name_up = current_user.full_name
             if get_voucher_data.save
-                get_finance_payment_voucher = FinancePaymentVoucherInfo.find_finance_voucher_info_id(get_voucher_data.id)
+                get_finance_payment_voucher = FinancePaymentVoucherInfo.find_by_finance_voucher_info_id(get_voucher_data.id)
                 get_finance_payment_voucher.jie_fang = get_voucher_data.get_money_self
                 get_finance_payment_voucher.dai_fang = get_voucher_data.get_money_self
                 get_finance_payment_voucher.save
@@ -1079,7 +1095,11 @@ before_filter :authenticate_user!
             @payment_date = PaymentNoticeInfo.find_by_id(params[:payment_id_set])
             if not @payment_date.blank?
                 @payment_date.state = "checking"
-                @payment_date.save
+                if @payment_date.save
+                    get_pi_item = PiItem.find_by_id(@payment_date.pi_item_id)
+                    get_pi_item.finance_state = "check"
+                    get_pi_item.save
+                end 
             end
             redirect_to :back and return
         end
@@ -1472,9 +1492,11 @@ before_filter :authenticate_user!
                 render "pi_list_eng.html.erb" and return
             elsif params[:finance_chk]
                 if can? :work_e, :all
+                    #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = '' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = '' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pi_list_eng.html.erb" and return     
             elsif params[:checked]
@@ -1510,6 +1532,9 @@ before_filter :authenticate_user!
     def edit_pcb_pi
         @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         @pi_info = PiInfo.find_by_id(params[:pi_info_id])
+        if not @pi_info.bank_info_id.blank?
+            @bank_info = BankInfo.find_by_id(@pi_info.bank_info_id)
+        end
         @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
         @pi_info_c_c_no = ""
         @pi_info_c_customer = ""
@@ -1548,7 +1573,7 @@ before_filter :authenticate_user!
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@boms.inspect)
             Rails.logger.info("add-------------------------------------12")
-            if can? :work_d, :all  
+            if can? :work_d, :all or can? :work_finance, :all
                 render "procurement/p_viewbom.html.erb" and return
             end
             if can? :work_e, :all  
@@ -2310,7 +2335,7 @@ before_filter :authenticate_user!
         elsif params[:order_by] == "cost"
             order_set = "cost DESC, created_at DESC, date DESC"
         end
-        @history_list = PDn.where(part_code: params[:part_code]).order(order_set)
+        @history_list = PDn.where(part_code: params[:part_code],state: "").order(order_set)
         if not @history_list.blank?
             @c_table = '<br>'
             @c_table += '<small>'
@@ -3305,7 +3330,7 @@ before_filter :authenticate_user!
 		    row.push(item.description)
                     row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
                     if not PDn.find_by(p_item_id: item.id,color: "y").blank?
-                        row.push(PDn.where(p_item_id: item.id,color: "y").last!.cost)
+                        row.push(PDn.where(p_item_id: item.id,color: "y",state: "").last!.cost)
                     else
                         row.push("")
                     end
@@ -6317,6 +6342,17 @@ before_filter :authenticate_user!
                 end
                 pi_draft.finance_state = "checked"
                 pi_draft.save
+                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+
+                if pi_item_data.bom_state == "checked"
+                    pi_item_data.state = "checked"
+                else
+                    pi_item_data.state = "check"
+                end
+                pi_item_data.finance_state = "checked"
+                pi_item_data.save
+
+
                 redirect_to pi_list_path() and return
             end
         end

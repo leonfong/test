@@ -11,7 +11,7 @@
                         <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
                         <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
-                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
+                    <% elsif can? :work_finance, :all and @pi_info.finance_state.blank? %>
                         <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% if can? :work_admin, :all %>
@@ -737,24 +737,28 @@ function change_<%= item.id.to_s %>(){
             <div class="collapse" id="shipping" style="padding-bottom: 20px;">
                 <%= form_tag({action: :p_add_bom,controller: :procurement},method:"post",class:"form-inline") do %>
                     <div class="form-group sr-only">
-                        <label for="part">p_id</label>
+                        <label for="p_id">p_id</label>
                         <input type="text" class="form-control" id="p_id" name="p_id" placeholder="p_id" value="<%= @boms.id %>">
                     </div>
                     <div class="form-group">
-                        <label for="part">MPN</label>
+                        <label for="p_mpn">MPN</label>
                         <input type="text" class="form-control" id="p_mpn" name="p_mpn" placeholder="MPN">
                     </div>
                     <div class="form-group">
-                        <label for="part">DES</label>
+                        <label for="p_des">DES</label>
                         <input type="text" class="form-control" id="p_des" name="p_des" placeholder="DES">
                     </div>
                     <div class="form-group">
-                        <label for="qty">QTY</label>
+                        <label for="p_qty">QTY</label>
                         <input type="number" class="form-control" id="p_qty" name="p_qty" placeholder="quantity">
                     </div>
                     <div class="form-group">
-                        <label for="code">REF.DES.</label>
+                        <label for="p_code">REF.DES.</label>
                         <input type="text" class="form-control" id="p_code" name="p_code" placeholder="REF.DES.">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_link">LINK</label>
+                        <input type="text" class="form-control" id="p_link" name="p_link" placeholder="LINK">
                     </div>
                     <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
                     <button type="submit" class="btn btn-warning">SUBMIT</button>

@@ -64,7 +64,7 @@
   <tbody>
     <% @payment.each do |payment| %>   
       <tr>
-        <td><button type="button" class="btn btn-info btn-xs" data-backdrop="static" data-toggle="modal" data-target="#new_voucher" data-c_code="<%= payment.c_code %>" data-pay_id="<%= payment.id %>" data-pi_info_no="<%= payment.pi_info_no %>" data-pay_p="<%= payment.pay_p %>" data-sell_full_name_up="<%= payment.sell_full_name_up %>" data-sell_team="<%= payment.sell_team %>" data-pay_type="<%= payment.pay_type %>" >新建收款单</button></td>
+        <td><button type="button" class="btn btn-info btn-xs" data-backdrop="static" data-toggle="modal" data-target="#new_voucher" data-c_code="<%= payment.c_code %>" data-pay_id="<%= payment.id %>" data-pi_info_no="<%= payment.pi_info_no %>" data-pay_p="<%= payment.pay_p %>" data-sell_full_name_up="<%= payment.sell_full_name_up %>" data-sell_team="<%= payment.sell_team %>" data-pay_type="<%= payment.pay_type %>" data-voucher_bank_account="<%= payment.pay_bank_account %>" data-voucher_bank_name="<%= payment.pay_bank_name %>" >新建收款单</button></td>
         <td><%= payment.state %></td>
         <td><%= payment.id %></td>
         <td><%= payment.sell_full_name_new %></td>
@@ -245,7 +245,7 @@
                                   <td><p class="form-control-static" id="pay_no"></p></td>
                                   <td><p class="form-control-static" id="pi_info_no"></p></td>
                                   <td><p class="form-control-static" id="pay_p"></p></td>
-                                  <td><input class="form-control input-sm" name="get_money_self" id="get_money_self" type="text" ></td>
+                                  <td><input class="form-control input-sm" name="get_money" id="get_money" type="text" ></td>
                               </tr> 
                           </tbody>  
                       </table>
@@ -327,6 +327,9 @@ $('#new_voucher').on('show.bs.modal', function (event) {
   var sell_full_name_up = button.data('sell_full_name_up')
   var sell_team = button.data('sell_team')
 
+  var voucher_bank_name = button.data('voucher_bank_name')
+  var voucher_bank_account = button.data('voucher_bank_account')
+
   var modal = $(this)
   modal.find($("#c_code")).val(c_code)
   modal.find($("#c_code_show")).html(c_code)
@@ -337,6 +340,8 @@ $('#new_voucher').on('show.bs.modal', function (event) {
   modal.find($("#pay_p")).html(pay_p)
   modal.find($("#sell_full_name_up")).val(sell_full_name_up)
   modal.find($("#sell_team")).val(sell_team)
+  modal.find($("#voucher_bank_name")).val(voucher_bank_name)
+  modal.find($("#voucher_bank_account")).val(voucher_bank_account)
 })
 </script>
 

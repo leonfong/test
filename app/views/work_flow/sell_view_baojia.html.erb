@@ -600,7 +600,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_account_name" class="col-md-3 control-label"><code>Account Name:</code></label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_account_name" id="pay_account_name" type="text">
+                                      <input class="form-control" name="pay_account_name" id="pay_account_name" type="text" value="<%=@bank_info.blank?? '': @bank_info.user_name%>">
                                   </div>
                               </div>
                           </div>
@@ -608,7 +608,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_account_number" class="col-md-3 control-label">Account Number:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_account_number" id="pay_account_number" type="text">
+                                      <input class="form-control" name="pay_account_number" id="pay_account_number" type="text" value="<%=@bank_info.blank?? '': @bank_info.bank_account%>">
                                   </div>
                               </div>
                           </div>
@@ -616,7 +616,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_swift_code" class="col-md-3 control-label">Swift code:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_swift_code" id="pay_swift_code" type="text">
+                                      <input class="form-control" name="pay_swift_code" id="pay_swift_code" type="text" value="<%=@bank_info.blank?? '': @bank_info.swift_code%>">
                                   </div>
                               </div>
                           </div>
@@ -624,7 +624,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_bank_name" class="col-md-3 control-label">Bank Name:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_bank_name" id="pay_bank_name" type="text">
+                                      <input class="form-control" name="pay_bank_name" id="pay_bank_name" type="text" value="<%=@bank_info.blank?? '': @bank_info.bank_name%>">
                                   </div>
                               </div>
                           </div>

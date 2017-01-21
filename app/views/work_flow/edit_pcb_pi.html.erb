@@ -53,6 +53,25 @@
             </div></div>
 
 
+            <div class="row "><div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><strong>收款银行</strong>
+                        <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#edit_pi_bank_info" style="margin-right: 5px;" >选择银行</button>
+                    </div>
+                    <div class="panel-body ">                     
+                        <div class="row ">
+                        <% if not @bank_info.blank? %>
+                            <div class="col-md-3"><strong>Account Name：</strong><ins><%=@bank_info.user_name %></ins></div> 
+                            <div class="col-md-3"><strong>Account Number：</strong><ins><%=@bank_info.bank_account %></ins></div> 
+                            <div class="col-md-3"><strong>Swift Code：</strong><ins><%=@bank_info.swift_code %></ins></div> 
+                            <div class="col-md-3"><strong>Bank Name：</strong><ins><%=@bank_info.bank_name %></ins></div>
+                        <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div></div>
+
+
 
 
             <div class="row "><div class="col-md-12">
@@ -215,7 +234,23 @@
                         </tr>
                         <tr>
                             <td colSpan="12"></td>
-                            <td colSpan="2"><strong>Total: <%= @pi_info.t_p %></strong></td>
+                            <td colSpan="2">
+                                <label for="t_p_edit" class="col-md-3 control-label" id="t_p_label">Total:</label>
+                                      <div id="t_p_show">
+                                          <%= @pi_info.t_p %>
+                                      </div>
+                                      <div style="display:none;" id="t_p_edit">
+                                      <%= form_tag({action: :edit_pi_info_t_p},method:"post") do %>
+                                          <input type="text" class="form-control sr-only"  name="p_pi_id" value="<%= @pi_info.id %>">
+                                          <div class="input-group input-group-sm">
+                                              <input type="text" class="form-control"  name="p_pi_t_p" value="<%= @pi_info.t_p %>">
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+                            </td>
                         </tr>    
                         <tr>
                             <td colSpan="12"></td>
@@ -608,7 +643,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="addsbLabel"><strong>添加运费/银行费 总价</strong></h4>
+            <h4 class=t_p_label"modal-title" id="addsbLabel"><strong>添加运费/银行费 总价</strong></h4>
         </div>
         
         <div class="modal-body">  
@@ -723,6 +758,48 @@
 
 
 
+<div class="modal fade" id="edit_pi_bank_info" tabindex="-1" role="dialog" aria-labelledby="edit_pi_bank_info_Label">
+    <div class="modal-dialog modal-lg" role="document"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="edit_pi_bank_info_Label"><strong>选择收款银行</strong></h4>
+            </div>
+      <%= form_tag('/edit_pi_bank_info', method:"post", class:"form-inline") do %>
+            <div class="modal-body">        
+                <div>
+                
+         
+                        <label for="c_order_no" class="control-label sr-only">询价单号:</label>
+                        <input type="text" class="form-control sr-only"  name="pi_id" value="<%= @pi_info.id %>">
+
+
+                        <lable for="order" , class="control-label sr-only"><strong>收款银行: </strong></lable>
+                        <div class=" input-group-sm">              
+                            <select class="form-control " name="bank_info" id="bank_info" >
+                                <option value="">--请选择收款银行--</option>
+                                <% BankInfo.all.each do |item| %>
+                                    <option value="<%= item.id %>"><%= item.des %></option>
+                                <% end %>
+                            </select>               
+
+                        </div>
+
+            
+                </div> 
+ 
+            </div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary" value="提交" >
+            </div>
+        <% end %>
+        </div></small>
+    </div>
+</div>
+
+
+
 
 
 
@@ -806,7 +883,12 @@ $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');
   $('#articleMenu').collapse('hide');
 });
-   
+$(document).ready(function(){
+    $("#t_p_label").dblclick(function(){
+        $("#t_p_show").hide();
+        $("#t_p_edit").show();
+    });
+});
 </script>
 
 

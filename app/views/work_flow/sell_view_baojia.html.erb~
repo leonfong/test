@@ -22,6 +22,88 @@
                 <% end %>
             </div></div>
 
+
+            <% if not @shou_kuan_tong_zhi_dan_list.blank? %>
+            <div class="row" style="padding-top: 10px;"><div class="col-md-12">
+            <div class="panel panel-info">  
+                <div class="panel-heading">收款通知单</div>              
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th width="80">操作</th>
+                            <th width="70">状态</th>
+                            <th width="80">收款通知号</th>
+                            <th width="80">制单人</th>
+                            <th width="80">审核人</th>
+                            <th width="90">通知日期</th>
+                            <th width="80">审批日期</th>
+                            <th width="80">收款金额</th>
+                            <th width="90">PI总金额</th>
+                            <th width="90">客编</th>
+                            <th width="90">PI NO.</th>
+                            <th width="90">PI日期</th>
+                            <th >备注</th>
+                            <th width="90">币别</th>
+                            <th width="120">Account name</th>
+                        <tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @pi_item %>
+                        <% @pi_item.each do |pi_item| %>
+                        <% if pi_item.state.blank? %>
+                        <tr class="danger">
+                        <% else %>
+                        <tr class="success">      
+                        <% end %>
+                            <td>
+                                <% if pi_item.bom_id.blank? %>
+                                    <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
+                                <% else %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
+                                <% end %>
+                            </td>
+                            <td><%= pi_item.c_p_no %></td>
+                            <td><%= pi_item.pcb_size %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.layer %></td>
+                            <td><%= pi_item.des %></td>
+                            <td><%= pi_item.pcb_price %></td>
+                            <td><%= pi_item.com_cost %></td>
+                            <td><%= pi_item.pcba %></td>
+                            <td><%= pi_item.unit_price %></td>
+                            <td><%= pi_item.t_p %></td>
+                        </tr>
+                        <% end %>
+                        <% end %> 
+
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                                <% end %>
+                            </td>
+                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
+                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td>金额: <%= pi_item.t_p %></td>
+                            <td colSpan="3"></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
+                                <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                                     
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+            <% end %>
+
+
             <div class="row" style="padding-top: 10px;"><div class="col-md-12">
             <div class="panel panel-info">                
                 <table class="table table-hover">
@@ -600,7 +682,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_account_name" class="col-md-3 control-label"><code>Account Name:</code></label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_account_name" id="pay_account_name" type="text" value="<%=@bank_info.blank??'':@bank_info.user_name%>">
+                                      <input class="form-control" name="pay_account_name" id="pay_account_name" type="text" value="<%=@bank_info.blank?? '': @bank_info.user_name%>">
                                   </div>
                               </div>
                           </div>
@@ -608,7 +690,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_account_number" class="col-md-3 control-label">Account Number:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_account_number" id="pay_account_number" type="text" value="<%=@bank_info.blank??'':@bank_info.bank_account%>">
+                                      <input class="form-control" name="pay_account_number" id="pay_account_number" type="text" value="<%=@bank_info.blank?? '': @bank_info.bank_account%>">
                                   </div>
                               </div>
                           </div>
@@ -616,7 +698,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_swift_code" class="col-md-3 control-label">Swift code:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_swift_code" id="pay_swift_code" type="text" value="<%=@bank_info.blank??'':@bank_info.swift_code%>">
+                                      <input class="form-control" name="pay_swift_code" id="pay_swift_code" type="text" value="<%=@bank_info.blank?? '': @bank_info.swift_code%>">
                                   </div>
                               </div>
                           </div>
@@ -624,7 +706,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="pay_bank_name" class="col-md-3 control-label">Bank Name:</label>
                                   <div class="col-md-9">
-                                      <input class="form-control" name="pay_bank_name" id="pay_bank_name" type="text" value="<%=@bank_info.blank??'':@bank_info.bank_name%>">
+                                      <input class="form-control" name="pay_bank_name" id="pay_bank_name" type="text" value="<%=@bank_info.blank?? '': @bank_info.bank_name%>">
                                   </div>
                               </div>
                           </div>

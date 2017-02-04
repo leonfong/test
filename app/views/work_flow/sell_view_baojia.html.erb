@@ -22,6 +22,80 @@
                 <% end %>
             </div></div>
 
+
+            <% if not @shou_kuan_tong_zhi_dan_list.blank? %>
+            <div class="row" style="padding-top: 10px;"><div class="col-md-12">
+            <div class="panel panel-info">  
+                <div class="panel-heading">收款通知单</div>              
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th width="70">状态</th>
+                            <th width="80">收款通知号</th>
+                            <th width="80">制单人</th>
+                            <th width="80">审核人</th>
+                            <th width="90">通知日期</th>
+                            <th width="80">审批日期</th>
+                            <th width="80">收款金额</th>
+                            <th width="90">PI总金额</th>
+                            <th width="90">客编</th>
+                            <th width="90">PI NO.</th>
+                            <th width="90">PI日期</th>
+                            <th >备注</th>
+                            <th width="90">币别</th>
+                            <th width="120">Account name</th>
+                        <tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @shou_kuan_tong_zhi_dan_list %>
+                            <% @shou_kuan_tong_zhi_dan_list.each do |payment| %> 
+                        <tr>
+                            <td><%= payment.state %></td>
+                            <td><%= payment.id %></td>
+                            <td><%= payment.sell_full_name_new %></td>
+                            <td><%= payment.sell_full_name_up %></td>
+                            <td><%= payment.created_at.localtime.strftime('%Y-%m-%d') %></td>
+                            <td><%=  %></td>
+                            <td><%= payment.pay_p %></td>  
+                            <td><%= payment.pi_t_p %></td>
+                            <td><%= payment.c_code %></td>
+                            <td><%= payment.pi_info_id %></td>
+                            <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
+                            <td><%= payment.remark %></td> 
+                            <td><%= payment.currency_type %></td> 
+                            <td><%= payment.pay_account_name %></td>
+                        <tr>
+                        <% end %>
+                        <% end %> 
+
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
+                                <% end %>
+                            </td>
+                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
+                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td>金额: <%= pi_item.t_p %></td>
+                            <td colSpan="3"></td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
+                                <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                                     
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+            <% end %>
+
+
             <div class="row" style="padding-top: 10px;"><div class="col-md-12">
             <div class="panel panel-info">                
                 <table class="table table-hover">

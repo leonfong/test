@@ -1576,7 +1576,10 @@ before_filter :authenticate_user!
             if can? :work_d, :all or can? :work_finance, :all
                 render "procurement/p_viewbom.html.erb" and return
             end
-            if can? :work_e, :all  
+            if can? :work_e, :all 
+                if not params[:pi_info_id].blank? 
+                    @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
+                end
                 @baojia = @bom_item
                 render "sell_view_baojia.html.erb" and return
             end

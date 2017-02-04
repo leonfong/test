@@ -111,7 +111,7 @@
       <td><%= buy.tax_cost %></td>
       <td><%= buy.tax %></td>
       <td><%= buy.tax_t_p %></td>
-      <td><%= buy.delivery_date.localtime.strftime('%Y-%m-%d') %></td>
+      <td><%= buy.delivery_date.blank?? '':buy.delivery_date.localtime.strftime('%Y-%m-%d') %></td>
       <td>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >

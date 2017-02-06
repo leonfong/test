@@ -6,6 +6,8 @@
                 <%= render partial: "work_flow/menu", locals: {selected: "pi_list_f"} %>
             <% elsif not params[:bom_chk].blank?%>
                 <%= render partial: "work_flow/menu", locals: {selected: "pi_list_bom"} %>
+            <% elsif not params[:buy_chk].blank?%>
+                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_buy"} %>
             <% else %>
                 <%= render partial: "work_flow/menu", locals: {selected: "pi_list"} %>
             <% end %>
@@ -53,6 +55,7 @@
       <th width="130">PI No.</th>
       <th width="150">Created Date</th>
       <th width="80">BOM审核</th>
+      <th width="80">采购审核</th>
       <th width="80">财务审核</th>
       <th width="80">数量</th>
       <th width="80">价格￥</th>
@@ -85,6 +88,15 @@
             <% elsif pcb.bom_state == "check" %>
                 审核中
             <% elsif pcb.bom_state == "checked" %>
+                审核完成
+            <% end %>
+        </td>
+        <td>
+            <% if pcb.buy_state.blank? %>
+                未提交
+            <% elsif pcb.buy_state == "check" %>
+                审核中
+            <% elsif pcb.buy_state == "checked" %>
                 审核完成
             <% end %>
         </td>

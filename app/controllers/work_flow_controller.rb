@@ -1490,6 +1490,15 @@ before_filter :authenticate_user!
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pi_list_eng.html.erb" and return
+            elsif params[:buy_chk]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list_eng.html.erb" and return
             elsif params[:finance_chk]
                 if can? :work_e, :all
                     #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = '' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
@@ -6312,6 +6321,7 @@ before_filter :authenticate_user!
                     pi_draft.pi_lock = "lock"
                     pi_item_data.state = "check"
                     pi_item_data.bom_state = "check"
+                    pi_item_data.buy_state = "check"
                     pi_item_data.save
                     pi_draft.state = "check"
                     pi_draft.save
@@ -6322,7 +6332,7 @@ before_filter :authenticate_user!
             if can? :work_d, :all 
                 Rails.logger.info("add-------------------------------------5652")
                 pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
-                if pi_item_data.finance_state == "checked"
+                if pi_item_data.finance_state == "checked" and pi_item_data.buy_state == "checked"
                     pi_item_data.state = "checked"
                 else
                     pi_item_data.state = "check"
@@ -6350,8 +6360,39 @@ before_filter :authenticate_user!
 =end
                 redirect_to pi_list_path() and return
             end
+            if can? :work_g, :all 
+                Rails.logger.info("add-------------------------------------5652")
+                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+                if pi_item_data.finance_state == "checked" and pi_item_data.bom_state == "checked"
+                    pi_item_data.state = "checked"
+                else
+                    pi_item_data.state = "check"
+                end
+                pi_item_data.buy_state = "checked"
+                pi_item_data.save
+                set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
+                if not set_lock.blank?
+                    set_lock.each do |item|
+                        find_bom = ProcurementBom.find_by_id(item.bom_id)
+                        if not find_bom.blank?
+                            find_bom.bom_lock = "lock"
+                            find_bom.save
+                        end
+                    end
+                end
+=begin
+                if pi_draft.finance_state == "checked"
+                    pi_draft.state = "checked"
+                else
+                    pi_draft.state = "check"
+                end
+                pi_draft.bom_state = "checked"
+                pi_draft.save
+=end
+                redirect_to pi_list_path() and return
+            end
             if can? :work_finance, :all 
-                if pi_draft.bom_state == "checked"
+                if pi_draft.bom_state == "checked" and pi_draft.buy_state == "checked"
                     pi_draft.state = "checked"
                 else
                     pi_draft.state = "check"
@@ -6360,7 +6401,7 @@ before_filter :authenticate_user!
                 pi_draft.save
                 pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
 
-                if pi_item_data.bom_state == "checked"
+                if pi_item_data.bom_state == "checked" and pi_item_data.buy_state == "checked"
                     pi_item_data.state = "checked"
                 else
                     pi_item_data.state = "check"

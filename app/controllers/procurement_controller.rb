@@ -2856,17 +2856,28 @@ before_filter :authenticate_user!
             
             #if can? :work_d, :all
             if not params[:add_bom].blank?
-                render "bom_viewbom.html.erb"
+                if not params[:state_flow].blank?
+                    @type_b = "[&quot;"
+                    all_type_b = MokoPartsType.find_by_sql("SELECT moko_parts_types.part_name_type_b_name,moko_parts_types.part_name_type_b_sname FROM moko_parts_types GROUP BY moko_parts_types.part_name_type_b_name")
+                    all_type_b.each do |type_b|
+                        @type_b += "&quot;,&quot;" + type_b.part_name_type_b_name.to_s
+                    end
+        @type_b += "&quot;]"
+                    @pi_info = PiInfo.find_by_id(params[:pi_info_id])
+                    render "bom_viewbom_order_center.html.erb" and return
+                else
+                    render "bom_viewbom.html.erb" and return
+                end
             else
                 if not @bom_item.blank?
                     @bom_item = @bom_item.select {|item| item.quantity != 0 }
                 end
-                render "p_viewbom.html.erb"
+                render "p_viewbom.html.erb"  and return
             end
             return false  
         else
             @shipping_info = ShippingInfo.where(user_id: current_user.id)
-            render "submit_order.html.erb"
+            render "submit_order.html.erb" and return
             return false
         end
     end

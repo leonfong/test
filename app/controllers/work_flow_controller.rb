@@ -1573,7 +1573,11 @@ before_filter :authenticate_user!
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@boms.inspect)
             Rails.logger.info("add-------------------------------------12")
-            if can? :work_d, :all or can? :work_finance, :all
+            if can? :work_d, :all
+                #render "procurement/p_viewbom.html.erb" and return
+                redirect_to p_viewbom_path(pi_info_id: params[:pi_info_id],pi_item_id: params[:pi_item_id],add_bom: "add_bom", bom_id: pi_item.bom_id, state_flow: "order_center")
+            end
+            if can? :work_finance, :all
                 render "procurement/p_viewbom.html.erb" and return
             end
             if can? :work_e, :all 
@@ -3245,8 +3249,17 @@ before_filter :authenticate_user!
             if params[:value_10]
                 add_part.value10 = params[:value_10]
             end
-            add_part.save
+            if add_part.save
+                if not params[:item_id].blank?
+                    get_p_item_data = PItem.find_by_id(params[:item_id])
+                    if not get_p_item_data.blank?
+                        get_p_item_data.product_id = add_part.id
+                        get_p_item_data.save
+                    end
+                end
+            end
         end  
+        
         redirect_to :back 
     end
 

@@ -31,7 +31,8 @@
     <ul id="articleMenu" class="nav nav-list  menu-second <% if selected =~ /pi/i %>collapse in<% else %>collapse<% end %>">
         <li><a <% if selected == "pi_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_draft_list"><i></i> PI草稿箱</a></li>
         <li><a <% if selected == "pi_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_list" ><i></i>PI查询</a></li>
-        <li><a <% if selected == "pi_list_bom" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> 待工程师审批</a></li>
+        <li><a <% if selected == "pi_list_bom" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> 待BOM工程师审批</a></li>
+        <li><a <% if selected == "pi_list_bom" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?buy_chk=true"><i class="icon-pencil"></i> 待采购工程师审批</a></li>
         <li><a <% if selected == "pi_sell_paymanet_notice" %>style="background-color: #d9edf7;"<% end %>href="/sell_payment_notice_list"><i class="icon-pencil"></i>待发送收款通知列表</a></li>
         <li><a <% if selected == "pi_list_f" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?finance_chk=true"><i class="icon-pencil"></i> 待财务审批</a></li>
     </ul>
@@ -92,7 +93,9 @@
     <a style="background-color: #ddd;" href="#factoryMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 工厂生产流程</a>
     <ul id="factoryMenu" class="nav nav-list  menu-second <% if selected =~ /factory/i %>collapse in<% else %>collapse<% end %>">
         <li><a <% if selected == "factory_in_manual" %>style="background-color: #d9edf7;"<% end %> href="/factory_in_manual"><i></i> 生产领料</a></li>
+<!--
         <li><a <% if selected == "factory_in" %>style="background-color: #d9edf7;"<% end %> href="/factory_in"><i></i> 上线生产</a></li>
+-->
         <li><a <% if selected == "factory_out" %>style="background-color: #d9edf7;"<% end %> href="/factory_out" ><i></i> 下线发货</a></li>
     </ul>
 <% end %>

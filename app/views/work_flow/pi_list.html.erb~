@@ -87,6 +87,7 @@
                 审核完成
             <% end %>
         </td>
+        <td></td>
         <td>
             <% if pcb.finance_state == "check" %>
                 审核中

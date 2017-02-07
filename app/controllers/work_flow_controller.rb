@@ -1529,7 +1529,11 @@ before_filter :authenticate_user!
                     @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
                 end
 =end
-                if can? :work_e, :all
+                
+                
+                if can? :work_admin, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
@@ -1582,13 +1586,6 @@ before_filter :authenticate_user!
             Rails.logger.info("add-------------------------------------12")
             Rails.logger.info(@boms.inspect)
             Rails.logger.info("add-------------------------------------12")
-            if can? :work_d, :all
-                #render "procurement/p_viewbom.html.erb" and return
-                redirect_to p_viewbom_path(pi_info_id: params[:pi_info_id],pi_item_id: params[:pi_item_id],add_bom: "add_bom", bom_id: pi_item.bom_id, state_flow: "order_center")
-            end
-            if can? :work_finance, :all
-                render "procurement/p_viewbom.html.erb" and return
-            end
             if can? :work_e, :all 
                 if not params[:pi_info_id].blank? 
                     @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
@@ -1596,6 +1593,14 @@ before_filter :authenticate_user!
                 @baojia = @bom_item
                 render "sell_view_baojia.html.erb" and return
             end
+            if can? :work_d, :all
+                #render "procurement/p_viewbom.html.erb" and return
+                redirect_to p_viewbom_path(pi_info_id: params[:pi_info_id],pi_item_id: params[:pi_item_id],add_bom: "add_bom", bom_id: pi_item.bom_id, state_flow: "order_center") and return
+            end
+            if can? :work_finance, :all or can? :work_g, :all
+                render "procurement/p_viewbom.html.erb" and return
+            end
+
         end
     end
 
@@ -6084,7 +6089,7 @@ before_filter :authenticate_user!
                     if not PDn.find_by_id(buy.dn_id).blank?
                         if not PDn.find_by_id(buy.dn_id).info.blank?
                             @table_buy += '<td><small><a href="'
-                            @table_buy += dn.info.to_s
+                            @table_buy += PDn.find_by_id(buy.dn_id).info.to_s
                             @table_buy += '">下载</a></small></td>'
                         else
                             @table_buy += '<td></td>'
@@ -6126,7 +6131,7 @@ before_filter :authenticate_user!
                                 @table_buy += '<p style="padding: 0px;margin: 0px;" >'
                                 @table_buy += '<small >'
                                 if not PDn.find(buy.dn_id).info.blank?                
-                                    @table_buy += '<a class="btn btn-info btn-xs" href="'+PDn.find(buy.dn_id).info+'" target="_blank">下载</a>'
+                                    @table_buy += '<a class="btn btn-info btn-xs" href="'+PDn.find(buy.dn_id).info.to_s+'" target="_blank">下载</a>'
                                 end
                                 @table_buy += '<strong>采购工程师: </strong>'+PDn.find(buy.dn_id).remark.to_s
                                 @table_buy += '</small>'
@@ -6380,15 +6385,13 @@ before_filter :authenticate_user!
                         end
                     end
                 end
-=begin
-                if pi_draft.finance_state == "checked"
+                if pi_draft.bom_state == "checked" and pi_draft.finance_state == "checked"
                     pi_draft.state = "checked"
                 else
                     pi_draft.state = "check"
                 end
-                pi_draft.bom_state = "checked"
+                pi_draft.buy_state = "checked"
                 pi_draft.save
-=end
                 redirect_to pi_list_path() and return
             end
             if can? :work_finance, :all 

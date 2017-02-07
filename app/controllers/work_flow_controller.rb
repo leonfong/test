@@ -6228,7 +6228,7 @@ before_filter :authenticate_user!
 
     def pi_draft  
         pi_draft = PiInfo.find_by_id(params[:p_pi])
-        if params[:commit] == "提交" and pi_draft.pi_lock != "lock"
+        if params[:commit] == "提交"
             #if can? :work_admin, :all 
                 #pi_draft.state = "checked"
                 #pi_draft.bom_state = "checked"
@@ -6243,7 +6243,7 @@ before_filter :authenticate_user!
                 redirect_to pi_list_path() and return                
             end
 =end
-            if can? :work_e, :all 
+            if can? :work_e, :all  and pi_draft.pi_lock != "lock"
                 pi_item_data = PiItem.find_by_id(params[:p_item])
                 if pi_item_data.qty.blank?
                     flash[:error] = "请填写数量!!!"

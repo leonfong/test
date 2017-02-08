@@ -283,7 +283,11 @@ before_filter :authenticate_user!
                         #up_item.procurement_version_bom_id =
                         up_item.quantity = item.quantity
                         if not params[:order_id].blank?
-                            up_item.pmc_qty = upstart.qty*item.quantity
+                            if upstart.p_type == "COMPONENTS"
+                                up_item.pmc_qty = item.quantity
+                            else
+                                up_item.pmc_qty = upstart.qty*item.quantity
+                            end
                         else
                             up_item.pmc_qty = item.pmc_qty
                         end

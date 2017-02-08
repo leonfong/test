@@ -85,6 +85,8 @@
                 审核中
             <% elsif pcb.bom_state == "checked" %>
                 审核完成
+            <% else %>
+                <%= pcb.bom_state %>
             <% end %>
         </td>
         <td>
@@ -92,6 +94,8 @@
                 审核中
             <% elsif pcb.buy_state == "checked" %>
                 审核完成
+            <% else %>
+                <%= pcb.buy_state %>
             <% end %>
         </td>
         <td>
@@ -99,6 +103,8 @@
                 审核中
             <% elsif pcb.finance_state == "checked" %>
                 审核完成
+            <% else %>
+                <%= pcb.finance_state %>
             <% end %>
         </td>
         <td><%= pcb.qty %></td>

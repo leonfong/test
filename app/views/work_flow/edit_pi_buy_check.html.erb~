@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "new_buy"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "buy_check_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
             <div class="row "><div class="col-md-12">                
@@ -160,17 +160,23 @@
 
 
 
-         <%= form_tag('/send_pi_buy_checked', method:"post",id:"upatt") do %>
+
             <div class="row "><div class="col-md-12">   
-                <div class="modal-footer"> 
+                <div class="modal-footer">
+                <%= form_tag('/send_pi_buy_checked', method:"post",id:"upatt") do %> 
                     <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= @pi_buy_info.dn.to_s %>">                   
                     <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= @pi_buy_info.pi_buy_no.to_s %>">
                     <% if can? :work_g, :all %>
-                        <%= submit_tag "审核", class: "btn btn-danger" ,onclick:"return postform()"%>                
+
+                        <%= submit_tag "审核", class: "btn btn-info" ,onclick:"return postform()"%>  
+                        <%= submit_tag "反审核", class: "btn btn-danger" ,onclick:"return unpostform()"%> 
+     
+     
                     <% end %>
+                <% end %>
                 </div>
             </div></div>
-       <% end %>
+
 
 
 

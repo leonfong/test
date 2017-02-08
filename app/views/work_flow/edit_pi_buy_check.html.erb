@@ -160,17 +160,23 @@
 
 
 
-         <%= form_tag('/send_pi_buy_checked', method:"post",id:"upatt") do %>
+
             <div class="row "><div class="col-md-12">   
-                <div class="modal-footer"> 
+                <div class="modal-footer">
+                <%= form_tag('/send_pi_buy_checked', method:"post",id:"upatt") do %> 
                     <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= @pi_buy_info.dn.to_s %>">                   
                     <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= @pi_buy_info.pi_buy_no.to_s %>">
                     <% if can? :work_g, :all %>
-                        <%= submit_tag "审核", class: "btn btn-danger" ,onclick:"return postform()"%>                
+
+                        <%= submit_tag "审核", class: "btn btn-info" ,onclick:"return postform()"%>  
+                        <%= submit_tag "反审核", class: "btn btn-danger" ,onclick:"return unpostform()"%> 
+     
+     
                     <% end %>
+                <% end %>
                 </div>
             </div></div>
-       <% end %>
+
 
 
 
@@ -364,7 +370,7 @@
 
 <script type="text/javascript">
 function postform() {  	           
-      if (confirm('确定要下单?')) {
+      if (confirm('确定审核通过?')) {
         if ($("#pi_buy_dn").val() == "")
         {                    
 　　      alert("请选择供应商！");                    
@@ -376,6 +382,18 @@ function postform() {
 
 }  
 
+function unpostform() {  	           
+      if (confirm('确定要反审核?')) {
+        if ($("#pi_buy_dn").val() == "")
+        {                    
+　　      alert("请选择供应商！");                    
+　　      return false;                
+　       }
+      } else {
+        return false;
+      }
+
+}  
 
 $('#edit_buy_qty').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal

@@ -30,7 +30,7 @@
       <td><%= buy_list.dn_long %></td>
       <td><%= buy_list.t_p_sum %></td>
       <td><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-      <td><%= buy_list.user %></td>
+      <td><%= User.find_by_email(buy_list.user).full_name %></td>
   </tr>
   <% end %>
 <% end %> 

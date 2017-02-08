@@ -9,7 +9,8 @@
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
                         <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
                     <% elsif can? :work_finance, :all and @pi_info.finance_state.blank? %>
                         <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
                     <% end %>

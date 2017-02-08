@@ -92,7 +92,7 @@
             <% end %>
         </td>
         <td>
-            <% if not pcb.bom_state.blank? and pcb.buy_state.blank? %>
+            <% if pcb.buy_state.blank? %>
                 未提交
             <% elsif pcb.buy_state == "check" %>
                 审核中

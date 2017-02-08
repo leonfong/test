@@ -22,7 +22,8 @@
       <th  >供应商</th>
       <th width="230">总价</th>
       <th width="230">Created Date</th>
-      <th width="190">采购工程师</th>
+      <th width="100">采购工程师</th>
+      <th width="65">状态</th>
       <% if can? :work_g, :all or can? :work_admin, :all%>
       <th width="50">操作</th>
       <% end %>
@@ -37,7 +38,8 @@
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.dn_long %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.t_p_sum %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.user %></td>
+      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= User.find_by_email(buy_list.user).full_name %></td>
+      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.state %></td>
       <% if can? :work_g, :all or can? :work_admin, :all%>
       <td>    
           <%= link_to "提交", send_pi_buy_check_path(pi_buy_no: buy_list.pi_buy_no), class: "btn btn-info btn-xs",data: {confirm: "确定要提交？"}%> 
@@ -45,7 +47,7 @@
       <% end %>
   </tr>
   <tr>
-      <td colSpan="5" style="padding: 0px;margin: 0px;">
+      <td colSpan="6" style="padding: 0px;margin: 0px;">
           <div class="collapse" id="buy_<%= buy_list.id %>">
 
 

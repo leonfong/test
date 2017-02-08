@@ -533,6 +533,7 @@ function change_<%= item.id.to_s %>(){
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <strong>MOKO描述</strong>
+                        
                         <code id="moko_des_exp"></code>
                     </div>
                     <div class="form-group sr-only">
@@ -544,6 +545,8 @@ function change_<%= item.id.to_s %>(){
 
                             <input id="part_name_type_b_name_en" name="part_name_type_b_name_en" type="text" class="form-control input-sm" style="padding: 0px;margin: 0px;" size="20" value="">
                             <input id="part_name_type_a_sname" name="part_name_type_a_sname" type="text" class="form-control input-sm" style="padding: 0px;margin: 0px;" size="20" value="">
+
+                            <input type="text" class="form-control" id="itemadd_id" name="item_id" >
                     </div>
                     <div class="panel-body form-horizontal" id="moko_des">
                         

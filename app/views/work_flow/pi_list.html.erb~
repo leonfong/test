@@ -87,7 +87,13 @@
                 审核完成
             <% end %>
         </td>
-        <td></td>
+        <td>
+            <% if pcb.buy_state == "check" %>
+                审核中
+            <% elsif pcb.buy_state == "checked" %>
+                审核完成
+            <% end %>
+        </td>
         <td>
             <% if pcb.finance_state == "check" %>
                 审核中

@@ -2217,6 +2217,7 @@ before_filter :authenticate_user!
     def send_pi_buy_check
         up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         if not up_state.blank?
+            
             up_state.state = "check"
             up_state.save
             PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
@@ -2234,14 +2235,26 @@ before_filter :authenticate_user!
     def send_pi_buy_checked
         up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         if not up_state.blank?
-            up_state.state = "checked"
+            if params[:commit] == "反审核"
+                up_state.state = "uncheck"
+            else
+                up_state.state = "checked"
+            end
             up_state.save
             PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
-                item.state = "checked"
+                if params[:commit] == "反审核"
+                    item.state = "checking"
+                else
+                    item.state = "checked"
+                end
                 item.save
                 pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
                 #pmc_data.buy_qty = item.qty
-                pmc_data.state = "checked" 
+                if params[:commit] == "反审核"
+                    pmc_data.state = "checking"
+                else
+                    pmc_data.state = "checked" 
+                end
                 pmc_data.save
             end
         end
@@ -6220,7 +6233,7 @@ before_filter :authenticate_user!
 
     def pi_buy_list
         #@pi_buy_list = PiBuyInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
-        @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'new' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
+        @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'new' OR pi_buy_infos.state = 'uncheck' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 
@@ -6414,6 +6427,32 @@ before_filter :authenticate_user!
 
 
                 redirect_to pi_list_path() and return
+            end
+        elsif params[:commit] == "反审核"
+            pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+            if can? :work_d, :all
+                pi_item_data.state = "check"
+                pi_item_data.bom_state = "uncheck"
+                pi_item_data.save
+                pi_draft.bom_state = "uncheck"
+                pi_draft.state = "check"
+                pi_draft.save
+            end
+            if can? :work_g, :all
+                pi_item_data.state = "check"
+                pi_item_data.buy_state = "uncheck"
+                pi_item_data.save
+                pi_draft.buy_state = "uncheck"
+                pi_draft.state = "check"
+                pi_draft.save
+            end
+            if can? :work_finance, :all
+                pi_item_data.state = "check"
+                pi_item_data.finance_state = "uncheck"
+                pi_item_data.save
+                pi_draft.finance_state = "uncheck"
+                pi_draft.state = "check"
+                pi_draft.save
             end
         end
         redirect_to pi_list_path() and return

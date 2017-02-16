@@ -28,6 +28,7 @@
       <td><%= link_to buy_list.pi_buy_no, pi_buy_item_path(pi_buy_info_id: buy_list.id) %></td>
       <td><%= buy_list.dn %></td>
       <td><%= buy_list.dn_long %></td>
+      <td><%= buy_list.t_p %></td>
       <td><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy_list.user %></td>
   </tr>

@@ -5,6 +5,17 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def send_pmc_back
+        get_pmc_data = PiPmcItem.find_by_id(params[:id])
+        if not get_pmc_data.blank?
+            if get_pmc_data.state == "pass"
+                get_pmc_data.state = "new_new"
+                get_pmc_data.save
+            end
+        end
+        redirect_to :back
+    end
+
     def edit_pi_info_t_p
         get_pi_data = PiInfo.find_by_id(params[:p_pi_id])
         get_pi_data.t_p = params[:p_pi_t_p]
@@ -1477,6 +1488,71 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def pmc_to_sell
+        if params[:key_order]
+            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        else
+            if params[:bom_chk]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list_eng.html.erb" and return
+            elsif params[:buy_chk]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list_eng.html.erb" and return
+            elsif params[:finance_chk]
+                if can? :work_e, :all
+                    #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = '' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = '' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list_eng.html.erb" and return     
+            elsif params[:checked]
+                if can? :work_e, :all
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                if can? :work_e, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'checked' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'checked' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+                render "pi_list_paymanet_notice.html.erb" and return
+            else
+                Rails.logger.info("add-------------------------------------12")
+=begin
+                if can? :work_e, :all
+                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' AND pi_sell = '#{current_user.email}' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
+                end
+=end
+                
+                
+                if can? :work_admin, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+            end
+        end        
+    end
+
     def pi_list
         if params[:key_order]
             @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
@@ -2283,62 +2359,68 @@ before_filter :authenticate_user!
     def send_pi_buy
         up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         if not up_state.blank?
-            up_state.state = "buy"
-            up_state.save
-            t_p = 0
-            PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
-                item.state = "buying"
-                item.save
-                t_p = t_p + item.buy_qty*item.cost
-                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
-                #pmc_data.buy_qty = item.qty
-                pmc_data.state = "buying" 
-                pmc_data.save
+            if params[:commit] == "反审核"
+                up_state.state = "uncheck"
+                up_state.save
+                redirect_to pi_buy_checked_list_path() and return
+            else
+                up_state.state = "buy"
+                up_state.save
+                t_p = 0
+                PiBuyItem.where(pi_buy_info_id: up_state.id).each do |item|
+                    item.state = "buying"
+                    item.save
+                    t_p = t_p + item.buy_qty*item.cost
+                    pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                    #pmc_data.buy_qty = item.qty
+                    pmc_data.state = "buying" 
+                    pmc_data.save
 
-                if item.save
-                    get_pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
-                    if not get_pmc_data.blank?
-                        get_wh = WarehouseInfo.find_by_moko_part(item.moko_part)
-                        if not get_wh.blank?
-                            #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
+                    if item.save
+                        get_pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                        if not get_pmc_data.blank?
+                            get_wh = WarehouseInfo.find_by_moko_part(item.moko_part)
+                            if not get_wh.blank?
+                                #get_wh.true_buy_qty = get_wh.true_buy_qty + (params[:buy_qty].to_i - get_pmc_data.buy_qty)
                             
-                            get_wh.true_buy_qty = get_wh.true_buy_qty + (item.buy_qty - item.pmc_qty)
-                            if item.pmc_flag == "pmc"
-                                get_wh.future_qty = get_wh.future_qty + item.buy_qty
-                            else
-                                get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.pmc_qty)
+                                get_wh.true_buy_qty = get_wh.true_buy_qty + (item.buy_qty - item.pmc_qty)
+                                if item.pmc_flag == "pmc"
+                                    get_wh.future_qty = get_wh.future_qty + item.buy_qty
+                                else
+                                    get_wh.future_qty = get_wh.future_qty + (item.buy_qty - item.pmc_qty)
+                                end
+                                get_wh.save
                             end
-                            get_wh.save
+                            get_pmc_data.buy_qty = item.buy_qty
+                            get_pmc_data.cost = item.cost
+                            get_pmc_data.dn = item.dn
+                            get_pmc_data.dn_long = item.dn_long
+                            get_pmc_data.save
                         end
-                        get_pmc_data.buy_qty = item.buy_qty
-                        get_pmc_data.cost = item.cost
-                        get_pmc_data.dn = item.dn
-                        get_pmc_data.dn_long = item.dn_long
-                        get_pmc_data.save
-                    end
                 
-                    put_pdn = PDn.new
-                    put_pdn.email = current_user.email
-                    put_pdn.p_item_id = item.p_item_id
-                    put_pdn.part_code = item.moko_part
-                    put_pdn.date = Time.new
-                    put_pdn.dn = item.dn
-                    put_pdn.dn_long = item.dn_long
-                    put_pdn.cost = item.cost
-                    put_pdn.qty = item.buy_qty
-                    put_pdn.dn_type = "B"
-                    put_pdn.save
-                    #更新所有价格
-                    change_pmc_cost = PiPmcItem.where("moko_part = '#{item.moko_part}' AND (state = 'buy_adding' OR state = 'new' OR state = 'pass')")
-                    if not change_pmc_cost.blank?
-                        change_pmc_cost.update_all "cost = '#{item.cost}'"
+                        put_pdn = PDn.new
+                        put_pdn.email = current_user.email
+                        put_pdn.p_item_id = item.p_item_id
+                        put_pdn.part_code = item.moko_part
+                        put_pdn.date = Time.new
+                        put_pdn.dn = item.dn
+                        put_pdn.dn_long = item.dn_long
+                        put_pdn.cost = item.cost
+                        put_pdn.qty = item.buy_qty
+                        put_pdn.dn_type = "B"
+                        put_pdn.save
+                        #更新所有价格
+                        change_pmc_cost = PiPmcItem.where("moko_part = '#{item.moko_part}' AND (state = 'buy_adding' OR state = 'new' OR state = 'pass')")
+                        if not change_pmc_cost.blank?
+                            change_pmc_cost.update_all "cost = '#{item.cost}'"
+                        end
+                        change_buy_cost = PiBuyItem.where("moko_part = '#{item.moko_part}' AND state = 'new'").update_all "cost = '#{item.cost}'"
                     end
-                    change_buy_cost = PiBuyItem.where("moko_part = '#{item.moko_part}' AND state = 'new'").update_all "cost = '#{item.cost}'"
-                end
 
+                end
+                up_state.t_p = t_p
+                up_state.save
             end
-            up_state.t_p = t_p
-            up_state.save
         end
         redirect_to pi_buy_checked_list_path()
     end
@@ -2508,70 +2590,72 @@ before_filter :authenticate_user!
                 
                 item_data = PiPmcItem.find_by_id(item_id)
                 if not item_data.blank?
-                    find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
-                    if find_buy_data.blank?
-                        add_buy_data = PiBuyItem.new
-                        add_buy_data.pi_info_id = item_data.pi_info_id
-                        add_buy_data.pi_item_id = item_data.pi_item_id
-                        add_buy_data.pmc_flag = item_data.pmc_flag
-                        add_buy_data.buy_user = item_data.buy_user
-                        add_buy_data.state = "new"
-                        add_buy_data.pi_pmc_item_id = item_data.id 
-                        add_buy_data.p_item_id = item_data.p_item_id
-                        add_buy_data.erp_id = item_data.erp_id
-                        add_buy_data.erp_no = item_data.erp_no
-                        add_buy_data.erp_no_son = item_data.erp_no_son
-                        add_buy_data.user_do = item_data.user_do
-                        add_buy_data.user_do_change = item_data.user_do_change
-                        add_buy_data.check = item_data.check
-                        add_buy_data.pi_buy_info_id = params[:pi_buy_id]
-                        add_buy_data.supplier_list_id = PiBuyInfo.find_by_id(params[:pi_buy_id]).supplier_list_id
-                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
-                        add_buy_data.quantity = item_data.quantity
-                        add_buy_data.qty = item_data.qty
-                        add_buy_data.pmc_qty = item_data.pmc_qty
-                        add_buy_data.buy_qty = item_data.buy_qty
-                        add_buy_data.description = item_data.description
-                        add_buy_data.part_code = item_data.part_code
-                        add_buy_data.fengzhuang = item_data.fengzhuang
-                        add_buy_data.link = item_data.link
-                        add_buy_data.cost = item_data.cost
+                    if item_data.state == "new" or item_data.state == "new_new"
+                        find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
+                        if find_buy_data.blank?
+                            add_buy_data = PiBuyItem.new
+                            add_buy_data.pi_info_id = item_data.pi_info_id
+                            add_buy_data.pi_item_id = item_data.pi_item_id
+                            add_buy_data.pmc_flag = item_data.pmc_flag
+                            add_buy_data.buy_user = item_data.buy_user
+                            add_buy_data.state = "new"
+                            add_buy_data.pi_pmc_item_id = item_data.id 
+                            add_buy_data.p_item_id = item_data.p_item_id
+                            add_buy_data.erp_id = item_data.erp_id
+                            add_buy_data.erp_no = item_data.erp_no
+                            add_buy_data.erp_no_son = item_data.erp_no_son
+                            add_buy_data.user_do = item_data.user_do
+                            add_buy_data.user_do_change = item_data.user_do_change
+                            add_buy_data.check = item_data.check
+                            add_buy_data.pi_buy_info_id = params[:pi_buy_id]
+                            add_buy_data.supplier_list_id = PiBuyInfo.find_by_id(params[:pi_buy_id]).supplier_list_id
+                            add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                            add_buy_data.quantity = item_data.quantity
+                            add_buy_data.qty = item_data.qty
+                            add_buy_data.pmc_qty = item_data.pmc_qty
+                            add_buy_data.buy_qty = item_data.buy_qty
+                            add_buy_data.description = item_data.description
+                            add_buy_data.part_code = item_data.part_code
+                            add_buy_data.fengzhuang = item_data.fengzhuang
+                            add_buy_data.link = item_data.link
+                            add_buy_data.cost = item_data.cost
 
-                        add_buy_data.tax_cost = item_data.cost
-                        add_buy_data.tax = item_data.cost
-                        add_buy_data.tax_t_p = item_data.cost
-                        #add_buy_data.delivery_date = item_data.created_at
+                            add_buy_data.tax_cost = item_data.cost
+                            add_buy_data.tax = item_data.cost
+                            add_buy_data.tax_t_p = item_data.cost
+                            #add_buy_data.delivery_date = item_data.created_at
 
-                        add_buy_data.info = item_data.info
-                        add_buy_data.product_id = item_data.product_id
-                        add_buy_data.moko_part = item_data.moko_part
-                        add_buy_data.moko_des = item_data.moko_des
-                        add_buy_data.warn = item_data.warn
-                        add_buy_data.user_id = item_data.user_id
-                        add_buy_data.danger = item_data.danger
-                        add_buy_data.manual = item_data.manual
-                        add_buy_data.mark = item_data.mark
-                        add_buy_data.mpn = item_data.mpn
-                        add_buy_data.mpn_id = item_data.mpn_id
-                        add_buy_data.price = item_data.price
-                        add_buy_data.mf = item_data.mf
-                        add_buy_data.dn = item_data.dn
-                        add_buy_data.dn_id = item_data.dn_id
-                        add_buy_data.dn_long = item_data.dn_long
-                        add_buy_data.other = item_data.other
-                        add_buy_data.all_info = item_data.all_info
-                        add_buy_data.remark = item_data.remark
-                        add_buy_data.color = item_data.color
-                        add_buy_data.supplier_tag = item_data.supplier_tag
-                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
-                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
-                        if add_buy_data.save
-                            item_data.state = "buy_adding"
-                            item_data.save
-                            pitem_data = PItem.find_by_id(add_buy_data.p_item_id)
-                            if not pitem_data.blank? 
-                                pitem_data.buy = "buy_adding"
-                                pitem_data.save
+                            add_buy_data.info = item_data.info
+                            add_buy_data.product_id = item_data.product_id
+                            add_buy_data.moko_part = item_data.moko_part
+                            add_buy_data.moko_des = item_data.moko_des
+                            add_buy_data.warn = item_data.warn
+                            add_buy_data.user_id = item_data.user_id
+                            add_buy_data.danger = item_data.danger
+                            add_buy_data.manual = item_data.manual
+                            add_buy_data.mark = item_data.mark
+                            add_buy_data.mpn = item_data.mpn
+                            add_buy_data.mpn_id = item_data.mpn_id
+                            add_buy_data.price = item_data.price
+                            add_buy_data.mf = item_data.mf
+                            add_buy_data.dn = item_data.dn
+                            add_buy_data.dn_id = item_data.dn_id
+                            add_buy_data.dn_long = item_data.dn_long
+                            add_buy_data.other = item_data.other
+                            add_buy_data.all_info = item_data.all_info
+                            add_buy_data.remark = item_data.remark
+                            add_buy_data.color = item_data.color
+                            add_buy_data.supplier_tag = item_data.supplier_tag
+                            add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                            add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                            if add_buy_data.save
+                                item_data.state = "buy_adding"
+                                item_data.save
+                                pitem_data = PItem.find_by_id(add_buy_data.p_item_id)
+                                if not pitem_data.blank? 
+                                    pitem_data.buy = "buy_adding"
+                                    pitem_data.save
+                                end
                             end
                         end
                     end
@@ -8001,11 +8085,11 @@ before_filter :authenticate_user!
             Rails.logger.info(add_orderby)
             Rails.logger.info("--------------------------------------add_orderby") 
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state = 0) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state = 0) " + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where ).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
                 end
             end
             
@@ -8020,12 +8104,12 @@ before_filter :authenticate_user!
             if params[:end_date] != ""
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows LEFT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
                 end
             end
             Rails.logger.info("--------------------------------------")
@@ -8124,19 +8208,19 @@ before_filter :authenticate_user!
                     end
                 end
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE #{where_o}  topics.topic_state = 'open' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE #{where_o}  topics.topic_state = 'open' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 20)
             if params[:order]
                 #if params[:order].size == 1 or params[:order].size == 2
                     #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + "ORDER BY updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 #else
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
                 #end
                 if @work_flow.size == 1 and params[:order].size > 2               
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
                 end
             else
                 if empty_date != ""                    
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
                 end               
             end
             #@quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE	#{where_p}")
@@ -8160,15 +8244,15 @@ before_filter :authenticate_user!
             end
             if params[:close]
                 @issue_lable = "已经关闭的问题"
-                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level, POSITION('work_f' IN topics.mark) AS mark_chk FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 10)
+                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level, POSITION('work_f' IN topics.mark) AS mark_chk FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 20)
             else
                 @issue_lable = "未关闭的问题"
-                @topic = Topic.find_by_sql("SELECT *, POSITION('work_f' IN topics.mark) AS mark_chk FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 10)
+                @topic = Topic.find_by_sql("SELECT *, POSITION('work_f' IN topics.mark) AS mark_chk FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 20)
             end
             if params[:order] or params[:sort_date]
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 20)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
                 end
             end
             
@@ -8187,16 +8271,16 @@ before_filter :authenticate_user!
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
                 end_date_a = " AND A.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
             if params[:order] 
                 if params[:order_s][:order_s].to_i == 5 
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a + " ORDER BY	A.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a + " ORDER BY	A.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 20)
                     #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 end
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
                 end
             end
             
@@ -8217,14 +8301,14 @@ before_filter :authenticate_user!
                     add_orderby = " ORDER BY work_flows.clear_date " 
                 end
             end
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)       
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 20)       
             #if @work_flow.size == 1                
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
             #end
             #render "index.html.erb"
             #redirect_to action: :index, data: { no_turbolink: true }
         end
-        @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+        @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
     end
 
    

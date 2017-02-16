@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;"> 
-            <%= render partial: "work_flow/menu", locals: {selected: "pmc_new"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pmc_to_sell"} %>
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;">

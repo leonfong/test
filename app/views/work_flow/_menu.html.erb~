@@ -32,7 +32,7 @@
         <li><a <% if selected == "pi_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_draft_list"><i></i> PI草稿箱</a></li>
         <li><a <% if selected == "pi_list" %>style="background-color: #d9edf7;"<% end %> href="/pi_list" ><i></i>PI查询</a></li>
         <li><a <% if selected == "pi_list_bom" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> 待BOM工程师审批</a></li>
-        <li><a <% if selected == "pi_list_buy" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?bom_chk=true"><i class="icon-pencil"></i> 待采购工程师审批</a></li>
+        <li><a <% if selected == "pi_list_buy" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?buy_chk=true"><i class="icon-pencil"></i> 待采购工程师审批</a></li>
         <li><a <% if selected == "pi_sell_paymanet_notice" %>style="background-color: #d9edf7;"<% end %>href="/sell_payment_notice_list"><i class="icon-pencil"></i>待发送收款通知列表</a></li>
         <li><a <% if selected == "pi_list_f" %>style="background-color: #d9edf7;"<% end %>href="/pi_list?finance_chk=true"><i class="icon-pencil"></i> 待财务审批</a></li>
     </ul>
@@ -50,6 +50,7 @@
     <a style="background-color: #ddd;" href="#pmcMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> PMC</a>
     <ul id="pmcMenu" class="nav nav-list  menu-second <% if selected =~ /pmc/i %>collapse in<% else %>collapse<% end %>">
 <% if can? :work_a, :all or can? :work_admin, :all%>
+        <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>PMC退回订单</a></li>
         <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增采购申请</a></li>
         <li><a <% if selected == "pmc_h" %>style="background-color: #d9edf7;"<% end %>href="/pmc_h"><i class="icon-list-alt"></i>PMC历史记录</a></li>
         <li><a <% if selected == "pmc_add_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_add_list"><i class="icon-list-alt"></i>新增备库存申请</a></li>

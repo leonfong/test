@@ -130,6 +130,7 @@
                                     <%= link_to "采购工程师",  {action: "pmc_h", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
                                 </th>
                                 <th width="90">下单数量</th>
+                                <th width="70">操作</th>
                             <tr>
                         </thead>
                         <tbody>
@@ -154,6 +155,11 @@
                                 <td><%= item.buy_user %></td>
 
                                 <td></td>
+                                <td>
+                                    <% if item.state == "pass" %>
+                                        <%= link_to "驳回", send_pmc_back_path(id: item.id), class: "btn btn-danger btn-xs",data: {confirm: "确定要驳回？"}%>
+                                    <% end %>
+                                </td>
                             </tr>
                             <% end %>
                         <% end %>

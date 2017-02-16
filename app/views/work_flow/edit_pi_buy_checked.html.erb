@@ -168,7 +168,8 @@
                     <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= @pi_buy_info.dn.to_s %>">                   
                     <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= @pi_buy_info.pi_buy_no.to_s %>">
                     <% if can? :work_g, :all %>
-                        <%= submit_tag "确认购买", class: "btn btn-danger" ,onclick:"return postform()"%>                
+                        <%= submit_tag "确认购买", class: "btn btn-info" ,onclick:"return postform()"%>  
+                        <%= submit_tag "反审核", class: "btn btn-danger" ,onclick:"return unpostform()"%>                 
                     <% end %>
                 </div>
             </div></div>

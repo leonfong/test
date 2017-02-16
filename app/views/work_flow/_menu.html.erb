@@ -50,6 +50,7 @@
     <a style="background-color: #ddd;" href="#pmcMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> PMC</a>
     <ul id="pmcMenu" class="nav nav-list  menu-second <% if selected =~ /pmc/i %>collapse in<% else %>collapse<% end %>">
 <% if can? :work_a, :all or can? :work_admin, :all%>
+        <li><a <% if selected == "pmc_to_sell" %>style="background-color: #d9edf7;"<% end %>href="/pmc_to_sell"><i class="icon-list-alt"></i>PMC退回订单</a></li>
         <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增采购申请</a></li>
         <li><a <% if selected == "pmc_h" %>style="background-color: #d9edf7;"<% end %>href="/pmc_h"><i class="icon-list-alt"></i>PMC历史记录</a></li>
         <li><a <% if selected == "pmc_add_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_add_list"><i class="icon-list-alt"></i>新增备库存申请</a></li>

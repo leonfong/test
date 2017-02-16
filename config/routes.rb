@@ -223,7 +223,7 @@ Rails.application.routes.draw do
   match '/edit_pi_info_t_p', to: 'work_flow#edit_pi_info_t_p', via: 'post'
   match '/send_pmc_back', to: 'work_flow#send_pmc_back', via: 'get'
   match '/pmc_to_sell', to: 'work_flow#pmc_to_sell', via: 'get'
-  match '/pmc_back_pcb_to_order', to: 'work_flow#pmc_back_pcb_to_order', via: 'get'
+  match '/pmc_back_to_pi', to: 'work_flow#pmc_back_to_pi', via: 'get'
 
 
 

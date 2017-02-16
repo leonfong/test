@@ -48,6 +48,7 @@
     <tr style="background-color: #eeeeee">
       <th width="130">PI No.</th>
       <th width="150">Created Date</th>
+      <th width="80">PMC</th>
       <th width="80">BOM审核</th>
       <th width="80">采购审核</th>
       <th width="80">财务审核</th>
@@ -76,6 +77,7 @@
         <% end %>
         
         <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= pcb.to_pmc_state %></td>
         <td>
             <% if pcb.bom_state.blank? %>
                 未提交
@@ -116,7 +118,11 @@
         <td><%= pcb.remark %></td>
         <td><%= pcb.follow_remark %></td>
         <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-            <td><div class="btn-group"><a class="btn btn-warning btn-xs" data-method='get'  href="/pmc_back_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要退回给业务?">PMC退回</a></div></td>
+            <% if pcb.pmc_back_state.blank? %>
+                <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/pmc_back_to_pi?id=<%= pcb.id.to_s %>" data-confirm="确定要退回给业务?">PMC退回</a></div></td>
+            <% else %>
+                <td></td>
+            <% end %>
 <!--
             <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quotechk?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
 -->

@@ -13,8 +13,9 @@
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         <input type="text" class="form-control sr-only" id="p_pi_item_id" name="p_pi_item_id" value="<%= params[:pi_item_id] %>">
                     <% if can? :work_e, :all %>
-                        <%= submit_tag "提交采购下单", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
-                    
+                        <% if @to_pmc_state.blank? %>
+                            <%= submit_tag "提交采购下单", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
+                        <% end %>
                     <% end %>
 
                     <% end %>

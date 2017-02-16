@@ -30,7 +30,6 @@
                 <table class="table table-hover">
                     <thead>
                         <tr style="background-color: #eeeeee">
-                            <th width="80">操作</th>
                             <th width="70">状态</th>
                             <th width="80">收款通知号</th>
                             <th width="80">制单人</th>
@@ -48,31 +47,24 @@
                         <tr>
                     </thead>
                     <tbody id="biaoge">
-                        <% if @pi_item %>
-                        <% @pi_item.each do |pi_item| %>
-                        <% if pi_item.state.blank? %>
-                        <tr class="danger">
-                        <% else %>
-                        <tr class="success">      
-                        <% end %>
-                            <td>
-                                <% if pi_item.bom_id.blank? %>
-                                    <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
-                                <% else %>
-                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
-                                <% end %>
-                            </td>
-                            <td><%= pi_item.c_p_no %></td>
-                            <td><%= pi_item.pcb_size %></td>
-                            <td><%= pi_item.qty %></td>
-                            <td><%= pi_item.layer %></td>
-                            <td><%= pi_item.des %></td>
-                            <td><%= pi_item.pcb_price %></td>
-                            <td><%= pi_item.com_cost %></td>
-                            <td><%= pi_item.pcba %></td>
-                            <td><%= pi_item.unit_price %></td>
-                            <td><%= pi_item.t_p %></td>
-                        </tr>
+                        <% if @shou_kuan_tong_zhi_dan_list %>
+                            <% @shou_kuan_tong_zhi_dan_list.each do |payment| %> 
+                        <tr>
+                            <td><%= payment.state %></td>
+                            <td><%= payment.id %></td>
+                            <td><%= payment.sell_full_name_new %></td>
+                            <td><%= payment.sell_full_name_up %></td>
+                            <td><%= payment.created_at.localtime.strftime('%Y-%m-%d') %></td>
+                            <td><%=  %></td>
+                            <td><%= payment.pay_p %></td>  
+                            <td><%= payment.pi_t_p %></td>
+                            <td><%= payment.c_code %></td>
+                            <td><%= payment.pi_info_id %></td>
+                            <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
+                            <td><%= payment.remark %></td> 
+                            <td><%= payment.currency_type %></td> 
+                            <td><%= payment.pay_account_name %></td>
+                        <tr>
                         <% end %>
                         <% end %> 
 

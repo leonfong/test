@@ -9250,7 +9250,8 @@ before_filter :authenticate_user!
             #redirect_to action: "index", page: "#{use_page}"
         elsif can? :work_e, :all
             #render "sell_feedback.html.erb"
-            render "sell.html.erb"
+            #render "sell.html.erb"
+            redirect_to work_flow_path() and return
         elsif can? :work_f, :all
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'merchandiser' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 

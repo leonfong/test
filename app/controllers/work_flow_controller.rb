@@ -1179,8 +1179,8 @@ before_filter :authenticate_user!
                 item_data = PItem.find_by_id(item_id)
                 if not item_data.blank?
                     Rails.logger.info("pmc_new--------------------------------------3")
-                    #find_buy_data = PiPmcItem.find_by_p_item_id(item_id)
-                    find_buy_data = ""
+                    find_buy_data = PiPmcItem.find_by_p_item_id(item_id)
+                    #find_buy_data = ""
                     if find_buy_data.blank?
                         Rails.logger.info("pmc_new--------------------------------------4")
                         add_buy_data = PiPmcItem.new
@@ -1488,20 +1488,24 @@ before_filter :authenticate_user!
                     end
                 end
             end
-            get_pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
-            if not get_pi_item_data.blank?
-                get_pi_item_data.to_pmc_state = "send"
-                get_pi_item_data.save
-            end
+
         end
+
+        get_pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+        if not get_pi_item_data.blank?
+            get_pi_item_data.to_pmc_state = "send"
+            get_pi_item_data.save
+        end
+
         redirect_to :back
     end
 
     def pmc_to_sell
         if params[:key_order]
-            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        else
-            @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            #@pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            
+            @pilist = PiBomQtyInfoItem.find_by_sql("SELECT pi_bom_qty_info_items.*, pi_items.*, p_items.* FROM pi_items INNER JOIN pi_bom_qty_info_items ON pi_items.id = pi_bom_qty_info_items.pi_item_id INNER JOIN p_items ON pi_bom_qty_info_items.p_item_id = p_items.id WHERE pi_bom_qty_info_items.pmc_back_state = '' AND (pi_items.pi_no LIKE '%#{params[:key_order]}%' OR p_items.moko_part LIKE '%#{params[:key_order]}%' OR p_items.moko_des LIKE '%#{params[:key_order]}%')").paginate(:page => params[:page], :per_page => 20)
+            #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         end        
     end
 
@@ -2547,6 +2551,7 @@ before_filter :authenticate_user!
                         find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
                         if find_buy_data.blank?
                             add_buy_data = PiBuyItem.new
+                            add_buy_data.pi_bom_qty_info_item_id = item_data.pi_bom_qty_info_item_id
                             add_buy_data.pi_info_id = item_data.pi_info_id
                             add_buy_data.pi_item_id = item_data.pi_item_id
                             add_buy_data.pmc_flag = item_data.pmc_flag
@@ -2609,7 +2614,7 @@ before_filter :authenticate_user!
                                     pitem_data.buy = "buy_adding"
                                     pitem_data.save
                                 end
-                                get_piitem_data = PiItem.find_by_id(add_buy_data.pi_item_id)
+                                get_piitem_data = PiBomQtyInfoItem.find_by_id(add_buy_data.pi_bom_qty_info_item_id)
                                 get_piitem_data.pmc_back_state = "lock"
                                 get_piitem_data.save
                             end
@@ -9231,7 +9236,8 @@ before_filter :authenticate_user!
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def ).paginate(:page => params[:page], :per_page => 10)
             end
-            render "production.html.erb"
+            redirect_to work_flow_path(), notice: "订单数据更新成功！" and return
+            #render "production.html.erb"
         elsif can? :work_d, :all
             #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + " ORDER BY work_flows.updated_at DESC " + limit ).first
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive = 'engineering' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)

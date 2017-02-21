@@ -13,8 +13,9 @@
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         <input type="text" class="form-control sr-only" id="p_pi_item_id" name="p_pi_item_id" value="<%= params[:pi_item_id] %>">
                     <% if can? :work_e, :all %>
-                        <%= submit_tag "提交采购下单", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
-                    
+                        <% if @to_pmc_state.blank? %>
+                            <%= submit_tag "提交采购下单", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
+                        <% end %>
                     <% end %>
 
                     <% end %>
@@ -249,6 +250,7 @@
 
                 <thead >
                 <tr style="background-color: #eeeeee">  
+                    <th width="90">操作</th>
                     <th width="150">MPN</th> 
                     <th>描述</th>
                     <th width="150">MOKO 编码</th>
@@ -272,6 +274,7 @@
 <!--
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.mpn %></small></td>
 -->
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a <% if item.lock_state == 'lock'%>class="btn btn-warning btn-xs"<% else %>class="btn btn-danger btn-xs"<% end %>  data-method='get'  href="/sell_back_item?pi_bom_qty_info_item_id=<%= item.pi_item_qty.to_s %>" data-confirm="确定要停止购买?">停止购买</a></small></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>

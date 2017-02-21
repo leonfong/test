@@ -224,7 +224,7 @@ Rails.application.routes.draw do
   match '/send_pmc_back', to: 'work_flow#send_pmc_back', via: 'get'
   match '/pmc_to_sell', to: 'work_flow#pmc_to_sell', via: 'get'
   match '/pmc_back_to_pi', to: 'work_flow#pmc_back_to_pi', via: 'get'
-
+  match '/sell_back_item', to: 'work_flow#sell_back_item', via: 'get'
 
 
 

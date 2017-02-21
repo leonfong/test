@@ -5,6 +5,20 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def sell_back_item
+        if not params[:pi_bom_qty_info_item_id].blank?
+            get_data = PiBomQtyInfoItem.find_by_id(params[:pi_bom_qty_info_item_id])
+            if not get_data.blank?
+                get_pi_data = PiItem.find_by_id(get_data.pi_item_id)
+                if get_pi_data.to_pmc_state == "send"
+                    get_data.lock_state = "lock"
+                    get_data.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def pmc_back_to_pi
 
     end
@@ -1611,7 +1625,7 @@ before_filter :authenticate_user!
             @to_pmc_state = pi_item.to_pmc_state
             @boms = ProcurementBom.find_by_id(pi_item.bom_id)
             #@bom_item = PItem.where(procurement_bom_id: @boms.id)
-            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
+            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
             @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(params[:pi_item_id])
             if not @bom_item.blank?
                 @bom_item = @bom_item.select {|item| item.quantity != 0 }

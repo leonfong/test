@@ -47,9 +47,9 @@
 
 
             <div class="row "><div class="col-md-12">
-                <% if not @pi_buy_info.dn.blank? %>
+                <% #if not @pi_buy_info.dn.blank? %>
                     <button  type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addbuy" >添加采购物料</button>
-                <% end %>
+                <% #end %>
             </div></div>
 
 
@@ -236,7 +236,12 @@
                         </div>
                         
                         <a id="tijiao" type="button" class="btn btn-info btn-sm" href="#">提交</a>
-                        
+
+                    </div>
+                    <div>
+                        <input style="margin-right: 5px;" type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+                        <input style="margin-right: 5px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+                        <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
                     </div>
                 <% end %>             
                 </div> 
@@ -261,7 +266,7 @@
                     <% if not @pi_buy_find.blank? %>
                         <% @pi_buy_find.each do |buy| %>
                                 <tr>
-                                <td><input type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
+                                <td><input class="chk_all" type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
                                 <td><%= buy.moko_des.to_s %></td>
                                 <td><%= buy.description.to_s %></td>
                                 <td><%= buy.quantity.to_s %></td>
@@ -511,6 +516,24 @@ $(document).ready(function(){
     $("#tijiao_true").click();
   });
 });
+
+
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    });
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

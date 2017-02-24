@@ -16,6 +16,9 @@
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
                             </div>   
+                            <div class="col-md-2"><p><strong> : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
+                                <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
+                            </div>
                         </div>
                     </div>
             </div></div>
@@ -119,6 +122,7 @@
                     <div class="form-group sr-only">         
                         <label for="pi_wh_no" class="control-label">入库单号:</label>
                         <input type="text" class="form-control" id="pi_wh_no" name="pi_wh_no" value="<%= @wh_info.pi_wh_no %>">
+                        <input type="text" class="form-control" id="pi_wh_info_id" name="pi_wh_info_id" value="<%= @wh_info.id %>">
                     </div>
                     <div class="form-group ">
                         <lable for="order" , class="control-label sr-only"><strong>供应商: </strong></lable>

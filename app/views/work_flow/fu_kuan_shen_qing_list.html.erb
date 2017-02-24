@@ -21,6 +21,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr style="background-color: #eeeeee">
+                                    <th width="150">日期</th>
                                     <th width="70">编号</th>     
                                     <th width="70">状态</th>
                                     <th width="70">借款方式</th>
@@ -32,6 +33,7 @@
 <% if not @list.blank? %>
                             <% @list.each do |item| %>  
                                 <tr>
+                                    <td><%= item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
                                     <td><%= link_to "FK_"+item.id.to_s, edit_fu_kuan_shen_qing_dan_path(id: item.id) %></td>
                                     <td><%= item.state %></td>
                                     <td><%= link_to item.supplier_clearing, edit_fu_kuan_shen_qing_dan_path(id: item.id) %></td>

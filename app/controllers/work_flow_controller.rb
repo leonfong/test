@@ -5,6 +5,10 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def ecn_list
+
+    end
+
     def sell_back_item
         if not params[:pi_bom_qty_info_item_id].blank?
             get_data = PiBomQtyInfoItem.find_by_id(params[:pi_bom_qty_info_item_id])
@@ -1505,12 +1509,13 @@ before_filter :authenticate_user!
 
         end
 
+=begin
         get_pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
         if not get_pi_item_data.blank?
             get_pi_item_data.to_pmc_state = "send"
             get_pi_item_data.save
         end
-
+=end
         redirect_to :back
     end
 
@@ -1645,6 +1650,12 @@ before_filter :authenticate_user!
                 redirect_to p_viewbom_path(pi_info_id: params[:pi_info_id],pi_item_id: params[:pi_item_id],add_bom: "add_bom", bom_id: pi_item.bom_id, state_flow: "order_center") and return
             end
             if can? :work_finance, :all or can? :work_g, :all
+                @all_dn = "[&quot;"
+                all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+                all_s_dn.each do |dn|
+                    @all_dn += "&quot;,&quot;" + dn.dn.to_s
+                end
+                @all_dn += "&quot;]"
                 render "procurement/p_viewbom.html.erb" and return
             end
 
@@ -1863,12 +1874,12 @@ before_filter :authenticate_user!
         end
         if not current_user.s_name.blank?
             if current_user.s_name.size == 1
-                @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'#{where_order_no}").order("pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'#{where_order_no} AND pcb_orders.del_flag = 'active'").order("pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             else 
                 if can? :work_admin, :all
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no} ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no} ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end
         end
@@ -2561,7 +2572,8 @@ before_filter :authenticate_user!
                 
                 item_data = PiPmcItem.find_by_id(item_id)
                 if not item_data.blank?
-                    if item_data.state == "new" or item_data.state == "new_new"
+                    if item_data.state == "pass" or item_data.state == "new_new"
+                    #if item_data.state == "new" or item_data.state == "new_new"
                         find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
                         if find_buy_data.blank?
                             add_buy_data = PiBuyItem.new
@@ -6154,7 +6166,7 @@ before_filter :authenticate_user!
             if not @pi_buy.blank?
                 @pi_buy.each do |buy|
                     @table_buy += '<tr>'
-                    @table_buy += '<td><input type="checkbox" value="'+buy.id.to_s+'" name="roles[]" id="roles_" checked></td>'
+                    @table_buy += '<td><input class="chk_all" type="checkbox" value="'+buy.id.to_s+'" name="roles[]" id="roles_" checked></td>'
                     @table_buy += '<td>'+buy.moko_des.to_s+'</td>'
                     @table_buy += '<td>'+buy.pmc_qty.to_s+'</td>'
                     @table_buy += '<td>'+buy.cost.to_s+'</td>'

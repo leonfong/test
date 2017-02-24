@@ -217,12 +217,17 @@
 <!--
                            <td><strong><%= "Project name" %>：</strong><%= @boms.p_name %></td>
 -->
+<% if not params[:pi_info_id].blank? %>
+                           <td><button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
+                           </td>
+<% end %>
                            <td><strong><%= "QTY" %>：</strong><%= @boms.qty %></td>
 <!--
                            <td><strong><%= "Dellvery date" %>：</strong><% if @boms.d_day == '1' %>7~10 days<% else %>11~25 days<% end %></td>
 
                            <td><strong><%= t(:bom_file) %>：</strong><%= @boms.excel_file_identifier %></td> 
 -->
+<!--
                            <td>
                                <% if can? :work_g_all, :all%>
                                <%= form_tag({controller: :procurement,action: :p_profit},method:"post",class:"form-inline") do %>
@@ -235,6 +240,7 @@
                                <% end %>
                                <% end %> 
                            </td> 
+-->
                            <td><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
                            <td><%= link_to "导出源文件", @boms.excel_file_url %></td> 
                            
@@ -250,9 +256,6 @@
 
                 <thead >
                 <tr style="background-color: #eeeeee">  
-<% if not params[:pi_info_id].blank? %>
-                    <th width="90">操作</th>
-<% end %>
                     <th width="150">MPN</th> 
                     <th>描述</th>
                     <th width="150">MOKO 编码</th>
@@ -276,9 +279,7 @@
 <!--
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.mpn %></small></td>
 -->
-<% if not params[:pi_info_id].blank? %>
-                    <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><a <% if item.lock_state == 'lock'%>class="btn btn-warning btn-xs"<% else %>class="btn btn-danger btn-xs"<% end %>  data-method='get'  href="/sell_back_item?pi_bom_qty_info_item_id=<%= item.pi_item_qty.to_s %>" data-confirm="确定要停止购买?">ECN</a></small></td>
-<% end %>
+
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
@@ -809,6 +810,293 @@
 <% end %>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="add_ecn" tabindex="-1" role="dialog" aria-labelledby="add_ecn_Label" >
+  <div class="modal-dialog modal-lg" style="width: 1600px;" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="add_ecn_Label"><strong>工程变更通知(ECN)</strong></h4>
+      </div>
+      
+      <%= form_tag({action: :new_voucher},method:"post",multipart:"true") do %>
+      <div class="modal-body" >
+          <div class="panel panel-default">
+              <div class="panel-body" style="padding: 15px 15px 1px;">
+                  <div class="row">
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label class="col-md-4 control-label" for="c_code">BOM编号:</label>
+                                  <div class="col-md-8">
+                                      <input class="sr-only" name="voucher_item" id="voucher_item" type="text" value="客户">
+                                      <p class="form-control-static" id="bom_no"></p>
+                                      <input class="sr-only" name="pay_id" id="pay_id" type="text" >
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_item" class="col-md-4 control-label">产品型号:</label>
+                                  <div class="col-md-8" >
+                                      <p class="form-control-static" id="c_code_show" ></p>
+                                      <input class="sr-only" name="c_code" id="c_code" type="text">
+                                  </div>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm ">
+                                  <label for="xianjin_kemu" class="col-md-3 control-label">签署:</label>   
+                                  <div class="col-md-9">
+                                      <input id="xianjin_kemu" autocomplete="off" name="xianjin_kemu" type="text" class="form-control" data-provide="typeahead" data-items="100" data-source="<%= raw @type_b %>" >     
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_bank_name" class="col-md-3 control-label">发起人:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control sr-only" name="voucher_bank_name" id="voucher_bank_name" type="text" >
+                                      <p class="form-control-static" id="" ><%= current_user.full_name %></p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_bank_account" class="col-md-3 control-label">审核:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" name="voucher_bank_account" id="voucher_bank_account" type="text" >
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label">批准:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" type="text" disabled>
+                                  </div>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="finance_at" class="col-md-4 control-label">日期:</label>
+                                  <div class="col-md-8">
+                                      <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="finance_at" class="col-md-4 control-label">执行时间:</label>
+                                  <div class="col-md-8">
+                                      <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="finance_at" class="col-md-4 control-label">BOM修改时间:</label>
+                                  <div class="col-md-8">
+                                      <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="panel panel-default">
+                  <div class="row">
+                      <div class="col-md-2">
+                          <label for="recipient-name" class="control-label">生效:</label>
+                      </div>
+                      <div class="col-md-2">
+                      <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="production" name="receive_feedback[]" id="receive_feedback_receive_feedback_production" />
+                               <strong>立即更改</strong>
+                           </label>
+                       </div>
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="engineering" name="receive_feedback[]" id="receive_feedback_receive_feedback_engineering" /> 
+                               <strong>批量变更</strong>
+                           </label>
+                       </div>
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="procurement" name="receive_feedback[]" id="receive_feedback_receive_feedback_procurement" />
+                               <strong>自然汰换</strong>
+                           </label>
+                       </div> 
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell" />
+                               <strong>消耗库存</strong>
+                           </label>
+                       </div> 
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell" />
+                               <strong>其它</strong>
+                           </label>
+                       </div>
+                       </div>
+                  </div>
+              </div>
+          </div>
+
+
+
+
+
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="panel panel-default">
+                      <div class="row">
+                      <div class="col-md-12">
+                      <table class="table table-bordered" >
+                          <thead>
+                              <tr class="active">
+                                  <th rowspan="2" width="45">序号</th>
+                                  <th colspan="4">变更前</th>
+                                  <th colspan="4">变更后</th> 
+                                  <th rowspan="2">备注</th>
+                              </tr>
+                              <tr class="active">
+                                  <th >位号</th>
+                                  <th >华创编码</th> 
+                                  <th >华创描述</th>
+                                  <th width="45">用量</th>
+                                  <th >位号</th>
+                                  <th >华创编码</th> 
+                                  <th >华创描述</th>
+                                  <th >用量</th>
+                              </tr>
+                          </thead>
+                          <tbody>  
+                              <% @baojia.each_with_index do |item,index| %>
+                              <tr> 
+                                  <td><%= index+1 %></td>
+                                  <td><%= item.part_code %></td>
+                                  <td><%= item.moko_part %></td>
+                                  <td><%= item.moko_des %></td>
+                                  <td><%= item.quantity %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                              </tr> 
+                              <% end %>
+                          </tbody>  
+                      </table>
+                      </div></div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()" >保存</button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 </small>
 
@@ -843,6 +1131,25 @@ function postform() {
 　     }
 
 }
+
+
+$('#add_ecn').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var moko_part = button.data('moko_part') 
+  var moko_des = button.data('moko_des')
+  var bom_no = button.data('bom_no')
+
+
+  var modal = $(this)
+  modal.find($("#moko_part")).val(moko_part)
+  modal.find($("#moko_des")).html(moko_des)
+  modal.find($("#bom_no")).html(bom_no)
+})
+
+
+
+
+
 </script>
 
 

@@ -18,7 +18,7 @@
                     </div>
                 </div>
 <% end %>
-<% if @fu_kuan.state == "check" and can? :work_admin, :all %>
+<% if @fu_kuan.state == "check" and can? :work_finance, :all %>
                 <div class="col-md-6" >
                     <div class="pull-right" style="padding: 15px 0px 0px 0px;">
                     <%= form_tag('/fu_kuan_shen_qing_to_checked', method:"post") do %>

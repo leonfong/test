@@ -21,6 +21,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr style="background-color: #eeeeee">
+                                    <th width="150">日期</th>
                                     <th width="70">编号</th>     
                                     <th width="70">状态</th>
                                     <th width="70">借款方式</th>
@@ -95,7 +96,16 @@
                 
                 <%= form_tag('/find_supplier', method:"post", class:"form-inline",remote: true) do %>
                     <div class="form-group ">
-                        
+                        <lable id="date_at_label" for="date_at" class="control-label"><strong>日期: </strong></lable>
+                        <%= text_field_tag :date_at, params[:date_at], id: "date_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#date_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM'
+        });    
+    });
+</script>         
                         <lable for="order"  class="control-label"><strong>供应商: </strong></lable>
                         <div class="input-group input-group-sm">              
                             <%= text_field_tag :supplier_code, params[:supplier_code], class:"form-control input-lg", size:"40", placeholder:"供应商代码/供应商名"%>    

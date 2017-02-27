@@ -582,6 +582,9 @@ before_filter :authenticate_user!
     def edit_fu_kuan_shen_qing_dan
         if not params[:id].blank?
             @fu_kuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
+            if not @fu_kuan.supplier_code.blank?
+               @bank_user = SupplierBankList.find_by_sql("SELECT supplier_bank_user,id FROM supplier_bank_lists WHERE supplier_code = '#{@fu_kuan.supplier_code}'")
+            end
             @fu_kuan_item = FuKuanShenQingDanItem.where(fu_kuan_shen_qing_dan_info_id: params[:id])
             if @fu_kuan.supplier_clearing == "日结"
                 @buy_item = PiBuyItem.where("supplier_list_id = '#{@fu_kuan.supplier_list_id}' AND yi_fu_kuan_p < buy_qty*cost")
@@ -796,11 +799,41 @@ before_filter :authenticate_user!
         redirect_to :back and return
     end
 
+    def edit_fu_kuan_bank_user
+        if not params[:id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
+            get_bank =SupplierBankList.find_by_id(params[:bank_user_edit])
+            get_fukuan.supplier_bank_user = get_bank.supplier_bank_user
+            get_fukuan.supplier_bank_name = get_bank.supplier_bank_name
+            get_fukuan.supplier_bank_account = get_bank.supplier_bank_account
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
     def edit_fu_kuan_remark
         if not params[:zhi_fu_id].blank?
             get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:zhi_fu_id])
             get_fukuan.remark = params[:remark_edit]
             get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_wh_order_songhuono
+        if not params[:id].blank?
+            get_wh = PiWhInfo.find_by_id(params[:id])
+            get_wh.song_huo_no = params[:songhuono_edit]
+            get_wh.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_wh_order_remark
+        if not params[:id].blank?
+            get_wh = PiWhInfo.find_by_id(params[:id])
+            get_wh.remark = params[:bei_zhu_edit]
+            get_wh.save
         end
         redirect_to :back and return
     end
@@ -3352,6 +3385,8 @@ before_filter :authenticate_user!
                     get_p_item_data = PItem.find_by_id(params[:item_id])
                     if not get_p_item_data.blank?
                         get_p_item_data.product_id = add_part.id
+                        get_p_item_data.moko_part = add_part.name
+                        get_p_item_data.moko_des = add_part.description
                         get_p_item_data.save
                     end
                 end

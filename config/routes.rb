@@ -226,6 +226,9 @@ Rails.application.routes.draw do
   match '/pmc_back_to_pi', to: 'work_flow#pmc_back_to_pi', via: 'get'
   match '/sell_back_item', to: 'work_flow#sell_back_item', via: 'get'
   match '/ecn_list', to: 'work_flow#ecn_list', via: 'get'
+  match '/edit_wh_order_songhuono', to: 'work_flow#edit_wh_order_songhuono', via: 'post'
+  match '/edit_wh_order_remark', to: 'work_flow#edit_wh_order_remark', via: 'post'
+  match '/edit_fu_kuan_bank_user', to: 'work_flow#edit_fu_kuan_bank_user', via: 'post'
 
 
 

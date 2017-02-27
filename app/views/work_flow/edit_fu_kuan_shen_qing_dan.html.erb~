@@ -18,7 +18,7 @@
                     </div>
                 </div>
 <% end %>
-<% if @fu_kuan.state == "check" and can? :work_admin, :all %>
+<% if @fu_kuan.state == "check" and can? :work_finance, :all %>
                 <div class="col-md-6" >
                     <div class="pull-right" style="padding: 15px 0px 0px 0px;">
                     <%= form_tag('/fu_kuan_shen_qing_to_checked', method:"post") do %>
@@ -79,11 +79,35 @@
                       <div class="col-md-6">
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm ">
-                                  <label for="" class="col-md-3 control-label">付款户名:</label>   
+                                  <label for="" class="col-md-3 control-label bg-warning" id="bank_user_label">付款户名:</label>   
                                   <div class="col-md-9">
-                                      <p class="form-control-static" ><%= @fu_kuan.supplier_bank_account %></p>     
+                                      <div id="bank_user_show">
+                                          <%= @fu_kuan.supplier_bank_user %>
+                                      </div>   
+
+
+
+                                      <div style="display:none;" id="bank_user_edit">
+                                      <%= form_tag({action: :edit_fu_kuan_bank_user},method:"post") do %>
+                                          <input class="form-control sr-only" name="id"  type="text" value="<%=@fu_kuan.id%>">
+                                          <div class="input-group input-group-sm">
+                                             
+                                              <%= select_tag(:bank_user_edit,options_for_select(@bank_user.collect,params[:bank_user_edit]),{:include_blank => '--请选择--',:class =>"form-control"})  %>
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+
+
+  
                                   </div>
                               </div>
+
+
+
+
                               <div class="form-group form-group-sm">
                                   <label for="" class="col-md-3 control-label">供应商开户银行:</label>
                                   <div class="col-md-9" >
@@ -98,7 +122,7 @@
                               </div>
                               
                               <div class="form-group form-group-sm">
-                                  <label for="voucher_remark" class="col-md-3 control-label" id="remark_label">付款理由:</label>
+                                  <label for="voucher_remark" class="col-md-3 control-label bg-warning" id="remark_label">付款理由:</label>
                                   <div class="col-md-9" >
                                       <div id="remark_show">
                                           <%= @fu_kuan.remark %>
@@ -398,6 +422,11 @@ $(document).ready(function(){
         $("#remark_show").hide();
         $("#remark_edit").show();
     });
+    $("#bank_user_label").dblclick(function(){
+        $("#bank_user_show").hide();
+        $("#bank_user_edit").show();
+    });
+
 });
 <% end %>
 </script>

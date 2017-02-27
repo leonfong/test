@@ -329,7 +329,7 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-<% if @fu_kuan_dan.state == "new" %>
+<% #if @fu_kuan_dan.state == "new" %>
 $(document).ready(function(){
     $("#finance_at_label").dblclick(function(){
         $("#finance_at_show").hide();
@@ -340,7 +340,7 @@ $(document).ready(function(){
         $("#xianjin_kemu_edit").show();
     });
 });
-<% end %>
+<% #end %>
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

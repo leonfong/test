@@ -16,9 +16,50 @@
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
                             </div>   
-                            <div class="col-md-2"><p><strong> : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
+
+                            <div class="col-md-3 class="form-group form-group-sm"">
+                                <label for="song_huo_dan_hao" class="col-md-3 control-label bg-warning" id="song_huo_dan_hao_label">送货单号:</label>
+                                <div class="col-md-9" >
+                                    <div id="song_huo_dan_hao_show">
+                                        <%= @wh_info.song_huo_no %>
+                                    </div>
+                                    <input type="text" class="form-control sr-only" id="song_huo_dan_hao" name="p_riqi" >
+                                    <div style="display:none;" id="song_huo_dan_hao_edit">
+                                        <%= form_tag({action: :edit_wh_order_songhuono},method:"post") do %>
+                                            <input class="form-control sr-only" name="id"  type="text" value="<%=@wh_info.id%>">
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control" name="songhuono_edit" value="<%= @wh_info.song_huo_no %>">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                                </span>
+                                            </div>
+                                        <% end %>
+                                    </div>
+                                </div>
                             </div>
+
+                            
+
+                            <div class="col-md-5 form-group form-group-sm">
+                                  <label for="bei_zhu" class="col-md-2 control-label bg-warning" id="bei_zhu_label">备注:</label>
+                                  <div class="col-md-10" >
+                                      <div id="bei_zhu_show">
+                                          <%= @wh_info.remark %>
+                                      </div>
+                                      <div style="display:none;" id="bei_zhu_edit">
+                                      <%= form_tag({action: :edit_wh_order_remark},method:"post") do %>
+                                          <input class="form-control sr-only" name="id"  type="text" value="<%=@wh_info.id%>">
+                                          <div class="input-group input-group-sm">
+                                              <textarea  class="form-control" name="bei_zhu_edit"  rows="3" ><%= @wh_info.remark %></textarea>
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+                                  </div>
+                            </div>
+
                         </div>
                     </div>
             </div></div>
@@ -184,7 +225,16 @@
 </div>
 
 <script>
-
+$(document).ready(function(){
+    $("#song_huo_dan_hao_label").dblclick(function(){
+        $("#song_huo_dan_hao_show").hide();
+        $("#song_huo_dan_hao_edit").show();
+    });
+    $("#bei_zhu_label").dblclick(function(){
+        $("#bei_zhu_show").hide();
+        $("#bei_zhu_edit").show();
+    });
+});
 </script>
 
 

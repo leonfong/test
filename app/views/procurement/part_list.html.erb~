@@ -294,7 +294,11 @@ function change_<%= item.id.to_s %>(){
 <a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="<%= item.id %>" data-remark_id="<%= remark_item.id %>" data-remark="<%= remark_item.remark %>" > </a>
 <% end %>
 <strong><%= remark_item.user_name %>: </strong>
+<% if remark_item.state == "del" %>
+<del><%= remark_item.remark %></del>
+<% else %>
 <%= remark_item.remark %>
+<% end %>
 </small>
 </p>
 </td>

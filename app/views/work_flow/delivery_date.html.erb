@@ -432,6 +432,67 @@
                                 </div>
                             </div>
                             
+
+
+
+                            <div class="row " style="margin: 0px;padding: 0px;">
+                                <div class="col-md-12 panel panel-default" style="margin-bottom: 50px;padding: 0px;">
+                                    <p><span class="label label-default" style="font-size: 13px;">历史记录<%= work.order_no.to_s %></span></p>
+                                    <table class="table table-bordered  table-hover" >
+                                        <thead >
+                                            <tr nowrap="nowrap" class="active">    
+                                                <th class="warning" width="150">用户名</th>                                            
+                                                <th class="warning" width="120">日期</th>
+                                                <th>下单日期</th>
+                                                <th>单号</th>
+                                                <th>数量</th>
+                                                <th>业务交期</th>
+                                                <th>产品代码</th>    
+                                                <th>入库数量</th>
+                                                <th>SMD</th>
+                                                <th>DIP</th>
+                                                <th>贴片通知生产</th>
+                                                <th>贴片交期</th>
+                                                <th>后焊通知生产</th>
+                                                <th>后焊&完成交期</th>
+                                                <th>补料已回</th>
+                                                <th>清尾完成</th>
+                                                <th>备注</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            <% Work.where(order_no: work.order_no).each do |his| %>
+                                            <tr>
+                                                <% if not User.where(email: his.user_name).blank? %>
+                                                <td><%= User.where(email: his.user_name).first.full_name %></td>
+                                                <% else %>
+                                                <td><%= his.user_name %></td>
+                                                <% end %>
+                                                <td><%= his.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+                                                <td><%= his.order_date %></td>
+                                                <td><%= his.order_no %></td>
+                                                <td><%= his.order_quantity %></td>
+                                                <td><%= his.salesman_end_date %></td>
+                                                <td><%= his.product_code %></td>
+                                                <td><%= his.warehouse_quantity %></td>
+                                                <td><%= his.smd %></td>
+                                                <td><%= his.dip %></td>
+                                                <td><%= his.smd_start_date %></td>
+                                                <td><%= his.smd_end_date %></td>
+                                                <td><%= his.dip_start_date %></td>
+                                                <td><%= his.dip_end_date %></td> 
+                                                <td><%= his.supplement_date %></td>
+                                                <td><%= his.clear_date %></td>
+                                              
+                                                <td><%= his.remark %></td>                                               
+                                            </tr>
+                                            <% end %>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     </td>

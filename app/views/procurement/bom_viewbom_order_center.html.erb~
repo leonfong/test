@@ -9,7 +9,8 @@
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
                         <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
                     <% elsif can? :work_finance, :all and @pi_info.finance_state.blank? %>
                         <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
                     <% end %>
@@ -39,9 +40,17 @@
         <div class="col-md-12">           
             
             <div class="row">
-                <div class="col-md-3 col-sm-3 " >
-                    <h4 style="color: #32aacb;margin-top: 0px;"><strong>BOM No. <%= @boms.no %></strong></h4>
+                <div class="col-md-6 col-sm-6 " >
+                    <h4 style="color: #32aacb;margin-top: 0px;">
+                        <strong>BOM No. <%= @boms.no %></strong>
+                        <span class="text-danger"><strong>版本 V<%= @boms.bom_version %></strong></span>
+                    </h4>
                 </div>
+                <div class="col-md-6 col-sm-6 " >
+                    <button style="margin-bottom: 10px;" id="show_del" type="button" class="btn btn-warning  pull-right">编辑</button></h1>
+                    <button style="display:none;margin-bottom: 10px;"  id="hide_del" type="button" class="btn btn-success btn-lg pull-right">编辑完成</button></h1>
+                </div>
+
 <!--
                 <small><div class="col-md-9 col-sm-9 pull-right" style="color:#999;">
                     PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>
@@ -87,6 +96,8 @@
 
                 <thead >
                 <tr style="background-color: #eeeeee"> 
+                    <th width="50" class="del_ctl" style="display:none">删除</th>
+                    <th width="50" class="del_ctl" style="display:none">编辑</th>
                     <th width="80">分配</th> 
                     <th width="150">MPN</th> 
                     <th>描述</th>
@@ -102,6 +113,8 @@
                
                 <% @bom_item.each_with_index do |item,index| %> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
+                    <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-trash text-left text-danger" href="/del_bom_item?id=<%=item.id.to_s%>" data-confirm="确定要删除？"></a></h1></td>
+                    <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><div ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-edit text-left text-success" data-toggle="modal" data-target="#edit_item_ref" data-item_id="<%= item.id %>" data-item_ref="<%= item.part_code %>" data-ref_quantity="<%= item.quantity %>" data-moko_part="<%= item.moko_part %>" ></a></h1></div></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
@@ -460,6 +473,36 @@ function change_<%= item.id.to_s %>(){
   </div>
 </div>
 
+<div class="modal fade" id="edit_item_ref" tabindex="-1" role="dialog" aria-labelledby="edit_item_refLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_item_refLabel">编辑位号数量</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_item_ref,controller: :procurement},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="item_ref_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="item_ref_id" name="item_id">
+          </div>
+          <div class="form-group">
+            <label for="ref_quantity" class="control-label">用量:</label>
+            <input class="form-control" name="ref_quantity" id="ref_quantity" type="number">
+          </div>
+          <div class="form-group">
+            <label for="item_ref" class="control-label">位号:</label>
+            <textarea class="form-control" id="item_ref"  name="item_ref"></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 <div class="modal fade" id="addmoko" tabindex="-1" role="dialog" aria-labelledby="editMpnLabel">
@@ -562,6 +605,19 @@ function change_<%= item.id.to_s %>(){
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -716,6 +772,36 @@ function parseLocalObjectData() {
                 }
             });
         }
+
+$('#edit_item_ref').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var item_id = button.data('item_id');
+  var item_ref = button.data('item_ref');
+  var ref_quantity = button.data('ref_quantity');
+  var item_moko_part = button.data('moko_part');
+  var modal = $(this);
+  modal.find('.modal-title').text('编辑位号 ' + item_moko_part);
+  modal.find($("#item_ref_id")).val(item_id);
+  modal.find($("#item_ref")).text(item_ref);
+  modal.find($("#ref_quantity")).val(ref_quantity);
+})
+
+$(document).ready(function(){
+   $(".del_ctl").hide();
+   $("#hide_del").hide();
+   $("#show_del").show();
+});
+
+$("#show_del").click(function(){
+   $(".del_ctl").show();
+   $("#show_del").hide();
+   $("#hide_del").show();
+});
+$("#hide_del").click(function(){
+   $(".del_ctl").hide();
+   $("#hide_del").hide();
+   $("#show_del").show();
+});
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

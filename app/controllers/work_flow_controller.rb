@@ -662,8 +662,14 @@ before_filter :authenticate_user!
     def fu_kuan_shen_qing_to_check
         if not params[:fu_kuan_shen_qing_to_check_id].blank?
             get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_to_check_id])
-            get_fukuan.state = "check"
-            get_fukuan.save
+            if get_fukuan.supplier_bank_user.blank?
+                Rails.logger.info("1111111111111111111111111111")
+                redirect_to :back, :flash => {:error => "请选择付款户名！！！"} and return false
+            else
+                Rails.logger.info("22222222222222222222222222")
+                get_fukuan.state = "check"
+                get_fukuan.save
+            end
         end
         redirect_to :back and return
     end
@@ -780,24 +786,7 @@ before_filter :authenticate_user!
         end
     end
 
-    def fu_kuan_shen_qing_to_check
-        if not params[:fu_kuan_shen_qing_to_check_id].blank?
-            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_to_check_id])
-            get_fukuan.state = "check"
-            get_fukuan.save
-        end
-        redirect_to :back and return
-    end
 
-    def fu_kuan_shen_qing_to_checked
-        if not params[:fu_kuan_shen_qing_to_check_id].blank?
-            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:fu_kuan_shen_qing_to_check_id])
-            get_fukuan.user_checked = current_user.full_name
-            get_fukuan.state = "checked"
-            get_fukuan.save
-        end
-        redirect_to :back and return
-    end
 
     def edit_fu_kuan_bank_user
         if not params[:id].blank?
@@ -2297,7 +2286,7 @@ before_filter :authenticate_user!
 
     def pi_buy_check_list
         #@w_wh = PiBuyInfo.where(state: "check")
-        @w_wh = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'check' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
+        @w_wh = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'check' OR pi_buy_infos.state = 'uncheck' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
     end
 
     def pi_buy_checked_list

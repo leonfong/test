@@ -13,6 +13,7 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="130">采购单号</th>
+      <th width="70">状态</th>
       <th width="130">供应商简称</th>
       <th >供应商全称</th>
       <th width="190">总价</th>
@@ -26,6 +27,7 @@
   <% @w_wh.each do |buy_list| %>
   <tr>
       <td><%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %></td>
+      <td><%= buy_list.state %></td>
       <td><%= buy_list.dn %></td>
       <td><%= buy_list.dn_long %></td>
       <td><%= buy_list.t_p_sum %></td>

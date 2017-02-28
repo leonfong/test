@@ -13,6 +13,7 @@
   <thead>
     <tr style="background-color: #eeeeee">
       <th width="130">采购单号</th>
+      <th width="70">状态</th>
       <th width="130">供应商简称</th>
       <th >供应商全称</th>
       <th width="190">总价</th>
@@ -30,7 +31,7 @@
       <td><%= buy_list.dn_long %></td>
       <td><%= buy_list.t_p_sum %></td>
       <td><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-      <td><%= buy_list.user %></td>
+      <td><%= User.find_by_email(buy_list.user).full_name %></td>
   </tr>
   <% end %>
 <% end %> 

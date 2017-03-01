@@ -268,6 +268,7 @@
 
 <% if not item.dn_id.blank? %>
 <% if not PDn.find(item.dn_id).remark.blank? %>
+<% if PDn.find(item.dn_id).color != "y" %>
 <div class="row" style="margin: 0px;" >
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
 <table style="margin: 0px;" >
@@ -290,6 +291,7 @@
 </div>
 <% end %>
 <% end %>
+<% end %>
 </div>
 
 
@@ -306,6 +308,11 @@
                 <% end %>
 
             </table>
+            <div>
+                <input style="margin-right: 5px;" type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+                <input style="margin-right: 5px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+                <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
+            </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-danger" >批量取消关注</button>
             <div>
@@ -422,6 +429,24 @@ $('#remarkitem').on('show.bs.modal', function (event) {
   var modal = $(this);
   modal.find($("#itemp_id_remark")).val(itempid);
 })
+
+
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    });
 </script>
 
 

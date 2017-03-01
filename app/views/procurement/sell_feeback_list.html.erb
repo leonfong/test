@@ -45,7 +45,7 @@
                 
                 <% @quate.each_with_index do |item,index| %> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
-                    <td style="padding: 5px 5px 5px 10px;margin: 0px;"><input type="checkbox" name="unfollow_item[]" value="<%= item.id.to_s %>"></td>
+                    <td style="padding: 5px 5px 5px 10px;margin: 0px;"><input class="chk_all" type="checkbox" name="unfollow_item[]" value="<%= item.id.to_s %>"></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= link_to item.pcb_order_no_son, sell_view_baojia_path(:bom_id =>item.procurement_bom_id) %></small></td>
 
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
@@ -308,6 +308,11 @@
                 <% end %>
 
             </table>
+            <div>
+                <input style="margin-right: 5px;" type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+                <input style="margin-right: 5px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+                <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
+            </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-danger" >批量取消关注</button>
             <div>
@@ -424,6 +429,24 @@ $('#remarkitem').on('show.bs.modal', function (event) {
   var modal = $(this);
   modal.find($("#itemp_id_remark")).val(itempid);
 })
+
+
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    });
 </script>
 
 

@@ -218,7 +218,12 @@
                            <td><strong><%= "Project name" %>：</strong><%= @boms.p_name %></td>
 -->
 <% if not params[:pi_info_id].blank? %>
-                           <td><button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
+                           <td>
+<!--
+                               <button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
+-->
+                               <a type="button" class="btn btn-danger btn-xs"  href="/edit_ecn?pi_item_id=<%=params[:pi_item_id]%>">ECN</a>
+                               
                            </td>
 <% end %>
                            <td><strong><%= "QTY" %>：</strong><%= @boms.qty %></td>

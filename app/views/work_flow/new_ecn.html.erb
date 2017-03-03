@@ -1,0 +1,209 @@
+<div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "ecn_new"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+           
+            <div class="row">
+                <div class="col-md-12 col-sm-12 form-inline" >
+        <% if can? :work_e, :all %>
+            <div style="padding: 10px;">
+            <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-target="#new_ecn" >新建ECN草稿</button>
+            </div>
+        <% end %>
+<% if not @ecn_draft_list.blank? %>
+<%= will_paginate(@ecn_draft_list) %>            
+<table class="table" >
+<!--
+  <thead >
+    <tr style="background-color: #eeeeee;">
+      <th width="220">询价单号</th>
+      <th width="80">客户代码</th>
+      <th >客户</th>
+      <th width="150">日期</th>
+      <th width="100">所属业务员</th>
+      <th width="100">跟踪业务员</th>
+      <th >跟踪备注</th>
+<% if can? :work_e, :all %>
+      <th width="50">删除</th>
+<% end %>
+-->
+<!--
+      <th width="120">发送到采购报价</th>
+
+    </tr>
+  </thead>
+-->
+  <tbody ><small>
+    <% @ecn_draft_list.each do |ecn| %>   
+      <tr>
+        
+      </tr>
+    <% end %>
+  </small>
+  </tbody>
+</table>
+<% end %>
+            
+            
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+<div class="modal fade" id="new_ecn" tabindex="-1" role="dialog" aria-labelledby="new_ecn_Label" >
+  <div class="modal-dialog modal-lg" style="width: 1600px;" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="new_ecn_Label"><strong>查找需要ECN的订单</strong></h4>
+      </div>
+      
+
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/new_ecn', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"询价单号，项目名称，项目描述，客户代码，客户名，业务邮箱，备注"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+            </div>
+            <% end %>                       
+            </span>
+            </div>
+        </div>
+<br>
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+<% if not @pilist.blank? %>        
+<%= will_paginate(@pilist) %>            
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="130">PI No.</th>
+      <th width="150">Created Date</th>
+      <th width="80">PMC</th>
+      <th width="80">BOM审核</th>
+      <th width="80">采购审核</th>
+      <th width="80">财务审核</th>
+      <th width="80">数量</th>
+      <th width="80">价格￥</th>
+      <th width="90">所属业务员</th>
+      <th width="90">跟踪业务员</th>
+      <th >采购备注</th>
+      <th >跟踪备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pilist.each do |pcb| %>   
+      <tr >
+        
+        <% if not pcb.pcb_customer_id.blank? %>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id,pi_info_id: pcb.pi_info_id,pi_item_id: pcb.id) %></td>
+        <% else %>
+            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,pi_info_id: pcb.pi_info_id,pi_item_id: pcb.id) %></td>
+        <% end %>
+        
+        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= pcb.to_pmc_state %></td>
+        <td>
+            <% if pcb.bom_state == "check" %>
+                审核中
+            <% elsif pcb.bom_state == "checked" %>
+                审核完成
+            <% else %>
+                <%= pcb.bom_state %>
+            <% end %>
+        </td>
+        <td>
+            <% if pcb.buy_state == "check" %>
+                审核中
+            <% elsif pcb.buy_state == "checked" %>
+                审核完成
+            <% else %>
+                <%= pcb.buy_state %>
+            <% end %>
+        </td>
+        <td>
+            <% if pcb.finance_state == "check" %>
+                审核中
+            <% elsif pcb.finance_state == "checked" %>
+                审核完成
+            <% else %>
+                <%= pcb.finance_state %>
+            <% end %>
+        </td>
+        <td><%= pcb.qty %></td>
+        <td><%= pcb.price %></td>
+        <td></td>
+        <td><%= User.find_by(email: pcb.pi_sell).full_name %></td>
+        <td><%= pcb.remark %></td>
+        <td><%= pcb.follow_remark %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+                </div>
+            </div>
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+</script>
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

@@ -8,19 +8,19 @@
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         <input type="text" class="form-control sr-only" id="p_pi_item_id" name="p_pi_item_id" value="<%= params[:pi_item_id] %>">
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
-                        <%= submit_tag "提交", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
+                        <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
                         <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                         <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
                     <% elsif can? :work_g, :all and @pi_info.buy_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                         <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
                     <% elsif can? :work_finance, :all and @pi_info.finance_state.blank? %>
-                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                         <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
                     <% end %>
                     <% if can? :work_admin, :all %>
-                        <%= submit_tag "提交", class: "btn btn-danger",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                         <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
                     <% end %>
                     <% end %>
@@ -440,9 +440,9 @@ function change_<%= item.id.to_s %>(){
                         
                     <% end %>
                     <% if item.part_code.to_s.size > 20 %>
-                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code[0,20]+"..." %></small></td>
+                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;word-break : break-all; "><small><%= item.part_code[0,20]+"..." %></small></td>
                     <% else %>
-                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.part_code %></small></td>
+                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;word-break : break-all; " ><small><%= item.part_code %></small></td>
                     <% end %>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
                     <td width="60" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td>

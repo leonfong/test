@@ -1,0 +1,100 @@
+<div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "ecn_new"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+           
+            <div class="row">
+                <div class="col-md-12 col-sm-12 form-inline" >
+        <% if can? :work_e, :all %>
+            <div style="padding: 10px;">
+            <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-target="#new_ecn" >新建ECN草稿</button>
+            </div>
+        <% end %>
+<% if not @ecn_draft_list.blank? %>
+<%= will_paginate(@ecn_draft_list) %>            
+<table class="table" >
+<!--
+  <thead >
+    <tr style="background-color: #eeeeee;">
+      <th width="220">询价单号</th>
+      <th width="80">客户代码</th>
+      <th >客户</th>
+      <th width="150">日期</th>
+      <th width="100">所属业务员</th>
+      <th width="100">跟踪业务员</th>
+      <th >跟踪备注</th>
+<% if can? :work_e, :all %>
+      <th width="50">删除</th>
+<% end %>
+-->
+<!--
+      <th width="120">发送到采购报价</th>
+
+    </tr>
+  </thead>
+-->
+  <tbody ><small>
+    <% @ecn_draft_list.each do |ecn| %>   
+      <tr>
+        
+      </tr>
+    <% end %>
+  </small>
+  </tbody>
+</table>
+<% end %>
+            
+            
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+<div class="modal fade" id="new_ecn" tabindex="-1" role="dialog" aria-labelledby="new_ecn_Label" >
+  <div class="modal-dialog modal-lg" style="width: 1600px;" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="new_ecn_Label"><strong>查找需要ECN的订单</strong></h4>
+      </div>
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+</script>
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

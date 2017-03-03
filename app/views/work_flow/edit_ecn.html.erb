@@ -1,0 +1,308 @@
+<div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "ecn_new"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+           
+
+        
+
+
+
+
+
+      <div class="row">
+          <div class="col-md-6 col-sm-6 " >
+              <h2><span class="label label-default">工程变更通知(ECN)</span></h2>
+          </div>
+      </div>
+      
+      <%= form_tag({action: :new_voucher},method:"post",multipart:"true") do %>
+      <div class="row" >
+          <div class="col-md-12 col-sm-12" >
+          <div class="panel panel-default">
+              <div class="panel-body" style="padding: 15px 15px 1px;">
+                  <div class="row">
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label class="col-md-4 control-label" for="c_code">BOM编号:</label>
+                                  <div class="col-md-8">
+                                      <input class="sr-only" name="voucher_item" id="voucher_item" type="text" value="客户">
+                                      <p class="form-control-static" id="bom_no"></p>
+                                      <input class="sr-only" name="pay_id" id="pay_id" type="text" >
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_item" class="col-md-4 control-label">产品型号:</label>
+                                  <div class="col-md-8" >
+                                      <p class="form-control-static" id="c_code_show" ></p>
+                                      <input class="sr-only" name="c_code" id="c_code" type="text">
+                                  </div>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm ">
+                                  <label for="xianjin_kemu" class="col-md-3 control-label">签署:</label>   
+                                  <div class="col-md-9">
+                                      <input id="xianjin_kemu" autocomplete="off" name="xianjin_kemu" type="text" class="form-control" data-provide="typeahead" data-items="100" data-source="<%= raw @type_b %>" >     
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_bank_name" class="col-md-3 control-label">发起人:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control sr-only" name="voucher_bank_name" id="voucher_bank_name" type="text" >
+                                      <p class="form-control-static" id="" ><%= current_user.full_name %></p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="voucher_bank_account" class="col-md-3 control-label">审核:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" name="voucher_bank_account" id="voucher_bank_account" type="text" >
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label">批准:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" type="text" disabled>
+                                  </div>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="finance_at" class="col-md-4 control-label">日期:</label>
+                                  <div class="col-md-8">
+                                      <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="finance_at" class="col-md-4 control-label">执行时间:</label>
+                                  <div class="col-md-8">
+                                      <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="finance_at" class="col-md-4 control-label">BOM修改时间:</label>
+                                  <div class="col-md-8">
+                                      <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="panel panel-default">
+                  <div class="row">
+                      <div class="col-md-2">
+                          <label for="recipient-name" class="control-label">生效:</label>
+                      </div>
+                      <div class="col-md-2">
+                      <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="production" name="receive_feedback[]" id="receive_feedback_receive_feedback_production" />
+                               <strong>立即更改</strong>
+                           </label>
+                       </div>
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="engineering" name="receive_feedback[]" id="receive_feedback_receive_feedback_engineering" /> 
+                               <strong>批量变更</strong>
+                           </label>
+                       </div>
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="procurement" name="receive_feedback[]" id="receive_feedback_receive_feedback_procurement" />
+                               <strong>自然汰换</strong>
+                           </label>
+                       </div> 
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell" />
+                               <strong>消耗库存</strong>
+                           </label>
+                       </div> 
+                       </div>
+                       <div class="col-md-2">
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell" />
+                               <strong>其它</strong>
+                           </label>
+                       </div>
+                       </div>
+                  </div>
+              </div>
+          </div>
+
+
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="panel panel-default">
+                      <div class="row">
+                      <div class="col-md-12">
+                      <table class="table table-bordered" >
+                          <thead>
+                              <tr class="active">
+                                  <th rowspan="2" width="45">序号</th>
+                                  <th colspan="4">变更前</th>
+                                  <th colspan="4">变更后</th> 
+                                  <th rowspan="2">备注</th>
+                              </tr>
+                              <tr class="active">
+                                  <th >位号</th>
+                                  <th >华创编码</th> 
+                                  <th >华创描述</th>
+                                  <th width="45">用量</th>
+                                  <th >位号</th>
+                                  <th >华创编码</th> 
+                                  <th >华创描述</th>
+                                  <th >用量</th>
+                              </tr>
+                          </thead>
+                          <tbody>  
+                              <% @baojia.each_with_index do |item,index| %>
+                              <tr> 
+                                  <td><%= index+1 %></td>
+                                  <td style="word-break : break-all; "><%= item.part_code %></td>
+                                  <td><%= item.moko_part %></td>
+                                  <td><%= item.moko_des %></td>
+                                  <td><%= item.quantity %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                                  <td><%= index+1 %></td>
+                              </tr> 
+                              <% end %>
+                          </tbody>  
+                      </table>
+                      </div></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="submit" class="btn btn-primary" onclick="return postform()" >保存</button>
+              </div>
+          </div>
+      </div>
+      <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<script>
+function get_options(value){
+    var urla='/work_flow/select_pcbcustomer_ajax?id='+value;
+    $("#change_s").attr("href",urla);
+    $("#change_s").click(); 
+  }
+
+
+</script>
+
+<script type="text/javascript">
+function postform() {  	           
+      if ($("#price").val() == "")
+      {                    
+　　    alert("请选填写报价！");                    
+　　    return false;                
+　     }
+
+}  
+
+$(".menu-first").click(function(){
+  $('#userMeun').collapse('hide');
+  $('#articleMenu').collapse('hide');
+  $('#whMenu').collapse('hide');
+});
+  
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

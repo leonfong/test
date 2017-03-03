@@ -229,6 +229,8 @@ Rails.application.routes.draw do
   match '/edit_wh_order_songhuono', to: 'work_flow#edit_wh_order_songhuono', via: 'post'
   match '/edit_wh_order_remark', to: 'work_flow#edit_wh_order_remark', via: 'post'
   match '/edit_fu_kuan_bank_user', to: 'work_flow#edit_fu_kuan_bank_user', via: 'post'
+  match '/new_ecn', to: 'work_flow#new_ecn', via: 'get'
+  match '/edit_ecn', to: 'work_flow#edit_ecn', via: 'get'
 
 
 

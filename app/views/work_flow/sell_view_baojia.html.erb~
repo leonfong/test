@@ -218,7 +218,12 @@
                            <td><strong><%= "Project name" %>：</strong><%= @boms.p_name %></td>
 -->
 <% if not params[:pi_info_id].blank? %>
-                           <td><button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
+                           <td>
+<!--
+                               <button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
+-->
+                               <a type="button" class="btn btn-danger btn-xs"  href="/edit_ecn?new=true">ECN</a>
+                               
                            </td>
 <% end %>
                            <td><strong><%= "QTY" %>：</strong><%= @boms.qty %></td>
@@ -439,7 +444,7 @@
 </div>
 
 
-<% get_dn_data = PDn.where(p_item_id: item.id, color: "b") %>
+<% get_dn_data = PDn.where("p_item_id=#{item.id} AND (color='b' OR (color='y' AND remark IS NOT NULL))") %>
 
 <% if not get_dn_data.blank? %>
 <% if not get_dn_data.first.remark.blank? %>

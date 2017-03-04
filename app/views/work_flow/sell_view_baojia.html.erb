@@ -222,8 +222,13 @@
 <!--
                                <button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
 -->
-                               <a type="button" class="btn btn-danger btn-xs"  href="/edit_ecn?pi_item_id=<%=params[:pi_item_id]%>">ECN</a>
-                               
+                               <%= form_tag({action: :add_ecn},method:"post") do %> 
+<!--
+                                   <a type="button" class="btn btn-danger btn-xs"  href="/edit_ecn?pi_item_id=<%=params[:pi_item_id]%>">新建ECN草稿</a>
+-->
+                                   <input type="text" class="form-control sr-only" name="pi_item_id" value="<%=params[:pi_item_id]%>" >
+                                   <input type="submit" class="btn btn-danger btn-xs" value="新建ECN草稿" >
+                               <% end %>
                            </td>
 <% end %>
                            <td><strong><%= "QTY" %>：</strong><%= @boms.qty %></td>

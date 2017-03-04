@@ -230,7 +230,13 @@ Rails.application.routes.draw do
   match '/edit_wh_order_remark', to: 'work_flow#edit_wh_order_remark', via: 'post'
   match '/edit_fu_kuan_bank_user', to: 'work_flow#edit_fu_kuan_bank_user', via: 'post'
   match '/new_ecn', to: 'work_flow#new_ecn', via: 'get'
+  match '/new_ecn_find_pi', to: 'work_flow#new_ecn_find_pi', via: 'get'
   match '/edit_ecn', to: 'work_flow#edit_ecn', via: 'get'
+  match '/add_ecn', to: 'work_flow#add_ecn', via: 'post'
+  match '/add_ecn_item', to: 'work_flow#add_ecn_item', via: 'post'
+  match '/edit_ecn_up', to: 'work_flow#edit_ecn_up', via: 'post'
+
+
 
 
 

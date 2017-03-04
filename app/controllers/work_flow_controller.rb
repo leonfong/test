@@ -5,15 +5,86 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
-    def edit_ecn
+    def edit_ecn_up
+
+    end
+
+    def add_ecn_item
+        if not params[:ecn_info_id].blank? 
+            ecn_item_new = BomEcnItem.new
+            ecn_item_new.bom_ecn_info_id = params[:ecn_info_id]
+            ecn_item_new.bom_item_id = params[:bom_item_id]
+            ecn_item_new.old_moko_part = params[:old_moko_part]
+            ecn_item_new.old_moko_des = params[:old_moko_des]
+            ecn_item_new.old_part_code = params[:old_part_code]
+            ecn_item_new.old_quantity = params[:old_quantity]
+            ecn_item_new.new_moko_part = params[:new_moko_part]
+            ecn_item_new.new_sell_des = params[:new_sell_des]
+            ecn_item_new.new_moko_des = params[:new_moko_des]
+            ecn_item_new.new_part_code = params[:new_part_code]
+            ecn_item_new.new_quantity = params[:new_quantity]
+            ecn_item_new.remark = params[:ecn_remark]
+            ecn_item_new.save
+        end
+        redirect_to :back
+    end
+
+    def add_ecn
         if not params[:pi_item_id].blank?
             pi_item = PiItem.find_by_id(params[:pi_item_id])
             @state = pi_item.state
             @to_pmc_state = pi_item.to_pmc_state
             @boms = ProcurementBom.find_by_id(pi_item.bom_id)
-            #@bom_item = PItem.where(procurement_bom_id: @boms.id)
-            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
             @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(params[:pi_item_id])
+
+=begin
+            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
+
+            if not @bom_item.blank?
+                @bom_item = @bom_item.select {|item| item.quantity != 0 }
+            end
+
+
+            if not params[:pi_info_id].blank? 
+                @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
+            end
+            @baojia = @bom_item
+=end
+            new_bom_ecn = BomEcnInfo.new
+            new_bom_ecn.bom_id =@boms.id
+            new_bom_ecn.pi_id = pi_item.pi_info_id
+            new_bom_ecn.pi_item_id = pi_item.id
+            new_bom_ecn.pi_no = pi_item.pi_no
+            new_bom_ecn.bom_no = @boms.no
+            #new_bom_ecn.chan_pin_xing_hao = ""
+            new_bom_ecn.fa_qi_ren_id = current_user.id
+            new_bom_ecn.fa_qi_ren_name = current_user.full_name
+            #new_bom_ecn.shen_he_ren_id = ""
+            #new_bom_ecn.shen_he_ren_name =""
+            #new_bom_ecn.pi_zhun_ren_id =""
+            #new_bom_ecn.pi_zhun_ren_name =""
+            #new_bom_ecn.zhi_xing_date_at =""
+            #new_bom_ecn.bom_update_date_at =""
+            #new_bom_ecn.change_type =""
+            #new_bom_ecn.sheng_xiao_type =""
+            #new_bom_ecn.remark =""
+            new_bom_ecn.save
+            redirect_to edit_ecn_path(bom_ecn_info_id: new_bom_ecn.id) and return
+        end
+        
+    end
+
+    def edit_ecn
+        @get_ecn_info = BomEcnInfo.find_by_id(params[:bom_ecn_info_id])
+        @get_ecn_item = BomEcnItem.where(bom_ecn_info_id: params[:bom_ecn_info_id])
+        if not @get_ecn_info.blank?
+            pi_item = PiItem.find_by_id(@get_ecn_info.pi_item_id)
+            @state = pi_item.state
+            @to_pmc_state = pi_item.to_pmc_state
+            @boms = ProcurementBom.find_by_id(pi_item.bom_id)
+            #@bom_item = PItem.where(procurement_bom_id: @boms.id)
+            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{@get_ecn_info.pi_item_id}'")
+            @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(@get_ecn_info.pi_item_id)
             if not @bom_item.blank?
                 @bom_item = @bom_item.select {|item| item.quantity != 0 }
             end
@@ -28,18 +99,77 @@ before_filter :authenticate_user!
         end
     end
 
-    def new_ecn
+    def new_ecn_find_pi
         if params[:key_order]
-            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        else
+
             if can? :work_admin, :all
-                @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE (pi_infos.c_code LIKE '%#{params[:key_order]}%' OR pi_infos.c_des LIKE '%#{params[:key_order]}%' OR pi_infos.p_name LIKE '%#{params[:key_order]}%' OR pi_infos.des_cn LIKE '%#{params[:key_order]}%' OR pi_infos.des_en LIKE '%#{params[:key_order]}%' OR pi_infos.pi_no LIKE '%#{params[:key_order]}%' OR pi_infos.remark LIKE '%#{params[:key_order]}%' OR pi_infos.follow_remark LIKE '%#{params[:key_order]}%') ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             elsif can? :work_e, :all
                 @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             else
                 @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             end
-        end        
+        end 
+        @all_item = ''
+        if not @pilist.blank?
+            @pilist.each do |pcb|
+                @all_item += '<tr >'
+                if not pcb.pcb_customer_id.blank?
+                    @all_item += '<td><a href="/edit_pcb_pi?c_id='+pcb.pcb_customer_id.to_s+'&amp;pi_info_id='+pcb.pi_info_id.to_s+'&amp;pi_item_id='+pcb.id.to_s+'&amp;pi_no='+pcb.pi_no.to_s+'">'+pcb.pi_no.to_s+'</a></td>'
+                else
+                    @all_item += '<td><a href="/edit_pcb_pi?pi_info_id='+pcb.pi_info_id.to_s+'&amp;pi_item_id='+pcb.id.to_s+'&amp;pi_no='+pcb.pi_no.to_s+'">'+pcb.pi_no.to_s+'</a></td>'
+                end
+        
+                @all_item += '<td>'+pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s+'</td>'
+                @all_item += '<td>'+pcb.to_pmc_state+'</td>'
+                @all_item += '<td>'
+                if pcb.bom_state == "check"
+                    @all_item += '审核中'
+                elsif pcb.bom_state == "checked"
+                    @all_item += '审核完成'
+                else
+                    @all_item += pcb.bom_state.to_s
+                end
+                    @all_item += '</td>'
+                @all_item += '<td>'
+                if pcb.buy_state == "check"
+                    @all_item += '审核中'
+                elsif pcb.buy_state == "checked"
+                    @all_item += '审核完成'
+                else
+                    @all_item += pcb.buy_state.to_s
+                end
+                @all_item += '</td>'
+                @all_item += '<td>'
+                if pcb.finance_state == "check"
+                    @all_item += '审核中'
+                elsif pcb.finance_state == "checked"
+                    @all_item += '审核完成'
+                else
+                    @all_item += pcb.finance_state.to_s
+                end
+                @all_item += '</td>'
+                @all_item += '<td>'+pcb.qty.to_s+'</td>'
+                @all_item += '<td>'+pcb.price.to_s+'</td>'
+                @all_item += '<td></td>'
+                @all_item += '<td>'+User.find_by(email: pcb.pi_sell).full_name.to_s+'</td>'
+                @all_item += '<td>'+pcb.remark.to_s+'</td>'
+                @all_item += '<td>'+pcb.follow_remark.to_s+'</td>'
+                @all_item += '</tr>'
+            end
+        end         
+    end
+
+    def new_ecn
+        @ecn_draft_list = BomEcnInfo.where(state: "new",fa_qi_ren_id: current_user.id ).paginate(:page => params[:page], :per_page => 20)
+        if can? :work_admin, :all
+            @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        elsif can? :work_e, :all
+            @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        else
+            @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        end
+       
     end
 
     def ecn_list
@@ -7363,7 +7493,7 @@ before_filter :authenticate_user!
     end
 
     def pcb_order_list
-        @ecn_draft_list = BomEcnInfo.all.paginate(:page => params[:page], :per_page => 20)
+
         if params[:key_order]
             if can? :work_a, :all
                 @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)

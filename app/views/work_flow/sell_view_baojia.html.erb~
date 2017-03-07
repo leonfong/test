@@ -222,7 +222,7 @@
 <!--
                                <button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
 -->
-                               <%= form_tag({action: :edit_pi_other_item},method:"post") do %> 
+                               <%= form_tag({action: :add_ecn},method:"post") do %> 
 <!--
                                    <a type="button" class="btn btn-danger btn-xs"  href="/edit_ecn?pi_item_id=<%=params[:pi_item_id]%>">新建ECN草稿</a>
 -->

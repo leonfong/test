@@ -454,7 +454,7 @@
 <% if not get_dn_data.blank? %>
 <% if not get_dn_data.first.remark.blank? %>
 
-<div class="row" style="margin: 0px;" >
+<div class="row" style="margin: 0px;">
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
 <table style="margin: 0px;" >
 <tr>
@@ -468,7 +468,8 @@
 <% if get_dn_data.first.email.blank? %>
 采购工程师:
 <% else %> 
-采购工程师:<%= User.find_by_email(get_dn_data.first.email).full_name %>
+
+采购工程师:<%= User.find_by_email(get_dn_data.first.email).full_name.to_s %>
 <% end %> 
 </strong>
 <%= get_dn_data.first.remark %>

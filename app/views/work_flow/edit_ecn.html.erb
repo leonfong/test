@@ -18,6 +18,7 @@
                 <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
             </div>
             <div class="col-md-6 col-sm-6">
+                <input class="sr-only" name="bom_ecn_info_id" id="bom_ecn_info_id" type="text" value="<%= @get_ecn_info.id %>">
                 <%= submit_tag "发送给BOM工程师", class:"btn btn-primary pull-right",data:{confirm: "确定要发送给BOM工程师?"} %>
                 <%= submit_tag "保存草稿", class:"btn btn-info pull-right",style:"margin-right:10px;"%>
 <!--
@@ -41,16 +42,21 @@
                                     <div class="form-group form-group-sm">
                                         <label class="col-md-4 control-label" for="c_code">BOM编号:</label>
                                         <div class="col-md-8">
-                                            <input class="sr-only" name="voucher_item" id="voucher_item" type="text" value="客户">
-                                            <p class="form-control-static" id="bom_no"></p>
-                                            <input class="sr-only" name="pay_id" id="pay_id" type="text" >
+                                            
+                                            <p class="form-control-static" id="bom_no"><%= @get_ecn_info.bom_no %></p>
+
                                         </div>
                                     </div>
                                     <div class="form-group form-group-sm">
                                         <label for="voucher_item" class="col-md-4 control-label">产品型号:</label>
                                         <div class="col-md-8" >
                                             <p class="form-control-static" id="c_code_show" ></p>
-                                            <input class="sr-only" name="c_code" id="c_code" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-group-sm">
+                                        <label for="voucher_item" class="col-md-4 control-label">变更原因:</label>
+                                        <div class="col-md-8" >
+                                            <textarea type="text" class="form-control" id="ecn_remark" name="ecn_remark"  ><%= @get_ecn_info.remark %></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -60,26 +66,26 @@
                                     <div class="form-group form-group-sm ">
                                         <label for="xianjin_kemu" class="col-md-3 control-label">签署:</label>   
                                         <div class="col-md-9">
-                                            <input id="xianjin_kemu" autocomplete="off" name="xianjin_kemu" type="text" class="form-control" data-provide="typeahead" data-items="100" data-source="<%= raw @type_b %>" >     
+                                            <p class="form-control-static" id="" ><%= current_user.full_name %></p>    
                                         </div>
                                     </div>
                                     <div class="form-group form-group-sm">
                                         <label for="voucher_bank_name" class="col-md-3 control-label">发起人:</label>
                                         <div class="col-md-9" >
-                                            <input class="form-control sr-only" name="voucher_bank_name" id="voucher_bank_name" type="text" >
+                                            
                                             <p class="form-control-static" id="" ><%= current_user.full_name %></p>
                                         </div>
                                     </div>
                                     <div class="form-group form-group-sm">
                                         <label for="voucher_bank_account" class="col-md-3 control-label">审核:</label>
                                         <div class="col-md-9" >
-                                            <input class="form-control" name="voucher_bank_account" id="voucher_bank_account" type="text" >
+                                            
                                         </div>
                                     </div>
                                     <div class="form-group form-group-sm">
                                         <label for="" class="col-md-3 control-label">批准:</label>
                                         <div class="col-md-9" >
-                                            <input class="form-control" type="text" disabled>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -89,22 +95,49 @@
                                     <div class="form-group form-group-sm">
                                         <label for="finance_at" class="col-md-4 control-label">日期:</label>
                                         <div class="col-md-8">
-                                            <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
-<script type="text/javascript">
-    $(function () {
-        $('#finance_at').datetimepicker({
-            useCurrent: false,
-            format: 'YYYY-MM-DD'
-        });    
-    });
-</script>
+                                            
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-horizontal">
                                     <div class="form-group form-group-sm">
+                                        <label for="change_at" class="col-md-4 control-label">变更性质:</label>
+                                        <div class="col-md-8">
+
+
+
+
+                                <label class="checkbox-inline">
+                                    <input type="radio" value="ever" name="change_type[]" id="change_type_ever" <% if @get_ecn_info.change_type == "ever" %> checked <% end %>>
+                                    <strong>永久</strong>
+                                </label>
+
+
+                                <label class="checkbox-inline">
+                                    <input type="radio" value="temp" name="change_type[]" id="change_type_temp" <% if @get_ecn_info.change_type == "temp" %> checked <% end %>>
+                                    <strong>临时</strong>
+                                </label>
+                                          
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                                <div class="form-horizontal">
+                                    <div class="form-group form-group-sm">
                                         <label for="finance_at" class="col-md-4 control-label">执行时间:</label>
                                         <div class="col-md-8">
+<!--
                                             <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
 <script type="text/javascript">
     $(function () {
@@ -114,6 +147,7 @@
         });    
     });
 </script>
+-->
                                         </div>
                                     </div>
                                 </div>
@@ -121,6 +155,7 @@
                                     <div class="form-group form-group-sm">
                                         <label for="finance_at" class="col-md-4 control-label">BOM修改时间:</label>
                                         <div class="col-md-8">
+<!--
                                             <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control input-sm", size:"10" %>
 <script type="text/javascript">
     $(function () {
@@ -130,6 +165,7 @@
         });    
     });
 </script>
+-->
                                         </div>
                                     </div>
                                 </div>
@@ -155,7 +191,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                     <input type="checkbox" value="production" name="receive_feedback[]" id="receive_feedback_receive_feedback_production" />
+                                     <input type="checkbox" value="a" name="sheng_xiao_type[]" id="sheng_xiao_type_a" <% if @get_ecn_info.sheng_xiao_type == "a" %> checked <% end %>>
                                      <strong>立即更改</strong>
                                 </label>
                             </div>
@@ -163,7 +199,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="engineering" name="receive_feedback[]" id="receive_feedback_receive_feedback_engineering" /> 
+                                    <input type="checkbox" value="b" name="sheng_xiao_type[]" id="sheng_xiao_type_b" <% if @get_ecn_info.sheng_xiao_type == "b" %> checked <% end %>> 
                                     <strong>批量变更</strong>
                                 </label>
                             </div>
@@ -171,7 +207,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="procurement" name="receive_feedback[]" id="receive_feedback_receive_feedback_procurement" />
+                                    <input type="checkbox" value="c" name="sheng_xiao_type[]" id="sheng_xiao_type_c" <% if @get_ecn_info.sheng_xiao_type == "c" %> checked <% end %>>
                                     <strong>自然汰换</strong>
                                 </label>
                             </div> 
@@ -179,7 +215,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell" />
+                                    <input type="checkbox" value="d" name="sheng_xiao_type[]" id="sheng_xiao_type_d" <% if @get_ecn_info.sheng_xiao_type == "d" %> checked <% end %>>
                                     <strong>消耗库存</strong>
                                 </label>
                             </div> 
@@ -187,7 +223,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="sell" name="receive_feedback[]" id="receive_feedback_receive_feedback_sell" />
+                                    <input type="checkbox" value="e" name="sheng_xiao_type[]" id="sheng_xiao_type_e" <% if @get_ecn_info.sheng_xiao_type == "e" %> checked <% end %>>
                                     <strong>其它</strong>
                                 </label>
                             </div>
@@ -267,8 +303,7 @@
                     <div class="panel-heading">
                         <strong>BOM</strong>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
+
                             <table class="table table-bordered" >
                                 <thead>
                                     <tr class="active">
@@ -289,14 +324,13 @@
                                         <td><%= item.moko_des %></td>
                                         <td><%= item.quantity %></td>
                                         <td>
-                                           <a type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#remarkupdate" backdrop="static" data-bom_item_id="<%= item.id %>" data-ecn_info_id="<%= @get_ecn_info.id %>" data-old_moko_part="<%= item.moko_part %>" data-old_moko_des="<%= item.moko_des %>" data-old_part_code="<%= item.part_code %>" data-old_quantity="<%= item.quantity %>" >变更</a>
+                                           <a type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#remarkupdate" data-backdrop="static" data-bom_item_id="<%= item.id %>" data-ecn_info_id="<%= @get_ecn_info.id %>" data-old_moko_part="<%= item.moko_part %>" data-old_moko_des="<%= item.moko_des %>" data-old_part_code="<%= item.part_code %>" data-old_quantity="<%= item.quantity %>" >变更</a>
                                         </td>
                                     </tr> 
                                 <% end %>
                                 </tbody>  
                             </table>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>

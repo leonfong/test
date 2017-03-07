@@ -17,7 +17,7 @@
     <tr style="background-color: #eeeeee;">
       <th width="200">BOM编号</th>
       <th width="200">PI编号</th>
-      <th >状态</th>
+      <th >c</th>
       <th >d</th>
       <th >e</th>
       <th >f</th>
@@ -31,7 +31,7 @@
       <tr>
         <td><%= link_to ecn.bom_no, edit_ecn_path(bom_ecn_info_id: ecn.id) %></td>
         <td><%= ecn.pi_no %></td>
-        <td><%= ecn.state %></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>

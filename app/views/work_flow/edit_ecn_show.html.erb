@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "ecn_new"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "ecn_list"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
            
@@ -19,12 +19,12 @@
             </div>
             <div class="col-md-6 col-sm-6">
                 <input class="sr-only" name="bom_ecn_info_id" id="bom_ecn_info_id" type="text" value="<%= @get_ecn_info.id %>">
-                <%= submit_tag "发送给BOM工程师", class:"btn btn-primary pull-right",data:{confirm: "确定要发送给BOM工程师?"} %>
-                <%= submit_tag "保存草稿", class:"btn btn-info pull-right",style:"margin-right:10px;"%>
-<!--
-                <button type="submit" class="btn btn-primary pull-right" onclick="return postform()" >发送给BOM工程师</button>
-                <button style="margin-right:10px;" type="submit" class="btn btn-info pull-right" onclick="return postform()" >保存草稿</button>
--->
+<% if can? :work_d, :all and @get_ecn_info.state == "checking" %>
+
+                <%= submit_tag "审批通过", class:"btn btn-danger pull-right",data:{confirm: "确定审批通过?"} %>
+
+<% end %>
+
             </div>
         </div>
       
@@ -56,7 +56,8 @@
                                     <div class="form-group form-group-sm">
                                         <label for="voucher_item" class="col-md-4 control-label">变更原因:</label>
                                         <div class="col-md-8" >
-                                            <textarea type="text" class="form-control" id="ecn_remark" name="ecn_remark"  ><%= @get_ecn_info.remark %></textarea>
+                                           
+                                            <p class="form-control-static" id="bom_no"><%= @get_ecn_info.remark %></p>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +96,7 @@
                                     <div class="form-group form-group-sm">
                                         <label for="finance_at" class="col-md-4 control-label">日期:</label>
                                         <div class="col-md-8">
-                                            
+                                            <p class="form-control-static" id="bom_no"><%= @get_ecn_info.send_at.localtime.strftime('%Y-%m-%d') %></p>
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +200,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="b" name="sheng_xiao_type[]" id="sheng_xiao_type_b" /> 
+                                    <input type="checkbox" value="b" name="sheng_xiao_type[]" id="sheng_xiao_type_b" <% if @get_ecn_info.sheng_xiao_type == "b" %> checked <% end %>> 
                                     <strong>批量变更</strong>
                                 </label>
                             </div>
@@ -207,7 +208,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="c" name="sheng_xiao_type[]" id="sheng_xiao_type_c" />
+                                    <input type="checkbox" value="c" name="sheng_xiao_type[]" id="sheng_xiao_type_c" <% if @get_ecn_info.sheng_xiao_type == "c" %> checked <% end %>>
                                     <strong>自然汰换</strong>
                                 </label>
                             </div> 
@@ -215,7 +216,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="d" name="sheng_xiao_type[]" id="sheng_xiao_type_d" />
+                                    <input type="checkbox" value="d" name="sheng_xiao_type[]" id="sheng_xiao_type_d" <% if @get_ecn_info.sheng_xiao_type == "d" %> checked <% end %>>
                                     <strong>消耗库存</strong>
                                 </label>
                             </div> 
@@ -223,7 +224,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="e" name="sheng_xiao_type[]" id="sheng_xiao_type_e" />
+                                    <input type="checkbox" value="e" name="sheng_xiao_type[]" id="sheng_xiao_type_e" <% if @get_ecn_info.sheng_xiao_type == "e" %> checked <% end %>>
                                     <strong>其它</strong>
                                 </label>
                             </div>
@@ -238,7 +239,7 @@
             <div class="col-md-12">
                 <div class="panel panel-danger">
                     <div class="panel-heading">
-                        <strong>ECN</strong> <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#add_item_ecn" data-backdrop="static" data-ecn_info_id_new="<%= @get_ecn_info.id %>">添加物料</button>
+                        <strong>ECN</strong> 
                     </div>
                             <table class="table table-bordered" >
                                 <colgroup>
@@ -312,7 +313,7 @@
                                         <th width="200">华创编码</th> 
                                         <th >华创描述</th>
                                         <th width="45">用量</th>
-                                        <th width="50">操作</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>  
@@ -323,9 +324,7 @@
                                         <td><%= item.moko_part %></td>
                                         <td><%= item.moko_des %></td>
                                         <td><%= item.quantity %></td>
-                                        <td>
-                                           <a type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#remarkupdate" data-backdrop="static" data-bom_item_id="<%= item.id %>" data-ecn_info_id="<%= @get_ecn_info.id %>" data-old_moko_part="<%= item.moko_part %>" data-old_moko_des="<%= item.moko_des %>" data-old_part_code="<%= item.part_code %>" data-old_quantity="<%= item.quantity %>" >变更</a>
-                                        </td>
+                                        
                                     </tr> 
                                 <% end %>
                                 </tbody>  
@@ -346,97 +345,9 @@
 
 
 
-<div class="modal fade" id="remarkupdate" tabindex="-1" role="dialog" aria-labelledby="remarkupdateLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="remarkupdateLabel">变更ECN项目</h4>
-      </div>
-      <div class="modal-body">
-        <%= form_tag('/add_ecn_item', method:"post") do %>
-          <div class="form-group sr-only">
-            <label for="itemp_id_remark" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="bom_item_id" name="bom_item_id">
-            <input type="text" class="form-control" id="ecn_info_id" name="ecn_info_id">
-            <input type="text" class="form-control" id="old_moko_part" name="old_moko_part">
-            <input type="text" class="form-control" id="old_moko_des" name="old_moko_des">
-            <input type="text" class="form-control" id="old_part_code" name="old_part_code">
-            <input type="text" class="form-control" id="old_quantity" name="old_quantity">
-          </div>
-          <div class="form-group">
-            <label for="itemp_id_remark" class="control-label">位号:</label>
-            <code id="old_part_code_show"></code>
-            <input type="text" class="form-control" id="new_part_code" name="new_part_code">
-          </div>
-          <div class="form-group">
-            <label for="itemp_id_remark" class="control-label">描述:</label>
-            <code id="old_moko_des_show"></code>
-            <textarea type="text" class="form-control" id="new_sell_des" name="new_sell_des"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="itemp_id_remark" class="control-label">用量:</label>
-            <code id="old_quantity_show"></code>
-            <input type="number" class="form-control" id="new_quantity" name="new_quantity">
-          </div>
-          <div class="form-group">
-            <label for="pj_remark">备注：</label>
-            <textarea type="text" class="form-control" id="ecn_remark" name="ecn_remark"  ></textarea>
-          </div>             
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
 
-<div class="modal fade" id="add_item_ecn" tabindex="-1" role="dialog" aria-labelledby="add_item_ecnLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="add_item_ecnLabel">添加ECN项目</h4>
-      </div>
-      <div class="modal-body">
-        <%= form_tag('/add_ecn_item', method:"post") do %>
-          <div class="form-group sr-only">
-            <label for="itemp_id_remark" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="ecn_info_id_new" name="ecn_info_id" >
 
-          </div>
-          <div class="form-group">
-            <label for="itemp_id_remark" class="control-label">位号:</label>
 
-            <input type="text" class="form-control" id="new_part_code" name="new_part_code">
-          </div>
-          <div class="form-group">
-            <label for="itemp_id_remark" class="control-label">描述:</label>
-         
-            <textarea type="text" class="form-control" id="new_sell_des" name="new_sell_des"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="itemp_id_remark" class="control-label">用量:</label>
-        
-            <input type="number" class="form-control" id="new_quantity" name="new_quantity">
-          </div>
-          <div class="form-group">
-            <label for="pj_remark">备注：</label>
-            <textarea type="text" class="form-control" id="ecn_remark" name="ecn_remark"  ></textarea>
-          </div>             
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Submit</button>
-      </div>
-     <% end %>
-    </div>
-  </div>
-</div>
 
 
 

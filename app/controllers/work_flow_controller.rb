@@ -6,7 +6,26 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def edit_ecn_up
-
+        if not params[:bom_ecn_info_id].blank?
+            get_ecn_info = BomEcnInfo.find_by_id(params[:bom_ecn_info_id])
+            if params[:commit] == "保存草稿"
+                get_ecn_info.state = "new"
+            elsif params[:commit] == "发送给BOM工程师"
+                get_ecn_info.state = "chicking"
+                get_ecn_info.send_at = Time.new()
+            elsif params[:commit] == "审批通过"
+                get_ecn_info.state = "chicked"
+            end
+            get_ecn_info.remark = params[:ecn_remark]
+            if not params[:sheng_xiao_type].blank?
+                get_ecn_info.sheng_xiao_type = params[:sheng_xiao_type].join("")
+            end
+            if not params[:change_type].blank?
+                get_ecn_info.change_type = params[:change_type].join("")
+            end
+            get_ecn_info.save
+        end
+        redirect_to :back
     end
 
     def add_ecn_item
@@ -96,6 +115,11 @@ before_filter :authenticate_user!
                 @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
             end
             @baojia = @bom_item
+            if @get_ecn_info.state == "new"
+                render "edit_ecn.html.erb" and return
+            else
+                render "edit_ecn_show.html.erb" and return
+            end
         end
     end
 
@@ -173,7 +197,7 @@ before_filter :authenticate_user!
     end
 
     def ecn_list
-
+        @ecn_draft_list = BomEcnInfo.where("state <> 'new' AND fa_qi_ren_id = #{current_user.id}" ).paginate(:page => params[:page], :per_page => 20)
     end
 
     def sell_back_item
@@ -2062,12 +2086,15 @@ before_filter :authenticate_user!
                 where_date += " AND pcb_orders.created_at < '#{params[:end_date]}' AND"
         end
         if not current_user.s_name.blank?
-            if current_user.s_name.size == 1
+            if current_user.s_name.split(",").size == 1
+                Rails.logger.info("sell-------------------------1")
                 @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'#{where_order_no} AND pcb_orders.del_flag = 'active'").order("pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
             else 
                 if can? :work_admin, :all
+                    Rails.logger.info("sell-------------------------2")
                     @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
+                    Rails.logger.info("sell-------------------------3")
                     @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end

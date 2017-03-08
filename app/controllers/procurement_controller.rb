@@ -3550,7 +3550,7 @@ WHERE
 	            #@bom_item.save!
                     bom_state = ""
                     if @bom_item.save!
-                        check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b'")
+                        check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b' AND quantity>0")
                         if check_blue.blank?
                             bom_state = "done"
                         end
@@ -3620,7 +3620,7 @@ WHERE
             @bom_item.user_do_change = nil
             bom_state = ""
             if @bom_item.save
-                check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b'")
+                check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b' AND quantity>0")
                 if check_blue.blank?
                     bom_state = "done"
                 end

@@ -1722,13 +1722,13 @@ before_filter :authenticate_user!
 
         end
 
-=begin
+
         get_pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
         if not get_pi_item_data.blank?
             get_pi_item_data.to_pmc_state = "send"
             get_pi_item_data.save
         end
-=end
+
         redirect_to :back
     end
 

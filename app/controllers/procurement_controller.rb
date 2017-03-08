@@ -1426,7 +1426,7 @@ before_filter :authenticate_user!
         if can? :work_e, :all
             remark.user_team = "sell"
             
-            p_c.color = nil
+            p_c.color = ""
             p_c.sell_feed_back_tag = "eng"
         elsif can? :work_d, :all
             remark.user_team = "bom"
@@ -2914,8 +2914,8 @@ before_filter :authenticate_user!
                     boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC #{order_ctl} ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? }
                     @boms = boms.paginate(:page => params[:page], :per_page => 15)
                 elsif params[:undone]
-                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC #{order_ctl} ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank?  }
-                    @boms = boms.paginate(:page => params[:page], :per_page => 15)
+                    #boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC #{order_ctl} ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank?  }
+                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do'AND state = 'done' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
                 elsif params[:sent_to_sell]
                     @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `remark_to_sell` = 'mark' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
                 else
@@ -3491,38 +3491,22 @@ WHERE
     end
 
     def p_updateii
-        if not params[:bom_version].blank?
-            dell_dns_color = PVersionDn.where(p_version_item_id: params[:id])
-        else
-            dell_dns_color = PDn.where(p_item_id: params[:id],state: "")
-        end
-        c_color = nil
-        if not params[:bom_version].blank?
-            dell_dns_color = PVersionDn.where("p_version_item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
-        else
-            dell_dns_color = PDn.where("p_item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
-        end
+        dell_dns_color = PDn.where(p_item_id: params[:id],state: "")
+        c_color = ""
+        dell_dns_color = PDn.where("p_item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
         if params[:product_name] != ""
-            if not params[:bom_version].blank?
-                @add_dns = PVersionDn.find(params[:dn_id])
-                @add_dns.email = current_user.email
-            else
-                @add_dns = PDn.find(params[:dn_id])
-                @add_dns.email = current_user.email
-            end
+            @add_dns = PDn.find(params[:dn_id])
+            @add_dns.email = current_user.email
+            
             if @add_dns.color == "y"
                 @add_dns.color = "y"
             else
                 @add_dns.color = "b"
             end
             @add_dns.save
-            if not params[:bom_version].blank?
-                @bom_item = PVersionItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
-                @bom = ProcurementVersionBom.find(@bom_item.procurement_bom_id)
-            else
-                @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
-                @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
-            end
+            @bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+           
             if @bom_item.update_attribute("product_id", Product.find_by(name: params[:product_name]).id)
                 if @bom_item.product_id
 	            #@bom_item.product = Product.find(@bom_item.product_id)
@@ -3546,8 +3530,14 @@ WHERE
                         @bom_item.sell_feed_back_tag = ""
                     end
                     @bom_item.user_do_change = nil
-	            @bom_item.save!
-  
+	            #@bom_item.save!
+                    bom_state = ""
+                    if @bom_item.save!
+                        check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b'")
+                        if check_blue.blank?
+                            bom_state = "done"
+                        end
+                    end
    
                     #累加产品被选择的次数
                     prefer = (Product.find(@bom_item.product_id)).prefer + 1
@@ -3572,6 +3562,7 @@ WHERE
 		            end
                         end
                         @bom.t_p = @total_price_nn.to_f.round(4)
+                        @bom.state = bom_state
                         @bom.save
                         render "p_updateii.js.erb"
                     end
@@ -3586,13 +3577,9 @@ WHERE
             
             #Rails.logger.info(@bom_item.id.to_s + '_dns')
         else
-            if not params[:bom_version].blank?
-                @add_dns = PVersionDn.find(params[:dn_id])
-                @add_dns.email = current_user.email
-            else
-                @add_dns = PDn.find(params[:dn_id])
-                @add_dns.email = current_user.email
-            end
+            @add_dns = PDn.find(params[:dn_id])
+            @add_dns.email = current_user.email
+            
             if @add_dns.color == "y"
                 @add_dns.color = "y"
             else
@@ -3600,11 +3587,8 @@ WHERE
             end
             #@add_dns.color = "b"
             @add_dns.save
-            if not params[:bom_version].blank?
-                @bom_item = PVersionItem.find(params[:id]) 
-            else
-                @bom_item = PItem.find(params[:id]) 
-            end
+            @bom_item = PItem.find(params[:id]) 
+            
             @bom_item.cost = @add_dns.cost
             @bom_item.dn_id = @add_dns.id
             @bom_item.dn = @add_dns.dn
@@ -3617,19 +3601,18 @@ WHERE
                 @bom_item.sell_feed_back_tag = ""
             end
             @bom_item.user_do_change = nil
-            @bom_item.save
-
-            if not params[:bom_version].blank?
-                @bom = ProcurementVersionBom.find(@bom_item.procurement_bom_id)
-            else
-                @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            bom_state = ""
+            if @bom_item.save
+                check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b'")
+                if check_blue.blank?
+                    bom_state = "done"
+                end
             end
+            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            @bom.state = bom_state
             @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
-            if not params[:bom_version].blank?
-                @matched_items_nn = PVersionItem.where(procurement_bom_id: @bom.id)     
-            else
-                @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)   
-            end 
+            @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)   
+            
             @total_price_nn = 0.00               
 	    if not @matched_items_nn.blank?
                 @bom_api_all = []
@@ -3906,7 +3889,7 @@ WHERE
         if params["#{params[:dn_itemid]}p"] != "" 
             @pitem.color = "b"
         else
-            @pitem.color = nil
+            @pitem.color = ""
         end
         @pitem.save
         @itemid = params[:dn_itemid]
@@ -4298,7 +4281,7 @@ WHERE
             @p_item.moko_des = nil
             @p_item.cost = nil 
             @p_item.price = nil
-            @p_item.color = nil
+            @p_item.color = ""
             @p_item.dn_id = nil
             @p_item.dn = nil
             @p_item.dn_long = nil

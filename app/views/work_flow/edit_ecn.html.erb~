@@ -199,7 +199,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="b" name="sheng_xiao_type[]" id="sheng_xiao_type_b" /> 
+                                    <input type="checkbox" value="b" name="sheng_xiao_type[]" id="sheng_xiao_type_b" <% if @get_ecn_info.sheng_xiao_type == "b" %> checked <% end %>> 
                                     <strong>批量变更</strong>
                                 </label>
                             </div>
@@ -207,7 +207,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="c" name="sheng_xiao_type[]" id="sheng_xiao_type_c" />
+                                    <input type="checkbox" value="c" name="sheng_xiao_type[]" id="sheng_xiao_type_c" <% if @get_ecn_info.sheng_xiao_type == "c" %> checked <% end %>>
                                     <strong>自然汰换</strong>
                                 </label>
                             </div> 
@@ -215,7 +215,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="d" name="sheng_xiao_type[]" id="sheng_xiao_type_d" />
+                                    <input type="checkbox" value="d" name="sheng_xiao_type[]" id="sheng_xiao_type_d" <% if @get_ecn_info.sheng_xiao_type == "d" %> checked <% end %>>
                                     <strong>消耗库存</strong>
                                 </label>
                             </div> 
@@ -223,7 +223,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="e" name="sheng_xiao_type[]" id="sheng_xiao_type_e" />
+                                    <input type="checkbox" value="e" name="sheng_xiao_type[]" id="sheng_xiao_type_e" <% if @get_ecn_info.sheng_xiao_type == "e" %> checked <% end %>>
                                     <strong>其它</strong>
                                 </label>
                             </div>
@@ -378,6 +378,19 @@
             <label for="itemp_id_remark" class="control-label">用量:</label>
             <code id="old_quantity_show"></code>
             <input type="number" class="form-control" id="new_quantity" name="new_quantity">
+          </div>
+          <div class="form-group">
+            <label for="change_at" class="control-label">变更性质:</label>
+            <div >
+              <label class="checkbox-inline">
+                <input type="radio" value="ever" name="change_type[]" id="change_type_ever" <% if @get_ecn_info.change_type == "ever" %> checked <% end %>>
+                <strong>永久</strong>
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" value="temp" name="change_type[]" id="change_type_temp" <% if @get_ecn_info.change_type == "temp" %> checked <% end %>>
+                <strong>临时</strong>
+              </label>
+            </div>
           </div>
           <div class="form-group">
             <label for="pj_remark">备注：</label>

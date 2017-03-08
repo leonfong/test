@@ -4331,6 +4331,7 @@ WHERE
         Rails.logger.info(@total_price_nn.to_f.round(4))
         Rails.logger.info("--------------------------")
         @bom.t_p = @total_price_nn.to_f.round(4)
+        @bom.state = ""
         @bom.save
     end
 

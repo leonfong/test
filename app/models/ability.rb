@@ -40,7 +40,7 @@ class Ability
       can :work_top, :all
       #can :work_b, :all
       #can :work_c, :all
-      can :work_d, :all
+      #can :work_d, :all
       can :pcb_review, :all
       can :pcb_dc, :all
       can :work_up, :all

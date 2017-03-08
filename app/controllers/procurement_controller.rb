@@ -2911,11 +2911,12 @@ before_filter :authenticate_user!
                 @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE (`p_name` LIKE '%#{params[:key_order].strip}%' OR `excel_file` LIKE '%#{params[:key_order].strip}%') AND `name` IS NULL AND `order_do` IS NULL ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
             else
                 if params[:complete]
-                    boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC #{order_ctl} ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? }
-                    @boms = boms.paginate(:page => params[:page], :per_page => 15)
+                    #boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE no IS NOT NULL AND p_name IS NOT NULL AND  remark_to_sell IS NULL ORDER BY `check` DESC #{order_ctl} ").select{|item| PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? }
+                    #@boms = boms.paginate(:page => params[:page], :per_page => 15)
+                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do'AND state = 'done' AND  remark_to_sell IS NULL ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
                 elsif params[:undone]
                     #boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do' ORDER BY `check` DESC #{order_ctl} ").select{|item| not PItem.where("procurement_bom_id = #{item.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank?  }
-                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do'AND state = 'done' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
+                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL AND `bom_team_ck` = 'do'AND state = '' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
                 elsif params[:sent_to_sell]
                     @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `remark_to_sell` = 'mark' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
                 else

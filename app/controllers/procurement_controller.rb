@@ -2822,6 +2822,11 @@ before_filter :authenticate_user!
         else
 =end
         @boms = ProcurementBom.find_by_id(params[:bom_id])
+        @q_order = PcbOrder.find_by(order_no: @boms.p_name_mom)
+        @q_order_item = PcbOrderItem.find_by_id(@boms.erp_item_id)
+        if not @q_order_item.blank?
+            @q_order_sell_item = PcbOrderSellItem.find_by_id(@q_order_item.pcb_order_sell_item_id)
+        end
         if can? :work_g_all, :all
             @user_do = "7"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id])

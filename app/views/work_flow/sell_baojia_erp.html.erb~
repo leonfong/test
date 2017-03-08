@@ -126,9 +126,19 @@
                                     <% if not order_son.blank? %>
                                         <tr class="bg-success">
                                             <td width="70"><%= order_son.created_at.localtime.strftime('%y-%m-%d') %></td>
-                                            <td width="150"><%= link_to order_item.pcb_order_no_son, sell_view_baojia_path(:bom_id =>order_son.id) %></td>
+                                            <% if order_item.p_type == "PCBA" or order_item.p_type == "COMPONENTS" %>
+                                                <td width="150"><%= link_to order_item.pcb_order_no_son, sell_view_baojia_path(:bom_id =>order_son.id) %></td>
+                                            <% else %>
+                                                <td width="150"><%= order_item.pcb_order_no_son %></td>
+                                            <% end %>
                                             <td width="100"><%= order_item.qty %></td>
                                             <td width="150">￥<%= order_item.t_p %></td>
+                                            <% if order_item.p_type == "PCBA" or order_item.p_type == "COMPONENTS" %>
+                                                <td width="150"><code>完成度:<%= PItem.where(procurement_bom_id: order_son.id).size %>/<%= PItem.where(procurement_bom_id: order_son.id,color: 'b').size %></code></td>
+                                            <% else %>
+                                                <td width="150"></td>
+                                            <% end %>
+                                            <td width="150"><% if order_item.state == "quotechked" %><code>报价完成</code><% end %></td>
                                             <td ><%= order_item.remark %></td>
                                             <td width="50"></td>
                                         </tr>

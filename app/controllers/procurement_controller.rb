@@ -2896,7 +2896,17 @@ before_filter :authenticate_user!
 
 
 
-    def p_bomlist   
+    def p_bomlist  
+
+
+        bomall = ProcurementBom.all
+        bomall.each do |abc|
+            check_blue = PItem.where("procurement_bom_id='#{abc.id}' AND color<>'b'")
+            if check_blue.blank?
+                abc.state = "done"
+                abc.save
+            end
+        end
         if can? :work_d, :all
             order_ctl = ",`created_at` DESC"
         else

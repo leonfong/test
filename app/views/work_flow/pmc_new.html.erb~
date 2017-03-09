@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;"> 
-            <%= render partial: "work_flow/menu", locals: {selected: "pmc_to_sell"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "pmc_new"} %>
 
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
@@ -83,6 +83,9 @@
                         </div>                       
                     </span>
                 </div>
+                <div class="col-md-2 col-sm-2 form-inline" >
+                    <button class="btn btn-danger btn-sm" id="btn_clean">一键清空</button>
+                </div>
             </div>
             <% end %>
 
@@ -104,7 +107,7 @@
                                 <th width="350">
                                     <%= link_to "物料名称",  {action: "pmc_new", sort_data: "moko_des",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
                                 </th>
-                                <th width="80">
+                                <th width="150">
                                     <%= link_to "位号",  {action: "pmc_new", sort_data: "part_code",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
                                 </th>
                                 <th width="80">申请总量</th>
@@ -131,7 +134,7 @@
                                 </td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
-                                <td><%= item.part_code[0,3]+"..." %></td>
+                                <td style="word-break : break-all;"><%= item.part_code %></td>
                                 <td><%= item.qty %></td>
                                 <td><%= item.buy_qty %></td>
                                 <td>
@@ -239,6 +242,17 @@ $("#selectAll").click(function () {
             this.checked = !this.checked;    
         });   
     }); 
+
+
+$(document).ready(function(){
+  $("#btn_clean").click(function(){
+    $("#order_no").val("");
+    $("#moko_part").val("");
+    $("#moko_des").val("");
+    $("#part_code").val("");
+    $("#buy_user").val("");
+  });
+});
 
 </script>
 <%

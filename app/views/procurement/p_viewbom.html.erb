@@ -15,7 +15,7 @@
                     <% elsif can? :work_g, :all and @pi_info.buy_state == nil %>
                         <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                         <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
-                    <% elsif can? :work_finance, :all and @pi_info.finance_state.blank? %>
+                    <% elsif can? :work_finance, :all and (@pi_item_data.finance_state.blank? or @pi_item_data.finance_state == "check") %>
                         <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                         <%= submit_tag "反审核", class: "btn btn-danger",data:{confirm: "确定审核不能通过?"} %>
                     <% end %>
@@ -195,7 +195,9 @@ $(document).ready(function() {
                                    <label for="pj_remark">子项目名：</label>
                                    <%= @boms.p_name %>
                                    <label for="pj_remark">国家：</label>
-                                   <%= @q_order.c_country %>
+                                   <% if not @q_order.blank? %>
+                                       <%= @q_order.c_country %>
+                                   <% end %>
                                </div>
                            </td>
                            <td width="120">

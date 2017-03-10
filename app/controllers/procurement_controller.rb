@@ -2112,6 +2112,9 @@ before_filter :authenticate_user!
             @sheet.row(row_use).each do |item|
                 if not item =~ /\n/
                     if not item.blank? 
+                        Rails.logger.info("item------------------------------------------------------------item")
+                        Rails.logger.info(item.inspect)
+                        Rails.logger.info("item------------------------------------------------------------item")
                         all_item << '"'+item+'":'+'"'+item+'"'
                     end
                 end

@@ -106,7 +106,7 @@
       </td>
       <td><%= buy.moko_des %></td>
       <td><%= buy.pmc_qty %></td>
-      <td><div data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>" data-delivery_date="<%= buy.delivery_date.blank?? '':buy.delivery_date.localtime.strftime('%Y-%m-%d') %>"><%= buy.buy_qty %></div></td>
+      <td><div class="bg-warning" data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>" data-delivery_date="<%= buy.delivery_date.blank?? '':buy.delivery_date.localtime.strftime('%Y-%m-%d') %>"><%= buy.buy_qty %></div></td>
       <td><%= buy.cost %></td>
       <td><%= buy.tax_cost %></td>
       <td><%= buy.tax %></td>

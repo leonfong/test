@@ -1250,6 +1250,9 @@ before_filter :authenticate_user!
         @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         if not params[:pay_id].blank?
             get_payment_notice_data = PaymentNoticeInfo.find_by_id(params[:pay_id])
+            if get_payment_notice_data.state == "checked"
+                redirect_to :back, :flash => {:error => "收款单不能重复！！！"} and return false
+            end
             finance_voucher_info = FinanceVoucherInfo.new
             finance_voucher_info.state = "checked"
             finance_voucher_info.payment_notice_info_id = get_payment_notice_data.id
@@ -1299,6 +1302,7 @@ before_filter :authenticate_user!
             finance_voucher_info.voucher_full_name_new = current_user.full_name
             finance_voucher_info.voucher_full_name_up = current_user.full_name
             if finance_voucher_info.save
+                
                 payment_voucher_info = FinancePaymentVoucherInfo.new
                 payment_voucher_info.finance_voucher_info_id = finance_voucher_info.id
                 payment_voucher_info.no = 1
@@ -1308,6 +1312,8 @@ before_filter :authenticate_user!
                 payment_voucher_info.dai_fang = finance_voucher_info.get_money_self
                 payment_voucher_info.finance_at = params[:finance_at]
                 payment_voucher_info.save
+                get_payment_notice_data.state = "checked"
+                get_payment_notice_data.save
             end
         end
         redirect_to :back
@@ -1344,6 +1350,7 @@ before_filter :authenticate_user!
                 if @payment_date.save
                     get_pi_item = PiItem.find_by_id(@payment_date.pi_item_id)
                     get_pi_item.finance_state = "check"
+                    get_pi_item.state = "check"
                     get_pi_item.save
                 end 
             end
@@ -1764,13 +1771,15 @@ before_filter :authenticate_user!
                 end
                 render "pi_list_eng.html.erb" and return
             elsif params[:finance_chk]
-                if can? :work_e, :all
-                    #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = '' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
+                @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+=begin
+                if can? :work_admin, :all
                     @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = '' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all 
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    
                 end
+=end
                 render "pi_list_eng.html.erb" and return     
             elsif params[:checked]
                 if can? :work_e, :all
@@ -1839,6 +1848,15 @@ before_filter :authenticate_user!
 
         if not params[:pi_item_id].blank?
             pi_item = PiItem.find_by_id(params[:pi_item_id])
+            @pi_item_data = pi_item 
+            q_order_item = PcbOrderItem.find_by_id(pi_item.order_item_id)
+
+
+            
+            @q_order = PcbOrder.find_by_id(q_order_item.pcb_order_id)
+            @q_order_sell_item = PcbOrderSellItem.find_by_id(q_order_item.pcb_order_sell_item_id)
+
+
             @state = pi_item.state
             @to_pmc_state = pi_item.to_pmc_state
             @boms = ProcurementBom.find_by_id(pi_item.bom_id)
@@ -3587,7 +3605,8 @@ before_filter :authenticate_user!
         #if not @find_pcb.blank?
             #@pi_pcb = PcbItemInfo.find_by_pcb_order_item_id(find_pcb.first.find_pcb.order_item_id)
         #end
-        @pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        #@pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        @pi_other_item = PiOtherItem.where(pi_info_id: @pi_info.id)
         @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
         if params[:type] == '1'
             render "pi_print_1.html.erb" and return
@@ -7831,11 +7850,11 @@ before_filter :authenticate_user!
         edit_pi_item.qty = params[:edit_qty]  
         edit_pi_item.layer = params[:edit_layer]
         edit_pi_item.des = params[:edit_des]
-        edit_pi_item.unit_price = params[:edit_unit_price]
+        edit_pi_item.unit_price = (params[:edit_pcb_price].to_f.round(3) + params[:edit_com_cost].to_f.round(3) + params[:edit_pcba].to_f.round(3))/params[:edit_qty].to_i
         edit_pi_item.pcb_price =params[:edit_pcb_price]
         edit_pi_item.com_cost = params[:edit_com_cost]
         edit_pi_item.pcba = params[:edit_pcba]
-        edit_pi_item.t_p = params[:edit_t_p]
+        edit_pi_item.t_p = params[:edit_pcb_price].to_f.round(3) + params[:edit_com_cost].to_f.round(3) + params[:edit_pcba].to_f.round(3)
         if edit_pi_item.save
             if edit_pi_item.p_type == "PCBA"
                 get_bom = ProcurementBom.find_by_id(edit_pi_item.bom_id)
@@ -7872,6 +7891,7 @@ before_filter :authenticate_user!
 
     def add_pi_other_item
         add_item = PiOtherItem.new
+        add_item.pi_info_id = params[:add_pi_info_id_other]
         add_item.c_id = params[:add_c_id_other]
         add_item.pi_no = params[:add_pi_no_other]
         add_item.p_type = params[:add_type_other]
@@ -8456,9 +8476,9 @@ before_filter :authenticate_user!
                 @topic = Topic.find_by_sql("SELECT *, POSITION('work_f' IN topics.mark) AS mark_chk FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 20)
             end
             if params[:order] or params[:sort_date]
-                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 20)
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 50)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 50)
                 end
             end
             

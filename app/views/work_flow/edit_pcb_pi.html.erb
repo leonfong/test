@@ -213,7 +213,7 @@
                                 <% end %>
                             </td>
                             <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
-                            <td colSpan="4">备注: <%= pi_item.remark %></td>
+                            <td colSpan="6">备注: <%= pi_item.remark %></td>
                             <td>金额: <%= pi_item.t_p %></td>
                             <td colSpan="3"></td>
                             <td>
@@ -521,24 +521,24 @@
               <input type="text" class="form-control" id="edit_des" name="edit_des" >
             </div>
             <div class="form-group">         
-              <label for="p_name" class="control-label">Unit Price:</label>
-              <input type="text" class="form-control" id="edit_unit_price" name="edit_unit_price" >
+              <label for="p_name" class="control-label">Unit Price(<code>Unit Price = Total Price/Quantity</code>):</label>
+              <input type="text" class="form-control" id="edit_unit_price" name="edit_unit_price" disabled>
             </div>
             <div class="form-group">         
-              <label for="p_name" class="control-label">PCB Price:</label>
+              <label for="p_name" class="control-label"><code>必填</code>PCB Price(光板费):</label>
               <input type="text" class="form-control" id="edit_pcb_price" name="edit_pcb_price" >
             </div>
             <div class="form-group">         
-              <label for="p_name" class="control-label">Components Cost:</label>
+              <label for="p_name" class="control-label"><code>必填</code>Components Cost(元器件费):</label>
               <input type="text" class="form-control" id="edit_com_cost" name="edit_com_cost" >
             </div>
             <div class="form-group">         
-              <label for="p_name" class="control-label">PCBA:</label>
+              <label for="p_name" class="control-label"><code>必填</code>PCBA(组装费):</label>
               <input type="text" class="form-control" id="edit_pcba" name="edit_pcba" >
             </div>
             <div class="form-group">         
-              <label for="p_name" class="control-label">Total Price(USD):</label>
-              <input type="text" class="form-control" id="edit_t_p" name="edit_t_p" >
+              <label for="p_name" class="control-label">Total Price(USD)(<code>Total Price = PCB Price + Components Cost + PCBA</code>):</label>
+              <input type="text" class="form-control" id="edit_t_p" name="edit_t_p" disabled>
             </div>
 
         </div>
@@ -689,7 +689,11 @@
         </div>
         
         <div class="modal-body">  
-            <%= form_tag({action: :add_pi_other_item},method:"post") do %>   
+            <%= form_tag({action: :add_pi_other_item},method:"post") do %> 
+            <div class="form-group sr-only">         
+                <label for="add_pi_info_id_other" class="control-label">pi_info_id:</label>
+                <input type="text" class="form-control" id="add_pi_info_id_other" name="add_pi_info_id_other" value="<%= @pi_info.id %>">
+            </div>  
             <div class="form-group sr-only">         
                 <label for="add_c_id_other" class="control-label">itemid:</label>
                 <input type="text" class="form-control" id="add_c_id_other" name="add_c_id_other" value="<%= params[:c_id] %>">
@@ -852,7 +856,7 @@ $('#edititem').on('show.bs.modal', function (event) {
   modal.find($("#edit_des")).val(edit_des);
   modal.find($("#edit_unit_price")).val(edit_unit_price);
   modal.find($("#edit_pcb_price")).val(edit_pcb_price);
-  //modal.find($("#edit_com_cost")).val(edit_com_cost);
+  modal.find($("#edit_com_cost")).val(edit_com_cost);
   modal.find($("#edit_pcba")).val(edit_pcba);
   modal.find($("#edit_t_p")).val(edit_t_p);
 

@@ -235,7 +235,7 @@
                         <tr>
                             <td colSpan="12"></td>
                             <td colSpan="2">
-                                <label for="t_p_edit" class="col-md-3 control-label" id="t_p_label">Total:</label>
+                                <label for="t_p_edit" class="col-md-3 control-label bg-danger" id="t_p_label">Total:</label>
                                       <div id="t_p_show">
                                           <%= @pi_info.t_p %>
                                       </div>
@@ -522,7 +522,7 @@
             </div>
             <div class="form-group">         
               <label for="p_name" class="control-label">Unit Price(<code>Unit Price = Total Price/Quantity</code>):</label>
-              <input type="text" class="form-control" id="edit_unit_price" name="edit_unit_price" >
+              <input type="text" class="form-control" id="edit_unit_price" name="edit_unit_price" disabled>
             </div>
             <div class="form-group">         
               <label for="p_name" class="control-label"><code>必填</code>PCB Price(光板费):</label>
@@ -663,11 +663,11 @@
             </div>  
             <div class="form-group">
               <label for="add_t_p" class="control-label">Total:</label>
-              <input type="text" class="form-control" id="add_t_p" name="add_t_p" value="<%= @pi_info.t_p %>">
+              <input type="text" class="form-control" id="add_t_p" name="add_t_p" value="<%= @pi_info.t_p %>" disabled>
             </div> 
             <div class="form-group">
               <label for="add_t_p_rmb" class="control-label">Total RMB:</label>
-              <input type="text" class="form-control" id="add_t_p_rmb" name="add_t_p_rmb" value="<%= @pi_info.t_p_rmb %>">
+              <input type="text" class="form-control" id="add_t_p_rmb" name="add_t_p_rmb" value="<%= @pi_info.t_p_rmb %>" disabled>
             </div>        
         </div>
         <div class="modal-footer">

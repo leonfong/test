@@ -2106,14 +2106,14 @@ before_filter :authenticate_user!
         if not current_user.s_name.blank?
             if current_user.s_name.split(",").size == 1
                 Rails.logger.info("sell-------------------------1")
-                @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'#{where_order_no} AND pcb_orders.del_flag = 'active'").order("pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @quate = PcbOrder.where("#{where_date + where_5star}  pcb_orders.state <> 'new' AND pcb_orders.order_sell = '#{current_user.email}'#{where_order_no} AND pcb_orders.del_flag = 'active'").order("pcb_orders.created_at DESC").paginate(:page => params[:page], :per_page => 20)
             else 
                 if can? :work_admin, :all
                     Rails.logger.info("sell-------------------------2")
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders  WHERE #{where_date + where_5star}  pcb_orders.state <> 'new'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.created_at DESC").paginate(:page => params[:page], :per_page => 20)
                 else
                     Rails.logger.info("sell-------------------------3")
-                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.created_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end
         end
@@ -7856,6 +7856,37 @@ before_filter :authenticate_user!
         edit_pi_item.pcba = params[:edit_pcba]
         edit_pi_item.t_p = params[:edit_pcb_price].to_f.round(3) + params[:edit_com_cost].to_f.round(3) + params[:edit_pcba].to_f.round(3)
         if edit_pi_item.save
+            get_rate_data = SetupFinanceInfo.find_by_id(1).dollar_rate
+
+            all_item_t_p = PiItem.find_by_sql("SELECT t_p FROM pi_items WHERE pi_info_id = #{edit_pi_item.pi_info_id} GROUP BY pi_info_id").first.t_p
+            all_other_t_p_data = PiOtherItem.find_by_sql("SELECT t_p FROM pi_other_items WHERE pi_info_id = #{edit_pi_item.pi_info_id} GROUP BY pi_info_id")
+            if not all_other_t_p_data.blank?
+                all_other_t_p = all_other_t_p_data.first.t_p
+            end 
+            if all_item_t_p.blank?
+                all_item_t_p = 0
+            end
+            if all_other_t_p.blank?
+                all_other_t_p = 0
+            end
+            get_pi_data = PiInfo.find_by_id(edit_pi_item.pi_info_id)
+            if get_pi_data.pi_shipping_cost.blank?
+                pi_shipping_cost = 0
+            else
+                pi_shipping_cost = get_pi_data.pi_shipping_cost
+            end
+            if get_pi_data.pi_bank_fee.blank?
+                pi_bank_fee = 0
+            else
+                pi_bank_fee = get_pi_data.pi_bank_fee
+            end
+
+            get_pi_data.t_p = all_item_t_p + all_other_t_p + pi_shipping_cost + pi_bank_fee
+            get_pi_data.t_p_rmb = (all_item_t_p + all_other_t_p + pi_shipping_cost + pi_bank_fee) * get_rate_data
+            get_pi_data.save
+        end
+=begin
+        if edit_pi_item.save
             if edit_pi_item.p_type == "PCBA"
                 get_bom = ProcurementBom.find_by_id(edit_pi_item.bom_id)
                 if not get_bom.blank?
@@ -7886,6 +7917,7 @@ before_filter :authenticate_user!
                 end
             end
         end
+=end
         redirect_to :back
     end
 
@@ -7898,16 +7930,76 @@ before_filter :authenticate_user!
         add_item.remark = params[:add_remark_other]
         add_item.t_p = params[:add_t_p_other]
         add_item.save
+        if add_item.save
+            get_rate_data = SetupFinanceInfo.find_by_id(1).dollar_rate
+
+            all_item_t_p = PiItem.find_by_sql("SELECT t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_info_id_other]} GROUP BY pi_info_id").first.t_p
+            all_other_t_p_data = PiOtherItem.find_by_sql("SELECT t_p FROM pi_other_items WHERE pi_info_id = #{params[:add_pi_info_id_other]} GROUP BY pi_info_id")
+            if not all_other_t_p_data.blank?
+                all_other_t_p = all_other_t_p_data.first.t_p
+            end 
+            if all_item_t_p.blank?
+                all_item_t_p = 0
+            end
+            if all_other_t_p.blank?
+                all_other_t_p = 0
+            end
+            get_pi_data = PiInfo.find_by_id(params[:add_pi_info_id_other])
+            if get_pi_data.pi_shipping_cost.blank?
+                pi_shipping_cost = 0
+            else
+                pi_shipping_cost = get_pi_data.pi_shipping_cost
+            end
+            if get_pi_data.pi_bank_fee.blank?
+                pi_bank_fee = 0
+            else
+                pi_bank_fee = get_pi_data.pi_bank_fee
+            end
+
+            get_pi_data.t_p = all_item_t_p + all_other_t_p + pi_shipping_cost + pi_bank_fee
+            get_pi_data.t_p_rmb = (all_item_t_p + all_other_t_p + pi_shipping_cost + pi_bank_fee) * get_rate_data
+            get_pi_data.save
+        end
         redirect_to :back
     end
 
     def add_pi_sb
-        add_sb = PiInfo.find_by_id(params[:add_pi_sb_id])
-        add_sb.pi_shipping_cost = params[:add_sc]
-        add_sb.pi_bank_fee = params[:add_bf]
-        add_sb.t_p = params[:add_t_p]
-        add_sb.t_p_rmb = params[:add_t_p_rmb]
-        add_sb.save
+        get_rate_data = SetupFinanceInfo.find_by_id(1).dollar_rate
+
+        all_item_t_p = PiItem.find_by_sql("SELECT t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id").first.t_p
+        all_other_t_p_data = PiOtherItem.find_by_sql("SELECT t_p FROM pi_other_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id")
+        if not all_other_t_p_data.blank?
+           all_other_t_p = all_other_t_p_data.first.t_p
+        end 
+        if all_item_t_p.blank?
+            all_item_t_p = 0
+        end
+        if all_other_t_p.blank?
+            all_other_t_p = 0
+        end
+        get_pi_data = PiInfo.find_by_id(params[:add_pi_sb_id])
+
+        if params[:add_sc].blank?
+            pi_shipping_cost = 0
+        else
+            pi_shipping_cost = params[:add_sc].to_f
+        end
+        if params[:add_bf].blank?
+            pi_bank_fee = 0
+        else
+            pi_bank_fee = params[:add_bf].to_f
+        end
+
+        get_pi_data.pi_shipping_cost = params[:add_sc]
+        get_pi_data.pi_bank_fee = params[:add_bf]
+
+        get_pi_data.t_p = all_item_t_p + all_other_t_p + pi_shipping_cost + pi_bank_fee
+        get_pi_data.t_p_rmb = (all_item_t_p + all_other_t_p + pi_shipping_cost + pi_bank_fee) * get_rate_data
+        get_pi_data.save
+
+
+
+
         redirect_to :back
     end
 

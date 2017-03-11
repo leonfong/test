@@ -5,6 +5,17 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_j_h_r_q
+        if not params[:jhrq_at].blank?
+            get_info_data = PiBuyInfo.find_by_id(params[:id])
+            get_info_data.delivery_date = params[:jhrq_at]
+            if get_info_data.save
+                get_item_data = PiBuyItem.where(pi_buy_info_id: get_info_data.id).update_all "delivery_date = '#{params[:jhrq_at]}'"
+            end
+        end
+        redirect_to :back
+    end
+
     def edit_ecn_up
         if not params[:bom_ecn_info_id].blank?
             get_ecn_info = BomEcnInfo.find_by_id(params[:bom_ecn_info_id])

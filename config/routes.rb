@@ -235,6 +235,7 @@ Rails.application.routes.draw do
   match '/add_ecn', to: 'work_flow#add_ecn', via: 'post'
   match '/add_ecn_item', to: 'work_flow#add_ecn_item', via: 'post'
   match '/edit_ecn_up', to: 'work_flow#edit_ecn_up', via: 'post'
+  match '/edit_j_h_r_q', to: 'work_flow#edit_j_h_r_q', via: 'post'
 
 
 

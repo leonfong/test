@@ -1385,6 +1385,16 @@ before_filter :authenticate_user!
         @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
         if not params[:pi_info_id].blank?
             get_pi_info_data = PiInfo.find_by_id(params[:pi_info_id])
+            shou_kuan_jin_e_data = PaymentNoticeInfo.find_by_sql("SELECT SUM(pay_p) AS pay_all FROM payment_notice_infos WHERE pi_info_id = '#{params[:pi_info_id]}'")
+            if not shou_kuan_jin_e_data.blank?
+                @shou_kuan_jin_e = shou_kuan_jin_e_data.first.pay_all
+            else 
+                @shou_kuan_jin_e = 0
+            end
+            pay_all = params[:pay_p].to_f + @shou_kuan_jin_e.to_f
+            if pay_all > get_pi_info_data.t_p
+                redirect_to :back, :flash => {:error => "保存失败，收款金额总和不能大于PI总金额！！！"} and return false
+            end
             new_payment_notice = PaymentNoticeInfo.new
             new_payment_notice.state = "new"
             new_payment_notice.pi_info_id = params[:pi_info_id]
@@ -1400,7 +1410,9 @@ before_filter :authenticate_user!
             new_payment_notice.pi_t_p = get_pi_info_data.t_p
             #new_payment_notice.unreceived_p = params[:unreceived_p]
             new_payment_notice.pay_att = params[:pay_att]
+
             new_payment_notice.pay_p = params[:pay_p]
+
             new_payment_notice.pay_type = params[:pay_type]
             new_payment_notice.pay_account_name = params[:pay_account_name]
             new_payment_notice.pay_account_number = params[:pay_account_number]
@@ -1883,6 +1895,12 @@ before_filter :authenticate_user!
             if can? :work_e, :all 
                 if not params[:pi_info_id].blank? 
                     @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
+                    shou_kuan_jin_e_data = PaymentNoticeInfo.find_by_sql("SELECT SUM(pay_p) AS pay_all FROM payment_notice_infos WHERE pi_info_id = '#{params[:pi_info_id]}'")
+                    if not shou_kuan_jin_e_data.blank?
+                        @shou_kuan_jin_e = shou_kuan_jin_e_data.first.pay_all
+                    else
+                        @shou_kuan_jin_e = 0
+                    end
                 end
                 @baojia = @bom_item
                 render "sell_view_baojia.html.erb" and return

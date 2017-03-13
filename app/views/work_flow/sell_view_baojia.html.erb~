@@ -454,7 +454,7 @@
 <% if not get_dn_data.blank? %>
 <% if not get_dn_data.first.remark.blank? %>
 
-<div class="row" style="margin: 0px;" >
+<div class="row" style="margin: 0px;">
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
 <table style="margin: 0px;" >
 <tr>
@@ -468,7 +468,8 @@
 <% if get_dn_data.first.email.blank? %>
 采购工程师:
 <% else %> 
-采购工程师:<%= User.find_by_email(get_dn_data.first.email).full_name %>
+
+采购工程师:<%= User.find_by_email(get_dn_data.first.email).full_name.to_s %>
 <% end %> 
 </strong>
 <%= get_dn_data.first.remark %>
@@ -811,7 +812,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary" onclick="return postform()">保存</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform_check()">保存</button>
       </div>
       <% end %>
     </div>
@@ -1133,13 +1134,17 @@ $('#remarkitem').on('show.bs.modal', function (event) {
   var modal = $(this);
   modal.find($("#itemp_id_remark")).val(itempid);
 })
-function postform() {  	           
+function postform_check() {  	           
       if ($("#pay_type").val() == "" )
       {                    
 　　    alert("请选填收款性质！");                    
 　　    return false;                
 　     }
-
+      if ($("#pay_p").val() + <%= @shou_kuan_jin_e %> > <%= @pi_info.t_p %>)
+      {                    
+　　    alert("保存失败，收款金额总和不能大于PI总金额！！！！");                    
+　　    return false;                
+　     }
 }
 
 

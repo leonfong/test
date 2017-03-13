@@ -1,4 +1,6 @@
 <small><div class="container-fluid" >
+<%= render 'layouts/flash_messages' %>
+
 
 <% if not params[:pi_info_id].blank? %>
 
@@ -812,7 +814,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary" onclick="return postform()">保存</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform_check()">保存</button>
       </div>
       <% end %>
     </div>
@@ -1134,13 +1136,17 @@ $('#remarkitem').on('show.bs.modal', function (event) {
   var modal = $(this);
   modal.find($("#itemp_id_remark")).val(itempid);
 })
-function postform() {  	           
+function postform_check() {  	           
       if ($("#pay_type").val() == "" )
       {                    
 　　    alert("请选填收款性质！");                    
 　　    return false;                
 　     }
-
+      if ($("#pay_p").val() + <%= @shou_kuan_jin_e %> > <%= @pi_info.t_p %>)
+      {                    
+　　    alert("保存失败，收款金额总和不能大于PI总金额！！！！");                    
+　　    return false;                
+　     }
 }
 
 

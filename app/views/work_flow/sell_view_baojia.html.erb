@@ -1142,11 +1142,13 @@ function postform_check() {
 　　    alert("请选填收款性质！");                    
 　　    return false;                
 　     }
+<% if not @shou_kuan_jin_e.blank?%>
       if ($("#pay_p").val() + <%= @shou_kuan_jin_e %> > <%= @pi_info.t_p %>)
       {                    
 　　    alert("保存失败，收款金额总和不能大于PI总金额！！！！");                    
 　　    return false;                
 　     }
+<% end %>
 }
 
 

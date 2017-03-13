@@ -1,4 +1,6 @@
 <small><div class="container-fluid" >
+<%= render 'layouts/flash_messages' %>
+
 
 <% if not params[:pi_info_id].blank? %>
 

@@ -195,7 +195,7 @@ $(document).ready(function() {
                                    <label for="pj_remark">子项目名：</label>
                                    <%= @boms.p_name %>
                                    <label for="pj_remark">国家：</label>
-                                   <% if @q_order.blank? %>
+                                   <% if not @q_order.blank? %>
                                        <%= @q_order.c_country %>
                                    <% end %>
                                </div>

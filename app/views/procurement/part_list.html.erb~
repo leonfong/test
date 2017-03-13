@@ -293,6 +293,7 @@ function change_<%= item.id.to_s %>(){
 <% if remark_item.user_id == current_user.id %>
 <a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#remarkupdate" data-itempid="<%= item.id %>" data-remark_id="<%= remark_item.id %>" data-remark="<%= remark_item.remark %>" > </a>
 <% end %>
+<strong><%= remark_item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></strong>
 <strong><%= remark_item.user_name %>: </strong>
 <% if remark_item.state == "del" %>
 <del><%= remark_item.remark %></del>

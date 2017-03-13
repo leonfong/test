@@ -3796,11 +3796,7 @@ WHERE
     end
 
     def p_edit_dn    
-        if not params[:bom_version].blank?   
-            dn = PVersionDn.find(params[:dn_id])
-        else
-            dn = PDn.find(params[:dn_id])
-        end
+        dn = PDn.find(params[:dn_id])
         if not params[:dn_info].blank?
             dn.update(editbn_params)
         end
@@ -3820,11 +3816,8 @@ WHERE
         
         if not params[:dn_remark].blank?
             dn.remark = params[:dn_remark].gsub(/\r\n/, " ")
-            if not params[:bom_version].blank? 
-                @bom_item = PVersionItem.find(dn.p_version_item_id)
-            else
-                @bom_item = PItem.find(dn.p_item_id)
-            end
+            @bom_item = PItem.find(dn.p_item_id)
+            
             #@bom_item.sell_feed_back_tag = "sell"
             #@bom_item.save
         end

@@ -79,19 +79,18 @@
                       <div class="col-md-6">
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm ">
+                              <% if not @bank_user.blank? %>
                                   <label for="" class="col-md-3 control-label bg-warning" id="bank_user_label">付款户名:</label>   
                                   <div class="col-md-9">
+                                  
                                       <div id="bank_user_show">
                                           <%= @fu_kuan.supplier_bank_user %>
-                                      </div>   
-
-
-
+                                      </div>  
                                       <div style="display:none;" id="bank_user_edit">
                                       <%= form_tag({action: :edit_fu_kuan_bank_user},method:"post") do %>
                                           <input class="form-control sr-only" name="id"  type="text" value="<%=@fu_kuan.id%>">
                                           <div class="input-group input-group-sm">
-                                             
+                                                   
                                               <%= select_tag(:bank_user_edit,options_for_select(@bank_user.collect{ |c| [c.supplier_bank_user,c.id] },params[:bank_user_edit]),{:include_blank => '--请选择--',:class =>"form-control"})  %>
                                               <span class="input-group-btn">
                                                   <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
@@ -99,10 +98,15 @@
                                           </div>
                                       <% end %>
                                       </div>
-
-
-  
                                   </div>
+                              <% else %>
+                                  <label class="col-md-3 control-label bg-warning" data-toggle="modal" data-backdrop="static" data-target="#BankInfo" data-supplier_bank_user="<%= @fu_kuan.supplier_bank_user %>" data-supplier_bank_name="<%= @fu_kuan.supplier_bank_name %>" data-supplier_bank_account="<%= @fu_kuan.supplier_bank_account %>"  >付款户名:</label>   
+                                  <div class="col-md-9">
+                                      <div>
+                                          <%= @fu_kuan.supplier_bank_user %>
+                                      </div>  
+                                  </div>
+                              <% end %>
                               </div>
 
 
@@ -140,8 +144,63 @@
                                       </div>
                                   </div>
                               </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label bg-warning" id="info_a_label">付款信息:</label>
+                                  <div class="col-md-5" >
+                                      <div id="info_a_show">
+                                          <p class="form-control-static" >
+                                          <% if not @fu_kuan.info_a.blank? %>
+                                              <a class="a_ctl" href="<%= @fu_kuan.info_a.url %>">下载</a>
+                                          <% else %>
+                                              <a class="a_ctl" >无</a>
+                                          <% end %>
+                                          </p>
+                                      </div>
+                                  
+                                      <div id="info_a_edit" style="display:none;" >
+                                      <%= form_tag({action: :edit_fu_kuan_info_a},method:"post",multipart:"true") do %>
+                                          <input class="form-control sr-only" name="id"  type="text" value="<%=@fu_kuan.id%>">
+                                          <div class="input-group input-group-sm">
+                                              <input class="form-control" name="info_a" id="info_a" type="file" accept=".xls,.zip,.rar,.gz,.bz2,.7z,.pdf,.doc,.docx"  >
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+                                  </div> 
+                              </div>
+
+                              <div class="form-group form-group-sm">
+                                  <label for="" class="col-md-3 control-label bg-warning" id="info_b_label">采购合同:</label>
+                                  <div class="col-md-5" >
+                                      <div id="info_b_show">
+                                          <p class="form-control-static" >
+                                          <% if not @fu_kuan.info_b.blank? %>
+                                              <a class="a_ctl" href="<%= @fu_kuan.info_b.url %>">下载</a>
+                                          <% else %>
+                                              <a class="a_ctl" >无</a>
+                                          <% end %>
+                                          </p>
+                                      </div>
+                                  
+                                      <div id="info_b_edit" style="display:none;" >
+                                      <%= form_tag({action: :edit_fu_kuan_info_b},method:"post",multipart:"true") do %>
+                                          <input class="form-control sr-only" name="id"  type="text" value="<%=@fu_kuan.id%>">
+                                          <div class="input-group input-group-sm">
+                                              <input class="form-control" name="info_b" id="info_b" type="file" accept=".xls,.zip,.rar,.gz,.bz2,.7z,.pdf,.doc,.docx"  >
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+                                  </div> 
+                              </div>
                           </div>
                       </div>
+
+
                       <div class="col-md-3">
                           <div class="form-horizontal">
                               <div class="form-group form-group-sm">
@@ -267,6 +326,49 @@
 
 
 
+<div class="modal fade" id="BankInfo" tabindex="-1" role="dialog" aria-labelledby="BankInfoLabel">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="BankInfoLabel">修改供应商银行信息</h4>
+      </div>
+        <%= form_tag({action: :edit_fu_kuan_bank},method:"post") do %>
+      <div class="modal-body">
+
+          <div class="form-group sr-only">
+            <label for="id" class="control-label">id:</label>
+            <input class="form-control " name="id"  type="text" value="<%=@fu_kuan.id%>">
+          </div>
+
+          <div class="form-group">
+            <label for="supplier_bank_user" class="control-label">付款户名:</label>
+            <input type="text" class="form-control" id="supplier_bank_user" name="supplier_bank_user">
+          </div>
+          <div class="form-group">
+            <label for="supplier_bank_name" class="control-label">供应商开户银行:</label>
+            <input type="text" class="form-control" id="supplier_bank_name" name="supplier_bank_name">
+          </div>
+          <div class="form-group">
+            <label for="supplier_bank_account" class="control-label">供应商银行帐号:</label>
+            <input type="text" class="form-control" id="supplier_bank_account" name="supplier_bank_account">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">提交</button>
+      </div>
+    <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 
 
 
@@ -387,6 +489,11 @@
 
 
 
+
+
+
+
+
 </div>
 </small>
 
@@ -400,6 +507,22 @@
     });
 </script> 
 <script type="text/javascript">
+$('#BankInfo').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var supplier_bank_user = button.data('supplier_bank_user');
+  var supplier_bank_name = button.data('supplier_bank_name');
+  var supplier_bank_account = button.data('supplier_bank_account');
+
+  var modal = $(this);
+
+  modal.find($("#supplier_bank_user")).val(supplier_bank_user);
+  modal.find($("#supplier_bank_name")).val(supplier_bank_name);
+  modal.find($("#supplier_bank_account")).val(supplier_bank_account);
+
+})
+
+
+
 $("#selectAll").click(function () {   
         $(".chk_all").each(function () {     
             $(this).prop('checked', true);//  
@@ -426,7 +549,14 @@ $(document).ready(function(){
         $("#bank_user_show").hide();
         $("#bank_user_edit").show();
     });
-
+    $("#info_a_label").dblclick(function(){
+        $("#info_a_show").hide();
+        $("#info_a_edit").show();
+    });
+    $("#info_b_label").dblclick(function(){
+        $("#info_b_show").hide();
+        $("#info_b_edit").show();
+    });
 });
 <% end %>
 </script>

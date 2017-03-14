@@ -5,6 +5,33 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_fu_kuan_remark
+        if not params[:zhi_fu_id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:zhi_fu_id])
+            get_fukuan.remark = params[:remark_edit]
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_fu_kuan_info_a
+        if not params[:id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
+            get_fukuan.info_a = params[:info_a]
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_fu_kuan_info_b
+        if not params[:id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
+            get_fukuan.info_b = params[:info_b]
+            get_fukuan.save
+        end
+        redirect_to :back and return
+    end
+
     def edit_j_h_r_q
         if not params[:jhrq_at].blank?
             get_info_data = PiBuyInfo.find_by_id(params[:id])
@@ -1002,10 +1029,12 @@ before_filter :authenticate_user!
         redirect_to :back and return
     end
 
-    def edit_fu_kuan_remark
-        if not params[:zhi_fu_id].blank?
-            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:zhi_fu_id])
-            get_fukuan.remark = params[:remark_edit]
+    def edit_fu_kuan_bank
+        if not params[:id].blank?
+            get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:id])
+            get_fukuan.supplier_bank_user = params[:supplier_bank_user]
+            get_fukuan.supplier_bank_name = params[:supplier_bank_name]
+            get_fukuan.supplier_bank_account = params[:supplier_bank_account]
             get_fukuan.save
         end
         redirect_to :back and return
@@ -1124,6 +1153,13 @@ before_filter :authenticate_user!
             new_fu_kuan.supplier_bank_user = get_supplier_data.supplier_bank_user
             new_fu_kuan.supplier_bank_name = get_supplier_data.supplier_bank_name
             new_fu_kuan.supplier_bank_account = get_supplier_data.supplier_bank_account
+            new_fu_kuan.save
+        else
+            new_fu_kuan = FuKuanShenQingDanInfo.new
+            new_fu_kuan.user_new = current_user.full_name
+            new_fu_kuan.supplier_name = "TB"
+            new_fu_kuan.supplier_name_long = "TB"
+            new_fu_kuan.supplier_clearing = "日结"
             new_fu_kuan.save
         end
         redirect_to edit_fu_kuan_shen_qing_dan_path(id: new_fu_kuan.id)

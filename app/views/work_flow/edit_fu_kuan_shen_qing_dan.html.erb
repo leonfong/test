@@ -390,7 +390,9 @@
                         <div class="col-md-3" >
                             <lable id="date_at_label" for="date_at" class="control-label sr-only"><strong>日期: </strong></lable>
                             <div class="input-group input-group-sm">
+                                <% if not @fu_kuan.supplier_list_id.blank? %>
                                 <input class="control-label sr-only" name="supplier_list_id" value="<%= @fu_kuan.supplier_list_id %>">
+                                <% end %>
                                 <%= text_field_tag :date_at, params[:date_at], id: "date_at",class:"form-control input-sm", size:"10",placeholder:"日期"%>
 
 <script type="text/javascript">

@@ -145,7 +145,7 @@
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
-                                  <label for="" class="col-md-3 control-label" id="info_a_label">付款信息:</label>
+                                  <label for="" class="col-md-3 control-label bg-warning" id="info_a_label">付款信息:</label>
                                   <div class="col-md-5" >
                                       <div id="info_a_show">
                                           <p class="form-control-static" >
@@ -172,7 +172,7 @@
                               </div>
 
                               <div class="form-group form-group-sm">
-                                  <label for="" class="col-md-3 control-label" id="info_b_label">采购合同:</label>
+                                  <label for="" class="col-md-3 control-label bg-warning" id="info_b_label">采购合同:</label>
                                   <div class="col-md-5" >
                                       <div id="info_b_show">
                                           <p class="form-control-static" >

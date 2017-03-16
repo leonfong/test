@@ -794,7 +794,11 @@ before_filter :authenticate_user!
         @all_item = ''
         if not params[:date_at].blank?
             #get_item_data = PiBuyItem.where("supplier_list_id = '#{params[:supplier_list_id]}' AND yi_fu_kuan_p < buy_qty*cost")
-            get_info_data = CaiGouFaPiaoInfo.where("supplier_list_id = '#{params[:supplier_list_id]}' AND date_format(wh_at,'%Y-%m') ='#{params[:date_at]}'")
+            if not params[:supplier_list_id].blank?
+                get_info_data = CaiGouFaPiaoInfo.where("supplier_list_id = '#{params[:supplier_list_id]}' AND date_format(wh_at,'%Y-%m') ='#{params[:date_at]}'")
+            else
+                get_info_data = CaiGouFaPiaoInfo.where("date_format(wh_at,'%Y-%m') ='#{params[:date_at]}'")
+            end
             if not get_info_data.blank?
                 get_info_data.each do |item|
                     @all_item += '<tr>' 

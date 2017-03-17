@@ -19,7 +19,8 @@
             </div>
             <div class="col-md-6 col-sm-6">
                 <input class="sr-only" name="bom_ecn_info_id" id="bom_ecn_info_id" type="text" value="<%= @get_ecn_info.id %>">
-<% if can? :work_d, :all %>
+<% if can? :work_d, :all and @get_ecn_info.state == "checking" %>
+
                 <%= submit_tag "审批通过", class:"btn btn-danger pull-right",data:{confirm: "确定审批通过?"} %>
 
 <% end %>

@@ -81,7 +81,11 @@ before_filter :authenticate_user!
             ecn_item_new.new_part_code = params[:new_part_code]
             ecn_item_new.new_quantity = params[:new_quantity]
             ecn_item_new.remark = params[:ecn_remark]
-            ecn_item_new.save
+            if ecn_item_new.save
+                p_item_data = PItem.find_by_id(params[:bom_item_id])
+                p_item_data.ecn_tag = "new"
+                p_item_data.save
+            end
         end
         redirect_to :back
     end

@@ -317,7 +317,7 @@
                                 </thead>
                                 <tbody>  
                                 <% @baojia.each_with_index do |item,index| %>
-                                    <tr> 
+                                    <tr <% if item.ecn_tag == "new" %>class="bg-danger"<% end %> > 
                                         <td><%= item.id %></td>
                                         <td style="word-break : break-all; "><%= item.part_code %></td>
                                         <td><%= item.moko_part %></td>

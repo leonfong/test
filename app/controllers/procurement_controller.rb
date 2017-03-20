@@ -3905,6 +3905,11 @@ WHERE
             @pitem.color = ""
         end
         @pitem.save
+        if @pitem.color.blank?
+            get_bom_data = ProcurementBom.find_by_id(@pitem.procurement_bom_id)
+            get_bom_data.state = ""
+            get_bom_data.save
+        end
         @itemid = params[:dn_itemid]
         @dnid = @pitem.dn_id
         dn_old = PDn.find_by_id(@dnid) 
@@ -4280,11 +4285,7 @@ WHERE
     end
 
     def del_cost
-        if not params[:bom_version].blank?
-            @p_item = PVersionItem.find(params[:id])
-        else
-            @p_item = PItem.find(params[:id])
-        end
+        @p_item = PItem.find(params[:id])
         Rails.logger.info("--------------------------")
         Rails.logger.info(@p_item.id.inspect)
         Rails.logger.info("--------------------------")
@@ -4300,20 +4301,13 @@ WHERE
             @p_item.dn_long = nil
             @p_item.save
         end 
-        if not params[:bom_version].blank?
-            PVersionDn.where(p_version_item_id: params[:id]).update_all "color=NULL"
-        else
-            PDn.where(p_item_id: params[:id],state: "").update_all "color=NULL"
-        end
-        if not params[:bom_version].blank?
-            @bom = ProcurementVersionBom.find(@p_item.procurement_bom_id)
-            @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
-            @matched_items_nn = PVersionItem.where(procurement_bom_id: @bom.id)      
-        else
-            @bom = ProcurementBom.find(@p_item.procurement_bom_id)
-            @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
-            @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)   
-        end
+        PDn.where(p_item_id: params[:id],state: "").update_all "color=NULL"
+        
+
+        @bom = ProcurementBom.find(@p_item.procurement_bom_id)
+        @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+        @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)   
+        
         @total_price_nn = 0.00               
 	if not @matched_items_nn.blank?
             @bom_api_all = []

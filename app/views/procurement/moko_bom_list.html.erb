@@ -1,0 +1,211 @@
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "mokobomlist"} %>
+        </div>
+<!--
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCBA业务</strong></h4></div>
+            <% if can? :pcb_review, :all %>
+            <%= link_to "订单检查", order_review_list_path ,class: "list-group-item"%>
+            <% end %>
+            <% if can? :pcb_dc, :all %>
+            <%= link_to "订单复查", order_dc_list_path ,class: "list-group-item"%>
+            <% end %>
+            <%= link_to "订单列表",p_bomlist_path(order_list: true) ,class: "list-group-item"%>
+            <%= link_to "新建BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
+            <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%> 
+            <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item "%>     
+        </div>
+-->
+        <div class="col-md-11" style="padding-top: 10px;">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/p_bomlist', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号/文件名"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+            </div>
+            <% end %>                       
+            </span>
+            </div>
+
+
+            <div class="col-md-6 col-sm-6 " >
+                <%= form_tag('/p_history', method:"get", class:"form-inline") do %>
+                <div class="col-md-9 form-group  nav navbar-nav navbar-left">
+                    <lable for="order" , class="sr-only">Qrder : </lable>
+                    <div class="input-group input-group-sm"> 
+                        <% if @part_name %>   
+                            <%= text_field_tag :part_name, @part_name, class:"form-control  input-lg", size:"30", placeholder:"MPN/描述"%>
+                        <% else %> 
+                            <%= text_field_tag :part_name, params[:part_name], class:"form-control input-lg", size:"30", placeholder:"MPN/描述/MOKO描述"%>
+                        <% end %>               
+                        <div class="input-group-btn">
+                            <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                        </div>
+                    </div>
+                </div>
+                <% end %>
+            </div>
+
+
+
+        </div>
+          <br>  
+<table class="table ">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="120">MOKO BOM No.</th>
+      <th width="200">Order No.</th>
+
+      <% if can? :work_d, :all %>
+      <th width="170">BOM上传日期</th>
+      <% else %>
+      <th width="170">BOM审核日期</th>
+      <% end %>
+      <th width="200">文件名</th>
+      <th width="70">数量</th>
+      <th >工程师备注</th>
+      <th width="50">版本</th>
+      <th width="70">上传</th>
+      <th width="70">审核</th>
+      <th width="100">采购工程师</th>
+
+      <th >业务备注</th>
+      <th width="50">删除</th>
+      <th width="50">编码</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+    <% #@itemall = "" %>
+    <% @boms.each do |bom| %>
+    <% #@itemall = @itemall + " " + bom.excel_file_identifier %>
+
+      <tr >
+        <td>
+            <%= link_to bom.bom_id,  moko_view_bom_path(bom_id: bom.id,bak: "bak") %>
+        </td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name.to_s %></td>
+
+        <% if can? :work_d, :all %>
+
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <% else %>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <% end %>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>" style="word-break : break-all; "><%= bom.excel_file_identifier %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">V<%= bom.bom_version.to_s %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">
+        <% if bom.bom_eng_up == nil %>
+            <%= User.find(bom.user_id).full_name %>
+        <% else %>
+            <%= bom.bom_eng_up %>
+        <% end %>
+        </td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_eng %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
+
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
+        <% if can? :work_g_all, :all %>
+            <% if bom.check == "do" %>
+                <td><div class="btn-group"><a class="btn btn-default">删除</a></div></td>
+            <% else %>
+                <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/p_del_bb?bom_id=<%= bom.id.to_s %>" data-confirm="确定要删除?">删除</a></div></td>  
+            <% end %>
+        <% else %> 
+           <td><div class="btn-group"><a class="btn btn-default btn-xs">删除</a></div></td>
+        <% end %>
+        <td><%= link_to "编码",  p_viewbom_path(bom_id: bom.id,add_bom: "add_bom"),class:"btn btn-success btn-xs" %></td>      
+      
+
+      </tr>
+
+      <tr>
+          <td colSpan="13" style="padding: 0px;margin: 0px;">
+              <div class="collapse" id="bom_version_<%= bom.id.to_s %>">
+                  <div  style="padding: 0px;margin: 0px;">
+                      <table class="table " style="padding: 0px;margin: 0px;">  
+                          <% MokoBomInfo.where(bom_id: bom.bom_id).each do |bom_v| %>
+                              <tr class="bg-warning">
+                                  <td width="50"><%= link_to "查看", p_viewbom_path(bom_id: bom_v.id) %></td>
+                                  <td width="300"><strong>关联Order NO: </strong><%= bom_v.erp_no_son %></td>
+                                  <td width="140"><strong>moko BOM版本: </strong>V<%= bom_v.bom_version %></td>
+                                  <td width="200"><strong>创建日期: </strong><%= bom_v.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                                  <td width="100"><strong>上传: </strong>
+                                      <% if bom_v.bom_eng_up == nil %>
+                                          <%= User.find(bom_v.user_id).full_name %>
+                                      <% else %>
+                                          <%= bom_v.bom_eng_up %>
+                                      <% end %>
+                                  </td>
+                                  <td width="100"><strong>审核: </strong><%= bom.bom_eng %></td>
+                                  <td></td>
+                              </tr>
+                          <% end %>
+                      </table>
+                  </div>
+               </div>
+           </td>
+       </tr>
+
+
+
+
+
+
+
+
+
+
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate(@boms) %>
+        </div>
+    </div>
+</div></small>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

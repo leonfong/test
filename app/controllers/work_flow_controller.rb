@@ -6738,13 +6738,131 @@ before_filter :authenticate_user!
                 end
                 pi_item_data.bom_state = "checked"
                 pi_item_data.save
-                set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
+                #set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
+                set_lock = PiItem.where("pi_info_id = '#{params[:p_pi]}' AND p_type = 'PCBA'")
                 if not set_lock.blank?
+                    Rails.logger.info("add-------------------------------------565211111")
                     set_lock.each do |item|
                         find_bom = ProcurementBom.find_by_id(item.bom_id)
                         if not find_bom.blank?
-                            find_bom.bom_lock = "lock"
-                            find_bom.save
+                            if find_bom.moko_bom_info_id.blank?
+
+                                up_bom = MokoBomInfo.new
+                            #up_bom.bom_id = find_bom.bom_id
+                            #up_bom.bom_version = bom_version
+                                up_bom.order_country = find_bom.order_country
+
+                                up_bom.erp_id = find_bom.erp_id
+                                up_bom.erp_item_id = find_bom.erp_item_id
+                                up_bom.erp_no = find_bom.erp_no
+                                up_bom.erp_no_son = find_bom.erp_no_son
+                                up_bom.erp_qty = find_bom.erp_qty
+                                up_bom.order_do = find_bom.order_do
+                                up_bom.star = find_bom.star
+                                up_bom.sell_remark = find_bom.sell_remark
+                                up_bom.sell_manager_remark = find_bom.sell_manager_remark
+                                up_bom.name = find_bom.name
+                                up_bom.p_name_mom = find_bom.p_name_mom
+                                up_bom.p_name = find_bom.p_name
+                                up_bom.bom_eng = find_bom.bom_eng
+                                up_bom.bom_eng_up = current_user.full_name
+                #up_bom.remark_to_sell = find_bom.remark_to_sell
+
+                                up_bom.check = find_bom.check
+   
+                                up_bom.remark = find_bom.remark
+                                up_bom.t_p = find_bom.t_p
+                                up_bom.profit = find_bom.profit
+                                up_bom.t_pp = find_bom.t_pp
+                                up_bom.d_day = find_bom.d_day
+                                up_bom.description = find_bom.description
+                                up_bom.excel_file = find_bom.excel_file
+                                up_bom.att = find_bom.att
+                                up_bom.pcb_p = find_bom.pcb_p
+                                up_bom.pcb_file = find_bom.pcb_file
+                                up_bom.pcb_layer = find_bom.pcb_layer
+                                up_bom.pcb_qty = find_bom.pcb_qty
+                                up_bom.pcb_size_c = find_bom.pcb_size_c
+                                up_bom.pcb_size_k = find_bom.pcb_size_k
+                                up_bom.pcb_sc = find_bom.pcb_sc
+                                up_bom.pcb_material = find_bom.pcb_material
+                                up_bom.pcb_cc = find_bom.pcb_cc
+                                up_bom.pcb_ct = find_bom.pcb_ct
+                                up_bom.pcb_sf = find_bom.pcb_sf
+                                up_bom.pcb_t = find_bom.pcb_t
+                                up_bom.t_c = find_bom.t_c
+                                up_bom.c_p = find_bom.c_p
+                                up_bom.user_id = find_bom.user_id
+                                up_bom.all_title = find_bom.all_title
+                                up_bom.row_use = find_bom.row_use
+                                up_bom.bom_eng_up = current_user.full_name
+
+                                up_bom.bom_team_ck = find_bom.bom_team_ck
+
+                                up_bom.sell_feed_back_tag = find_bom.sell_feed_back_tag
+                                if up_bom.save 
+                                    up_bom.bom_id = "moko#{up_bom.id}"
+                                    up_bom.save
+                                    find_bom_item = PItem.where(procurement_bom_id: find_bom.id)
+                                    if not find_bom_item.blank?
+                                        find_bom_item.each do |item_p|
+                                            up_item = up_bom.moko_bom_items.build()
+                                            up_item.bom_version = up_bom.bom_version
+                                            up_item.p_type = item_p.p_type
+                                            #up_item.buy = item.buy
+                                            up_item.erp_id = item_p.erp_id
+                                            up_item.erp_no = item_p.erp_no
+                                            up_item.user_do = item_p.user_do
+                                            up_item.user_do_change = item_p.user_do_change
+                                            up_item.check = item_p.check
+
+                                            up_item.quantity = item_p.quantity
+ 
+                                            if item.p_type == "COMPONENTS"
+                                                up_item.pmc_qty = item_p.quantity
+                                            else
+                                                up_item.pmc_qty = item.qty*item_p.quantity
+                                            end
+ 
+                                            up_item.customer_qty = item_p.customer_qty
+                                            up_item.description = item_p.description
+                                            up_item.part_code = item_p.part_code
+                                            up_item.fengzhuang = item_p.fengzhuang
+                                            up_item.link = item_p.link
+                                            up_item.cost = item_p.cost
+                                            up_item.info = item_p.info
+                                            up_item.product_id = item_p.product_id
+                                            up_item.moko_part = item_p.moko_part
+                                            up_item.moko_des = item_p.moko_des
+                                            up_item.warn = item_p.warn
+                                            up_item.user_id = item_p.user_id
+                                            up_item.danger = item_p.danger
+                                            up_item.manual = item_p.manual
+                                            up_item.mark = item_p.mark
+                                            up_item.mpn = item_p.mpn
+                                            up_item.mpn_id = item_p.mpn_id
+                                            up_item.price = item_p.price
+                                            up_item.mf = item_p.mf
+                                            up_item.dn_id = item_p.dn_id
+                                            up_item.dn = item_p.dn
+                                            up_item.dn_long = item_p.dn_long
+                                            up_item.other = item_p.other
+                                            up_item.all_info = item_p.all_info
+                                            up_item.remark = item_p.remark
+                                            up_item.color = item_p.color
+                                            up_item.supplier_tag = item_p.supplier_tag
+                                            up_item.supplier_out_tag = item_p.supplier_out_tag
+                                            up_item.sell_feed_back_tag = item_p.sell_feed_back_tag
+                                            up_item.save
+                                        end
+                                    end
+                                end 
+
+                                find_bom.bom_lock = "lock"
+                                find_bom.bom_id = up_bom.bom_id
+                                find_bom.moko_bom_info_id = up_bom.id
+                                find_bom.save
+                            end
                         end
                     end
                 end
@@ -8732,12 +8850,14 @@ before_filter :authenticate_user!
             @topic.save
             render "sell_feedback.html.erb"
         elsif can? :work_f, :all
-            if @topic.mark.blank?
-                @topic.mark = "lwork_fl"
-            else
-                @topic.mark += "lwork_fl"
+            if current_user.email == "wenbo@mokotechnology.com"
+                if @topic.mark.blank? 
+                    @topic.mark = "lwork_fl"
+                else
+                    @topic.mark += "lwork_fl"
+                end
+                @topic.save
             end
-            @topic.save
             render "merchandiser_feedback.html.erb"
         elsif can? :work_g, :all
             render "procurement_feedback.html.erb"

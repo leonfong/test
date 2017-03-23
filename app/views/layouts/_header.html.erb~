@@ -76,6 +76,9 @@
                             <%= link_to "PCB报价列表", pcb_list_path %>
                         </li>
                         <li>
+                            <%= link_to "MOKO物料价格维护", moko_part_data_path %>
+                        </li>
+                        <li>
                             <%= link_to "历史报价", p_history_path %>
                         </li>
                     </ul>

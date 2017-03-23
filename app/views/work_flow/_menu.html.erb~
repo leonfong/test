@@ -104,12 +104,13 @@
 <% if can? :work_d, :all or can? :work_admin, :all %>
     <a style="background-color: #ddd;" href="#bom_Menu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> BOM版本管理</a>
     <ul id="bom_Menu" class="nav nav-list  menu-second <% if selected =~ /bomlist/i %>collapse in<% else %>collapse<% end %>">
-        <li><a <% if selected == "bomlist" %>style="background-color: #d9edf7;"<% end %> href="/p_bomlist"><i></i>BOM列表</a></li>
+        <li><a <% if selected == "bomlist" %>style="background-color: #d9edf7;"<% end %> href="/p_bomlist"><i></i>BOM匹配列表</a></li>
+        <li><a <% if selected == "bomlist" %>style="background-color: #d9edf7;"<% end %> href="/moko_bom_list"><i></i>BOM列表</a></li>
     </ul>
 
     <a style="background-color: #ddd;" href="#ecn_Menu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 工程变更(ECN)</a>
     <ul id="ecn_Menu" class="nav nav-list  menu-second <% if selected =~ /ecn_/i %>collapse in<% else %>collapse<% end %>">
-        <li><a <% if selected == "ecn_new" %>style="background-color: #d9edf7;"<% end %> href="/new_ecn"><i></i>新建ECN</a></li>
+        <li><a <% if selected == "ecn_new" %>style="background-color: #d9edf7;"<% end %> href="/new_ecn"><i></i>新建ECN草稿</a></li>
         <li><a <% if selected == "ecn_list" %>style="background-color: #d9edf7;"<% end %> href="/ecn_list"><i></i>ECN申请列表</a></li>
     </ul>
 <% end %>

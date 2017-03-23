@@ -142,7 +142,7 @@
 
   <tbody ><small>
     <% @pcblist.each do |pcb| %>   
-      <tr>
+      <tr class="bg-warning">
         <% if not pcb.pcb_customer_id.blank? %>
             <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></small></td>
         <% else %>

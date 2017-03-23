@@ -248,21 +248,27 @@ Rails.application.routes.draw do
 
 
 
+
   match '/procurement_new', to: 'procurement#p_create_bom', via: 'get' 
   match '/p_new_bom', to: 'procurement#p_upbom',via: 'post'
   match '/p_new_bom', to: 'procurement#p_upbom',via: 'get'
   match '/p_select_column', to: 'procurement#p_select_column',via: 'get' 
   match '/p_search_part', to: 'procurement#p_search_part',via: 'post'
   match '/p_viewbom', to: 'procurement#p_viewbom',via: 'get'
+  match '/moko_view_bom', to: 'procurement#moko_view_bom',via: 'get'
   match '/p_viewbom', to: 'procurement#p_viewbom',via: 'post'
   match '/p_update_bom', to: 'procurement#update_bom',via: 'post'
   match '/p_get_bom', to: 'procurement#p_get_bom',via: 'get'
   match '/p_del_bom', to: 'procurement#p_del_bom',via: 'post'
   match '/p_add_bom', to: 'procurement#p_add_bom',via: 'post'
   match '/p_bomlist', to: 'procurement#p_bomlist',via: 'get'
+  match '/moko_bom_list', to: 'procurement#moko_bom_list', via: 'get'
   match '/search_m', to: 'procurement#search_m',via: 'post'
   match '/search_m', to: 'procurement#search_m',via: 'get'
+  match '/search_m_moko', to: 'procurement#search_m_moko',via: 'post'
+  match '/search_m_moko', to: 'procurement#search_m_moko',via: 'get'
   match '/p_update', to: 'procurement#p_update',via: 'get'
+  match '/p_update_moko', to: 'procurement#p_update_moko',via: 'get'
   match '/p_updateii', to: 'procurement#p_updateii',via: 'get'
   match '/p_edit', to: 'procurement#p_edit',via: 'post'
   match '/p_edit', to: 'procurement#p_edit',via: 'get'
@@ -320,6 +326,8 @@ Rails.application.routes.draw do
   match '/edit_item_qty', to: 'procurement#edit_item_qty', via: 'post'
   match '/del_bom_item', to: 'procurement#del_bom_item', via: 'get'
   match '/edit_item_ref', to: 'procurement#edit_item_ref', via: 'post'
+  match '/del_bom_item_moko', to: 'procurement#del_bom_item_moko', via: 'get'
+  match '/edit_item_ref_moko', to: 'procurement#edit_item_ref_moko', via: 'post'
   match '/pcb_list_del', to: 'procurement#pcb_list_del', via: 'get'
 
 

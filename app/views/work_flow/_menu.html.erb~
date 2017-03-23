@@ -105,7 +105,7 @@
     <a style="background-color: #ddd;" href="#bom_Menu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> BOM版本管理</a>
     <ul id="bom_Menu" class="nav nav-list  menu-second <% if selected =~ /bomlist/i %>collapse in<% else %>collapse<% end %>">
         <li><a <% if selected == "bomlist" %>style="background-color: #d9edf7;"<% end %> href="/p_bomlist"><i></i>BOM匹配列表</a></li>
-        <li><a <% if selected == "bomlist" %>style="background-color: #d9edf7;"<% end %> href="/moko_bom_list"><i></i>BOM列表</a></li>
+        <li><a <% if selected == "mokobomlist" %>style="background-color: #d9edf7;"<% end %> href="/moko_bom_list"><i></i>BOM列表</a></li>
     </ul>
 
     <a style="background-color: #ddd;" href="#ecn_Menu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 工程变更(ECN)</a>

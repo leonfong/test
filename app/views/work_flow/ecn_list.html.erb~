@@ -15,9 +15,10 @@
 
   <thead >
     <tr style="background-color: #eeeeee;">
+      <th width="200">提交时间</th>
       <th width="200">BOM编号</th>
       <th width="200">PI编号</th>
-      <th >c</th>
+      <th >状态</th>
       <th >d</th>
       <th >e</th>
       <th >f</th>
@@ -29,9 +30,10 @@
   <tbody ><small>
     <% @ecn_draft_list.each do |ecn| %>   
       <tr>
+        <td><%= ecn.send_at.localtime %></td>
         <td><%= link_to ecn.bom_no, edit_ecn_path(bom_ecn_info_id: ecn.id) %></td>
         <td><%= ecn.pi_no %></td>
-        <td></td>
+        <td><%= ecn.state %></td>
         <td></td>
         <td></td>
         <td></td>

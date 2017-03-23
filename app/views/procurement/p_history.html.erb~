@@ -19,7 +19,7 @@
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
 
-
+<!--
             <div class="col-md-6 col-sm-6 form-inline" > 
             <span  style="color:#999;">
                <%= form_tag('/p_bomlist', method:"get", class:"form-inline") do %>
@@ -44,7 +44,7 @@
             <% end %>                       
             </span>
             </div>
-
+-->
 
 
 
@@ -79,6 +79,7 @@
                         <th width="100">日期</th>
                         <th>MPN</th>
                         <th>DES</th>
+                        <th>MOKO Part</th>
                         <th>MOKO DES</th>
                         <th width="90">QTY</th>
                         <th width="120">Order No.</th>
@@ -90,9 +91,10 @@
                 <tbody>
                 <% @p_history.each do |bom| %>
                     <tr>
-                        <td><%= bom.created_at.localtime.strftime('%Y-%m-%d').to_s %></td>
-                        <td><%= bom.mpn %></td>
-                        <td><%= bom.des %></td>
+                        <td><%= bom.c_time.localtime.strftime('%Y-%m-%d').to_s %></td>
+                        <td style="word-break : break-all;"><%= bom.mpn %></td>
+                        <td style="word-break : break-all;"><%= bom.des %></td>
+                        <td><%= bom.moko_part %></td>
                         <td><%= bom.moko_des %></td>
                         <td><%= bom.quantity*ProcurementBom.find(bom.procurement_bom_id).qty %></td>
                         <td><%= link_to ProcurementBom.find(bom.procurement_bom_id).p_name,  p_viewbom_path(bom_id: bom.procurement_bom_id,bak: "bak") %></td>

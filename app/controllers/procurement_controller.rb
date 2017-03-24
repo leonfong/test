@@ -1889,7 +1889,7 @@ before_filter :authenticate_user!
     end
 
     def p_history
-        if can? :work_baojia, :all
+        if can? :work_baojia, :all or can? :work_sw_hw, :all
             where_des = ""
             where_moko_des = ""
             where_remark = ""

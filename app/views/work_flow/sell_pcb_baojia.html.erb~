@@ -1,5 +1,6 @@
 <small>
 <div class="row" style="margin: 0px;padding: 0px;" >
+<%= render 'layouts/flash_messages' %>
 <br>
   <ul class="nav nav-tabs">
       <li role="presentation" ><a href="/work_flow"><h4><strong><p class="text-primary"  >业务部问题跟踪&反馈</p></strong></h4></a></li>
@@ -73,7 +74,9 @@
                                 <th width="250">客户名</th>
                                 <th width="350">客户公司名</th>
                                 <th width="65">国家</th>
+<!--
                                 <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
+-->
                                 <th >收货地址</th>
                                 <th width="60">业务员</th>  
                                 <th width="100">数量</th>
@@ -97,7 +100,9 @@
                                 <td><%= q_order.customer %></td>
                                 <td><%= q_order.customer_com %></td>
                                 <td><%= q_order.customer_country %></td>
+<!--
                                 <td><%= q_order.email %></td>
+-->
                                 <td><%= q_order.shipping_address %></td>
                                 <td><%= User.find_by(email: q_order.sell).full_name %></td>
                                 <td><%= q_order.qty %></td>

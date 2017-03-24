@@ -8211,6 +8211,9 @@ before_filter :authenticate_user!
     end
 
     def add_pcb_customer
+        if params[:customer_country].blank?
+            redirect_to :back, :flash => {:error => "请填写国家！！！"} and return false
+        end
         @pcb = PcbCustomer.new()
         #@pcb.user_id = current_user.id
         if PcbCustomer.maximum("id").blank?

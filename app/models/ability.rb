@@ -33,6 +33,7 @@ class Ability
     alias_action :update, :to => :work_suppliers    #供应商
     alias_action :update, :to => :work_send_to_sell    #发给业务 
     alias_action :update, :to => :work_admin    #管理员 
+    alias_action :update, :to => :work_sw_hw    #管理员 
     if user.has_role?(:admin)
       #can :manage, :all
       can :work_a, :all
@@ -170,6 +171,9 @@ class Ability
       can :work_top, :all
     elsif user.has_role?(:work_suppliers)
       can :work_suppliers, :all
+      can :read, :all
+    elsif user.has_role?(:work_sw_hw)
+      can :work_sw_hw, :all
       can :read, :all
     else
       can :read, :all

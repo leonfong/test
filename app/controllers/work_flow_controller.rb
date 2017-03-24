@@ -6748,6 +6748,7 @@ before_filter :authenticate_user!
                             if find_bom.moko_bom_info_id.blank?
 
                                 up_bom = MokoBomInfo.new
+                                up_bom.moko_state = "active"
                             #up_bom.bom_id = find_bom.bom_id
                             #up_bom.bom_version = bom_version
                                 up_bom.order_country = find_bom.order_country

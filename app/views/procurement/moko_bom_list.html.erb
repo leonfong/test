@@ -88,9 +88,10 @@
       <th width="100">采购工程师</th>
 
       <th >业务备注</th>
+<!--
       <th width="50">删除</th>
       <th width="50">编码</th>
-
+-->
 
     </tr>
   </thead>
@@ -126,6 +127,8 @@
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
 
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
+
+<!--
         <% if can? :work_g_all, :all %>
             <% if bom.check == "do" %>
                 <td><div class="btn-group"><a class="btn btn-default">删除</a></div></td>
@@ -136,20 +139,21 @@
            <td><div class="btn-group"><a class="btn btn-default btn-xs">删除</a></div></td>
         <% end %>
         <td><%= link_to "编码",  p_viewbom_path(bom_id: bom.id,add_bom: "add_bom"),class:"btn btn-success btn-xs" %></td>      
-      
+-->
 
       </tr>
 
       <tr>
-          <td colSpan="13" style="padding: 0px;margin: 0px;">
+          <td colSpan="11" style="padding: 0px;margin: 0px;">
               <div class="collapse" id="bom_version_<%= bom.id.to_s %>">
                   <div  style="padding: 0px;margin: 0px;">
                       <table class="table " style="padding: 0px;margin: 0px;">  
                           <% MokoBomInfo.where(bom_id: bom.bom_id).each do |bom_v| %>
                               <tr class="bg-warning">
-                                  <td width="50"><%= link_to "查看", p_viewbom_path(bom_id: bom_v.id) %></td>
+                                  <td width="50"><%= link_to "查看", moko_view_bom_path(bom_id: bom_v.id) %></td>
                                   <td width="300"><strong>关联Order NO: </strong><%= bom_v.erp_no_son %></td>
                                   <td width="140"><strong>moko BOM版本: </strong>V<%= bom_v.bom_version %></td>
+                                  <td width="140"><strong>状态: </strong><%= bom_v.moko_state %></td>
                                   <td width="200"><strong>创建日期: </strong><%= bom_v.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
                                   <td width="100"><strong>上传: </strong>
                                       <% if bom_v.bom_eng_up == nil %>

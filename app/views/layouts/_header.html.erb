@@ -49,6 +49,11 @@
                     <%= link_to t('supplier_offer'),supplier_offer_path, data: { no_turbolink: true } %>
                 </li>
             <% end %>
+            <% if can? :work_sw_hw, :all %>
+                <li id="sw">
+                    <%= link_to '历史价格查询',p_history_path %>
+                </li>
+            <% end %>
             <% if can? :work_baojia, :all %>
 <!--              
                 <li id="l">
@@ -218,7 +223,12 @@ $(document).ready(function () {
     $("#o").mouseleave(function () {             
             $("#o").removeClass('active');          
     });
-   
+    $("#sw").mouseenter(function () {                     
+            $("#sw").addClass('active');        
+    });
+    $("#sw").mouseleave(function () {             
+            $("#sw").removeClass('active');          
+    });
 
 });
 </script>

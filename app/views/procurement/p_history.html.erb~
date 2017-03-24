@@ -3,6 +3,8 @@
 <!--
         <h3><strong>Price History</strong></h3>
 -->
+<!--
+
         <div class="col-md-1 list-group" style="padding: 0px;">
             <div class="alert alert-info text-center" role="alert" style="padding: 10px 10px 0px;margin: 0px;"><h4 ><strong>PCBA业务</strong></h4></div>
             <% if can? :pcb_review, :all %>
@@ -16,10 +18,11 @@
             <%= link_to "BOM列表", p_bomlist_path ,class: "list-group-item active"%>          
             <%= link_to "MOKO物料维护", moko_part_data_path ,class: "list-group-item "%>
         </div>
-        <div class="col-md-11" style="padding-top: 10px;">
+-->
+        <div class="col-md-12" style="padding-top: 10px;">
         <div class="row">
 
-<!--
+<% if if can? :work_g, :all %>
             <div class="col-md-6 col-sm-6 form-inline" > 
             <span  style="color:#999;">
                <%= form_tag('/p_bomlist', method:"get", class:"form-inline") do %>
@@ -44,7 +47,7 @@
             <% end %>                       
             </span>
             </div>
--->
+<% end %>
 
 
 

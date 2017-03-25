@@ -359,7 +359,224 @@ before_filter :authenticate_user!
         end
     end
 
+    def bom_v_up_moko
+        if not params[:order_id].blank?
+            upstart = PcbOrderItem.find_by_id(params[:order_id])
+        end
+        find_bom = MokoBomInfo.find_by_id(params[:bom_id])
+        if not find_bom.blank?
+=begin
+            bom_version_find = ProcurementVersionBom.where(procurement_bom_id: find_bom.id)
+            if not bom_version_find.blank?
+                bom_version = bom_version_find.last.bom_version.to_i + 1
+            else
+                bom_version = 1
+            end
+            up_bom = ProcurementVersionBom.new
+=end
+            bom_version_find = ProcurementBom.where(bom_id: find_bom.bom_id)
+            if not bom_version_find.blank?
+                bom_version = bom_version_find.last.bom_version.to_i + 1
+            else
+                bom_version = 999
+            end
+            up_bom = ProcurementBom.new
+            up_bom.bom_id = find_bom.bom_id
+            up_bom.bom_version = bom_version
+            up_bom.order_country = find_bom.order_country
+            if not params[:bom_unlock].blank?
+                up_bom.erp_id = find_bom.erp_id
+                up_bom.erp_item_id = find_bom.erp_item_id
+                up_bom.erp_no = find_bom.erp_no
+                up_bom.erp_no_son = find_bom.erp_no_son
+                up_bom.erp_qty = find_bom.erp_qty
+                up_bom.order_do = find_bom.order_do
+                up_bom.star = find_bom.star
+                up_bom.sell_remark = find_bom.sell_remark
+                up_bom.sell_manager_remark = find_bom.sell_manager_remark
+                up_bom.name = find_bom.name
+                up_bom.p_name_mom = find_bom.p_name_mom
+                up_bom.p_name = find_bom.p_name
+                up_bom.bom_eng = find_bom.bom_eng
+                up_bom.bom_eng_up = current_user.full_name
+                #up_bom.remark_to_sell = find_bom.remark_to_sell
+            end
+            up_bom.check = find_bom.check
+            if ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').blank?
+            order_n =1
+            else
 
+                order_n = ProcurementBom.find_by_sql('SELECT no FROM procurement_boms WHERE to_days(procurement_boms.created_at) = to_days(NOW())').last.no.split("B")[-1].to_i + 1
+            end
+            up_bom.no = "MB" + Time.new.strftime('%Y').to_s[-1] + Time.new.strftime('%m%d').to_s + "B" + order_n.to_s + "B"
+
+            #up_bom.p_name_mom = "COPY"
+            #up_bom.p_name = "COPY"
+            #up_bom.qty = find_bom.qty
+            if not params[:order_id].blank?
+                up_bom.qty = upstart.qty
+            else
+                up_bom.qty = find_bom.erp_qty
+            end
+            up_bom.remark = find_bom.remark
+            up_bom.t_p = find_bom.t_p
+            up_bom.profit = find_bom.profit
+            up_bom.t_pp = find_bom.t_pp
+            up_bom.d_day = find_bom.d_day
+            up_bom.description = find_bom.description
+            up_bom.excel_file = find_bom.excel_file
+            up_bom.att = find_bom.att
+            up_bom.pcb_p = find_bom.pcb_p
+            up_bom.pcb_file = find_bom.pcb_file
+            up_bom.pcb_layer = find_bom.pcb_layer
+            up_bom.pcb_qty = find_bom.pcb_qty
+            up_bom.pcb_size_c = find_bom.pcb_size_c
+            up_bom.pcb_size_k = find_bom.pcb_size_k
+            up_bom.pcb_sc = find_bom.pcb_sc
+            up_bom.pcb_material = find_bom.pcb_material
+            up_bom.pcb_cc = find_bom.pcb_cc
+            up_bom.pcb_ct = find_bom.pcb_ct
+            up_bom.pcb_sf = find_bom.pcb_sf
+            up_bom.pcb_t = find_bom.pcb_t
+            up_bom.t_c = find_bom.t_c
+            up_bom.c_p = find_bom.c_p
+            up_bom.user_id = find_bom.user_id
+            up_bom.all_title = find_bom.all_title
+            up_bom.row_use = find_bom.row_use
+            up_bom.bom_eng_up = current_user.full_name
+
+            up_bom.bom_team_ck = find_bom.bom_team_ck
+
+            up_bom.sell_feed_back_tag = find_bom.sell_feed_back_tag
+            if up_bom.save 
+                find_bom_item = MokoBomItem.where(moko_bom_info_id: find_bom.id)
+                if not find_bom_item.blank?
+                    find_bom_item.each do |item|
+                        up_item = up_bom.p_items.build()
+                        up_item.bom_version = bom_version
+                        up_item.p_type = item.p_type
+                        #up_item.buy = item.buy
+                        if not params[:bom_unlock].blank?
+                            up_item.erp_id = item.erp_id
+                            up_item.erp_no = item.erp_no
+                        end
+                        up_item.user_do = item.user_do
+                        up_item.user_do_change = item.user_do_change
+                        up_item.check = item.check
+                        #up_item.procurement_version_bom_id =
+                        up_item.quantity = item.quantity
+                        if not params[:order_id].blank?
+                            if upstart.p_type == "COMPONENTS"
+                                up_item.pmc_qty = item.quantity
+                            else
+                                up_item.pmc_qty = upstart.qty*item.quantity
+                            end
+                        else
+                            up_item.pmc_qty = item.pmc_qty
+                        end
+                        up_item.customer_qty = item.customer_qty
+                        up_item.description = item.description
+                        up_item.part_code = item.part_code
+                        up_item.fengzhuang = item.fengzhuang
+                        up_item.link = item.link
+                        up_item.cost = item.cost
+                        up_item.info = item.info
+                        up_item.product_id = item.product_id
+                        up_item.moko_part = item.moko_part
+                        up_item.moko_des = item.moko_des
+                        up_item.warn = item.warn
+                        up_item.user_id = item.user_id
+                        up_item.danger = item.danger
+                        up_item.manual = item.manual
+                        up_item.mark = item.mark
+                        up_item.mpn = item.mpn
+                        up_item.mpn_id = item.mpn_id
+                        up_item.price = item.price
+                        up_item.mf = item.mf
+                        up_item.dn_id = item.dn_id
+                        up_item.dn = item.dn
+                        up_item.dn_long = item.dn_long
+                        up_item.other = item.other
+                        up_item.all_info = item.all_info
+                        up_item.remark = item.remark
+                        up_item.color = item.color
+                        up_item.supplier_tag = item.supplier_tag
+                        up_item.supplier_out_tag = item.supplier_out_tag
+                        up_item.sell_feed_back_tag = item.sell_feed_back_tag
+                        if up_item.save
+                            find_item_dn = PDn.where(p_item_id: item.id,state: "")
+                            if not find_item_dn.blank?
+                                find_item_dn.each do |item|
+                                    up_item_dn = up_item.p_dns.build()
+                                    #up_item_dn.p_version_item_id = 
+                                    up_item_dn.part_code = item.part_code
+                                    up_item_dn.date = item.date
+                                    up_item_dn.dn = item.dn
+                                    up_item_dn.dn_long = item.dn_long
+                                    up_item_dn.cost = item.cost
+                                    up_item_dn.qty = item.qty
+                                    up_item_dn.info = item.info
+                                    up_item_dn.remark = item.remark
+                                    up_item_dn.tag = item.tag
+                                    up_item_dn.color = item.color
+                                    up_item_dn.save
+                                end
+                            end
+                            find_item_remark = PItemRemark.where(p_item_id: item.id)
+                            if not find_item_remark.blank?
+                                find_item_remark.each do |item|
+                                    up_item_remark = up_item.p_item_remarks.build()
+                                    #up_item_remark.p_version_item_id = 
+                                    up_item_remark.user_id = item.user_id
+                                    up_item_remark.user_name = item.user_name
+                                    up_item_remark.user_team = item.user_team
+                                    up_item_remark.remark = item.remark
+                                    up_item_remark.info = item.info
+                                    up_item_remark.state = item.state
+                                    up_item_remark.save
+                                end
+                            end
+                        end
+                    end
+                end
+            end 
+        end
+        if not params[:order_id].blank?
+            upstart = PcbOrderItem.find_by_id(params[:order_id])
+            if params[:state] == "mark"
+                upstart.state = "quotechked"
+            else
+                upstart.state = "quote"
+            end
+            upstart.p_type = "PCBA"
+            upstart.bom_id = up_bom.id
+            if upstart.save
+                up_bom.erp_id = upstart.pcb_order_id
+                up_bom.erp_item_id = upstart.id
+                up_bom.erp_no = upstart.pcb_order_no
+                up_bom.erp_no_son = upstart.pcb_order_no_son
+                up_bom.erp_qty = upstart.qty
+                #up_bom.name = find_bom.name
+                up_bom.p_name_mom = upstart.pcb_order_no
+                up_bom.p_name = upstart.pcb_order_no_son
+                up_bom.save
+                up_bom_item = PItem.where(procurement_bom_id: up_bom.id).update_all(erp_id: upstart.id,erp_no: upstart.pcb_order_no_son)
+            end
+        else
+            upstart = PcbOrderItem.find_by_id(up_bom.erp_item_id)
+            upstart.bom_id = up_bom.id
+            upstart.save
+            pi_draft = PiItem.find_by_id(params[:pi_item_id])
+            pi_draft.bom_id = up_bom.id
+            if pi_draft.save
+                pi_data = PiInfo.find_by_id(pi_draft.pi_info_id)
+                pi_data.state = "check"
+                pi_data.bom_state = nil
+                pi_data.save
+            end
+        end
+        redirect_to p_viewbom_path(bom_id: up_bom.id)
+    end
 
     def bom_v_up
         if not params[:order_id].blank?

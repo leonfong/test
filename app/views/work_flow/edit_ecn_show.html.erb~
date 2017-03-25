@@ -109,13 +109,13 @@
 
 
                                 <label class="checkbox-inline">
-                                    <input type="radio" value="ever" name="change_type[]" id="change_type_ever" <% if @get_ecn_info.change_type == "ever" %> checked <% end %>>
+                                    <input type="radio" value="ever" name="change_type[]" id="change_type_ever" <% if @get_ecn_info.change_type == "ever" %> checked <% end %> disabled>
                                     <strong>永久</strong>
                                 </label>
 
 
                                 <label class="checkbox-inline">
-                                    <input type="radio" value="temp" name="change_type[]" id="change_type_temp" <% if @get_ecn_info.change_type == "temp" %> checked <% end %>>
+                                    <input type="radio" value="temp" name="change_type[]" id="change_type_temp" <% if @get_ecn_info.change_type == "temp" %> checked <% end %> disabled>
                                     <strong>临时</strong>
                                 </label>
                                           
@@ -318,7 +318,7 @@
                                 </thead>
                                 <tbody>  
                                 <% @baojia.each_with_index do |item,index| %>
-                                    <tr> 
+                                    <tr <% if item.ecn_tag == "new" %>class="bg-danger"<% end %> > 
                                         <td><%= item.id %></td>
                                         <td style="word-break : break-all; "><%= item.part_code %></td>
                                         <td><%= item.moko_part %></td>

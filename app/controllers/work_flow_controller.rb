@@ -49,10 +49,10 @@ before_filter :authenticate_user!
             if params[:commit] == "保存草稿"
                 get_ecn_info.state = "new"
             elsif params[:commit] == "发送给BOM工程师"
-                get_ecn_info.state = "chicking"
+                get_ecn_info.state = "checking"
                 get_ecn_info.send_at = Time.new()
             elsif params[:commit] == "审批通过"
-                get_ecn_info.state = "chicked"
+                get_ecn_info.state = "checked"
             end
             get_ecn_info.remark = params[:ecn_remark]
             if not params[:sheng_xiao_type].blank?
@@ -7463,6 +7463,41 @@ before_filter :authenticate_user!
             end
         end
         redirect_to edit_pcb_pi_path(pi_info_id: up_c.id,pi_no: params[:c_pi_no],c_id: params[:id])
+    end
+
+    def find_linkbom_moko
+        if params[:c_code_moko] != ""
+            @c_info = MokoBomInfo.find_by_sql("SELECT * FROM `moko_bom_infos`  WHERE `moko_bom_infos`.`moko_state` = 'active' AND `moko_bom_infos`.`erp_no_son` LIKE '%#{params[:c_code_moko].strip}%'")
+            if not @c_info.blank?
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th>项目名</th>'
+                @c_table += '<th>子项目名</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td>' + cu.p_name_mom.to_s + '</td>'
+                    
+                    @c_table += '<td>'
+                    @c_table += '<form action="/bom_v_up_moko" method="post" >'
+                    @c_table += '<input type="text" name="order_id" id="order_id" value="' + params[:find_linkbom_moko_id].to_s + '" class="sr-only" >'
+                    @c_table += '<input type="text" name="bom_id" id="bom_id" value="' + cu.id.to_s + '" class="sr-only" >'
+                    @c_table += '<button type="submit" class="btn btn-link btn-sm" data-confirm="确定要关联?">' + cu.p_name.to_s + '</button>'
+                    @c_table += '</form>'
+                    @c_table += '</td>'
+                    @c_table += '</tr>'
+                end
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+            end
+        end
     end
 
     def find_linkbom

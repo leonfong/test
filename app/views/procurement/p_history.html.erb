@@ -89,6 +89,7 @@
                         <th width="90">Price</th>
                         <th>供应商</th>
                         <th>备注</th>
+                        <th width="90">采购</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,7 +106,9 @@
                         <% if not PDn.find_by_id(bom.dn_id).blank? %>
                             <td><%= PDn.find_by_id(bom.dn_id).dn_long %></td>
                             <td><%= PDn.find_by_id(bom.dn_id).remark %></td>
+                            <td><%= User.find_by_email(PDn.find_by_id(bom.dn_id).email) ? User.find_by_email(PDn.find_by_id(bom.dn_id).email).full_name : "" %></td>
                         <% else %>
+                            <td> </td>
                             <td> </td>
                             <td> </td>
                         <% end %>

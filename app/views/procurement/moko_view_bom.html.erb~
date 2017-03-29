@@ -83,7 +83,7 @@
                     <th>描述</th>
                     <th>MOKO 编码</th>
                     <th>MOKO 描述</th>
-                    <th width="50">位号</th>
+                    <th width="100">位号</th>
                     <th width="50">用量</th>
                    
                     <th >Other</th>

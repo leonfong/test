@@ -442,9 +442,11 @@ function change_<%= item.id.to_s %>(){
     $("#input_<%= item.id.to_s %>").val("<%= item.description %>");
     }
 </script>
-                    
+                    <% if can? :work_admin, :all or can? :work_d, :all %> 
                     <td <% if can? :work_dd, :all %><% else %>width="150"<% end %> style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><small><%= item.description %></small></td> 
-
+                    <% else %>
+                    <td <% if can? :work_dd, :all %><% else %>width="150"<% end %> style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.description %></small></td> 
+                    <% end %>
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>

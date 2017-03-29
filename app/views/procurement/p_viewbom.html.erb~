@@ -466,9 +466,9 @@ function change_<%= item.id.to_s %>(){
                     <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;word-break : break-all; " ><small><%= item.part_code %></small></td>
                     
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
-                    <td width="60" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity*@boms.qty %></small></td>
+                    <td width="60" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity.to_i*@boms.qty.to_i %></small></td>
                     <% if not params[:pi_info_id].blank? %>
-                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= @pi_bom_qty_info.t_qty.to_i*item.quantity %></small></td>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= @pi_bom_qty_info.t_qty.to_i*item.quantity.to_i %></small></td>
                     <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
                         <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.pi_item_qty %>" data-pmc_qty="<%= item.bom_ctl_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.bom_ctl_qty %></div> 
                     

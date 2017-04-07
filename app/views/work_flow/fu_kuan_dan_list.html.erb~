@@ -37,6 +37,7 @@
                             <% @list.each do |item| %>  
                                 <tr>
                                     <td><%= link_to "编辑",  {action: "edit_fu_kuan_dan", id: item.id} %></td>
+                                    <td><%= item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
                                     <td><%= "FK_"+item.id.to_s %></td>
                                     <td><%= item.state %></td>
                                     <td><%= item.supplier_clearing %></td>

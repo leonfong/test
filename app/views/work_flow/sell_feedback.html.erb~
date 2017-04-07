@@ -1,7 +1,7 @@
 <div class="container" >
 <div class="row" style="padding: 0px;">
   <h2><p class="text-primary">业务部问题反馈</p></h2><hr>
-  <img  style="CURSOR: pointer" onclick="javascript:window.open('http://b.qq.com/webc.htm?new=0&sid=2851001005&o=www.fastbom.com&q=7', '_blank', 'height=502, width=644,toolbar=no,scrollbars=no,menubar=no,status=no');"  border="0" SRC=http://wpa.qq.com/pa?p=1:2851001005:1 alt="你有消息">
+  
 </div>
 <div class="row"style="padding: 0px;">
     <div class="col-md-3 nav navbar-nav" >
@@ -81,6 +81,13 @@
 <% end %>
 </div>
 <script type="text/javascript">
+$(document).ready(function(){
+
+    $(".ke-insertfile").html('abc');
+
+}); 
+
+
 function postform() {  	         
     html = my_feedback.html();     
 
@@ -91,6 +98,8 @@ function postform() {
 　     }
 
 }    
+
+
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

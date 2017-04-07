@@ -662,6 +662,20 @@
                               </div>
                           </div>
                       </div>
+                      <div class="col-md-3">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label for="c_country" class="col-md-3 control-label">尾款:</label>
+                                  <div class="col-md-9">
+                                      <% if not @shou_kuan_jin_e.blank? %>
+                                      <input class="form-control" name="c_country" id="c_country" type="text" value="<%=   @pi_info.t_p - @shou_kuan_jin_e %>" readonly>
+                                      <% else %>
+                                      <input class="form-control" name="c_country" id="c_country" type="text" value="<%=   @pi_info.t_p  %>" readonly>
+                                      <% end %>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                   </div>
               </div>
           </div>

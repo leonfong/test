@@ -86,7 +86,7 @@
                                   <label for="xianjin_kemu" class="col-md-3 control-label bg-warning" id="xianjin_kemu_label">现金类科目:</label>   
                                   <div class="col-md-9">
                                       <div id="xianjin_kemu_show">
-                                          <% if not @fu_kuan_dan.finance_at.blank? %>
+                                          <% if not @fu_kuan_dan.xianjin_kemu.blank? %>
                                               <p class="form-control-static" ><%= @fu_kuan_dan.xianjin_kemu %></p>
                                           <% end %>
                                       </div>

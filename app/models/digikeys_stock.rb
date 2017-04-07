@@ -1,3 +1,3 @@
 class DigikeysStock < ActiveRecord::Base
-    establish_connection :mpninfo
+    #establish_connection :mpninfo
 end

@@ -334,7 +334,7 @@ Rails.application.routes.draw do
   match '/del_bom_item_moko', to: 'procurement#del_bom_item_moko', via: 'get'
   match '/edit_item_ref_moko', to: 'procurement#edit_item_ref_moko', via: 'post'
   match '/pcb_list_del', to: 'procurement#pcb_list_del', via: 'get'
-
+  match '/chk_add_bom_item', to: 'procurement#chk_add_bom_item', via: 'get'
 
 
 

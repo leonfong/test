@@ -114,6 +114,7 @@
                                 <th width="80">申请总量</th>
                                 <th width="80">申请数量</th>
                                 <th width="80">库存</th>
+                                <th width="80">虚拟库存</th>
                                 <th >备注</th>
                                 <th width="90">
                                     <%= link_to "采购工程师",  {action: "pmc_new", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
@@ -138,12 +139,19 @@
                                 <td style="word-break : break-all;"><%= item.part_code %></td>
                                 <td><%= item.qty %></td>
                                 <td><%= item.buy_qty %></td>
-                                <td>
+
                                 <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>
+                                <td>
                                     <%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %>
-                                <% else %>
-                                <% end %>
                                 </td>
+                                <td>
+                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).future_qty %>
+                                </td>
+                                <% else %>
+                                <td></td>
+                                <td></td>
+                                <% end %>
+
                                 <td><%= item.remark %></td>
                                 <td>
                                     <div data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>" ><%= item.buy_user %></div>

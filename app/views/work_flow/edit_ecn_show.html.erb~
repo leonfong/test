@@ -12,18 +12,18 @@
 
 
 
-<%= form_tag({action: :edit_ecn_up},method:"post",multipart:"true") do %>
+
         <div class="row">
             <div class="col-md-6 col-sm-6 " >
                 <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
             </div>
             <div class="col-md-6 col-sm-6">
                 <input class="sr-only" name="bom_ecn_info_id" id="bom_ecn_info_id" type="text" value="<%= @get_ecn_info.id %>">
-<% if can? :work_d, :all and @get_ecn_info.state == "checking" %>
 
-                <%= submit_tag "审批通过", class:"btn btn-danger pull-right",data:{confirm: "确定审批通过?"} %>
+                <%= link_to "更新匹配",  p_viewbom_path(bom_id: @get_ecn_info.bom_id,bak: "bak",ecn: "ecn",ecn_pi_info_id: @get_ecn_info.pi_id,pi_item_id: @get_ecn_info.pi_item_id),class:"btn btn-warning pull-right" %>
+                
+                <%= link_to "更新BOM",  p_viewbom_path(bom_id: @get_ecn_info.bom_id,bak: "bak",ecn: "ecn",pi_info_id: @get_ecn_info.pi_id,pi_item_id: @get_ecn_info.pi_item_id),class:"btn btn-danger pull-right" %>
 
-<% end %>
 
             </div>
         </div>
@@ -192,7 +192,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                     <input type="checkbox" value="a" name="sheng_xiao_type[]" id="sheng_xiao_type_a" <% if @get_ecn_info.sheng_xiao_type == "a" %> checked <% end %>>
+                                     <input type="checkbox" value="a" name="sheng_xiao_type[]" id="sheng_xiao_type_a" <% if @get_ecn_info.sheng_xiao_type == "a" %> checked <% end %> disabled>
                                      <strong>立即更改</strong>
                                 </label>
                             </div>
@@ -200,7 +200,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="b" name="sheng_xiao_type[]" id="sheng_xiao_type_b" <% if @get_ecn_info.sheng_xiao_type == "b" %> checked <% end %>> 
+                                    <input type="checkbox" value="b" name="sheng_xiao_type[]" id="sheng_xiao_type_b" <% if @get_ecn_info.sheng_xiao_type == "b" %> checked <% end %> disabled> 
                                     <strong>批量变更</strong>
                                 </label>
                             </div>
@@ -208,7 +208,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="c" name="sheng_xiao_type[]" id="sheng_xiao_type_c" <% if @get_ecn_info.sheng_xiao_type == "c" %> checked <% end %>>
+                                    <input type="checkbox" value="c" name="sheng_xiao_type[]" id="sheng_xiao_type_c" <% if @get_ecn_info.sheng_xiao_type == "c" %> checked <% end %> disabled>
                                     <strong>自然汰换</strong>
                                 </label>
                             </div> 
@@ -216,7 +216,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="d" name="sheng_xiao_type[]" id="sheng_xiao_type_d" <% if @get_ecn_info.sheng_xiao_type == "d" %> checked <% end %>>
+                                    <input type="checkbox" value="d" name="sheng_xiao_type[]" id="sheng_xiao_type_d" <% if @get_ecn_info.sheng_xiao_type == "d" %> checked <% end %> disabled>
                                     <strong>消耗库存</strong>
                                 </label>
                             </div> 
@@ -224,7 +224,7 @@
                         <div class="col-md-2">
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" value="e" name="sheng_xiao_type[]" id="sheng_xiao_type_e" <% if @get_ecn_info.sheng_xiao_type == "e" %> checked <% end %>>
+                                    <input type="checkbox" value="e" name="sheng_xiao_type[]" id="sheng_xiao_type_e" <% if @get_ecn_info.sheng_xiao_type == "e" %> checked <% end %> disabled>
                                     <strong>其它</strong>
                                 </label>
                             </div>
@@ -233,7 +233,7 @@
                 </div>
             </div>
         </div>
-<% end %>
+
 
         <div class="row">
             <div class="col-md-12">

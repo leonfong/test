@@ -15,9 +15,9 @@
                 </div>
             </div>
 
-            <%= form_tag('/pmc_new', method:"get", class:"form-inline") do %>
+
             <div class="row" style="padding-top: 10px;padding-bottom: 2px;">
-                
+                <%= form_tag('/pmc_new', method:"get", class:"form-inline") do %>
                 <div class="col-md-2 col-sm-2 form-inline" >
                     <span  style="color:#999;">
                         <div class="form-group  nav navbar-nav navbar-left">
@@ -83,11 +83,12 @@
                         </div>                       
                     </span>
                 </div>
+                <% end %>
                 <div class="col-md-2 col-sm-2 form-inline" >
                     <button class="btn btn-danger btn-sm" id="btn_clean">一键清空</button>
                 </div>
             </div>
-            <% end %>
+
 
             <div class="row">
                 <div class="col-md-12" >
@@ -113,6 +114,7 @@
                                 <th width="80">申请总量</th>
                                 <th width="80">申请数量</th>
                                 <th width="80">库存</th>
+                                <th width="80">虚拟库存</th>
                                 <th >备注</th>
                                 <th width="90">
                                     <%= link_to "采购工程师",  {action: "pmc_new", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>

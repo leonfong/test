@@ -25,6 +25,7 @@
                             <thead>
                                 <tr style="background-color: #eeeeee">
                                     <th width="100">新建付款单</th>
+                                    <th width="100">日期时间</th>
                                     <th width="70">编号</th>     
                                     <th width="70">状态</th>
                                     <th width="70">借款方式</th>
@@ -41,7 +42,8 @@
                                     <% else %>
                                     <td><a style="margin-right: 100px;" type="button" class="btn btn-primary btn-xs" href="/new_fu_kuan_dan?id=<%= item.id %>" >新建付款单</a></td>
                                     <% end %>
-                                    <td><%= "FK_"+item.id.to_s %></td>
+                                    <td><%= item.created_at %></td>
+                                    <td><%= "FKSH_"+item.id.to_s %></td>
                                     <td><%= item.state %></td>
                                     <td><%= item.supplier_clearing %></td>
                                     <td><%= item.supplier_name %></td>

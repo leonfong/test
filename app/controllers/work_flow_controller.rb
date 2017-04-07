@@ -5,6 +5,376 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pmc_back_to_pi
+
+    end
+
+    def send_pmc_back
+        get_pmc_data = PiPmcItem.find_by_id(params[:id])
+        if not get_pmc_data.blank?
+            if get_pmc_data.state == "pass"
+                get_wh_data = WarehouseInfo.find_by_moko_part(get_pmc_data.moko_part)
+                if not get_wh_data.blank?
+                    if get_pmc_data.buy_user == "MOKO_TEMP"
+                        get_wh_data.future_qty = get_wh_data.future_qty + get_pmc_data.buy_qty
+                        get_wh_data.save
+                    elsif get_pmc_data.buy_user == "MOKO"
+                        get_wh_data.future_qty = get_wh_data.qty + get_pmc_data.buy_qty
+                        get_wh_data.save
+                    end
+                end
+                get_pmc_data.state = "new_new"
+                get_pmc_data.save
+            end
+        end
+        redirect_to :back
+    end
+
+    def pi_to_pmc
+        Rails.logger.info("pmc_new--------------------------------------1")
+        #@pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy = '' ORDER BY p_items.product_id DESC")
+        @pi_buy = PiBomQtyInfoItem.find_by_sql("SELECT pi_bom_qty_info_items.pi_item_id,pi_bom_qty_info_items.pi_info_id,pi_bom_qty_info_items.bom_ctl_qty AS pmc_qty,pi_bom_qty_info_items.customer_qty,pi_bom_qty_info_items.p_item_id,pi_bom_qty_info_items.order_item_id,pi_bom_qty_info_items.id AS qty_item_id FROM pi_bom_qty_info_items INNER JOIN p_items ON pi_bom_qty_info_items.p_item_id = p_items.id WHERE pi_bom_qty_info_items.pi_item_id = '#{params[:p_pi_item_id]}' AND pi_bom_qty_info_items.buy = '' ")
+        if not @pi_buy.blank?
+            Rails.logger.info("pmc_new--------------------------------------2")
+            @pi_buy.each do |item_buy|
+                need_buy = "no"
+                need_chk = "no"
+                item_id = item_buy.p_item_id
+                item_data = PItem.find_by_id(item_id)
+                if not item_data.blank?
+                    Rails.logger.info("pmc_new--------------------------------------3")
+                    find_buy_data = PiPmcItem.find_by_p_item_id(item_id)
+                    #find_buy_data = ""
+                    if find_buy_data.blank?
+                        Rails.logger.info("pmc_new--------------------------------------4")
+                        add_buy_data = PiPmcItem.new
+                        add_buy_data.state = "new"
+                        add_buy_data.pi_info_id = item_buy.pi_info_id
+                        add_buy_data.pi_item_id = item_buy.pi_item_id
+                        add_buy_data.pi_bom_qty_info_item_id = item_buy.qty_item_id
+                        add_buy_data.erp_no = item_data.erp_no
+                        add_buy_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
+                        #add_buy_data.erp_no_son = item_data.erp_no
+                        add_buy_data.moko_part = item_data.moko_part
+                        add_buy_data.moko_des = item_data.moko_des
+                        add_buy_data.part_code = item_data.part_code
+        
+
+                        moko_data = Product.find_by_id(item_data.product_id)
+                        wh_data = WarehouseInfo.find_by_moko_part(item_data.moko_part)
+                        if wh_data.blank?
+                            wh_data = WarehouseInfo.new
+                            wh_data.moko_part = item_data.moko_part
+                            wh_data.moko_des = item_data.moko_des
+                            wh_data.save
+                        end
+                        use_data = WhChkInfo.find_by_sql("SELECT SUM(wh_chk_infos.chk_qty) AS use_qty FROM wh_chk_infos WHERE (wh_chk_infos.state = 'new' OR wh_chk_infos.state = 'applying') AND wh_chk_infos.moko_part = '#{item_data.moko_part}'")
+                        use_qty = 0
+                        if not use_data.blank?
+                            if not use_data.first.use_qty.blank?
+                                use_qty = use_data.first.use_qty
+                            end 
+                        end
+                        #sell_qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
+                        #需求
+                        #sell_qty = item_data.quantity*PcbOrderItem.find_by_id(item_buy.order_item_id).qty
+                        #sell_qty = item_data.pmc_qty
+                        sell_qty = item_buy.pmc_qty
+                        add_buy_data.qty = sell_qty
+                        add_buy_data.qty_in = sell_qty 
+                        chk_data = WhChkInfo.where(moko_part: item_data.moko_part,state: "new")
+                        #如果这个料正在被申请盘点中
+                        if not chk_data.blank?
+                            add_buy_data.buy_user = "CHK"
+                            add_buy_data.pmc_type = "CHK"
+                            add_buy_data.buy_qty = sell_qty
+                            add_buy_data.pmc_qty = sell_qty
+                        else
+                            #如果库存中有这个料
+                            if not wh_data.blank? and not moko_data.blank?
+                                Rails.logger.info("pmc_new--------------------------------------5")
+                                #如果库存大于0
+                                if wh_data.qty > 0 and wh_data.qty - use_qty > 0
+                                    Rails.logger.info("pmc_new--------------------------------------6")
+                                    add_buy_data.buy_user = "CHK"
+                                    add_buy_data.pmc_type = "CHK"
+                                    add_buy_data.buy_qty = sell_qty
+                                    add_buy_data.pmc_qty = sell_qty
+                                    need_chk = "do"
+=begin
+                                send_chk_wh = WhChkInfo.new
+                                send_chk_wh.pi_pmc_item_id = add_buy_data.id
+                                send_chk_wh.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
+                                send_chk_wh.p_item_id = item_data.id
+                                send_chk_wh.moko_part = item_data.moko_part
+                                send_chk_wh.moko_des = item_data.moko_des
+                                send_chk_wh.chk_qty = wh_data.qty
+                                send_chk_wh.state = "new"
+                                send_chk_wh.save
+=end
+                            
+                                else
+                                    Rails.logger.info("pmc_new--------------------------------------7")
+                                    #如果虚拟库存大于0
+                                    if wh_data.future_qty > 0
+                                    Rails.logger.info("pmc_new--------------------------------------8")
+                                        #如果库存虚拟大于等于需求
+                                        if wh_data.future_qty - sell_qty >= 0
+                                            Rails.logger.info("pmc_new--------------------------------------9")
+                                            add_buy_data.buy_user = "MOKO_TEMP"
+                                            add_buy_data.buy_qty = sell_qty
+                                            add_buy_data.pmc_qty = sell_qty
+                                            wh_data.future_qty = wh_data.future_qty - sell_qty
+                                            wh_data.temp_future_qty = wh_data.temp_future_qty + sell_qty
+                                            wh_data.save
+                                        elsif wh_data.future_qty - sell_qty < 0
+                                            Rails.logger.info("pmc_new--------------------------------------10")
+                                            add_buy_data.buy_user = "MOKO_TEMP"
+                                            add_buy_data.buy_qty = wh_data.future_qty
+                                            add_buy_data.pmc_qty = wh_data.future_qty
+                                            wh_data.future_qty = 0
+                                            wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.temp_future_qty
+                                            wh_data.save
+                                            #不够的让采购员补齐
+                                            need_buy = "do"
+                                    
+                                        end
+                                    else
+                                        Rails.logger.info("pmc_new--------------------------------------11")
+                                        add_buy_data.buy_qty = sell_qty
+                                        add_buy_data.pmc_qty = sell_qty
+                                        if moko_data.package1 == "D" or moko_data.package1 == "Q"
+                                            add_buy_data.buy_user = "A"
+                                        elsif moko_data.package1 == "PZ"
+                                            add_buy_data.buy_user = "B"
+                                        end
+                                        wh_data.temp_buy_qty = wh_data.temp_buy_qty.to_i + sell_qty.to_i
+                                        wh_data.true_buy_qty = wh_data.true_buy_qty.to_i + sell_qty.to_i
+                                        wh_data.save
+                                    end
+                                end
+                            else
+                                Rails.logger.info("pmc_new--------------------------------------12")
+                                wh_data = WarehouseInfo.new
+                                wh_data.moko_part = item_data.moko_part
+                                wh_data.moko_des = item_data.moko_des
+                                wh_data.save
+                                add_buy_data.buy_qty = sell_qty
+                                add_buy_data.pmc_qty = sell_qty
+                            
+                            end
+                        end
+                        Rails.logger.info("pmc_new--------------------------------------13")
+
+
+                        add_buy_data.remark = item_data.remark
+
+                         
+
+
+                        add_buy_data.p_item_id = item_data.id
+                        add_buy_data.erp_id = item_data.erp_id
+                        add_buy_data.user_do = item_data.user_do
+                        add_buy_data.user_do_change = item_data.user_do_change
+                        add_buy_data.check = item_data.check
+                        add_buy_data.pi_buy_info_id = params[:pi_buy_id]
+                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                        add_buy_data.quantity = item_data.quantity
+                        add_buy_data.description = item_data.description
+                        add_buy_data.fengzhuang = item_data.fengzhuang
+                        add_buy_data.link = item_data.link
+                        add_buy_data.cost = item_data.cost
+                        add_buy_data.info = item_data.info
+                        add_buy_data.product_id = item_data.product_id
+                        add_buy_data.warn = item_data.warn
+                        add_buy_data.user_id = item_data.user_id
+                        add_buy_data.danger = item_data.danger
+                        add_buy_data.manual = item_data.manual
+                        add_buy_data.mark = item_data.mark
+                        add_buy_data.mpn = item_data.mpn
+                        add_buy_data.mpn_id = item_data.mpn_id
+                        add_buy_data.price = item_data.price
+                        add_buy_data.mf = item_data.mf
+                        add_buy_data.dn = item_data.dn
+                        add_buy_data.dn_id = item_data.dn_id
+                        add_buy_data.dn_long = item_data.dn_long
+                        add_buy_data.other = item_data.other
+                        add_buy_data.all_info = item_data.all_info
+                        add_buy_data.color = item_data.color
+                        add_buy_data.supplier_tag = item_data.supplier_tag
+                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                        if add_buy_data.save
+                            Rails.logger.info("pmc_new--------------------------------------14")
+                            #判断是否需要工厂盘料
+                            #if not wh_data.blank? and not moko_data.blank?
+                            if need_chk == "do"  
+                                Rails.logger.info("pmc_new--------------------------------------15")
+                                if wh_data.qty > 0 and wh_data.qty - use_qty > 0
+                                    Rails.logger.info("pmc_new--------------------------------------16")
+                                    send_chk_wh = WhChkInfo.new
+                                    send_chk_wh.pi_pmc_item_id = add_buy_data.id
+                                    send_chk_wh.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
+                                    send_chk_wh.p_item_id = item_data.id
+                                    send_chk_wh.moko_part = item_data.moko_part
+                                    send_chk_wh.moko_des = item_data.moko_des
+                                    send_chk_wh.chk_qty = wh_data.qty
+                                    send_chk_wh.state = "new"
+                                    send_chk_wh.save
+                                end
+                            end
+                            #判断是否需要采购补齐
+                            if need_buy == "do"
+                                Rails.logger.info("pmc_new--------------------------------------17")
+                                add_buy_do = PiPmcItem.new
+                                add_buy_do.state = "new"
+                                add_buy_do.pi_bom_qty_info_item_id = item_buy.qty_item_id
+                                add_buy_do.pi_info_id = item_buy.pi_info_id
+                                add_buy_do.pi_item_id = item_buy.pi_item_id
+                                add_buy_do.erp_no = add_buy_data.erp_no
+                                add_buy_do.erp_no_son = add_buy_data.erp_no_son
+                                add_buy_do.moko_part = add_buy_data.moko_part
+                                add_buy_do.moko_des = add_buy_data.moko_des
+                                add_buy_do.part_code = add_buy_data.part_code
+
+                                add_buy_do.qty = add_buy_data.qty
+                                add_buy_do.qty_in = add_buy_data.qty
+
+                                if moko_data.package1 == "D" or moko_data.package1 == "Q"
+                                    add_buy_do.buy_user = "A"
+                                elsif moko_data.package1 == "PZ"
+                                    add_buy_do.buy_user = "B"
+                                end
+                                add_buy_do.buy_qty = add_buy_data.qty - add_buy_data.buy_qty
+                                add_buy_do.pmc_qty = add_buy_data.qty - add_buy_data.buy_qty
+                                add_buy_do.remark = add_buy_data.remark
+                                add_buy_do.p_item_id = add_buy_data.p_item_id
+                                add_buy_do.erp_id = add_buy_data.erp_id
+                                add_buy_do.user_do = add_buy_data.user_do
+                                add_buy_do.user_do_change = add_buy_data.user_do_change
+                                add_buy_do.check = add_buy_data.check
+                                add_buy_do.pi_buy_info_id = add_buy_data.pi_buy_info_id
+                                add_buy_do.procurement_bom_id = add_buy_data.procurement_bom_id
+                                add_buy_do.quantity = add_buy_data.quantity
+                                add_buy_do.description = add_buy_data.description
+                                add_buy_do.fengzhuang = add_buy_data.fengzhuang
+                                add_buy_do.link = add_buy_data.link
+                                add_buy_do.cost = add_buy_data.cost
+                                add_buy_do.info = add_buy_data.info
+                                add_buy_do.product_id = add_buy_data.product_id
+                                add_buy_do.warn = add_buy_data.warn
+                                add_buy_do.user_id = add_buy_data.user_id
+                                add_buy_do.danger = add_buy_data.danger
+                                add_buy_do.manual = add_buy_data.manual
+                                add_buy_do.mark = add_buy_data.mark
+                                add_buy_do.mpn = add_buy_data.mpn
+                                add_buy_do.mpn_id = add_buy_data.mpn_id
+                                add_buy_do.price = add_buy_data.price
+                                add_buy_do.mf = add_buy_data.mf
+                                add_buy_do.dn = add_buy_data.dn
+                                add_buy_do.dn_id = add_buy_data.dn_id
+                                add_buy_do.dn_long = add_buy_data.dn_long
+                                add_buy_do.other = add_buy_data.other
+                                add_buy_do.all_info = add_buy_data.all_info
+                                add_buy_do.color = add_buy_data.color
+                                add_buy_do.supplier_tag = add_buy_data.supplier_tag
+                                add_buy_do.supplier_out_tag = add_buy_data.supplier_out_tag
+                                add_buy_do.sell_feed_back_tag = add_buy_data.sell_feed_back_tag
+                                if add_buy_do.save
+                                    Rails.logger.info("pmc_new--------------------------------------18")
+                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty + add_buy_do.buy_qty
+                                    wh_data.save
+                                end
+                            end
+                            get_qty_item_date = PiBomQtyInfoItem.find_by_id(item_buy.qty_item_id)
+                            get_qty_item_date.buy = "pmc"
+                            get_qty_item_date.save
+                            Rails.logger.info("pmc_new--------------------------------------19")
+                            #判断是否需要客供
+                            #if item_data.customer_qty > 0
+                            if item_buy.customer_qty.to_i > 0
+                                add_customer_data = PiPmcItem.new
+                                add_customer_data.pi_info_id = item_buy.pi_info_id
+                                add_customer_data.pi_item_id = item_buy.pi_item_id
+                                add_customer_data.pi_bom_qty_info_item_id = item_buy.qty_item_id
+                                add_customer_data.state = "new"
+                                add_customer_data.erp_no = item_data.erp_no
+                                add_customer_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
+                                #add_customer_data.erp_no_son = item_data.erp_no
+                                add_customer_data.moko_part = item_data.moko_part
+                                add_customer_data.moko_des = item_data.moko_des
+                                add_customer_data.part_code = item_data.part_code
+                                add_customer_data.qty = sell_qty
+                                add_customer_data.qty_in = item_buy.customer_qty
+                                add_customer_data.buy_user = "CUSTOMER"
+                                add_customer_data.pmc_type = "CHK"
+                                add_customer_data.buy_qty = item_buy.customer_qty
+                                add_customer_data.pmc_qty = item_buy.customer_qty
+                                add_customer_data.remark = item_data.remark
+                                add_customer_data.p_item_id = item_data.id
+                                add_customer_data.erp_id = item_data.erp_id
+                                add_customer_data.user_do = item_data.user_do
+                                add_customer_data.user_do_change = item_data.user_do_change
+                                add_customer_data.check = item_data.check
+                                add_customer_data.pi_buy_info_id = params[:pi_buy_id]
+                                add_customer_data.procurement_bom_id = item_data.procurement_bom_id
+                                add_customer_data.quantity = item_data.quantity
+                                add_customer_data.description = item_data.description
+                                add_customer_data.fengzhuang = item_data.fengzhuang
+                                add_customer_data.link = item_data.link
+                                add_customer_data.cost = item_data.cost
+                                add_customer_data.info = item_data.info
+                                add_customer_data.product_id = item_data.product_id
+                                add_customer_data.warn = item_data.warn
+                                add_customer_data.user_id = item_data.user_id
+                                add_customer_data.danger = item_data.danger
+                                add_customer_data.manual = item_data.manual
+                                add_customer_data.mark = item_data.mark
+                                add_customer_data.mpn = item_data.mpn
+                                add_customer_data.mpn_id = item_data.mpn_id
+                                add_customer_data.price = item_data.price
+                                add_customer_data.mf = item_data.mf
+                                add_customer_data.dn = item_data.dn
+                                add_customer_data.dn_id = item_data.dn_id
+                                add_customer_data.dn_long = item_data.dn_long
+                                add_customer_data.other = item_data.other
+                                add_customer_data.all_info = item_data.all_info
+                                add_customer_data.color = item_data.color
+                                add_customer_data.supplier_tag = item_data.supplier_tag
+                                add_customer_data.supplier_out_tag = item_data.supplier_out_tag
+                                add_customer_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                                if add_customer_data.save
+                                    wh_data.temp_customer_qty = wh_data.temp_customer_qty.to_i + add_customer_data.pmc_qty.to_i
+                                    wh_data.save
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+
+        end
+
+
+        get_pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+        if not get_pi_item_data.blank?
+            get_pi_item_data.to_pmc_state = "send"
+            get_pi_item_data.save
+        end
+
+        redirect_to :back
+    end
+
+    def pmc_to_sell
+        if params[:key_order]
+            #@pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+            
+            @pilist = PiBomQtyInfoItem.find_by_sql("SELECT pi_bom_qty_info_items.*, pi_items.*, p_items.* FROM pi_items INNER JOIN pi_bom_qty_info_items ON pi_items.id = pi_bom_qty_info_items.pi_item_id INNER JOIN p_items ON pi_bom_qty_info_items.p_item_id = p_items.id WHERE pi_bom_qty_info_items.pmc_back_state = '' AND (pi_items.pi_no LIKE '%#{params[:key_order]}%' OR p_items.moko_part LIKE '%#{params[:key_order]}%' OR p_items.moko_des LIKE '%#{params[:key_order]}%')").paginate(:page => params[:page], :per_page => 20)
+            #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        end        
+    end
+
+
     def edit_fu_kuan_remark
         if not params[:zhi_fu_id].blank?
             get_fukuan = FuKuanShenQingDanInfo.find_by_id(params[:zhi_fu_id])
@@ -239,7 +609,12 @@ before_filter :authenticate_user!
     end
 
     def ecn_list
-        @ecn_draft_list = BomEcnInfo.where("state <> 'new' AND fa_qi_ren_id = #{current_user.id}" ).paginate(:page => params[:page], :per_page => 20)
+        if can? :work_admin, :all or can? :work_d, :all
+            @ecn_draft_list = BomEcnInfo.where("state <> 'new'" ).paginate(:page => params[:page], :per_page => 20)
+        else
+            @ecn_draft_list = BomEcnInfo.where("state <> 'new' AND fa_qi_ren_id = #{current_user.id}" ).paginate(:page => params[:page], :per_page => 20)
+        end
+        
     end
 
     def sell_back_item
@@ -256,20 +631,7 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
-    def pmc_back_to_pi
 
-    end
-
-    def send_pmc_back
-        get_pmc_data = PiPmcItem.find_by_id(params[:id])
-        if not get_pmc_data.blank?
-            if get_pmc_data.state == "pass"
-                get_pmc_data.state = "new_new"
-                get_pmc_data.save
-            end
-        end
-        redirect_to :back
-    end
 
     def edit_pi_info_t_p
         get_pi_data = PiInfo.find_by_id(params[:p_pi_id])
@@ -1471,349 +1833,6 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
-    def pi_to_pmc
-        Rails.logger.info("pmc_new--------------------------------------1")
-        #@pi_buy = PiInfo.find_by_sql("SELECT p_items.*,pi_items.order_item_id FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy = '' ORDER BY p_items.product_id DESC")
-        @pi_buy = PiBomQtyInfoItem.find_by_sql("SELECT pi_bom_qty_info_items.pi_item_id,pi_bom_qty_info_items.pi_info_id,pi_bom_qty_info_items.bom_ctl_qty AS pmc_qty,pi_bom_qty_info_items.customer_qty,pi_bom_qty_info_items.p_item_id,pi_bom_qty_info_items.order_item_id,pi_bom_qty_info_items.id AS qty_item_id FROM pi_bom_qty_info_items INNER JOIN p_items ON pi_bom_qty_info_items.p_item_id = p_items.id WHERE pi_bom_qty_info_items.pi_item_id = '#{params[:p_pi_item_id]}' AND pi_bom_qty_info_items.buy = '' ")
-        if not @pi_buy.blank?
-            Rails.logger.info("pmc_new--------------------------------------2")
-            @pi_buy.each do |item_buy|
-                need_buy = "no"
-                need_chk = "no"
-                item_id = item_buy.p_item_id
-                item_data = PItem.find_by_id(item_id)
-                if not item_data.blank?
-                    Rails.logger.info("pmc_new--------------------------------------3")
-                    find_buy_data = PiPmcItem.find_by_p_item_id(item_id)
-                    #find_buy_data = ""
-                    if find_buy_data.blank?
-                        Rails.logger.info("pmc_new--------------------------------------4")
-                        add_buy_data = PiPmcItem.new
-                        add_buy_data.state = "new"
-                        add_buy_data.pi_info_id = item_buy.pi_info_id
-                        add_buy_data.pi_item_id = item_buy.pi_item_id
-                        add_buy_data.pi_bom_qty_info_item_id = item_buy.qty_item_id
-                        add_buy_data.erp_no = item_data.erp_no
-                        add_buy_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
-                        #add_buy_data.erp_no_son = item_data.erp_no
-                        add_buy_data.moko_part = item_data.moko_part
-                        add_buy_data.moko_des = item_data.moko_des
-                        add_buy_data.part_code = item_data.part_code
-        
-
-                        moko_data = Product.find_by_id(item_data.product_id)
-                        wh_data = WarehouseInfo.find_by_moko_part(item_data.moko_part)
-                        if wh_data.blank?
-                            wh_data = WarehouseInfo.new
-                            wh_data.moko_part = item_data.moko_part
-                            wh_data.moko_des = item_data.moko_des
-                            wh_data.save
-                        end
-                        use_data = WhChkInfo.find_by_sql("SELECT SUM(wh_chk_infos.chk_qty) AS use_qty FROM wh_chk_infos WHERE (wh_chk_infos.state = 'new' OR wh_chk_infos.state = 'applying') AND wh_chk_infos.moko_part = '#{item_data.moko_part}'")
-                        use_qty = 0
-                        if not use_data.blank?
-                            if not use_data.first.use_qty.blank?
-                                use_qty = use_data.first.use_qty
-                            end 
-                        end
-                        #sell_qty = item_data.quantity*ProcurementBom.find(item_data.procurement_bom_id).qty
-                        #需求
-                        #sell_qty = item_data.quantity*PcbOrderItem.find_by_id(item_buy.order_item_id).qty
-                        #sell_qty = item_data.pmc_qty
-                        sell_qty = item_buy.pmc_qty
-                        add_buy_data.qty = sell_qty
-                        add_buy_data.qty_in = sell_qty 
-                        chk_data = WhChkInfo.where(moko_part: item_data.moko_part,state: "new")
-                        #如果这个料正在被申请盘点中
-                        if not chk_data.blank?
-                            add_buy_data.buy_user = "CHK"
-                            add_buy_data.pmc_type = "CHK"
-                            add_buy_data.buy_qty = sell_qty
-                            add_buy_data.pmc_qty = sell_qty
-                        else
-                            #如果库存中有这个料
-                            if not wh_data.blank? and not moko_data.blank?
-                                Rails.logger.info("pmc_new--------------------------------------5")
-                                #如果库存大于0
-                                if wh_data.qty > 0 and wh_data.qty - use_qty > 0
-                                    Rails.logger.info("pmc_new--------------------------------------6")
-                                    add_buy_data.buy_user = "CHK"
-                                    add_buy_data.pmc_type = "CHK"
-                                    add_buy_data.buy_qty = sell_qty
-                                    add_buy_data.pmc_qty = sell_qty
-                                    need_chk = "do"
-=begin
-                                send_chk_wh = WhChkInfo.new
-                                send_chk_wh.pi_pmc_item_id = add_buy_data.id
-                                send_chk_wh.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
-                                send_chk_wh.p_item_id = item_data.id
-                                send_chk_wh.moko_part = item_data.moko_part
-                                send_chk_wh.moko_des = item_data.moko_des
-                                send_chk_wh.chk_qty = wh_data.qty
-                                send_chk_wh.state = "new"
-                                send_chk_wh.save
-=end
-                            
-                                else
-                                    Rails.logger.info("pmc_new--------------------------------------7")
-                                    #如果虚拟库存大于0
-                                    if wh_data.future_qty > 0
-                                    Rails.logger.info("pmc_new--------------------------------------8")
-                                        #如果库存虚拟大于等于需求
-                                        if wh_data.future_qty - sell_qty >= 0
-                                            Rails.logger.info("pmc_new--------------------------------------9")
-                                            add_buy_data.buy_user = "MOKO_TEMP"
-                                            add_buy_data.buy_qty = sell_qty
-                                            add_buy_data.pmc_qty = sell_qty
-                                            wh_data.future_qty = wh_data.future_qty - sell_qty
-                                            wh_data.temp_future_qty = wh_data.temp_future_qty + sell_qty
-                                            wh_data.save
-                                        elsif wh_data.future_qty - sell_qty < 0
-                                            Rails.logger.info("pmc_new--------------------------------------10")
-                                            add_buy_data.buy_user = "MOKO_TEMP"
-                                            add_buy_data.buy_qty = wh_data.future_qty
-                                            add_buy_data.pmc_qty = wh_data.future_qty
-                                            wh_data.future_qty = 0
-                                            wh_data.temp_future_qty = wh_data.temp_future_qty + wh_data.temp_future_qty
-                                            wh_data.save
-                                            #不够的让采购员补齐
-                                            need_buy = "do"
-                                    
-                                        end
-                                    else
-                                        Rails.logger.info("pmc_new--------------------------------------11")
-                                        add_buy_data.buy_qty = sell_qty
-                                        add_buy_data.pmc_qty = sell_qty
-                                        if moko_data.package1 == "D" or moko_data.package1 == "Q"
-                                            add_buy_data.buy_user = "A"
-                                        elsif moko_data.package1 == "PZ"
-                                            add_buy_data.buy_user = "B"
-                                        end
-                                        wh_data.temp_buy_qty = wh_data.temp_buy_qty.to_i + sell_qty.to_i
-                                        wh_data.true_buy_qty = wh_data.true_buy_qty.to_i + sell_qty.to_i
-                                        wh_data.save
-                                    end
-                                end
-                            else
-                                Rails.logger.info("pmc_new--------------------------------------12")
-                                wh_data = WarehouseInfo.new
-                                wh_data.moko_part = item_data.moko_part
-                                wh_data.moko_des = item_data.moko_des
-                                wh_data.save
-                                add_buy_data.buy_qty = sell_qty
-                                add_buy_data.pmc_qty = sell_qty
-                            
-                            end
-                        end
-                        Rails.logger.info("pmc_new--------------------------------------13")
-
-
-                        add_buy_data.remark = item_data.remark
-
-                         
-
-
-                        add_buy_data.p_item_id = item_data.id
-                        add_buy_data.erp_id = item_data.erp_id
-                        add_buy_data.user_do = item_data.user_do
-                        add_buy_data.user_do_change = item_data.user_do_change
-                        add_buy_data.check = item_data.check
-                        add_buy_data.pi_buy_info_id = params[:pi_buy_id]
-                        add_buy_data.procurement_bom_id = item_data.procurement_bom_id
-                        add_buy_data.quantity = item_data.quantity
-                        add_buy_data.description = item_data.description
-                        add_buy_data.fengzhuang = item_data.fengzhuang
-                        add_buy_data.link = item_data.link
-                        add_buy_data.cost = item_data.cost
-                        add_buy_data.info = item_data.info
-                        add_buy_data.product_id = item_data.product_id
-                        add_buy_data.warn = item_data.warn
-                        add_buy_data.user_id = item_data.user_id
-                        add_buy_data.danger = item_data.danger
-                        add_buy_data.manual = item_data.manual
-                        add_buy_data.mark = item_data.mark
-                        add_buy_data.mpn = item_data.mpn
-                        add_buy_data.mpn_id = item_data.mpn_id
-                        add_buy_data.price = item_data.price
-                        add_buy_data.mf = item_data.mf
-                        add_buy_data.dn = item_data.dn
-                        add_buy_data.dn_id = item_data.dn_id
-                        add_buy_data.dn_long = item_data.dn_long
-                        add_buy_data.other = item_data.other
-                        add_buy_data.all_info = item_data.all_info
-                        add_buy_data.color = item_data.color
-                        add_buy_data.supplier_tag = item_data.supplier_tag
-                        add_buy_data.supplier_out_tag = item_data.supplier_out_tag
-                        add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
-                        if add_buy_data.save
-                            Rails.logger.info("pmc_new--------------------------------------14")
-                            #判断是否需要工厂盘料
-                            #if not wh_data.blank? and not moko_data.blank?
-                            if need_chk == "do"  
-                                Rails.logger.info("pmc_new--------------------------------------15")
-                                if wh_data.qty > 0 and wh_data.qty - use_qty > 0
-                                    Rails.logger.info("pmc_new--------------------------------------16")
-                                    send_chk_wh = WhChkInfo.new
-                                    send_chk_wh.pi_pmc_item_id = add_buy_data.id
-                                    send_chk_wh.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
-                                    send_chk_wh.p_item_id = item_data.id
-                                    send_chk_wh.moko_part = item_data.moko_part
-                                    send_chk_wh.moko_des = item_data.moko_des
-                                    send_chk_wh.chk_qty = wh_data.qty
-                                    send_chk_wh.state = "new"
-                                    send_chk_wh.save
-                                end
-                            end
-                            #判断是否需要采购补齐
-                            if need_buy == "do"
-                                Rails.logger.info("pmc_new--------------------------------------17")
-                                add_buy_do = PiPmcItem.new
-                                add_buy_do.state = "new"
-                                add_buy_do.pi_bom_qty_info_item_id = item_buy.qty_item_id
-                                add_buy_do.pi_info_id = item_buy.pi_info_id
-                                add_buy_do.pi_item_id = item_buy.pi_item_id
-                                add_buy_do.erp_no = add_buy_data.erp_no
-                                add_buy_do.erp_no_son = add_buy_data.erp_no_son
-                                add_buy_do.moko_part = add_buy_data.moko_part
-                                add_buy_do.moko_des = add_buy_data.moko_des
-                                add_buy_do.part_code = add_buy_data.part_code
-
-                                add_buy_do.qty = add_buy_data.qty
-                                add_buy_do.qty_in = add_buy_data.qty
-
-                                if moko_data.package1 == "D" or moko_data.package1 == "Q"
-                                    add_buy_do.buy_user = "A"
-                                elsif moko_data.package1 == "PZ"
-                                    add_buy_do.buy_user = "B"
-                                end
-                                add_buy_do.buy_qty = add_buy_data.qty - add_buy_data.buy_qty
-                                add_buy_do.pmc_qty = add_buy_data.qty - add_buy_data.buy_qty
-                                add_buy_do.remark = add_buy_data.remark
-                                add_buy_do.p_item_id = add_buy_data.p_item_id
-                                add_buy_do.erp_id = add_buy_data.erp_id
-                                add_buy_do.user_do = add_buy_data.user_do
-                                add_buy_do.user_do_change = add_buy_data.user_do_change
-                                add_buy_do.check = add_buy_data.check
-                                add_buy_do.pi_buy_info_id = add_buy_data.pi_buy_info_id
-                                add_buy_do.procurement_bom_id = add_buy_data.procurement_bom_id
-                                add_buy_do.quantity = add_buy_data.quantity
-                                add_buy_do.description = add_buy_data.description
-                                add_buy_do.fengzhuang = add_buy_data.fengzhuang
-                                add_buy_do.link = add_buy_data.link
-                                add_buy_do.cost = add_buy_data.cost
-                                add_buy_do.info = add_buy_data.info
-                                add_buy_do.product_id = add_buy_data.product_id
-                                add_buy_do.warn = add_buy_data.warn
-                                add_buy_do.user_id = add_buy_data.user_id
-                                add_buy_do.danger = add_buy_data.danger
-                                add_buy_do.manual = add_buy_data.manual
-                                add_buy_do.mark = add_buy_data.mark
-                                add_buy_do.mpn = add_buy_data.mpn
-                                add_buy_do.mpn_id = add_buy_data.mpn_id
-                                add_buy_do.price = add_buy_data.price
-                                add_buy_do.mf = add_buy_data.mf
-                                add_buy_do.dn = add_buy_data.dn
-                                add_buy_do.dn_id = add_buy_data.dn_id
-                                add_buy_do.dn_long = add_buy_data.dn_long
-                                add_buy_do.other = add_buy_data.other
-                                add_buy_do.all_info = add_buy_data.all_info
-                                add_buy_do.color = add_buy_data.color
-                                add_buy_do.supplier_tag = add_buy_data.supplier_tag
-                                add_buy_do.supplier_out_tag = add_buy_data.supplier_out_tag
-                                add_buy_do.sell_feed_back_tag = add_buy_data.sell_feed_back_tag
-                                if add_buy_do.save
-                                    Rails.logger.info("pmc_new--------------------------------------18")
-                                    wh_data.temp_buy_qty = wh_data.temp_buy_qty + add_buy_do.buy_qty
-                                    wh_data.save
-                                end
-                            end
-                            get_qty_item_date = PiBomQtyInfoItem.find_by_id(item_buy.qty_item_id)
-                            get_qty_item_date.buy = "pmc"
-                            get_qty_item_date.save
-                            Rails.logger.info("pmc_new--------------------------------------19")
-                            #判断是否需要客供
-                            #if item_data.customer_qty > 0
-                            if item_buy.customer_qty.to_i > 0
-                                add_customer_data = PiPmcItem.new
-                                add_customer_data.pi_info_id = item_buy.pi_info_id
-                                add_customer_data.pi_item_id = item_buy.pi_item_id
-                                add_customer_data.pi_bom_qty_info_item_id = item_buy.qty_item_id
-                                add_customer_data.state = "new"
-                                add_customer_data.erp_no = item_data.erp_no
-                                add_customer_data.erp_no_son = PcbOrderItem.find_by_id(item_buy.order_item_id).pcb_order_no_son
-                                #add_customer_data.erp_no_son = item_data.erp_no
-                                add_customer_data.moko_part = item_data.moko_part
-                                add_customer_data.moko_des = item_data.moko_des
-                                add_customer_data.part_code = item_data.part_code
-                                add_customer_data.qty = sell_qty
-                                add_customer_data.qty_in = item_buy.customer_qty
-                                add_customer_data.buy_user = "CUSTOMER"
-                                add_customer_data.pmc_type = "CHK"
-                                add_customer_data.buy_qty = item_buy.customer_qty
-                                add_customer_data.pmc_qty = item_buy.customer_qty
-                                add_customer_data.remark = item_data.remark
-                                add_customer_data.p_item_id = item_data.id
-                                add_customer_data.erp_id = item_data.erp_id
-                                add_customer_data.user_do = item_data.user_do
-                                add_customer_data.user_do_change = item_data.user_do_change
-                                add_customer_data.check = item_data.check
-                                add_customer_data.pi_buy_info_id = params[:pi_buy_id]
-                                add_customer_data.procurement_bom_id = item_data.procurement_bom_id
-                                add_customer_data.quantity = item_data.quantity
-                                add_customer_data.description = item_data.description
-                                add_customer_data.fengzhuang = item_data.fengzhuang
-                                add_customer_data.link = item_data.link
-                                add_customer_data.cost = item_data.cost
-                                add_customer_data.info = item_data.info
-                                add_customer_data.product_id = item_data.product_id
-                                add_customer_data.warn = item_data.warn
-                                add_customer_data.user_id = item_data.user_id
-                                add_customer_data.danger = item_data.danger
-                                add_customer_data.manual = item_data.manual
-                                add_customer_data.mark = item_data.mark
-                                add_customer_data.mpn = item_data.mpn
-                                add_customer_data.mpn_id = item_data.mpn_id
-                                add_customer_data.price = item_data.price
-                                add_customer_data.mf = item_data.mf
-                                add_customer_data.dn = item_data.dn
-                                add_customer_data.dn_id = item_data.dn_id
-                                add_customer_data.dn_long = item_data.dn_long
-                                add_customer_data.other = item_data.other
-                                add_customer_data.all_info = item_data.all_info
-                                add_customer_data.color = item_data.color
-                                add_customer_data.supplier_tag = item_data.supplier_tag
-                                add_customer_data.supplier_out_tag = item_data.supplier_out_tag
-                                add_customer_data.sell_feed_back_tag = item_data.sell_feed_back_tag
-                                if add_customer_data.save
-                                    wh_data.temp_customer_qty = wh_data.temp_customer_qty.to_i + add_customer_data.pmc_qty.to_i
-                                    wh_data.save
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-
-        end
-
-
-        get_pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
-        if not get_pi_item_data.blank?
-            get_pi_item_data.to_pmc_state = "send"
-            get_pi_item_data.save
-        end
-
-        redirect_to :back
-    end
-
-    def pmc_to_sell
-        if params[:key_order]
-            #@pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-            
-            @pilist = PiBomQtyInfoItem.find_by_sql("SELECT pi_bom_qty_info_items.*, pi_items.*, p_items.* FROM pi_items INNER JOIN pi_bom_qty_info_items ON pi_items.id = pi_bom_qty_info_items.pi_item_id INNER JOIN p_items ON pi_bom_qty_info_items.p_item_id = p_items.id WHERE pi_bom_qty_info_items.pmc_back_state = '' AND (pi_items.pi_no LIKE '%#{params[:key_order]}%' OR p_items.moko_part LIKE '%#{params[:key_order]}%' OR p_items.moko_des LIKE '%#{params[:key_order]}%')").paginate(:page => params[:page], :per_page => 20)
-            #@pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        end        
-    end
 
     def pi_list
         if params[:key_order]

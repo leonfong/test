@@ -33,7 +33,7 @@ KindEditor.plugin('insertfile', function(K) {
 			//title
 			'<div class="ke-dialog-row">',
 			'<label for="keTitle" style="width:60px;">' + lang.title + '</label>',
-			'<input type="text" id="keTitle" class="ke-input-text" name="title" value="" style="width:160px;" /></div>',
+			'<input type="text" id="keTitle" class="ke-input-text" name="title" value="123123" style="width:160px;" /></div>',
 			'</div>',
 			//form end
 			'</form>',
@@ -77,10 +77,12 @@ KindEditor.plugin('insertfile', function(K) {
 					dialog.hideLoading();
 					if (data.error === 0) {
 						var url = data.url;
+                                                
 						if (formatUploadUrl) {
 							url = K.formatUrl(url, 'absolute');
 						}
 						urlBox.val(url);
+						
 						if (self.afterUpload) {
 							self.afterUpload.call(self, url, data, name);
 						}

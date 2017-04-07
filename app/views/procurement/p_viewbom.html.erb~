@@ -151,6 +151,9 @@ $(document).ready(function() {
             <div class="row" style="padding-top: 10px;">
                 <div class="col-md-6 col-sm-6 " >
                     <h4 style="color: #32aacb;margin-top: 0px;padding: 0px;margin-bottom: 0px;">
+                        <% if not params[:ecn].blank? %>
+                        <span class="label label-danger">ECN</span>
+                        <% end %>
                         <strong>BOM No. <%= @boms.no %></strong>
 
                         <span class="text-danger"><strong>版本 V<%= @boms.bom_version %></strong></span>
@@ -442,9 +445,11 @@ function change_<%= item.id.to_s %>(){
     $("#input_<%= item.id.to_s %>").val("<%= item.description %>");
     }
 </script>
-                    
+                    <% if can? :work_admin, :all or can? :work_d, :all %> 
                     <td <% if can? :work_dd, :all %><% else %>width="150"<% end %> style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><small><%= item.description %></small></td> 
-
+                    <% else %>
+                    <td <% if can? :work_dd, :all %><% else %>width="150"<% end %> style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.description %></small></td> 
+                    <% end %>
                     <% if item.product_id !=0 and item.product_id != nil%>
                         <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
                             <small>
@@ -746,6 +751,143 @@ function change_<%= item.id.to_s %>(){
 
 
             <% end %>
+
+
+
+
+
+
+
+<% if not @bom_item_new.blank? %> 
+            <div class="row">
+                <div class="col-md-12" style="padding-top: 50px;">
+                    <span class="label label-danger">待审批的ECN新增物料</span>
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-md-12" >
+            <small>
+            <table class="table table-hover" style="margin: 0px;"> 
+
+                <thead >
+                <tr style="background-color: #eeeeee"> 
+                    <th width="50" >删除</th>
+                    <th width="50" >编辑</th>
+                    <th width="150">MPN</th> 
+                    <th <% if can? :work_dd, :all %><% else %>width="150"<% end %>>描述</th>
+                    <th >MOKO 描述</th>
+                    <th width="100">位号</th>
+                    <th width="50">用量</th>
+                    <th width="60">报价量</th>
+                    <th width="50" >审批</th>
+                
+                </tr>
+                </thead>
+            </table>  </small> 
+                </div>  
+                <div class="col-md-4" <% if can? :work_dd, :all %>style="display:none;padding-left: 0px;"<% else %>style="padding-left: 0px;"<% end %> >
+            
+                </div>  </div>
+
+                <% @bom_item_new.each_with_index do |item,index| %>
+                <div id="<%=item.id%>_div" class="row" style="padding: 0px;">
+                        <div class="col-md-12" > 
+                <small>
+                <table class="table table-hover" style="margin: 0px;"> 
+                <tr  >
+                    <td style="padding-left: 0px;" width="45"  ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-trash text-left text-danger" href="/del_bom_item?id=<%=item.id.to_s%>" data-confirm="确定要删除？"></a></h1></td>
+                    <td style="padding-left: 0px;" width="45"  ><div ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-edit text-left text-success" data-toggle="modal" data-target="#edit_item_ref" data-item_id="<%= item.id %>" data-item_ref="<%= item.part_code %>" data-ref_quantity="<%= item.quantity %>" data-moko_part="<%= item.moko_part %>" ></a></h1></div></td>
+                    
+
+                    <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="150"><small>
+                        <a type="button" class="glyphicon glyphicon-edit a_ctl" data-toggle="modal" data-target="#editMpn" data-mpn="<%= item.mpn %>" data-itempid="<%= item.id %>" id="<%= item.id.to_s + '_mpn' %>" ><%= item.mpn %></a>
+                    </td>   
+<script>
+function change_<%= item.id.to_s %>(){
+    $("#input_<%= item.id.to_s %>").val("<%= item.description %>");
+    }
+</script>
+                    
+                    <td <% if can? :work_dd, :all %><% else %>width="150"<% end %> style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.description %></small></td> 
+                    
+                    <% if item.product_id !=0 and item.product_id != nil%>
+                        <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small>
+                            
+                            <a class="text-muted a_ctl" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>" data-container="body" data-toggle="popover" tabindex="0"  data-trigger="focus" data-placement="top" data-content="<%= Product.find(item.product_id).name %>"><%= Product.find(item.product_id).description %></a>
+                            </small>
+                    </td>
+                        
+                    <% else %>
+                        <td  style="padding: 5px 0px 5px 0px;margin: 0px;">
+                            <small> 
+                                
+                                <a class="text-muted a_ctl" name="<%= item.id.to_s + 'd' %>"  id="<%= item.id.to_s + 'd' %>"></a>
+                            </small>
+                        </td>
+                        
+                    <% end %>
+                    
+                    <td width="100" style="padding: 5px 0px 5px 0px;margin: 0px;word-break : break-all; " ><small><%= item.part_code %></small></td>
+                    
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity %></small></td>
+                    <td width="60" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.quantity.to_i*@boms.qty.to_i %></small></td>
+                    <% if not params[:pi_info_id].blank? %>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= @pi_bom_qty_info.t_qty.to_i*item.quantity.to_i %></small></td>
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><small>
+                        <div data-toggle="modal" data-target="#edit_item_qty" data-item_des="<%= item.description %>" data-item_id="<%= item.pi_item_qty %>" data-pmc_qty="<%= item.bom_ctl_qty %>" data-customer_qty="<%= item.customer_qty %>" ><%= item.bom_ctl_qty %></div> 
+                    
+                    </small>
+                    </td> 
+                    <td width="50" style="padding: 5px 0px 5px 0px;margin: 0px;"><%= item.customer_qty %></td>
+                    <% end %>
+                    <td width="50" ><a  class="btn btn-danger btn-xs text-left text-danger" href="/chk_add_bom_item?id=<%=item.id.to_s%>&pi_info_id=<%=params[:ecn_pi_info_id]%>&pi_item_id=<%=params[:pi_item_id]%>" data-confirm="确定要发送给PMC？">通过</a></td>
+                    
+
+
+                   </tr></table></small>
+
+
+                   </div>
+
+
+
+
+
+
+
+
+
+
+
+                </td></tr> </div>  
+
+
+
+
+
+                <% end %>
+
+
+
+
+            <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div class="row" style="padding-bottom: 20px;">
                 <div class="col-md-12">
             <script>
@@ -766,6 +908,9 @@ function change_<%= item.id.to_s %>(){
                     <div class="form-group sr-only">
                         <label for="p_id">p_id</label>
                         <input type="text" class="form-control" id="p_id" name="p_id" placeholder="p_id" value="<%= @boms.id %>">
+                        <% if not params[:ecn].blank? %>
+                        <input type="text" class="form-control" id="ecn" name="ecn" placeholder="ecn" value="ecn">
+                        <% end %>
                     </div>
                     <div class="form-group">
                         <label for="p_mpn">MPN</label>
@@ -791,7 +936,7 @@ function change_<%= item.id.to_s %>(){
                     <button type="submit" class="btn btn-warning">SUBMIT</button>
                 <% end %> 
             </div>
-<% if params[:pi_info_id].blank? %>
+<% if params[:pi_info_id].blank? and params[:ecn].blank?%>
             <div class="modal-footer">
                 <%= link_to "返回上一步", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-danger pull-left",data:{confirm: "返回上一步会删除这个BOM所有已经匹配的数据，确定要返回上一步吗？"}%>
 <!--                

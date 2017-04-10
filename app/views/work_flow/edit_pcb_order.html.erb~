@@ -222,7 +222,7 @@
                             </td>
                             <td><%= q_item.remark %></td>
                             <td>   
-                                <a class="btn btn-warning btn-xs" data-toggle="modal" data-target="#linkbommoko" data-find_linkbom_id="<%= q_item.id %>">关联匹配</a>
+                                <a class="btn btn-warning btn-xs" data-toggle="modal" data-target="#linkbommoko" data-find_linkbom_id="<%= q_item.id %>">关联BOM</a>
                             </td>
                             <td>   
                                 <a class="btn btn-danger btn-xs" href="/procurement_new?erp_item_id=<%= q_item.id.to_s %>&erp_no=<%= @q_order.order_no %>&erp_no_son=<%= q_item.pcb_order_no_son %>&erp_qty=<%= q_item.qty %>">上传</a>
@@ -687,7 +687,7 @@
                 <%= form_tag('/find_linkbom_moko', method:"get", class:"form-inline",remote: true) do %>
                     <div class="form-group sr-only">         
                         <label for="find_linkbom_moko_id" class="control-label">询价ID:</label>
-                        <input type="text" class="form-control" id="find_linkbom_moko_moko_id" name="find_linkbom_moko_moko_id" >
+                        <input type="text" class="form-control" id="find_linkbom_moko_id" name="find_linkbom_moko_id" >
                     </div>
                     <div class="form-group ">
                         <lable for="order" , class="control-label"><strong>单号: </strong></lable>

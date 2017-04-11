@@ -235,11 +235,13 @@ Rails.application.routes.draw do
   match '/edit_ecn', to: 'work_flow#edit_ecn', via: 'get'
   match '/add_ecn', to: 'work_flow#add_ecn', via: 'post'
   match '/add_ecn_item', to: 'work_flow#add_ecn_item', via: 'post'
+  match '/up_ecn_item', to: 'work_flow#up_ecn_item', via: 'post'
   match '/edit_ecn_up', to: 'work_flow#edit_ecn_up', via: 'post'
   match '/edit_j_h_r_q', to: 'work_flow#edit_j_h_r_q', via: 'post'
   match '/edit_fu_kuan_bank', to: 'work_flow#edit_fu_kuan_bank', via: 'post'
   match '/edit_fu_kuan_info_a', to: 'work_flow#edit_fu_kuan_info_a', via: 'post'
   match '/edit_fu_kuan_info_b', to: 'work_flow#edit_fu_kuan_info_b', via: 'post'
+  match '/clean_work_date', to: 'work_flow#clean_work_date', via: 'get'
 
 
 
@@ -268,6 +270,10 @@ Rails.application.routes.draw do
   match '/moko_bom_list', to: 'procurement#moko_bom_list', via: 'get'
   match '/search_m', to: 'procurement#search_m',via: 'post'
   match '/search_m', to: 'procurement#search_m',via: 'get'
+  match '/search_m_ecn', to: 'procurement#search_m_ecn',via: 'post'
+  match '/search_m_ecn', to: 'procurement#search_m_ecn',via: 'get'
+  match '/set_ecn', to: 'procurement#set_ecn',via: 'get'
+
   match '/search_m_moko', to: 'procurement#search_m_moko',via: 'post'
   match '/search_m_moko', to: 'procurement#search_m_moko',via: 'get'
   match '/p_update', to: 'procurement#p_update',via: 'get'

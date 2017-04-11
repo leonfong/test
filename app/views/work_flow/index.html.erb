@@ -270,6 +270,7 @@
                     <th class="bg-primary" width="80">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
                     <th class="bg-primary">备注</th>
+                    <th class="bg-danger" width="50">清空</th>
                 </tr>
             </thead>
             <tbody >
@@ -373,6 +374,9 @@
                     </td> 
                     <td>  
                         <%= text_field_tag :remark, params[:remark], id: work.id.to_s+"remark",class:"form-control input-sm",value:work.remark , size:"20" , style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;"%>
+                    </td>
+                    <td>
+                         <a type="button" class="btn btn-danger btn-xs" href="/clean_work_date?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清空</a>
                     </td>
                 </tr>
                 <tr> 

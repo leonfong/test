@@ -99,6 +99,7 @@
                                         </div>
                                     </div>
                                 </div>
+<!--
                                 <div class="form-horizontal">
                                     <div class="form-group form-group-sm">
                                         <label for="change_at" class="col-md-4 control-label">变更性质:</label>
@@ -126,7 +127,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+-->
 
 
 
@@ -240,8 +241,10 @@
                     <div class="panel-heading">
                         <strong>ECN</strong> <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#add_item_ecn" data-backdrop="static" data-ecn_info_id_new="<%= @get_ecn_info.id %>">添加物料</button>
                     </div>
-                            <table class="table table-bordered" >
+                            <table class="table table-bordered table-hover" >
                                 <colgroup>
+                                    <col width=4%></col>
+                                    <col width=4%></col>
                                     <col width=4%></col>
                                     <col width=10%></col>
                                     <col width=10%></col>
@@ -251,11 +254,13 @@
                                     <col width=10%></col>
                                     <col width=15%></col>
                                     <col width=3%></col>
-                                    <col width=30%></col>
+                                    <col width=22%></col>
                                 </colgroup>
                                 <thead>
                                     <tr class="active">
+                                        <th rowspan="2">操作</th>
                                         <th rowspan="2">代号</th>
+                                        <th rowspan="2">性质</th>
                                         <th colspan="4">变更前</th>
                                         <th colspan="4">变更后</th> 
                                         <th rowspan="2">备注</th>
@@ -274,8 +279,10 @@
                                 <tbody>  
                                 <% if not@get_ecn_item.blank?%>
                                 <% @get_ecn_item.each_with_index do |item,index| %>
-                                    <tr> 
+                                    <tr <% if item.state == "new" %>class="bg-danger"<% end %>> 
+                                        <td><a type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#bom_eng_set" data-backdrop="static" data-up_item_id="<%= item.id %>"  data-up_old_moko_part="<%= item.old_moko_part %>" data-up_old_moko_des="<%= item.old_moko_des %>" data-up_old_part_code="<%= item.old_part_code %>" data-up_old_quantity="<%= item.old_quantity %>" data-up_new_moko_part="<%= item.new_moko_part %>" data-up_new_moko_des="<%= item.new_moko_des %>" data-up_new_part_code="<%= item.new_part_code %>" data-up_new_quantity="<%= item.new_quantity %>" data-sell_change_type="<%= item.change_type %>">操作</a></td>
                                         <td><%= item.bom_item_id %></td>
+                                        <td><%= item.change_type %></td>
                                         <td style="word-break : break-all; "><%= item.old_part_code %></td>
                                         <td><%= item.old_moko_part %></td>
                                         <td><%= item.old_moko_des %></td>
@@ -304,7 +311,7 @@
                         <strong>BOM</strong>
                     </div>
 
-                            <table class="table table-bordered" >
+                            <table class="table table-bordered table-hover table-condensed" >
                                 <thead>
                                     <tr class="active">
                                         <th width="60">代号</th>
@@ -346,6 +353,118 @@
 
 
 
+<div class="modal fade" id="bom_eng_set" tabindex="-1" role="dialog" aria-labelledby="bom_eng_setLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="bom_eng_setLabel">工程师ECN操作</h4>
+      </div>
+      <div class="modal-body">
+
+
+
+
+                            <div  class="form-group" >
+                              
+                                <%= form_tag('/search_m_ecn', remote: true, class:"form-inline") do %>
+                                <div class="form-group">
+                                    <%= text_field_tag :q, params[:q], id:"input_up", class:"form-control", size:30, value: "", placeholder:"Description"%>
+                                    
+                                    <%= submit_tag t(:search), class:"btn btn-primary" %>
+                                </div>
+                                <% end %>
+<div class="row">
+  <div class="col-md-12" id="up_lab">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12" id="up_tbody">  
+  </div>    
+</div>
+                            </div>
+
+
+
+
+
+
+
+        <%= form_tag('/up_ecn_item', method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="itemp_id_remark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="up_bom_item_id" name="up_item_id">
+          </div>
+
+          <div class="form-group">
+            <label for="change_at" class="control-label">操作:</label>
+            <div >
+              <label class="checkbox-inline">
+                <input type="radio" value="edit" name="opt_type[]" id="opt_item_type_edit" >
+                <strong>修改物料</strong>
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" value="add" name="opt_type[]" id="opt_item_type_add" >
+                <strong>增加物料</strong>
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" value="del" name="opt_type[]" id="opt_item_type_del" >
+                <strong>删除物料</strong>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="itemp_id_remark" class="control-label">MOKO PART:</label>
+            <code id="up_old_moko_part_show"></code>
+            <p id="up_new_moko_part_show" class="bg-success"></p>
+            <input type="text" class="form-control" id="up_eng_moko_part" name="up_eng_moko_part">
+          </div>
+          <div class="form-group">
+            <label for="itemp_id_remark" class="control-label">MOKO描述:</label>
+            <code id="up_old_moko_des_show"></code>
+            <p id="up_new_moko_des_show" class="bg-success"></p>
+            <textarea type="text" class="form-control" id="up_eng_moko_des" name="up_eng_moko_des"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="itemp_id_remark" class="control-label">位号:</label>
+            <code id="up_old_part_code_show"></code>
+            <p id="up_new_part_code_show" class="bg-success"></p>
+            <input type="text" class="form-control" id="up_eng_part_code" name="up_eng_part_code">
+          </div>
+          <div class="form-group">
+            <label for="itemp_id_remark" class="control-label">用量:</label>
+            <code id="up_old_quantity_show"></code>
+            <p id="up_new_quantity_show" class="bg-success"></p>
+            <input type="number" class="form-control" id="up_eng_quantity" name="up_eng_quantity">
+          </div>
+
+          <div class="form-group">
+            <label for="change_at" class="control-label">变更性质:</label>
+            <div >
+                <code id="sell_change_type"></code>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pj_remark">备注：</label>
+            <code id="up_ecn_remark"></code>
+            <textarea type="text" class="form-control" id="up_eng_remark" name="up_eng_remark"  ></textarea>
+          </div>             
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
 <div class="modal fade" id="remarkupdate" tabindex="-1" role="dialog" aria-labelledby="remarkupdateLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -379,21 +498,21 @@
             <code id="old_quantity_show"></code>
             <input type="number" class="form-control" id="new_quantity" name="new_quantity">
           </div>
-<!--
+
           <div class="form-group">
             <label for="change_at" class="control-label">变更性质:</label>
             <div >
               <label class="checkbox-inline">
-                <input type="radio" value="ever" name="change_type[]" id="change_item_type_ever" <% if @get_ecn_info.change_type == "ever" %> checked <% end %>>
+                <input type="radio" value="ever" name="change_type[]" id="change_item_type_ever" >
                 <strong>永久</strong>
               </label>
               <label class="checkbox-inline">
-                <input type="radio" value="temp" name="change_type[]" id="change_item_type_temp" <% if @get_ecn_info.change_type == "temp" %> checked <% end %>>
+                <input type="radio" value="temp" name="change_type[]" id="change_item_type_temp" >
                 <strong>临时</strong>
               </label>
             </div>
           </div>
--->
+
           <div class="form-group">
             <label for="pj_remark">备注：</label>
             <textarea type="text" class="form-control" id="ecn_remark" name="ecn_remark"  ></textarea>
@@ -408,6 +527,7 @@
     </div>
   </div>
 </div>
+
 
 <div class="modal fade" id="add_item_ecn" tabindex="-1" role="dialog" aria-labelledby="add_item_ecnLabel">
   <div class="modal-dialog" role="document">
@@ -439,6 +559,19 @@
             <input type="number" class="form-control" id="new_quantity" name="new_quantity">
           </div>
           <div class="form-group">
+            <label for="change_at" class="control-label">变更性质:</label>
+            <div >
+              <label class="checkbox-inline">
+                <input type="radio" value="ever" name="change_type[]" id="change_item_type_ever" <% if @get_ecn_info.change_type == "ever" %> checked <% end %>>
+                <strong>永久</strong>
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" value="temp" name="change_type[]" id="change_item_type_temp" <% if @get_ecn_info.change_type == "temp" %> checked <% end %>>
+                <strong>临时</strong>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
             <label for="pj_remark">备注：</label>
             <textarea type="text" class="form-control" id="ecn_remark" name="ecn_remark"  ></textarea>
           </div>             
@@ -462,6 +595,51 @@
 
 <script>
 
+$('#bom_eng_set').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var up_item_id = button.data('up_item_id');
+
+  var up_old_moko_part = button.data('up_old_moko_part');
+  var up_old_moko_des = button.data('up_old_moko_des');
+  var up_old_part_code = button.data('up_old_part_code');
+  var up_old_quantity = button.data('up_old_quantity');
+
+  var up_new_moko_part = button.data('up_new_moko_part');
+  var up_new_moko_des = button.data('up_new_moko_des');
+  var up_new_part_code = button.data('up_new_part_code');
+  var up_new_quantity = button.data('up_new_quantity');
+
+
+  var sell_change_type = button.data('sell_change_type');
+
+  var modal = $(this);
+  modal.find($("#up_item_id")).val(up_item_id);
+
+  modal.find($("#up_old_moko_part_show")).val(up_old_moko_part);
+  modal.find($("#up_old_moko_des_show")).text(up_old_moko_des);
+  modal.find($("#up_old_part_code_show")).text(up_old_part_code);
+  modal.find($("#up_old_quantity_show")).text(up_old_quantity);
+
+  modal.find($("#up_new_moko_part_show")).val(up_new_moko_part);
+  modal.find($("#up_new_moko_des_show")).text(up_new_moko_des);
+  modal.find($("#up_new_part_code_show")).text(up_new_part_code);
+  modal.find($("#up_new_quantity_show")).text(up_new_quantity);
+
+  modal.find($("#sell_change_type")).text(sell_change_type);
+
+  modal.find($("#up_eng_part_code")).val("");
+  modal.find($("#up_eng_moko_part")).val("");
+  modal.find($("#up_eng_moko_des")).val("");
+  modal.find($("#up_eng_quantity")).val("");
+  modal.find($("#up_eng_remark")).text("");
+
+  modal.find($("#opt_item_type_edit")).removeAttr("checked");
+  modal.find($("#opt_item_type_add")).removeAttr("checked");
+  modal.find($("#opt_item_type_del")).removeAttr("checked");
+
+})
+
+
 $('#remarkupdate').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var bom_item_id = button.data('bom_item_id');
@@ -480,6 +658,16 @@ $('#remarkupdate').on('show.bs.modal', function (event) {
   modal.find($("#old_moko_des_show")).text(old_moko_des);
   modal.find($("#old_part_code_show")).text(old_part_code);
   modal.find($("#old_quantity_show")).text(old_quantity);
+
+  modal.find($("#new_part_code")).val("");
+  modal.find($("#new_sell_des")).val("");
+  modal.find($("#new_quantity")).val("");
+  modal.find($("#ecn_remark")).text("");
+
+  modal.find($("#change_item_type_ever")).removeAttr("checked");
+  modal.find($("#change_item_type_temp")).removeAttr("checked");
+
+
 })
 
 $('#add_item_ecn').on('show.bs.modal', function (event) {

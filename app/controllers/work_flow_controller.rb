@@ -438,23 +438,65 @@ before_filter :authenticate_user!
 
     def add_ecn_item
         if not params[:ecn_info_id].blank? 
-            ecn_item_new = BomEcnItem.new
-            ecn_item_new.bom_ecn_info_id = params[:ecn_info_id]
-            ecn_item_new.bom_item_id = params[:bom_item_id]
-            ecn_item_new.old_moko_part = params[:old_moko_part]
-            ecn_item_new.old_moko_des = params[:old_moko_des]
-            ecn_item_new.old_part_code = params[:old_part_code]
-            ecn_item_new.old_quantity = params[:old_quantity]
-            ecn_item_new.new_moko_part = params[:new_moko_part]
-            ecn_item_new.new_sell_des = params[:new_sell_des]
-            ecn_item_new.new_moko_des = params[:new_moko_des]
-            ecn_item_new.new_part_code = params[:new_part_code]
-            ecn_item_new.new_quantity = params[:new_quantity]
-            ecn_item_new.remark = params[:ecn_remark]
-            if ecn_item_new.save
-                p_item_data = PItem.find_by_id(params[:bom_item_id])
-                p_item_data.ecn_tag = "new"
-                p_item_data.save
+            if not params[:bom_item_id].blank?
+                check_item = BomEcnItem.find_by(bom_ecn_info_id: params[:ecn_info_id],bom_item_id: params[:bom_item_id])
+
+                if check_item.blank?
+                    ecn_item_new = BomEcnItem.new
+                    ecn_item_new.bom_ecn_info_id = params[:ecn_info_id]
+                    ecn_item_new.bom_item_id = params[:bom_item_id]
+                    ecn_item_new.old_moko_part = params[:old_moko_part]
+                    ecn_item_new.old_moko_des = params[:old_moko_des]
+                    ecn_item_new.old_part_code = params[:old_part_code]
+                    ecn_item_new.old_quantity = params[:old_quantity]
+                    ecn_item_new.new_moko_part = params[:new_moko_part]
+                    ecn_item_new.new_sell_des = params[:new_sell_des]
+                    ecn_item_new.new_moko_des = params[:new_moko_des]
+                    ecn_item_new.new_part_code = params[:new_part_code]
+                    ecn_item_new.new_quantity = params[:new_quantity]
+                    ecn_item_new.change_type = params[:change_type].join("")
+                    ecn_item_new.remark = params[:ecn_remark]
+                    if ecn_item_new.save
+                        p_item_data = PItem.find_by_id(params[:bom_item_id])
+                        p_item_data.ecn_tag = "new"
+                        p_item_data.save
+                    end
+                else
+                    check_item.old_moko_part = params[:old_moko_part]
+                    check_item.old_moko_des = params[:old_moko_des]
+                    check_item.old_part_code = params[:old_part_code]
+                    check_item.old_quantity = params[:old_quantity]
+                    check_item.new_moko_part = params[:new_moko_part]
+                    check_item.new_sell_des = params[:new_sell_des]
+                    check_item.new_moko_des = params[:new_moko_des]
+                    check_item.new_part_code = params[:new_part_code]
+                    check_item.new_quantity = params[:new_quantity]
+                    check_item.change_type = params[:change_type].join("")
+                    check_item.remark = params[:ecn_remark]
+                    check_item.save
+                end
+            else
+                ecn_item_new = BomEcnItem.new
+                ecn_item_new.bom_ecn_info_id = params[:ecn_info_id]
+                ecn_item_new.bom_item_id = params[:bom_item_id]
+                ecn_item_new.old_moko_part = params[:old_moko_part]
+                ecn_item_new.old_moko_des = params[:old_moko_des]
+                ecn_item_new.old_part_code = params[:old_part_code]
+                ecn_item_new.old_quantity = params[:old_quantity]
+                ecn_item_new.new_moko_part = params[:new_moko_part]
+                ecn_item_new.new_sell_des = params[:new_sell_des]
+                ecn_item_new.new_moko_des = params[:new_moko_des]
+                ecn_item_new.new_part_code = params[:new_part_code]
+                ecn_item_new.new_quantity = params[:new_quantity]
+                ecn_item_new.change_type = params[:change_type].join("")
+                ecn_item_new.remark = params[:ecn_remark]
+                if ecn_item_new.save
+                    p_item_data = PItem.find_by_id(params[:bom_item_id])
+                    if not p_item_data.blank?
+                        p_item_data.ecn_tag = "new"
+                        p_item_data.save
+                    end
+                end
             end
         end
         redirect_to :back
@@ -8518,6 +8560,18 @@ before_filter :authenticate_user!
             @quate = ProcurementBom.find_by_sql("SELECT procurement_boms.`p_name`,p_items.*  FROM procurement_boms INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id WHERE p_items.sell_feed_back_tag = 'sell'").paginate(:page => params[:page], :per_page => 10)
         end 
 =end   
+    end
+
+    def clean_work_date
+        get_data = WorkFlow.find_by_id(params[:id])
+        if not get_data.blank?
+            get_data.smd_start_date = nil
+            get_data.smd_end_date = nil
+            get_data.dip_start_date = nil
+            get_data.dip_end_date = nil
+            get_data.save
+            redirect_to :back and return
+        end
     end
 
     def index

@@ -4091,6 +4091,243 @@ before_filter :authenticate_user!
         Rails.logger.info("--------------------------2222")
     end
 
+    def search_m_ecn
+        if cookies.permanent[:educator_locale].to_s == "zh"
+            part_name_locale = "part_name"
+        elsif cookies.permanent[:educator_locale].to_s == "en"
+            part_name_locale = "part_name_en"
+        end
+        #@bom_item = PItem.find(params[:id])
+        
+	#params[:p]=@bom_item.part_code
+
+        if not params[:q].blank?
+            des = params[:q].strip.split(" ")
+            where_des = ""
+            des.each_with_index do |de,index|
+                where_des += "products.description LIKE '%#{de}%'"
+                if des.size > (index + 1)
+                    where_des += " AND "
+                end
+            end      
+        end
+        if params[:part_name].nil? and params[:package2].nil?
+	    @ptype = ""
+            @package2 = ""
+	elsif params[:package2].nil?
+	    @ptype = params[:part_name]
+                #@ptype = ""
+	    @package2 = ""
+	elsif params[:part_name].nil?
+	    @ptype = ""
+	    @package2 = params[:package2]
+	else
+	    @ptype = params[:part_name]
+                #@ptype = ""
+	    @package2 = params[:package2]
+	end
+        Rails.logger.info("--------------------------")
+        #Rails.logger.info(@package2.inspect)
+        Rails.logger.info("--------------------------")
+        if  @package2 != ""
+            find_bom = " AND `package2` = '"+@package2+"' "
+        else
+            find_bom = " "
+        end
+        if  @ptype != ""
+            find_ptype = " AND "+part_name_locale+" = '"+@ptype+"' "
+        else
+            find_ptype = " "
+        end
+        #@match_products = Product.find_by_sql("SELECT * FROM `products` WHERE `description` LIKE '%#{des}%' " + find_ptype +  find_bom).to_ary
+        @match_products = Product.find_by_sql("SELECT DISTINCT products.name,products.* FROM products LEFT JOIN all_dns ON products.`name` = all_dns.part_code WHERE #{where_des} #{find_ptype} #{find_bom} ").to_ary
+        @counted = Hash.new(0)
+        @match_products.each { |h| @counted[h[part_name_locale]] += 1 }
+        @counted = Hash[@counted.map {|k,v| [k,v.to_s] }]	
+        
+        @counted1 = Hash.new(0)
+        @match_products.each { |h| @counted1[h["package2"]] += 1 }
+        @counted1 = Hash[@counted1.map {|k,v| [k,v.to_s] }]	
+        if user_signed_in?
+            if current_user.email == "web@mokotechnology.com"
+                @bom_html = ""
+                unless @match_products.nil?
+                    #@match_products[0..19].each do |item|
+                    @match_products.each do |item|
+                        @bom_html = @bom_html + "<tr>"
+
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "'><div>#{item.name.to_s}</div></a>"
+                        
+                        @bom_html = @bom_html + "</td>"
+
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "'><div>#{item.description.to_s}</div></a>"
+                        
+                        @bom_html = @bom_html + "</td>"
+=begin
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{ActionController::Base.helpers.number_with_precision(item.min_price, precision: 4).to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+=end                       
+                        #part_code = Product.find(params[:product_id]).name
+                        #all_dns = AllDn.where(part_code: part_code).order('date DESC')
+                        all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{item.name}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+                        if all_dns.blank?
+                            all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{item.name}' ORDER BY all_dns.date DESC").first
+                            if all_dns.blank?
+                                @bom_html += "<td width='50'>无</td>"
+                                @bom_html += "<td width='100'>无</td>"
+                                @bom_html += "<td width='50'>无</td>"
+                                @bom_html += "<td width='80'>无</td>"
+                            else
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"                
+                                @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"                     
+                            end
+                        else
+                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                            @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                            @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+
+                        end
+                        
+
+                        
+                        
+                        
+                        
+
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "'><div>OK</div></a>"
+                        @bom_html = @bom_html + "</td>"
+
+                        @bom_html = @bom_html + "</tr>"
+                    end           
+                end
+            else
+                @bom_html = ""
+                unless @match_products.nil?
+                    #@match_products[0..19].each do |item|
+                    @match_products.each do |item|
+                        @bom_html = @bom_html + "<tr>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "'><div>#{item.name.to_s}</div></a>"
+                       
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "'><div>#{item.description.to_s}</div></a>"
+                       
+                        @bom_html = @bom_html + "</td>"
+=begin
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/p_update?id="+ params[:id].to_s + "&product_id=" + item.id.to_s + "&bomsuse=bomsuse'><div>#{ActionController::Base.helpers.number_with_precision(item.min_price, precision: 4).to_s}</div></a>"
+                        @bom_html = @bom_html + "</td>"
+=end
+                        all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{item.name}' AND all_dns.qty >= 100 ORDER BY all_dns.date DESC").first
+                        if all_dns.blank?
+                            all_dns = AllDn.find_by_sql("SELECT * FROM all_dns WHERE all_dns.part_code = '#{item.name}' ORDER BY all_dns.date DESC").first
+
+                            if all_dns.blank?
+                                @bom_html += "<td width='50'>无</td>"
+                                @bom_html += "<td width='100'>无</td>"
+                                @bom_html += "<td width='50'>无</td>"
+                                @bom_html += "<td width='80'>无</td>"
+                            else
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                                @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                                @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"                             
+                            end
+                        else
+                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.date.localtime.strftime("%y-%m").to_s + "</div></a></small></td>"
+                            @bom_html += "<td width='100' title='"+all_dns.dn_long.to_s+"'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>" + all_dns.dn.to_s + "</div></a></small></td>"
+                            @bom_html += "<td width='50'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>"+all_dns.qty.to_s+"</div></a></small></td>"
+                            @bom_html += "<td width='80'><small><a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "' ><div>￥"+all_dns.price.to_s+"</div></a></small></td>"
+                        end
+                        
+
+                        @bom_html = @bom_html + "<td>"
+                        @bom_html = @bom_html + "<a rel='nofollow' data-method='get' data-remote='true' href='/set_ecn?product_id="+ item.id.to_s + "'><div>OK</div></a>"
+                        @bom_html = @bom_html + "</td>"
+                        @bom_html = @bom_html + "</tr>"
+                    end           
+                end
+            end
+        end
+        
+        
+        @bom_lab = '<table class="table table-bordered"><thead><tr><td><strong>' + t(:current_search) + '：</strong></td></tr></thead><tbody>'
+        unless @package2 and @ptype
+            Rails.logger.info("--------------------------aaaa")
+            @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "：" 
+            unless @counted.nil?
+                Rails.logger.info("--------------------------bbbb")
+                @counted.each do |key, value|
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %>
+                    Rails.logger.info("--------------------------")
+                    Rails.logger.info(params[:q].inspect)
+                    Rails.logger.info(params[:p].inspect)
+                    Rails.logger.info(key.inspect)
+                    Rails.logger.info("--------------------------")
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m_ecn' + "?p=" + params[:p].to_s + "&amp;part_name=" + key + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end 
+            @bom_lab = @bom_lab + "</td></tr>"
+        
+            @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "： "
+            unless @counted1.nil?
+                Rails.logger.info("--------------------------ccccc")
+                @counted1.each do |key, value| 
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :q =>params[:q], :p =>params[:p]) %>
+                    #<a href="/bom_item/8315/edit?p=C6-1%2CC7-1%2CC67-1%2CC68-1&amp;package2=0402&amp;q=CAP+CER+10PF+16V+NP0+0402">0402</a>
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m_ecn' + "?p=" + params[:p].to_s + "&amp;package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end
+            @bom_lab = @bom_lab + "</td></tr>"
+        else
+            Rails.logger.info("--------------------------dddddd")
+            @bom_lab = @bom_lab + "<tr><td>" + t(:category) + "： "
+            unless @counted.nil? 
+                Rails.logger.info("--------------------------eeeee")
+                @counted.each do |key, value| 
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :part_name =>key, :q =>params[:q], :p =>params[:p]) %> 
+                    Rails.logger.info("--------------------------")
+                    Rails.logger.info(key.inspect)
+                    Rails.logger.info(value.inspect)
+                    Rails.logger.info("--------------------------")
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m_ecn' + "?part_name=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;bomsuse=bomsuse" + '">' + key + "</a>"
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end
+            @bom_lab = @bom_lab + "</td></tr>"
+            @bom_lab = @bom_lab + "<tr><td>" + t(:packaging) + "："
+            unless @counted1.nil?
+                Rails.logger.info("--------------------------fffff")
+                @counted1.each do |key, value|
+                    #<%= link_to "#{key}",  edit_bom_item_path(@bom_item, :package2 =>key, :part_name =>@ptype, :q =>params[:q], :p =>params[:p]) %>
+                    @bom_lab = @bom_lab + '<a data-remote="true" href="/search_m_ecn' + "?package2=" + key.to_s + "&amp;q=" + params[:q].to_s + "&amp;part_name=" + @ptype + "&amp;bomsuse=bomsuse" + '">' + key.to_s + "</a>"
+                    @bom_lab = @bom_lab + '<span class="badge">' + value.to_s + '</span>'
+                end
+            end
+            @bom_lab = @bom_lab + "</td></tr>"
+        end
+        @bom_lab = @bom_lab + "</tbody></table>"
+        Rails.logger.info("--------------------------1111")
+        Rails.logger.info(@bom_lab.inspect)
+        #Rails.logger.info(@bom_html.inspect)
+        Rails.logger.info("--------------------------2222")
+    end
+
+    def set_ecn
+        if not params[:product_id].blank?
+            @get_data = Product.find_by_id(params[:product_id])
+        end  
+    end
 
     def search_m_moko
         if cookies.permanent[:educator_locale].to_s == "zh"

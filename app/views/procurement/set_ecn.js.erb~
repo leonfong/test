@@ -1,2 +1,3 @@
-$("#up_eng_moko_part").val("<%= params[:moko_part] %>");
-$("#up_eng_moko_des").val("<%= params[:moko_des] %>");
+$("#up_eng_moko_part").val("<%= @get_data.name %>");
+$("#up_eng_moko_des").val("<%= @get_data.description %>");
+

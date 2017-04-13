@@ -7,16 +7,42 @@
         <div class="col-md-11" style="padding-top: 10px;">
            
 
-        
-
-
-
-
-<%= form_tag({action: :edit_ecn_up},method:"post",multipart:"true") do %>
+<% if @get_ecn_info.state == "checking" %> 
+<%= form_tag({action: :cut_in_ecn},method:"post",multipart:"true") do %>
         <div class="row">
             <div class="col-md-6 col-sm-6 " >
                 <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
             </div>
+
+            <% if can? :work_admin, :all or can? :work_e, :all %>
+            <div class="col-md-6 col-sm-6">
+                <input class="sr-only" name="bom_ecn_info_id" id="bom_ecn_info_id" type="text" value="<%= @get_ecn_info.id %>">
+                <%= submit_tag "执行ECN", class:"btn btn-danger pull-right",data:{confirm: "确定要执行ECN?"} %>
+
+
+            </div>
+            <% end %>
+        </div>
+<% end %>
+<% elsif @get_ecn_info.state == "checked" %>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 " >
+                <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
+            </div>
+
+
+        </div>
+<% end %>
+
+
+<%= form_tag({action: :edit_ecn_up},method:"post",multipart:"true") do %>
+<% if @get_ecn_info.state == "new" %>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 " >
+                <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
+            </div>
+            
+            <% if can? :work_admin, :all or can? :work_e, :all %>
             <div class="col-md-6 col-sm-6">
                 <input class="sr-only" name="bom_ecn_info_id" id="bom_ecn_info_id" type="text" value="<%= @get_ecn_info.id %>">
                 <%= submit_tag "发送给BOM工程师", class:"btn btn-primary pull-right",data:{confirm: "确定要发送给BOM工程师?"} %>
@@ -26,8 +52,10 @@
                 <button style="margin-right:10px;" type="submit" class="btn btn-info pull-right" onclick="return postform()" >保存草稿</button>
 -->
             </div>
+            <% end %>
+            
         </div>
-      
+<% end %>      
 
         <div class="row" >
             <div class="col-md-12 col-sm-12" >
@@ -178,7 +206,7 @@
         </div>
 
 
-
+<!--
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-danger">
@@ -233,16 +261,25 @@
                 </div>
             </div>
         </div>
+-->
 <% end %>
 
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-danger">
                     <div class="panel-heading">
-                        <strong>ECN</strong> <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#add_item_ecn" data-backdrop="static" data-ecn_info_id_new="<%= @get_ecn_info.id %>">添加物料</button>
+                        <strong>ECN</strong> 
+                        <% if @get_ecn_info.state == "checked" %>
+                        <% if can? :work_admin, :all or can? :work_e, :all %>
+                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#add_item_ecn" data-backdrop="static" data-ecn_info_id_new="<%= @get_ecn_info.id %>">添加物料</button>
+                        <% end %>
+                        <% end %>
                     </div>
                             <table class="table table-bordered table-hover" >
                                 <colgroup>
+                                    <% if can? :work_admin, :all or can? :work_d, :all %>
+                                    <col width=4%></col>
+                                    <% end %>
                                     <col width=4%></col>
                                     <col width=4%></col>
                                     <col width=4%></col>
@@ -258,8 +295,11 @@
                                 </colgroup>
                                 <thead>
                                     <tr class="active">
+                                        <% if can? :work_admin, :all or can? :work_d, :all %>
                                         <th rowspan="2">操作</th>
-                                        <th rowspan="2">代号</th>
+                                        <% end %>
+                                        <th rowspan="2">BOM代号</th>
+                                        <th rowspan="2">匹配代号</th>
                                         <th rowspan="2">性质</th>
                                         <th colspan="4">变更前</th>
                                         <th colspan="4">变更后</th> 
@@ -279,8 +319,11 @@
                                 <tbody>  
                                 <% if not@get_ecn_item.blank?%>
                                 <% @get_ecn_item.each_with_index do |item,index| %>
-                                    <tr <% if item.state == "new" %>class="bg-danger"<% end %>> 
-                                        <td><a type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#bom_eng_set" data-backdrop="static" data-up_item_id="<%= item.id %>"  data-up_old_moko_part="<%= item.old_moko_part %>" data-up_old_moko_des="<%= item.old_moko_des %>" data-up_old_part_code="<%= item.old_part_code %>" data-up_old_quantity="<%= item.old_quantity %>" data-up_new_moko_part="<%= item.new_moko_part %>" data-up_new_moko_des="<%= item.new_moko_des %>" data-up_new_part_code="<%= item.new_part_code %>" data-up_new_quantity="<%= item.new_quantity %>" data-sell_change_type="<%= item.change_type %>">操作</a></td>
+                                    <tr <% if item.state == "new" %>class="danger"<% elsif item.state == "opt" %>class="success"<% end %>> 
+                                        <% if can? :work_admin, :all or can? :work_d, :all %>
+                                        <td <% if not item.opt_type.blank? %>rowspan="2"<% end %> ><a type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#bom_eng_set" data-backdrop="static" data-up_item_id="<%= item.id %>"  data-up_old_moko_part="<%= item.old_moko_part %>" data-up_old_moko_des="<%= item.old_moko_des %>" data-up_old_part_code="<%= item.old_part_code %>" data-up_old_quantity="<%= item.old_quantity %>" data-up_new_moko_part="<%= item.new_moko_part %>" data-up_new_moko_des="<%= item.new_moko_des %>" data-up_new_part_code="<%= item.new_part_code %>" data-up_new_quantity="<%= item.new_quantity %>" data-sell_change_type="<%= item.change_type %>" data-eng_moko_part="<%= item.eng_moko_part %>" data-eng_moko_des="<%= item.eng_moko_des %>" data-eng_part_code="<%= item.eng_part_code %>" data-eng_quantity="<%= item.eng_quantity %>" data-eng_remark="<%= item.eng_remark %>" data-opt_type="<%= item.opt_type %>">操作</a></td>
+                                        <% end %>
+                                        <td><%= item.moko_bom_item_id %></td>
                                         <td><%= item.bom_item_id %></td>
                                         <td><%= item.change_type %></td>
                                         <td style="word-break : break-all; "><%= item.old_part_code %></td>
@@ -293,6 +336,20 @@
                                         <td><%= item.new_quantity %></td>
                                         <td><%= item.remark %></td>
                                     </tr> 
+                                    <% if not item.opt_type.blank? %>
+                                    <tr class="warning">
+                                        <td colspan="11">
+                                            <div>
+                                                <label>操作类型：</label><%= item.opt_type %>
+                                                <label>MOKO PART：</label><%= item.eng_moko_part %>
+                                                <label>MOKO描述：</label><%= item.eng_moko_des %>
+                                                <label>位号：</label><%= item.eng_part_code %>
+                                                <label>用量：</label><%= item.eng_quantity %>
+                                                <label>备注：</label><%= item.eng_remark %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% end %>
                                 <% end %>
                                 <% end %>
                                 </tbody>  
@@ -314,25 +371,31 @@
                             <table class="table table-bordered table-hover table-condensed" >
                                 <thead>
                                     <tr class="active">
-                                        <th width="60">代号</th>
+                                        <th width="75">BOM代号</th>
+                                        <th width="75">匹配代号</th>
                                         <th >位号</th>
                                         <th width="200">华创编码</th> 
                                         <th >华创描述</th>
                                         <th width="45">用量</th>
+                                        <% if can? :work_admin, :all or can? :work_e, :all %>
                                         <th width="50">操作</th>
+                                        <% end %>
                                     </tr>
                                 </thead>
                                 <tbody>  
                                 <% @baojia.each_with_index do |item,index| %>
-                                    <tr <% if item.ecn_tag == "new" %>class="bg-danger"<% end %> > 
+                                    <tr <% if item.ecn_tag == "new" %>class="danger"<% end %> > 
+                                        <td><%= item.moko_bom_item_id %></td>
                                         <td><%= item.id %></td>
                                         <td style="word-break : break-all; "><%= item.part_code %></td>
                                         <td><%= item.moko_part %></td>
                                         <td><%= item.moko_des %></td>
                                         <td><%= item.quantity %></td>
+                                        <% if can? :work_admin, :all or can? :work_e, :all %>
                                         <td>
-                                           <a type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#remarkupdate" data-backdrop="static" data-bom_item_id="<%= item.id %>" data-ecn_info_id="<%= @get_ecn_info.id %>" data-old_moko_part="<%= item.moko_part %>" data-old_moko_des="<%= item.moko_des %>" data-old_part_code="<%= item.part_code %>" data-old_quantity="<%= item.quantity %>" >变更</a>
+                                           <a type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#remarkupdate" data-backdrop="static" data-bom_item_id="<%= item.id %>" data-ecn_info_id="<%= @get_ecn_info.id %>" data-old_moko_part="<%= item.moko_part %>" data-old_moko_des="<%= item.moko_des %>" data-old_part_code="<%= item.part_code %>" data-old_quantity="<%= item.quantity %>" data-moko_bom_item_id="<%= item.moko_bom_item_id %>">变更</a>
                                         </td>
+                                        <% end %>
                                     </tr> 
                                 <% end %>
                                 </tbody>  
@@ -395,12 +458,12 @@
         <%= form_tag('/up_ecn_item', method:"post") do %>
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
-            <input type="text" class="form-control" id="up_bom_item_id" name="up_item_id">
+            <input type="text" class="form-control" id="up_item_id" name="up_item_id">
           </div>
 
           <div class="form-group">
-            <label for="change_at" class="control-label">操作:</label>
-            <div >
+            <label for="change_at" class="control-label">操作类型:</label>
+            <div class="bg-danger">
               <label class="checkbox-inline">
                 <input type="radio" value="edit" name="opt_type[]" id="opt_item_type_edit" >
                 <strong>修改物料</strong>
@@ -457,7 +520,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform_eng()" >Submit</button>
       </div>
      <% end %>
     </div>
@@ -477,6 +540,7 @@
           <div class="form-group sr-only">
             <label for="itemp_id_remark" class="control-label">itemid:</label>
             <input type="text" class="form-control" id="bom_item_id" name="bom_item_id">
+            <input type="text" class="form-control" id="moko_bom_item_id" name="moko_bom_item_id">
             <input type="text" class="form-control" id="ecn_info_id" name="ecn_info_id">
             <input type="text" class="form-control" id="old_moko_part" name="old_moko_part">
             <input type="text" class="form-control" id="old_moko_des" name="old_moko_des">
@@ -609,8 +673,14 @@ $('#bom_eng_set').on('show.bs.modal', function (event) {
   var up_new_part_code = button.data('up_new_part_code');
   var up_new_quantity = button.data('up_new_quantity');
 
-
   var sell_change_type = button.data('sell_change_type');
+
+  var eng_moko_part = button.data('eng_moko_part');
+  var eng_moko_des = button.data('eng_moko_des');
+  var eng_part_code = button.data('eng_part_code');
+  var eng_quantity = button.data('eng_quantity');
+  var eng_remark = button.data('eng_remark');
+  var opt_type = button.data('opt_type');
 
   var modal = $(this);
   modal.find($("#up_item_id")).val(up_item_id);
@@ -627,15 +697,33 @@ $('#bom_eng_set').on('show.bs.modal', function (event) {
 
   modal.find($("#sell_change_type")).text(sell_change_type);
 
-  modal.find($("#up_eng_part_code")).val("");
-  modal.find($("#up_eng_moko_part")).val("");
-  modal.find($("#up_eng_moko_des")).val("");
-  modal.find($("#up_eng_quantity")).val("");
-  modal.find($("#up_eng_remark")).text("");
 
-  modal.find($("#opt_item_type_edit")).removeAttr("checked");
-  modal.find($("#opt_item_type_add")).removeAttr("checked");
-  modal.find($("#opt_item_type_del")).removeAttr("checked");
+  modal.find($("#up_eng_part_code")).val(eng_part_code);
+  modal.find($("#up_eng_moko_part")).val(eng_moko_part);
+  modal.find($("#up_eng_moko_des")).val(eng_moko_des);
+  modal.find($("#up_eng_quantity")).val(eng_quantity);
+  modal.find($("#up_eng_remark")).text(eng_remark);
+
+  if (opt_type == "edit")
+    {
+    modal.find($("#opt_item_type_edit")).attr("checked",true);
+    modal.find($("#opt_item_type_add")).removeAttr("checked");
+    modal.find($("#opt_item_type_del")).removeAttr("checked");
+    }
+  else if(opt_type == "add")
+    {
+    modal.find($("#opt_item_type_edit")).removeAttr("checked");
+    modal.find($("#opt_item_type_add")).attr("checked",true);
+    modal.find($("#opt_item_type_del")).removeAttr("checked");
+    }
+  else if(opt_type == "del")
+    {
+    modal.find($("#opt_item_type_edit")).removeAttr("checked");
+    modal.find($("#opt_item_type_add")).removeAttr("checked");
+    modal.find($("#opt_item_type_del")).attr("checked",true);
+    }
+
+
 
 })
 
@@ -643,6 +731,7 @@ $('#bom_eng_set').on('show.bs.modal', function (event) {
 $('#remarkupdate').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var bom_item_id = button.data('bom_item_id');
+  var moko_bom_item_id = button.data('moko_bom_item_id');
   var ecn_info_id = button.data('ecn_info_id');
   var old_moko_part = button.data('old_moko_part');
   var old_moko_des = button.data('old_moko_des');
@@ -702,6 +791,14 @@ $(".menu-first").click(function(){
   $('#whMenu').collapse('hide');
 });
   
+
+function postform_eng() { 
+    if (document.getElementById('opt_item_type_edit').checked == false & document.getElementById('opt_item_type_add').checked == false &  document.getElementById('opt_item_type_del').checked == false)
+      {                    
+　　    alert("请选择操作类型！");                    
+　　    return false;                
+　     }                   
+}    
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

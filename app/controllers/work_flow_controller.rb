@@ -436,6 +436,23 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def up_ecn_item
+        if not params[:up_item_id].blank?
+            get_data = BomEcnItem.find_by_id(params[:up_item_id])
+            if not get_data.blank?
+                get_data.eng_moko_part = params[:up_eng_moko_part]
+                get_data.eng_moko_des = params[:up_eng_moko_des]
+                get_data.eng_part_code = params[:up_eng_part_code]
+                get_data.eng_quantity = params[:up_eng_quantity]
+                get_data.eng_remark = params[:up_eng_remark]
+                get_data.opt_type = params[:opt_type].join("")
+                get_data.state = "opt"
+                get_data.save
+            end
+        end
+        redirect_to :back
+    end
+
     def add_ecn_item
         if not params[:ecn_info_id].blank? 
             if not params[:bom_item_id].blank?
@@ -445,6 +462,7 @@ before_filter :authenticate_user!
                     ecn_item_new = BomEcnItem.new
                     ecn_item_new.bom_ecn_info_id = params[:ecn_info_id]
                     ecn_item_new.bom_item_id = params[:bom_item_id]
+                    ecn_item_new.moko_bom_item_id = params[:moko_bom_item_id]
                     ecn_item_new.old_moko_part = params[:old_moko_part]
                     ecn_item_new.old_moko_des = params[:old_moko_des]
                     ecn_item_new.old_part_code = params[:old_part_code]
@@ -479,6 +497,7 @@ before_filter :authenticate_user!
                 ecn_item_new = BomEcnItem.new
                 ecn_item_new.bom_ecn_info_id = params[:ecn_info_id]
                 ecn_item_new.bom_item_id = params[:bom_item_id]
+                ecn_item_new.moko_bom_item_id = params[:moko_bom_item_id]
                 ecn_item_new.old_moko_part = params[:old_moko_part]
                 ecn_item_new.old_moko_des = params[:old_moko_des]
                 ecn_item_new.old_part_code = params[:old_part_code]
@@ -547,6 +566,69 @@ before_filter :authenticate_user!
         
     end
 
+    def cut_in_ecn
+        if not bom_ecn_info_id.blank?
+            get_ecn_info = BomEcnInfo.find_by_id(params[:bom_ecn_info_id])
+            get_ecn_item = BomEcnItem.where(bom_ecn_info_id: params[:bom_ecn_info_id])
+            if not get_ecn_item.blank?
+                get_ecn_item.each do |item|
+                    if item.opt_type == "del"
+                        if can? :work_d, :all or can? :work_admin, :all 
+                            if not item.bom_item_id.blank?
+                                get_data = PItem.find_by_id(item.bom_item_id)
+                                if not get_data.blank?
+                                    if not get_data.cost.blank? and not get_data.pmc_qty.blank?
+                                        del_t_p = get_data.pmc_qty*get_data.cost
+                                        get_bom = ProcurementBom.find_by_id(get_data.procurement_bom_id)  
+                                        if not get_bom.blank?
+                                            get_bom.t_p = get_bom.t_p - del_t_p
+                                            get_bom.save
+                                        end
+                                    end
+                                    get_data.destroy
+                                end
+                            end
+                        end
+                        if item.change_type == "ever"
+
+                        end
+                    elsif item.opt_type == "add"
+
+                        get_bom = ProcurementBom.find_by_id(get_ecn_info.bom_id)
+                        if item.change_type == "ever"
+                            get_moko_bom_info = MokoBomInfo.find_by_id(get_bom.moko_bom_info_id)
+                            new_moko_item = MokoBomItem.new
+                            new_moko_item.bom_version = get_moko_bom_info.bom_version
+
+
+                            new_moko_item.save
+                        end
+                        if not get_bom.blank?
+                            bom_item = PItem.new
+                            
+                            bom_item.bom_version = get_bom.bom_version
+                            bom_item.pmc_qty = item.eng_quantity.to_i*get_bom.qty.to_i
+                            bom_item.procurement_bom_id = get_ecn_info.bom_id
+                            bom_item.quantity = item.eng_quantity
+                            bom_item.part_code = item.eng_part_code
+                            bom_item.description = item.new_sell_des
+                            bom_item.moko_part = item.eng_moko_part
+                            bom_item.moko_des = item.eng_moko_des
+                            bom_item.user_id = current_user.id
+                            if item.change_type == "ever"
+                                bom_item.moko_bom_item_id = new_moko_item.id
+                            end
+                            bom_item.save
+                        end
+                    elsif item.opt_type == "edit"
+
+                    end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def edit_ecn
         @get_ecn_info = BomEcnInfo.find_by_id(params[:bom_ecn_info_id])
         @get_ecn_item = BomEcnItem.where(bom_ecn_info_id: params[:bom_ecn_info_id])
@@ -569,11 +651,13 @@ before_filter :authenticate_user!
                 @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
             end
             @baojia = @bom_item
+=begin
             if @get_ecn_info.state == "new"
                 render "edit_ecn.html.erb" and return
             else
                 render "edit_ecn_show.html.erb" and return
             end
+=end
         end
     end
 
@@ -8569,6 +8653,7 @@ before_filter :authenticate_user!
             get_data.smd_end_date = nil
             get_data.dip_start_date = nil
             get_data.dip_end_date = nil
+            get_data.smd_state = ""
             get_data.save
             redirect_to :back and return
         end

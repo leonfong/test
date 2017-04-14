@@ -89,6 +89,7 @@
                     
 
                     <th class="bg-primary" >备注</th>
+                    <th class="bg-info" width="90">最后交期</th>
                 </tr>
             </thead>
             <tbody >
@@ -168,6 +169,9 @@
                     
                     <td>  
                         <%= work.remark %>
+                    </td>
+                    <td>  
+                        <%= work.last_at %>
                     </td>
                 </tr>
                 <tr> 
@@ -380,6 +384,7 @@ function postform<%= work.id.to_s %>() {
                                                 <th>补料已回</th>
                                                 <th>清尾完成</th>
                                                 <th>备注</th>
+
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -406,7 +411,7 @@ function postform<%= work.id.to_s %>() {
                                                 <td><%= his.supplement_date %></td>
                                                 <td><%= his.clear_date %></td>
                                               
-                                                <td><%= his.remark %></td>                                               
+                                                <td><%= his.remark %></td>                                             
                                             </tr>
                                             <% end %>
                                         </tbody>

@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs">
       <li role="presentation" class="active"><a href="/work_flow"><h4><strong><p class="text-primary" >业务部问题跟踪&反馈</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_baojia"><h4><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
-      <li role="presentation" ><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >报价列表(新)</p></strong></h4></a></li>
+      <li role="presentation" ><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >PCBA报价列表(新)</p></strong></h4></a></li>
       <li role="presentation" ><a href="/sell_pcb_baojia"><h4><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
       <% if can? :work_pcb_business, :all %>
       <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
@@ -380,6 +380,7 @@ function postform<%= work.id.to_s %>() {
                                                 <th>补料已回</th>
                                                 <th>清尾完成</th>
                                                 <th>备注</th>
+
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -406,7 +407,7 @@ function postform<%= work.id.to_s %>() {
                                                 <td><%= his.supplement_date %></td>
                                                 <td><%= his.clear_date %></td>
                                               
-                                                <td><%= his.remark %></td>                                               
+                                                <td><%= his.remark %></td>                                             
                                             </tr>
                                             <% end %>
                                         </tbody>

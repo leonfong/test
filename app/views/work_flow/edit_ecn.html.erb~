@@ -739,6 +739,7 @@ $('#remarkupdate').on('show.bs.modal', function (event) {
   var old_quantity = button.data('old_quantity');
   var modal = $(this);
   modal.find($("#bom_item_id")).val(bom_item_id);
+  modal.find($("#moko_bom_item_id")).val(moko_bom_item_id);
   modal.find($("#ecn_info_id")).val(ecn_info_id);
   modal.find($("#old_moko_part")).val(old_moko_part);
   modal.find($("#old_moko_des")).val(old_moko_des);

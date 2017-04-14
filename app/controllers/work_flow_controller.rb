@@ -567,63 +567,98 @@ before_filter :authenticate_user!
     end
 
     def cut_in_ecn
-        if not bom_ecn_info_id.blank?
-            get_ecn_info = BomEcnInfo.find_by_id(params[:bom_ecn_info_id])
-            get_ecn_item = BomEcnItem.where(bom_ecn_info_id: params[:bom_ecn_info_id])
-            if not get_ecn_item.blank?
-                get_ecn_item.each do |item|
-                    if item.opt_type == "del"
-                        if can? :work_d, :all or can? :work_admin, :all 
-                            if not item.bom_item_id.blank?
-                                get_data = PItem.find_by_id(item.bom_item_id)
-                                if not get_data.blank?
-                                    if not get_data.cost.blank? and not get_data.pmc_qty.blank?
-                                        del_t_p = get_data.pmc_qty*get_data.cost
-                                        get_bom = ProcurementBom.find_by_id(get_data.procurement_bom_id)  
-                                        if not get_bom.blank?
-                                            get_bom.t_p = get_bom.t_p - del_t_p
-                                            get_bom.save
+        if can? :work_d, :all or can? :work_admin, :all 
+            if not bom_ecn_info_id.blank?
+                get_ecn_info = BomEcnInfo.find_by_id(params[:bom_ecn_info_id])
+                get_ecn_item = BomEcnItem.where(bom_ecn_info_id: params[:bom_ecn_info_id])
+                if not get_ecn_item.blank?
+                    get_ecn_item.each do |item|
+                        if item.opt_type == "del"
+                            if item.change_type == "ever"
+                                get_moko_item = MokoBomItem.find_by_id(item.moko_bom_item_id)
+                                get_moko_item.destroy
+                            end
+                            if can? :work_d, :all or can? :work_admin, :all 
+                                if not item.bom_item_id.blank?
+                                    get_data = PItem.find_by_id(item.bom_item_id)
+                                    if not get_data.blank?
+                                        if not get_data.cost.blank? and not get_data.pmc_qty.blank?
+                                            del_t_p = get_data.pmc_qty*get_data.cost
+                                            get_bom = ProcurementBom.find_by_id(get_data.procurement_bom_id)  
+                                            if not get_bom.blank?
+                                                get_bom.t_p = get_bom.t_p - del_t_p
+                                                get_bom.save
+                                            end
                                         end
+                                        get_data.destroy
                                     end
-                                    get_data.destroy
                                 end
                             end
-                        end
-                        if item.change_type == "ever"
 
-                        end
-                    elsif item.opt_type == "add"
+                        elsif item.opt_type == "add"
 
-                        get_bom = ProcurementBom.find_by_id(get_ecn_info.bom_id)
-                        if item.change_type == "ever"
-                            get_moko_bom_info = MokoBomInfo.find_by_id(get_bom.moko_bom_info_id)
-                            new_moko_item = MokoBomItem.new
-                            new_moko_item.bom_version = get_moko_bom_info.bom_version
-
-
-                            new_moko_item.save
-                        end
-                        if not get_bom.blank?
-                            bom_item = PItem.new
-                            
-                            bom_item.bom_version = get_bom.bom_version
-                            bom_item.pmc_qty = item.eng_quantity.to_i*get_bom.qty.to_i
-                            bom_item.procurement_bom_id = get_ecn_info.bom_id
-                            bom_item.quantity = item.eng_quantity
-                            bom_item.part_code = item.eng_part_code
-                            bom_item.description = item.new_sell_des
-                            bom_item.moko_part = item.eng_moko_part
-                            bom_item.moko_des = item.eng_moko_des
-                            bom_item.user_id = current_user.id
+                            get_bom = ProcurementBom.find_by_id(get_ecn_info.bom_id)
                             if item.change_type == "ever"
-                                bom_item.moko_bom_item_id = new_moko_item.id
+                                get_moko_bom_info = MokoBomInfo.find_by_id(get_bom.moko_bom_info_id)
+                                new_moko_item = MokoBomItem.new
+                                new_moko_item.bom_version = get_moko_bom_info.bom_version
+                                new_moko_item.moko_bom_info_id = get_moko_bom_info.id
+                                new_moko_item.quantity = item.eng_quantity
+                                new_moko_item.part_code = item.eng_part_code
+                                new_moko_item.description = item.new_sell_des
+                                new_moko_item.moko_part = item.eng_moko_part
+                                new_moko_item.moko_des = item.eng_moko_des
+                                new_moko_item.user_id = current_user.id
+                                new_moko_item.save
                             end
-                            bom_item.save
+                            if not get_bom.blank?
+                                bom_item = PItem.new
+                            
+                                bom_item.bom_version = get_bom.bom_version
+                                bom_item.pmc_qty = item.eng_quantity.to_i*get_bom.qty.to_i
+                                bom_item.procurement_bom_id = get_ecn_info.bom_id
+                                bom_item.quantity = item.eng_quantity
+                                bom_item.part_code = item.eng_part_code
+                                bom_item.description = item.new_sell_des
+                                bom_item.moko_part = item.eng_moko_part
+                                bom_item.moko_des = item.eng_moko_des
+                                bom_item.user_id = current_user.id
+                                if item.change_type == "ever"
+                                    bom_item.moko_bom_item_id = new_moko_item.id
+                                end
+                                bom_item.save
+                            end
+                        elsif item.opt_type == "edit"
+                            if item.change_type == "ever"
+                                get_moko_item = MokoBomItem.find_by_id(item.moko_bom_item_id)
+                                get_moko_item.quantity = item.eng_quantity
+                                get_moko_item.part_code = item.eng_part_code
+                                get_moko_item.description = item.new_sell_des
+                                get_moko_item.moko_part = item.eng_moko_part
+                                get_moko_item.moko_des = item.eng_moko_des
+                                get_moko_item.user_id = current_user.id
+                                get_moko_item.save
+                            end 
+                            if not item.bom_item_id.blank?
+                                get_data = PItem.find_by_id(item.bom_item_id)
+                                get_data.bom_version = get_bom.bom_version
+                                get_data.pmc_qty = item.eng_quantity.to_i*get_bom.qty.to_i
+                                get_data.procurement_bom_id = get_ecn_info.bom_id
+                                get_data.quantity = item.eng_quantity
+                                get_data.part_code = item.eng_part_code
+                                get_data.description = item.new_sell_des
+                                get_data.moko_part = item.eng_moko_part
+                                get_data.moko_des = item.eng_moko_des
+                                get_data.user_id = current_user.id
+                                get_data.save
+                            end
                         end
-                    elsif item.opt_type == "edit"
-
+                        item.state = "done"
+                        item.save
                     end
                 end
+                get_ecn_info.state = "checked"
+                get_ecn_info.save
             end
         end
         redirect_to :back
@@ -9326,6 +9361,18 @@ before_filter :authenticate_user!
         redirect_to work_flow_path()
     end
     
+    def edit_work_item
+        if not params[:work_id].blank?
+            get_work = WorkFlow.find(params[:work_id])
+            if not get_work.blank?
+                get_work.remark = params[:work_remark]
+                get_work.last_at = params[:last_at]
+                get_work.save
+            end
+        end
+        redirect_to :back
+    end
+
     def edit_work
         @open = "collapse"
         if params[:work_id]

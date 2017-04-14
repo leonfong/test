@@ -973,6 +973,7 @@ before_filter :authenticate_user!
                 bom_version = 999
             end
             up_bom = ProcurementBom.new
+            up_bom.moko_bom_info_id = find_bom.moko_bom_info_id
             up_bom.bom_id = find_bom.bom_id
             up_bom.bom_version = bom_version
             up_bom.order_country = find_bom.order_country
@@ -1045,6 +1046,7 @@ before_filter :authenticate_user!
                 if not find_bom_item.blank?
                     find_bom_item.each do |item|
                         up_item = up_bom.p_items.build()
+                        up_item.moko_bom_item_id = item.moko_bom_item_id
                         up_item.bom_version = bom_version
                         up_item.p_type = item.p_type
                         #up_item.buy = item.buy

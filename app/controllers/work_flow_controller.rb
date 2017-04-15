@@ -9373,6 +9373,22 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def edit_work_color
+        if params[:work_id]
+            work_up = WorkFlow.find(params[:work_id])
+            if not work_up.blank?
+                if work_up.order_state > 0
+                    work_up.order_state = 0
+                    work_up.save
+                elsif work_up.order_state.blank? or work_up.order_state == 0
+                    work_up.order_state = 3
+                    work_up.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def edit_work
         @open = "collapse"
         if params[:work_id]

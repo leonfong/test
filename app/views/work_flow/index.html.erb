@@ -247,7 +247,7 @@
                 <tr nowrap="nowrap">
                     <th class="bg-primary" width="50">详细</th>
                     <th class="bg-primary" width="60">操作</th>
-                    <th class="bg-primary" width="110">状态</th>
+                    <th class="bg-primary" width="50">状态</th>
 <!--
                     <th class="bg-primary">下单日期</th>
 -->
@@ -297,9 +297,7 @@
                     </td> 
                     <td>
                         <div class="btn-group" role="group-sm" aria-label="...">
-                            <%= link_to "A",  {action: "edit_work", commit: "A", work_id: work.id.to_s},class: "btn btn-default btn-sm", style:"height: 25px;padding: 5px 10px;" %>                           
-                            <%= link_to "C",  {action: "edit_work", commit: "C", work_id: work.id.to_s},class: "btn btn-danger btn-sm", style:"height: 25px;padding: 5px 10px;" %>
-                            <%= link_to "D",  {action: "edit_work", commit: "D", work_id: work.id.to_s},class: "btn btn-info btn-sm", style:"height: 25px;padding: 5px 10px;" %> 
+                            <%= link_to "UP",  {action: "edit_work_color", commit: "A", work_id: work.id.to_s},class: "btn btn-warning btn-sm", style:"height: 25px;padding: 5px 10px;" %>                           
                            
                         </div>   
                     </td>  

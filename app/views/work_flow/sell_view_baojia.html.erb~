@@ -25,7 +25,7 @@
                 <% end %>
             </div></div>
 
-
+        <% if can? :work_e, :all or can? :work_admin, :all %>
             <% if not @shou_kuan_tong_zhi_dan_list.blank? %>
             <div class="row" style="padding-top: 10px;"><div class="col-md-12">
             <div class="panel panel-info">  
@@ -99,6 +99,14 @@
             <% end %>
 
 
+<% if can? :work_e, :all and can? :work_admin, :all %>
+            <div class="row "><div class="col-md-12">
+                <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsb" >添加运费/银行费/总价</button>
+                <button  type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addother" >添加其它费用</button>
+            </div></div>
+<% end %>
+
+
             <div class="row" style="padding-top: 10px;"><div class="col-md-12">
             <div class="panel panel-info">                
                 <table class="table table-hover">
@@ -166,12 +174,43 @@
                         </tr>
                         <% end %>
                         <% end %>
-                                     
+                        <tr>
+                            <td colSpan="10"></td>
+                            <td colSpan="1"><strong>Shipping Cost: <%= @pi_info.pi_shipping_cost %></strong></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="10"></td>
+                            <td colSpan="1"><strong>Bank Fee: <%= @pi_info.pi_bank_fee %></strong></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="10"></td>
+                            <td colSpan="1">
+                                <label for="t_p_edit" class="col-md-4 control-label bg-danger" id="t_p_label">Total:</label>
+                                      <div id="t_p_show">
+                                          <%= @pi_info.t_p %>
+                                      </div>
+                                      <div style="display:none;" id="t_p_edit">
+                                      <%= form_tag({action: :edit_pi_info_t_p},method:"post") do %>
+                                          <input type="text" class="form-control sr-only"  name="p_pi_id" value="<%= @pi_info.id %>">
+                                          <div class="input-group input-group-sm">
+                                              <input type="text" class="form-control"  name="p_pi_t_p" value="<%= @pi_info.t_p %>">
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+                            </td>
+                        </tr>    
+                        <tr>
+                            <td colSpan="10"></td>
+                            <td colSpan="1"><strong>Total RMB: <%= @pi_info.t_p_rmb %></strong></td>
+                        </tr>                     
                     </tbody>
                 </table>             
             </div>
             </div></div>
-
+        <% end %>
 <% end %>
 
 
@@ -667,7 +706,11 @@
                               <div class="form-group form-group-sm">
                                   <label for="c_country" class="col-md-3 control-label">尾款:</label>
                                   <div class="col-md-9">
+                                      <% if not @shou_kuan_jin_e.blank? %>
                                       <input class="form-control" name="c_country" id="c_country" type="text" value="<%=   @pi_info.t_p - @shou_kuan_jin_e %>" readonly>
+                                      <% else %>
+                                      <input class="form-control" name="c_country" id="c_country" type="text" value="<%=   @pi_info.t_p  %>" readonly>
+                                      <% end %>
                                   </div>
                               </div>
                           </div>
@@ -697,6 +740,7 @@
                                           <option value="定金">定金</option>
                                           <option value="尾款">尾款</option>
                                           <option value="应收款">应收款</option>
+                                          <option value="先生产后付款">先生产后付款</option>
                                       </select>
                                   </div>
                               </div>
@@ -1118,10 +1162,107 @@
 
 
 
-
-
 </div>
 </small>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="addsb" tabindex="-1" role="dialog" aria-labelledby="addsbLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class=t_p_label"modal-title" id="addsbLabel"><strong>添加运费/银行费 总价</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :add_pi_sb},method:"post") do %>   
+            <div class="form-group sr-only">         
+                <label for="add_pi_sb_id" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="add_pi_sb_id" name="add_pi_sb_id" value="<%= @pi_info.id %>">
+            </div>   
+  
+            <div class="form-group">         
+              <label for="add_sc" class="control-label">Shipping Cost:</label>
+              <input type="text" class="form-control" id="add_sc" name="add_sc" value="<%= @pi_info.pi_shipping_cost %>">
+            </div> 
+            <div class="form-group">
+              <label for="add_bf" class="control-label">Bank Fee:</label>
+              <input type="text" class="form-control" id="add_bf" name="add_bf" value="<%= @pi_info.pi_bank_fee %>">
+            </div>  
+            <div class="form-group">
+              <label for="add_t_p" class="control-label">Total:</label>
+              <input type="text" class="form-control" id="add_t_p" name="add_t_p" value="<%= @pi_info.t_p %>" disabled>
+            </div> 
+            <div class="form-group">
+              <label for="add_t_p_rmb" class="control-label">Total RMB:</label>
+              <input type="text" class="form-control" id="add_t_p_rmb" name="add_t_p_rmb" value="<%= @pi_info.t_p_rmb %>" disabled>
+            </div>        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" >
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+<div class="modal fade" id="addother" tabindex="-1" role="dialog" aria-labelledby="addotherLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="addotherLabel"><strong>添加其他费用</strong></h4>
+        </div>
+        
+        <div class="modal-body">  
+            <%= form_tag({action: :add_pi_other_item},method:"post") do %> 
+            <div class="form-group sr-only">         
+                <label for="add_pi_info_id_other" class="control-label">pi_info_id:</label>
+                <input type="text" class="form-control" id="add_pi_info_id_other" name="add_pi_info_id_other" value="<%= @pi_info.id %>">
+            </div>  
+            <div class="form-group sr-only">         
+                <label for="add_c_id_other" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="add_c_id_other" name="add_c_id_other" value="<%= params[:c_id] %>">
+            </div>   
+            <div class="form-group sr-only">         
+                <label for="add_pi_no_other" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="add_pi_no_other" name="add_pi_no_other" value="<%= params[:pi_no] %>">
+            </div>   
+            <div class="form-group">         
+              <label for="add_type_other" class="control-label">费用种类:</label>
+              <input type="text" class="form-control" id="add_type_other" name="add_type_other" >
+            </div> 
+            <div class="form-group">         
+              <label for="add_remark_other" class="control-label">备注:</label>
+              <textarea  class="form-control" id="add_remark_other" name="add_remark_other"></textarea>
+            </div> 
+            <div class="form-group">
+              <label for="add_t_p_other" class="control-label">报价(美金):</label>
+              <input type="text" class="form-control" id="add_t_p_other" name="add_t_p_other" >
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" >
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
 
 
 <script>
@@ -1178,7 +1319,12 @@ $('#add_ecn').on('show.bs.modal', function (event) {
 
 
 
-
+$(document).ready(function(){
+    $("#t_p_label").dblclick(function(){
+        $("#t_p_show").hide();
+        $("#t_p_edit").show();
+    });
+});
 </script>
 
 

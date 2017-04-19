@@ -245,7 +245,8 @@ Rails.application.routes.draw do
   match '/edit_fu_kuan_info_b', to: 'work_flow#edit_fu_kuan_info_b', via: 'post'
   match '/clean_work_date', to: 'work_flow#clean_work_date', via: 'get'
   match '/cut_in_ecn', to: 'work_flow#cut_in_ecn', via: 'post'
-
+  match '/voucher_checked', to: 'work_flow#voucher_checked', via: 'get'
+  match '/voucher_uncheck', to: 'work_flow#voucher_uncheck', via: 'get'
 
 
 

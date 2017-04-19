@@ -53,7 +53,7 @@
       <th width="80">收款金额</th>
       <th width="90">PI总金额</th>
       <th width="90">客编</th>
-      <th width="90">PI NO.</th>
+      <th width="120">PI NO.</th>
       <th width="90">PI日期</th>
       <th >备注</th>
       <th width="90">币别</th>
@@ -72,7 +72,7 @@
         <td><%= payment.pay_p %></td>  
         <td><%= payment.pi_t_p %></td>
         <td><%= payment.c_code %></td>
-        <td><%= payment.pi_info_id %></td>
+        <td><%= PiInfo.find_by_id(payment.pi_info_id).pi_no%></td>
         <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
         <td><%= payment.remark %></td> 
         <td><%= payment.currency_type %></td> 
@@ -163,7 +163,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="currency_type" class="col-md-3 control-label"><code>币别:</code></label>
                                   <div class="col-md-9" >
-                                      <p class="form-control-static" id="currency_type"></p>
+                                      <p class="form-control-static" id="currency_type">美金</p>
                                   </div>
                               </div>
                           </div>

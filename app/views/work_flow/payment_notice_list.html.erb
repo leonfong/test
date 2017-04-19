@@ -5,12 +5,35 @@
             <%= render partial: "work_flow/menu", locals: {selected: "paymanet_notice_finance"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
+
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 form-inline" >
+                    <div style="padding-bottom: 10px;">
+                        <ul class="nav nav-tabs" >
+                            <li <% if params[:state] == "checking" %>class="active"<% end %> ><a href="/payment_notice_list?state=checking">未建立收款单</a></li>
+                            <li <% if params[:state] == "checked" %>class="active"<% end %> ><a href="/payment_notice_list?state=checked">已建立收款单</a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
             
             
             <span  style="color:#999;">
-               <%= form_tag('/pi_list', method:"get", class:"form-inline") do %>
+               <%= form_tag('/payment_notice_list', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
                   
                   <lable for="order" , class="sr-only">Qrder : </lable>
@@ -25,9 +48,6 @@
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
-                <a type="button" class="btn btn-info btn-sm" href="/pi_list?bom_chk=true">等待工程师审批</a>
-                <a type="button" class="btn btn-danger btn-sm" href="/pi_list?finance_chk=true">等待财务审批</a>
-                <a type="button" class="btn btn-success btn-sm" href="/pi_list?checked=true">已经通过审批</a>
             </div>
             <% end %>                       
             </span>
@@ -54,7 +74,7 @@
       <th width="80">收款金额</th>
       <th width="90">PI总金额</th>
       <th width="90">客编</th>
-      <th width="90">PI NO.</th>
+      <th width="120">PI NO.</th>
       <th width="90">PI日期</th>
       <th >备注</th>
       <th width="90">币别</th>
@@ -74,7 +94,7 @@
         <td><%= payment.pay_p %></td>  
         <td><%= payment.pi_t_p %></td>
         <td><%= payment.c_code %></td>
-        <td><%= payment.pi_info_id %></td>
+        <td><%= PiInfo.find_by_id(payment.pi_info_id).pi_no %></td>
         <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
         <td><%= payment.remark %></td> 
         <td><%= payment.currency_type %></td> 

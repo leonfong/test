@@ -180,6 +180,7 @@ before_filter :authenticate_user!
                     @bom = ProcurementBom.find(get_item_data.procurement_bom_id) 
                     get_item_data.part_code = params[:item_ref]
                     get_item_data.quantity = params[:ref_quantity]
+                    get_item_data.link = params[:item_link]
                     get_item_data.pmc_qty = @bom.qty.to_i*params[:ref_quantity].to_i
                     if get_item_data.save
                         #@bom = ProcurementBom.find(get_item_data.procurement_bom_id)  

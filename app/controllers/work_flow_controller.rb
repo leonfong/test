@@ -1832,7 +1832,7 @@ before_filter :authenticate_user!
                 redirect_to :back, :flash => {:error => "收款单不能重复！！！"} and return false
             end
             finance_voucher_info = FinanceVoucherInfo.new
-            finance_voucher_info.state = "checked"
+            finance_voucher_info.state = "new"
             finance_voucher_info.payment_notice_info_id = get_payment_notice_data.id
             finance_voucher_info.payment_notice_info_no = get_payment_notice_data.id
             finance_voucher_info.pi_info_id = get_payment_notice_data.pi_info_id
@@ -1880,6 +1880,11 @@ before_filter :authenticate_user!
             finance_voucher_info.voucher_full_name_new = current_user.full_name
             finance_voucher_info.voucher_full_name_up = current_user.full_name
             if finance_voucher_info.save
+                get_payment_notice_data.state = "checked"
+                get_payment_notice_data.save
+            end
+=begin
+            if finance_voucher_info.save
                 
                 payment_voucher_info = FinancePaymentVoucherInfo.new
                 payment_voucher_info.finance_voucher_info_id = finance_voucher_info.id
@@ -1893,13 +1898,54 @@ before_filter :authenticate_user!
                 get_payment_notice_data.state = "checked"
                 get_payment_notice_data.save
             end
+=end
+        end
+        redirect_to :back
+    end
+
+    def voucher_checked
+        if not params[:id].blank?
+            finance_voucher_info = FinanceVoucherInfo.find_by_id(params[:id])
+            
+            if finance_voucher_info.state == "checked"
+                redirect_to :back, :flash => {:error => "已经审批通过"} and return false
+            end
+            finance_voucher_info.state = "checked"
+            if finance_voucher_info.save
+                payment_voucher_info = FinancePaymentVoucherInfo.new
+                payment_voucher_info.finance_voucher_info_id = finance_voucher_info.id
+                payment_voucher_info.no = 1
+                payment_voucher_info.des = finance_voucher_info.sell_team.to_s + finance_voucher_info.sell_full_name_up.to_s + finance_voucher_info.pi_info_no.to_s
+                payment_voucher_info.kemu = finance_voucher_info.xianjin_kemu.to_s + "---" + finance_voucher_info.c_code
+                payment_voucher_info.jie_fang = finance_voucher_info.get_money_self
+                payment_voucher_info.dai_fang = finance_voucher_info.get_money_self
+                payment_voucher_info.finance_at = params[:finance_at]
+                payment_voucher_info.save
+            end
+        end
+        redirect_to :back
+    end
+
+    def voucher_uncheck
+        if not params[:id].blank?
+            finance_voucher_info = FinanceVoucherInfo.find_by_id(params[:id])
+            
+            if finance_voucher_info.state == "checked"
+                redirect_to :back, :flash => {:error => "已经审批通过"} and return false
+            end
+            finance_voucher_info.state = "uncheck"
+            finance_voucher_info.save
         end
         redirect_to :back
     end
 
     def payment_notice_list
         @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
-        @payment = PaymentNoticeInfo.where(state: "checking").paginate(:page => params[:page], :per_page => 20)
+        if params[:state] == "checked"
+            @payment = PaymentNoticeInfo.where(state: "checked").paginate(:page => params[:page], :per_page => 20)
+        else
+            @payment = PaymentNoticeInfo.where(state: "checking").paginate(:page => params[:page], :per_page => 20)
+        end
         @type_b = "[&quot;"
         
         all_type_b = KuaijikemuInfo.find_by_sql("select CONCAT(code_a_name,'-',code_b_name,'-',code_c_name) AS c_name,CONCAT(code_a,' ',code_b,' ',code_c) AS c_code from kuaijikemu_infos")
@@ -1911,7 +1957,13 @@ before_filter :authenticate_user!
 
     def payment_voucher_list
         @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
-        @payment = FinanceVoucherInfo.where("DATE_FORMAT(created_at, '%Y%m') = DATE_FORMAT(CURDATE() , '%Y%m')").paginate(:page => params[:page], :per_page => 20)
+        if params[:state] == "checked"
+            @payment = FinanceVoucherInfo.where("state = 'checked' AND DATE_FORMAT(created_at, '%Y%m') = DATE_FORMAT(CURDATE() , '%Y%m')").paginate(:page => params[:page], :per_page => 20)
+        elsif params[:state] == "uncheck"
+            @payment = FinanceVoucherInfo.where("state = 'uncheck' AND DATE_FORMAT(created_at, '%Y%m') = DATE_FORMAT(CURDATE() , '%Y%m')").paginate(:page => params[:page], :per_page => 20)
+        else 
+            @payment = FinanceVoucherInfo.where("state = 'new' AND DATE_FORMAT(created_at, '%Y%m') = DATE_FORMAT(CURDATE() , '%Y%m')").paginate(:page => params[:page], :per_page => 20)
+        end
     end
 
     def sell_payment_notice_list
@@ -7439,7 +7491,8 @@ before_filter :authenticate_user!
             pi_item.p_type = q_item.p_type
             pi_item.att = q_item.att
             pi_item.remark =  q_item.remark    
-            pi_item.saveinspect
+            pi_item.com_cost = q_item.t_p
+            pi_item.save
         end
 
 

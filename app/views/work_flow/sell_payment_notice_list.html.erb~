@@ -72,7 +72,7 @@
         <td><%= payment.pay_p %></td>  
         <td><%= payment.pi_t_p %></td>
         <td><%= payment.c_code %></td>
-        <td><%= payment.pi_info_id %></td>
+        <td><%= PiInfo.find_by_id(payment.pi_info_id).pi_no%></td>
         <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
         <td><%= payment.remark %></td> 
         <td><%= payment.currency_type %></td> 
@@ -163,7 +163,7 @@
                               <div class="form-group form-group-sm">
                                   <label for="currency_type" class="col-md-3 control-label"><code>币别:</code></label>
                                   <div class="col-md-9" >
-                                      <p class="form-control-static" id="currency_type"></p>
+                                      <p class="form-control-static" id="currency_type">美金</p>
                                   </div>
                               </div>
                           </div>
@@ -356,7 +356,7 @@
         <input type="submit" class="btn btn-success pay_show" id="hide_del" name="commit" value="保存" style="display:none;">
       </div>
       <% end %>
-      <%= form_tag({action: :edit_payment_notice},method:"post",multipart:"true",remote:"ture") do %>
+      <%= form_tag({action: :edit_payment_notice},method:"post",multipart:"true") do %>
       <div class="modal-footer pay_hide" >
          <input class="form-control sr-only" name="payment_id_set" id="payment_id_set" type="text" >
         <input type="submit" class="btn btn-primary pay_hide" name="commit" value="审批通过" data-confirm="确定审批通过？">

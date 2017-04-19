@@ -334,7 +334,7 @@ $(document).ready(function() {
                 <table class="table table-hover" style="margin: 0px;"> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
                     <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-trash text-left text-danger" href="/del_bom_item?id=<%=item.id.to_s%>" data-confirm="确定要删除？"></a></h1></td>
-                    <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><div ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-edit text-left text-success" data-toggle="modal" data-target="#edit_item_ref" data-item_id="<%= item.id %>" data-item_ref="<%= item.part_code %>" data-ref_quantity="<%= item.quantity %>" data-moko_part="<%= item.moko_part %>" ></a></h1></div></td>
+                    <td style="display:none; padding-left: 0px;" width="45" class=" del_ctl" ><div ><h1 style="padding: 0px;margin: 0px;" ><a data-remote='true' class="glyphicon glyphicon-edit text-left text-success" data-toggle="modal" data-target="#edit_item_ref" data-item_id="<%= item.id %>" data-item_ref="<%= item.part_code %>" data-ref_quantity="<%= item.quantity %>" data-moko_part="<%= item.moko_part %>" data-link="<%= item.link %>" ></a></h1></div></td>
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="80"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
                             <tr>
@@ -898,9 +898,9 @@ function change_<%= item.id.to_s %>(){
             {document.getElementById('collapseExamplebut').className='glyphicon glyphicon-minus';}
             }
             </script>
-
+<% if can? :work_d, :all or can? :work_admin, :all %>
                     <button style="margin-top: 20px;" class="btn btn-warning btn-xs" type="button" data-toggle="collapse" data-target="#shipping" aria-expanded="false" aria-controls="shipping" onclick="change_p()">ADD A NEW PART <span id="collapseExamplebut" class="glyphicon glyphicon-plus" aria-hidden="true"></button>
-
+<% end %>
                 </div>
             </div>
             <div class="collapse" id="shipping" style="padding-bottom: 20px;">
@@ -938,7 +938,9 @@ function change_<%= item.id.to_s %>(){
             </div>
 <% if params[:pi_info_id].blank? and params[:ecn].blank?%>
             <div class="modal-footer">
+<% if can? :work_d, :all or can? :work_admin, :all %>
                 <%= link_to "返回上一步", p_new_bom_path(bom_id: @boms.id, bak_bom: "bak"),class:"btn btn-danger pull-left",data:{confirm: "返回上一步会删除这个BOM所有已经匹配的数据，确定要返回上一步吗？"}%>
+<% end %>
 <!--                
                 <%= link_to "检查",  up_check_path(bom_id: @boms.id,user_do: @user_do), class: "btn btn-danger" %>
 -->
@@ -1265,6 +1267,10 @@ function change_<%= item.id.to_s %>(){
             <label for="item_ref" class="control-label">位号:</label>
             <textarea class="form-control" id="item_ref"  name="item_ref"></textarea>
           </div>
+          <div class="form-group">
+            <label for="item_link" class="control-label">Link:</label>
+            <textarea class="form-control" id="item_link"  name="item_link"></textarea>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -1326,12 +1332,14 @@ $('#edit_item_ref').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var item_id = button.data('item_id');
   var item_ref = button.data('item_ref');
+  var item_link = button.data('link');
   var ref_quantity = button.data('ref_quantity');
   var item_moko_part = button.data('moko_part');
   var modal = $(this);
   modal.find('.modal-title').text('编辑位号 ' + item_moko_part);
   modal.find($("#item_ref_id")).val(item_id);
   modal.find($("#item_ref")).text(item_ref);
+  modal.find($("#item_link")).text(item_link);
   modal.find($("#ref_quantity")).val(ref_quantity);
 })
 $('#edit_item_qty').on('show.bs.modal', function (event) {

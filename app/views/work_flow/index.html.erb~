@@ -262,16 +262,16 @@
                     <th class="bg-primary" width="60">DIP</th>
                     <th class="bg-primary" width="100">贴片通知生产</th>
                     <th class="bg-info" width="80"><%= link_to "贴片交期",  {action: "index", sort_date: "smd"} %><span class="caret"></span></th>
+                    <th class="bg-danger" width="60">清空</th>               
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="110"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
- 
+                    <th class="bg-danger" width="55">清空</th>
                     <th class="bg-warning" width="45">提醒</th>
                     <th class="bg-primary" width="100">补料已回</th>
                     <th class="bg-primary" width="80">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
                     <th class="bg-primary">备注</th>
                     <th class="bg-primary" width="80">最后交期</th>
-                    <th class="bg-danger" width="50">清空</th>
                 </tr>
             </thead>
             <tbody >
@@ -310,7 +310,7 @@
                     <td class="success" nowrap="nowrap" >
                         <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>
                       
-                         <a tabindex="0" class="btn btn-sm  btn-link" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="订单号--<%= work.order_no %>" data-content="<%= '下单日期: '+work.order_date.to_s + '  业务交期: ' + work.salesman_end_date.to_s +  '  产品代码： ' + work.product_code.to_s %>" , style="height: 25px;padding: 0px 10px;line-height: 1.5;border-radius: 0px;"><%= work.order_no %></a>
+                         <a tabindex="0" class="btn btn-sm  btn-link" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="订单号--<%= work.order_no %>" data-content="<%= '下单日期: '+work.order_date.to_s + '  业务交期: ' + work.salesman_end_date.to_s +  '  产品代码： ' + work.product_code.to_s %>" , style="height: 25px;padding: 3px 0px;line-height: 1.5;border-radius: 0px;"><%= work.order_no %></a>
 
                     </td>
                     <td class="success">
@@ -343,13 +343,18 @@
                           <%= work.smd_state %>
                        <% end %>                                             
                     </td> 
+                    <td>
+                         <a type="button" class="btn btn-danger btn-xs" href="/clean_work_date_smd?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清SMD</a>
+                    </td>
                     <td <% if work.dip_start_date != nil %>class="success"<% end %>>
                         <%= work.dip_start_date %>                                                              
                     </td> 
                     <td <% if work.dip_end_date != nil %>class="success"<% end %>>
                         <%= work.dip_end_date %>
                     </td> 
-                    
+                    <td>
+                         <a type="button" class="btn btn-danger btn-xs" href="/clean_work_date_dip?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清DIP</a>
+                    </td>
                    <td>
                        <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">!!!</a>                                                             
                     </td>                                        
@@ -379,9 +384,7 @@
                             <%= work.last_at %>
                         </div>
                     </td>
-                    <td>
-                         <a type="button" class="btn btn-danger btn-xs" href="/clean_work_date?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清空</a>
-                    </td>
+
                 </tr>
                 <tr> 
                    <td colSpan="17" style="margin: 0px;padding: 0px;">

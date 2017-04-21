@@ -359,6 +359,7 @@ before_filter :authenticate_user!
         get_pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
         if not get_pi_item_data.blank?
             get_pi_item_data.to_pmc_state = "send"
+            get_pi_item_data.sell_at = Time.new()
             get_pi_item_data.save
         end
 
@@ -6969,6 +6970,7 @@ before_filter :authenticate_user!
                     pi_item_data.state = "check"
                 end
                 pi_item_data.bom_state = "checked"
+                pi_item_data.bom_at = Time.new()
                 pi_item_data.save
                 #set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
                 set_lock = PiItem.where("pi_info_id = '#{params[:p_pi]}' AND p_type = 'PCBA'")
@@ -7119,6 +7121,7 @@ before_filter :authenticate_user!
                     pi_item_data.state = "check"
                 end
                 pi_item_data.buy_state = "checked"
+                pi_item_data.caigou_at = Time.new()
                 pi_item_data.save
                 set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
                 if not set_lock.blank?
@@ -7155,6 +7158,7 @@ before_filter :authenticate_user!
                     pi_item_data.state = "check"
                 end
                 pi_item_data.finance_state = "checked"
+                pi_item_data.caiwu_at = Time.new()
                 pi_item_data.save
 
 
@@ -8734,14 +8738,25 @@ before_filter :authenticate_user!
 =end   
     end
 
-    def clean_work_date
+    def clean_work_date_smd
         get_data = WorkFlow.find_by_id(params[:id])
         if not get_data.blank?
             get_data.smd_start_date = nil
             get_data.smd_end_date = nil
+
+            get_data.smd_state = ""
+            get_data.save
+            redirect_to :back and return
+        end
+    end
+
+    def clean_work_date_dip
+        get_data = WorkFlow.find_by_id(params[:id])
+        if not get_data.blank?
+
             get_data.dip_start_date = nil
             get_data.dip_end_date = nil
-            get_data.smd_state = ""
+
             get_data.save
             redirect_to :back and return
         end

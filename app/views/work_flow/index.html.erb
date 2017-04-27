@@ -344,7 +344,7 @@
                        <% end %>                                             
                     </td> 
                     <td>
-                         <a type="button" class="btn btn-danger btn-xs" href="/clean_work_date_smd?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清SMD</a>
+                         <a type="button" class="btn btn-success btn-xs" href="/clean_work_date_smd?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清SMD</a>
                     </td>
                     <td <% if work.dip_start_date != nil %>class="success"<% end %>>
                         <%= work.dip_start_date %>                                                              
@@ -353,7 +353,7 @@
                         <%= work.dip_end_date %>
                     </td> 
                     <td>
-                         <a type="button" class="btn btn-danger btn-xs" href="/clean_work_date_dip?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清DIP</a>
+                         <a type="button" class="btn btn-success btn-xs" href="/clean_work_date_dip?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清DIP</a>
                     </td>
                    <td>
                        <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">!!!</a>                                                             

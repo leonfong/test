@@ -2175,6 +2175,10 @@ before_filter :authenticate_user!
                     shou_kuan_jin_e_data = PaymentNoticeInfo.find_by_sql("SELECT SUM(pay_p) AS pay_all FROM payment_notice_infos WHERE pi_info_id = '#{params[:pi_info_id]}'")
                     if not shou_kuan_jin_e_data.blank?
                         @shou_kuan_jin_e = shou_kuan_jin_e_data.first.pay_all
+                        Rails.logger.info("@shou_kuan_jin_e-------------------------")
+                        Rails.logger.info(@shou_kuan_jin_e.to_i.inspect)  
+                        Rails.logger.info(@pi_info.t_p.to_i.inspect)
+                        Rails.logger.info("@shou_kuan_jin_e----------------------------------")
                     else
                         @shou_kuan_jin_e = 0
                     end
@@ -8397,8 +8401,8 @@ before_filter :authenticate_user!
         if add_item.save
             get_rate_data = SetupFinanceInfo.find_by_id(1).dollar_rate
 
-            all_item_t_p = PiItem.find_by_sql("SELECT t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_info_id_other]} GROUP BY pi_info_id").first.t_p
-            all_other_t_p_data = PiOtherItem.find_by_sql("SELECT t_p FROM pi_other_items WHERE pi_info_id = #{params[:add_pi_info_id_other]} GROUP BY pi_info_id")
+            all_item_t_p = PiItem.find_by_sql("SELECT SUM(t_p) AS t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_info_id_other]} GROUP BY pi_info_id").first.t_p
+            all_other_t_p_data = PiOtherItem.find_by_sql("SELECT SUM(t_p) AS t_p FROM pi_other_items WHERE pi_info_id = #{params[:add_pi_info_id_other]} GROUP BY pi_info_id")
             if not all_other_t_p_data.blank?
                 all_other_t_p = all_other_t_p_data.first.t_p
             end 
@@ -8430,8 +8434,8 @@ before_filter :authenticate_user!
     def add_pi_sb
         get_rate_data = SetupFinanceInfo.find_by_id(1).dollar_rate
 
-        all_item_t_p = PiItem.find_by_sql("SELECT t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id").first.t_p
-        all_other_t_p_data = PiOtherItem.find_by_sql("SELECT t_p FROM pi_other_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id")
+        all_item_t_p = PiItem.find_by_sql("SELECT SUM(t_p) AS t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id").first.t_p
+        all_other_t_p_data = PiOtherItem.find_by_sql("SELECT SUM(t_p) AS t_p FROM pi_other_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id")
         if not all_other_t_p_data.blank?
            all_other_t_p = all_other_t_p_data.first.t_p
         end 

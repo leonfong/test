@@ -688,9 +688,11 @@
                                   <label for="c_country" class="col-md-3 control-label">尾款:</label>
                                   <div class="col-md-9">
                                       <% if not @shou_kuan_jin_e.blank? %>
-                                      <input class="form-control" name="c_country" id="c_country" type="text" value="<%=   @pi_info.t_p - @shou_kuan_jin_e %>" readonly>
+                                      <input class="form-control" name="wei_kuan" id="wei_kuan" type="text" value="<%=   @pi_info.t_p - @shou_kuan_jin_e %>" readonly>
+                                      <input class="form-control sr-only" name="shou_kuan_jin_e" id="shou_kuan_jin_e" type="text" value="<%=   @shou_kuan_jin_e %>" readonly>
                                       <% else %>
-                                      <input class="form-control" name="c_country" id="c_country" type="text" value="<%=   @pi_info.t_p  %>" readonly>
+                                      <input class="form-control" name="wei_kuan" id="wei_kuan" type="text" value="<%=   @pi_info.t_p  %>" readonly>
+                                      <input class="form-control sr-only" name="shou_kuan_jin_e" id="shou_kuan_jin_e" type="text" value="0" readonly>
                                       <% end %>
                                   </div>
                               </div>
@@ -1231,7 +1233,7 @@
             </div> 
             <div class="form-group">
               <label for="add_t_p_other" class="control-label">报价(美金):</label>
-              <input type="text" class="form-control" id="add_t_p_other" name="add_t_p_other" >
+              <input type="number" class="form-control" id="add_t_p_other" name="add_t_p_other" >
             </div>
         </div>
         <div class="modal-footer">
@@ -1275,9 +1277,10 @@ function postform_check() {
 　　    return false;                
 　     }
 <% if not @shou_kuan_jin_e.blank?%>
-      if ($("#pay_p").val() + <%= @shou_kuan_jin_e %> > <%= @pi_info.t_p %>)
+      if ($("#pay_p").val() + $("#shou_kuan_jin_e").val() > <%= @pi_info.t_p %>)
       {                    
-　　    alert("保存失败，收款金额总和不能大于PI总金额！！！！");                    
+　　    alert($("#pay_p").val() + $("#shou_kuan_jin_e").val() + "---保存失败，收款金额总和不能大于PI总金额！！！！---"
++ <%= @pi_info.t_p %>);                    
 　　    return false;                
 　     }
 <% end %>

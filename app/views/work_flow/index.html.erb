@@ -266,7 +266,9 @@
                     <th class="bg-primary" width="100">后焊通知生产</th>
                     <th class="bg-info" width="110"><%= link_to "后焊&完成交期",  {action: "index", sort_date: "dip"} %><span class="caret"></span></th>                    
                     <th class="bg-danger" width="55">清空</th>
+<!--
                     <th class="bg-warning" width="45">提醒</th>
+--> 
                     <th class="bg-primary" width="100">补料已回</th>
                     <th class="bg-primary" width="80">补料状态</th>
                     <th class="bg-info" width="80"><%= link_to "清尾完成",  {action: "index", sort_date: "clear"} %><span class="caret"></span></th>
@@ -287,7 +289,7 @@
                                     {document.getElementById('<%= work.id.to_s + "but" %>').className='glyphicon glyphicon-minus';}
                                 }
                         </script>
-                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
+                        <button class="btn <% if Topic.where(order_no: work.order_no).blank? %> btn-primary<% else %> btn-danger<% end %> btn-sm" type="button" data-toggle="collapse" data-target="#<%= work.id.to_s + work.order_no %>" aria-expanded="false" aria-controls="collapseExamplebom"  style="height: 25px;padding: 1px 10px;font-size: 10px;line-height: 1.5;border-radius: 3px;" onclick="change_<%= work.id.to_s %>()">
                             <span id="<%= work.id.to_s + 'but' %>" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </td> 
@@ -355,9 +357,11 @@
                     <td>
                          <a type="button" class="btn btn-success btn-xs" href="/clean_work_date_dip?id=<%= work.id.to_s %>" data-confirm="确定要清空时间？">清DIP</a>
                     </td>
+<!--
                    <td>
                        <a class="btn btn-sm <% if Topic.where(order_no: work.order_no).blank? %> btn-default disabled<% else %> btn-danger<% end %>" , style="height: 25px;padding: 3px 10px;line-height: 1.5;border-radius: 3px;">!!!</a>                                                             
-                    </td>                                        
+                    </td> 
+-->                                        
                     </td>
                     <td>
                         <%= text_field_tag :supplement_date, params[:supplement_date], id: work.id.to_s+"supplement_date",class:"form-control input-sm",value:work.supplement_date , size:"9", style:"height: 25px;padding: 5px 10px;line-height: 1.5;border-radius: 3px;" %>
@@ -387,7 +391,7 @@
 
                 </tr>
                 <tr> 
-                   <td colSpan="17" style="margin: 0px;padding: 0px;">
+                   <td colSpan="19" style="margin: 0px;padding: 0px;">
                     <div class="col-md-12" style="margin: 0px;padding: 0px;">
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">

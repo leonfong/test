@@ -192,7 +192,7 @@ class Ability
       can :work_baojia, :all
       can :work_g_all, :all
       can :work_g, :all
-      can :work_e, :all
+      #can :work_e, :all
       #can :work_d, :all
       can :external_access, :all
       can :work_pcb_business, :all

@@ -1,9 +1,28 @@
 <small>
-<div class="container" >
+<div class="container-fluid" >
+<div class="row" style="margin: 0px;padding: 0px;" >
+<br>
+  <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="/work_flow"><h4><strong><p class="text-primary" >采购部问题跟踪&反馈</p></strong></h4></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><h4><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
+      <li role="presentation" ><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >PCBA报价列表(新)</p></strong></h4></a></li>
+      <li role="presentation" ><a href="/sell_pcb_baojia"><h4><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
+      <% if can? :work_pcb_business, :all %>
+      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
+      <% end %>
+  </ul>
+<br>
+  <%= render 'layouts/flash_messages' %>
+</div>
+<% if can? :work_g_work_flow, :all %>
+
+<% else %>
 <div class="row" style="padding: 0px;">
   <h2><p class="text-primary">采购部问题跟踪&反馈</p></h2><hr>
   <%= render 'layouts/flash_messages' %>
 </div>
+<% end %>
+
 <div class="row"style="padding: 0px;">
     <div class="col-md-3 nav navbar-nav" >
         <%= link_to "查询未处理的问题",  {action: "index"}, class: "btn btn-danger  btn-sm" %>
@@ -198,7 +217,7 @@
             <textarea name="procurement_feedback" id="<%= work.id.to_s %>"></textarea>
 <script>
 KindEditor.ready(function(K){
-        	my_feedback<%= work.id.to_s %> = K.create('#<%= work.id.to_s %>', {"items":["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"],"width":"100%","height":300,"allowFileManager":true,"uploadJson":"http://www.fastbom.com/kindeditor/upload","fileManagerJson":"http://www.fastbom.com/kindeditor/filemanager","htmlTags":{
+        	my_feedback<%= work.id.to_s %> = K.create('#<%= work.id.to_s %>', {"items":["undo","redo","|","image","multiimage","insertfile","|","fontname","fontsize","forecolor","hilitecolor","bold"],"width":"100%","height":300,"allowFileManager":true,"uploadJson":"http://erp.fastbom.com/kindeditor/upload","fileManagerJson":"http://erp.fastbom.com/kindeditor/filemanager","htmlTags":{
 		font : ['id', 'class', 'color', 'size', 'face', '.background-color'],
 		span : [
 			'id', 'class', '.color', '.background-color', '.font-size', '.font-family', '.background',

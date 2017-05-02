@@ -16,6 +16,7 @@ class Ability
     alias_action :update, :to => :work_g          #采购10
     alias_action :update, :to => :work_baojia     #报价
     alias_action :update, :to => :work_g_all      #采购主管16
+    alias_action :update, :to => :work_g_work_flow      #采购主管
     alias_action :update, :to => :work_g_a        #采购1 17
     alias_action :update, :to => :work_g_b        #采购2 18
     alias_action :update, :to => :work_g_c        #采购3 19
@@ -175,6 +176,26 @@ class Ability
     elsif user.has_role?(:work_sw_hw)
       can :work_sw_hw, :all
       can :read, :all
+    elsif user.has_role?(:work_g_admin)
+      can :work_a, :all
+      can :work_admin, :all
+      can :work_top, :all
+      #can :work_b, :all
+      #can :work_e, :all
+      can :pcb_review, :all
+      can :pcb_dc, :all
+      can :work_up, :all
+      can :old_bom, :all
+      can :work_baojia, :all
+      can :work_g_all, :all
+      can :work_g, :all
+      can :work_g_work_flow, :all
+      can :external_access, :all
+      can :work_pcb_business, :all
+      can :work_suppliers, :all
+      can :work_send_to_sell, :all
+      can :work_wh, :all
+      can :work_h, :all
     else
       can :read, :all
     end

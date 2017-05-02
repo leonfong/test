@@ -249,7 +249,7 @@ Rails.application.routes.draw do
   match '/voucher_checked', to: 'work_flow#voucher_checked', via: 'get'
   match '/voucher_uncheck', to: 'work_flow#voucher_uncheck', via: 'get'
   match '/shou_kuan_ping_zheng', to: 'work_flow#shou_kuan_ping_zheng', via: 'get'
-
+  match '/fu_kuan_ping_zheng', to: 'work_flow#fu_kuan_ping_zheng', via: 'get'
 
 
 

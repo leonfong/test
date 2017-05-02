@@ -2,7 +2,7 @@
  
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "shoukuan_zheng_finance"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "fukuan_zheng_finance"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
 
@@ -16,7 +16,7 @@
             
             
             <span  style="color:#999;">
-               <%= form_tag('/pi_list', method:"get", class:"form-inline") do %>
+               <%= form_tag('/fu_kuan_ping_zheng', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
                   
                   <lable for="order" , class="sr-only">Qrder : </lable>
@@ -53,9 +53,11 @@
       <th width="80">操作</th>
       <th width="80">序号</th>
       <th width="180">DES</th>
-      <th >科目</th>
+      <th >借方科目</th>
+      <th >贷方科目</th>
       <th width="100">借方</th>
       <th width="100">贷方</th>
+      <th >备注</th>
       <th width="150">审批日期</th>
      
 
@@ -67,9 +69,11 @@
         <td></td>
         <td><%= index+1 %></td>
         <td><%= payment.des %></td>
-        <td><%= payment.kemu %></td>
+        <td><%= payment.jie_fang_kemu %></td>
+        <td><%= payment.dai_fang_kemu %></td>
         <td><%= payment.jie_fang %></td>
         <td><%= payment.dai_fang %></td>
+        <td><%= payment.remark %></td>
         <td><%= payment.finance_at.blank?? "":payment.finance_at.localtime.strftime('%Y-%m-%d') %></td>
         
       </tr>

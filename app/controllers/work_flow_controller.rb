@@ -6,7 +6,19 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def shou_kuan_ping_zheng
-        @pingzheng = FinancePaymentVoucherInfo.all.paginate(:page => params[:page], :per_page => 20)
+        if not params[:pass_date].blank?
+            @pingzheng = FinancePaymentVoucherInfo.find_by_sql("SELECT * FROM finance_payment_voucher_infos WHERE date_format(finance_payment_voucher_infos.finance_at,'%Y-%m')='#{params[:pass_date]}' ").paginate(:page => params[:page], :per_page => 20)
+        else
+            @pingzheng = FinancePaymentVoucherInfo.all.paginate(:page => params[:page], :per_page => 20)
+        end
+    end
+
+    def fu_kuan_ping_zheng
+        if not params[:pass_date].blank?
+            @pingzheng = FuKuanPingZhengInfo.find_by_sql("SELECT * FROM fu_kuan_ping_zheng_infos WHERE date_format(fu_kuan_ping_zheng_infos.finance_at,'%Y-%m')='#{params[:pass_date]}' ").paginate(:page => params[:page], :per_page => 20)
+        else
+            @pingzheng = FuKuanPingZhengInfo.all.paginate(:page => params[:page], :per_page => 20)
+        end
     end
 
     def pmc_back_to_pi

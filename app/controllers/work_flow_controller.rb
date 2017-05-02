@@ -5,6 +5,10 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def shou_kuan_ping_zheng
+        @pingzheng = FinancePaymentVoucherInfo.all.paginate(:page => params[:page], :per_page => 20)
+    end
+
     def pmc_back_to_pi
 
     end

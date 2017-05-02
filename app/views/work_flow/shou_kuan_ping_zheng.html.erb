@@ -1,0 +1,102 @@
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "shoukuan_zheng_finance"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+
+           
+
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/pi_list', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                        
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"询价单号，项目名称，项目描述，客户代码，客户名，业务邮箱，备注"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+            </div>
+            <% end %>                       
+            </span>
+            </div>
+        </div>
+<br>
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+<% if not @pingzheng.blank? %>        
+<%= will_paginate(@pingzheng) %>            
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="80">操作</th>
+      <th width="80">序号</th>
+      <th width="180">DES</th>
+      <th >科目</th>
+      <th width="100">借方</th>
+      <th width="100">贷方</th>
+      <th width="150">审批日期</th>
+     
+
+    </tr>
+  </thead>
+  <tbody>
+    <% @pingzheng.each_with_index do |payment,index| %>   
+      <tr>
+        <td></td>
+        <td><%= index+1 %></td>
+        <td><%= payment.des %></td>
+        <td><%= payment.kemu %></td>
+        <td><%= payment.jie_fang %></td>
+        <td><%= payment.dai_fang %></td>
+        <td><%= payment.finance_at.blank?? "":payment.finance_at.localtime.strftime('%Y-%m-%d') %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+        </div></div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</small>
+
+
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

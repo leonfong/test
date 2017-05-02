@@ -248,6 +248,7 @@ Rails.application.routes.draw do
   match '/cut_in_ecn', to: 'work_flow#cut_in_ecn', via: 'post'
   match '/voucher_checked', to: 'work_flow#voucher_checked', via: 'get'
   match '/voucher_uncheck', to: 'work_flow#voucher_uncheck', via: 'get'
+  match '/shou_kuan_ping_zheng', to: 'work_flow#shou_kuan_ping_zheng', via: 'get'
 
 
 

@@ -177,11 +177,14 @@ class Ability
       can :work_sw_hw, :all
       can :read, :all
     elsif user.has_role?(:work_g_admin)
+      can :work_g_work_flow, :all
+      #can :manage, :all
       can :work_a, :all
       can :work_admin, :all
       can :work_top, :all
       #can :work_b, :all
-      #can :work_e, :all
+      #can :work_c, :all
+      #can :work_d, :all
       can :pcb_review, :all
       can :pcb_dc, :all
       can :work_up, :all
@@ -189,7 +192,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_all, :all
       can :work_g, :all
-      can :work_g_work_flow, :all
+      can :work_e, :all
+      #can :work_d, :all
       can :external_access, :all
       can :work_pcb_business, :all
       can :work_suppliers, :all

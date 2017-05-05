@@ -53,7 +53,8 @@
       <th width="80">操作</th>
       <th width="80">序号</th>
       <th width="180">DES</th>
-      <th >科目</th>
+      <th >借方科目</th>
+      <th >贷方科目</th>
       <th width="100">借方</th>
       <th width="100">贷方</th>
       <th width="150">审批日期</th>
@@ -67,7 +68,8 @@
         <td></td>
         <td><%= index+1 %></td>
         <td><%= payment.des %></td>
-        <td><%= payment.kemu %></td>
+        <td><%= payment.jie_fang_kemu %></td>
+        <td><%= payment.dai_fang_kemu %></td>
         <td><%= payment.jie_fang %></td>
         <td><%= payment.dai_fang %></td>
         <td><%= payment.finance_at.blank?? "":payment.finance_at.localtime.strftime('%Y-%m-%d') %></td>

@@ -5,6 +5,31 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_ping_zheng
+        if not params[:ping_zheng_id].blank?
+            get_data = ZongZhangInfo.find_by_id(params[:ping_zheng_id])
+            if not get_data.blank?
+                get_data.des = params[:des]
+                get_data.jie_fang_kemu = params[:jie_fang_kemu]
+                get_data.dai_fang_kemu = params[:dai_fang_kemu]
+                get_data.jie_fang = params[:jie_fang]
+                get_data.dai_fang = params[:dai_fang]
+                get_data.remark = params[:remark]
+                get_data.finance_at = params[:finance_at]
+                get_data.save
+            end
+        end
+        redirect_to :back
+    end
+
+    def zong_zhang_list
+        if not params[:pass_date].blank?
+            @pingzheng = ZongZhangInfo.find_by_sql("SELECT * FROM zong_zhang_infos WHERE date_format(zong_zhang_infos.finance_at,'%Y-%m')='#{params[:pass_date]}' ").paginate(:page => params[:page], :per_page => 20)
+        else
+            @pingzheng = ZongZhangInfo.all.paginate(:page => params[:page], :per_page => 20)
+        end
+    end
+
     def shou_kuan_ping_zheng
         if not params[:pass_date].blank?
             @pingzheng = FinancePaymentVoucherInfo.find_by_sql("SELECT * FROM finance_payment_voucher_infos WHERE date_format(finance_payment_voucher_infos.finance_at,'%Y-%m')='#{params[:pass_date]}' ").paginate(:page => params[:page], :per_page => 20)
@@ -1420,7 +1445,8 @@ before_filter :authenticate_user!
             get_fukuan.state = "checked"
             get_fukuan.true_t_p = @t_p
             if get_fukuan.save
-                fu_kuan_ping_zheng_info = FuKuanPingZhengInfo.new
+                fu_kuan_ping_zheng_info = ZongZhangInfo.new
+                fu_kuan_ping_zheng_info.type = "fu"
                 fu_kuan_ping_zheng_info.fu_kuan_dan_info_id = get_fukuan.id
                 #fu_kuan_ping_zheng_info.no = 1
                 #fu_kuan_ping_zheng_info.des = finance_voucher_info.sell_team.to_s + finance_voucher_info.sell_full_name_up.to_s + finance_voucher_info.pi_info_no.to_s
@@ -1929,11 +1955,13 @@ before_filter :authenticate_user!
             end
             finance_voucher_info.state = "checked"
             if finance_voucher_info.save
-                payment_voucher_info = FinancePaymentVoucherInfo.new
+                payment_voucher_info = ZongZhangInfo.new
+                payment_voucher_info.type = "shou"
                 payment_voucher_info.finance_voucher_info_id = finance_voucher_info.id
                 payment_voucher_info.no = 1
                 payment_voucher_info.des = finance_voucher_info.sell_team.to_s + finance_voucher_info.sell_full_name_up.to_s + finance_voucher_info.pi_info_no.to_s
-                payment_voucher_info.kemu = finance_voucher_info.xianjin_kemu.to_s + "---" + finance_voucher_info.c_code
+                payment_voucher_info.jie_fang_kemu = finance_voucher_info.xianjin_kemu.to_s + "---" + finance_voucher_info.c_code
+                payment_voucher_info.dai_fang_kemu = finance_voucher_info.xianjin_kemu.to_s + "---" + finance_voucher_info.c_code
                 payment_voucher_info.jie_fang = finance_voucher_info.get_money_self
                 payment_voucher_info.dai_fang = finance_voucher_info.get_money_self
                 payment_voucher_info.finance_at = params[:finance_at]

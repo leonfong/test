@@ -1,0 +1,221 @@
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "zong_zhang_finance"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+
+           
+
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+            
+            
+            <span  style="color:#999;">
+               <%= form_tag('/fu_kuan_ping_zheng', method:"get", class:"form-inline") do %>
+               <div class="form-group  nav navbar-nav navbar-left">
+                  
+                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <div class="input-group input-group-sm">    
+                                <%= text_field_tag :pass_date, params[:pass_date], id: "pass_date",class:"form-control input-sm", size:"30" , placeholder:"审核日期" %>
+                                <script type="text/javascript">
+                                    $(function () {
+                                    $('#pass_date').datetimepicker({
+                                        useCurrent: false,
+                                        format: 'YYYY-MM'
+                                    });    
+                                    });
+                                 </script>
+                                <div class="input-group-btn">
+                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                                </div>
+                            </div>
+            </div>
+            <% end %>                       
+            </span>
+            </div>
+        </div>
+<br>
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+<% if not @pingzheng.blank? %>        
+<%= will_paginate(@pingzheng) %>            
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="60">操作</th>
+      <th width="80">序号</th>
+      <th width="80">TYPE</th>
+      <th width="180">DES</th>
+      <th >借方科目</th>
+      <th >贷方科目</th>
+      <th width="100">借方</th>
+      <th width="100">贷方</th>
+      <th >备注</th>
+      <th width="150">审批日期</th>
+     
+
+    </tr>
+  </thead>
+  <tbody>
+    <% @pingzheng.each_with_index do |payment,index| %>   
+      <tr>
+        <td><a class="glyphicon glyphicon-edit" data-backdrop="static" data-toggle="modal" data-target="#edit_ping_zheng" data-ping_zheng_id="<%= payment.id %>" data-des="<%= payment.des %>" data-jie_fang_kemu="<%= payment.jie_fang_kemu %>" data-dai_fang_kemu="<%= payment.dai_fang_kemu %>" data-jie_fang="<%= payment.jie_fang %>" data-dai_fang="<%= payment.dai_fang %>" data-remark="<%= payment.remark %>" data-finance_at="<%= payment.finance_at.blank?? '':payment.finance_at.localtime.strftime('%Y-%m-%d').to_s %>"></a></td>
+        <td><%= index+1 %></td>
+        <td><%= payment.zong_zhang_type %></td>
+        <td><%= payment.des %></td>
+        <td><%= payment.jie_fang_kemu %></td>
+        <td><%= payment.dai_fang_kemu %></td>
+        <td><%= payment.jie_fang %></td>
+        <td><%= payment.dai_fang %></td>
+        <td><%= payment.remark %></td>
+        <td><%= payment.finance_at.blank?? "":payment.finance_at.localtime.strftime('%Y-%m-%d') %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+        </div></div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</small>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="edit_ping_zheng" tabindex="-1" role="dialog" aria-labelledby="edit_ping_zhengLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_ping_zhengLabel">编辑凭证</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_ping_zheng},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="ping_zheng_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="ping_zheng_id" name="ping_zheng_id">
+          </div>
+          <div class="form-group">
+            <label for="finance_at">审批日期：</label>
+            <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+          </div> 
+          <div class="form-group">
+            <label for="des" class="control-label">DES:</label>
+            <input class="form-control" name="des" id="des" type="text" >
+          </div>
+          <div class="form-group">
+            <label for="jie_fang_kemu" class="control-label">借方科目:</label>
+            <input class="form-control" name="jie_fang_kemu" id="jie_fang_kemu" type="text" >
+          </div>
+          <div class="form-group">
+            <label for="dai_fang_kemu" class="control-label">贷方科目:</label>
+            <input class="form-control" name="dai_fang_kemu" id="dai_fang_kemu" type="text">
+          </div>
+          <div class="form-group">
+            <label for="jie_fang">借方：</label>
+            <input class="form-control" name="jie_fang" id="jie_fang" type="number">
+          </div> 
+          <div class="form-group">
+            <label for="dai_fang">贷方：</label>
+            <input class="form-control" name="dai_fang" id="dai_fang" type="number">
+          </div> 
+          <div class="form-group">
+            <label for="remark">备注：</label>
+            <input class="form-control" name="remark" id="remark" type="text">
+          </div> 
+           
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+$('#edit_ping_zheng').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var ping_zheng_id = button.data('ping_zheng_id');
+  var des = button.data('des');
+  var jie_fang_kemu = button.data('jie_fang_kemu');
+  var dai_fang_kemu = button.data('dai_fang_kemu');
+  var jie_fang = button.data('jie_fang');
+  var dai_fang = button.data('dai_fang');
+  var remark = button.data('remark');
+  var finance_at = button.data('finance_at');
+
+  var modal = $(this);
+  modal.find($("#ping_zheng_id")).val(ping_zheng_id);
+  modal.find($("#des")).val(des);
+  modal.find($("#jie_fang_kemu")).val(jie_fang_kemu);
+  modal.find($("#dai_fang_kemu")).val(dai_fang_kemu);
+  modal.find($("#jie_fang")).val(jie_fang);
+  modal.find($("#dai_fang")).val(dai_fang);
+  modal.find($("#remark")).val(remark);
+  modal.find($("#finance_at")).val(finance_at);
+})
+
+
+</script>
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

@@ -99,16 +99,31 @@
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;" width="80"><small>
                         <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
+                            <tr>                                            
+                                <td style="padding: 0px 0px 0px 5px;margin: 0px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >A</div></a></small></td>
+                                <td style="padding: 0px 0px 0px 5px;margin: 0px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75"><div >B</div></a></small></td>
+                                <td style="padding: 0px 0px 0px 5px;margin: 0px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77"><div >C</div></a></small></td>
+                                <td style="padding: 0px 0px 0px 5px;margin: 0px;" id="<%=item.id.to_s%>_d" <% if item.user_do == 'd'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=d"><div >D</div></a></small></td>
+                            </tr>
                             <tr>
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_77" <% if item.user_do == 77  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=77"><div >罗</div></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_a1" <% if item.user_do == 'a1'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=a1"><div >A1</div></a></small></td>
                             
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_75" <% if item.user_do == 75  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=75"><div >黄</div></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_a2" <% if item.user_do == 'a2'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=a2"><div >A2</div></a></small></td>
                                             
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_7" <% if item.user_do == 7  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=7"><div >马</div></a></small></td>
-                                <td style="padding-left: 5px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_b1" <% if item.user_do == 'b1'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=b1"><div >B1</div></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_b2" <% if item.user_do == 'b2'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=b2"><div >B2</div></a></small></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_c1" <% if item.user_do == 'c1'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=c1"><div >C1</div></a></small></td>
+                            
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_c2" <% if item.user_do == 'c2'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=c2"><div >C2</div></a></small></td>
+                                            
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_d1" <% if item.user_do == 'd1'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=d1"><div >D1</div></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_d2" <% if item.user_do == 'd2'  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=d2"><div >D2</div></a></small></td>
                             </tr>
                             <tr>                                
-                                <td colSpan="4" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
+                                <td colSpan="2" style="padding: 0px;margin: 0px;" id="<%=item.id.to_s%>_9999" <% if item.user_do == 9999  %>class="text-center bg-success"<% else %>class="text-center"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=9999"><div >other</div></a></small></td>
+                                <td colSpan="2" style="padding: 0px 0px 0px 5px;margin: 0px;" id="<%=item.id.to_s%>_999" <% if item.user_do == 999  %>class="bg-success"<% end %>><small><a data-method='get' data-remote='true' href="/p_up_userdo?id=<%=item.id.to_s%>&user_do=999"><div >供</div></a></small></td>
                             </tr>
                         </table>
 
@@ -210,7 +225,7 @@ function change_<%= item.id.to_s %>(){
     $("#input_<%= item.id.to_s %>").val("<%= item.description %>");
     }
 </script> 
-                    <% if can? :work_admin, :all or if can? :work_d, :all %>
+                    <% if can? :work_admin, :all or can? :work_d, :all %>
                     <td width="150" style="padding: 5px 0px 5px 0px;margin: 0px;" type="button" data-toggle="collapse" data-target="#<%= item.id.to_s + 'dow' %>" aria-expanded="false" aria-controls="<%= (index+1).to_s + 'bom' %>"  onclick="change_<%= item.id.to_s %>()"><small><%= item.description %></small></td>
                     <% else %> 
                     <td width="150" style="padding: 5px 0px 5px 0px;margin: 0px;" ><small><%= item.description %></small></td> 

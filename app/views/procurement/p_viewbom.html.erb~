@@ -1332,12 +1332,14 @@ $('#edit_item_ref').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var item_id = button.data('item_id');
   var item_ref = button.data('item_ref');
+  var item_link = button.data('link');
   var ref_quantity = button.data('ref_quantity');
   var item_moko_part = button.data('moko_part');
   var modal = $(this);
   modal.find('.modal-title').text('编辑位号 ' + item_moko_part);
   modal.find($("#item_ref_id")).val(item_id);
   modal.find($("#item_ref")).text(item_ref);
+  modal.find($("#item_link")).text(item_link);
   modal.find($("#ref_quantity")).val(ref_quantity);
 })
 $('#edit_item_qty').on('show.bs.modal', function (event) {

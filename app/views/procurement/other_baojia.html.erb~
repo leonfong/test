@@ -79,8 +79,13 @@
                 <thead >
                 <tr style="background-color: #eeeeee"> 
                     <th width="80">分配</th> 
-                    <th width="150">MPN</th> 
-                    <th width="150">描述</th>
+                    <% if params[:key_order] %>
+                        <th width="150"><%= link_to "MPN",  {action: "other_baojia", sort_date: "mpn",key_order: params[:key_order]} %><span class="caret"></span></th>
+                        <th width="150"><%= link_to "描述",  {action: "other_baojia", sort_date: "des",key_order: params[:key_order]} %><span class="caret"></span></th>
+                    <% else %> 
+                        <th width="150"><%= link_to "MPN",  {action: "other_baojia", sort_date: "mpn"} %><span class="caret"></span></th>
+                        <th width="150"><%= link_to "描述",  {action: "other_baojia", sort_date: "des"} %><span class="caret"></span></th>
+                    <% end %>
                     <th >MOKO 描述</th>
                     <th width="50">位号</th>
                     <th width="50">数量</th>

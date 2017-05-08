@@ -103,11 +103,7 @@
     <% @boms.each do |bom| %>
     <% #@itemall = @itemall + " " + bom.excel_file_identifier %>
 
-      <% if can? :work_g_all, :all %>
-          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %> >
-      <% elsif can? :work_g_a, :all %>
-          <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %> >
-      <% elsif can? :work_g_b, :all %>
+      <% if can? :work_g_all, :all or can? :work_g_a, :all or can? :work_g_b, :all or can? :work_g_a1, :all or can? :work_g_a2, :all or can? :work_g_b1, :all or can? :work_g_b2, :all or can? :work_g_c, :all or can? :work_g_d, :all %>
           <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %> >
       <% else %>
           <tr >

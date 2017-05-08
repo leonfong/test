@@ -3775,7 +3775,7 @@ before_filter :authenticate_user!
         if can? :work_g_all, :all
             @user_do = "7"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id],add_state: "")
-        elsif can? :work_g_a, :all
+        elsif can? :work_g_a, :all or can? :work_g_b1, :all or can? :work_g_b, :all
             @user_do = "77"
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id],add_state: "")
             #@bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '77' OR user_do = '9999')")

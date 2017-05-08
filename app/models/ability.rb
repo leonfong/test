@@ -148,6 +148,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_b)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_baojia, :all
@@ -156,6 +157,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_b1)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_baojia, :all
@@ -164,6 +166,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_b2)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_baojia, :all
@@ -172,6 +175,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_c)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_baojia, :all
@@ -180,6 +184,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_c1)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_baojia, :all
@@ -188,6 +193,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_c2)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_baojia, :all
@@ -196,6 +202,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_d)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_g_d, :all
@@ -203,6 +210,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_d1)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_g_d1, :all
@@ -210,6 +218,7 @@ class Ability
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_d2)
       #can :manage, :all
+      can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
       can :work_g_d2, :all

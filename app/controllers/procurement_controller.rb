@@ -2327,7 +2327,7 @@ before_filter :authenticate_user!
         elsif params[:sort_date] == "des"
             add_orderby = "p_items.description DESC"
         else
-            add_orderby = "p_items.user_do DESC"
+            add_orderby = "p_items.user_do"
         end
         if params[:complete]
             part_ctl = " AND p_items.color = 'b'" 

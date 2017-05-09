@@ -6,9 +6,14 @@
         </div>
         <div class="col-md-11" style="padding-top: 10px;">
 
-           
-
-
+        <div class="row">
+            <div class="col-md-12 col-sm-12 form-inline" >
+                <div style="padding: 0px 0px 10px 0px;">
+                    <a type="button" class="btn btn-primary btn-sm" data-backdrop="static" data-toggle="modal" data-target="#new_ping_zheng" >新建凭证</a>
+            
+                </div>
+            </div>
+        </div>
 
 
         <div class="row">
@@ -16,7 +21,7 @@
             
             
             <span  style="color:#999;">
-               <%= form_tag('/fu_kuan_ping_zheng', method:"get", class:"form-inline") do %>
+               <%= form_tag('/zong_zhang_list', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
                   
                   <lable for="order" , class="sr-only">Qrder : </lable>
@@ -39,7 +44,6 @@
             </span>
             </div>
         </div>
-<br>
 
 
 
@@ -50,7 +54,7 @@
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="60">操作</th>
+      <th width="50">操作</th>
       <th width="80">序号</th>
       <th width="80">TYPE</th>
       <th width="180">DES</th>
@@ -59,7 +63,8 @@
       <th width="100">借方</th>
       <th width="100">贷方</th>
       <th >备注</th>
-      <th width="150">审批日期</th>
+      <th width="100">审批日期</th>
+      <th width="45">删除</th>
      
 
     </tr>
@@ -77,7 +82,7 @@
         <td><%= payment.dai_fang %></td>
         <td><%= payment.remark %></td>
         <td><%= payment.finance_at.blank?? "":payment.finance_at.localtime.strftime('%Y-%m-%d') %></td>
-        
+        <td><a class="text-danger glyphicon glyphicon-remove" data-method="get" data-remote="true" href="/ping_zheng_del?id=<%= payment.id %>" data-confirm="确定要删除?"></a></td>
       </tr>
     <% end %>
   </tbody>
@@ -176,6 +181,66 @@
 
 
 
+<div class="modal fade" id="new_ping_zheng" tabindex="-1" role="dialog" aria-labelledby="new_ping_zhengLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="new_ping_zhengLabel">新建凭证</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :new_ping_zheng},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="new_ping_zheng_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="new_ping_zheng_id" name="new_ping_zheng_id">
+          </div>
+          <div class="form-group">
+            <label for="new_finance_at">审批日期：</label>
+            <%= text_field_tag :new_finance_at, params[:"new_finance_at], id: "new_finance_at",class:"form-control" %>
+<script type="text/javascript">
+    $(function () {
+        $('#new_finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+          </div> 
+          <div class="form-group">
+            <label for="new_des" class="control-label">DES:</label>
+            <input class="form-control" name="new_des" id="new_des" type="text" >
+          </div>
+          <div class="form-group">
+            <label for="new_jie_fang_kemu" class="control-label">借方科目:</label>
+            <input class="form-control" name="new_jie_fang_kemu" id="new_jie_fang_kemu" type="text" >
+          </div>
+          <div class="form-group">
+            <label for="new_dai_fang_kemu" class="control-label">贷方科目:</label>
+            <input class="form-control" name="new_dai_fang_kemu" id="new_dai_fang_kemu" type="text">
+          </div>
+          <div class="form-group">
+            <label for="new_jie_fang">借方：</label>
+            <input class="form-control" name="new_jie_fang" id="new_jie_fang" type="number">
+          </div> 
+          <div class="form-group">
+            <label for="new_dai_fang">贷方：</label>
+            <input class="form-control" name="new_dai_fang" id="new_dai_fang" type="number">
+          </div> 
+          <div class="form-group">
+            <label for="new_remark">备注：</label>
+            <input class="form-control" name="new_remark" id="new_remark" type="text">
+          </div> 
+           
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 

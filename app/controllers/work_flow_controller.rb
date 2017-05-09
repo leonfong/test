@@ -5,6 +5,18 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def ping_zheng_del
+        if can? :work_finance, :all
+            if not params[:id].blank?
+                get_data = ZongZhangInfo.find_by_id(params[:id])
+                if not get_data.blank?
+                    get_data.destroy
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def edit_ping_zheng
         if not params[:ping_zheng_id].blank?
             get_data = ZongZhangInfo.find_by_id(params[:ping_zheng_id])
@@ -18,6 +30,23 @@ before_filter :authenticate_user!
                 get_data.finance_at = params[:finance_at]
                 get_data.save
             end
+        end
+        redirect_to :back
+    end
+
+    def new_ping_zheng
+        if can? :work_finance, :all
+            get_data = ZongZhangInfo.new
+
+            get_data.des = params[:new_des]
+            get_data.jie_fang_kemu = params[:new_jie_fang_kemu]
+            get_data.dai_fang_kemu = params[:new_dai_fang_kemu]
+            get_data.jie_fang = params[:new_jie_fang]
+            get_data.dai_fang = params[:new_dai_fang]
+            get_data.remark = params[:new_remark]
+            get_data.finance_at = params[:new_finance_at]
+            get_data.save
+
         end
         redirect_to :back
     end

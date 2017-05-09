@@ -103,7 +103,7 @@
     <% @boms.each do |bom| %>
     <% #@itemall = @itemall + " " + bom.excel_file_identifier %>
 
-      <% if can? :work_g_all, :all or can? :work_g_a, :all or can? :work_g_b, :all or can? :work_g_a1, :all or can? :work_g_a2, :all or can? :work_g_b1, :all or can? :work_g_b2, :all %>
+      <% if can? :work_g_all, :all or can? :work_g_a, :all or can? :work_g_b, :all or can? :work_g_a1, :all or can? :work_g_a2, :all or can? :work_g_b1, :all or can? :work_g_b2, :all or can? :work_g_c, :all or can? :work_g_d, :all %>
           <tr <% if PItem.where("procurement_bom_id = #{bom.id} AND quantity <> 0 AND (color <> 'b' OR color IS NULL)").blank? %>class="bg-info"<% else %>class="bg-danger"<% end %> >
       <% else %>
           <tr >
@@ -136,7 +136,7 @@
         <% end %>
         </td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_eng %></td>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN 7 THEN '马' WHEN 77 THEN '罗' WHEN 75 THEN '黄' WHEN 999 THEN '供' WHEN 9999 THEN 'O' ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN '7' THEN 'A' WHEN '77' THEN 'C' WHEN '75' THEN 'B' WHEN '999' THEN '供' WHEN '9999' THEN 'O' WHEN 'a1' THEN 'A1' WHEN 'b1' THEN 'B1'  WHEN 'c1' THEN 'C1'  WHEN 'd1' THEN 'D1' WHEN 'a2' THEN 'A2' WHEN 'b2' THEN 'B2'  WHEN 'c2' THEN 'C2'  WHEN 'd2' THEN 'D2'  ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
 
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
         <td><div class="btn-group"><%= link_to "ECN",  p_viewbom_path(bom_id: bom.id,bak: "bak",ecn: "ecn"),class:"btn btn-warning btn-xs" %></div></td>

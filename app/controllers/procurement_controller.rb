@@ -3780,7 +3780,7 @@ before_filter :authenticate_user!
             @bom_item = PItem.where(procurement_bom_id: params[:bom_id],add_state: "")
         elsif can? :work_g_a, :all or can? :work_g_b1, :all or can? :work_g_b, :all or can? :work_g_c, :all or can? :work_g_d, :all or can? :work_g_a1, :all or can? :work_g_a2, :all or can? :work_g_b2, :all or can? :work_g_c1, :all or can? :work_g_c2, :all or can? :work_g_d1, :all or can? :work_g_d2, :all
             @user_do = "77"
-            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],add_state: "")
+            @bom_item = PItem.where(procurement_bom_id: params[:bom_id],add_state: "").order('user_do')
             #@bom_item = PItem.where("procurement_bom_id = #{params[:bom_id]} AND (user_do = '77' OR user_do = '9999')")
         elsif can? :work_g_b, :all
             @user_do = "75"

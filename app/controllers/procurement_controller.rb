@@ -2341,11 +2341,11 @@ before_filter :authenticate_user!
         part_ctl = ""
         add_orderby = "procurement_boms.id"
         if params[:sort_date] == "mpn"
-            add_orderby = "p_items.mpn DESC"
+            add_orderby = "'procurement_boms.jia_ji DESC','p_items.mpn DESC'"
         elsif params[:sort_date] == "des"
-            add_orderby = "p_items.description DESC"
+            add_orderby = "procurement_boms.jia_ji DESC','p_items.description DESC'"
         else
-            add_orderby = "p_items.user_do"
+            add_orderby = "'procurement_boms.jia_ji DESC','p_items.user_do'"
         end
         if params[:complete]
             part_ctl = " AND p_items.color = 'b'" 

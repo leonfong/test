@@ -3910,7 +3910,7 @@ before_filter :authenticate_user!
                 elsif params[:sent_to_sell]
                     @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `remark_to_sell` = 'mark' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
                 else
-                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL  AND `remark_to_sell` = '' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
+                    @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` IS NULL  AND `remark_to_sell` IS NULL ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 15)
                 end
             end
         end

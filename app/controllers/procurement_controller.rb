@@ -9,6 +9,24 @@ class ProcurementController < ApplicationController
 skip_before_action :verify_authenticity_token
 before_filter :authenticate_user!
 
+    def fan_jia_ji
+        p_bom = ProcurementBom.find_by_id(params[:bom_id])
+        if can? :work_g_all, :all
+            p_bom.jia_ji = ""
+            p_bom.save
+        end
+        redirect_to :back
+    end
+
+    def jia_ji
+        p_bom = ProcurementBom.find_by_id(params[:bom_id])
+        if can? :work_g_all, :all
+            p_bom.jia_ji = "do"
+            p_bom.save
+        end
+        redirect_to :back
+    end
+
     def moko_bom_up_done
         if not can? :work_d, :all or can? :work_admin, :all
             render plain: "You don't have permission to view this page !" and return
@@ -2473,10 +2491,12 @@ before_filter :authenticate_user!
                 #@part = PItem.find_by_sql("﻿SELECT p_items.* FROM p_items INNER JOIN p_dns ON p_items.id = p_dns.p_item_id WHERE p_items.user_do = '999' AND p_dns.color = 'y' GROUP BY p_items.id").paginate(:page => params[:page], :per_page => 10)
             elsif params[:undone]
                 @part = PItem.where(user_do: '999',supplier_tag: nil).order("mpn","created_at").paginate(:page => params[:page], :per_page => 10)
+                @part = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where(user_do: '999',supplier_tag: nil).order("jia_ji DESC","mpn","created_at").paginate(:page => params[:page], :per_page => 10)
             elsif params[:key_mpn]
                 @part = PItem.where("(mpn LIKE '%#{params[:key_mpn]}%' OR description LIKE '%#{params[:key_mpn]}%') AND user_do = '999' AND supplier_tag = 'done'").order("mpn","created_at").paginate(:page => params[:page], :per_page => 10)
             else
-                @part = PItem.where(user_do: '999').order("mpn","created_at").paginate(:page => params[:page], :per_page => 10)
+                #@part = PItem.where(user_do: '999').order("mpn","created_at").paginate(:page => params[:page], :per_page => 10)
+                @part = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '999'").order("jia_ji DESC","mpn","created_at").paginate(:page => params[:page], :per_page => 10)
             end
             Rails.logger.info("-------------------------@part")
             #Rails.logger.info(@part.inspect)   

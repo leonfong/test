@@ -60,7 +60,7 @@
                         </thead>
                         <tbody>
 <% @part.each do |part| %>
-                            <tr >
+                            <tr <% if ProcurementBom.find(part.procurement_bom_id).jia_ji == "do" %>class="bg-danger"<% end %>>
                                 <td> 
                                     <%= part.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
                                 </td>

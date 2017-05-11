@@ -91,7 +91,10 @@
       <th width="100">采购工程师</th>
 
       <th >业务备注</th>
+      <th width="80">加急</th>
+<!--
       <th width="50">ECN</th>
+-->
       <th width="50">删除</th>
       <th width="50">编码</th>
       <th width="60">已发送</th>
@@ -139,7 +142,14 @@
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN '7' THEN 'A' WHEN '77' THEN 'C' WHEN '75' THEN 'B' WHEN '999' THEN '供' WHEN '9999' THEN 'O' WHEN 'a1' THEN 'A1' WHEN 'b1' THEN 'B1'  WHEN 'c1' THEN 'C1'  WHEN 'd1' THEN 'D1' WHEN 'a2' THEN 'A2' WHEN 'b2' THEN 'B2'  WHEN 'c2' THEN 'C2'  WHEN 'd2' THEN 'D2'  ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
 
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
+<!--
         <td><div class="btn-group"><%= link_to "ECN",  p_viewbom_path(bom_id: bom.id,bak: "bak",ecn: "ecn"),class:"btn btn-warning btn-xs" %></div></td>
+-->
+        <% if bom.jia_ji == "do" %>
+        <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/fan_jia_ji?bom_id=<%= bom.id.to_s %>" data-confirm="确定要取消加急报价?">取消加急</a></div></td>
+        <% else %>
+        <td><div class="btn-group"><a class="btn btn-warning btn-xs" data-method='get'  href="/jia_ji?bom_id=<%= bom.id.to_s %>" data-confirm="确定要加急报价?">加急</a></div></td>
+        <% end %>
         <% if can? :work_g_all, :all %>
             <% if bom.check == "do" %>
                 <td><div class="btn-group"><a class="btn btn-default">删除</a></div></td>

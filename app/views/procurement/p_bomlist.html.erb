@@ -139,7 +139,7 @@
         <% end %>
         </td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_eng %></td>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN '7' THEN 'A' WHEN '77' THEN 'C' WHEN '75' THEN 'B' WHEN '999' THEN '供' WHEN '9999' THEN 'O' WHEN 'a1' THEN 'A1' WHEN 'b1' THEN 'B1'  WHEN 'c1' THEN 'C1'  WHEN 'd1' THEN 'D1' WHEN 'a2' THEN 'A2' WHEN 'b2' THEN 'B2'  WHEN 'c2' THEN 'C2'  WHEN 'd2' THEN 'D2'  ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= PItem.find_by_sql("SELECT CASE `p_items`.user_do WHEN '7' THEN 'A' WHEN '77' THEN 'C' WHEN '75' THEN 'B' WHEN '999' THEN '供' WHEN '9999' THEN 'O' WHEN 'a1' THEN 'A1' WHEN 'b1' THEN 'B1'  WHEN 'c1' THEN 'C1'  WHEN 'd1' THEN 'D1' WHEN 'a2' THEN 'A2' WHEN 'b2' THEN 'B2'  WHEN 'c2' THEN 'C2'  WHEN 'd2' THEN 'D2'  WHEN 'd' THEN 'D'  ELSE '' END AS go FROM `p_items` WHERE (procurement_bom_id = #{bom.id} AND (color <> 'b' OR color IS NULL) AND supplier_tag IS NULL AND quantity != 0) GROUP BY p_items.user_do").map{|item| item.go }.join(" ") %></td>
 
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
 <!--

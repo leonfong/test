@@ -2345,7 +2345,7 @@ before_filter :authenticate_user!
         elsif params[:sort_date] == "des"
             add_orderby = "procurement_boms.jia_ji DESC','p_items.description DESC'"
         else
-            add_orderby = "'procurement_boms.jia_ji DESC','p_items.user_do'"
+            add_orderby = "'procurement_boms.jia_ji DESC','p_items.user_do DESC'"
         end
         if params[:complete]
             part_ctl = " AND p_items.color = 'b'" 
@@ -2532,6 +2532,7 @@ before_filter :authenticate_user!
                 all_title << "描述"
                 all_title << "数量"
                 all_title << "报价"
+                all_title << "加急"
                 sheet1.row(0).concat all_title
                 #sheet1.column(1).width = 50
                 set_color = 0  
@@ -2540,6 +2541,8 @@ before_filter :authenticate_user!
                     if all_title[set_color] =~ /数量/i 
                         sheet1.column(set_color).width = 8
                     elsif all_title[set_color] =~ /报价/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /加急/i
                         sheet1.column(set_color).width = 8
                     elsif all_title[set_color] =~ /描述/i
                         sheet1.column(set_color).width = 35  
@@ -2574,6 +2577,11 @@ before_filter :authenticate_user!
                     row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
                     if not PDn.find_by(p_item_id: item.id,color: "y").blank?
                         row.push(PDn.where(p_item_id: item.id,color: "y",state: "").last!.cost)
+                    else
+                        row.push("")
+                    end
+                    if ProcurementBom.find(item.procurement_bom_id).jia_ji == "do"
+                        row.push("加急")
                     else
                         row.push("")
                     end

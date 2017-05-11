@@ -2343,7 +2343,7 @@ before_filter :authenticate_user!
         if params[:sort_date] == "mpn"
             add_orderby = "'procurement_boms.jia_ji DESC','p_items.mpn DESC'"
         elsif params[:sort_date] == "des"
-            add_orderby = "procurement_boms.jia_ji DESC','p_items.description DESC'"
+            add_orderby = "'procurement_boms.jia_ji DESC','p_items.description DESC'"
         else
             add_orderby = "'procurement_boms.jia_ji DESC','p_items.user_do DESC'"
         end

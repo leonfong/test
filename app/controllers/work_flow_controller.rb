@@ -9300,7 +9300,7 @@ before_filter :authenticate_user!
         end
         if can? :work_c, :all or can? :work_a, :all
             render "production_feedback.html.erb"
-        elsif can? :work_d, :all
+        elsif can? :work_d, :all or can? :work_d_bom, :all or can? :work_d_pcb, :all or can? :work_d_ziliao, :all or can? :work_d_test, :all
             render "engineering_feedback.html.erb"
         elsif can? :work_e, :all
             if current_user.s_name.blank?

@@ -75,6 +75,10 @@ en:
       long: ! '%B %d, %Y'
   production: "生产部"
   engineering: "工程部"
+  engineering_test: 工程部-测试组
+  engineering_bom: 工程部-BOM组
+  engineering_pcb: 工程部-PCB组
+  engineering_ziliao: 工程部-资料组
   merchandiser: "跟单部"
   procurement: "采购部"
   sell: "业务部"

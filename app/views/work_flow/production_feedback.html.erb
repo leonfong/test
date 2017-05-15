@@ -70,12 +70,6 @@
 
                        <div class="checkbox-inline">
                            <label>
-                               <input type="checkbox" value="engineering" name="send_up[]" id="send_up1" onclick="change_2()">    
-                               <strong><%= '工程部' %></strong>
-                           </label>
-                       </div>
-                       <div class="checkbox-inline">
-                           <label>
                                <input type="checkbox" value="procurement" name="send_up[]" id="send_up2" onclick="change_2()"> 
                                <strong><%= '采购部' %></strong>
                            </label>
@@ -86,11 +80,39 @@
                                <strong><%= '业务部' %></strong>
                            </label>
                        </div>
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="engineering_bom" name="send_up[]" id="send_up5" onclick="change_2()"> 
+                               <strong><%= '工程部-BOM组' %></strong>
+                           </label>
+                       </div>
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="engineering_pcb" name="send_up[]" id="send_up6" onclick="change_2()"> 
+                               <strong><%= '工程部-PCB组' %></strong>
+                           </label>
+                       </div>
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="engineering_ziliao" name="send_up[]" id="send_up7" onclick="change_2()"> 
+                               <strong><%= '工程部-资料组' %></strong>
+                           </label>
+                       </div>
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="engineering_test" name="send_up[]" id="send_up8" onclick="change_2()"> 
+                               <strong><%= '工程部-测试组' %></strong>
+                           </label>
+                       </div>
        <script>
         function change_1(){
                document.getElementById('send_up1').checked = false; 
                document.getElementById('send_up2').checked = false; 
                document.getElementById('send_up4').checked = false; 
+               document.getElementById('send_up5').checked = false;
+               document.getElementById('send_up6').checked = false;
+               document.getElementById('send_up7').checked = false;
+               document.getElementById('send_up8').checked = false;
                             
            }  
          function change_2(){

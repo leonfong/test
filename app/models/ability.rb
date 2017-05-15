@@ -106,6 +106,7 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_d_pcb, :all
+      can :work_d, :all
       #can :work_baojia, :all
       can :old_bom, :all
     elsif user.has_role?(:work_four_ziliao)
@@ -113,11 +114,13 @@ class Ability
       can :work_up, :all
       can :work_d_ziliao, :all
       #can :work_baojia, :all
+      can :work_d, :all
       can :old_bom, :all
     elsif user.has_role?(:work_four_test)
       #can :manage, :all
       can :work_up, :all
       can :work_d_test, :all
+      can :work_d, :all
       #can :work_baojia, :all
       can :old_bom, :all
     elsif user.has_role?(:work_four_a)

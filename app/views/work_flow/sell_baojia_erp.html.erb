@@ -78,6 +78,7 @@
 
 <div class="row " style="padding-top: 7px;">
     <div class="col-md-12 " style="padding: 5px;" >
+<% if not @quate.blank? %>
        <%= will_paginate(@quate) %> 
        <div class="panel panel-info " >
                     
@@ -98,7 +99,7 @@
                             </tr>
                         </thead>
                         <tbody>
-<% if not @quate.blank?%>
+
 <% @quate.each do |q_order| %>
                             <tr <% if PcbCustomer.find_by_id(q_order.pcb_customer_id).c_time == 1 %>class="success"<% end %> data-toggle="collapse" href="#order_son_<%= q_order.id.to_s %>" aria-expanded="false" aria-controls="order_son_<%= q_order.id %>">
                                 <td ><%= q_order.created_at.localtime.strftime('%y-%m-%d') %></td>
@@ -150,12 +151,13 @@
                                 </td>
                             </tr>
 
-<% end %> 
+
 <% end %>          
                         </tbody>
                     </table>
 
         </div>
+<% end %> 
     </div>
 
 

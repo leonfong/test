@@ -275,6 +275,7 @@ class Ability
       can :work_e, :all
     elsif user.has_role?(:work_eleven)
       #can :manage, :all
+      can :work_g_work_flow, :all
       can :work_up, :all
       can :work_finance, :all
     elsif user.has_role?(:work_pcb_review)

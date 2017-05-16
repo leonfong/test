@@ -255,6 +255,7 @@ Rails.application.routes.draw do
   match '/new_ping_zheng', to: 'work_flow#new_ping_zheng', via: 'post'
   match '/ping_zheng_del', to: 'work_flow#ping_zheng_del', via: 'get'
   match '/work_flow_merchandiser', to: 'work_flow#work_flow_merchandiser', via: 'get'
+  match '/pmc_manual_list', to: 'work_flow#pmc_manual_list', via: 'get'
 
 
 

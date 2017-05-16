@@ -47,7 +47,7 @@
         <li><a <% if selected == "fu_kuan_dan_finance" %>style="background-color: #d9edf7;"<% end %>href="/fu_kuan_dan_list?state=none"><i class="icon-pencil"></i>付款单列表</a></li>
         <li><a <% if selected == "fukuan_zheng_finance" %>style="background-color: #d9edf7;"<% end %>href="/fu_kuan_ping_zheng"><i class="icon-pencil"></i>付款凭证</a></li>
         <li><a <% if selected == "cai_gou_fa_finance" %>style="background-color: #d9edf7;"<% end %>href="/cai_gou_fa_piao_list"><i class="icon-pencil"></i>采购发票列表</a></li>
-        <li><a <% if selected == "cai_gou_fa_finance" %>style="background-color: #d9edf7;"<% end %>href="/zong_zhang_list"><i class="icon-pencil"></i>总帐</a></li>
+        <li><a <% if selected == "zong_zhang_finance" %>style="background-color: #d9edf7;"<% end %>href="/zong_zhang_list"><i class="icon-pencil"></i>总帐</a></li>
     </ul>
 
     <a style="background-color: #ddd;" href="#pmcMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> PMC</a>
@@ -58,6 +58,7 @@
 -->
         <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增采购申请</a></li>
         <li><a <% if selected == "pmc_h" %>style="background-color: #d9edf7;"<% end %>href="/pmc_h"><i class="icon-list-alt"></i>PMC历史记录</a></li>
+        <li><a <% if selected == "pmc_add_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_add_list"><i class="icon-list-alt"></i>手动PMC</a></li>
         <li><a <% if selected == "pmc_add_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_add_list"><i class="icon-list-alt"></i>新增备库存申请</a></li>
         <li><a <% if selected == "pmc_warehouse_check" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_list"><i class="icon-list-alt"></i>PMC库存盘点审核</a></li>
 <% end %>

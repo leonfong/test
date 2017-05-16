@@ -5,6 +5,10 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pmc_manual_list
+        @pmc_manual_list = PiPmcAddInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
+    end
+
     def ping_zheng_del
         if can? :work_finance, :all
             if not params[:id].blank?
@@ -2486,6 +2490,7 @@ before_filter :authenticate_user!
         if params[:end_date] != "" and  params[:end_date] != nil
                 where_date += " AND pcb_orders.created_at < '#{params[:end_date]}' AND"
         end
+        Rails.logger.info(current_user.s_name)
         if not current_user.s_name.blank?
             if current_user.s_name.split(",").size == 1
                 Rails.logger.info("sell-------------------------1")
@@ -2499,6 +2504,8 @@ before_filter :authenticate_user!
                     @quate = PcbOrder.find_by_sql("SELECT pcb_orders.* FROM pcb_orders JOIN users ON pcb_orders.order_sell = users.email WHERE #{where_date + where_5star}  pcb_orders.state <> 'new' AND users.team = '#{current_user.team}'#{where_sell}#{where_order_no}  AND pcb_orders.del_flag = 'active' ORDER BY pcb_orders.created_at DESC").paginate(:page => params[:page], :per_page => 20)
                 end
             end
+        else
+            Rails.logger.info("sell-------------------------999")
         end
     end
 

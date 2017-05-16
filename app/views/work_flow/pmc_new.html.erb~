@@ -84,8 +84,11 @@
                     </span>
                 </div>
                 <% end %>
-                <div class="col-md-2 col-sm-2 form-inline" >
+                <div class="col-md-1 col-sm-1 form-inline" >
                     <button class="btn btn-danger btn-sm" id="btn_clean">一键清空</button>
+                </div>
+                <div class="col-md-1 col-sm-1 form-inline" >
+                    <button class="btn btn-primary btn-sm" data-backdrop="static" data-toggle="modal" data-target="#addpmc">新建PMC申请</button>
                 </div>
             </div>
 
@@ -139,15 +142,22 @@
                                 <td style="word-break : break-all;"><%= item.part_code %></td>
                                 <td><%= item.qty %></td>
                                 <td><%= item.buy_qty %></td>
-                                <td>
+
                                 <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>
-                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %>
-                                <% else %>
-                                <% end %>
-                                </td>
-                                <td><%= item.remark %></td>
                                 <td>
-                                    <div data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>" ><%= item.buy_user %></div>
+                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %>
+                                </td>
+                                <td>
+                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).future_qty %>
+                                </td>
+                                <% else %>
+                                <td></td>
+                                <td></td>
+                                <% end %>
+
+                                <td><%= item.remark %></td>
+                                <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>">
+                                    <div ><%= item.buy_user %></div>
                                 </td>
                                 <td>
                                 <% if item.buy_user == "CHK" %>
@@ -207,6 +217,93 @@
 </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="addpmc" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择PI</strong></h4>
+            </div>
+      
+            <div class="modal-body">        
+                <div class="form-inline" >
+                <%= form_tag('/find_pmc_pi', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group sr-only">         
+                        <label for="c_order_no" class="control-label">单号:</label>
+                        <%= text_field_tag :pi_buy_no, params[:pi_buy_no], class:"sr-only", value:params[:pi_buy_no] %>
+                    </div>
+                    <div class="form-group ">
+                        <lable for="dn_code" , class="control-label"><strong></strong></lable>
+                        <div class="input-group input-group-sm">  
+                            <% if @key_order %>   
+                                <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                            <% else %> 
+                                <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"PI"%>
+                            <% end %>                     
+                                      
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                            </div>
+                        </div>
+                        
+                        <a id="tijiao" type="button" class="btn btn-info btn-sm" href="#">提交</a>
+
+                    </div>
+                    
+                <% end %>             
+                </div> 
+                <%= form_tag('/add_pi_buy_item', method:"get") do %>
+                
+                <div class="form-group" id="table_buy" style="padding-top: 10px;">
+
+                    <table class="table table-hover">
+                    <thead>
+                    <tr style="background-color: #eeeeee">
+                    <th width="20"></th>
+                    <th >PI</th>
+                    <th ></th>
+                    <th >备注</th>
+                    </tr>
+                    </thead>
+                    <tbody><small>
+                    
+                                <tr>
+
+                                </tr>
+
+                    </small></tbody>
+                    </table>
+
+
+
+
+                </div>
+                <%= submit_tag "tijiao", class:"btn btn-primary btn-sm sr-only",id:"tijiao_true" %>
+                <% end %>
+            </div>
+        </div></small>
+    </div>
+</div>
 
 
 

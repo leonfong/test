@@ -5,8 +5,91 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def find_pmc_pi
+        if not params[:key_order].blank?
+            @pmc_new = PiPmcItem.where(erp_no_son: params[:key_order])
+        end
+    end
+
+    def pmc_new
+        pmc_where = "state = 'new'"
+        if not params[:pass_date].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "pass_at LIKE '#{params[:pass_date].to_s.strip}%'"
+        end
+        if not params[:order_no].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "erp_no_son LIKE '%#{params[:order_no].to_s.strip}%'"
+        end
+        if not params[:moko_part].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "moko_part LIKE '%#{params[:moko_part].to_s.strip}%'"
+        end
+        if not params[:moko_des].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "moko_des LIKE '%#{params[:moko_des].to_s.strip}%'"
+        end
+        if not params[:part_code].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "part_code LIKE '%#{params[:part_code].to_s.strip}%'"
+        end
+        if not params[:buy_user].blank?
+            if not pmc_where.blank?
+            pmc_where += " AND "
+            end
+            pmc_where += "buy_user LIKE '%#{params[:buy_user].to_s.strip}%'"
+        end
+        sort_data = "moko_part"
+        if not params[:sort_data].blank?
+            sort_data = params[:sort_data]
+        end
+        if params[:chk].blank?
+            pmc_where += " AND pmc_type = ''"
+            @pmc_new = PiPmcItem.where(pmc_where).order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
+        else
+            pmc_where += " AND pmc_type = 'CHK'"
+            @pmc_new = PiPmcItem.where(pmc_where).order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
+            render "pmc_new_chk.html.erb" and return
+        end
+    end
+
     def pmc_manual_list
         @pmc_manual_list = PiPmcAddInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def new_pmc_manual_order
+        if params[:pi_pmc_add_info_no] == "" or params[:pi_pmc_add_info_no] == nil
+            if PiPmcAddInfo.find_by_sql('SELECT no FROM pi_pmc_add_infos WHERE to_days(pi_pmc_add_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = PiPmcAddInfo.find_by_sql('SELECT no FROM pi_pmc_add_infos WHERE to_days(pi_pmc_add_infos.created_at) = to_days(NOW())').last.no.split("PMC")[-1].to_i + 1
+            end
+            @pi_pmc_add_info_no = "MO"+ Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PMC"+ pi_n.to_s
+            pi_pmc_add_info = PiPmcAddInfo.new()
+            pi_pmc_add_info.no = @pi_pmc_add_info_no
+            pi_pmc_add_info.user = current_user.email
+            pi_pmc_add_info.state = "new"
+            pi_pmc_add_info.save
+            pi_pmc_add_info_id = pi_pmc_add_info.id
+        else
+            pi_pmc_add_info_id = params[:pi_pmc_add_info_id]
+        end
+        redirect_to edit_pmc_manual_order_path(pi_pmc_add_info_id: pi_pmc_add_info_id) and return 
+    end
+
+    def edit_pmc_manual_order
+        @get_info = PiPmcAddInfo.find_by_id(params[:pi_pmc_add_info_id])
+        @get_item = PiPmcAddItem.where(pi_pmc_add_info_id: params[:pi_pmc_add_info_id])
     end
 
     def ping_zheng_del
@@ -3789,58 +3872,6 @@ before_filter :authenticate_user!
             sort_data = params[:sort_data]
         end
         @pi_buy = PiPmcItem.where("#{pmc_where}").order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
-    end
-
-    def pmc_new
-        pmc_where = "state = 'new'"
-        if not params[:pass_date].blank?
-            if not pmc_where.blank?
-            pmc_where += " AND "
-            end
-            pmc_where += "pass_at LIKE '#{params[:pass_date].to_s.strip}%'"
-        end
-        if not params[:order_no].blank?
-            if not pmc_where.blank?
-            pmc_where += " AND "
-            end
-            pmc_where += "erp_no_son LIKE '%#{params[:order_no].to_s.strip}%'"
-        end
-        if not params[:moko_part].blank?
-            if not pmc_where.blank?
-            pmc_where += " AND "
-            end
-            pmc_where += "moko_part LIKE '%#{params[:moko_part].to_s.strip}%'"
-        end
-        if not params[:moko_des].blank?
-            if not pmc_where.blank?
-            pmc_where += " AND "
-            end
-            pmc_where += "moko_des LIKE '%#{params[:moko_des].to_s.strip}%'"
-        end
-        if not params[:part_code].blank?
-            if not pmc_where.blank?
-            pmc_where += " AND "
-            end
-            pmc_where += "part_code LIKE '%#{params[:part_code].to_s.strip}%'"
-        end
-        if not params[:buy_user].blank?
-            if not pmc_where.blank?
-            pmc_where += " AND "
-            end
-            pmc_where += "buy_user LIKE '%#{params[:buy_user].to_s.strip}%'"
-        end
-        sort_data = "moko_part"
-        if not params[:sort_data].blank?
-            sort_data = params[:sort_data]
-        end
-        if params[:chk].blank?
-            pmc_where += " AND pmc_type = ''"
-            @pmc_new = PiPmcItem.where(pmc_where).order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
-        else
-            pmc_where += " AND pmc_type = 'CHK'"
-            @pmc_new = PiPmcItem.where(pmc_where).order("#{sort_data} DESC").paginate(:page => params[:page], :per_page => 30)
-            render "pmc_new_chk.html.erb" and return
-        end
     end
 
     def new_moko_part

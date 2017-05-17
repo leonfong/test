@@ -5,9 +5,51 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def manual_pmc_item
+        if not params[:manual_pmc_pi_id].blank?
+            pmc_data = PiPmcItem.find_by_id(params[:manual_pmc_pi_id])
+            pmc_data_new = PiPmcItem.new
+            pmc_data_new.pi_info_id = pmc_data.pi_info_id
+            pmc_data_new.state = "new"
+            pmc_data_new.erp_no = pmc_data.erp_no
+            pmc_data_new.erp_no_son = pmc_data.erp_no_son
+            pmc_data_new.moko_part =params[:manual_pmc_moko_part]
+            pmc_data_new.moko_des = params[:manual_pmc_moko_des]
+            pmc_data_new.part_code = params[:manual_pmc_part_code]
+            pmc_data_new.qty = params[:manual_pmc_qty]
+            pmc_data_new.buy_qty = params[:manual_pmc_buy_qty]
+            pmc_data_new.pmc_qty = params[:manual_pmc_buy_qty]
+            pmc_data_new.qty_in = params[:manual_pmc_buy_qty]
+            pmc_data_new.buy_user = params[:manual_pmc_buy_user]
+            pmc_data_new.remark = params[:manual_pmc_remark]
+            pmc_data_new.save
+        end
+        redirect_to :back
+    end
+
     def find_pmc_pi
         if not params[:key_order].blank?
-            @pmc_new = PiPmcItem.where(erp_no_son: params[:key_order])
+            pmc_new = PiPmcItem.find_by_sql("SELECT * FROM pi_pmc_items  WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' GROUP BY pi_pmc_items.erp_no_son")
+            #@pmc_new = PiPmcItem.where(erp_no_son: params[:key_order])
+            if not pmc_new.blank?
+                @tr = ''
+                pmc_new.each do |item|
+                    @tr += '<tr>'
+                    @tr += '<td><a data-method="get" data-remote="true" href="/set_pmc_pi?id=' + item.id.to_s + '">' + item.erp_no_son + '</a></td>'
+                    @tr += '<td>' + item.erp_no_son + '</td>'
+                    @tr += '</tr>'
+                end
+                render "find_pmc_pi.js.erb" and return
+            end
+        end
+    end
+
+    def set_pmc_pi
+        if not params[:id].blank?
+            @pmc_data = PiPmcItem.find_by_id(params[:id])
+            if not @pmc_data.blank?
+                render "set_pmc_pi.js.erb" and return
+            end
         end
     end
 
@@ -9977,8 +10019,17 @@ before_filter :authenticate_user!
                                 receive_new = topic_up.feedback_receive.split(",")|params[:send_up]  
                                 if can? :work_c, :all
                                     receive_new.delete("production")    
-                                elsif can? :work_d, :all 
-                                    receive_new.delete("engineering")
+                                #elsif can? :work_d, :all 
+                                    #receive_new.delete("engineering")
+                                elsif can? :work_d_ziliao, :all 
+                                    receive_new.delete("engineering_ziliao")
+                                elsif can? :work_d_bom, :all 
+                                    receive_new.delete("engineering_bom")
+                                elsif can? :work_d_pcb, :all 
+                                    receive_new.delete("engineering_pcb")
+                                elsif can? :work_d_test, :all 
+                                    receive_new.delete("engineering_test")
+
                                 #elsif can? :work_f, :all 
                                     #receive_new.delete("merchandiser")
                                 elsif can? :work_g, :all 

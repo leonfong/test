@@ -1,0 +1,11 @@
+
+
+
+$("#manual_pmc_pi_id").html('<%= raw @wh_wait %>');
+
+
+$('#addpmc').modal('toggle')
+$('#manual_pmc').modal({
+backdrop: "static",
+toggle: true
+})

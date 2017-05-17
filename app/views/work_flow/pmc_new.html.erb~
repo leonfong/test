@@ -238,7 +238,7 @@
 
 
 <div class="modal fade" id="addpmc" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
-    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
+    <div class="modal-dialog " role="document"><small>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -266,44 +266,141 @@
                             </div>
                         </div>
                         
-                        <a id="tijiao" type="button" class="btn btn-info btn-sm" href="#">提交</a>
 
                     </div>
                     
                 <% end %>             
                 </div> 
-                <%= form_tag('/add_pi_buy_item', method:"get") do %>
                 
                 <div class="form-group" id="table_buy" style="padding-top: 10px;">
 
                     <table class="table table-hover">
                     <thead>
                     <tr style="background-color: #eeeeee">
-                    <th width="20"></th>
                     <th >PI</th>
-                    <th ></th>
                     <th >备注</th>
                     </tr>
                     </thead>
-                    <tbody><small>
-                    
-                                <tr>
+                    <small>
+                    <tbody id="set_pi">
 
-                                </tr>
 
-                    </small></tbody>
+                    </tbody></small>
                     </table>
 
 
 
 
                 </div>
-                <%= submit_tag "tijiao", class:"btn btn-primary btn-sm sr-only",id:"tijiao_true" %>
-                <% end %>
             </div>
         </div></small>
     </div>
 </div>
+
+
+
+
+<div class="modal fade" id="manual_pmc" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="find_cLabel"><strong>新建PMC申请</strong></h4>
+            </div>
+      
+      <%= form_tag({action: :manual_pmc_item},method:"post",multipart:"true") do %>
+      <div class="modal-body" >
+          <div class="panel panel-default">
+              <div class="panel-body" style="padding: 15px 15px 1px;">
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm">
+                                  <label class="col-md-4 control-label" for="manual_pmc_pi_show">PI:</label>
+                                  <div class="col-md-8">
+                                      <input class="sr-only" name="manual_pmc_pi_id" id="manual_pmc_pi_id" type="text" value="">
+                                      <p class="form-control-static" id="manual_pmc_pi_show"></p>
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="manual_pmc_moko_part" class="col-md-4 control-label">MOKO ID:</label>
+                                  <div class="col-md-8" >
+                                      <input class="form-control" name="manual_pmc_moko_part" id="manual_pmc_moko_part" type="text">
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="manual_pmc_moko_des" class="col-md-4 control-label">物料名称:</label>
+                                  <div class="col-md-8" >
+                                      <input class="form-control" name="manual_pmc_moko_des" id="manual_pmc_moko_des" type="text" >
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="manual_pmc_part_code" class="col-md-4 control-label">位号:</label>
+                                  <div class="col-md-8" >
+                                      <input class="form-control" name="manual_pmc_part_code" id="manual_pmc_part_code" type="text" >
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-horizontal">
+                              <div class="form-group form-group-sm ">
+                                  <label for="manual_pmc_qty" class="col-md-3 control-label">申请总量:</label>   
+                                  <div class="col-md-9">
+                                      <input id="manual_pmc_qty"  name="manual_pmc_qty" type="text" class="form-control" >     
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="manual_pmc_buy_qty" class="col-md-3 control-label">申请数量:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" name="manual_pmc_buy_qty" id="manual_pmc_buy_qty" type="text" >
+                                  </div>
+                              </div>
+                              
+                              <div class="form-group form-group-sm">
+                                  <label for="manual_pmc_buy_user" class="col-md-3 control-label">采购工程师:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" type="text" name="manual_pmc_buy_user" id="manual_pmc_buy_user"> 
+                                  </div>
+                              </div>
+                              <div class="form-group form-group-sm">
+                                  <label for="manual_pmc_remark" class="col-md-3 control-label">备注:</label>
+                                  <div class="col-md-9" >
+                                      <input class="form-control" name="manual_pmc_remark" id="manual_pmc_remark" type="text" >
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()" >提交</button>
+      </div>
+      <% end %>
+
+        </div></small>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

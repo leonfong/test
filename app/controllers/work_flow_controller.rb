@@ -5,6 +5,19 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_pmc_remark
+        if can? :work_d, :all or can? :work_admin, :all 
+            if not params[:item_id].blank?
+                get_item_data = PiPmcItem.find_by_id(params[:item_id])
+                if not get_item_data.blank?
+                    get_item_data.remark = params[:remark]
+                    get_item_data.save
+                end
+            end
+        end
+        redirect_to :back
+    end
+
     def pmc_close
         get_pmc_data = PiPmcItem.find_by_id(params[:id])
         if not get_pmc_data.blank?
@@ -76,7 +89,7 @@ before_filter :authenticate_user!
     end
 
     def pmc_new
-        pmc_where = "state = 'new'"
+        pmc_where = "state like '%new%'"
         if not params[:pass_date].blank?
             if not pmc_where.blank?
             pmc_where += " AND "

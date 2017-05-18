@@ -105,6 +105,10 @@
                                 <th width="130">
                                     <%= link_to "Order No.",  {action: "pmc_new", sort_data: "erp_no_son",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
                                 </th>
+                                <th width="90">
+                                    <%= link_to "采购工程师",  {action: "pmc_new", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
+                                </th>
+                                <th width="80">状态</th>
                                 <th width="150">
                                     <%= link_to "MOKO ID",  {action: "pmc_new", sort_data: "moko_part",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
                                 </th>
@@ -119,9 +123,7 @@
                                 <th width="80">库存</th>
                                 <th width="80">虚拟库存</th>
                                 <th >备注</th>
-                                <th width="90">
-                                    <%= link_to "采购工程师",  {action: "pmc_new", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
-                                </th>
+
                                 <th width="60">审核</th>
                                 <th width="60">关闭</th>
                             </tr>
@@ -132,12 +134,17 @@
                             <% @pmc_new.each do |item|%>   
                             <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% elsif item.check == "GREEN" %>class="bg-success"<% end %>>
                                 <td style="padding: 5px 5px 5px 10px;margin: 0px;"><input class="chk_all" type="checkbox" name="checkpass_item[]" value="<%= item.id.to_s %>"></td>
+                                
                                 <td>
                                     <%= item.erp_no_son %>
                                     <% if item.buy_user == "MOKO" %>
                                     <a type="button" class="btn btn-danger btn-xs" data-confirm="确定要取消内购?" href="/del_pmc_wh_check_pass?id=<%= item.id.to_s %>">取消内购</a>
                                     <% end %>
                                 </td>
+                                <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>">
+                                    <div ><%= item.buy_user %></div>
+                                </td>
+                                <td><%= item.state %></td>
                                 <td><%= item.moko_part %></td>
                                 <td><%= item.moko_des %></td>
                                 <td style="word-break : break-all;"><%= item.part_code %></td>
@@ -156,10 +163,10 @@
                                 <td></td>
                                 <% end %>
 
-                                <td><%= item.remark %></td>
-                                <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>">
-                                    <div ><%= item.buy_user %></div>
+                                <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_remark" data-item_id="<%= item.id %>" data-remark="<%= item.remark %>" data-moko_part="<%= item.moko_part %>" >
+                                    <%= item.remark %>
                                 </td>
+                                
                                 <td>
                                 <% if item.buy_user == "CHK" %>
                                 <% else %>
@@ -219,7 +226,33 @@
 </div>
 
 
-
+<div class="modal fade" id="edit_remark" tabindex="-1" role="dialog" aria-labelledby="edit_buy_userLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_remarkLabel">备注</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_pmc_remark},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="item_id_ramark" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="item_id_ramark" name="item_id">
+          </div>
+          <div class="form-group">
+            <label for="buy_user" class="control-label">备注:</label>
+            <textarea class="form-control" name="remark" id="remark" rows="3" ></textarea>
+          </div>         
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
 
 
 
@@ -421,6 +454,17 @@ $('#edit_buy_user').on('show.bs.modal', function (event) {
   modal.find($("#edit_buy_userLabel")).html('重新分配采购工程师: ' + moko_part);
   modal.find($("#item_id")).val(item_id);
   modal.find($("#buy_user")).val(buy_user);
+})
+
+$('#edit_remark').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var item_id = button.data('item_id');
+  var remark = button.data('remark');
+  var moko_part = button.data('moko_part');
+  var modal = $(this);
+  modal.find($("#edit_remarkLabel")).html('备注: ' + moko_part);
+  modal.find($("#item_id_ramark")).val(item_id);
+  modal.find($("#remark")).html(remark);
 })
 
 

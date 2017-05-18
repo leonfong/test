@@ -123,6 +123,7 @@
                                     <%= link_to "采购工程师",  {action: "pmc_new", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
                                 </th>
                                 <th width="60">审核</th>
+                                <th width="60">关闭</th>
                             </tr>
                         </thead>
 
@@ -165,6 +166,7 @@
                                     <a type="button" class="btn btn-success btn-xs" data-confirm="确定审核通过?" href="/pmc_check_pass?id=<%= item.id.to_s %>">审核</a>
                                 <% end %>
                                 </td>
+                                <td><a type="button" class="btn btn-danger btn-xs" data-confirm="确定关闭?" href="?id=<%= item.id.to_s %>">关闭</a></td>
                             </tr>
                             <% end %>
 
@@ -347,13 +349,13 @@
                               <div class="form-group form-group-sm ">
                                   <label for="manual_pmc_qty" class="col-md-3 control-label">申请总量:</label>   
                                   <div class="col-md-9">
-                                      <input id="manual_pmc_qty"  name="manual_pmc_qty" type="text" class="form-control" >     
+                                      <input id="manual_pmc_qty"  name="manual_pmc_qty" type="number" class="form-control" >     
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
                                   <label for="manual_pmc_buy_qty" class="col-md-3 control-label">申请数量:</label>
                                   <div class="col-md-9" >
-                                      <input class="form-control" name="manual_pmc_buy_qty" id="manual_pmc_buy_qty" type="text" >
+                                      <input class="form-control" name="manual_pmc_buy_qty" id="manual_pmc_buy_qty" type="number" >
                                   </div>
                               </div>
                               

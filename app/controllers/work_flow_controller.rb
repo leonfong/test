@@ -5,12 +5,34 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pmc_close
+        get_pmc_data = PiPmcItem.find_by_id(params[:id])
+        if not get_pmc_data.blank?
+            if get_pmc_data.state == "new"
+                get_wh_data = WarehouseInfo.find_by_moko_part(get_pmc_data.moko_part)
+                if not get_wh_data.blank?
+                    if get_pmc_data.buy_user == "MOKO_TEMP"
+                        get_wh_data.future_qty = get_wh_data.future_qty + get_pmc_data.buy_qty
+                        get_wh_data.save
+                    elsif get_pmc_data.buy_user == "MOKO"
+                        get_wh_data.future_qty = get_wh_data.qty + get_pmc_data.buy_qty
+                        get_wh_data.save
+                    end
+                end
+                get_pmc_data.state = "close"
+                get_pmc_data.save
+            end
+        end
+        redirect_to :back
+    end
+
     def manual_pmc_item
         if not params[:manual_pmc_pi_id].blank?
             pmc_data = PiPmcItem.find_by_id(params[:manual_pmc_pi_id])
             pmc_data_new = PiPmcItem.new
             pmc_data_new.pi_info_id = pmc_data.pi_info_id
             pmc_data_new.state = "new"
+            pmc_data_new.pass_at = Time.new
             pmc_data_new.erp_no = pmc_data.erp_no
             pmc_data_new.erp_no_son = pmc_data.erp_no_son
             pmc_data_new.moko_part =params[:manual_pmc_moko_part]

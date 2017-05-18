@@ -258,6 +258,7 @@ Rails.application.routes.draw do
   match '/find_pmc_pi', to: 'work_flow#find_pmc_pi', via: 'get'
   match '/set_pmc_pi', to: 'work_flow#set_pmc_pi', via: 'get'
   match '/manual_pmc_item', to: 'work_flow#manual_pmc_item', via: 'post'
+  match '/pmc_close', to: 'work_flow#pmc_close', via: 'get'
 
 
 

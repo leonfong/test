@@ -2760,8 +2760,14 @@ before_filter :authenticate_user!
             if not params[:item_id].blank?
                 get_item_data = PiPmcAddItem.find_by_id(params[:item_id])
                 if not get_item_data.blank?
-                    get_item_data.buy_user = params[:buy_user]
-                    get_item_data.save
+                    if get_item_data.state == "new"
+                        get_item_data.buy_user = params[:buy_user]
+                        get_item_data.moko_part = params[:moko_part]
+                        get_item_data.moko_des = params[:moko_des]
+                        get_item_data.pmc_qty = params[:pmc_qty]
+                        get_item_data.remark = params[:remark]
+                        get_item_data.save
+                    end
                 end
             end
         end
@@ -2846,7 +2852,7 @@ before_filter :authenticate_user!
     end
 
     def pmc_add_list
-        @pmc_add_list = PiPmcAddInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
+        @pmc_add_list = PiPmcAddInfo.where(state: "new").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
     end
 
     def new_pmc_add_order
@@ -3440,6 +3446,9 @@ before_filter :authenticate_user!
         if can? :work_a, :all or can? :work_admin, :all
             item_data = PiPmcItem.find_by_id(params[:id])
             if not item_data.blank?
+                if item_data.buy_user == ""
+                    redirect_to :back, :flash => {:error => "请填写采购工程师！！！"} and return false
+                end
                 item_data.state = "pass"
                 item_data.pass_at = Time.new
                 item_data.save
@@ -3526,6 +3535,9 @@ before_filter :authenticate_user!
                 params[:checkpass_item].each do |id|
                     item_data = PiPmcItem.find_by_id(id)
                     if not item_data.blank?
+                        if item_data.buy_user == ""
+                            redirect_to :back, :flash => {:error => "请填写采购工程师！！！"} and return false
+                        end
                         item_data.state = "pass"
                         item_data.pass_at = Time.new
                         item_data.save

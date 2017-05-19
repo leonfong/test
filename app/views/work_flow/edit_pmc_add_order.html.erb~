@@ -72,6 +72,7 @@
                             <th width="80">需求数量</th>
                             <th width="80">采购工程师</th>
                             <th >备注</th>
+                            <th width="50">修改</th>
                         </tr>
                     </thead>
                     <tbody><small>
@@ -83,14 +84,15 @@
                             <td><%= item.moko_part %></td>
                             <td><%= item.moko_des %></td>
                             <td><%= item.pmc_qty %></td>
+                            <td><%= item.buy_user %></td>
+                            <td><%= item.remark %></td>
                             <td>
                             <% if item.state == "done" %>
-                                <%= item.buy_user %>
+                                Done!
                             <% else %>
-                                <div data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>" ><%= item.buy_user %></div>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-remark="<%= item.remark %>" data-pmc_qty="<%= item.pmc_qty %>" data-moko_part="<%= item.moko_part %>" data-moko_des="<%= item.moko_des %>"></a>
                             <% end %>
                             </td>
-                            <td><%= item.remark %></td>
                         </tr>
                         <% end %>
                     <% end %> 
@@ -126,7 +128,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="edit_buy_userLabel">重新分配采购工程师</h4>
+        <h4 class="modal-title" id="edit_buy_userLabel">修改</h4>
       </div>
       <div class="modal-body">
         <%= form_tag({action: :edit_pmc_add_buy_user},method:"post") do %>
@@ -135,10 +137,30 @@
             <input type="text" class="form-control" id="item_id" name="item_id">
           </div>
           <div class="form-group">
+            <label for="buy_user" class="control-label">MOKO PART:</label>
+            <input class="form-control" name="moko_part" id="moko_part" type="text" >
+          </div>    
+          <div class="form-group">
+            <label for="buy_user" class="control-label">MOKO DES:</label>
+            <input class="form-control" name="moko_des" id="moko_des" type="text" >
+          </div>    
+          <div class="form-group">
+            <label for="buy_user" class="control-label">数量:</label>
+            <input class="form-control" name="pmc_qty" id="pmc_qty" type="text" >
+          </div>    
+          <div class="form-group">
             <label for="buy_user" class="control-label">采购工程师:</label>
             <input class="form-control" name="buy_user" id="buy_user" type="text" >
           </div>         
-        
+          <div class="form-group">
+            <label for="buy_user" class="control-label">备注:</label>
+            <textarea class="form-control" name="remark" id="remark" rows="3" ></textarea>
+          </div>        
+
+
+
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -159,10 +181,17 @@ $('#edit_buy_user').on('show.bs.modal', function (event) {
   var item_id = button.data('item_id');
   var buy_user = button.data('buy_user');
   var moko_part = button.data('moko_part');
+  var moko_des = button.data('moko_des');
+  var pmc_qty = button.data('pmc_qty');
+  var remark = button.data('remark');
   var modal = $(this);
-  modal.find($("#edit_buy_userLabel")).html('重新分配采购工程师: ' + moko_part);
+  modal.find($("#edit_buy_userLabel")).html('编辑: ' + moko_part);
   modal.find($("#item_id")).val(item_id);
   modal.find($("#buy_user")).val(buy_user);
+  modal.find($("#moko_part")).val(moko_part);
+  modal.find($("#moko_des")).val(moko_des);
+  modal.find($("#pmc_qty")).val(pmc_qty);
+  modal.find($("#remark")).html(remark);
 })
 </script>
 <%

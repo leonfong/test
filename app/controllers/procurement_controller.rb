@@ -2349,6 +2349,7 @@ before_filter :authenticate_user!
         end
         if params[:complete]
             part_ctl = " AND p_items.color = 'b'" 
+            add_orderby = "p_items.updated_at DESC"
         else
             part_ctl = " AND (p_items.color <> 'b' OR p_items.color IS NULL)"
         end

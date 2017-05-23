@@ -255,11 +255,12 @@ Rails.application.routes.draw do
   match '/new_ping_zheng', to: 'work_flow#new_ping_zheng', via: 'post'
   match '/ping_zheng_del', to: 'work_flow#ping_zheng_del', via: 'get'
   match '/work_flow_merchandiser', to: 'work_flow#work_flow_merchandiser', via: 'get'
-  match '/find_pmc_pi', to: 'work_flow#find_pmc_pi', via: 'get'
+  match '/find_pmc_pi', to: 'work_flow#find_pmc_pi', via: 'post'
   match '/set_pmc_pi', to: 'work_flow#set_pmc_pi', via: 'get'
   match '/manual_pmc_item', to: 'work_flow#manual_pmc_item', via: 'post'
   match '/pmc_close', to: 'work_flow#pmc_close', via: 'get'
   match '/edit_pmc_remark', to: 'work_flow#edit_pmc_remark', via: 'post'
+
 
 
 

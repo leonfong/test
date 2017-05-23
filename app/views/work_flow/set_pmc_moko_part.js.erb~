@@ -1,7 +1,7 @@
 
 
 
-$("#manual_pmc_moko_part_id").val('<%= raw @pmc_data.id %>');
+$("#manual_pmc_pi_id").val('<%= raw @pmc_data.id %>');
 $("#manual_pmc_pi_show").html('<%= raw @pmc_data.erp_no_son %>');
 
 $('#addpmc').modal('toggle')

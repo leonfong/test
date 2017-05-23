@@ -274,7 +274,7 @@
 
 
 <div class="modal fade" id="addpmc" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
-    <div class="modal-dialog " role="document"><small>
+    <div class="modal-dialog modal-lg" role="document"><small>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -283,55 +283,45 @@
       
             <div class="modal-body">        
                 <div class="form-inline" >
-                <%= form_tag('/find_pmc_pi', method:"get", class:"form-inline",remote: true) do %>
+                <%= form_tag('/find_pmc_pi', method:"post", class:"form-inline",remote: true) do %>
                     <div class="form-group sr-only">         
                         <label for="c_order_no" class="control-label">单号:</label>
                         <%= text_field_tag :pi_buy_no, params[:pi_buy_no], class:"sr-only", value:params[:pi_buy_no] %>
                     </div>
                     <div class="form-group ">
-                        <lable for="dn_code" , class="control-label"><strong></strong></lable>
-                        <div class="input-group input-group-sm">  
-                            <% if @key_order %>   
-                                <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
-                            <% else %> 
-                                <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"PI"%>
-                            <% end %>                     
-                                      
-                            <div class="input-group-btn">
-                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
-                            </div>
-                        </div>
-                        
-
+                        <label for="dn_code" >PI</label>
+                        <%= text_field_tag :key_order, params[:key_order], class:"form-control input-sm", size:"20", placeholder:"PI"%>
                     </div>
-                    
+                    <div class="form-group ">
+                        <label for="dn_code" >MOKO Part</label>
+                        <%= text_field_tag :key_moko_part, params[:key_moko_part], class:"form-control input-sm", size:"20", placeholder:"MOKO PART"%>           
+                        <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                    </div>
                 <% end %>             
                 </div> 
                 
                 <div class="form-group" id="table_buy" style="padding-top: 10px;">
-
                     <table class="table table-hover">
                     <thead>
                     <tr style="background-color: #eeeeee">
-                    <th >PI</th>
-                    <th >备注</th>
+                    <th width="150">PI</th>
+                    <th >MOKO Part</th>.
+                    <th >MOKO DES</th>
+                    <th width="60">操作</th>
                     </tr>
                     </thead>
                     <small>
                     <tbody id="set_pi">
-
-
                     </tbody></small>
                     </table>
-
-
-
-
                 </div>
             </div>
         </div></small>
     </div>
 </div>
+
+
+
 
 
 

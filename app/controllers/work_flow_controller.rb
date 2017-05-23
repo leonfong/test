@@ -21,7 +21,7 @@ before_filter :authenticate_user!
     def pmc_close
         get_pmc_data = PiPmcItem.find_by_id(params[:id])
         if not get_pmc_data.blank?
-            if get_pmc_data.state == "new"
+            if get_pmc_data.state == "new" or get_pmc_data.state == "new_new"
                 get_wh_data = WarehouseInfo.find_by_moko_part(get_pmc_data.moko_part)
                 if not get_wh_data.blank?
                     if get_pmc_data.buy_user == "MOKO_TEMP"
@@ -33,6 +33,7 @@ before_filter :authenticate_user!
                     end
                 end
                 get_pmc_data.state = "close"
+                get_pmc_data.pass_at = Time.new
                 get_pmc_data.save
             end
         end
@@ -65,13 +66,17 @@ before_filter :authenticate_user!
     def find_pmc_pi
         if not params[:key_order].blank?
             pmc_new = PiPmcItem.find_by_sql("SELECT * FROM pi_pmc_items  WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' GROUP BY pi_pmc_items.erp_no_son")
+
+            pmc_new = PiPmcItem.find_by_sql("SELECT p_items.*, pi_pmc_items.erp_no_son,pi_pmc_items.id AS pmc_id FROM pi_pmc_items INNER JOIN procurement_boms ON pi_pmc_items.erp_no_son = procurement_boms.erp_no_son INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' AND p_items.moko_part LIKE '%#{params[:key_moko_part]}%'")
             #@pmc_new = PiPmcItem.where(erp_no_son: params[:key_order])
             if not pmc_new.blank?
                 @tr = ''
                 pmc_new.each do |item|
                     @tr += '<tr>'
-                    @tr += '<td><a data-method="get" data-remote="true" href="/set_pmc_pi?id=' + item.id.to_s + '">' + item.erp_no_son + '</a></td>'
                     @tr += '<td>' + item.erp_no_son + '</td>'
+                    @tr += '<td>' + item.moko_part + '</td>'
+                    @tr += '<td>' + item.moko_des + '</td>'
+                    @tr += '<td><a class="btn btn-success" data-method="get" data-remote="true" href="/set_pmc_pi?id=' + item.id.to_s + '&pmc_id=' + item.pmc_id.to_s + '">选择</a></td>'
                     @tr += '</tr>'
                 end
                 render "find_pmc_pi.js.erb" and return
@@ -80,8 +85,9 @@ before_filter :authenticate_user!
     end
 
     def set_pmc_pi
-        if not params[:id].blank?
-            @pmc_data = PiPmcItem.find_by_id(params[:id])
+        if not params[:pmc_id].blank?
+            @pmc_data = PiPmcItem.find_by_id(params[:pmc_id])
+            @moko_part_data = PItem.find_by_id(params[:id])
             if not @pmc_data.blank?
                 render "set_pmc_pi.js.erb" and return
             end
@@ -2149,7 +2155,7 @@ before_filter :authenticate_user!
             finance_voucher_info.state = "checked"
             if finance_voucher_info.save
                 payment_voucher_info = ZongZhangInfo.new
-                payment_voucher_info.type = "shou"
+                payment_voucher_info.zong_zhang_type = "shou"
                 payment_voucher_info.finance_voucher_info_id = finance_voucher_info.id
                 payment_voucher_info.no = 1
                 payment_voucher_info.des = finance_voucher_info.sell_team.to_s + finance_voucher_info.sell_full_name_up.to_s + finance_voucher_info.pi_info_no.to_s
@@ -2881,7 +2887,7 @@ before_filter :authenticate_user!
     end
 
     def edit_buy_user
-        if can? :work_d, :all or can? :work_admin, :all 
+        if can? :work_d, :all or can? :work_admin, :all or can? :work_a, :all
             if not params[:item_id].blank?
                 get_item_data = PiPmcItem.find_by_id(params[:item_id])
                 if not get_item_data.blank?
@@ -3919,7 +3925,7 @@ before_filter :authenticate_user!
     end
 
     def pmc_h
-        pmc_where = "state <> 'new'"
+        pmc_where = "state NOT LIKE '%new%'"
         if not params[:pass_date].blank?
             if not pmc_where.blank?
             pmc_where += " AND "

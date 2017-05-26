@@ -133,7 +133,7 @@
                         <tbody>
 
                             <% @pmc_new.each do |item|%>   
-                            <tr <% if item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% elsif item.check == "GREEN" %>class="bg-success"<% end %>>
+                            <tr <% if item.up_flag == "do" %>class="bg-warning"<% elsif item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% elsif item.check == "GREEN" %>class="bg-success"<% end %>>
                                 <td style="padding: 5px 5px 5px 10px;margin: 0px;"><input class="chk_all" type="checkbox" name="checkpass_item[]" value="<%= item.id.to_s %>"></td>
                                 
                                 <td>
@@ -278,7 +278,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="find_cLabel"><strong>选择PI</strong></h4>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择MOKO Part</strong></h4>
             </div>
       
             <div class="modal-body">        
@@ -295,7 +295,7 @@
                     <div class="form-group ">
                         <label for="dn_code" >MOKO Part</label>
                         <%= text_field_tag :key_moko_part, params[:key_moko_part], class:"form-control input-sm", size:"20", placeholder:"MOKO PART"%>           
-                        <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                        <%= submit_tag "搜索", class:"btn btn-primary btn-sm", onclick:"return postform()"%>                             
                     </div>
                 <% end %>             
                 </div> 
@@ -307,6 +307,7 @@
                     <th width="150">PI</th>
                     <th >MOKO Part</th>.
                     <th >MOKO DES</th>
+                    <th width="60">操作</th>
                     </tr>
                     </thead>
                     <small>
@@ -344,25 +345,29 @@
                                   <label class="col-md-4 control-label" for="manual_pmc_pi_show">PI:</label>
                                   <div class="col-md-8">
                                       <input class="sr-only" name="manual_pmc_pi_id" id="manual_pmc_pi_id" type="text" value="">
+                                      <input class="sr-only" name="manual_moko_part_id" id="manual_moko_part_id" type="text" value="">
                                       <p class="form-control-static" id="manual_pmc_pi_show"></p>
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
                                   <label for="manual_pmc_moko_part" class="col-md-4 control-label">MOKO ID:</label>
                                   <div class="col-md-8" >
-                                      <input class="form-control" name="manual_pmc_moko_part" id="manual_pmc_moko_part" type="text">
+                                      <input class="form-control sr-only" name="manual_pmc_moko_part" id="manual_pmc_moko_part" type="text">
+                                      <p class="form-control-static" id="manual_pmc_moko_part_show"></p>
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
                                   <label for="manual_pmc_moko_des" class="col-md-4 control-label">物料名称:</label>
                                   <div class="col-md-8" >
-                                      <input class="form-control" name="manual_pmc_moko_des" id="manual_pmc_moko_des" type="text" >
+                                      <input class="form-control sr-only" name="manual_pmc_moko_des" id="manual_pmc_moko_des" type="text" >
+                                      <p class="form-control-static" id="manual_pmc_moko_des_show"></p>
                                   </div>
                               </div>
                               <div class="form-group form-group-sm">
                                   <label for="manual_pmc_part_code" class="col-md-4 control-label">位号:</label>
                                   <div class="col-md-8" >
-                                      <input class="form-control" name="manual_pmc_part_code" id="manual_pmc_part_code" type="text" >
+                                      <input class="form-control sr-only" name="manual_pmc_part_code" id="manual_pmc_part_code" type="text" >
+                                      <p class="form-control-static" id="manual_pmc_part_code_show"></p>
                                   </div>
                               </div>
                           </div>
@@ -404,7 +409,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary" onclick="return postform()" >提交</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform_new()" >提交</button>
       </div>
       <% end %>
 
@@ -486,6 +491,18 @@ $(document).ready(function(){
   });
 });
 
+function postform() {  	           
+      if ($("#key_order").val() == "" )
+      {                    
+　　    alert("请填写PI！");                    
+　　    return false;                
+　     }
+      if ($("#key_moko_part").val() == "" )
+      {                    
+　　    alert("请填写MOKO PART！");                    
+　　    return false;                
+　     }
+}
 </script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

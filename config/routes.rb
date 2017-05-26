@@ -260,6 +260,16 @@ Rails.application.routes.draw do
   match '/manual_pmc_item', to: 'work_flow#manual_pmc_item', via: 'post'
   match '/pmc_close', to: 'work_flow#pmc_close', via: 'get'
   match '/edit_pmc_remark', to: 'work_flow#edit_pmc_remark', via: 'post'
+  match '/wh_get', to: 'work_flow#wh_get', via: 'get'
+  match '/new_wh_get', to: 'work_flow#new_wh_get', via: 'get'
+  match '/edit_wh_get', to: 'work_flow#edit_wh_get', via: 'get'
+  match '/find_wh_get_bom', to: 'work_flow#find_wh_get_bom', via: 'post'
+  match '/wh_get_bom_up', to: 'work_flow#wh_get_bom_up', via: 'get'
+  match '/edit_wh_item_qty', to: 'work_flow#edit_wh_item_qty', via: 'post'
+  match '/wh_get_to_check', to: 'work_flow#wh_get_to_check', via: 'post'
+
+
+  
 
 
 

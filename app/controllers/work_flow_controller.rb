@@ -5,6 +5,135 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def wh_get_to_check
+
+    end
+
+    def edit_wh_item_qty
+        if not params[:wh_item_out_id].blank?
+            item_data = WhGetItem.find_by_id(params[:wh_item_out_id])
+            if not item_data.blank?
+                info_data = WhGetInfo.find_by_id(item_data.wh_get_info_id)
+                if not info_data.blank?
+                    if info_data.state == "new"
+                        item_data.qty_out = params[:wh_item_qty_out]
+                        item_data.save
+                    end
+                end
+            end
+        end
+
+        redirect_to :back
+    end
+
+    def find_wh_get_bom
+        if not params[:wh_get_info_id].blank?
+            bom_data = ProcurementBom.find_by_erp_no_son(params[:bom_no])
+            @bom_list_data = ""
+            if not bom_data.blank?
+                @bom_list_data += '<small>'
+                @bom_list_data += '<table class="table table-bordered">'
+                @bom_list_data += '<thead>'
+                @bom_list_data += '<tr class="active">'
+                @bom_list_data += '<th >PI NO.</th>'
+                @bom_list_data += '<th width="120">数量</th>'
+                @bom_list_data += '<th width="50">操作</th>'
+                @bom_list_data += '<tr>'
+                @bom_list_data += '</thead>'
+                @bom_list_data += '<tbody>'
+                #bom_data.each do |wh_bom|
+                @bom_list_data += '<tr id="wh_item_'+bom_data.id.to_s+'">'
+                @bom_list_data += '<td>'+bom_data.erp_no_son.to_s+'</td>'
+                @bom_list_data += '<td>'+bom_data.erp_qty.to_s+'</td>'
+                @bom_list_data += '<td><a class="btn btn-xs btn-danger " data-method="get"  href="/wh_get_bom_up?id=' + bom_data.id.to_s + '&wh_get_info_id=' + params[:wh_get_info_id].to_s + '" data-confirm="确定?">确定</a></td>' 
+                @bom_list_data += '</tr>'
+                #end
+                @bom_list_data += '<tbody>'
+                @bom_list_data += '<table>'
+                @bom_list_data += '<small>'
+            end
+        end
+    end
+
+    def wh_get_bom_up
+        if not params[:wh_get_info_id].blank?
+            Rails.logger.info("add-------------------------------------1")
+            get_wh_get_info_data = WhGetInfo.find_by_id(params[:wh_get_info_id])
+            if not get_wh_get_info_data.blank?
+                Rails.logger.info("add-------------------------------------2")
+                if get_wh_get_info_data.state == "new"
+                    get_old_bom = WhGetItem.where(wh_get_info_id: params[:wh_get_info_id])
+                    if not get_old_bom.blank?
+                        get_old_bom.each do |item|
+                            item.destroy
+                        end
+                    end
+                end
+                get_bom_info = ProcurementBom.find_by_id(params[:id])
+                get_new_bom = PItem.where(procurement_bom_id: params[:id])
+                if not get_new_bom.blank?
+                    Rails.logger.info("add-------------------------------------3")
+                    get_new_bom.each do |item|
+                        up_data = WhGetItem.new
+                        up_data.wh_get_info_id = get_wh_get_info_data.id
+                        up_data.wh_get_info_no = get_wh_get_info_data.wh_get_no
+                        up_data.moko_part = item.moko_part
+                        up_data.moko_des = item.moko_des
+                        up_data.p_item_id = item.id
+                        up_data.erp_no_son = get_bom_info.erp_no_son
+                        up_data.qty = item.quantity.to_i*get_bom_info.qty.to_i
+                        up_data.qty_out = item.quantity.to_i*get_bom_info.qty.to_i
+                        up_data.save
+                    end
+                end   
+            end
+        else
+            Rails.logger.info("add-------------------------------------wwwwwwwwwww")
+            Rails.logger.info(params[:wh_get_info_id])
+            Rails.logger.info("add-------------------------------------wwwwwwwwwww")
+        end
+        redirect_to :back
+    end
+
+    def edit_wh_get
+        @wh_info = WhGetInfo.find_by(wh_get_no: params[:wh_get_no])
+        @wh_item = WhGetItem.where(wh_get_info_no: params[:wh_get_no])
+        #@all_dn = "[&quot;"
+        #all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn, all_dns.dn_long FROM all_dns GROUP BY all_dns.dn")
+        #all_s_dn = SupplierList.find_by_sql("SELECT  supplier_name, supplier_name_long FROM supplier_lists ")
+        #all_s_dn.each do |dn|
+            #@all_dn += "&quot;,&quot;" + dn.supplier_name.to_s + "&#{dn.supplier_name_long.to_s}"
+        #end
+        #@all_dn += "&quot;]"
+    end
+
+    def new_wh_get
+        if params[:wh_get_no] == "" or params[:wh_get_no] == nil
+            if WhGetInfo.find_by_sql('SELECT wh_get_no FROM wh_get_infos WHERE to_days(wh_get_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = WhGetInfo.find_by_sql('SELECT wh_get_no FROM wh_get_infos WHERE to_days(wh_get_infos.created_at) = to_days(NOW())').last.wh_get_no.split("WHGET")[-1].to_i + 1
+            end
+            @wh_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "WHGET"+ pi_n.to_s
+
+            wh_info = WhGetInfo.new
+            wh_info.wh_get_no = @wh_no
+            wh_info.wh_get_user = current_user.email
+            wh_info.state = "new"
+            #wh_info.site = "c"            
+            wh_info.save
+            wh_get_no = wh_info.wh_get_no
+        else
+            wh_get_no = params[:wh_get_no]
+        end
+        #@pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        redirect_to edit_wh_get_path(wh_get_no: wh_get_no) and return 
+    end
+
+    def wh_get
+        @whlist = WhGetInfo.all.order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+    end
+
     def edit_pmc_remark
         if can? :work_d, :all or can? :work_admin, :all 
             if not params[:item_id].blank?
@@ -43,13 +172,14 @@ before_filter :authenticate_user!
     def manual_pmc_item
         if not params[:manual_pmc_pi_id].blank?
             pmc_data = PiPmcItem.find_by_id(params[:manual_pmc_pi_id])
+            #moko_part_data = PItem.find_by_id(params[:manual_moko_part_id])
             pmc_data_new = PiPmcItem.new
             pmc_data_new.pi_info_id = pmc_data.pi_info_id
             pmc_data_new.state = "new"
             pmc_data_new.pass_at = Time.new
             pmc_data_new.erp_no = pmc_data.erp_no
             pmc_data_new.erp_no_son = pmc_data.erp_no_son
-            pmc_data_new.moko_part =params[:manual_pmc_moko_part]
+            pmc_data_new.moko_part = params[:manual_pmc_moko_part]
             pmc_data_new.moko_des = params[:manual_pmc_moko_des]
             pmc_data_new.part_code = params[:manual_pmc_part_code]
             pmc_data_new.qty = params[:manual_pmc_qty]

@@ -92,7 +92,7 @@
         <li><a <% if selected == "wh_out" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 出库</a></li>
 -->
         <li><a <% if selected == "wh_query" %>style="background-color: #d9edf7;"<% end %> href="/wh_query" ><i></i> 库存查询</a></li>
-        <li><a <% if selected == "wh_get" %>style="background-color: #d9edf7;"<% end %> href="/wh_get" ><i></i> 库存查询</a></li>
+        
     </ul>
 <% end %>
 
@@ -102,8 +102,11 @@
         <li><a <% if selected == "factory_in_manual" %>style="background-color: #d9edf7;"<% end %> href="/factory_in_manual"><i></i> 生产领料</a></li>
 <!--
         <li><a <% if selected == "factory_in" %>style="background-color: #d9edf7;"<% end %> href="/factory_in"><i></i> 上线生产</a></li>
--->
+
         <li><a <% if selected == "factory_out" %>style="background-color: #d9edf7;"<% end %> href="/factory_out" ><i></i> 下线发货</a></li>
+-->
+        <li><a <% if selected == "factory_get" %>style="background-color: #d9edf7;"<% end %> href="/wh_get" ><i></i> 生产领料2</a></li>
+        <li><a <% if selected == "factory_get" %>style="background-color: #d9edf7;"<% end %> href="/wh_out" ><i></i> 发货</a></li>
     </ul>
 <% end %>
 

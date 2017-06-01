@@ -73,7 +73,11 @@
                             <td><%= wh_item.moko_part %></td>
                             <td><%= wh_item.moko_des %></td>
                             <td><%= wh_item.qty %></td>
+                            <% if @wh_info.state == "new" %>
                             <td class="bg-warning" data-toggle="modal" data-backdrop="static" data-target="#edit_wh_item_qty" data-wh_id="<%= wh_item.id %>" data-wh_qty="<%= wh_item.qty_out %>"  data-wh_moko_part="<%= wh_item.moko_part %>" data-wh_moko_des="<%= wh_item.moko_des %>"><%= wh_item.qty_out %></td>
+                            <% else %>
+                            <td><%= wh_item.qty_out %></td>
+                            <% end %>
                             <td><%= wh_item.erp_no_son %></td>
 
                         </tr>

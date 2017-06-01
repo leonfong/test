@@ -267,6 +267,12 @@ Rails.application.routes.draw do
   match '/wh_get_bom_up', to: 'work_flow#wh_get_bom_up', via: 'get'
   match '/edit_wh_item_qty', to: 'work_flow#edit_wh_item_qty', via: 'post'
   match '/wh_get_to_check', to: 'work_flow#wh_get_to_check', via: 'post'
+  match '/wh_out', to: 'work_flow#wh_out', via: 'get'
+  match '/new_wh_out', to: 'work_flow#new_wh_out', via: 'get'
+  match '/edit_wh_out', to: 'work_flow#edit_wh_out', via: 'get'
+  match '/find_wh_out', to: 'work_flow#find_wh_out', via: 'post'
+  match '/wh_out_bom_up', to: 'work_flow#wh_out_bom_up', via: 'get'
+
 
 
   

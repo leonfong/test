@@ -5,6 +5,116 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def wh_out
+        @whlist = WhOutInfo.all.order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+    end
+
+    def new_wh_out
+        if params[:wh_out_no] == "" or params[:wh_out_no] == nil
+            if WhOutInfo.find_by_sql('SELECT wh_out_no FROM wh_out_infos WHERE to_days(wh_out_infos.created_at) = to_days(NOW())').blank?
+                pi_n =1
+            else
+                pi_n = WhOutInfo.find_by_sql('SELECT wh_out_no FROM wh_out_infos WHERE to_days(wh_out_infos.created_at) = to_days(NOW())').last.wh_out_no.split("WHGET")[-1].to_i + 1
+            end
+            @wh_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "WHOUT"+ pi_n.to_s
+
+            wh_info = WhOutInfo.new
+            wh_info.wh_out_no = @wh_no
+            wh_info.wh_out_user = current_user.email
+            wh_info.state = "new"
+            #wh_info.site = "c"            
+            wh_info.save
+            wh_out_no = wh_info.wh_out_no
+        else
+            wh_out_no = params[:wh_out_no]
+        end
+        #@pcblist = PcbOrder.where(state: "quotechk").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        redirect_to edit_wh_out_path(wh_out_no: wh_out_no) and return 
+    end
+
+    def edit_wh_out
+        @wh_info = WhOutInfo.find_by(wh_out_no: params[:wh_out_no])
+        @wh_item = WhOutItem.where(wh_out_info_no: params[:wh_out_no])
+    end
+
+    def find_wh_out
+#要给成从仓库查询
+        if not params[:wh_out_info_id].blank?
+            bom_data = WarehouseInfo.find_by_erp_no_son(params[:bom_no])
+            @bom_list_data = ""
+            if not bom_data.blank?
+                @bom_list_data += '<small>'
+                @bom_list_data += '<table class="table table-bordered">'
+                @bom_list_data += '<thead>'
+                @bom_list_data += '<tr class="active">'
+                @bom_list_data += '<th >PI NO.</th>'
+                @bom_list_data += '<th >MOKO PART</th>'
+                @bom_list_data += '<th >MOKO DES</th>'
+                @bom_list_data += '<th width="120">数量</th>'
+                @bom_list_data += '<th width="50">操作</th>'
+                @bom_list_data += '<tr>'
+                @bom_list_data += '</thead>'
+                @bom_list_data += '<tbody>'
+                #bom_data.each do |wh_bom|
+                @bom_list_data += '<tr id="wh_item_'+bom_data.id.to_s+'">'
+                @bom_list_data += '<td>'+bom_data.erp_no_son.to_s+'</td>'
+                @bom_list_data += '<td>'+bom_data.moko_part.to_s+'</td>'
+                @bom_list_data += '<td>'+bom_data.moko_des.to_s+'</td>'
+                @bom_list_data += '<td>'+bom_data.qty.to_s+'</td>'
+                @bom_list_data += '<td><a class="btn btn-xs btn-danger " data-method="get"  href="/wh_out_bom_up?id=' + bom_data.id.to_s + '&wh_out_info_id=' + params[:wh_out_info_id].to_s + '" data-confirm="确定?">确定</a></td>' 
+                @bom_list_data += '</tr>'
+                #end
+                @bom_list_data += '<tbody>'
+                @bom_list_data += '<table>'
+                @bom_list_data += '<small>'
+            end
+        end
+    end
+
+    def wh_out_bom_up
+        if not params[:wh_out_info_id].blank?
+            Rails.logger.info("add-------------------------------------1")
+            out_wh_out_info_data = WhOutInfo.find_by_id(params[:wh_out_info_id])
+            if not out_wh_out_info_data.blank?
+                Rails.logger.info("add-------------------------------------2")
+                if out_wh_out_info_data.state == "new"
+                    out_old_bom = WhOutItem.where(wh_out_info_id: params[:wh_out_info_id])
+                    if not out_old_bom.blank?
+                        out_old_bom.each do |item|
+                            item.destroy
+                        end
+                    end
+                end
+                out_bom_info = ProcurementBom.find_by_id(params[:id])
+                out_new_bom = PItem.where(procurement_bom_id: params[:id])
+                if not out_new_bom.blank?
+                    Rails.logger.info("add-------------------------------------3")
+                    out_new_bom.each do |item|
+                        up_data = WhOutItem.new
+                        up_data.wh_out_info_id = out_wh_out_info_data.id
+                        up_data.wh_out_info_no = out_wh_out_info_data.wh_out_no
+                        up_data.moko_part = item.moko_part
+                        up_data.moko_des = item.moko_des
+                        up_data.p_item_id = item.id
+                        up_data.erp_no_son = out_bom_info.erp_no_son
+                        up_data.qty = item.quantity.to_i*out_bom_info.qty.to_i
+                        up_data.qty_out = item.quantity.to_i*out_bom_info.qty.to_i
+                        up_data.save
+                    end
+                end   
+            end
+        else
+            Rails.logger.info("add-------------------------------------wwwwwwwwwww")
+            Rails.logger.info(params[:wh_out_info_id])
+            Rails.logger.info("add-------------------------------------wwwwwwwwwww")
+        end
+        redirect_to :back
+    end
+
+    def factory_out
+
+    end
+
     def wh_get_to_check
 
     end
@@ -1638,6 +1748,7 @@ before_filter :authenticate_user!
                                 add_history_data.p_item_id = item_data.id
                                 add_history_data.erp_id = item_data.erp_id
                                 add_history_data.erp_no = item_data.erp_no
+                                add_history_data.erp_no_son = item_data.erp_no_son
                                 add_history_data.user_do = item_data.user_do
                                 add_history_data.user_do_change = item_data.user_do_change
                                 add_history_data.check = item_data.check
@@ -3071,9 +3182,6 @@ before_filter :authenticate_user!
 
     def wh_material_flow
 
-    end
-
-    def factory_out
     end
 
     def add_wh_change_item
@@ -6689,9 +6797,7 @@ before_filter :authenticate_user!
         
     end
 
-    def wh_out
 
-    end
 
     def wh_query
         if params[:moko_part]
@@ -9551,7 +9657,11 @@ before_filter :authenticate_user!
             #render "index.html.erb"
             #redirect_to action: :index, data: { no_turbolink: true }
         end
-        @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+        if can? :work_a, :all
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%pmc%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+        else
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+        end
     end
 
    
@@ -10204,6 +10314,8 @@ before_filter :authenticate_user!
                                     receive_new.delete("production")    
                                 #elsif can? :work_d, :all 
                                     #receive_new.delete("engineering")
+                                elsif can? :work_a, :all 
+                                    receive_new.delete("pmc")
                                 elsif can? :work_d_ziliao, :all 
                                     receive_new.delete("engineering_ziliao")
                                 elsif can? :work_d_bom, :all 
@@ -10244,6 +10356,33 @@ before_filter :authenticate_user!
                     end
                     topic_up.mark = ""
                     topic_up.save
+                    if topic_up.feedback_receive =~ /pmc/
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id > 3 AND users_roles.role_id < 7")
+                        open_id = ""
+                        all_open_id.each do |item|
+                            if not item.open_id.blank?
+                                open_id += item.open_id + ","
+                            end
+                        end
+                        oauth = Oauth.find(1)
+                        company_id = oauth.company_id
+                        company_token = oauth.company_token
+                        url = 'https://openapi.b.qq.com/api/tips/send'
+                        if not open_id.blank? 
+                            url += '?company_id='+company_id
+                            url += '&company_token='+company_token
+                            url += '&app_id=200710667'
+                            url += '&client_ip=120.25.151.208'
+                            url += '&oauth_version=2'
+                            url += '&to_all=0'  
+                            url += '&receivers='+open_id.chop
+                            url += '&window_title=Fastbom-PCB AND PCBA'
+                            url += '&tips_title='+URI.encode('PMC的宝宝们')
+                            url += '&tips_content='+URI.encode('有新的回复，点击查看。')
+                            url += '&tips_url=erp.fastbom.com/feedback?id='+topic_up.id.to_s 
+                            resp = Net::HTTP.get_response(URI(url))
+                        end 
+                    end
                     if topic_up.feedback_receive =~ /production/
                         all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id > 3 AND users_roles.role_id < 7")
                         open_id = ""

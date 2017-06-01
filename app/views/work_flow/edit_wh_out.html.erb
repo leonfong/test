@@ -1,7 +1,7 @@
 <div class="container-fluid" >
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "factory_get"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "factory_out"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
 
@@ -10,8 +10,8 @@
                 <div class="panel panel-info">
                         <div class="panel-heading"><strong>领料单信息:</strong></div>
                         <div class="panel-body ">                     
-                            <div class="col-md-2"><p><strong>领料单号. : </strong><ins id="wh_get_show" name="wh_get_show"><%= @wh_info.wh_get_no.to_s %></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_pi" name="p_wh" value="<%= @wh_info.wh_get_no %>">
+                            <div class="col-md-2"><p><strong>领料单号. : </strong><ins id="wh_out_show" name="wh_out_show"><%= @wh_info.wh_out_no.to_s %></ins></p>
+                                <input type="text" class="form-control sr-only" id="p_pi" name="p_wh" value="<%= @wh_info.wh_out_no %>">
                             </div>
                             <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
@@ -50,7 +50,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>物料列表</strong> 
                 <% if can? :work_e, :all and @wh_info.state == "new"%>
-                    <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-backdrop="static" data-target="#find_c" style="margin-right: 5px;" >选择BOM匹配</button>
+                    <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-backdrop="static" data-target="#find_c" style="margin-right: 5px;" >选择货物</button>
                 <% end %>
                 </div>
 
@@ -118,16 +118,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="find_cLabel"><strong>选择BOM匹配</strong></h4>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择货物</strong></h4>
             </div>
       
             <div class="modal-body">        
                 <div class="form-inline">
-                <%= form_tag('/find_wh_get_bom', method:"post", class:"form-inline",remote: true) do %>
+                <%= form_tag('/find_wh_out', method:"post", class:"form-inline",remote: true) do %>
                     <div class="form-group sr-only">         
                         <label for="pi_wh_no" class="control-label">入库单号:</label>
 
-                        <input type="text" class="form-control" id="wh_get_info_id" name="wh_get_info_id" value="<%= @wh_info.id %>">
+                        <input type="text" class="form-control" id="wh_out_info_id" name="wh_out_info_id" value="<%= @wh_info.id %>">
                     </div>
        
                     <div class="form-group ">

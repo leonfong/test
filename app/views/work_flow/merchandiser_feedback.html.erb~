@@ -105,6 +105,12 @@
                        </div>
                        <div class="checkbox-inline">
                            <label>
+                               <input type="checkbox" value="procurement_pcb" name="send_up[]" id="send_up10" onclick="change_2()"> 
+                               <strong><%= '采购部-PCB' %></strong>
+                           </label>
+                       </div>
+                       <div class="checkbox-inline">
+                           <label>
                                <input type="checkbox" value="sell" name="send_up[]" id="send_up4" onclick="change_2()"> 
                                <strong><%= '业务部' %></strong>
                            </label>
@@ -198,7 +204,7 @@ else if (document.getElementById('topic_state_close').checked == false & documen
 　　    alert("请填写回复的内容！");                    
 　　    return false;                
 　     }
-    else if (document.getElementById('topic_state_open').checked == true & html != "" & document.getElementById('topic_state_open').checked == true & document.getElementById('send_up1').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up5').checked == false & document.getElementById('send_up6').checked == false & document.getElementById('send_up7').checked == false & document.getElementById('send_up8').checked == false & document.getElementById('send_up_mark').checked == false)
+    else if (document.getElementById('topic_state_open').checked == true & html != "" & document.getElementById('topic_state_open').checked == true & document.getElementById('send_up1').checked == false & document.getElementById('send_up3').checked == false & document.getElementById('send_up4').checked == false & document.getElementById('send_up5').checked == false & document.getElementById('send_up6').checked == false & document.getElementById('send_up7').checked == false & document.getElementById('send_up8').checked == false & document.getElementById('send_up9').checked == false & document.getElementById('send_up_mark').checked == false)
       {                    
 　　    alert("请选择接收问题的部门！");                    
 　　    return false;                

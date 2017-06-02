@@ -122,7 +122,9 @@ Rails.application.routes.draw do
   match '/edit_wh_order', to: 'work_flow#edit_wh_order', via: 'get'
   match '/new_wh_order', to: 'work_flow#new_wh_order', via: 'get'
   match '/find_w_wh', to: 'work_flow#find_w_wh', via: 'get'
+  match '/find_w_chanpin', to: 'work_flow#find_w_chanpin', via: 'get'
   match '/add_wh_item', to: 'work_flow#add_wh_item', via: 'post'
+  match '/add_wh_item_chengpin', to: 'work_flow#add_wh_item_chengpin', via: 'post'
   match '/del_wh_item', to: 'work_flow#del_wh_item', via: 'get'
   match '/wh_draft', to: 'work_flow#wh_draft', via: 'post'
   match '/del_wh', to: 'work_flow#del_wh', via: 'get'
@@ -271,8 +273,8 @@ Rails.application.routes.draw do
   match '/new_wh_out', to: 'work_flow#new_wh_out', via: 'get'
   match '/edit_wh_out', to: 'work_flow#edit_wh_out', via: 'get'
   match '/find_wh_out', to: 'work_flow#find_wh_out', via: 'post'
-  match '/wh_out_bom_up', to: 'work_flow#wh_out_bom_up', via: 'get'
-
+  match '/wh_out_item_up', to: 'work_flow#wh_out_item_up', via: 'get'
+  match '/wh_out_to_check', to: 'work_flow#wh_out_to_check', via: 'post'
 
 
   

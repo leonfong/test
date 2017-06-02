@@ -93,13 +93,15 @@
 
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
-                    <%= form_tag('/wh_get_to_check', method:"post") do %>
-                        <input type="text" class="form-control sr-only" id="wh_get_up_id" name="wh_get_up_id" value="<%= @wh_info.id %>">
+                    <%= form_tag('/wh_out_to_check', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="wh_out_up_id" name="wh_out_up_id" value="<%= @wh_info.id %>">
                         
                     
-
+                        <% if @wh_info.state == "new"%>
                         <%= submit_tag "提交审批", class:"btn btn-info" ,data:{confirm: "确定要提交给XXX审批?"} %>
-
+                        <% elsif @wh_info.state == "checking"%>
+                        <%= submit_tag "确认发货", class:"btn btn-info" ,data:{confirm: "确定发货?"} %>
+                        <% end %>
 
                     
                     <% end %>
@@ -127,17 +129,20 @@
                     <div class="form-group sr-only">         
                         <label for="pi_wh_no" class="control-label">入库单号:</label>
 
-                        <input type="text" class="form-control" id="wh_get_info_id" name="wh_get_info_id" value="<%= @wh_info.id %>">
+                        <input type="text" class="form-control" id="wh_out_info_id" name="wh_out_info_id" value="<%= @wh_info.id %>">
                     </div>
        
                     <div class="form-group ">
                         <lable for="order" , class="control-label sr-only"><strong>采购单号: </strong></lable>
                         <div class="input-group input-group-sm">              
                             
-                            <input id="bom_no"  name="bom_no" type="text" class="form-control input-sm" placeholder="BOM匹配PI单号" size="60" value="<%= params[:bom_no]%>">              
-                            <div class="input-group-btn">
+                            <input id="bom_no"  name="bom_no" type="text" class="form-control input-sm" placeholder="BOM匹配PI单号" size="60" value="<%= params[:bom_no]%>">            
+                            <span class="input-group-addon">单独采购：
+                                <input type="checkbox" aria-label="..." value="alone" name="out_type" name="out_type">
+                            </span>
+                            <span class="input-group-btn">
                                 <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                            </div>
+                            </span>
                         </div>
                     </div>
                 <% end %>             
@@ -244,6 +249,8 @@ $(document).ready(function(){
         $("#bei_zhu_edit").show();
     });
 });
+
+
 </script>
 
 

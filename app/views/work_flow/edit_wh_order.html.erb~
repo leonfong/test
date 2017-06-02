@@ -41,7 +41,7 @@
                             
 
                             <div class="col-md-5 form-group form-group-sm">
-                                  <label for="bei_zhu" class="col-md-2 control-label" id="bei_zhu_label"><p class="bg-warning">备注:</p></label>
+                                  <label for="bei_zhu" class="col-md-2 control-label bg-warning" id="bei_zhu_label">备注:</label>
                                   <div class="col-md-10" >
                                       <div id="bei_zhu_show">
                                           <%= @wh_info.remark %>
@@ -70,6 +70,7 @@
                 <div class="panel-heading"><strong>等待入库物料列表</strong> 
                 <% if can? :work_e, :all and @wh_info.state == "new"%>
                     <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择入库物料</button>
+                    <button type="button" class="btn btn-danger btn-xs  navbar-right" data-toggle="modal" data-target="#find_chengpin" style="margin-right: 5px;" >选择入库成品</button>
                 <% end %>
                 </div>
 <!--
@@ -100,7 +101,7 @@
                         <% if @wh_item %>
                         <% @wh_item.each do |wh_item| %>
                         <tr>
-                            <td><%= PiBuyInfo.find_by_id(wh_item.pi_buy_info_id).dn_long %></td>
+                            <td><%= wh_item.pi_buy_info_id.blank?? "":PiBuyInfo.find_by_id(wh_item.pi_buy_info_id).dn_long %></td>
                             <td><%= PiBuyInfo.find_by_id(wh_item.pi_buy_info_id).pi_buy_no %></td>
                             <td><%= wh_item.erp_no %></td>
                             <td><%= wh_item.moko_part %></td>
@@ -198,7 +199,45 @@
 </div>
 
 
+<div class="modal fade" id="find_chengpin" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="find_chengpinLabel"><strong>选择入库成品</strong></h4>
+            </div>
+      
+            <div class="modal-body">        
+                <div class="form-inline">
+                <%= form_tag('/find_w_chanpin', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group sr-only">         
+                        <label for="pi_wh_no" class="control-label">入库单号:</label>
+                        <input type="text" class="form-control" id="pi_wh_no" name="pi_wh_no" value="<%= @wh_info.pi_wh_no %>">
+                        <input type="text" class="form-control" id="pi_wh_info_id" name="pi_wh_info_id" value="<%= @wh_info.id %>">
+                    </div>
 
+                    
+                    <div class="form-group ">
+                        <lable for="order" , class="control-label sr-only"><strong>产品代码: </strong></lable>
+                        <div class="input-group input-group-sm">              
+                            
+                            <input id="chanpin_no"  name="chanpin_no" type="text" class="form-control input-sm" placeholder="产品代码" size="60" value="<%= params[:chanpin_no]%>">              
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>             
+                </div> 
+                <br>
+                <div class="form-group" id="w_part_chanpin">
+                
+
+                </div>
+            </div>
+        </div></small>
+    </div>
+</div>
 
 
 

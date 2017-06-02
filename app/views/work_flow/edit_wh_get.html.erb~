@@ -1,7 +1,7 @@
 <div class="container-fluid" >
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "wh_get"} %>
+            <%= render partial: "work_flow/menu", locals: {selected: "factory_get"} %>
         </div>
         <div class="col-md-11" style="padding-top: 10px;"><small>
 
@@ -98,7 +98,11 @@
                         
                     
 
+                        <% if @wh_info.state == "new"%>
                         <%= submit_tag "提交审批", class:"btn btn-info" ,data:{confirm: "确定要提交给XXX审批?"} %>
+                        <% elsif @wh_info.state == "checking"%>
+                        <%= submit_tag "确认发货", class:"btn btn-info" ,data:{confirm: "确定发货?"} %>
+                        <% end %>
 
 
                     

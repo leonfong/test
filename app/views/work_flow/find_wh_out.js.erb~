@@ -1,10 +1,4 @@
 $("#bom_list").html('<%= raw @bom_list_data %>');
-$(document).ready(function(){
-  $("#tijiao").click(function(){
-    $("#tijiao_true").click();
-  });
-  
-});
 $("#selectAll").click(function () {   
         $(".chk_all").each(function () {     
             $(this).prop('checked', true);//  

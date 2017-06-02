@@ -98,7 +98,11 @@
                         
                     
 
+                        <% if @wh_info.state == "new"%>
                         <%= submit_tag "提交审批", class:"btn btn-info" ,data:{confirm: "确定要提交给XXX审批?"} %>
+                        <% elsif @wh_info.state == "checking"%>
+                        <%= submit_tag "确认发货", class:"btn btn-danger" ,data:{confirm: "确定发货?"} %>
+                        <% end %>
 
 
                     

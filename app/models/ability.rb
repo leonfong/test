@@ -45,6 +45,8 @@ class Ability
     alias_action :update, :to => :external_access         #外部访问21
     alias_action :update, :to => :work_top         #管理员
     alias_action :update, :to => :work_pcb_business          #PCB业务
+    alias_action :update, :to => :work_g_pcb_fb          #采购PCB业复问题
+    alias_action :update, :to => :work_g_a_fb          #采购回复问题
     alias_action :update, :to => :work_suppliers    #供应商
     alias_action :update, :to => :work_send_to_sell    #发给业务 
     alias_action :update, :to => :work_admin    #管理员 
@@ -144,6 +146,7 @@ class Ability
       can :work_g, :all
       can :work_baojia, :all
       can :old_bom, :all
+      can :work_g_pcb_fb, :all
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_all)
       can :work_send_to_sell, :all
@@ -154,6 +157,7 @@ class Ability
       can :work_g_all, :all
       can :work_suppliers, :all
       can :old_bom, :all
+      can :work_g_a_fb, :all
       can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_a)
       #can :manage, :all
@@ -163,7 +167,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_a, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_a1)
       #can :manage, :all
       can :work_suppliers, :all
@@ -173,7 +178,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_a1, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_a2)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -182,7 +188,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_a2, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_b)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -191,7 +198,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_b, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_b1)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -200,7 +208,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_b1, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_b2)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -209,7 +218,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_b2, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_c)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -218,7 +228,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_c, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_c1)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -227,7 +238,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_c1, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_c2)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -236,7 +248,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_c2, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_d)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -245,7 +258,8 @@ class Ability
       can :work_baojia, :all
       can :work_g_d, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_d1)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -253,7 +267,8 @@ class Ability
       can :work_g, :all
       can :work_g_d1, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_seven_d2)
       #can :manage, :all
       can :work_send_to_sell, :all
@@ -261,7 +276,8 @@ class Ability
       can :work_g, :all
       can :work_g_d2, :all
       can :old_bom, :all
-      can :work_pcb_business, :all
+      can :work_g_a_fb, :all
+      #can :work_pcb_business, :all
     elsif user.has_role?(:work_eight)
       #can :manage, :all
       can :work_up, :all

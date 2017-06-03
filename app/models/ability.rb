@@ -313,6 +313,7 @@ class Ability
       can :work_sw_hw, :all
       can :read, :all
     elsif user.has_role?(:work_g_admin)
+      can :work_g_a_fb, :all
       can :work_g_work_flow, :all
       #can :manage, :all
       can :work_a, :all

@@ -9757,7 +9757,7 @@ before_filter :authenticate_user!
             render "merchandiser.html.erb"
 #采购
         #elsif can? :work_g, :all 
-        elsif can :work_g_a_fb, :all
+        elsif can? :work_g_a_fb, :all
             start_date = ""
             start_date_a = ""
             if params[:start_date] != ""
@@ -9785,8 +9785,8 @@ before_filter :authenticate_user!
             
             render "procurement.html.erb"
 #采购 pcb
-        elsif can? :work_pcb_business, :all
-        elsif can :work_g_pcb_fb, :all
+        #elsif can? :work_pcb_business, :all
+        elsif can? :work_g_pcb_fb, :all
             start_date = ""
             start_date_a = ""
             if params[:start_date] != ""

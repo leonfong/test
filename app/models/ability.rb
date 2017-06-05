@@ -93,7 +93,7 @@ class Ability
     elsif user.has_role?(:work_wh_fb)
       #can :manage, :all
       can :work_up, :all
-      can :work_c, :all
+      can :work_wh, :all
       can :work_wh_fb, :all
       can :work_h, :all
     elsif user.has_role?(:work_four)

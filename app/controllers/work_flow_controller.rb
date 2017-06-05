@@ -9449,7 +9449,8 @@ before_filter :authenticate_user!
         else
             empty_date = ""
             #limit = ""
-        end 
+        end
+#生产部 
         if can? :work_c, :all
             #if params[:order] or  params[:empty_date]                    
                 #add_where = ""        
@@ -9490,6 +9491,55 @@ before_filter :authenticate_user!
             Rails.logger.info("--------------------------------------add_orderby") 
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state = 0) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state = 0) " + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
             @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            if params[:order] or params[:empty_date]
+                @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where ).paginate(:page => params[:page], :per_page => 10)
+                if @work_flow.size == 1                
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                end
+            end
+            
+            render "production.html.erb"
+#仓库
+        elsif can? :work_wh_fb, :all
+            #if params[:order] or  params[:empty_date]                    
+                #add_where = ""        
+                #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + "  ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            #else
+                #@show_title = "未反馈的订单"
+                #add_where = ""
+                #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
+            #end
+            add_orderby = ""
+            if params[:sort_date]
+                if params[:sort_date] == "smd"
+                    empty_date = ""
+                    add_where = "AND smd_end_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.smd_end_date "
+                elsif params[:sort_date] == "dip"
+                    empty_date = ""
+                    add_where = "AND dip_end_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.dip_end_date "
+                elsif params[:sort_date] == "clear"
+                    empty_date = ""
+                    add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.clear_date " 
+                elsif params[:sort_date] == "state"
+                    empty_date = ""
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.feed_state DESC" 
+                elsif params[:sort_date] == "smd_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.smd_start_date DESC" 
+                elsif params[:sort_date] == "dip_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.dip_start_date DESC" 
+                end
+            end
+            Rails.logger.info("--------------------------------------add_orderby")
+            Rails.logger.info(add_orderby)
+            Rails.logger.info("--------------------------------------add_orderby") 
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state = 0) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state = 0) " + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%warehouse%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where ).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
@@ -10503,13 +10553,14 @@ before_filter :authenticate_user!
                                     receive_new.delete("engineering_pcb")
                                 elsif can? :work_d_test, :all 
                                     receive_new.delete("engineering_test")
-
                                 #elsif can? :work_f, :all 
                                     #receive_new.delete("merchandiser")
                                 elsif can? :work_g_a_fb, :all
                                     receive_new.delete("procurement")
                                 elsif can? :work_g_pcb_fb, :all
                                     receive_new.delete("pcb")
+                                elsif can? :work_wh_fb, :all
+                                    receive_new.delete("warehouse")
                                 end
 
                                 topic_up.feedback_receive = receive_new.join(",")

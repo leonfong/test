@@ -105,7 +105,7 @@
                        </div>
                        <div class="checkbox-inline">
                            <label>
-                               <input type="checkbox" value="procurement_pcb" name="send_up[]" id="send_up10" onclick="change_2()"> 
+                               <input type="checkbox" value="pcb" name="send_up[]" id="send_up10" onclick="change_2()"> 
                                <strong><%= '采购部-PCB' %></strong>
                            </label>
                        </div>
@@ -139,6 +139,12 @@
                                <strong><%= '工程部-测试组' %></strong>
                            </label>
                        </div>
+                       <div class="checkbox-inline">
+                           <label>
+                               <input type="checkbox" value="warehouse" name="send_up[]" id="send_up11" onclick="change_2()"> 
+                               <strong><%= '仓库' %></strong>
+                           </label>
+                       </div>
 
         <script>
         function change_1(){
@@ -150,6 +156,8 @@
                document.getElementById('send_up7').checked = false;
                document.getElementById('send_up8').checked = false;
                document.getElementById('send_up9').checked = false;
+               document.getElementById('send_up10').checked = false;
+               document.getElementById('send_up11').checked = false;
                             
            } 
          function change_2(){

@@ -39,6 +39,7 @@ class Ability
     alias_action :update, :to => :work_i          #MPN
     alias_action :update, :to => :work_finance    #财务
     alias_action :update, :to => :work_wh         #仓库
+    alias_action :update, :to => :work_wh_fb        #仓库复问题
     alias_action :update, :to => :pcb_review      #PCB_R
     alias_action :update, :to => :pcb_dc          #PCB_DC
     alias_action :update, :to => :old_bom         #老bom匹配功能
@@ -88,6 +89,12 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_c, :all
+      can :work_h, :all
+    elsif user.has_role?(:work_wh_fb)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_c, :all
+      can :work_wh_fb, :all
       can :work_h, :all
     elsif user.has_role?(:work_four)
       #can :manage, :all

@@ -3402,6 +3402,9 @@ before_filter :authenticate_user!
                                         @item = item
                                         render "p_search_part.js.erb" and return
                                     #rescue
+                                    #else
+#++++++++++++++++++++++++++++++++
+                                        #render "p_search_part.js.erb" and return
                                     end
                                 end
                                 if not match_product.blank?
@@ -3451,7 +3454,7 @@ before_filter :authenticate_user!
                                 #item.save
                                 #@item = item
                                 render "p_search_part.js.erb" and return        
-                                end
+                            end
                         else
     #0.2如果没有mpn只有描述
                             Rails.logger.info("22555-------------------------------------------------------22")

@@ -9934,7 +9934,7 @@ before_filter :authenticate_user!
             render "merchandiser_feedback.html.erb"
         elsif can? :work_g, :all
             render "procurement_feedback.html.erb"
-        elsif can? :work_b, :all
+        elsif can? :work_b, :all or can? :work_wh_fb, :all
             if @topic.mark.blank?
                 @topic.mark = "lwork_bl"
             else

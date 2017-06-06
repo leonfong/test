@@ -9849,7 +9849,7 @@ before_filter :authenticate_user!
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
                 end_date_a = " AND A.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%pcb%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement_pcb%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
             if params[:order] 
                 if params[:order_s][:order_s].to_i == 5 
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a + " ORDER BY	A.updated_at DESC").paginate(:page => params[:page], :per_page => 20)

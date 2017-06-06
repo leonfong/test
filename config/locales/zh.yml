@@ -88,15 +88,17 @@ zh:
         zero: "暂无%{model}记录"
     page_gap: "…"
     previous_label: "上一页"
-    production: 生产部
-  engineering: 工程部
+  production: "生产部"
+  engineering: "工程部"
   engineering_test: 工程部-测试组
   engineering_bom: 工程部-BOM组
   engineering_pcb: 工程部-PCB组
   engineering_ziliao: 工程部-资料组
-  sell: 业务部
-  merchandiser: 跟单部
-  procurement: 采购部
+  merchandiser: "跟单部"
+  procurement: "采购部"
+  sell: "业务部"
+  pcb: "采购PCB"
+  warehours: "仓库"
   stepone: "点击上传按钮进入上传BOM页面。"
   steptwo: "点击按钮选择要上传的BOM文件。"
   steptwoa: "点击下载例子（BOM文件）。"

@@ -82,6 +82,8 @@ en:
   merchandiser: "跟单部"
   procurement: "采购部"
   sell: "业务部"
+  pcb: "采购PCB"
+  warehours: "仓库"
   stepone: "upload your bom list here."
   steptwo: "upload your BOM Template here."
   steptwoa: "Download the BOM Template."

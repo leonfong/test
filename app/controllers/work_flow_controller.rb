@@ -9548,9 +9548,9 @@ before_filter :authenticate_user!
             end
             
             render "production.html.erb"
-=begin
-#工程部 
-        elsif can? :work_d, :all
+
+#工程部主管 
+        elsif can? :work_d_all, :all
             start_date = ""
             if params[:start_date] != ""
                 start_date = " AND topics.created_at > '#{params[:start_date]}'"
@@ -9579,7 +9579,7 @@ before_filter :authenticate_user!
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE "  + where_def + add_where + " AND feedback_state = 1 ORDER BY work_flows.updated_at DESC "  ).paginate(:page => params[:page], :per_page => 10)
             #end
             #render "test_feedback.list.html.erb"
-=end
+
 #BOM组
         elsif can? :work_d_bom, :all
             start_date = ""

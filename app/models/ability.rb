@@ -12,6 +12,7 @@ class Ability
     alias_action :update, :to => :work_c          #生产6
 
     alias_action :update, :to => :work_d          #工程7
+    alias_action :update, :to => :work_d_all      #工程all
     alias_action :update, :to => :work_d_bom      #工程36
     alias_action :update, :to => :work_d_pcb      #工程37
     alias_action :update, :to => :work_d_ziliao   #工程38
@@ -100,6 +101,7 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_d, :all
+      can :work_d_all, :all
       #can :work_baojia, :all
       can :old_bom, :all
     elsif user.has_role?(:work_four_bom)

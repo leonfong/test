@@ -10558,7 +10558,7 @@ before_filter :authenticate_user!
                                 elsif can? :work_g_a_fb, :all
                                     receive_new.delete("procurement")
                                 elsif can? :work_g_pcb_fb, :all
-                                    receive_new.delete("pcb")
+                                    receive_new.delete("procurement_pcb")
                                 elsif can? :work_wh_fb, :all
                                     receive_new.delete("warehouse")
                                 end

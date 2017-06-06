@@ -97,7 +97,7 @@ zh:
   merchandiser: "跟单部"
   procurement: "采购部"
   sell: "业务部"
-  pcb: "采购PCB"
+  procurement_pcb: "采购PCB"
   warehours: "仓库"
   stepone: "点击上传按钮进入上传BOM页面。"
   steptwo: "点击按钮选择要上传的BOM文件。"

@@ -84,6 +84,7 @@ en:
   sell: "业务部"
   procurement_pcb: "采购PCB"
   warehours: "仓库"
+  pmc: "PMC"
   stepone: "upload your bom list here."
   steptwo: "upload your BOM Template here."
   steptwoa: "Download the BOM Template."

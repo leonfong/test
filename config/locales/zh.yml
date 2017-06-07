@@ -99,6 +99,7 @@ zh:
   sell: "业务部"
   procurement_pcb: "采购PCB"
   warehours: "仓库"
+  pmc: "PMC"
   stepone: "点击上传按钮进入上传BOM页面。"
   steptwo: "点击按钮选择要上传的BOM文件。"
   steptwoa: "点击下载例子（BOM文件）。"

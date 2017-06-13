@@ -275,7 +275,8 @@ Rails.application.routes.draw do
   match '/find_wh_out', to: 'work_flow#find_wh_out', via: 'post'
   match '/wh_out_item_up', to: 'work_flow#wh_out_item_up', via: 'get'
   match '/wh_out_to_check', to: 'work_flow#wh_out_to_check', via: 'post'
-
+  match '/edit_buy_qty', to: 'work_flow#edit_buy_qty', via: 'post'
+  match '/pmc_list', to: 'work_flow#pmc_list', via: 'get'
 
   
 

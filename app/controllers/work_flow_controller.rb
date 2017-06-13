@@ -5,6 +5,9 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def pmc_list
+    end
+
     def wh_out
         @whlist = WhOutInfo.all.order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
     end
@@ -318,7 +321,7 @@ before_filter :authenticate_user!
     end
 
     def edit_pmc_remark
-        if can? :work_d, :all or can? :work_admin, :all 
+        if can? :work_a, :all or can? :work_admin, :all 
             if not params[:item_id].blank?
                 get_item_data = PiPmcItem.find_by_id(params[:item_id])
                 if not get_item_data.blank?
@@ -378,9 +381,10 @@ before_filter :authenticate_user!
 
     def find_pmc_pi
         if not params[:key_order].blank?
-            pmc_new = PiPmcItem.find_by_sql("SELECT * FROM pi_pmc_items  WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' GROUP BY pi_pmc_items.erp_no_son")
+            #pmc_new = PiPmcItem.find_by_sql("SELECT * FROM pi_pmc_items  WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' GROUP BY pi_pmc_items.erp_no_son")
 
-            pmc_new = PiPmcItem.find_by_sql("SELECT p_items.*, pi_pmc_items.erp_no_son,pi_pmc_items.id AS pmc_id FROM pi_pmc_items INNER JOIN procurement_boms ON pi_pmc_items.erp_no_son = procurement_boms.erp_no_son INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' AND p_items.moko_part LIKE '%#{params[:key_moko_part]}%'")
+            #pmc_new = PiPmcItem.find_by_sql("SELECT p_items.*, pi_pmc_items.erp_no_son,pi_pmc_items.id AS pmc_id FROM pi_pmc_items INNER JOIN procurement_boms ON pi_pmc_items.erp_no_son = procurement_boms.erp_no_son INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' AND p_items.moko_part LIKE '%#{params[:key_moko_part]}%'")
+            pmc_new = PiPmcItem.find_by_sql("SELECT p_items.*, A.* FROM procurement_boms INNER JOIN p_items ON procurement_boms.id = p_items.procurement_bom_id RIGHT JOIN (SELECT DISTINCT pi_pmc_items.erp_no_son, pi_pmc_items.id AS pmc_id FROM pi_pmc_items WHERE pi_pmc_items.erp_no_son LIKE '%#{params[:key_order]}%' group by erp_no_son) A ON A.erp_no_son = procurement_boms.erp_no_son WHERE A.erp_no_son LIKE '%#{params[:key_order]}%' AND p_items.moko_part LIKE '%#{params[:key_moko_part]}%'")
             #@pmc_new = PiPmcItem.where(erp_no_son: params[:key_order])
             if not pmc_new.blank?
                 @tr = ''
@@ -3226,7 +3230,18 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
-
+    def edit_buy_qty
+        if can? :work_d, :all or can? :work_admin, :all or can? :work_a, :all
+            if not params[:item_id_qty].blank?
+                get_item_data = PiPmcItem.find_by_id(params[:item_id_qty])
+                if not get_item_data.blank?
+                    get_item_data.buy_qty = params[:buy_qty]
+                    get_item_data.save
+                end
+            end
+        end
+        redirect_to :back
+    end
 
     def wh_draft_change
         wh_order = PiWhChangeInfo.find_by_pi_wh_change_no(params[:wh_no])
@@ -9903,6 +9918,14 @@ before_filter :authenticate_user!
             @receive += " " + t(:"#{rece}")
         end
         if can? :work_c, :all or can? :work_a, :all
+            if can? :work_f_m, :all
+                if @topic.mark.blank? 
+                    @topic.mark = "lwork_f_ml"
+                else
+                    @topic.mark += "lwork_f_ml"
+                end
+                @topic.save
+            end
             render "production_feedback.html.erb"
         elsif can? :work_d, :all or can? :work_d_bom, :all or can? :work_d_pcb, :all or can? :work_d_ziliao, :all or can? :work_d_test, :all
             render "engineering_feedback.html.erb"

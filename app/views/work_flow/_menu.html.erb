@@ -56,14 +56,17 @@
 <!--
         <li><a <% if selected == "pmc_to_sell" %>style="background-color: #d9edf7;"<% end %>href="/pmc_to_sell"><i class="icon-list-alt"></i>PMC退回订单</a></li>
 -->
+        <li><a <% if selected == "pmc_part_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_list"><i class="icon-list-alt"></i>物料跟踪表</a></li>
         <li><a <% if selected == "pmc_new" %>style="background-color: #d9edf7;"<% end %>href="/pmc_new"><i class="icon-list-alt"></i>新增采购申请</a></li>
         <li><a <% if selected == "pmc_h" %>style="background-color: #d9edf7;"<% end %>href="/pmc_h"><i class="icon-list-alt"></i>PMC历史记录</a></li>
         <li><a <% if selected == "pmc_add_list" %>style="background-color: #d9edf7;"<% end %>href="/pmc_add_list"><i class="icon-list-alt"></i>新增备库存申请</a></li>
         <li><a <% if selected == "pmc_warehouse_check" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_list"><i class="icon-list-alt"></i>PMC库存盘点审核</a></li>
+
 <% end %>
 <% if can? :work_c, :all or can? :work_admin, :all or can? :work_a, :all%>
         <li><a <% if selected == "pmc_warehouse_check_apply_for" %>style="background-color: #d9edf7;"<% end %>href="/pmc_wh_check_apply_for_list"><i class="icon-list-alt"></i>工厂盘赢/亏 申请</a></li>
 <% end %>
+
     </ul>
 
 <% if can? :work_g, :all %>
@@ -79,7 +82,7 @@
 
 
 
-<% if can? :work_wh, :all %>
+<% if can? :work_wh, :all or can? :work_a, :all %>
     <a style="background-color: #ddd;" href="#whMenu" class="list-group-item menu-first" data-toggle="collapse"><i class="icon-book icon-large"></i> 库存管理</a>
     <ul id="whMenu" class="nav nav-list  menu-second <% if selected =~ /wh/i %>collapse in<% else %>collapse<% end %>">
         <li><a <% if selected == "wh_draft_list" %>style="background-color: #d9edf7;"<% end %> href="/wh_draft_list"><i></i> 入库</a></li>

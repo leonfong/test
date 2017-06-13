@@ -84,13 +84,15 @@
                             <td><%= item.moko_part %></td>
                             <td><%= item.moko_des %></td>
                             <td><%= item.pmc_qty %></td>
-                            <td><%= item.buy_user %></td>
+                            <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>">
+                                    <div ><%= item.buy_user %></div>
+                                </td>
                             <td><%= item.remark %></td>
                             <td>
                             <% if item.state == "done" %>
                                 Done!
                             <% else %>
-                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-remark="<%= item.remark %>" data-pmc_qty="<%= item.pmc_qty %>" data-moko_part="<%= item.moko_part %>" data-moko_des="<%= item.moko_des %>"></a>
+                                <a class="glyphicon glyphicon-edit" data-backdrop="static" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-remark="<%= item.remark %>" data-pmc_qty="<%= item.pmc_qty %>" data-moko_part="<%= item.moko_part %>" data-moko_des="<%= item.moko_des %>"></a>
                             <% end %>
                             </td>
                         </tr>

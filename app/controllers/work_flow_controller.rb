@@ -6,6 +6,18 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def pmc_list
+        where_data = ""
+        if not params[:start_date].blank?
+            where_data += " WHERE pi_buy_items.delivery_date > '#{params[:start_date]}'"
+        end
+        if not params[:end_date].blank?
+            if where_data == ""
+                where_data += " WHERE pi_buy_items.delivery_date < '#{params[:end_date]}'"
+            else
+                where_data += " AND pi_buy_items.delivery_date < '#{params[:end_date]}'"
+            end
+        end
+        @pmc_list = PiPmcItem.find_by_sql("SELECT pi_pmc_items.moko_part, pi_pmc_items.moko_des, pi_pmc_items.part_code, pi_pmc_items.buy_qty, pi_pmc_items.buy_user, pi_pmc_items.remark, pi_pmc_items.pmc_qty, pi_pmc_items.qty, pi_buy_items.pi_buy_info_id, pi_buy_items.delivery_date, pi_buy_items.buy_qty, pi_buy_items.qty_done, pi_pmc_items.p_item_id, pi_pmc_items.erp_id FROM pi_pmc_items LEFT JOIN pi_buy_items ON pi_pmc_items.id = pi_buy_items.pi_pmc_item_id #{where_data}").paginate(:page => params[:page], :per_page => 20)
     end
 
     def wh_out

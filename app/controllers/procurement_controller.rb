@@ -1790,6 +1790,156 @@ before_filter :authenticate_user!
         end
     end
 
+    def p_excel
+        @bom = ProcurementBom.find(params[:bom_id])
+        file_name = @bom.p_name.to_s+".xls"
+        path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #Rails.logger.info(file_name.inspect)
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
+                all_title = @bom.all_title.split("|",-1)
+                all_title << "MPN"
+                all_title << "MOKO物料名称"
+                all_title << "MOKO物料描述"
+                all_title << "数量"
+                all_title << "成本单价"
+                all_title << "报价"
+                all_title << "备注1"
+                all_title << "备注2"
+                sheet1.row(0).concat all_title
+                #sheet1.column(1).width = 50
+                set_color = 0  
+                while set_color < all_title.size do         
+                    sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
+                    if all_title[set_color] =~ /Quantity/i or all_title[set_color] =~ /qty/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /成本价/i or all_title[set_color] =~ /报价/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /MOKO物料描述/i
+                        sheet1.column(set_color).width = 35
+                    elsif all_title[set_color] =~ /part/i
+                        sheet1.column(set_color).width = 22
+                    else
+                        sheet1.column(set_color).width = 15
+                    end
+                    set_color += 1
+                end
+		@bom.p_items.each_with_index do |item,index|
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :text_wrap => 1,:size => 8
+                    })
+                    add_format = Spreadsheet::Format.new({
+                    :text_wrap => 1,:size => 8,:pattern_fg_color => :builtin_red
+                    })
+		    row = sheet1.row(rowNum)
+                    row.set_format(2,title_format)
+                    set_f = 0  
+                    while set_f < all_title.size do         
+                        row.set_format(set_f,title_format)
+                        set_f += 1
+                    end
+                    #if item.warn
+                        #[0,1,2,3,4,5,6,7].each{|col|
+                        #row.set_format(2,title_format)
+                        #row.default_format = color
+                        #}
+                    #end
+                    if not item.all_info.blank?
+                        item.all_info.split("|",-1).each do |info|
+                            row.push(info.to_s)
+                        end
+                    else
+                        all_title.each_with_index do |set_color,index|
+                            row.set_format(index,ColorFormat.new(:red,:white))
+                        end
+                        @bom.all_title.split("|",-1).each do |do_it|
+                            row.push("")
+                        end
+                    end
+		    #row.push(rowNum)
+		    #row.push(item.description)
+		    #row.push(item.quantity)
+                    row.push("#{item.mpn}")
+                    if item.product_id != 0 and item.product_id != nil
+                        row.push(Product.find(item.product_id).name)
+                        row.push(Product.find(item.product_id).description)
+                    else
+                        row.push("")
+                        row.push("")
+                    end
+                    if can? :work_d, :all
+                        row.push(" ")
+                        row.push(" ")
+                        row.push(" ")
+                    else
+                        row.push("#{item.quantity}")
+                        row.push("#{item.cost}")
+                        row.push("#{item.price}")
+                    end
+                    if item.dn_id.blank?
+                        row.push("")
+                    else
+                        begin
+                            if PDn.find(item.dn_id).remark.blank?
+                                row.push("")
+                            else
+                                row.push(PDn.find(item.dn_id).remark)
+                            end
+                        rescue
+                            row.push("")
+                        end
+                    end
+                    if PItemRemark.where(p_item_id: item.id).blank?
+                        row.push("")
+                    else
+                        allitem_remark = ""
+                        #Rails.logger.info("----------------------------------------------------------------ggg3")
+                        PItemRemark.where(p_item_id: item.id).each do |remark_i|
+                            allitem_remark += "【#{remark_i.user_name}】:#{remark_i.remark}\n\r"
+                        end
+                        row.push(allitem_remark)
+                    end
+                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    Rails.logger.info(item.all_info.inspect)
+                    #Rails.logger.info(item.all_info.split("|",-1).inspect)
+                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                    if not item.dn_id.blank?
+                        Rails.logger.info("111111111111111")
+                        #Rails.logger.info(request.protocol)
+                        #Rails.logger.info(request.host_with_port)
+                        #Rails.logger.info(PDn.find(item.dn_id).info_url.inspect)
+                        #Rails.logger.info("111111111111111")
+                        begin
+                            if not PDn.find(item.dn_id).info_url.blank?
+                                #row.push(request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url)
+                                row.push(Spreadsheet::Link.new request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url, '技术资料')
+                            else
+                                row.push("")
+                            end
+                        rescue
+                            row.push("")
+                        end
+                    else
+                        row.push("")
+                    end		 
+                end
+
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('UTF-8'), filename: file_name)
+                              
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel")
+                #send_file(path,filename: file_name, type: "application/vnd.ms-excel")    
+    end
 
     def p_excel_add
         @bom = ProcurementBom.find(params[:bom_id])
@@ -5622,146 +5772,6 @@ WHERE
             @dn.state = "del"
             @dn.save
         end
-    end
-
-    def p_excel
-        @bom = ProcurementBom.find(params[:bom_id])
-        file_name = @bom.p_name.to_s+".xls"
-        path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
-        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-        #Rails.logger.info(file_name.inspect)
-        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-
-                Spreadsheet.client_encoding = 'UTF-8'
-		ff = Spreadsheet::Workbook.new
-
-		sheet1 = ff.create_worksheet
-
-		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
-                all_title = @bom.all_title.split("|",-1)
-                all_title << "MPN"
-                all_title << "MOKO物料名称"
-                all_title << "MOKO物料描述"
-                all_title << "数量"
-                all_title << "成本单价"
-                all_title << "报价"
-                all_title << "备注"
-                sheet1.row(0).concat all_title
-                #sheet1.column(1).width = 50
-                set_color = 0  
-                while set_color < all_title.size do         
-                    sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
-                    if all_title[set_color] =~ /Quantity/i or all_title[set_color] =~ /qty/i
-                        sheet1.column(set_color).width = 8
-                    elsif all_title[set_color] =~ /成本价/i or all_title[set_color] =~ /报价/i
-                        sheet1.column(set_color).width = 8
-                    elsif all_title[set_color] =~ /MOKO物料描述/i
-                        sheet1.column(set_color).width = 35
-                    elsif all_title[set_color] =~ /part/i
-                        sheet1.column(set_color).width = 22
-                    else
-                        sheet1.column(set_color).width = 15
-                    end
-                    set_color += 1
-                end
-		@bom.p_items.each_with_index do |item,index|
-		    rowNum = index+1
-                    title_format = Spreadsheet::Format.new({
-                    :text_wrap => 1,:size => 8
-                    })
-                    add_format = Spreadsheet::Format.new({
-                    :text_wrap => 1,:size => 8,:pattern_fg_color => :builtin_red
-                    })
-		    row = sheet1.row(rowNum)
-                    row.set_format(2,title_format)
-                    set_f = 0  
-                    while set_f < all_title.size do         
-                        row.set_format(set_f,title_format)
-                        set_f += 1
-                    end
-                    #if item.warn
-                        #[0,1,2,3,4,5,6,7].each{|col|
-                        #row.set_format(2,title_format)
-                        #row.default_format = color
-                        #}
-                    #end
-                    if not item.all_info.blank?
-                        item.all_info.split("|",-1).each do |info|
-                            row.push(info.to_s)
-                        end
-                    else
-                        all_title.each_with_index do |set_color,index|
-                            row.set_format(index,ColorFormat.new(:red,:white))
-                        end
-                        @bom.all_title.split("|",-1).each do |do_it|
-                            row.push("")
-                        end
-                    end
-		    #row.push(rowNum)
-		    #row.push(item.description)
-		    #row.push(item.quantity)
-                    row.push("#{item.mpn}")
-                    if item.product_id != 0 and item.product_id != nil
-                        row.push(Product.find(item.product_id).name)
-                        row.push(Product.find(item.product_id).description)
-                    else
-                        row.push("")
-                        row.push("")
-                    end
-                    if can? :work_d, :all
-                        row.push(" ")
-                        row.push(" ")
-                        row.push(" ")
-                    else
-                        row.push("#{item.quantity}")
-                        row.push("#{item.cost}")
-                        row.push("#{item.price}")
-                    end
-                    if item.dn_id.blank?
-                        row.push("")
-                    else
-                        begin
-                            if PDn.find(item.dn_id).remark.blank?
-                                row.push("")
-                            else
-                                row.push(PDn.find(item.dn_id).remark)
-                            end
-                        rescue
-                            row.push("")
-                        end
-                    end
-                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                    Rails.logger.info(item.all_info.inspect)
-                    #Rails.logger.info(item.all_info.split("|",-1).inspect)
-                    Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-                    if not item.dn_id.blank?
-                        Rails.logger.info("111111111111111")
-                        #Rails.logger.info(request.protocol)
-                        #Rails.logger.info(request.host_with_port)
-                        #Rails.logger.info(PDn.find(item.dn_id).info_url.inspect)
-                        #Rails.logger.info("111111111111111")
-                        begin
-                            if not PDn.find(item.dn_id).info_url.blank?
-                                #row.push(request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url)
-                                row.push(Spreadsheet::Link.new request.protocol + request.host_with_port + PDn.find(item.dn_id).info_url, '技术资料')
-                            else
-                                row.push("")
-                            end
-                        rescue
-                            row.push("")
-                        end
-                    else
-                        row.push("")
-                    end		 
-                end
-
-                #file_contents = StringIO.new
-	        #ff.write (file_contents)
-	        #send_data(file_contents.string.force_encoding('UTF-8'), filename: file_name)
-                              
-                ff.write (path+file_name)              
-                send_file(path+file_name, type: "application/vnd.ms-excel")
-                #send_file(path,filename: file_name, type: "application/vnd.ms-excel")    
     end
 
     def p_profit

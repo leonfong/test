@@ -19,9 +19,17 @@
                 <div class="col-md-2 col-sm-2 form-inline" >
                     <span  style="color:#999;">
                         <div class="form-group  nav navbar-nav navbar-left">
-                            <lable for="order_no" , class="sr-only">Qrder : </lable>
+                            <lable for="start_date" , class="sr-only">start_date : </lable>
                             <div class="input-group input-group-sm">    
-                                <%= text_field_tag :order_no, params[:order_no], class:"form-control input-lg", size:"30", placeholder:"订单号"%>     
+                                <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"30" , placeholder:"开始日期" %>
+                                <script type="text/javascript">
+                                    $(function () {
+                                    $('#start_date').datetimepicker({
+                                        useCurrent: false,
+                                        format: 'YYYY-MM-DD'
+                                    });    
+                                    });
+                                 </script>
                                 <div class="input-group-btn">
                                     <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                                 </div>
@@ -32,9 +40,17 @@
                 <div class="col-md-2 col-sm-2 form-inline" >
                     <span  style="color:#999;">
                         <div class="form-group  nav navbar-nav navbar-left">
-                            <lable for="moko_part" , class="sr-only">MOKO ID : </lable>
+                            <lable for="end_date" , class="sr-only">end_date : </lable>
                             <div class="input-group input-group-sm">    
-                                <%= text_field_tag :moko_part, params[:moko_part], class:"form-control input-lg", size:"30", placeholder:"MOKO ID"%>     
+                                <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"30" , placeholder:"结束日期" %>
+                                <script type="text/javascript">
+                                    $(function () {
+                                    $('#end_date').datetimepicker({
+                                        useCurrent: false,
+                                        format: 'YYYY-MM-DD'
+                                    });    
+                                    });
+                                 </script>
                                 <div class="input-group-btn">
                                     <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                                 </div>
@@ -42,136 +58,52 @@
                         </div>                       
                     </span>
                 </div>
-                <div class="col-md-2 col-sm-2 form-inline" >
-                    <span  style="color:#999;">
-                        <div class="form-group  nav navbar-nav navbar-left">
-                            <lable for="moko_des" , class="sr-only">MOKO ID : </lable>
-                            <div class="input-group input-group-sm">    
-                                <%= text_field_tag :moko_des, params[:moko_des], class:"form-control input-lg", size:"30", placeholder:"MOKO 描述"%>     
-                                <div class="input-group-btn">
-                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                                </div>
-                            </div>
-                        </div>                       
-                    </span>
-                </div>
-                <div class="col-md-2 col-sm-2 form-inline" >
-                    <span  style="color:#999;">
-                        <div class="form-group  nav navbar-nav navbar-left">
-                            <lable for="part_code" , class="sr-only">位号 : </lable>
-                            <div class="input-group input-group-sm">    
-                                <%= text_field_tag :part_code, params[:part_code], class:"form-control input-lg", size:"30", placeholder:"位号"%>     
-                                <div class="input-group-btn">
-                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                                </div>
-                            </div>
-                        </div>                       
-                    </span>
-                </div>
-                <div class="col-md-2 col-sm-2 form-inline" >
-                    <span  style="color:#999;">
-                        <div class="form-group  nav navbar-nav navbar-left">
-                            <lable for="buy_user" , class="sr-only">采购工程师 : </lable>
-                            <div class="input-group input-group-sm">    
-                                <%= text_field_tag :buy_user, params[:buy_user], class:"form-control input-lg", size:"30", placeholder:"采购工程师"%>     
-                                <div class="input-group-btn">
-                                    <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                                </div>
-                            </div>
-                        </div>                       
-                    </span>
-                </div>
+                
+                
+                
                 <% end %>
-                <div class="col-md-1 col-sm-1 form-inline" >
-                    <button class="btn btn-danger btn-sm" id="btn_clean">一键清空</button>
-                </div>
+
                 
             </div>
 
 
             <div class="row">
                 <div class="col-md-12" >
-                        <% if @pmc_new %>
-<%= will_paginate(@pmc_new) %>
+                        <% if @pmc_list %>
+<%= will_paginate(@pmc_list) %>
                     <%= form_tag({action: :pmc_check_pass_all,controller: :work_flow},method:"post") do %>
                     <table class="table table-hover">
                         <thead>
                             <tr style="background-color: #eeeeee">
-                                <th width="30"></th>
-                                <th width="130">
-                                    <%= link_to "Order No.",  {action: "pmc_new", sort_data: "erp_no_son",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
-                                </th>
-                                <th width="90">
-                                    <%= link_to "采购工程师",  {action: "pmc_new", sort_data: "buy_user",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
-                                </th>
-                                <th width="80">状态</th>
-                                <th width="150">
-                                    <%= link_to "MOKO ID",  {action: "pmc_new", sort_data: "moko_part",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
-                                </th>
-                                <th width="350">
-                                    <%= link_to "物料名称",  {action: "pmc_new", sort_data: "moko_des",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
-                                </th>
-                                <th width="150">
-                                    <%= link_to "位号",  {action: "pmc_new", sort_data: "part_code",order_no: params[:order_no],moko_part: params[:moko_part],moko_des: params[:moko_des],part_code: params[:part_code],buy_user: params[:buy_user]} %><span class="caret"></span>
-                                </th>
-                                <th width="80">申请总量</th>
-                                <th width="80">申请数量</th>
-                                <th width="80">库存</th>
-                                <th width="80">虚拟库存</th>
-                                <th >备注</th>
+                                <th width="130">物料名称</th>
+                                <th width="90">位号</th>
+                                <th width="80">BOM用量</th>
+                                <th width="150">需求数</th>
+                                <th width="350">请购数</th>
+                                <th width="80">采购单号</th>
+                                <th width="100">采购日期</th>
+                                <th >采购数量</th>
 
-                                <th width="60">审核</th>
-                                <th width="60">关闭</th>
+                                <th width="100">入库数量</th>
+                                
                             </tr>
                         </thead>
 
                         <tbody>
 
-                            <% @pmc_new.each do |item|%>   
-                            <tr <% if item.up_flag == "do" %>class="bg-warning"<% elsif item.buy_user == "CHK" %>class="bg-danger"<% elsif item.buy_user == "MOKO" %>class="bg-info"<% elsif item.check == "GREEN" %>class="bg-success"<% end %>>
-                                <td style="padding: 5px 5px 5px 10px;margin: 0px;"><input class="chk_all" type="checkbox" name="checkpass_item[]" value="<%= item.id.to_s %>"></td>
-                                
-                                <td>
-                                    <%= item.erp_no_son %>
-                                    <% if item.buy_user == "MOKO" %>
-                                    <a type="button" class="btn btn-danger btn-xs" data-confirm="确定要取消内购?" href="/del_pmc_wh_check_pass?id=<%= item.id.to_s %>">取消内购</a>
-                                    <% end %>
-                                </td>
-                                <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_buy_user" data-item_id="<%= item.id %>" data-buy_user="<%= item.buy_user %>" data-moko_part="<%= item.moko_part %>">
-                                    <div ><%= item.buy_user %></div>
-                                </td>
-                                <td><%= item.state %></td>
+                            <% @pmc_list.each do |item|%>   
+                            <tr>
                                 <td><%= item.moko_part %></td>
-                                <td><%= item.moko_des %></td>
-                                <td style="word-break : break-all;"><%= item.part_code %></td>
-                                <td><%= item.qty %></td>
-                                <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_buy_qty" data-item_id="<%= item.id %>" data-buy_qty="<%= item.buy_qty %>" data-moko_part="<%= item.moko_part %>">
-                                    <%= item.buy_qty %>
-                                </td>
-
-                                <% if not WarehouseInfo.find_by_moko_part(item.moko_part).blank? %>
-                                <td>
-                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).qty %>
-                                </td>
-                                <td>
-                                    <%= WarehouseInfo.find_by_moko_part(item.moko_part).future_qty %>
-                                </td>
-                                <% else %>
+                                <td><%= item.part_code %></td>
                                 <td></td>
                                 <td></td>
-                                <% end %>
-
-                                <td class="bg-warning" data-backdrop="static" data-toggle="modal" data-target="#edit_remark" data-item_id="<%= item.id %>" data-remark="<%= item.remark %>" data-moko_part="<%= item.moko_part %>" >
-                                    <%= item.remark %>
-                                </td>
+                                <td></td>
+                                <td></td>
+                                <td><%= item.delivery_date.blank?? "": item.delivery_date.localtime.strftime('%Y-%m-%d') %></td>
+                                <td><%= item.buy_qty %></td>
+                                <td><%= item.qty_done %></td>
                                 
-                                <td>
-                                <% if item.buy_user == "CHK" %>
-                                <% else %>
-                                    <a type="button" class="btn btn-success btn-xs" data-confirm="确定审核通过?" href="/pmc_check_pass?id=<%= item.id.to_s %>">审核</a>
-                                <% end %>
-                                </td>
-                                <td><a type="button" class="btn btn-danger btn-xs" data-confirm="确定关闭?" href="pmc_close?id=<%= item.id.to_s %>">关闭</a></td>
+
                             </tr>
                             <% end %>
 

@@ -3455,6 +3455,20 @@ before_filter :authenticate_user!
         redirect_to pi_buy_check_list_path()
     end
 
+    def send_pi_buy_checked_item
+        if not params[:pi_buy_item_id].blank?
+            get_data = PiBuyItem.find_by_id(params[:pi_buy_item_id])
+            if not get_data.blank?
+                get_data.state = "checking"
+                get_data.save
+                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                pmc_data.state = "checking"
+                pmc_data.save
+            end
+        end
+        redirect_to :back
+    end
+
     def send_pi_buy_checked
         up_state = PiBuyInfo.find_by_pi_buy_no(params[:pi_buy_no])
         if not up_state.blank?
@@ -10446,7 +10460,7 @@ before_filter :authenticate_user!
                     topic_up.user_name = current_user.email                     #发帖的人
                     topic_up.save
                     if topic_up.feedback_receive =~ /production/
-                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id > 3 AND users_roles.role_id < 7")
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND (users_roles.role_id = '4' OR users_roles.role_id = '5' OR users_roles.role_id = '6' OR users_roles.role_id = '41')")
                         open_id = ""
                         all_open_id.each do |item|
                             if not item.open_id.blank?
@@ -10678,7 +10692,7 @@ before_filter :authenticate_user!
                         end 
                     end
                     if topic_up.feedback_receive =~ /production/
-                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND users_roles.role_id > 3 AND users_roles.role_id < 7")
+                        all_open_id = User.find_by_sql("SELECT users_roles.role_id,users_roles.user_id,users.id,users.email,users.s_name,users.open_id,users.full_name FROM users INNER JOIN users_roles ON users_roles.user_id = users.id AND (users_roles.role_id = '4' OR users_roles.role_id = '5' OR users_roles.role_id = '6' OR users_roles.role_id = '41')")
                         open_id = ""
                         all_open_id.each do |item|
                             if not item.open_id.blank?

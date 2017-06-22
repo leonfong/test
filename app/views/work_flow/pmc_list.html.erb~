@@ -47,7 +47,7 @@
                                     $(function () {
                                     $('#end_date').datetimepicker({
                                         useCurrent: false,
-                                        format: 'YYYY-MM'
+                                        format: 'YYYY-MM-DD'
                                     });    
                                     });
                                  </script>

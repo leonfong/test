@@ -76,7 +76,7 @@
       <th width="80">单价￥</th>
       <th >供应商</th>
       <th >备注</th>
-      <th  width="80">反审核</th>
+      <th  width="70">反审核</th>
     </tr>
   </thead>
   <tbody><small>
@@ -144,7 +144,9 @@
 <% end %>
 </div>
                     </td>
-                    <td></td>
+                    <td> 
+                        <a class="btn btn-xs btn-danger" href="/send_pi_buy_checked_item?pi_buy_item_id=<%= buy.id %>" data-confirm="确定要反审核?">反审核</a>       
+                    </td>
   </tr>
   <% end %>
 <% end %> 

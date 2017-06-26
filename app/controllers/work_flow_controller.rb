@@ -1967,7 +1967,7 @@ before_filter :authenticate_user!
                 @list = FuKuanShenQingDanInfo.where(state: "checked")
             end
         else 
-            @list = FuKuanShenQingDanInfo.all
+            @list = FuKuanShenQingDanInfo.all.order("created_at DESC")
         end
     end
 
@@ -2281,6 +2281,77 @@ before_filter :authenticate_user!
         redirect_to edit_fu_kuan_shen_qing_dan_path(id: new_fu_kuan.id)
     end
 
+
+    def edit_new_fu_kuan_shen_qing_dan
+        if not params[:id].blank?
+            get_supplier_data = SupplierList.find_by_id(params[:id])
+            new_fu_kuan = FuKuanShenQingDanInfo.find_by_id(params[:info_id])
+            new_fu_kuan.user_new = current_user.full_name
+            new_fu_kuan.supplier_code = get_supplier_data.supplier_code
+            new_fu_kuan.supplier_name = get_supplier_data.supplier_name
+            new_fu_kuan.supplier_name_long = get_supplier_data.supplier_name_long
+            new_fu_kuan.supplier_list_id = get_supplier_data.id
+            new_fu_kuan.supplier_clearing = get_supplier_data.supplier_clearing
+            new_fu_kuan.supplier_address = get_supplier_data.supplier_address
+            new_fu_kuan.supplier_contacts = get_supplier_data.supplier_contacts
+            new_fu_kuan.supplier_phone = get_supplier_data.supplier_phone
+            new_fu_kuan.supplier_bank_user = get_supplier_data.supplier_bank_user
+            new_fu_kuan.supplier_bank_name = get_supplier_data.supplier_bank_name
+            new_fu_kuan.supplier_bank_account = get_supplier_data.supplier_bank_account
+            new_fu_kuan.save
+        else
+            new_fu_kuan = FuKuanShenQingDanInfo.find_by_id(params[:info_id])
+            new_fu_kuan.user_new = current_user.full_name
+            new_fu_kuan.supplier_name = "TB"
+            new_fu_kuan.supplier_name_long = "TB"
+            new_fu_kuan.supplier_clearing = "日结"
+            new_fu_kuan.save
+        end
+        redirect_to :back
+    end
+
+    def edit_find_supplier
+        if params[:supplier_code] != ""
+            if params[:pay_type] == "d"
+                pay_type = " AND `supplier_lists`.`supplier_clearing` = '日结'"
+            elsif params[:pay_type] == "m"
+                pay_type = " AND `supplier_lists`.`supplier_clearing` = '月结'"
+            end
+            @supplier_info = SupplierList.find_by_sql("SELECT * FROM `supplier_lists`  WHERE (`supplier_lists`.`supplier_name` LIKE '%#{params[:supplier_code]}%' OR `supplier_lists`.`supplier_name_long` LIKE '%#{params[:supplier_code]}%')#{pay_type}")
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@supplier_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @supplier_info.blank?
+                Rails.logger.info("add-------------------------------------12")
+                @supplier_table = '<br>'
+                @supplier_table += '<small>'
+                @supplier_table += '<table class="table table-bordered">'
+                @supplier_table += '<thead>'
+                @supplier_table += '<tr class="active">'
+                @supplier_table += '<th width="70">供简称</th>'
+                @supplier_table += '<th>供简全称</th>'
+                @supplier_table += '<th>默认结算方式</th>'
+                @supplier_table += '<tr>'
+                @supplier_table += '</thead>'
+                @supplier_table += '<tbody>'
+                @supplier_info.each do |cu|
+                    @supplier_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @supplier_table += '<td><a rel="nofollow" data-method="get"  href="/edit_new_fu_kuan_shen_qing_dan?id=' + cu.id.to_s + '&info_id='+ params[:info_id].to_s + '"><div>' + cu.supplier_name.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @supplier_table += '<td><a rel="nofollow" data-method="get"  href="/edit_new_fu_kuan_shen_qing_dan?id=' + cu.id.to_s + '&info_id='+ params[:info_id].to_s + '"><div>' + cu.supplier_name_long.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @supplier_table += '<td><a rel="nofollow" data-method="get"  href="/edit_new_fu_kuan_shen_qing_dan?id=' + cu.id.to_s + '&info_id='+ params[:info_id].to_s + '"><div>' + cu.supplier_clearing.to_s.gsub(/'/,'') + '</div></a></td>'
+                    @supplier_table += '</tr>'
+                end
+                @supplier_table += '</tbody>'
+                @supplier_table += '</table>'
+                @supplier_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@supplier_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
     def find_supplier
         if params[:supplier_code] != ""
             if params[:pay_type] == "d"
@@ -2365,6 +2436,9 @@ before_filter :authenticate_user!
 
     def fu_kuan_shen_qing_type
 
+    end
+
+    def edit_fu_kuan_shen_qing_type
     end
 
     def edit_setup_finance
@@ -3459,11 +3533,13 @@ before_filter :authenticate_user!
         if not params[:pi_buy_item_id].blank?
             get_data = PiBuyItem.find_by_id(params[:pi_buy_item_id])
             if not get_data.blank?
-                get_data.state = "checking"
-                get_data.save
-                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                
+                pmc_data = PiPmcItem.find_by_id(get_data.pi_pmc_item_id)
                 pmc_data.state = "checking"
-                pmc_data.save
+                if pmc_data.save
+                    
+                    get_data.destroy
+                end
             end
         end
         redirect_to :back
@@ -7483,7 +7559,7 @@ before_filter :authenticate_user!
 
     def pi_buy_list
         #@pi_buy_list = PiBuyInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
-        @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'new' OR pi_buy_infos.state = 'uncheck' GROUP BY pi_buy_infos.id").paginate(:page => params[:page], :per_page => 20)
+        @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'new' OR pi_buy_infos.state = 'uncheck' GROUP BY pi_buy_infos.id ORDER BY pi_buy_infos.created_at DESC").paginate(:page => params[:page], :per_page => 20)
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 

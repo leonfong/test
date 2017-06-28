@@ -5,6 +5,11 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def edit_pi_buy_remark
+
+        redirect_to :back
+    end
+
     def pmc_list
         where_data = ""
         if not params[:start_date].blank?
@@ -3521,7 +3526,7 @@ before_filter :authenticate_user!
                 item.state = "checking"
                 item.save
                 pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
-                #pmc_data.buy_qty = item.qty
+                pmc_data.buyer_qty = pmc_data.buyer_qty + item.buy_qty
                 pmc_data.state = "checking" 
                 pmc_data.save
             end
@@ -3562,7 +3567,7 @@ before_filter :authenticate_user!
                 end
                 item.save
                 pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
-                #pmc_data.buy_qty = item.qty
+                pmc_data.buyer_qty = pmc_data.buyer_qty - item.buy_qty
                 if params[:commit] == "反审核"
                     pmc_data.state = "checking"
                 else
@@ -3665,6 +3670,11 @@ before_filter :authenticate_user!
     def edit_pi_buy_qty_cost
         get_item = PiBuyItem.find_by_id(params[:buy_id])
         if not get_item.blank?
+            get_pmc_data = PiPmcItem.find_by_id(get_item.pi_pmc_item.id)
+            #if params[:buy_qty].to_i < get_pmc_data.pmc_qty.to_i - get_pmc_data.buy_qty.to_i
+                #get_pmc_data.state = "new"
+                #get_pmc_data.save
+            #end
             get_item.buy_qty = params[:buy_qty]
             get_item.cost = params[:buy_cost]
             get_item.dn = params[:buy_dn]
@@ -7412,9 +7422,11 @@ before_filter :authenticate_user!
                         where_des += " AND "
                     end
                 end 
-                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' AND `pi_pmc_items`.`buy_user` <> 'MOKO' ORDER BY 'moko_part'")
+                #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' AND `pi_pmc_items`.`buy_user` <> 'MOKO' ORDER BY 'moko_part'")
+                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`pmc_qty` > `pi_pmc_items`.`buyer_qty` AND `pi_pmc_items`.`buy_user` <> 'MOKO' ORDER BY 'moko_part'")
             else
-                @pi_buy = PiPmcItem.where("state = 'pass' AND `buy_user` <> 'MOKO'").order("moko_part")
+                #@pi_buy = PiPmcItem.where("state = 'pass' AND `buy_user` <> 'MOKO'").order("moko_part")
+                @pi_buy = PiPmcItem.where("`pi_pmc_items`.`pmc_qty` > `pi_pmc_items`.`buyer_qty` AND `buy_user` <> 'MOKO'").order("moko_part")
             end
             #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE (p_items.moko_part LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND pi_infos.state = 'checked' AND p_items.buy IS NULL")    
             #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' ") 

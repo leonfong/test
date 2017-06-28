@@ -121,7 +121,8 @@
       <th >税率</th>
       <th >价税合计</th>
       <th >交货日期</th>
-      <th >备注</th>
+      <th >报价备注</th>
+      <th >采购备注</th>
     </tr>
   </thead>
   <tbody><small>
@@ -193,6 +194,7 @@
 <% end %>
 </div>
       </td>
+      <td class="bg-warning" data-toggle="modal" data-target="#edit_buy_remark" data-buy_id="<%= buy.id %>" data-buy_moko_part="<%= buy.moko_part %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_remark="<%= buy.remark %>"></td>
   </tr>
   <% end %>
 <% end %> 
@@ -362,7 +364,6 @@
 <% end %>
 </div>
                                 </td>
-                                <td></td>
                                 </tr>
                         <% end %>
                     <% end %>
@@ -451,6 +452,44 @@
 </div>
 
 
+<div class="modal fade" id="edit_buy_remark" tabindex="-1" role="dialog" aria-labelledby="edit_buy_remarkLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_buy_remarkLabel">编辑备注</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_pi_buy_remark},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="buy_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="buy_remark_id" name="buy_remark_id">
+          </div>
+          <div class="form-group">
+            <label for="buy_moko_part" class="control-label">供应商简称:</label>
+            <input class="form-control" name="buy_moko_part" id="buy_moko_part" type="text"  readonly>
+          </div>
+          <div class="form-group">
+            <label for="buy_moko_des" class="control-label">供应商全称:</label>
+            <input class="form-control" name="buy_moko_des" id="buy_moko_des" type="text"  readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="buy_remark">备注：</label>
+            <textarea class="form-control" name="buy_remark" id="buy_remark" type="text"></textarea>
+          </div>            
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
 <div class="modal fade" id="edit_buy_qty" tabindex="-1" role="dialog" aria-labelledby="edit_buy_qtyLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -520,6 +559,21 @@ function postform() {
       }
 
 }  
+
+$('#edit_buy_remark').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var buy_id = button.data('buy_id');
+  var buy_qty = button.data('buy_moko_part');
+  var buy_qty = button.data('buy_moko_des');
+  var buy_remark = button.data('buy_remark');
+ 
+  var modal = $(this);
+  
+  modal.find($("#buy_remark_id")).val(buy_id);
+  modal.find($("#buy_moko_part")).val(buy_moko_part);
+  modal.find($("#buy_moko_des")).val(buy_moko_des);
+  modal.find($("#buy_remark")).html(buy_remark);
+})
 
 
 $('#edit_buy_qty').on('show.bs.modal', function (event) {

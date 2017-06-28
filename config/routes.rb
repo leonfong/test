@@ -284,6 +284,7 @@ Rails.application.routes.draw do
   match '/edit_new_fu_kuan_shen_qing_dan', to: 'work_flow#edit_new_fu_kuan_shen_qing_dan', via: 'get'
   match '/find_supplier', to: 'work_flow#find_supplier', via: 'post'
   match '/edit_find_supplier', to: 'work_flow#edit_find_supplier', via: 'post'
+  match '/edit_pi_buy_remark', to: 'work_flow#edit_pi_buy_remark', via: 'post'
 
 
 

@@ -6,7 +6,11 @@ class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
     def edit_pi_buy_remark
-
+        if not params[:buy_remark_id].blank?
+            get_data = PiBuyItem.find_by_id(params[:buy_remark_id])
+            get_data.remark = params[:buy_remark]
+            get_data.save
+        end
         redirect_to :back
     end
 
@@ -8757,11 +8761,11 @@ before_filter :authenticate_user!
                 render "pcb_order_list.html.erb" and return
             elsif params[:bom_chk]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email,del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 20)
                 else
-                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 20)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:place_an_order]

@@ -194,7 +194,7 @@
 <% end %>
 </div>
       </td>
-      <td class="bg-warning" data-toggle="modal" data-target="#edit_buy_remark" data-buy_id="<%= buy.id %>" data-buy_moko_part="<%= buy.moko_part %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_remark="<%= buy.remark %>"></td>
+      <td class="bg-warning" data-toggle="modal" data-target="#edit_buy_remark" data-buy_id="<%= buy.id %>" data-buy_moko_part="<%= buy.moko_part %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_remark="<%= buy.remark %>"><%= buy.remark %></td>
   </tr>
   <% end %>
 <% end %> 
@@ -467,11 +467,11 @@
           </div>
           <div class="form-group">
             <label for="buy_moko_part" class="control-label">供应商简称:</label>
-            <input class="form-control" name="buy_moko_part" id="buy_moko_part" type="text"  readonly>
+            <div class="form-control"  id="buy_moko_part"  ></div>
           </div>
           <div class="form-group">
             <label for="buy_moko_des" class="control-label">供应商全称:</label>
-            <input class="form-control" name="buy_moko_des" id="buy_moko_des" type="text"  readonly>
+            <div class="form-control"  id="buy_moko_des"  ></div>
           </div>
 
           <div class="form-group">
@@ -563,8 +563,8 @@ function postform() {
 $('#edit_buy_remark').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var buy_id = button.data('buy_id');
-  var buy_qty = button.data('buy_moko_part');
-  var buy_qty = button.data('buy_moko_des');
+  var buy_moko_part = button.data('buy_moko_part');
+  var buy_moko_des = button.data('buy_moko_des');
   var buy_remark = button.data('buy_remark');
  
   var modal = $(this);

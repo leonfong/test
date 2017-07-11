@@ -141,10 +141,10 @@
 
 
   <tbody ><small>
-    <% @pcblist.each do |pcb| %>   
+    <% @pcblist.each_with_index do |pcb,index| %>   
       <tr class="bg-warning">
         <% if not pcb.pcb_customer_id.blank? %>
-            <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></small></td>
+            <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><span class="badge"><%= index+1 %></span><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></small></td>
         <% else %>
             <td width="180" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><strong>询价单号: </strong><%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %><small></small></td>
         <% end %>

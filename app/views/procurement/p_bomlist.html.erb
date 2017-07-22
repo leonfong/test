@@ -193,6 +193,7 @@
                                       <% end %>
                                   </td>
                                   <td width="100"><strong>审核: </strong><%= bom.bom_eng %></td>
+                                  <td width="200"><strong>审核日期: </strong><%= bom_v.bom_team_ck_at.blank?? '': bom_v.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
                                   <td></td>
                               </tr>
                           <% end %>

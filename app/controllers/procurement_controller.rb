@@ -4053,8 +4053,8 @@ before_filter :authenticate_user!
         if can? :work_d, :all
             order_ctl = ",`created_at` DESC"
         else
-            order_ctl = ",`bom_team_ck_at` DESC"
-            #order_ctl = ",`created_at` DESC"
+            #order_ctl = ",`bom_team_ck_at` DESC"
+            order_ctl = ",`created_at` DESC"
         end  
         if params[:order_list]
             @boms = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE `name` IS NULL AND `order_do` = 'do' ORDER BY `check` DESC #{order_ctl} ").paginate(:page => params[:page], :per_page => 12)

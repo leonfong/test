@@ -474,7 +474,7 @@
 <% get_dn_data = PDn.where("p_item_id=#{item.id} AND state='' AND (color='b' OR (color='y' AND remark IS NOT NULL ))") %>
 
 <% if not get_dn_data.blank? %>
-<% if get_dn_data.first.remark.blank?||get_dn_data.first.info.blank?%>
+<% if not get_dn_data.first.remark.blank?|| not get_dn_data.first.info.blank?%>
 
 <div class="row" style="margin: 0px;">
 <div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">

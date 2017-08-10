@@ -525,9 +525,36 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def new_ping_zheng
+        if can? :work_finance, :all
+            get_data = ZongZhangInfo.new
+
+            #get_data.des = params[:new_des]
+            #get_data.jie_fang_kemu = params[:new_jie_fang_kemu]
+            #get_data.dai_fang_kemu = params[:new_dai_fang_kemu]
+            #get_data.jie_fang = params[:new_jie_fang]
+            #get_data.dai_fang = params[:new_dai_fang]
+            #get_data.remark = params[:new_remark]
+            #get_data.finance_at = params[:new_finance_at]
+            get_data.save
+
+        end
+        redirect_to :back
+    end
+
+    def ping_zheng_new
+        if can? :work_finance, :all or can? :work_admin, :all
+            get_data = ZongZhangInfo.new
+            get_data.save
+            redirect_to edit_ping_zheng_path(id: get_data.id) and return
+        end
+        
+    end
+
     def edit_ping_zheng
-        if not params[:ping_zheng_id].blank?
-            get_data = ZongZhangInfo.find_by_id(params[:ping_zheng_id])
+        if not params[:id].blank?
+            @get_data = ZongZhangInfo.find_by_id(params[:id])
+=begin
             if not get_data.blank?
                 get_data.des = params[:des]
                 get_data.jie_fang_kemu = params[:jie_fang_kemu]
@@ -538,28 +565,34 @@ before_filter :authenticate_user!
                 get_data.finance_at = params[:finance_at]
                 get_data.save
             end
+=end
+        end
+        #redirect_to :back
+    end
+
+    def edit_ping_zheng_up
+        if not params[:ping_zheng_id].blank?
+            get_data = ZongZhangInfo.find_by_id(params[:ping_zheng_id])
+            if not get_data.blank?
+                get_data.des = params[:des]
+                get_data.remark = params[:remark]
+                get_data.finance_at = params[:finance_at]
+                get_data.save
+            end
         end
         redirect_to :back
     end
 
-    def new_ping_zheng
-        if can? :work_finance, :all
-            get_data = ZongZhangInfo.new
-
-            get_data.des = params[:new_des]
-            get_data.jie_fang_kemu = params[:new_jie_fang_kemu]
-            get_data.dai_fang_kemu = params[:new_dai_fang_kemu]
-            get_data.jie_fang = params[:new_jie_fang]
-            get_data.dai_fang = params[:new_dai_fang]
-            get_data.remark = params[:new_remark]
-            get_data.finance_at = params[:new_finance_at]
-            get_data.save
-
-        end
-        redirect_to :back
-    end
 
     def zong_zhang_list
+        if not params[:pass_date].blank?
+            @pingzheng = ZongZhangInfo.find_by_sql("SELECT * FROM zong_zhang_infos WHERE date_format(zong_zhang_infos.finance_at,'%Y-%m')='#{params[:pass_date]}' ").paginate(:page => params[:page], :per_page => 20)
+        else
+            @pingzheng = ZongZhangInfo.all.paginate(:page => params[:page], :per_page => 20)
+        end
+    end
+
+    def zong_zhang_new_list
         if not params[:pass_date].blank?
             @pingzheng = ZongZhangInfo.find_by_sql("SELECT * FROM zong_zhang_infos WHERE date_format(zong_zhang_infos.finance_at,'%Y-%m')='#{params[:pass_date]}' ").paginate(:page => params[:page], :per_page => 20)
         else

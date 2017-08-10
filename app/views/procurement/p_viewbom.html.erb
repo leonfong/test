@@ -245,6 +245,7 @@ $(document).ready(function() {
                            <% end %>
                            <% #if @boms.excel_file_url != nil %>
                            <td width="100"><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
+                           <td width="100"><%= link_to "导出(单独采购)", p_excel_m_path(:bom_id =>@boms.id) %></td>
                            <td width="100"><%= link_to "导出源文件", @boms.excel_file_url %></td> 
                            <% #end %>
                        </tr>

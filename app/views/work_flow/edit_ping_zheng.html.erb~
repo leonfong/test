@@ -1,0 +1,378 @@
+<small><div class="container-fluid" >
+ 
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "zong_zhang_new_finance"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;">
+            <div class="row "><div class="col-md-12">                
+                <div class="panel panel-info">
+                        <div class="panel-heading"><strong>总帐 信息:</strong>
+                            <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-backdrop="static" data-toggle="modal" data-target="#edit_ping_zheng" data-ping_zheng_id="<%= @get_data.id %>" data-des="<%= @get_data.des.to_s %>" data-remark="<%= @get_data.remark.to_s %>" data-finance_at="<%= @get_data.finance_at.blank?? '':@get_data.finance_at.localtime.strftime('%Y-%m-%d').to_s %>" style="margin-right: 5px;" >编辑</button>
+                        </div>
+                        <div class="panel-body ">                     
+                            <div class="col-md-2"><p><strong>总帐TYPE: </strong><ins id="p_pi_show" name="p_pi_show"><%= @get_data.zong_zhang_type.to_s %></ins></p>                                
+                            </div>
+                            <div class="col-md-2"><p><strong>DES : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= @get_data.des.to_s.to_s %></ins></p>
+                            </div> 
+                            <div class="col-md-2"><p><strong>备注: </strong><ins><%= @get_data.remark.to_s %></ins></p>
+                            </div> 
+                            <div class="col-md-6">
+                                <label for="j_h_r_q_show" class="col-md-2 control-label"">审批日期:</label>
+                                <div class="col-md-3" >
+                                <% if not @get_data.finance_at.blank? %>
+                                    <%= @get_data.finance_at.localtime.strftime('%Y-%m-%d').to_s %>
+                                <% end %>
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+            </div></div>
+
+            <div class="row "><div class="col-md-12">
+                <% #if not @pi_buy_info.dn.blank? %>
+                    <button  type="button" class="btn btn-primary btn-xs" data-backdrop="static" data-toggle="modal" data-target="#new_ping_zheng" >添加凭证</button>
+                <% #end %>
+            </div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="row "><div class="col-md-12 col-sm-12 form-inline" >
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="50">操作</th>
+      <th width="80">序号</th>
+      <th width="80">TYPE</th>
+      <th width="180">DES</th>
+      <th >借方科目</th>
+      <th >贷方科目</th>
+      <th width="100">借方</th>
+      <th width="100">贷方</th>
+      <th >备注</th>
+      <th width="100">审批日期</th>
+      <th width="45">删除</th>
+     
+
+    </tr>
+  </thead>
+  <tbody><small>
+<% if not @pi_buy.blank? %>
+  <% @pi_buy.each do |buy| %>
+  <tr>
+      <td><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pi_buy_item?id=<%= buy.id.to_s %>" data-confirm="确定要删除?">删除</a></td>
+      <td><%= buy.erp_no_son %></td>
+      <td><%= buy.mpn %></td>
+      <td>
+          <a class="text-info bg-warning" data-method='get' data-remote='true' href="/cost_history_buy?part_code=<%= buy.moko_part.to_s%>&item_id=<%= buy.id.to_s %>"><%= buy.moko_part %></a>
+      </td>
+      <td><%= buy.moko_des %></td>
+      <td><%= buy.pmc_qty %></td>
+      <td><div class="bg-warning" data-toggle="modal" data-target="#edit_buy_qty" data-buy_id="<%= buy.id %>" data-buy_qty="<%= buy.buy_qty %>" data-buy_cost="<%= buy.cost %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_dn="<%= buy.dn %>" data-buy_dn_long="<%= buy.dn_long %>" data-delivery_date="<%= buy.delivery_date.blank?? '':buy.delivery_date.localtime.strftime('%Y-%m-%d') %>"><%= buy.buy_qty %></div></td>
+      <td><%= buy.cost %></td>
+      <td><%= buy.tax_cost %></td>
+      <td><%= buy.tax %></td>
+      <td><%= buy.tax_t_p %></td>
+      <td><%= buy.delivery_date.blank?? '':buy.delivery_date.localtime.strftime('%Y-%m-%d') %></td>
+      <td>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >
+<% PItemRemark.where(p_item_id: buy.p_item_id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+</div>
+
+<% if not buy.dn_id.blank? %>
+<% if not PDn.find_by_id(buy.dn_id).blank? %>
+<% if not PDn.find(buy.dn_id).remark.blank? %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<% if not PDn.find(buy.dn_id).info.blank? %>                 
+<a class="btn btn-info btn-xs" href="<%= PDn.find(buy.dn_id).info %>" target="_blank">下载</a>
+<% end %>
+<strong>采购工程师: </strong>
+<%= PDn.find(buy.dn_id).remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% end %>
+<% end %>
+</div>
+      </td>
+      <td class="bg-warning" data-toggle="modal" data-target="#edit_buy_remark" data-buy_id="<%= buy.id %>" data-buy_moko_part="<%= buy.moko_part %>" data-buy_moko_des="<%= buy.moko_des %>" data-buy_remark="<%= buy.remark %>"><%= buy.remark %></td>
+  </tr>
+  <% end %>
+<% end %> 
+  </small>   
+  </tbody>
+</table>
+            </div></div>
+
+
+
+
+
+
+
+
+
+
+         <%= form_tag('/send_pi_buy_check', method:"post",id:"upatt") do %>
+            <div class="row "><div class="col-md-12">   
+                <div class="modal-footer"> 
+                    <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="">
+                    <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="">
+                    <% if can? :work_g, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info" ,onclick:"return postform()"%>                
+                    <% end %>
+                </div>
+            </div></div>
+       <% end %>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="edit_ping_zheng" tabindex="-1" role="dialog" aria-labelledby="edit_ping_zhengLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_ping_zhengLabel">编辑凭证</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :edit_ping_zheng_up},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="ping_zheng_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="ping_zheng_id" name="ping_zheng_id">
+          </div>
+          <div class="form-group">
+            <label for="finance_at">审批日期：</label>
+            <%= text_field_tag :finance_at, params[:finance_at], id: "finance_at",class:"form-control" %>
+<script type="text/javascript">
+    $(function () {
+        $('#finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+          </div> 
+          <div class="form-group">
+            <label for="des" class="control-label">DES:</label>
+            <input class="form-control" name="des" id="des" type="text" >
+          </div>
+          
+          <div class="form-group">
+            <label for="remark">备注：</label>
+            <input class="form-control" name="remark" id="remark" type="text">
+          </div> 
+           
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="new_ping_zheng" tabindex="-1" role="dialog" aria-labelledby="new_ping_zhengLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="new_ping_zhengLabel">新建凭证</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :new_ping_zheng},method:"post") do %>
+          <div class="form-group sr-only">
+            <label for="new_ping_zheng_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="new_ping_zheng_id" name="new_ping_zheng_id">
+          </div>
+          <div class="form-group">
+            <label for="new_finance_at">审批日期：</label>
+            <%= text_field_tag :new_finance_at, params[:new_finance_at], id: "new_finance_at",class:"form-control" %>
+<script type="text/javascript">
+    $(function () {
+        $('#new_finance_at').datetimepicker({
+            useCurrent: false,
+            format: 'YYYY-MM-DD'
+        });    
+    });
+</script>
+          </div> 
+          <div class="form-group">
+            <label for="new_des" class="control-label">DES:</label>
+            <input class="form-control" name="new_des" id="new_des" type="text" >
+          </div>
+          <div class="form-group">
+            <label for="new_jie_fang_kemu" class="control-label">借方科目:</label>
+            <input class="form-control" name="new_jie_fang_kemu" id="new_jie_fang_kemu" type="text" >
+          </div>
+          <div class="form-group">
+            <label for="new_dai_fang_kemu" class="control-label">贷方科目:</label>
+            <input class="form-control" name="new_dai_fang_kemu" id="new_dai_fang_kemu" type="text">
+          </div>
+          <div class="form-group">
+            <label for="new_jie_fang">借方：</label>
+            <input class="form-control" name="new_jie_fang" id="new_jie_fang" type="number">
+          </div> 
+          <div class="form-group">
+            <label for="new_dai_fang">贷方：</label>
+            <input class="form-control" name="new_dai_fang" id="new_dai_fang" type="number">
+          </div> 
+          <div class="form-group">
+            <label for="new_remark">备注：</label>
+            <input class="form-control" name="new_remark" id="new_remark" type="text">
+          </div> 
+           
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</div></small>
+
+
+<script type="text/javascript">
+function postform() {  	           
+      if (confirm('确定要下单?')) {
+        if ($("#pi_buy_dn").val() == "")
+        {                    
+　　      alert("请选择供应商！");                    
+　　      return false;                
+　       }
+      } else {
+        return false;
+      }
+
+}  
+
+
+
+
+
+$(document).ready(function(){
+  $("#tijiao").click(function(){
+    $("#tijiao_true").click();
+  });
+  $("#j_h_r_q_label").dblclick(function(){
+    $("#j_h_r_q_show").hide();
+    $("#j_h_r_q_edit").show();
+  });
+});
+
+$('#edit_ping_zheng').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var ping_zheng_id = button.data('ping_zheng_id');
+  var des = button.data('des');
+  var remark = button.data('remark');
+  var finance_at = button.data('finance_at');
+
+  var modal = $(this);
+  modal.find($("#ping_zheng_id")).val(ping_zheng_id);
+  modal.find($("#des")).val(des);
+  modal.find($("#remark")).val(remark);
+  modal.find($("#finance_at")).val(finance_at);
+})
+
+
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

@@ -274,6 +274,7 @@
                            </td> 
 -->
                            <td><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
+                           <td><%= link_to "导出(单独采购)", p_excel_m_path(:bom_id =>@boms.id) %></td>
                            <td><%= link_to "导出源文件", @boms.excel_file_url %></td> 
                            
                        </tr>

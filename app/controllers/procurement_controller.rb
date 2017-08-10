@@ -1963,6 +1963,7 @@ before_filter :authenticate_user!
                 
                 
                 all_title << "MPN"
+                all_title << "DES"
                 all_title << "MOKO物料名称"
                 all_title << "MOKO物料描述"
                 all_title << "数量"
@@ -2027,6 +2028,7 @@ before_filter :authenticate_user!
 		    #row.push(item.description)
 		    #row.push(item.quantity)
                     row.push("#{item.mpn}")
+                    row.push("#{item.description}")
                     if item.product_id != 0 and item.product_id != nil
                         row.push(Product.find(item.product_id).name)
                         row.push(Product.find(item.product_id).description)

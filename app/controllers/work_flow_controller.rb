@@ -9968,6 +9968,10 @@ before_filter :authenticate_user!
                 if @work_flow.size == 1                
                     @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 50)
                 end
+            else
+                if empty_date != ""
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 20) 
+                end
             end
             
             render "merchandiser.html.erb"

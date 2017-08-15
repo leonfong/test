@@ -387,6 +387,7 @@ Rails.application.routes.draw do
   match '/chk_add_bom_item', to: 'procurement#chk_add_bom_item', via: 'get'
   match '/jia_ji', to: 'procurement#jia_ji', via: 'get'
   match '/fan_jia_ji', to: 'procurement#fan_jia_ji', via: 'get'
+  match '/up_all_dn', to: 'procurement#up_all_dn', via: 'get'
 
 
 

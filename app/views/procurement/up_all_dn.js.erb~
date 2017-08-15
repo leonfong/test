@@ -1,0 +1,2 @@
+
+document.getElementById('<%= @item_id.to_s + "_" + @dn_id.to_s + "_star" %>').className="glyphicon glyphicon-star";

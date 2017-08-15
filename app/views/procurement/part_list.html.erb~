@@ -215,7 +215,7 @@
                                 
                             </tr>
                             <tr>
-                                <td colSpan="3" class="text-center <% if ProcurementBom.find(item.procurement_bom_id).jia_ji == "do" %>bg-warning<% end %>" style="padding: 0px;margin: 0px;"><small><%= link_to ProcurementBom.find(item.procurement_bom_id).p_name,  p_viewbom_path(bom_id: item.procurement_bom_id,bak: "bak"),target: "_blank" %></small></td>
+                                <td colSpan="3" class="text-center <% if ProcurementBom.find(item.procurement_bom_id).jia_ji == "do" %>bg-info<% end %>" style="padding: 0px;margin: 0px;"><small><%= link_to ProcurementBom.find(item.procurement_bom_id).p_name,  p_viewbom_path(bom_id: item.procurement_bom_id,bak: "bak"),target: "_blank" %></small></td>
                             </tr>
                         </table>
 
@@ -435,7 +435,7 @@ function change_<%= item.id.to_s %>(){
                                 <% end %>
 
                                 <td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%Y-%m-%d') %></div></a></small></td>
-
+                                <td id="<%= item.id %>_<%= dn.id %>_star" style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-star-empty" data-method='get' data-remote='true' href="/up_all_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>" data-confirm="确定要上传价格?"></a></small></td>
                                 <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> 
 <% if dn.qty.blank?%>
 <%= PItem.find_by_id(dn.p_item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.p_item_id).procurement_bom_id).qty %>

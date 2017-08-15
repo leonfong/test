@@ -5575,9 +5575,9 @@ WHERE
                     @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bom_version=' + params[:bom_version].to_s + '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
                 else
                     @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'
+                    
+                    @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a id="'+params[:item_id].to_s+'_'+dn.id.to_s+'_star" class="glyphicon glyphicon-star-empty" data-method="get" data-remote="true" href="/up_all_dn?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'" data-confirm="确定要上传价格?"></a></small></td>'
 
-
-                
                     @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
 
                 
@@ -5934,6 +5934,29 @@ WHERE
             @dn.state = "del"
             @dn.save
         end
+    end
+
+    def up_all_dn
+        @item_id = params[:item_id]
+        @dn_id = params[:id]
+        itemall = PItem.find(params[:item_id])
+        dn = PDn.find(params[:id])
+        if not itemall.blank?
+            if not itemall.moko_part.blank?
+                add_dn = AllDn.new()
+                add_dn.date = Time.new()
+                add_dn.dn = dn.dn
+                add_dn.dn_long = dn.dn_long
+                add_dn.part_code = itemall.moko_part
+                add_dn.des = itemall.moko_des
+                add_dn.qty = itemall.pmc_qty
+                add_dn.price = dn.cost
+                add_dn.save
+                render "up_all_dn.js.erb" and return
+            end
+            redirect_to :back and return
+        end
+        redirect_to :back and return
     end
 
     def p_profit

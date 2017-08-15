@@ -5943,18 +5943,24 @@ WHERE
         dn = PDn.find(params[:id])
         if not itemall.blank?
             if not itemall.moko_part.blank?
-                add_dn = AllDn.new()
-                add_dn.date = Time.new()
-                add_dn.dn = dn.dn
-                add_dn.dn_long = dn.dn_long
-                add_dn.part_code = itemall.moko_part
-                add_dn.des = itemall.moko_des
-                add_dn.qty = itemall.pmc_qty
-                add_dn.price = dn.cost
-                add_dn.save
-                render "up_all_dn.js.erb" and return
+                if not dn.dn.blank?
+                    add_dn = AllDn.new()
+                    add_dn.date = Time.new()
+                    add_dn.dn = dn.dn
+                    add_dn.dn_long = dn.dn_long
+                    add_dn.part_code = itemall.moko_part
+                    add_dn.des = itemall.moko_des
+                    add_dn.qty = itemall.pmc_qty
+                    add_dn.price = dn.cost
+                    if add_dn.save
+                        dn.up_alldn_tag = 'up'
+                        dn.save
+                        render "up_all_dn.js.erb" and return
+                    end
+                end
+                #redirect_to :back and return
             end
-            redirect_to :back and return
+            #redirect_to :back and return
         end
         redirect_to :back and return
     end

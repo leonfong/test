@@ -118,7 +118,7 @@
                         <%= work.order_date %>  
                     </td>
                     <td>
-                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %>                         
+                        <%= text_field_tag :work_id, work.id.to_s,  class:"sr-only", size:2 , value: work.id.to_s %> 
                         <%= work.order_no %>
                     </td>
                     <td>

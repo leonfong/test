@@ -44,6 +44,7 @@
             </span>     
   
     </div>
+   <% if can? :work_g, :all %>
    <div class="col-md-6">     
             <span  style="color:#999;">
                <%= form_tag('/p_excel_part_list', method:"post", class:"form-inline") do %>
@@ -71,7 +72,7 @@
                           });
                        </script>
                      <div class="input-group-addon " >采购工程师 : </div>         
-                       <select name="sell" id="sell" class="form-control">
+                       <select name="user_do" id="user_do" class="form-control">
                          <option value="">--请选择--</option>
                          <option value="7">A</option>
                          <option value="75">B</option>
@@ -98,6 +99,7 @@
             </span>     
   
     </div>
+    <% end %> 
 </div>
   
 

@@ -44,6 +44,7 @@
             </span>     
   
     </div>
+   <% if can? :work_g_all, :all %>
    <div class="col-md-6">     
             <span  style="color:#999;">
                <%= form_tag('/p_excel_part_list', method:"post", class:"form-inline") do %>
@@ -98,6 +99,7 @@
             </span>     
   
     </div>
+    <% end %> 
 </div>
   
 

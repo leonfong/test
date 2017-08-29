@@ -15,7 +15,7 @@
 
 
 <div class="row" style="padding-bottom: 10px;">
-   <div class="col-md-12">     
+   <div class="col-md-6">     
 <!--
             <h3><strong>权限-采购工程师</strong></h3>
 -->
@@ -31,18 +31,72 @@
                   <% else %> 
                       <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号/描述/MPN"%>
                   <% end %>               
-                  <div class="input-group-btn">
+                    <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                  </div>
+                    </div>
                   
+                  </div>
+                  <a type="button" class="btn btn-success btn-sm" href="/part_list?complete=true">已经报价的物料</a>
+                  <a type="button" class="btn btn-warning btn-sm" href="/part_list?undone=true">等待报价的物料</a>
+                  <a type="button" class="btn btn-info btn-sm" href="/part_list?p_type=COM">单独采购的物料</a>
                 </div>
-                <a type="button" class="btn btn-success btn-sm" href="/part_list?complete=true">已经报价的物料</a>
-                <a type="button" class="btn btn-warning btn-sm" href="/part_list?undone=true">等待报价的物料</a>
-                <a type="button" class="btn btn-info btn-sm" href="/part_list?p_type=COM">单独采购的物料</a>
-            </div>
-            <% end %>                       
-            </span>               
-            
+                <% end %>                           
+            </span>     
+  
+    </div>
+   <div class="col-md-6">     
+            <span  style="color:#999;">
+               <%= form_tag('/p_excel_part_list', method:"post", class:"form-inline") do %>
+                 <div class="col-md-9 form-group  nav navbar-nav navbar-left">
+                   <lable for="order" , class="sr-only">Qrder : </lable>   
+                   <div class="input-group input-group-sm"> 
+                     <div class="input-group-addon " >开始 : </div>
+                       <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                     <div class="input-group-addon " >结束 : </div>
+                       <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                     <div class="input-group-addon " >采购工程师 : </div>         
+                       <select name="user_do" id="user_do" class="form-control">
+                         <option value="">--请选择--</option>
+                         <option value="7">A</option>
+                         <option value="75">B</option>
+                         <option value="77">C</option>
+                         <option value="d">D</option>
+                         <option value="a1">A1</option>
+                         <option value="b1">B1</option>
+                         <option value="c1">C1</option>
+                         <option value="d1">D1</option>
+                         <option value="a2">A2</option>
+                         <option value="b2">B2</option>
+                         <option value="c2">C2</option>
+                         <option value="d2">D2</option>
+                         <option value="9999">Oher</option>
+                         <option value="999">供</option>
+                       </select>
+                     <div class="input-group-btn">
+                      <%= submit_tag "导出Excel", class:"btn btn-primary btn-sm" %>
+                    </div>
+                  </div>
+                </div>
+               <% end %>  
+                                          
+            </span>     
+  
     </div>
 </div>
   

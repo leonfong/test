@@ -330,6 +330,7 @@ Rails.application.routes.draw do
   match '/up_check', to: 'procurement#up_check',via: 'post'
   match '/p_excel_m', to: 'procurement#p_excel_m',via: 'get'
   match '/p_excel', to: 'procurement#p_excel',via: 'get'
+  match '/p_excel_part_list', to: 'procurement#p_excel_part_list',via: 'post'
   match '/p_profit', to: 'procurement#p_profit',via: 'post'
   match '/del_cost', to: 'procurement#del_cost',via: 'get'
   match '/up_check', to: 'procurement#up_check',via: 'get'

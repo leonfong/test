@@ -15,7 +15,7 @@
 
 
 <div class="row" style="padding-bottom: 10px;">
-   <div class="col-md-12">     
+   <div class="col-md-6">     
 <!--
             <h3><strong>权限-采购工程师</strong></h3>
 -->
@@ -31,18 +31,72 @@
                   <% else %> 
                       <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"30", placeholder:"订单号/描述/MPN"%>
                   <% end %>               
-                  <div class="input-group-btn">
+                    <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
-                  </div>
+                    </div>
                   
+                  </div>
+                  <a type="button" class="btn btn-success btn-sm" href="/part_list?complete=true">已经报价的物料</a>
+                  <a type="button" class="btn btn-warning btn-sm" href="/part_list?undone=true">等待报价的物料</a>
+                  <a type="button" class="btn btn-info btn-sm" href="/part_list?p_type=COM">单独采购的物料</a>
                 </div>
-                <a type="button" class="btn btn-success btn-sm" href="/part_list?complete=true">已经报价的物料</a>
-                <a type="button" class="btn btn-warning btn-sm" href="/part_list?undone=true">等待报价的物料</a>
-                <a type="button" class="btn btn-info btn-sm" href="/part_list?p_type=COM">单独采购的物料</a>
-            </div>
-            <% end %>                       
-            </span>               
-            
+                <% end %>                           
+            </span>     
+  
+    </div>
+   <div class="col-md-6">     
+            <span  style="color:#999;">
+               <%= form_tag('/p_excel_part_list', method:"post", class:"form-inline") do %>
+                 <div class="col-md-9 form-group  nav navbar-nav navbar-left">
+                   <lable for="order" , class="sr-only">Qrder : </lable>   
+                   <div class="input-group input-group-sm"> 
+                     <div class="input-group-addon " >开始 : </div>
+                       <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                     <div class="input-group-addon " >结束 : </div>
+                       <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                     <div class="input-group-addon " >采购工程师 : </div>         
+                       <select name="sell" id="sell" class="form-control">
+                         <option value="">--请选择--</option>
+                         <option value="7">A</option>
+                         <option value="75">B</option>
+                         <option value="77">C</option>
+                         <option value="d">D</option>
+                         <option value="a1">A1</option>
+                         <option value="b1">B1</option>
+                         <option value="c1">C1</option>
+                         <option value="d1">D1</option>
+                         <option value="a2">A2</option>
+                         <option value="b2">B2</option>
+                         <option value="c2">C2</option>
+                         <option value="d2">D2</option>
+                         <option value="9999">Oher</option>
+                         <option value="999">供</option>
+                       </select>
+                     <div class="input-group-btn">
+                      <%= submit_tag "导出Excel", class:"btn btn-primary btn-sm" %>
+                    </div>
+                  </div>
+                </div>
+               <% end %>  
+                                          
+            </span>     
+  
     </div>
 </div>
   
@@ -435,7 +489,7 @@ function change_<%= item.id.to_s %>(){
                                 <% end %>
 
                                 <td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%Y-%m-%d') %></div></a></small></td>
-                                <td id="<%= item.id %>_<%= dn.id %>_star" style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-star-empty" data-method='get' data-remote='true' href="/up_all_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>" data-confirm="确定要上传价格?"></a></small></td>
+                                <td style="padding: 0px;margin: 0px;" width="15"><small><a id="<%= item.id %>_<%= dn.id %>_star" class="glyphicon glyphicon-star-empty" data-method='get' data-remote='true' href="/up_all_dn?id=<%=dn.id.to_s%>&item_id=<%= item.id %>" data-confirm="确定要上传价格?"></a></small></td>
                                 <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id=<%= item.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> 
 <% if dn.qty.blank?%>
 <%= PItem.find_by_id(dn.p_item_id).quantity*ProcurementBom.find_by_id(PItem.find_by_id(dn.p_item_id).procurement_bom_id).qty %>

@@ -2648,6 +2648,125 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def p_excel_part_list
+        if can? :work_g, :all
+            where_date = ""
+            if params[:start_date] != "" and  params[:start_date] != nil
+                where_date += "p_items.updated_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" and  params[:end_date] != nil
+                where_date += " AND p_items.updated_at < '#{params[:end_date]}' AND"
+            end
+            #@bom = PItem.where(user_do: params[:sort_date].to_s,supplier_tag: nil)
+            @bom = PItem.find_by_sql("SELECT p_items.* FROM p_items  WHERE #{where_date}  p_items.user_do = '#{params[:user_do]}'")
+            file_name = "baojia_out.xls"
+            path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
+
+
+                Spreadsheet.client_encoding = 'UTF-8'
+		ff = Spreadsheet::Workbook.new
+
+		sheet1 = ff.create_worksheet
+
+		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
+                all_title = []
+                all_title << "采购员"                
+                all_title << "PI"
+                all_title << "MPN"
+                all_title << "描述"
+                all_title << "MOKO描述"
+                all_title << "数量"
+                all_title << "成本价"
+                all_title << "小计"
+                all_title << "日期"
+                sheet1.row(0).concat all_title
+                #sheet1.column(1).width = 50
+                set_color = 0  
+                while set_color < all_title.size do         
+                    sheet1.row(0).set_format(set_color,ColorFormat.new(:gray,:white))
+                    if all_title[set_color] =~ /数量/i 
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /成本价/i
+                        sheet1.column(set_color).width = 8
+                    elsif all_title[set_color] =~ /描述/i
+                        sheet1.column(set_color).width = 35  
+                    elsif all_title[set_color] =~ /MPN/i
+                        sheet1.column(set_color).width = 20      
+                    elsif all_title[set_color] =~ /日期/i
+                        sheet1.column(set_color).width = 20                   
+                    else
+                        sheet1.column(set_color).width = 15
+                    end
+                    set_color += 1
+                end
+		@bom.each_with_index do |item,index| 
+		    rowNum = index+1
+                    title_format = Spreadsheet::Format.new({
+                    :text_wrap => 1,:size => 8
+                    })
+		    row = sheet1.row(rowNum)
+                    row.set_format(2,title_format)
+                    set_f = 0  
+                    while set_f < all_title.size do         
+                        row.set_format(set_f,title_format)
+                        set_f += 1
+                    end
+                    if params[:user_do] == "7"
+                        row.push("A")
+                    elsif params[:user_do] == "75"
+                        row.push("B")
+                    elsif params[:user_do] == "77"
+                        row.push("C")
+                    elsif params[:user_do] == "d"
+                        row.push("D")
+                    elsif params[:user_do] == "a1"
+                        row.push("A1")
+                    elsif params[:user_do] == "b1"
+                        row.push("B1")
+                    elsif params[:user_do] == "c1"
+                        row.push("C1")
+                    elsif params[:user_do] == "d1"
+                        row.push("D1")
+                    elsif params[:user_do] == "a2"
+                        row.push("A2")
+                    elsif params[:user_do] == "b2"
+                        row.push("B2")
+                    elsif params[:user_do] == "c2"
+                        row.push("C2")
+                    elsif params[:user_do] == "d2"
+                        row.push("D2")
+                    elsif params[:user_do] == "9999"
+                        row.push("other")
+                    elsif params[:user_do] == "999"
+                        row.push("供")
+                    else
+                        row.push(" ")
+                    end
+                    row.push(item.erp_no)
+                    row.push(item.mpn)
+		    row.push(item.description)
+		    row.push(item.moko_des)
+                    row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
+		    row.push(item.cost)
+                    if item.cost.blank?
+                        row.push("")
+                    else
+                        row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty * item.cost)
+                    end
+                    row.push(item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s)
+                end
+
+                #file_contents = StringIO.new
+	        #ff.write (file_contents)
+	        #send_data(file_contents.string.force_encoding('UTF-8'), filename: file_name)
+                              
+                ff.write (path+file_name)              
+                send_file(path+file_name, type: "application/vnd.ms-excel") and return
+        else
+            render plain: "You don't have permission to view this page !"
+        end
+    end
+
     def part_list
         part_ctl = ""
         add_orderby = "procurement_boms.id"

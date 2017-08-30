@@ -9954,6 +9954,12 @@ before_filter :authenticate_user!
                 elsif params[:sort_date] == "clear"
                     add_where = "AND clear_date IS NOT NULL AND work_flows.order_state != 1 "
                     add_orderby = " ORDER BY work_flows.clear_date " 
+                elsif params[:sort_date] == "smd_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.smd_start_date DESC" 
+                elsif params[:sort_date] == "dip_start"
+                    add_where = "AND feed_state IS NOT NULL AND work_flows.order_state != 1 "
+                    add_orderby = " ORDER BY work_flows.dip_start_date DESC"
                 end
             end
             if params[:close]

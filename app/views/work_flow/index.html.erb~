@@ -391,7 +391,7 @@
 
                 </tr>
                 <tr> 
-                   <td colSpan="20" style="margin: 0px;padding: 0px;">
+                   <td colSpan="19" style="margin: 0px;padding: 0px;">
                     <div class="col-md-12" style="margin: 0px;padding: 0px;">
                         <div class="collapse" id="<%= work.id.to_s + work.order_no %>" >
                             <div class="row " style="margin: 0px;padding: 0px;">

@@ -196,6 +196,10 @@ Rails.application.routes.draw do
   match '/setup_finance', to: 'work_flow#setup_finance', via: 'get'
   match '/edit_setup_finance', to: 'work_flow#edit_setup_finance', via: 'post'
   match '/fu_kuan_shen_qing_list', to: 'work_flow#fu_kuan_shen_qing_list', via: 'get'
+  match '/erp_index', to: 'work_flow#erp_index', via: 'get'
+
+
+
 
 
 

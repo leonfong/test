@@ -1,0 +1,27 @@
+<div class="erpheader" style="top: 0;position: fixed;right: 0;left: 0;padding: 10px 20px 0px;margin: 0px;background-color: #003366;">
+    <p style="color: #FFFFFF;font-size: 16px;">华创恒达ERP系统</p>
+    <p class="pull-right" style="top: 15px;position: fixed;right: 5px;color: #FFFFFF;font-size: 20px;"><span class="glyphicon glyphicon-user"></span>
+         <% if user_signed_in? %>
+           <% if not current_user.full_name.blank?%>
+               <%= link_to(current_user.full_name, bomlist_path,:class=>"erpheader") %>
+           <% else %>
+               <%= link_to(current_user.email, bomlist_path,:class=>"erpheader") %>
+           <% end %>
+               <%= link_to("[退出]", destroy_user_session_path, :method => :delete,:class=>"erpheader") %>           
+        <% else %>
+            <%= link_to(t('login'), new_session_path(:user),:class=>"erpheader") %>
+            <%= link_to(t('sign_up'), new_registration_path(:user),:class=>"erpheader") %>       
+        <% end %>
+    </p>
+
+    <ul class="erpbtn nav nav-tabs" style="border-bottom: solid 0px #114F8E;">
+        <li role="presentation" class="selectActive" style="margin-bottom: 0px;"><a href="#" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">我的工作台</a></li>
+        <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">询价管理</a></li>
+        <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">PI管理</a></li>
+        <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">变更管理</a></li>
+        <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">客户管理</a></li>
+        <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">消息池</a></li>
+        <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">产品中心</a></li>
+    </ul>
+</div>
+

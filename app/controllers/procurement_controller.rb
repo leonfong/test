@@ -2825,7 +2825,7 @@ before_filter :authenticate_user!
         elsif can? :work_g_all, :all
             @user_do = "7"
             #@bom_item = PItem.where(user_do: "7")
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = 'a1' OR p_items.user_do = 'a2' OR p_items.user_do = '999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
 =begin
             if @bom_item.blank?
                 @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("p_items.user_do = '7' OR AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{key_des}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
@@ -2861,7 +2861,7 @@ before_filter :authenticate_user!
             @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = '7' OR p_items.user_do = '9999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
         elsif can? :work_g_a1, :all
             @user_do = "a1"
-            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = 'a1') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
+            @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = 'a1' OR p_items.user_do = '999') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)
         elsif can? :work_g_a2, :all
             @user_do = "a2"
             @bom_item = PItem.joins("JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id").where("(p_items.user_do = 'a2') AND quantity <> 0 AND procurement_boms.bom_team_ck = 'do' #{part_ctl} #{where_data}").order(add_orderby).paginate(:page => params[:page], :per_page => 15)

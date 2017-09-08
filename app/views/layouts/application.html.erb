@@ -19,7 +19,7 @@
     <%= render 'layouts/shim' %>
 
    <style type="text/css">
-body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
+body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei, Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
 div.upul ul  
 {  
     list-style:none; /* 去掉ul前面的符号 */  
@@ -291,6 +291,41 @@ footer {
     max-width:100%;
     max-height:100%;
 }
+/*ERP header样式*/
+.erpheader div{
+
+}
+.erpheader .erpbtn{
+    margin: 0px;
+    padding: 0px;
+}
+.erpheader .erpbtn li{
+    float: left;
+    list-style: none;
+    height: 40px;
+    line-height: 40px;
+    background-color: #114F8E;
+    width:120px;
+    text-align: center;
+    cursor: pointer;
+    color: #FFFFFF;
+    font-size: 16px;
+    
+}
+.erpheader .erpbtn li:not(:first-child){
+    margin-left: 5px;
+    
+}
+
+.erpheader .erpbtn li.selectActive{
+    border-bottom: solid 0px #114F8E;
+    background-color: #E5E5E5;
+    color: #000000;
+}
+.erpheader a{
+    color: #FFFFFF;
+    font-size: 16px;
+}
 </style>
   </head>
 <% if request.original_fullpath =~ /pi_print/i  %>
@@ -304,13 +339,16 @@ footer {
 <% else %>
   <body style="padding: 70px;" >
 <% end %>
-<% if not request.original_fullpath =~ /pi_print/i  %>    
+<%= render 'layouts/header' %>
+<% #if not request.original_fullpath =~ /pi_print/i  %>    
+<% if not params[:controller] == "work_flow"  %> 
     <%= render 'layouts/header' %>
 <% end %>  
     <div class="container-fluid" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;margin: 0px;">
 <!--
       <%= render 'layouts/flash_messages' %>
 -->
+    <%= yield :erp_header %>
     <%= yield %>
 
 <% if user_signed_in? %>

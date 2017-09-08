@@ -5,6 +5,9 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def erp_index
+    end
+
     def edit_pi_buy_remark
         if not params[:buy_remark_id].blank?
             get_data = PiBuyItem.find_by_id(params[:buy_remark_id])

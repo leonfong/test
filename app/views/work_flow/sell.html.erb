@@ -1,4 +1,8 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "work_flow"} %>
+<% end %>
 <small>
+<div class="container-fluid" >
 <div class="row" style="margin: 0px;padding: 0px;" >
 <br>
   <ul class="nav nav-tabs">
@@ -515,6 +519,7 @@ function postform<%= work.id.to_s %>() {
 
 
 <% end %>
+</div>
 </small>
 <script>
   $(function () {

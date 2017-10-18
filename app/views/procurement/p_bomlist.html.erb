@@ -1,5 +1,24 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "p_bomlist"} %>
+    <% if can? :work_g, :all %>
+        <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "p_bomlist"} %>
+    <% elsif can? :work_d, :all %>
+        <%= render partial: "work_flow/erp_header_bom", locals: {selected: "p_bomlist"} %>
+    <% end %>
+<% end %>
 <small><div class="container-fluid" >
- 
+     <div class="row" >
+
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <li class="active">询价BOM列表</li>
+                <li><a href="/part_list">PCBA报价列表</a></li>         
+                <li><a href="/pcb_list">PCB报价列表</a></li> 
+                <li><a href="/moko_part_data">MOKO物料价格维护</a></li>
+                <li><a href="/p_history">历史报价</a></li>
+                <li><a href="/procurement_new">上传BOM</a></li>
+            </ol>
+
+    </div>
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "bomlist"} %>
@@ -21,9 +40,19 @@
 -->
         <div class="col-md-11" style="padding-top: 10px;">
         <div class="row">
-            <div class="col-md-6 col-sm-6 form-inline" >
-            
-            
+            <div class="col-md-4 col-sm-4 form-inline" >
+                <ul class="nav nav-pills">
+                    <li role="presentation" <% if not params[:complete].blank? %>class="active"<% end %> ><a href="/p_bomlist?complete=true">等待发送</a></li>
+                    <li role="presentation" <% if not params[:undone].blank? %>class="active"<% end %> ><a href="/p_bomlist?undone=true">等待报价</a></li>
+                    <li role="presentation" <% if not params[:sent_to_sell].blank? %>class="active"<% end %> ><a href="/p_bomlist?sent_to_sell=true">已经发送</a></li>
+                </ul>
+<!--
+                <a type="button" class="btn btn-info btn-sm" href="/p_bomlist?complete=true">等待发给业务部的BOM</a>
+                <a type="button" class="btn btn-danger btn-sm" href="/p_bomlist?undone=true">等待报价的BOM</a>
+                <a type="button" class="btn btn-success btn-sm" href="/p_bomlist?sent_to_sell=true">已经发给业务部的BOM</a>
+-->
+            </div>
+            <div class="col-md-4 col-sm-4 form-inline" >         
             <span  style="color:#999;">
                <%= form_tag('/p_bomlist', method:"get", class:"form-inline") do %>
                <div class="form-group  nav navbar-nav navbar-left">
@@ -40,16 +69,14 @@
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
                   </div>
                 </div>
-                <a type="button" class="btn btn-info btn-sm" href="/p_bomlist?complete=true">等待发给业务部的BOM</a>
-                <a type="button" class="btn btn-danger btn-sm" href="/p_bomlist?undone=true">等待报价的BOM</a>
-                <a type="button" class="btn btn-success btn-sm" href="/p_bomlist?sent_to_sell=true">已经发给业务部的BOM</a>
+                
             </div>
             <% end %>                       
             </span>
             </div>
 
 
-            <div class="col-md-6 col-sm-6 " >
+            <div class="col-md-4 col-sm-4 " >
                 <%= form_tag('/p_history', method:"get", class:"form-inline") do %>
                 <div class="col-md-9 form-group  nav navbar-nav navbar-left">
                     <lable for="order" , class="sr-only">Qrder : </lable>

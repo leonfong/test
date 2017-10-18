@@ -1,0 +1,180 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "customer"} %>
+<% end %>
+<div class="container-fluid" >
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active">客户管理</li>
+        <% if can? :work_e, :all %>            
+                <b style="margin-left: 30%;margin-right: 40%;"><a class="btn btn-info btn-sm" id="new_customer">新建客户</a></b>
+                <% end %>
+        
+        </ol>
+    </div>
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-12" style="padding-top: 10px;"> 
+            <div class="form-inline">
+                <%= form_tag('/customer_list', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group ">
+                        <lable for="order" , class="control-label sr-only"><strong>客户: </strong></lable>
+                        <div class="input-group input-group-sm">              
+                            <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"客户代码/客户名/客户公司名/客户联系方式"%>               
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                            </div>
+                            
+                        </div>
+                    </div>
+                <% end %>             
+            </div> 
+        </div>
+    </div>
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-12" style="padding-top: 10px;"> 
+            <div class="row">
+                <div class="col-md-12 col-sm-12 form-inline" >
+                    <table class="table table-bordered">  
+                        <thead >
+                            <tr class="active text-primary">
+                                <th width="80">客户代码</th>
+                                <th width="250">客户名</th>
+                                <th width="350">客户公司名</th>
+                                <th width="65">国家</th>
+<!--
+                                <th width="350">联系方式（邮箱，﻿whatsapp,line,skype,facebook，等）</th>
+-->
+                                <th >收货地址</th>
+                                <th width="60">业务员</th>  
+                                <th width="100">数量</th>
+                                
+                                <th width="50">附件</th>
+                                <th > 备注</th>
+<!--
+                                <th >跟进备注</th>
+-->
+                                <th width="50"> 编辑</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+<% @quate.each do |q_order| %>
+                            <tr>
+                                <td><%= q_order.c_no %></td>
+                                <td><%= q_order.customer %></td>
+                                <td><%= q_order.customer_com %></td>
+                                <td><%= q_order.customer_country %></td>
+<!--
+                                <td><%= q_order.email %></td>
+-->
+                                <td><%= q_order.shipping_address %></td>
+                                <td><%= User.find_by(email: q_order.sell).full_name %></td>
+                                <td><%= q_order.qty %></td>
+                                <td>
+                                    <% if not q_order.att.blank? %>
+                                        <a href="<%= q_order.att.url %>">下载</a>
+                                    <% else %>
+                                        无
+                                    <% end %>
+                                </td>
+                                <td><%= q_order.remark %></td>
+<!--
+                                <td><%= q_order.follow_remark %></td>
+-->
+                                <td>
+<!--
+                                        <button type="button" class="btn btn-default btn-xs disabled"  >更新</button>
+-->
+                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-customer_country="<%= q_order.customer_country %>" data-shipping_address="<%= q_order.shipping_address %>" data-order_no="<%= q_order.order_no %>" >更新</button>
+
+                                </td>
+                            </tr>
+<% end %> 
+         
+                        </tbody>
+                    </table>
+<%= will_paginate(@quate) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addcustomer" tabindex="-1" role="dialog" aria-labelledby="addcustomerLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addcustomerLabel">新建客户信息</h4>
+      </div>
+      <%= form_tag({action: :add_customer},method:"post",multipart:"true",id: "order_form") do %>
+      <div class="modal-body">       
+          <div class="form-group">
+            <label for="customer" class="control-label">客户名:</label>
+            <input type="text" class="form-control" id="customer" name="customer">
+          </div>   
+          <div class="form-group">
+            <label for="customer_com" class="control-label">客户公司名:</label>
+            <input type="text" class="form-control" id="customer_com" name="customer_com">
+          </div>       
+          <div class="form-group">
+            <label for="customer_country" class="control-label">国家:</label>
+            <input type="text" class="form-control" id="customer_country" name="customer_country">
+          </div> 
+<!--      
+          <div class="form-group">
+            <label for="email" class="control-label">联系方式（邮箱必填)，(﻿whatsapp,line,skype,facebook，等）:</label>
+            <textarea class="form-control" id="email" name="email"></textarea>
+          </div> 
+-->
+          <div class="form-group">
+            <label for="shipping_address" class="control-label">收货地址和电话:</label>
+            <textarea  class="form-control" id="shipping_address" name="shipping_address"></textarea>
+          </div> 
+<!--
+          <div class="form-group">
+            <label for="sell" class="control-label">业务:</label>
+            <input type="text" class="form-control" id="sell" name="sell">
+          </div> 
+
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="qty" name="qty">
+          </div>         
+
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+-->
+          <div class="form-group">
+            <label for="qty" class="control-label">备注:</label>
+            <textarea  class="form-control" id="remark" name="remark"></textarea>
+          </div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+$(document).ready(function(){
+  $("#new_customer").click(function(){
+  $("#addcustomer").modal('toggle');
+  }); 
+});
+
+</script>
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

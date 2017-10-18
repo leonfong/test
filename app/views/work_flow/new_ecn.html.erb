@@ -1,18 +1,24 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "ecn"} %>
+<% end %>
 <div class="container-fluid" >
- 
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active">新建ECN草稿</li>
+        <li><a href="/ecn_list">ECN列表</a></li>
+        
+        <% if can? :work_e, :all %>            
+            <b style="margin-left: 30%;margin-right: 40%;"><button  type="button" class="btn btn-info btn-sm" data-toggle="modal" data-backdrop="static" data-target="#new_ecn" >新建ECN草稿</button></b>
+        <% end %>
+        </ol>
+    </div>
     <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "ecn_new"} %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;">
+
+        <div class="col-md-12" style="padding-top: 10px;">
            
             <div class="row">
                 <div class="col-md-12 col-sm-12 form-inline" >
-        <% if can? :work_e, :all %>
-            <div style="padding: 10px;">
-            <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-target="#new_ecn" >新建ECN草稿</button>
-            </div>
-        <% end %>
+        
 <% if not @ecn_draft_list.blank? %>
 <%= will_paginate(@ecn_draft_list) %>            
 <table class="table" >

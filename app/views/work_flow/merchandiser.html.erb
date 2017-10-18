@@ -1,4 +1,8 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_other", locals: {selected: "work_flow"} %>
+<% end %>
 <small>
+<div class="container-fluid" >
 <div class="row" style="padding: 0px;">
   <h2><p class="text-primary">跟单部问题跟踪&反馈</p></h2><hr>
   <%= render 'layouts/flash_messages' %>
@@ -575,7 +579,7 @@ function postform<%= work.id.to_s %>() {
 
 
 <% end %>
-
+</div>
 </small> 
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",

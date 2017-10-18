@@ -35,40 +35,39 @@
                 <a href="/work_flow" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">Work Flow</a>
             </li>
         <% end %>
-        <% if selected == "pcb_draft_list" %>
+        <% if selected == "p_bomlist" %>
             <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/pcb_order_list?new=true" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">询价管理</a>
+                <a href="/p_bomlist" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">报价管理</a>
             </li>
         <% else %>
             <li role="presentation" style="margin-bottom: 0px;">
-                <a href="/pcb_order_list?new=true" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">询价管理</a>
+                <a href="/p_bomlist" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">报价管理</a>
             </li>
         <% end %>
-        <% if selected == "pi_draft_list" %>
+        <% if selected == "pi_list" %>
             <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/pi_draft_list" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">PI管理</a>
-            </li>
-        <% else %>
-            <li role="presentation" style="margin-bottom: 0px;"><a href="/pi_draft_list" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">PI管理</a></li>
-        <% end %>
-        <% if selected == "ecn" %>
-            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/new_ecn" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">变更管理</a>
+                <a href="/pi_list?buy_chk=true" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">PI审批</a>
             </li>
         <% else %>
-            <li role="presentation" style="margin-bottom: 0px;"><a href="/new_ecn" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">变更管理</a></li>
+            <li role="presentation" style="margin-bottom: 0px;"><a href="/pi_list?buy_chk=true" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">PI审批</a></li>
         <% end %>
-        <% if selected == "customer" %>
+        <% if selected == "pi_waitfor_buy" %>
             <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/customer_list" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">客户管理</a>
+                <a href="/pi_waitfor_buy" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">采购管理</a>
+            </li>
+        <% else %>
+            <li role="presentation" style="margin-bottom: 0px;"><a href="/pi_waitfor_buy" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">采购管理</a></li>
+        <% end %>
+        <% if selected == "moko_supplier_list" %>
+            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
+                <a href="/moko_supplier_list" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">供应商管理</a>
             </li>
         <% else %>
             <li role="presentation" style="margin-bottom: 0px;">
-                <a href="/customer_list" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">客户管理</a>
+                <a href="/moko_supplier_list" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">供应商管理</a>
             </li>
         <% end %>
         <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">消息池</a></li>
-        <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">产品中心</a></li>
     </ul>
 </div>
 

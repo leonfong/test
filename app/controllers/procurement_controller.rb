@@ -1966,6 +1966,7 @@ before_filter :authenticate_user!
                 all_title << "DES"
                 all_title << "MOKO物料名称"
                 all_title << "MOKO物料描述"
+                all_title << "位号"
                 all_title << "数量"
                 all_title << "成本单价"
                 all_title << "报价"
@@ -2040,7 +2041,9 @@ before_filter :authenticate_user!
                         row.push(" ")
                         row.push(" ")
                         row.push(" ")
+                        row.push(" ")
                     else
+                        row.push("#{item.part_code}")
                         row.push("#{item.quantity}")
                         row.push("#{item.cost}")
                         row.push("#{item.price}")
@@ -2652,13 +2655,13 @@ before_filter :authenticate_user!
         if can? :work_g, :all
             where_date = ""
             if params[:start_date] != "" and  params[:start_date] != nil
-                where_date += "p_items.updated_at > '#{params[:start_date]}'"
+                where_date += "procurement_boms.bom_team_ck_at > '#{params[:start_date]}'"
             end
             if params[:end_date] != "" and  params[:end_date] != nil
-                where_date += " AND p_items.updated_at < '#{params[:end_date]}' AND"
+                where_date += " AND procurement_boms.bom_team_ck_at < '#{params[:end_date]}' AND"
             end
             #@bom = PItem.where(user_do: params[:sort_date].to_s,supplier_tag: nil)
-            @bom = PItem.find_by_sql("SELECT p_items.* FROM p_items  WHERE #{where_date}  p_items.user_do = '#{params[:user_do]}'")
+            @bom = PItem.find_by_sql("SELECT p_items.*, procurement_boms.bom_team_ck_at FROM p_items JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id  WHERE #{where_date}  p_items.user_do = '#{params[:user_do]}'")
             file_name = "baojia_out.xls"
             path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
 
@@ -2753,7 +2756,7 @@ before_filter :authenticate_user!
                     else
                         row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty * item.cost)
                     end
-                    row.push(item.updated_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s)
+                    row.push(procurement_boms.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s)
                 end
 
                 #file_contents = StringIO.new
@@ -3818,11 +3821,17 @@ before_filter :authenticate_user!
                                         add_dns.save
                                         item.cost = add_dns.cost
                                         item.color = "g"
-                                        item.product_id = match_product_old.product_id
-                                        if match_product_old.product_id != 0
-                                            if not Product.find(match_product_old.product_id).blank? 
-                                                item.moko_part = Product.find(match_product_old.product_id).name
-                                                item.moko_des = Product.find(match_product_old.product_id).description
+                                        if match_product_old.product_id.blank?
+                                            item.product_id = 0
+                                        else
+                                            item.product_id = match_product_old.product_id
+                                        end
+                                        if match_product_old.product_id != 0 
+                                            if match_product_old.product_id != nil
+                                                if not Product.find(match_product_old.product_id).blank? 
+                                                    item.moko_part = Product.find(match_product_old.product_id).name
+                                                    item.moko_des = Product.find(match_product_old.product_id).description
+                                                end
                                             end
                                         end
                                         item.dn_id = add_dns.id
@@ -3961,12 +3970,16 @@ before_filter :authenticate_user!
                                     Rails.logger.info("product_id-------------------------------------------------------product_id0")
                                     Rails.logger.info(match_product_old.product_id.inspect)
                                     Rails.logger.info("match_product_old.product_id-------------------------------------------------------match_product_old.product_id")
-                                    if match_product_old.product_id != 0
+                                    if match_product_old.product_id != 0 and match_product_old.product_id != nil
                                         if not Product.find(match_product_old.product_id).blank?
                                             item.moko_part = Product.find(match_product_old.product_id).name
                                             item.moko_des = Product.find(match_product_old.product_id).description
                                         end  
-                                    end                                 
+                                    end  
+                                    if match_product_old.product_id == nil
+                                        item.product_id = 0
+                                    end 
+                                                                  
                                     item.dn_id = add_dns.id
                                     item.dn = add_dns.dn
                                     item.dn_long = add_dns.dn_long
@@ -5472,7 +5485,11 @@ WHERE
                     @bom_item.manual = true
                     @bom_item.mpn_id = nil
                     #@bom_item.mpn = nil
-                    @bom_item.color = "b"
+                    if @add_dns.cost == nil or @add_dns.cost == 0
+                        @bom_item.color = ""
+                    else
+                        @bom_item.color = "b"
+                    end
                     if @add_dns.remark != nil or @add_dns.remark != ""
                         if @add_dns.color != "y"
                             @bom_item.sell_feed_back_tag = "sell"
@@ -5547,7 +5564,11 @@ WHERE
             @bom_item.dn = @add_dns.dn
             @bom_item.dn_long = @add_dns.dn_long
             #@bom_item.product_id = 0
-            @bom_item.color = "b"
+            if @add_dns.cost == nil or @add_dns.cost == 0
+                @bom_item.color = ""
+            else
+                @bom_item.color = "b"
+            end
             if @add_dns.remark != nil or @add_dns.remark != ""
                 @bom_item.sell_feed_back_tag = "sell"
             else

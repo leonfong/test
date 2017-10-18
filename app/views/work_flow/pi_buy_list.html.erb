@@ -1,5 +1,16 @@
-<div class="container-fluid" >
- 
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_waitfor_buy"} %>
+<% end %>
+<small><div class="container-fluid" >
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+            <li ><a href="/pi_waitfor_buy">待采购物料</a></li>
+            <li class="active">采购订单</a></li>         
+            <li><a href="/pi_buy_list">付款申请</a></li>
+            <li><a href="/pi_buy_list">付款水单</a></li>
+            <li><a href="/pi_buy_list">采购发票</a></li>
+        </ol>
+    </div> 
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "buy_list"} %>
@@ -246,7 +257,7 @@
 </div>
 
 </div>
-
+</small>
 
 
 

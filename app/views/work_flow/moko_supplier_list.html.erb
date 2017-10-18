@@ -1,4 +1,14 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "moko_supplier_list"} %>
+<% end %>
 <div class="container-fluid" >
+    <small><div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+
+            <li class="active">供应商列表</a></li>         
+
+        </ol>
+    </div></small>
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "supplier_manage_list"} %>

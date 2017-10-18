@@ -100,7 +100,11 @@
                         <td style="word-break : break-all;"><%= bom.des %></td>
                         <td><%= bom.moko_part %></td>
                         <td><%= bom.moko_des %></td>
-                        <td><%= bom.quantity*ProcurementBom.find(bom.procurement_bom_id).qty %></td>
+                        <% if not ProcurementBom.find(bom.procurement_bom_id).blank? %>
+                            <td><%= bom.quantity*ProcurementBom.find(bom.procurement_bom_id).qty %></td>
+                        <% else %>
+                            <td></td>
+                        <% end %>
                         <td><%= link_to ProcurementBom.find(bom.procurement_bom_id).p_name,  p_viewbom_path(bom_id: bom.procurement_bom_id,bak: "bak") %></td>
                         <td><%= bom.cost %></td>
                         <% if not PDn.find_by_id(bom.dn_id).blank? %>

@@ -1,17 +1,30 @@
+<% content_for :erp_header do %>
+    <% if can? :work_e, :all %>
+        <%= render partial: "work_flow/erp_header", locals: {selected: "ecn"} %>
+    <% elsif can? :work_d, :all %>
+        <%= render partial: "work_flow/erp_header_bom", locals: {selected: "ecn"} %>
+    <% end %>
+<% end %>
 <div class="container-fluid" >
- 
+     <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active">工程变更通知(ECN)</li>
+        <% if can? :work_e, :all %>
+            <li><a href="/new_ecn">新建ECN草稿</a></li>
+        <% end %>
+        <li><a href="/ecn_list">ECN列表</a></li>
+
+        </ol>
+    </div>
     <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "ecn_new"} %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;">
+        <div class="col-md-12" style="padding-top: 0px;">
            
 
 <% if @get_ecn_info.state == "checking" %> 
 <%= form_tag({action: :cut_in_ecn},method:"post",multipart:"true") do %>
-        <div class="row">
+        <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-6 col-sm-6 " >
-                <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
+                
             </div>
 
             <% if can? :work_admin, :all or can? :work_e, :all %>
@@ -25,9 +38,9 @@
         </div>
 <% end %>
 <% elsif @get_ecn_info.state == "checked" %>
-        <div class="row">
+        <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-6 col-sm-6 " >
-                <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
+                
             </div>
 
 
@@ -37,9 +50,9 @@
 
 <%= form_tag({action: :edit_ecn_up},method:"post",multipart:"true") do %>
 <% if @get_ecn_info.state == "new" %>
-        <div class="row">
+        <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-6 col-sm-6 " >
-                <h2 style="padding-top:0px;margin-top:0px;"><span class="label label-default">工程变更通知(ECN)</span></h2>
+                
             </div>
             
             <% if can? :work_admin, :all or can? :work_e, :all %>

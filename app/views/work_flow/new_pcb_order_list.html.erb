@@ -1,116 +1,170 @@
-<div class="container-fluid" >
- 
-    <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pcb_draft_list"} %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;">
-
-<div class="row" style="margin: 0px;padding: 0px;" >
-<!--
-<br>
-  <ul class="nav nav-tabs" >
-      <li role="presentation" ><a href="/sell_pcb_baojia"><h5 ><strong><p class="text-primary" >PCB客户信息表</p></strong></h5></a></li>
-      <li role="presentation" class="active"><a href="/pcb_order_list?new=true"><h5 ><strong><p class="text-primary" >询价草稿列表</p></strong></h5></a></li>
-  </ul>
-<br>
--->
-  <%= render 'layouts/flash_messages' %>
-</div>
-
-
-
-
-        <% if can? :work_e, :all %>
-            <div style="padding: 10px;">
-            <a type="button" class="btn btn-primary btn-sm"  href="/new_pcb_order?new=true">新建询价</a>
-            
-            </div>
-        <% end %>
-<%= will_paginate(@pcblist) %>            
-<table class="table" >
-<!--
-  <thead >
-    <tr style="background-color: #eeeeee;">
-      <th width="220">询价单号</th>
-      <th width="80">客户代码</th>
-      <th >客户</th>
-      <th width="150">日期</th>
-      <th width="100">所属业务员</th>
-      <th width="100">跟踪业务员</th>
-      <th >跟踪备注</th>
-<% if can? :work_e, :all %>
-      <th width="50">删除</th>
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "pcb_draft_list"} %>
 <% end %>
--->
-<!--
-      <th width="120">发送到采购报价</th>
+<div class="container-fluid" >
+    <div class="row" >
 
-    </tr>
-  </thead>
--->
-  <tbody ><small>
-    <% @pcblist.each do |pcb| %>   
-      <tr>
-        <% if not pcb.pcb_customer_id.blank? %>
-            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>询价单号:  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></small></td>
-        <% else %>
-            <td width="220" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>询价单号:  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></small></td>
-        <% end %>
-<!--
-        <td width="80" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><%= pcb.c_code %></td>
-        <td style="border-top:0px none #ddd;"><%= pcb.c_des %></td>
--->
-        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>业务员: <%= User.find_by(email: pcb.order_sell).full_name %></small></td>
-        <td width="150" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small>日期: <%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></small></td>
-<!--
-        <td style="border-top:0px none #ddd;">备注: <%= pcb.follow_remark %></td>
--->
-        <td style="padding: 20px 0px 0px;border-top:0px none #ddd;"></td>
-<% if can? :work_e, :all %>
-        <td width="50" style="padding: 20px 0px 0px;border-top:0px none #ddd;"><small><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a></div></small></td>
-<% end %>      
-      </tr>
-      <% if not PcbOrderSellItem.where(pcb_order_no: pcb.order_no).blank?%>
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <li class="active">未提交的</li>
+                <li><a href="/pcb_order_list?bom_chk=true">待BOM检查</a></li>
+                <li><a href="/pcb_order_list?quote=true">待报价</a></li>
+                <li><a href="/pcb_order_list?quotechk=true">已报价</a></li>           
+                <% if can? :work_e, :all %>            
+                <b style="margin-left: 30%;margin-right: 40%;"><a type="button" class="btn btn-info btn-sm"   href="/new_pcb_order?new=true">新建询价</a></b>
+                <% end %>
+            </ol>
+
+    </div>
+    <div class="row" style="padding-ltft: 10px;padding-right: 10px;">
+      <div class="col-md-12" >
+        <%= render 'layouts/flash_messages' %>
+
+    <% @pcblist.each_with_index do |pcb,index| %>   
+      <div class="row">
+        <div class="col-md-12" >
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+            <% if not pcb.pcb_customer_id.blank? %>
+              <div class="col-md-3" ><%= index+1 %>询价单号:  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id) %></div>
+            <% else %>
+              <div class="col-md-3"><%= index+1 %>询价单号:  <%= link_to pcb.order_no, edit_pcb_order_path(order_no: pcb.order_no) %></div>
+            <% end %>
+            <div class="col-md-3">业务员: <%= User.find_by(email: pcb.order_sell).full_name %></div>
+            <div class="col-md-3">日期: <%= pcb.created_at.localtime.strftime('%Y-%m-%d').to_s %></div>
         
-      <tr >
-          <td colspan="5" style="margin: 0px;padding: 0px 0px 20px;border-top:0px none #ddd;">
-          <small><div class="highlight" style="margin: 0px;padding: 0px;">
-          <table class="table" style="width:100%;max-width:100%;margin: 0px;padding: 0px;">
+            <% if can? :work_e, :all %>
+            <div class="col-md-3">
+              <div class="pull-right" >
+              
+              <%= link_to "修改", edit_pcb_order_path(order_no: pcb.order_no,c_id: pcb.pcb_customer_id),class:"" %>
+              <a class="" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?">删除</a>
+              <%= link_to "提交", update_pcb_order_path(p_no: pcb.order_no,p_name: pcb.p_name,commit: "提交"),class:"" %>
+              </div>
+            </div>
+            <% end %>   
+            </div>
+        </div> 
+        <table class="table table-condensed">
+          <% if not PcbOrderSellItem.where(pcb_order_no: pcb.order_no).blank?%>
           <thead>
-          <tr style="background-color: #eeeeee;">
-            <th >英文描述</th>
-            <th >中文描述</th>
-            <th width="100">数量</th>
-            <th >备注</th>
+          <tr >
+            <th class="text-center">英文描述</th>
+            <th class="text-center">中文描述</th>
+            <th class="text-center" width="100">数量</th>
+            <th class="text-center">备注</th>
+            <th width="50"></th>
+            <th width="50"></th>
           </tr>
           </thead>
           <% PcbOrderSellItem.where(pcb_order_no: pcb.order_no).each do |item| %>
               
-              <tr style="margin: 0px;padding: 0px;">
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_en %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.des_cn %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.qty %></td>
-                  <td style="margin: 0px;padding: 10px;border-top:1px solid #ddd;"><%= item.remark %></td>
+              <tr >
+                  <td class="text-center"><%= item.des_en %></td>
+                  <td class="text-center"><%= item.des_cn %></td>
+                  <td class="text-center"><%= item.qty %></td>
+                  <td class="text-center"><%= item.remark %></td>
+                  
+                  <% if can? :work_e, :all %>
+                  <td class="text-center"><a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editsellitem" data-edit_c_item_id="<%= item.id %>"   data-edit_des_en="<%= item.des_en %>" data-edit_des_cn="<%= item.des_cn %>" data-edit_qty="<%= item.qty %>" data-edit_follow_remark="<%= item.remark %>"></a></td>
+                   <td class="text-center"><a class="glyphicon glyphicon-remove" href="/del_pcb_order_sell_item?id=<%= item.id %>" data-confirm="确定要删除?"></a></td>
+                  <% end %>
+                  
+                  
               </tr>
               
+            <% end %>
           <% end %>
-          </table>
-          </div></small>
-          </td>
-      </tr>
-      <% end %>
+        </table>
+        </div>  
+      </div>
+      </div> 
     <% end %>
-  </small>
-  </tbody>
-</table>
-        </div>
+<%= will_paginate(@pcblist) %>
     </div>
-
+  </div>
 </div>
 
 
+<div class="modal fade" id="editsellitem" tabindex="-1" role="dialog" aria-labelledby="editsellitemLabel">
+<div class="modal-dialog modal-lg"><small>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="editsellModalLabel"><strong>修改询价信息 </strong></h4>
+        </div>
+        
+        <div class="modal-body">
+            
+            <%= form_tag({action: :edit_pcb_order_sell_item},method:"post",multipart:"ture",id: "order_form") do %>  
+            <div class="form-group sr-only">         
+                <label for="edit_c_item_id_sell" class="control-label">itemid:</label>
+                <input type="text" class="form-control" id="edit_c_item_id_sell" name="edit_c_item_id_sell">
+            </div> 
+            
+            <div class="form-group">
+              <label for="sell_manager_remark" class="control-label">附件:</label>
+              <input name="edit_att_sell" id="edit_att_sell" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>注意：请上传压缩文件. (只允许上传 zip, rar, gz, bz2, 7z 文件)</code>
+            </div> 
+            <div class="form-group">         
+              <label for="des_en" class="control-label">PI英文描述:</label>
+              <input type="text" class="form-control" id="edit_des_en_sell" name="edit_des_en_sell">
+            </div> 
+            <div class="form-group">         
+              <label for="des_cn" class="control-label">中文描述:</label>
+              <input type="text" class="form-control" id="edit_des_cn_sell" name="edit_des_cn_sell">
+            </div> 
+            <div class="form-group">
+              <label for="qty" class="control-label">数量:</label>
+              <input autocomplete="off" type="number" class="form-control" id="edit_qty_sell" name="edit_qty_sell">
+            </div> 
+            <div class="form-group">
+              <label for="follow_remark" class="control-label">备注:</label><code>注意：如果需要多个数量的报价，请在备注中包含要报价的数量。</code>
+              <textarea  class="form-control" id="edit_follow_remark_sell" name="edit_follow_remark_sell"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_edit_sell()">
+        </div>
+        <% end %>
+    </div></small>
+  </div>
+</div>
+
+
+
+
+
 <script type="text/javascript">
+
+$('#editsellitem').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var edit_c_item_id_sell = button.data('edit_c_item_id');
+  var edit_des_en_sell = button.data('edit_des_en');
+  var edit_des_cn_sell = button.data('edit_des_cn');  
+  var edit_qty_sell = button.data('edit_qty'); 
+  var edit_follow_remark_sell = button.data('edit_follow_remark');                       
+  var modal = $(this);
+  modal.find($("#edit_c_item_id_sell")).val(edit_c_item_id_sell);
+  modal.find($("#edit_des_en_sell")).val(edit_des_en_sell);
+  modal.find($("#edit_des_cn_sell")).val(edit_des_cn_sell);
+  modal.find($("#edit_qty_sell")).val(edit_qty_sell);
+  modal.find($("#edit_follow_remark_sell")).html(edit_follow_remark_sell);
+})
+
+
+
+function postform_edit_sell() {  	         
+      if ($("#edit_qty_sell").val() == "")
+      {                    
+　　    alert("请填写数量！");                    
+　　    return false;                
+　     }  
+}  
+
+
+
 
 $(".menu-first").click(function(){
   $('#userMeun').collapse('hide');

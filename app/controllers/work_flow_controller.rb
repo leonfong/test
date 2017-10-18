@@ -5,7 +5,125 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def user_info_edit
+    
+    end
+
+    def edit_menu
+        if not params[:menu_up].blank?
+            get_user = User.find_by_email(current_user.email)
+            if not get_user.blank?
+                if params[:menu_up].include?"a"
+                    get_user.menu_a = "show"
+                else
+                    get_user.menu_a = nil
+                end
+                if params[:menu_up].include?"b"
+                    get_user.menu_b = "show"
+                else
+                    get_user.menu_b = nil
+                end
+                if params[:menu_up].include?"c"
+                    get_user.menu_c = "show"
+                else
+                    get_user.menu_c = nil
+                end
+                if params[:menu_up].include?"d"
+                    get_user.menu_d = "show"
+                else
+                    get_user.menu_d = nil
+                end
+                if params[:menu_up].include?"e"
+                    get_user.menu_e = "show"
+                else
+                    get_user.menu_e = nil
+                end
+                if params[:menu_up].include?"f"
+                    get_user.menu_f = "show"
+                else
+                    get_user.menu_f = nil
+                end
+                get_user.save
+            end
+        else
+            get_user = User.find_by_email(current_user.email)
+            if not get_user.blank?
+                get_user.menu_a = nil
+                get_user.menu_b = nil
+                get_user.menu_c = nil
+                get_user.menu_d = nil
+                get_user.menu_e = nil
+                get_user.menu_f = nil
+                get_user.save
+            end
+        end
+        redirect_to :back
+    end
+
+    def edit_block
+        if not params[:block_up].blank?
+            get_user = User.find_by_email(current_user.email)
+            if not get_user.blank?
+                if params[:block_up].include?"a"
+                    get_user.block_a = "show"
+                else
+                    get_user.block_a = nil
+                end
+                if params[:block_up].include?"b"
+                    get_user.block_b = "show"
+                else
+                    get_user.block_b = nil
+                end
+                if params[:block_up].include?"c"
+                    get_user.block_c = "show"
+                else
+                    get_user.block_c = nil
+                end
+                if params[:block_up].include?"d"
+                    get_user.block_d = "show"
+                else
+                    get_user.block_d = nil
+                end
+                if params[:block_up].include?"e"
+                    get_user.block_e = "show"
+                else
+                    get_user.block_e = nil
+                end
+                if params[:block_up].include?"f"
+                    get_user.block_f = "show"
+                else
+                    get_user.block_f = nil
+                end
+                get_user.save
+            end
+        else
+            get_user = User.find_by_email(current_user.email)
+            if not get_user.blank?
+                get_user.block_a = nil
+                get_user.block_b = nil
+                get_user.block_c = nil
+                get_user.block_d = nil
+                get_user.block_e = nil
+                get_user.block_f = nil
+                get_user.save
+            end
+        end
+        redirect_to :back
+    end
+
     def erp_index
+        if can? :work_e, :all
+            @my_customer = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE `pcb_customers`.`follow` = '#{current_user.email}'")
+            @pcblist = PcbOrder.where(order_sell: current_user.email,del_flag: "active").order("updated_at DESC")
+            @pilist = PiItem.find_by_sql("SELECT pi_infos.* FROM pi_infos WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC")
+            render "erp_index.html.erb" and return
+        elsif can? :work_g, :all
+            render "erp_index_caigou.html.erb" and return
+        elsif can? :work_d, :all
+            render "erp_index_bom.html.erb" and return
+        else 
+            render "erp_index_other.html.erb" and return
+        end
     end
 
     def edit_pi_buy_remark
@@ -8770,65 +8888,65 @@ before_filter :authenticate_user!
 
         if params[:key_order]
             if can? :work_a, :all
-                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             elsif can? :work_e, :all
-                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             else
-                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             end
         else
             if params[:new] 
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "new",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "new",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "new",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @pcblist = PcbOrder.where(state: "new",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "new",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 end
                 render "new_pcb_order_list.html.erb" and return
             elsif params[:quote]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "quote",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quote",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "quote",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quote",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @pcblist = PcbOrder.where(state: "quote",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quote",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:bom_chk]
                 if can? :work_a, :all
                     @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 20)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email,del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",order_sell: current_user.email,del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "bom_chk",del_flag: "active").order("created_at").paginate(:page => params[:page], :per_page => 10)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:place_an_order]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "order",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "order",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "order",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "order",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @pcblist = PcbOrder.where(state: "order",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "order",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 end
                 render "pcb_order_list.html.erb" and return
             elsif params[:quotechk]
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where(state: "quotechk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quotechk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where(state: "quotechk",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quotechk",order_sell: current_user.email,del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @pcblist = PcbOrder.where(state: "quotechk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where(state: "quotechk",del_flag: "active").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 end
                 render "pcb_order_list.html.erb" and return
             else
                 if can? :work_a, :all
-                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 elsif can? :work_e, :all
-                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pcblist = PcbOrder.where("del_flag = 'active' AND state <> 'new' ").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 end
             end
         end
@@ -9246,6 +9364,40 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def customer_list
+        if not params[:c_code].blank?
+            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'").paginate(:page => params[:page], :per_page => 10)
+        else
+            @quate = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE `pcb_customers`.`follow` = '#{current_user.email}'").paginate(:page => params[:page], :per_page => 10)
+        end
+    end
+
+    def add_customer
+        if params[:customer_country].blank?
+            redirect_to :back, :flash => {:error => "请填写国家！！！"} and return false
+        end
+        @pcb = PcbCustomer.new()
+        #@pcb.user_id = current_user.id
+        if PcbCustomer.maximum("id").blank?
+            @pcb.c_no = "pcb1"
+        else
+            @pcb.c_no = "pcb" + (PcbCustomer.maximum("id") + 1).to_s
+        end
+        @pcb.customer = params[:customer].to_s.gsub(/'/,'')
+        @pcb.customer_com = params[:customer_com].to_s.gsub(/'/,'')
+        @pcb.email = params[:email] .to_s.gsub(/'/,'')
+        @pcb.sell = current_user.email .to_s.gsub(/'/,'')
+        @pcb.qty = params[:qty].to_s.gsub(/'/,'')
+        @pcb.att = params[:att].to_s.gsub(/'/,'')
+        @pcb.remark= params[:remark].to_s.gsub(/'/,'')
+        @pcb.customer_country = params[:customer_country].to_s.gsub(/'/,'')
+        @pcb.shipping_address = params[:shipping_address]   .to_s.gsub(/'/,'')   
+        @pcb.follow = current_user.email           
+        @pcb.save
+        redirect_to :back
+    end
+
+
     def add_pcb_customer
         if params[:customer_country].blank?
             redirect_to :back, :flash => {:error => "请填写国家！！！"} and return false
@@ -9659,11 +9811,11 @@ before_filter :authenticate_user!
             Rails.logger.info(add_orderby)
             Rails.logger.info("--------------------------------------add_orderby") 
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state = 0) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state = 0) " + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where ).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             
@@ -9708,11 +9860,11 @@ before_filter :authenticate_user!
             Rails.logger.info(add_orderby)
             Rails.logger.info("--------------------------------------add_orderby") 
             @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE (work_flows.smd LIKE '%齐%' AND work_flows.smd_start_date IS NULL AND work_flows.order_state = 0) OR (work_flows.dip LIKE '%齐%' AND work_flows.dip_start_date IS NULL AND work_flows.order_state = 0) " + add_where + add_orderby).paginate(:page => params[:page], :per_page => 10)
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%warehouse%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%warehouse%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] or params[:empty_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where ).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             
@@ -9728,12 +9880,12 @@ before_filter :authenticate_user!
             if params[:end_date] != ""
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows LEFT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             Rails.logger.info("--------------------------------------")
@@ -9759,12 +9911,12 @@ before_filter :authenticate_user!
             if params[:end_date] != ""
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_bom%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_bom%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows LEFT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             Rails.logger.info("--------------------------------------")
@@ -9781,12 +9933,12 @@ before_filter :authenticate_user!
             if params[:end_date] != ""
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_pcb%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_pcb%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows LEFT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             Rails.logger.info("--------------------------------------")
@@ -9804,12 +9956,12 @@ before_filter :authenticate_user!
             if params[:end_date] != ""
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_ziliao%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_ziliao%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows LEFT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             Rails.logger.info("--------------------------------------")
@@ -9827,12 +9979,12 @@ before_filter :authenticate_user!
             if params[:end_date] != ""
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_test%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%engineering_test%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows LEFT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             Rails.logger.info("--------------------------------------")
@@ -9925,19 +10077,19 @@ before_filter :authenticate_user!
                     end
                 end
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE #{where_o}  topics.topic_state = 'open' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE #{where_o}  topics.topic_state = 'open' ORDER BY topics.mark " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order]
                 #if params[:order].size == 1 or params[:order].size == 2
                     #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + "ORDER BY updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 #else
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 #end
                 if @work_flow.size == 1 and params[:order].size > 2               
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             else
                 if empty_date != ""                    
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT * FROM `work_flows` WHERE "  + empty_date + where_def + add_where + ") AS a #{where_o_a} ORDER BY a.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
                 end               
             end
             #@quate = ProcurementBom.find_by_sql("SELECT * FROM `procurement_boms` WHERE	#{where_p}")
@@ -9967,10 +10119,10 @@ before_filter :authenticate_user!
             end
             if params[:close]
                 @issue_lable = "已经关闭的问题"
-                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level, POSITION('work_f' IN topics.mark) AS mark_chk FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 20)
+                @topic = Topic.find_by_sql("SELECT topics.*,feedbacks.topic_id,feedbacks.feedback_level, POSITION('work_f' IN topics.mark) AS mark_chk FROM topics INNER JOIN feedbacks ON topics.id = feedbacks.topic_id WHERE feedbacks.feedback_level = 1 ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 10)
             else
                 @issue_lable = "未关闭的问题"
-                @topic = Topic.find_by_sql("SELECT *, POSITION('work_f' IN topics.mark) AS mark_chk FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 20)
+                @topic = Topic.find_by_sql("SELECT *, POSITION('work_f' IN topics.mark) AS mark_chk FROM `topics` WHERE topics.feedback_receive LIKE '%merchandiser%' ORDER BY mark_chk " ).paginate(:page => params[:page], :per_page => 10)
             end
             if params[:order] or params[:sort_date]
                 @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where + add_orderby).paginate(:page => params[:page], :per_page => 50)
@@ -9979,7 +10131,7 @@ before_filter :authenticate_user!
                 end
             else
                 if empty_date != ""
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 20) 
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 50) 
                 end
             end
             
@@ -9999,16 +10151,16 @@ before_filter :authenticate_user!
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
                 end_date_a = " AND A.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 if params[:order_s][:order_s].to_i == 5 
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a + " ORDER BY	A.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a + " ORDER BY	A.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                     #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 end
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             
@@ -10028,16 +10180,16 @@ before_filter :authenticate_user!
                 end_date = " AND topics.created_at < '#{params[:end_date]}'"
                 end_date_a = " AND A.created_at < '#{params[:end_date]}'"
             end
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement_pcb%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%procurement_pcb%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
             if params[:order] 
                 if params[:order_s][:order_s].to_i == 5 
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a + " ORDER BY	A.updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM (SELECT DISTINCT feedbacks.order_no, feedbacks.feedback_type, feedbacks.created_at, feedbacks.updated_at FROM feedbacks WHERE feedbacks.feedback_type = 'procurement' GROUP BY feedbacks.order_no) A JOIN work_flows ON A.order_no = work_flows.order_no WHERE " + where_def + add_where + start_date_a + end_date_a + " ORDER BY	A.updated_at DESC").paginate(:page => params[:page], :per_page => 10)
                 else
-                    @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT DISTINCT work_flows.order_no, work_flows.* FROM work_flows RIGHT JOIN topics ON work_flows.id = topics.order_id WHERE " + where_def + add_where + start_date + end_date).paginate(:page => params[:page], :per_page => 10)
                     #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + where_def + add_where).paginate(:page => params[:page], :per_page => 10)
                 end
                 if @work_flow.size == 1                
-                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 20)
+                    @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
                 end
             end
             
@@ -10058,7 +10210,7 @@ before_filter :authenticate_user!
                     add_orderby = " ORDER BY work_flows.clear_date " 
                 end
             end
-            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 20)       
+            @work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE " + empty_date + where_def + add_where + add_orderby ).paginate(:page => params[:page], :per_page => 10)       
             #if @work_flow.size == 1                
                 #@work_flow = WorkFlow.find_by_sql("SELECT * FROM `work_flows` WHERE product_code = '#{@work_flow.first.product_code}'").paginate(:page => params[:page], :per_page => 10)
             #end
@@ -10066,9 +10218,9 @@ before_filter :authenticate_user!
             #redirect_to action: :index, data: { no_turbolink: true }
         end
         if can? :work_a, :all
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%pmc%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%pmc%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
         else
-            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 20)
+            @topic = Topic.find_by_sql("SELECT * FROM `topics` WHERE topics.feedback_receive LIKE '%production%' ORDER BY topics.updated_at DESC " ).paginate(:page => params[:page], :per_page => 10)
         end
     end
 

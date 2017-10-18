@@ -1,5 +1,5 @@
 <% content_for :erp_header do %>
-    <%= render partial: "work_flow/erp_header", locals: {selected: "my_work"} %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "my_work"} %>
 <% end %>
 <div class="container-fluid" >
     <div class="row" >
@@ -8,149 +8,15 @@
                 <span class="glyphicon glyphicon-user" style="font-size: 20px;"></span>
                 <li class="active"><%= current_user.full_name %></li>
                 <li class="active">首页</li>       
-                <li class="<% if current_user.menu_a.blank? %>sr-only<% end %>"><a href="#">代办事项</a></li>
-                <li class="<% if current_user.menu_b.blank? %>sr-only<% end %>"><a href="/customer_list">我的客户</a></li>
                 <li class="<% if current_user.menu_c.blank? %>sr-only<% end %>"><a href="#">我的消息</a></li>
-                <li class="<% if current_user.menu_d.blank? %>sr-only<% end %>"><a href="/pcb_order_list?new=true">我的询价</a></li>
-                <li class="<% if current_user.menu_e.blank? %>sr-only<% end %>"><a href="/pi_draft_list">我的PI单</a></li>
-                <li class="<% if current_user.menu_f.blank? %>sr-only<% end %>"><a href="/new_ecn">我的变更</a></li>
                 <li><a href="/user_info_edit">帐号设置</a></li>
-                <b class="pull-right" ><a type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_menu" >定制我的工作台</a></b>
+                
             </ol>
 
     </div>
-    <div class="row" style="padding: 0px 20px 10px;">
-        <div class="col-md-6">
-            <a type="button" class="btn btn-default btn-sm glyphicon glyphicon-plus" data-toggle="modal" data-target="#edit_block" >添加首页区块</a>
-        </div>
-    </div>
+
     <div class="row" style="padding: 10px 20px 10px;">
-        <div class="col-md-6 <% if current_user.block_a.blank? %>sr-only<% end %>">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">代办事项</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 <% if current_user.block_b.blank? %>sr-only<% end %>">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">最新消息</h3>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-6 <% if current_user.block_c.blank? %>sr-only<% end %>">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">我的客户</h3>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th width="80">序号</th>
-                            <th>名称</th>
-                            <th>代码</th>
-                            <th>联系人</th>
-                            <th>联系方式</th>
-                            <th>成交次数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <% @my_customer.first(6).each_with_index do |my_c,index| %>
-                        <tr>
-                            <td><%= index+1 %></td>
-                            <td><%= my_c.customer_com %></td>
-                            <td><%= my_c.c_no %></td>
-                            <td><%= my_c.customer %></td>
-                            <td><%= my_c.email %></td>
-                            <td></td>
-                        </tr>
-                    <% end %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-md-6 <% if current_user.block_d.blank? %>sr-only<% end %>">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">我的询价单</h3>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th width="80">序号</th>
-                            <th>询价单号</th>
-                            <th>询价时间</th>
-                            <th>当前状态</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <% @pcblist.first(6).each_with_index do |my_pcblist,index| %>
-                        <tr>
-                            <td><%= index+1 %></td>
-                            <td><%= my_pcblist.order_no %></td>
-                            <td><%= my_pcblist.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-                            <td> 
-                                <% if my_pcblist.state == "bom_chk" %>
-                                    BOM检查
-                                <% elsif my_pcblist.state == "quote" %>
-                                    等待报价
-                                <% elsif my_pcblist.state == "quotechk" %>
-                                    报价完成
-                                <% elsif my_pcblist.state == "new" %>
-                                    未提交
-                                <% end %>
-                            </td>
-                        </tr>
-                    <% end %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="col-md-6 <% if current_user.block_e.blank? %>sr-only<% end %>">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">我的PI单</h3>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th width="80">序号</th>
-                            <th>PI单号</th>
-                            <th>发起时间</th>
-                            <th>当前状态</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <% @pilist.first(6).each_with_index do |my_pi,index| %>
-                        <tr>
-                            <td><%= index+1 %></td>
-                            <td><%= my_pi.pi_no %></td>
-                            <td><%= my_pi.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-                            <td> 
-                                <% if my_pi.state == "check" %>
-                                    审批中
-                                <% elsif my_pi.state == "checked" %>
-                                    审批完成
-                                <% elsif my_pi.state == "new" %>
-                                    未提交
-                                <% end %>
-                            </td>
-                        </tr>
-                    <% end %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-md-6 <% if current_user.block_f.blank? %>sr-only<% end %>" >
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">我发起的变更</h3>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

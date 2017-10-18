@@ -1,10 +1,23 @@
+<% content_for :erp_header do %>
+    <% if can? :work_e, :all %>
+        <%= render partial: "work_flow/erp_header", locals: {selected: "ecn"} %>
+    <% elsif can? :work_d, :all %>
+        <%= render partial: "work_flow/erp_header_bom", locals: {selected: "ecn"} %>
+    <% end %>
+<% end %>
 <div class="container-fluid" >
- 
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active">ECN列表</li>
+        <% if can? :work_e, :all %>
+            <li><a href="/new_ecn">新建ECN草稿</a></li>
+        <% end %>
+        
+        </ol>
+    </div>
     <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "ecn_list"} %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;">
+        
+        <div class="col-md-12" style="padding-top: 10px;">
            
             <div class="row">
                 <div class="col-md-12 col-sm-12 form-inline" >

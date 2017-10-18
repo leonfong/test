@@ -1,19 +1,12 @@
-<%
-meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
-     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
-     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
-%>
-
-
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_bom", locals: {selected: "pcb_draft_list"} %>
+<% end %>
 <div class="container-fluid" >
-  
-
-
-
-
-
-
-
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+            <li class="active">检查询价单<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>上传BOM</li>
+        </ol>
+    </div>
 <% flash.each do |key, value| %>
         <div class= "<%= "alert #{flash_class_for(key)}"%>"><%= value %></div>
 <% end %>
@@ -81,3 +74,10 @@ meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastb
         </div></div></div>
     </div>
 </div>
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

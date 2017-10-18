@@ -1,6 +1,19 @@
-<div class="container-fluid" style="padding-top: 15px;">
-
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "p_bomlist"} %>
+<% end %>
+<div class="container-fluid" >
+   <small><div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+            <li><a href="/p_bomlist">询价BOM列表</a></li>
+            <li><a href="/part_list">PCBA报价列表</a></li>         
+            <li class="active">PCB报价列表</li> 
+            <li><a href="/moko_part_data">MOKO物料价格维护</a></li>
+            <li><a href="/p_history">历史报价</a></li>
+            <li><a href="/procurement_new">上传BOM</a></li>
+        </ol>
+    </div></small>
 <small><div class="row" style="padding-bottom: 10px;">
+
    <div class="col-md-12">     
             <span  style="color:#999;">
                <%= form_tag('/pcb_list', method:"get", class:"form-inline") do %>

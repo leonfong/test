@@ -1,17 +1,35 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "work_flow"} %>
+<% end %>
 <small>
 <div class="container-fluid" >
-<div class="row" style="margin: 0px;padding: 0px;" >
+     <div class="row" >
+
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <li class="active">问题跟踪&反馈</li>
+                <li><a href="/sell_baojia">PCBA报价列表</a></li>         
+                <li><a href="/sell_baojia_erp">PCBA报价列表(新)</a></li> 
+                <li><a href="/sell_pcb_baojia">PCB客户信息表</a></li>
+                <% if can? :work_pcb_business, :all %>
+                <li><a href="/pcb_order_list?new=true">新建PCB订单列表</a></li>
+                <% end %>
+            </ol>
+
+    </div>
+<div class="row"  >
+<!--
 <br>
   <ul class="nav nav-tabs">
-      <li role="presentation" class="active"><a href="/work_flow"><h4><strong><p class="text-primary" >问题跟踪&反馈</p></strong></h4></a></li>
-      <li role="presentation" ><a href="/sell_baojia"><h4><strong><p class="text-primary" >PCBA报价列表</p></strong></h4></a></li>
-      <li role="presentation" ><a href="/sell_baojia_erp"><h4 ><strong><p class="text-primary" >PCBA报价列表(新)</p></strong></h4></a></li>
-      <li role="presentation" ><a href="/sell_pcb_baojia"><h4><strong><p class="text-primary" >PCB客户信息表</p></strong></h4></a></li>
+      <li role="presentation" class="active"><a href="/work_flow"><strong><p class="text-primary" >问题跟踪&反馈</p></strong></a></li>
+      <li role="presentation" ><a href="/sell_baojia"><strong><p class="text-primary" >PCBA报价列表</p></strong></a></li>
+      <li role="presentation" ><a href="/sell_baojia_erp"><strong><p class="text-primary" >PCBA报价列表(新)</p></strong></a></li>
+      <li role="presentation" ><a href="/sell_pcb_baojia"><strong><p class="text-primary" >PCB客户信息表</p></strong></a></li>
       <% if can? :work_pcb_business, :all %>
-      <li role="presentation"><a href="/pcb_order_list?new=true"><h4 ><strong><p class="text-primary" >新建PCB订单列表</p></strong></h4></a></li>
+      <li role="presentation"><a href="/pcb_order_list?new=true"><strong><p class="text-primary" >新建PCB订单列表</p></strong></a></li>
       <% end %>
   </ul>
 <br>
+-->
   <%= render 'layouts/flash_messages' %>
 </div>
 <% if can? :work_g_work_flow, :all %>

@@ -1,12 +1,24 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "p_bomlist"} %>
+<% end %>
+<small>
 <div class="container-fluid" >
-﻿
-<div class="row" style="margin: 0px;padding: 0px;" >
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+            <li class="active">采购部报价列表</li>
+            <li><a href="/other_baojia">供应商批量报价工具</a></li>         
+
+        </ol>
+    </div>
+<div class="row"  >
+<!--
 <br>
   <ul class="nav nav-tabs">
       <li role="presentation" class="active" ><a href="/part_list"><h4><strong><p class="text-primary"  >采购部报价列表</p></strong></h4></a></li>
       <li role="presentation" ><a href="/other_baojia"><h4><strong><p class="text-primary" >供应商批量报价工具</p></strong></h4></a></li>     
   </ul>
 <br>
+-->
   <%= render 'layouts/flash_messages' %>
 </div>
 
@@ -780,7 +792,7 @@ function change_<%= item.id.to_s %>(){
 
 </div>
 </div>
-
+</small>
 
 
 

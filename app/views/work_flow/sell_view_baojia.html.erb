@@ -1,13 +1,24 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "pi_draft_list"} %>
+<% end %>
 <small><div class="container-fluid" >
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active"><%= params[:pi_no] %></li>
+        <li><a href="/pi_draft_list">未提交的PI</a></li>
+        <li><a href="/pi_list">PI列表</a></li>         
+        <% if can? :work_e, :all %>            
+            <b style="margin-left: 30%;margin-right: 40%;"><button type="button" class="btn btn-info" data-backdrop="static" data-toggle="modal" data-target="#new_payment_notice">新建收款通知单</button></b>
+        <% end %>
+        </ol>
+    </div>
 <%= render 'layouts/flash_messages' %>
 
 
 <% if not params[:pi_info_id].blank? %>
 
             <div class="row" style="padding-top: 10px;"><div class="col-md-12">   
-                <div class="pull-left">
-                     <button type="button" class="btn btn-info" data-backdrop="static" data-toggle="modal" data-target="#new_payment_notice">新建收款通知单</button>
-                </div>
+                
                 <% if @state == "checked" %>
                 <div class="pull-right">
                     
@@ -26,58 +37,7 @@
             </div></div>
 
         <% if can? :work_e, :all or can? :work_admin, :all %>
-            <% if not @shou_kuan_tong_zhi_dan_list.blank? %>
-            <div class="row" style="padding-top: 10px;"><div class="col-md-12">
-            <div class="panel panel-info">  
-                <div class="panel-heading">收款通知单</div>              
-                <table class="table table-hover">
-                    <thead>
-                        <tr style="background-color: #eeeeee">
-                            <th width="70">状态</th>
-                            <th width="80">收款通知号</th>
-                            <th width="80">制单人</th>
-                            <th width="80">审核人</th>
-                            <th width="90">通知日期</th>
-                            <th width="80">审批日期</th>
-                            <th width="80">收款金额</th>
-                            <th width="90">PI总金额</th>
-                            <th width="90">客编</th>
-                            <th width="90">PI NO.</th>
-                            <th width="90">PI日期</th>
-                            <th >备注</th>
-                            <th width="90">币别</th>
-                            <th width="120">Account name</th>
-                        <tr>
-                    </thead>
-                    <tbody id="biaoge">
-                        <% if @shou_kuan_tong_zhi_dan_list %>
-                            <% @shou_kuan_tong_zhi_dan_list.each do |payment| %> 
-                        <tr>
-                            <td><%= payment.state %></td>
-                            <td><%= payment.id %></td>
-                            <td><%= payment.sell_full_name_new %></td>
-                            <td><%= payment.sell_full_name_up %></td>
-                            <td><%= payment.created_at.localtime.strftime('%Y-%m-%d') %></td>
-                            <td><%=  %></td>
-                            <td><%= payment.pay_p %></td>  
-                            <td><%= payment.pi_t_p %></td>
-                            <td><%= payment.c_code %></td>
-                            <td><%= payment.pi_info_id %></td>
-                            <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
-                            <td><%= payment.remark %></td> 
-                            <td><%= payment.currency_type %></td> 
-                            <td><%= payment.pay_account_name %></td>
-                        <tr>
-                        <% end %>
-                        <% end %> 
 
-                        
-                                     
-                    </tbody>
-                </table>             
-            </div>
-            </div></div>
-            <% end %>
 
 
 <% if can? :work_e, :all and can? :work_admin, :all %>
@@ -192,6 +152,60 @@
             </div>
             </div></div>
         <% end %>
+
+
+            <% if not @shou_kuan_tong_zhi_dan_list.blank? %>
+            <div class="row" style="padding-top: 10px;"><div class="col-md-12">
+            <div class="panel panel-info">  
+                <div class="panel-heading">收款通知单</div>              
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th width="70">状态</th>
+                            <th width="80">收款通知号</th>
+                            <th width="80">制单人</th>
+                            <th width="80">审核人</th>
+                            <th width="90">通知日期</th>
+                            <th width="80">审批日期</th>
+                            <th width="80">收款金额</th>
+                            <th width="90">PI总金额</th>
+                            <th width="90">客编</th>
+                            <th width="90">PI NO.</th>
+                            <th width="90">PI日期</th>
+                            <th >备注</th>
+                            <th width="90">币别</th>
+                            <th width="120">Account name</th>
+                        <tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @shou_kuan_tong_zhi_dan_list %>
+                            <% @shou_kuan_tong_zhi_dan_list.each do |payment| %> 
+                        <tr>
+                            <td><%= payment.state %></td>
+                            <td><%= payment.id %></td>
+                            <td><%= payment.sell_full_name_new %></td>
+                            <td><%= payment.sell_full_name_up %></td>
+                            <td><%= payment.created_at.localtime.strftime('%Y-%m-%d') %></td>
+                            <td><%=  %></td>
+                            <td><%= payment.pay_p %></td>  
+                            <td><%= payment.pi_t_p %></td>
+                            <td><%= payment.c_code %></td>
+                            <td><%= payment.pi_info_id %></td>
+                            <td><%= payment.pi_date.localtime.strftime('%Y-%m-%d') %></td>
+                            <td><%= payment.remark %></td> 
+                            <td><%= payment.currency_type %></td> 
+                            <td><%= payment.pay_account_name %></td>
+                        <tr>
+                        <% end %>
+                        <% end %> 
+
+                        
+                                     
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+            <% end %>
 <% end %>
 
 

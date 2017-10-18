@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   match '/moko_part_update', to: 'work_flow#moko_part_update', via: 'post'
   match '/sell_pcb_baojia', to: 'work_flow#sell_pcb_baojia', via: 'get'
   match '/add_pcb_customer', to: 'work_flow#add_pcb_customer', via: 'post'
+  match '/add_customer', to: 'work_flow#add_customer', via: 'post'
   match '/edit_pcb_customer', to: 'work_flow#edit_pcb_customer', via: 'post'
   match '/pcb_order_list', to: 'work_flow#pcb_order_list', via: 'get'
   match '/new_pcb_order', to: 'work_flow#new_pcb_order', via: 'get'
@@ -90,6 +91,7 @@ Rails.application.routes.draw do
   match '/find_moko_part_ch', to: 'work_flow#find_moko_part_ch', via: 'get'
   match '/del_pcb_order_item', to: 'work_flow#del_pcb_order_item', via: 'get'
   match '/update_pcb_order', to: 'work_flow#update_pcb_order', via: 'post'
+  match '/update_pcb_order', to: 'work_flow#update_pcb_order', via: 'get'
   match '/del_pi_item', to: 'work_flow#del_pi_item', via: 'get'
   match '/del_pcb_pi', to: 'work_flow#del_pcb_pi', via: 'get'
   match '/edit_pi_item', to: 'work_flow#edit_pi_item', via: 'post'
@@ -197,6 +199,9 @@ Rails.application.routes.draw do
   match '/edit_setup_finance', to: 'work_flow#edit_setup_finance', via: 'post'
   match '/fu_kuan_shen_qing_list', to: 'work_flow#fu_kuan_shen_qing_list', via: 'get'
   match '/erp_index', to: 'work_flow#erp_index', via: 'get'
+  match '/customer_list', to: 'work_flow#customer_list', via: 'get'
+  match '/user_info_edit', to: 'work_flow#user_info_edit', via: 'get'
+
 
 
 
@@ -292,8 +297,8 @@ Rails.application.routes.draw do
   match '/find_supplier', to: 'work_flow#find_supplier', via: 'post'
   match '/edit_find_supplier', to: 'work_flow#edit_find_supplier', via: 'post'
   match '/edit_pi_buy_remark', to: 'work_flow#edit_pi_buy_remark', via: 'post'
-
-
+  match '/edit_menu', to: 'work_flow#edit_menu', via: 'post'
+  match '/edit_block', to: 'work_flow#edit_block', via: 'post'
 
 
 

@@ -1,0 +1,78 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "my_work"} %>
+<% end %>
+<div class="container-fluid" >
+    <div class="row" >
+    
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <span class="glyphicon glyphicon-user" style="font-size: 20px;"></span>
+                <li class="active"><%= current_user.full_name %></li>
+                       
+                
+            </ol>
+
+    </div>
+    <div class="row" style="padding: 10px 20px 10px;">
+        <div class="col-md-12">
+            <div class="row" >  
+                <h3><span class="label label-default" >基本资料</span></h3>
+            </div>
+
+            <div class="row" style="padding-top: 15px;">  
+               <div class="col-md-4">
+                   <label>姓名：</label><%= current_user.full_name %>
+               </div>
+               <div class="col-md-4">
+                   <label>所属部门：</label><%= current_user.team %>
+               </div>
+               <div class="col-md-4">
+                   <label>角色：</label>
+               </div>
+            </div>
+            <div class="row" style="padding-top: 15px;">  
+               <div class="col-md-4">
+                   <label>岗位：</label>
+               </div>
+               <div class="col-md-4">
+                   <label>帐号权限：</label>
+               </div>
+               <div class="col-md-4">
+                   <label>入职时间：</label>
+               </div>
+            </div>
+            <hr/>
+            <div class="row" style="padding: 0px;">  
+                <h3><span class="label label-default" >帐号密码</span></h3>
+            </div>
+            <div class="row" style="padding-top: 15px;">  
+               <div class="col-md-12">
+                   <label>邮箱：</label><%= current_user.email %>
+               </div>
+            </div>
+            <div class="row" style="padding-top: 15px;">  
+               <div class="col-md-12">
+                   <label>手机号码：</label><%= current_user.phone %>
+               </div>
+            </div>
+            <div class="row" style="padding-top: 15px;">
+               <div class="col-md-12">
+                   <label>密码：</label>
+               </div>
+            </div>
+            <hr/>
+            <div class="row" style="padding: 0px;">  
+                <h3><span class="label label-default" >其他信息</span></h3>
+            </div>
+            <div class="row" style="padding-top: 15px;">
+               <div class="col-md-12">
+                   <label>最后登录时间：</label><%= current_user.last_sign_in_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %>
+               </div>
+            </div>
+            <div class="row" style="padding-top: 15px;">
+               <div class="col-md-12">
+                   <label>最后登录IP：</label><%= current_user.last_sign_in_ip %>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>

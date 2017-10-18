@@ -1,47 +1,76 @@
+<% content_for :erp_header do %>
+    <% if can? :work_e, :all %>
+        <%= render partial: "work_flow/erp_header", locals: {selected: "pcb_draft_list"} %>
+    <% elsif can? :work_d, :all %>
+        <%= render partial: "work_flow/erp_header_bom", locals: {selected: "pcb_draft_list"} %>
+    <% end %>
+<% end %>
 <div class="container-fluid" >
+    <div class="row" >
+
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <% if can? :work_e, :all %>
+                    <li class="active">新建询价</li>
+                    <li><a href="/pcb_order_list?new=true">未提交的</a></li>
+                <% elsif can? :work_d, :all %>
+                    <li class="active">BOM处理询价</li>
+                <% end %>
+                <li><a href="/pcb_order_list?bom_chk=true">待BOM检查</a></li>
+                <li><a href="/pcb_order_list?quote=true">待报价</a></li>
+                <li><a href="/pcb_order_list?quotechk=true">已报价</a></li>           
+                <% if can? :work_e, :all %>            
+                <b style="margin-left: 30%;margin-right: 40%;"><a type="button" class="btn btn-info btn-sm"   href="/new_pcb_order?new=true">新建询价</a></b>
+                <% end %>
+            </ol>
+
+    </div>
     <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pcb_draft_list"} %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;"><small>
+        <div class="col-md-12" style="padding-top: 10px;"><small>
         
-            <div class="row "><div class="col-md-12">                
+            <div class="row "><div class="col-md-6">                
                 <div class="panel panel-info">
                     <div class="panel-heading"><strong>询价基本信息:</strong></div>
                     <div class="panel-body ">  
-                   
-                        <div class="col-md-2"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"><%= @q_order.order_no %></ins></p>
-                        </div>
+                        <div class="row ">
+                            <div class="col-md-6"><p><strong>询价单号 : </strong><ins id="p_no_show" name="p_no_show"><%= @q_order.order_no %></ins></p></div>
 <!--
-                        <div class="col-md-4 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @q_order.p_name %>">
-                        </div>
+                            <div class="col-md-4 form-inline"><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @q_order.p_name %>">
+                            </div>
 -->
-                        <div class="col-md-2 form-inline"><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= Time.new.strftime("%Y-%m-%d")%></ins>
+                            <div class="col-md-6 form-inline"><strong>询价日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= Time.new.strftime("%Y-%m-%d")%></ins>
                                 <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
-                        </div> 
-                        <div class="col-md-2 form-inline"><strong>交货日期 : </strong><ins></ins>
-                                <input type="text" class="form-control sr-only" id="p_pi1" name="p_pi1" >
+                            </div> 
                         </div>
-                        <div class="col-md-1 form-inline"><strong>美金汇率 : </strong><ins></ins>
+                        <div class="row ">
+<!--
+                            <div class="col-md-2 form-inline"><strong>交货日期 : </strong><ins></ins>
+                                <input type="text" class="form-control sr-only" id="p_pi1" name="p_pi1" >
+                            </div>
+-->
+                            <div class="col-md-6 form-inline"><strong>美金汇率 : </strong><ins></ins>
                                 <input type="text" class="form-control sr-only" id="p_pi2" name="p_pi2" >
-                        </div>  
-                        <div class="col-md-1 form-inline"><strong>修改次数 : </strong><ins></ins>
+                            </div>  
+                            <div class="col-md-6 form-inline"><strong>修改次数 : </strong><ins></ins>
                                 <input type="text" class="form-control sr-only" id="p_pi3" name="p_pi3" >
-                        </div>  
+                            </div> 
+                        </div> 
                     </div>
                 </div>
-            </div></div>
+            </div>
 
 
 
-            <div class="row "><div class="col-md-12">
+            <div class="col-md-6">
                 <div class="panel panel-info">
                     <div class="panel-heading"><strong>业务员信息</strong></div>
                     <div class="panel-body ">                     
                         <div class="row ">
-                            <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= User.find_by(email: @q_order.order_sell).full_name %></ins></div> 
-                            <div class="col-md-2"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= @q_order.team %></ins></div> 
-                            <div class="col-md-2"><strong>制单人电话：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= @q_order.phone %></ins></div> 
+                            <div class="col-md-6"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= User.find_by(email: @q_order.order_sell).full_name %></ins></div> 
+                            <div class="col-md-6"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= @q_order.team %></ins></div> 
+                        </div>
+                        <div class="row " style="padding-top: 10px;">
+                            <div class="col-md-6"><strong>制单人电话：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= @q_order.phone %></ins></div> 
+                            <div class="col-md-6"><strong>邮箱：</strong><ins ><%= @q_order.phone %></ins></div> 
                         </div>
                     </div>
                 </div>
@@ -52,7 +81,9 @@
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>客户信息</strong> 
                 <% if can? :work_e, :all and @q_order.state == "new"%>
+                
                 <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择客户</button>
+                <a class="btn btn-success btn-xs navbar-right" id="new_customer_only" style="margin-right: 5px;">新建客户</a>  
                 <% end %>
                 </div>
                 <div class="panel-body ">                     
@@ -81,18 +112,15 @@
                 <button  type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addsellitem" >添加询价信息</button>
             </div></div>
 <% end %>
-
-
-
             <div class="row "><div class="col-md-12">
             <div class="panel panel-info">                
                 <table class="table table-hover">
                     <thead>
                         <tr style="background-color: #eeeeee">
                             <th width="60">操作</th>                           
-                            <th width="70">数量</th>
                             <th >PI英文描述</th>
                             <th >中文描述</th>
+                            <th width="70">数量</th>
                             <th width="50">附件</th>
                             <th >备注</th>
                             <th width="40">删除</th>
@@ -112,10 +140,9 @@
 
                             <% end %>
                             </td>
-                            
-                            <td><%= q_item_sell.qty %></td>
                             <td><%= q_item_sell.des_en %></td>
                             <td><%= q_item_sell.des_cn %></td>
+                            <td><%= q_item_sell.qty %></td>
                             <td>
                                 <% if not q_item_sell.att.blank? %>                 
                                     <a class="btn btn-info btn-xs" href="<%= q_item_sell.att %>" target="_blank">下载</a>
@@ -1086,7 +1113,12 @@ $(document).ready(function(){
   $("#find_c").modal('toggle');
   $("#addcustomer").modal('toggle');
   }); 
+  $("#new_customer_only").click(function(){
+  //$("#find_c").modal('toggle');
+  $("#addcustomer").modal('toggle');
+  }); 
 });
+
 </script>
 
 

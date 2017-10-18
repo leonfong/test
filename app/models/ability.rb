@@ -281,6 +281,7 @@ class Ability
       can :work_send_to_sell, :all
       can :work_up, :all
       can :work_g, :all
+      can :work_baojia, :all
       can :work_g_d1, :all
       can :old_bom, :all
       can :work_g_a_fb, :all

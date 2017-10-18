@@ -1,56 +1,71 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "pi_draft_list"} %>
+<% end %>
 <div class="container-fluid" >
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active">新建PI</li>
+        <li><a href="/pi_draft_list">未提交的PI</a></li>
+        <li><a href="/pi_list">查看PI</a></li>         
+        <% if can? :work_e, :all %>            
+            <b style="margin-left: 30%;margin-right: 40%;"><a type="button" class="btn btn-info btn-sm"   href="/new_pcb_pi">新建PI</a></b>
+        <% end %>
+        </ol>
+    </div>
     <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "pi_draft_list"} %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;"><small>
-
-            <div class="row "><div class="col-md-12">
-                
-                <div class="panel panel-info">
+        <div class="col-md-12" style="padding-top: 10px;"><small>
+            <div class="row ">
+                <div class="col-md-6">
+                    <div class="panel panel-info">
                         <div class="panel-heading"><strong>PI 信息:</strong></div>
-                        <div class="panel-body ">                     
-                            <div class="col-md-2"><p><strong>PI NO. : </strong><ins id="p_pi_show" name="p_pi_show"><%= @pi_info.pi_no.to_s %></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
-                            </div>
+                        <div class="panel-body "> 
+                            <div class="row ">                    
+                                <div class="col-md-4"><p><strong>PI NO. : </strong><ins id="p_pi_show" name="p_pi_show"><%= @pi_info.pi_no.to_s %></ins></p>
+                                    <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.pi_no %>">
+                                </div>
 <!--
-                            <div class="col-md-4 form-inline"><p><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @pi_info.p_name %>">
-                            </div>
+                                <div class="col-md-4 form-inline"><p><strong>项目名称 : </strong><input type="text" class="form-control input-sm" style="width:75%" id="p_name" name="p_name" value="<%= @pi_info.p_name %>">
+                                </div>
 -->
-                            <div class="col-md-2"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
-                            </div> 
-                            <div class="col-md-2"><p><strong>交货日期 : </strong><ins></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_pi1" name="p_pi1" >
+                                <div class="col-md-4"><p><strong>日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"></ins></p>
+                                    <input type="text" class="form-control sr-only" id="p_riqi" name="p_riqi" >
+                                </div> 
                             </div>
-                            <div class="col-md-1"><p><strong>美金汇率 : </strong><ins></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_pi2" name="p_pi2" >
-                            </div>  
-                            <div class="col-md-1"><p><strong>修改次数 : </strong><ins></ins></p>
-                                <input type="text" class="form-control sr-only" id="p_pi3" name="p_pi3" >
-                            </div>  
-                        </div>
-                    </div>
-            </div></div>
-
-
-
-            <div class="row "><div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading"><strong>业务员信息</strong>
-                        <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#edit_user_info" style="margin-right: 5px;" >编辑</button>
-                    </div>
-                    <div class="panel-body ">                     
-                        <div class="row ">
-                            <div class="col-md-2"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= current_user.en_name %></ins></div> 
-                            <div class="col-md-2"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= current_user.team %></ins></div> 
-                            <div class="col-md-2"><strong>Tel：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.tel %></ins></div> 
-                            <div class="col-md-2"><strong>Fox：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.fax %></ins></div> 
-                            <div class="col-md-4"><strong>Add：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.add %></ins></div>
+                            <div class="row ">  
+                                <div class="col-md-4"><p><strong>交货日期 : </strong><ins></ins></p>
+                                    <input type="text" class="form-control sr-only" id="p_pi1" name="p_pi1" >
+                                </div>
+                                <div class="col-md-4"><p><strong>美金汇率 : </strong><ins></ins></p>
+                                    <input type="text" class="form-control sr-only" id="p_pi2" name="p_pi2" >
+                                </div>  
+                                <div class="col-md-4"><p><strong>修改次数 : </strong><ins></ins></p>
+                                    <input type="text" class="form-control sr-only" id="p_pi3" name="p_pi3" >
+                                </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div></div>
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><strong>业务员信息</strong>
+                            <button type="button" class="btn btn-primary btn-xs  navbar-right" data-toggle="modal" data-target="#edit_user_info" style="margin-right: 5px;" >编辑</button>
+                        </div>
+                        <div class="panel-body ">                     
+                            <div class="row ">
+                                <div class="col-md-6"><strong>制单人：</strong><ins id="zhidanren_show" name="zhidanren_show"><%= current_user.en_name %></ins></div> 
+                                <div class="col-md-6"><strong>部门：</strong><ins id="bumen_show" name="bumen_show"><%= current_user.team %></ins></div> 
+                            </div>
+                            <div class="row " style="padding-top: 10px;">
+                                <div class="col-md-6"><strong>电话：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.tel %></ins></div> 
+                                <div class="col-md-6"><strong>邮箱：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.fax %></ins></div>
+                            </div>
+                            <div class="row " style="padding-top: 10px;"> 
+                                <div class="col-md-12"><strong>地址：</strong><ins id="lianxifangshi_show" name="lianxifangshi_show"><%= current_user.add %></ins></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <div class="row "><div class="col-md-12">

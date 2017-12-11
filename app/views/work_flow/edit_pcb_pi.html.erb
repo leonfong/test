@@ -7,8 +7,8 @@
         <li class="active">新建PI</li>
         <li><a href="/pi_draft_list">未提交的PI</a></li>
         <li><a href="/pi_list">查看PI</a></li>         
-        <% if can? :work_e, :all %>            
-            <b style="margin-left: 30%;margin-right: 40%;"><a type="button" class="btn btn-info btn-sm"   href="/new_pcb_pi">新建PI</a></b>
+        <% if can? :work_e, :all or can? :work_d, :all %>            
+            <b style="margin-left: 30%;margin-right: 40%;"><a type="button" class="btn btn-info btn-sm" target="_blank" href="/view_pi_fengmian?pi_id=<%=params[:pi_info_id]%>">修改华创封面</a></b>
         <% end %>
         </ol>
     </div>
@@ -134,8 +134,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr style="background-color: #eeeeee">
-                            <th width="40">操作</th>
-                            <th width="40">删除</th>
+
 <!--
                             <th width="150">物料编码</th>
                             <th >物料名称</th>
@@ -159,23 +158,18 @@
                             <th>PCBA</th>
                             <th>Unit Price</th>
                             <th>Total Price(USD)</th>
+                            <th width="40">操作</th>
+                            <th width="40">删除</th>
+<!--
                             <th width="50">提交</th>
+-->
                         </tr>
                     </thead>
                     <tbody id="biaoge">
                         <% if @pi_item %>
                         <% @pi_item.each do |pi_item| %>
                         <tr>
-                            <td>
-                                <% if @pi_info.state == "new" %>
-                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>"  data-edit_follow_remark="<%= pi_item.remark %>"  data-edit_price="<%= pi_item.price %>" data-edit_c_p_no="<%= pi_item.c_p_no %>" data-edit_pcb_size="<%= pi_item.pcb_size %>" data-edit_qty="<%= pi_item.qty %>" data-edit_layer="<%= pi_item.layer %>" data-edit_des="<%= pi_item.des %>" data-edit_unit_price="<%= pi_item.unit_price %>" data-edit_pcb_price="<%= pi_item.pcb_price %>" data-edit_com_cost="<%= pi_item.com_cost %>" data-edit_pcba="<%= pi_item.pcba %>" data-edit_t_p="<%= pi_item.t_p %>"  ></a>
-                                <% end %>
-                            </td>
-                            <td>
-                                <% if @pi_info.state == "new" %>
-                                <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
-                                <% end %>
-                            </td>
+
 <!--
                             
                             <td><%= pi_item.moko_code %></td>
@@ -211,26 +205,76 @@
                             <td><%= pi_item.unit_price %></td>
                             <td><%= pi_item.t_p %></td>
                             <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#edititem" data-edit_c_item_id="<%= pi_item.id %>"  data-edit_moko_code="<%= pi_item.moko_code %>" data-edit_moko_des="<%= pi_item.moko_des %>" data-edit_p_type="<%= pi_item.p_type %>" data-edit_des_en="<%= pi_item.des_en %>" data-edit_des_cn="<%= pi_item.des_cn %>"  data-edit_follow_remark="<%= pi_item.remark %>"  data-edit_price="<%= pi_item.price %>" data-edit_c_p_no="<%= pi_item.c_p_no %>" data-edit_pcb_size="<%= pi_item.pcb_size %>" data-edit_qty="<%= pi_item.qty %>" data-edit_layer="<%= pi_item.layer %>" data-edit_des="<%= pi_item.des %>" data-edit_unit_price="<%= pi_item.unit_price %>" data-edit_pcb_price="<%= pi_item.pcb_price %>" data-edit_com_cost="<%= pi_item.com_cost %>" data-edit_pcba="<%= pi_item.pcba %>" data-edit_t_p="<%= pi_item.t_p %>"  ></a>
+                                <% end %>
+                            </td>
+                            <td>
+                                <% if @pi_info.state == "new" %>
+                                <a class="glyphicon glyphicon-remove" href="/del_pi_item?del_pi_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>               
+                                <% end %>
+                            </td>
+<!--
+                            <td>
                             <% if pi_item.state.blank? %>
                                 <a href="/pi_draft?p_pi=<%= @pi_info.id %>&p_item=<%= pi_item.id %>&commit=提交" class="btn btn-success btn-xs" data-confirm="确定要提交PI?" >提交</a>
                             <% end %>
                             </td>
+-->
                         </tr>
                         <% end %>
                         <% end %> 
 
+
+
+
+
+
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th>费用种类</th>
+                            <th>金额（美金）</th>
+                            <th>金额（RMB）</th>
+                            <th>备注</th>
+                            <th width="40">操作</th>
+                            <th width="40">删除</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <tr>
+                            <td >Shipping Cost</td>
+                            <td ><%= @pi_info.pi_shipping_cost %></td>
+                            <td ><%= @pi_info.pi_shipping_cost %></td>
+                            <td ></td>
+                            <td ></td>
+                            <td ></td>
+                        </tr>
+                        <tr>
+                            <td >Bank Fee</td>
+                            <td ><%= @pi_info.pi_bank_fee %></td>
+                            <td ><%= @pi_info.pi_bank_fee %></td>
+                            <td ></td>
+                            <td ></td>
+                            <td ></td>
+                        </tr>
                         <% if @pi_other_item %>
                         <% @pi_other_item.each do |pi_item| %>
                         <tr>
+
+                            <td > <%= pi_item.p_type %></td>
+
+                            <td><%= pi_item.t_p %></td>
+                            <td><%= pi_item.t_p %></td>
+                            <td>备注: <%= pi_item.remark %></td>
                             <td>
                                 <% if @pi_info.state == "new" %>
                                 <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editotheritem" data-edit_item_id_other="<%= pi_item.id %>" data-edit_p_type_other="<%= pi_item.p_type %>" data-edit_remark_other="<%= pi_item.remark %>" data-edit_t_p_other="<%= pi_item.t_p %>" ></a>
                                 <% end %>
                             </td>
-                            <td colSpan="2">其它费用种类: <%= pi_item.p_type %></td>
-                            <td colSpan="6">备注: <%= pi_item.remark %></td>
-                            <td>金额: <%= pi_item.t_p %></td>
-                            <td colSpan="3"></td>
                             <td>
                                 <% if @pi_info.state == "new" %>
                                 <a class="glyphicon glyphicon-remove" href="/del_pi_other_item?del_pi_other_item_id=<%= pi_item.id %>" data-confirm="确定要删除?"></a>
@@ -239,6 +283,42 @@
                         </tr>
                         <% end %>
                         <% end %>
+
+                        <tr>
+                            <td >
+                                <label for="t_p_edit" class="col-md-3 control-label bg-danger" id="t_p_label">Total:</label>
+                            </td>
+                            <td >
+                                      <div id="t_p_show">
+                                          <%= @pi_info.t_p %>
+                                      </div>
+                                      <div style="display:none;" id="t_p_edit">
+                                      <%= form_tag({action: :edit_pi_info_t_p},method:"post") do %>
+                                          <input type="text" class="form-control sr-only"  name="p_pi_id" value="<%= @pi_info.id %>">
+                                          <div class="input-group input-group-sm">
+                                              <input type="text" class="form-control"  name="p_pi_t_p" value="<%= @pi_info.t_p %>">
+                                              <span class="input-group-btn">
+                                                  <button class="btn btn-link glyphicon glyphicon-ok" type="submit"></button>
+                                              </span>
+                                          </div>
+                                      <% end %>
+                                      </div>
+                            </td>
+                            <td ><strong>Total RMB: <%= @pi_info.t_p_rmb %></strong></td>
+                            <td ></td>
+                            <td ></td>
+                            <td ></td>
+                        </tr>
+
+
+                    </tbody>
+                </table> 
+
+
+
+
+
+<!--
                         <tr>
                             <td colSpan="12"></td>
                             <td colSpan="2"><strong>Shipping Cost: <%= @pi_info.pi_shipping_cost %></strong></td>
@@ -247,6 +327,7 @@
                             <td colSpan="12"></td>
                             <td colSpan="2"><strong>Bank Fee: <%= @pi_info.pi_bank_fee %></strong></td>
                         </tr>
+
                         <tr>
                             <td colSpan="12"></td>
                             <td colSpan="2">
@@ -266,11 +347,12 @@
                                       <% end %>
                                       </div>
                             </td>
-                        </tr>    
+                        </tr>   
                         <tr>
                             <td colSpan="12"></td>
                             <td colSpan="2"><strong>Total RMB: <%= @pi_info.t_p_rmb %></strong></td>
-                        </tr>                 
+                        </tr>  
+-->               
                     </tbody>
                 </table>             
             </div>
@@ -313,29 +395,34 @@
             </div> 
             <div class="row "><div class="col-md-12">   
                 <div class="modal-footer">
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=1" >打印MOKO1</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=2" >打印MOKO2</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=3" >打印EASTWIN1</a>&nbsp;</span>
-                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=4" >打印EASTWIN2</a></span>
+
 <!--                    
                     <%= submit_tag "保存到草稿", class:"btn btn-success" %>
 -->
-<!--
+
                     <%= form_tag('/pi_draft', method:"post") do %>
                         <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
                         
                     <% if can? :work_e, :all and @pi_info.state == "new"%>
                         <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
+                    <% elsif can? :work_e_admin, :all and @pi_info.state == "sell_admin_check" %>
+                        <%= submit_tag "业务主管审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "BOM审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
-                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "财务审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% if can? :work_admin, :all %>
-                        <%= submit_tag "提交", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                        <%= submit_tag "admin审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
                     <% end %>
                     <% end %>
--->
+
+
+
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=1" >打印MOKO1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=2" >打印MOKO2</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=3" >打印EASTWIN1</a>&nbsp;</span>
+                    <span class="nav navbar-nav navbar-left"><a class="btn btn-warning btn-sm" target="_blank" href="/pi_print?id=<%= @pi_info.id %>&type=4" >打印EASTWIN2</a></span>
                 </div>
             </div></div>
             <div class="row "><div class="col-md-12">   

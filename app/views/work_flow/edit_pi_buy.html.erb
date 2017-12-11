@@ -1,6 +1,17 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_waitfor_buy"} %>
+<% end %>
 <small><div class="container-fluid" >
- 
-    <div class="row" style="padding: 0px;">
+    <div class="row" style="z-index:400;position: fixed;right: 0;left: 0;margin: 0px;background-color: #f5f5f5;border-radius: 4px;">
+        <div class="col-md-6">
+            <h4>采购询价<span class="glyphicon glyphicon-chevron-right"></span>新建采购申请</h4>     
+         
+        </div>
+        <div class="col-md-6 ">
+            <a type="button" class="btn btn-info pull-right" style="margin-left: 10px;margin-top: 5px;" href="#" >test</a>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 60px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "buy_list"} %>
         </div>

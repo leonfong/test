@@ -1,1 +1,0 @@
- $("#<%=params[:id].to_s %>_tr").hide();

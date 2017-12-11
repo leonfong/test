@@ -1,61 +1,24 @@
 <% content_for :erp_header do %>
-    <% if can? :work_g, :all %>
-        <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_list"} %>
-    <% elsif can? :work_d, :all %>
-        <%= render partial: "work_flow/erp_header_bom", locals: {selected: "pi_list"} %>
-    <% end %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_waitfor_buy"} %>
 <% end %>
 <small><div class="container-fluid" >
     <div class="row" >
         <ol class="breadcrumb" style="padding: 8px 30px;">
-            <li><a href="/pi_list?bom_chk=true">待审批</a></li>
-            <% if can? :work_g, :all %>
-                <li><a href="/pi_list?bom_chk=true">已审批</a></li> 
-            <% elsif can? :work_d, :all %>
-                <li><a href="/pi_list?bom_chked=true">已审批</a></li> 
-            <% end %>        
+            <li ><a href="/pi_waitfor_buy">待采购物料</a></li>
+            <li class="active">采购询价</a></li>     
+            <li><a href="/pi_buy_list">采购订单</a></li>     
+            <li><a href="/fu_kuan_shen_qing_list">付款申请</a></li>
+            <li><a href="/pi_buy_list">付款水单</a></li>
+            <li><a href="/cai_gou_fa_piao_list">采购发票</a></li>
         </ol>
-    </div>
+    </div> 
+
     <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <% if not params[:finance_chk].blank? %>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_f"} %>
-            <% elsif not params[:bom_chk].blank?%>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_bom"} %>
-            <% elsif not params[:buy_chk].blank?%>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list_buy"} %>
-            <% else %>
-                <%= render partial: "work_flow/menu", locals: {selected: "pi_list"} %>
-            <% end %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;">
-        <div class="row">
-            <div class="col-md-6 col-sm-6 " >
-
-
-            
-            <span  style="color:#999;">
-               <%= form_tag('/pi_list', method:"get") do %>
-               
-                  
+        <div class="col-md-6" style="padding-top: 1px;"> 
+            <div class="form-inline">
+                <%= form_tag('/pi_buy_baojia_list', method:"get", class:"form-inline") do %>
                 <div class="row">
-                  <div class="col-md-3 col-sm-3 " >
-                  <div class="input-group input-group-sm">    
-                      
-
-
-                  <div class="input-group-btn">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        状态：<% if params[:bom_chk]%>等待BOM审批<% elsif params[:bom_chked]%>BOM已经审批<% end %>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="/pi_list?bom_chk=true">等待BOM审批</a></li>
-                        <li><a href="pi_list?bom_chked=true">BOM已经审批</a></li>
-                    </ul>
-                 </div>
-                 </div>
-                 </div>
+                  
 
                  <div class="col-md-4 col-sm-4 " >
                  <div class="input-group input-group-sm"> 
@@ -84,117 +47,103 @@
 
                  <div class="col-md-5 col-sm-5 " >
 
-                 <div class="input-group input-group-sm"> 
-                  <% if @key_order %>   
-                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
-                  <% else %> 
-                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"询价单号，项目名称，项目描述，客户代码，客户名，业务邮箱，备注"%>
-                  <% end %>
-
+                 <div class="input-group input-group-sm">  
+                      <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"100", placeholder:"输入PI编号、MOKO编码、描述、物料品牌、供应商"%>
                   <div class="input-group-btn">
                       <%= submit_tag "搜索", class:"btn btn-primary btn-sm", onclick:"return postformchk()" %>
                   </div>
                 </div>
                 </div>
                 </div>
-            
-            <% end %>                       
-            </span>
-            </div>
+
+
+                <% end %>             
+            </div> 
         </div>
-<br>
+    </div>
+
+
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-12" style="padding-top: 10px;">
+            <div style="padding: 10px;">
+            <a  type="button" class="btn btn-primary btn-sm"  href="/new_pi_buy">新建采购询价</a>
+            
+            </div>
 
 
 
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
-<% if not @pilist.blank? %>        
-<%= will_paginate(@pilist) %>            
+        
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="130">PI No.</th>
-      <th width="150">Created Date</th>
-      <th width="80">BOM审核</th>
-      <th width="80">采购审核</th>
-      <th width="80">财务审核</th>
-      <th width="80">数量</th>
-      <th width="80">价格￥</th>
-      <th width="90">所属业务员</th>
-      <th width="90">跟踪业务员</th>
-      <th >采购备注</th>
-      <th >跟踪备注</th>
-      <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-      <th width="60">退回</th>
-<!--
-      <th width="75">操作</th>
--->
-      <% end %>
+      <th width="100">
+                  <div class="btn-group btn-group-xs ">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        状态：<% if params[:baojia_state]=="new" %>未提交<% elsif params[:baojia_state]=="checking" %>待审核<% elsif params[:baojia_state]=="checked" %>已审核<% elsif params[:baojia_state]=="buy" %>已采购<% elsif params[:baojia_state]=="back" %>被驳回<% else %>全部<% end %>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="/pi_buy_baojia_list?baojia_state=new">未提交</a></li>
+                        <li><a href="/pi_buy_baojia_list?baojia_state=checking">待审核</a></li>
+                        <li><a href="/pi_buy_baojia_list?baojia_state=checked">已审核</a></li>
+                        <li><a href="/pi_buy_baojia_list?baojia_state=buy">已采购</a></li>
+                        <li><a href="/pi_buy_baojia_list?baojia_state=back">被驳回</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/pi_buy_baojia_list?baojia_state=all">全部</a></li>
+                    </ul>
+                 </div>
+
+
+      </th>
+      <th width="150">采购询价单号</th>
+      <th width="150">制单人</th>
+      <th width="100">提交时间</th>
+      <th width="100">审核人</th>
+      <th width="100">审核时间</th>
+      <th>备注</th>
+      <th width="150">操作</th>
+
     </tr>
   </thead>
-  <tbody>
-    <% @pilist.each do |pcb| %>   
-      <tr >
-        
-        <% if not pcb.pcb_customer_id.blank? %>
-            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,c_id: pcb.pcb_customer_id,pi_item_id: pcb.id,pi_info_id: pcb.pi_info_id) %></td>
-        <% else %>
-            <td>  <%= link_to pcb.pi_no, edit_pcb_pi_path(pi_no: pcb.pi_no,pi_info_id: pcb.pi_info_id,pi_item_id: pcb.id) %></td>
-        <% end %>
-        
-        <td><%= pcb.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td>
-            <% if pcb.bom_state.blank? %>
-                未提交
-            <% elsif pcb.bom_state == "check" %>
-                审核中
-            <% elsif pcb.bom_state == "checked" %>
-                审核完成
-            <% else %>
-                <%= pcb.bom_state %>
-            <% end %>
-        </td>
-        <td>
-            <% if pcb.buy_state.blank? %>
-                未提交
-            <% elsif pcb.buy_state == "check" %>
-                审核中
-            <% elsif pcb.buy_state == "checked" %>
-                审核完成
-            <% else %>
-                <%= pcb.buy_state %>
-            <% end %>
-        </td>
-        <td>
-            <% if pcb.finance_state.blank? %>
-                未提交
-            <% elsif pcb.finance_state == "check" %>
-                审核中
-            <% elsif pcb.finance_state == "checked" %>
-                审核完成
-            <% else %>
-                <%= pcb.finance_state %>
-            <% end %>
-        </td>
-        <td><%= pcb.qty %></td>
-        <td><%= pcb.price %></td>
-        <td></td>
-        <td><%= User.find_by(email: pcb.pi_sell).full_name %></td>
-        <td><%= pcb.remark %></td>
-        <td><%= pcb.follow_remark %></td>
-        <% if can? :work_pcb_business, :all and can? :work_g, :all %>
-            <td><div class="btn-group"><a class="btn btn-warning btn-xs" data-method='get'  href="/back_pcb_to_order?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要退回给业务?">退回</a></div></td>
-<!--
-            <td><div class="btn-group"><a class="btn btn-danger btn-xs" data-method='get'  href="/release_pcb_to_quotechk?bom_id=<%= pcb.id.to_s %>" data-confirm="确定要完成报价?">确认报价</a></div></td>
--->
-        
-        <% end %>
-      </tr>
-    <% end %>
+  <tbody><small>
+<% if not @pi_buy_list.blank? %>
+  <%= will_paginate(@pi_buy_list) %> 
+  <% @pi_buy_list.each do |buy_list| %>
+  <tr>
+      <td><%= buy_list.state %></td>
+      <td ><%= link_to "CGXJ"+buy_list.id.to_s, view_pi_buy_baojia_path(baojia_id: buy_list.id) %></td>
+      <td><%= User.find_by_email(buy_list.zhi_dan_ren).full_name %></td>
+      <td><%= buy_list.ti_jiao_at.blank?? "": buy_list.ti_jiao_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+      <td><%= buy_list.shen_he_ren.blank?? "": User.find_by_email(buy_list.shen_he_ren).full_name %></td>
+      <td><%= buy_list.shen_he_at.blank?? "": buy_list.shen_he_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+      <td><%= buy_list.remark %></td>
+      <td>  
+        <%= link_to "修改", view_pi_buy_baojia_path(baojia_id: buy_list.id), class: "btn btn-link btn-xs" %> 
+        <% if buy_list.state == "new" %>
+            <%= link_to "删除", del_pi_buy_baojia_path(baojia_id: buy_list.id), class: "btn btn-link btn-xs",data: {confirm: "确定要删除？"}%>
+        <% end %>   
+        <%= link_to "提交", send_pi_buy_check_baojia_path(pi_buy_baojia_info_id_chk: buy_list.id), class: "btn btn-link btn-xs",data: {confirm: "确定要提交？"}%> 
+      </td>           
+  </tr>
+  
+  <% end %>
+<% end %> 
+  </small>   
   </tbody>
 </table>
-<% end %>
+
         </div></div>
+
+
+
+
+
+
+
+
+
         </div>
     </div>
 

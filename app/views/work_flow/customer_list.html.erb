@@ -14,7 +14,7 @@
     <div class="row" style="padding: 0px;">
         <div class="col-md-12" style="padding-top: 10px;"> 
             <div class="form-inline">
-                <%= form_tag('/customer_list', method:"get", class:"form-inline",remote: true) do %>
+                <%= form_tag('/customer_list', method:"get", class:"form-inline") do %>
                     <div class="form-group ">
                         <lable for="order" , class="control-label sr-only"><strong>客户: </strong></lable>
                         <div class="input-group input-group-sm">              
@@ -85,7 +85,7 @@
 <!--
                                         <button type="button" class="btn btn-default btn-xs disabled"  >更新</button>
 -->
-                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-customer_country="<%= q_order.customer_country %>" data-shipping_address="<%= q_order.shipping_address %>" data-order_no="<%= q_order.order_no %>" >更新</button>
+                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editOrder"  data-itempid="<%= q_order.id %>" data-customer="<%= q_order.customer %>" data-customer_com="<%= q_order.customer_com %>" data-email="<%= q_order.email %>" data-sell="<%= q_order.sell %>" data-qty="<%= q_order.qty %>" data-remark="<%= q_order.remark %>" data-customer_country="<%= q_order.customer_country %>" data-shipping_address="<%= q_order.shipping_address %>" data-order_no="<%= q_order.order_no %>" >更新</button>
 
                                 </td>
                             </tr>
@@ -111,7 +111,7 @@
       <%= form_tag({action: :add_customer},method:"post",multipart:"true",id: "order_form") do %>
       <div class="modal-body">       
           <div class="form-group">
-            <label for="customer" class="control-label">客户名:</label>
+            <label for="customer" class="control-label">客户名:<code>必填</code></label>
             <input type="text" class="form-control" id="customer" name="customer">
           </div>   
           <div class="form-group">
@@ -119,20 +119,20 @@
             <input type="text" class="form-control" id="customer_com" name="customer_com">
           </div>       
           <div class="form-group">
-            <label for="customer_country" class="control-label">国家:</label>
+            <label for="customer_country" class="control-label">国家:<code>必填</code></label>
             <input type="text" class="form-control" id="customer_country" name="customer_country">
           </div> 
-<!--      
+      
           <div class="form-group">
             <label for="email" class="control-label">联系方式（邮箱必填)，(﻿whatsapp,line,skype,facebook，等）:</label>
             <textarea class="form-control" id="email" name="email"></textarea>
           </div> 
--->
+
           <div class="form-group">
             <label for="shipping_address" class="control-label">收货地址和电话:</label>
             <textarea  class="form-control" id="shipping_address" name="shipping_address"></textarea>
           </div> 
-<!--
+
           <div class="form-group">
             <label for="sell" class="control-label">业务:</label>
             <input type="text" class="form-control" id="sell" name="sell">
@@ -147,10 +147,76 @@
             <label for="sell_manager_remark" class="control-label">附件:</label>
             <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
           </div> 
--->
+
           <div class="form-group">
             <label for="qty" class="control-label">备注:</label>
             <textarea  class="form-control" id="remark" name="remark"></textarea>
+          </div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick="return postform()" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="editOrder" tabindex="-1" role="dialog" aria-labelledby="editOrderLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editOrderLabel">更新客户信息</h4>
+      </div>
+      <%= form_tag({action: :edit_pcb_customer},method:"post",multipart:"true",id: "order_form") do %>
+      <div class="modal-body">
+          <div class="form-group sr-only">
+            <label for="customer" class="control-label">id:</label>
+            <input type="text" class="form-control" id="edit_id" name="edit_id">
+          </div>       
+          <div class="form-group">
+            <label for="customer" class="control-label">客户名:</label>
+            <input type="text" class="form-control" id="edit_customer" name="customer">
+          </div>   
+          <div class="form-group">
+            <label for="customer_com" class="control-label">客户公司名:</label>
+            <input type="text" class="form-control" id="edit_customer_com" name="customer_com">
+          </div>       
+          <div class="form-group">
+            <label for="customer_country" class="control-label">国家:</label>
+            <input type="text" class="form-control" id="edit_customer_country" name="customer_country">
+          </div> 
+      
+          <div class="form-group">
+            <label for="email" class="control-label">联系方式（邮箱必填)，(﻿whatsapp,line,skype,facebook，等）:</label>
+            <textarea class="form-control" id="edit_email" name="email"></textarea>
+          </div> 
+
+          <div class="form-group">
+            <label for="shipping_address" class="control-label">收货地址和电话:</label>
+            <textarea  class="form-control" id="edit_shipping_address" name="shipping_address"></textarea>
+          </div> 
+
+          <div class="form-group">
+            <label for="sell" class="control-label">业务:</label>
+            <input type="text" class="form-control" id="edit_sell" name="sell">
+          </div> 
+
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="edit_qty" name="qty">
+          </div>         
+
+          <div class="form-group">
+            <label for="sell_manager_remark" class="control-label">附件:</label>
+            <input name="att" id="att" type="file" accept=".zip,.rar,.gz,.bz2,.7z" style="display: block;  text-align: right;  z-index: 999999; cursor: pointer;" ><code>Note: please upload the Compressed file. (only allow you to upload the zip, rar, gz, bz2, 7z file)</code>
+          </div> 
+
+          <div class="form-group">
+            <label for="qty" class="control-label">备注:</label>
+            <textarea  class="form-control" id="edit_remark" name="remark"></textarea>
           </div> 
       </div>
       <div class="modal-footer">
@@ -164,12 +230,51 @@
 
 
 
+
 <script>
 $(document).ready(function(){
   $("#new_customer").click(function(){
   $("#addcustomer").modal('toggle');
   }); 
 });
+
+
+$('#editOrder').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var itempid = button.data('itempid')
+  var customer = button.data('customer')
+  var customer_com = button.data('customer_com')
+  var email = button.data('email')
+  var sell = button.data('sell')
+  var qty = button.data('qty')
+  var remark = button.data('remark')
+  var customer_country = button.data('customer_country')
+  var shipping_address = button.data('shipping_address')
+
+  var modal = $(this)
+  modal.find($("#edit_id")).val(itempid)
+  modal.find($("#edit_customer")).val(customer)
+  modal.find($("#edit_customer_com")).val(customer_com)
+  modal.find($("#edit_email")).val(email)
+  modal.find($("#edit_sell")).val(sell)
+  modal.find($("#edit_qty")).val(qty)
+  modal.find($("#edit_remark")).val(remark)
+  modal.find($("#edit_customer_country")).val(customer_country)
+  modal.find($("#edit_shipping_address")).val(shipping_address)
+})
+
+function postform() {  	           
+      if ($("#customer").val() == "")
+      {                    
+　　    alert("请填写客户名！");                    
+　　    return false;                
+　     }
+      if ($("#customer_country").val() == "")
+      {                    
+　　    alert("请填写客户国家！");                    
+　　    return false;                
+　     }
+}  
 
 </script>
 

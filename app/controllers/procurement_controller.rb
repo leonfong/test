@@ -220,6 +220,88 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
+    def p_add_pipei_bom
+        if not params[:pipei_bom_id].blank?
+        get_bom = PiBomQtyInfo.find_by_id(params[:pipei_bom_id])
+            if not get_bom.blank?
+                bom_item = PiBomQtyInfoItem.new
+                if not params[:ecn].blank?
+                    bom_item.add_state = "new"
+                end
+                bom_item.pmc_qty = params[:qty].to_i*get_bom.qty.to_i
+                bom_item.moko_bom_info_id = get_bom.moko_bom_info_id
+                bom_item.pi_bom_qty_info_id = params[:pipei_bom_id]
+                bom_item.quantity = params[:qty]
+                if not params[:mpn].blank?
+                    bom_item.mpn = params[:mpn]
+                end
+                bom_item.part_code = params[:code]
+                if not params[:des].blank?
+                    bom_item.description = params[:des]
+                end
+                if not params[:link].blank?
+                    bom_item.link = params[:link]
+                end
+                bom_item.user_id = current_user.id
+                bom_item.save
+            end
+        end
+
+        redirect_to :back
+    end
+
+    def p_add_moko_bom
+        if not params[:bom_id].blank?
+        get_bom = MokoBomInfo.find_by_id(params[:bom_id])
+            if not get_bom.blank?
+                bom_item = MokoBomItem.new
+                if not params[:ecn].blank?
+                    bom_item.add_state = "new"
+                end
+                bom_item.pmc_qty = params[:qty].to_i*get_bom.qty.to_i
+                bom_item.moko_bom_info_id = params[:bom_id]
+                bom_item.quantity = params[:qty]
+                if not params[:mpn].blank?
+                    bom_item.mpn = params[:mpn]
+                end
+                bom_item.part_code = params[:code]
+                if not params[:des].blank?
+                    bom_item.description = params[:des]
+                end
+                if not params[:link].blank?
+                    bom_item.link = params[:link]
+                end
+                bom_item.user_id = current_user.id
+                bom_item.save
+            end
+        end
+        if not params[:xunjia_bom_id].blank?
+        get_bom = ProcurementBom.find_by_id(params[:xunjia_bom_id])
+            if not get_bom.blank?
+                bom_item = PItem.new
+                if not params[:ecn].blank?
+                    bom_item.add_state = "new"
+                end
+                bom_item.pmc_qty = params[:qty].to_i*get_bom.qty.to_i
+                bom_item.procurement_bom_id = params[:xunjia_bom_id]
+                bom_item.quantity = params[:qty]
+                if not params[:mpn].blank?
+                    bom_item.mpn = params[:mpn]
+                end
+                bom_item.part_code = params[:code]
+                if not params[:des].blank?
+                    bom_item.description = params[:des]
+                end
+                if not params[:link].blank?
+                    bom_item.link = params[:link]
+                end
+                bom_item.user_id = current_user.id
+                bom_item.save
+            end
+        end
+        redirect_to :back
+    end
+
     def p_add_bom
         get_bom = ProcurementBom.find_by_id(params[:p_id])
         if not get_bom.blank?
@@ -2615,6 +2697,7 @@ before_filter :authenticate_user!
         p_bom = ProcurementBom.find(params[:bom_id])
         if can? :work_send_to_sell, :all
             p_bom.remark_to_sell = "mark"
+            p_bom.remark_to_sell_at = Time.new()
             p_bom.save
 =begin
             if not p_bom.erp_item_id.blank?
@@ -2653,6 +2736,7 @@ before_filter :authenticate_user!
 
     def p_excel_part_list
         if can? :work_g, :all
+=begin
             where_date = ""
             if params[:start_date] != "" and  params[:start_date] != nil
                 where_date += "procurement_boms.bom_team_ck_at > '#{params[:start_date]}'"
@@ -2662,6 +2746,22 @@ before_filter :authenticate_user!
             end
             #@bom = PItem.where(user_do: params[:sort_date].to_s,supplier_tag: nil)
             @bom = PItem.find_by_sql("SELECT p_items.*, procurement_boms.bom_team_ck_at FROM p_items JOIN procurement_boms ON procurement_boms.id = p_items.procurement_bom_id  WHERE #{where_date}  p_items.user_do = '#{params[:user_do]}'")
+=end
+
+            where_date = ""
+            if params[:start_date] != "" and  params[:start_date] != nil
+                where_date += "p_dns.created_at > '#{params[:start_date]}'"
+            end
+            if params[:end_date] != "" and  params[:end_date] != nil
+                where_date += " AND p_dns.created_at < '#{params[:end_date]}' AND"
+            end
+            #@bom = PItem.where(user_do: params[:sort_date].to_s,supplier_tag: nil)
+            #@bom = PDn.find_by_sql("SELECT p_dns.email, p_dns.owner_email, p_items.user_do, p_dns.cost, p_items.moko_des, p_items.erp_no, p_items.mpn, p_items.description,p_dns.created_at,p_dns.color,p_dns.qty FROM p_dns JOIN p_items ON p_dns.p_item_id = p_items.id  WHERE #{where_date}  p_items.user_do = '#{params[:user_do]}'")
+            #@bom = PDn.find_by_sql("SELECT p_dns.* FROM p_dns WHERE #{where_date}  p_dns.owner_email = '#{params[:user_do]}'")
+            @bom = PDn.find_by_sql("SELECT p_dns.email, p_dns.owner_email, p_items.user_do, p_dns.cost, p_items.moko_des, p_items.erp_no, p_items.mpn, p_items.description,p_dns.created_at,p_dns.color,p_dns.qty FROM p_dns LEFT JOIN p_items ON p_dns.p_item_id = p_items.id  WHERE #{where_date}  p_dns.owner_email = '#{params[:user_do]}' AND p_dns.color = 'b'")
+
+
+
             file_name = "baojia_out.xls"
             path = Rails.root.to_s+"/public/uploads/bom/excel_file/"
 
@@ -2673,7 +2773,8 @@ before_filter :authenticate_user!
 
 		#sheet1.row(0).concat %w{No 描述 报价 技术资料}
                 all_title = []
-                all_title << "采购员"                
+                #all_title << "采购员"    
+                all_title << "采购员帐号"            
                 all_title << "PI"
                 all_title << "MPN"
                 all_title << "描述"
@@ -2703,60 +2804,67 @@ before_filter :authenticate_user!
                     set_color += 1
                 end
 		@bom.each_with_index do |item,index| 
-		    rowNum = index+1
-                    title_format = Spreadsheet::Format.new({
-                    :text_wrap => 1,:size => 8
-                    })
-		    row = sheet1.row(rowNum)
-                    row.set_format(2,title_format)
-                    set_f = 0  
-                    while set_f < all_title.size do         
-                        row.set_format(set_f,title_format)
-                        set_f += 1
+                    if item.owner_email != "" and item.owner_email != nil
+		        rowNum = index+1
+                        title_format = Spreadsheet::Format.new({
+                        :text_wrap => 1,:size => 8
+                        })
+		        row = sheet1.row(rowNum)
+                        row.set_format(2,title_format)
+                        set_f = 0  
+                        while set_f < all_title.size do         
+                            row.set_format(set_f,title_format)
+                            set_f += 1
+                        end
+=begin
+                        if params[:user_do] == "7"
+                            row.push("A")
+                        elsif params[:user_do] == "75"
+                            row.push("B")
+                        elsif params[:user_do] == "77"
+                            row.push("C")
+                        elsif params[:user_do] == "d"
+                            row.push("D")
+                        elsif params[:user_do] == "a1"
+                            row.push("A1")
+                        elsif params[:user_do] == "b1"
+                            row.push("B1")
+                        elsif params[:user_do] == "c1"
+                            row.push("C1")
+                        elsif params[:user_do] == "d1"
+                            row.push("D1")
+                        elsif params[:user_do] == "a2"
+                            row.push("A2")
+                        elsif params[:user_do] == "b2"
+                            row.push("B2")
+                        elsif params[:user_do] == "c2"
+                            row.push("C2")
+                        elsif params[:user_do] == "d2"
+                            row.push("D2")
+                        elsif params[:user_do] == "9999"
+                            row.push("other")
+                        elsif params[:user_do] == "999"
+                            row.push("供")
+                        else
+                            row.push(" ")
+                        end
+=end
+                        row.push(item.owner_email)
+                        row.push(item.erp_no)
+                        row.push(item.mpn)
+		        row.push(item.description)
+		        row.push(item.moko_des)
+                        #row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
+                        row.push(item.qty)
+		        row.push(item.cost)
+                        if item.cost.blank?
+                            row.push("")
+                        else
+                        #row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty * item.cost)
+                            row.push(item.qty * item.cost)
+                        end
+                        row.push(item.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s)
                     end
-                    if params[:user_do] == "7"
-                        row.push("A")
-                    elsif params[:user_do] == "75"
-                        row.push("B")
-                    elsif params[:user_do] == "77"
-                        row.push("C")
-                    elsif params[:user_do] == "d"
-                        row.push("D")
-                    elsif params[:user_do] == "a1"
-                        row.push("A1")
-                    elsif params[:user_do] == "b1"
-                        row.push("B1")
-                    elsif params[:user_do] == "c1"
-                        row.push("C1")
-                    elsif params[:user_do] == "d1"
-                        row.push("D1")
-                    elsif params[:user_do] == "a2"
-                        row.push("A2")
-                    elsif params[:user_do] == "b2"
-                        row.push("B2")
-                    elsif params[:user_do] == "c2"
-                        row.push("C2")
-                    elsif params[:user_do] == "d2"
-                        row.push("D2")
-                    elsif params[:user_do] == "9999"
-                        row.push("other")
-                    elsif params[:user_do] == "999"
-                        row.push("供")
-                    else
-                        row.push(" ")
-                    end
-                    row.push(item.erp_no)
-                    row.push(item.mpn)
-		    row.push(item.description)
-		    row.push(item.moko_des)
-                    row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty)
-		    row.push(item.cost)
-                    if item.cost.blank?
-                        row.push("")
-                    else
-                        row.push(item.quantity * ProcurementBom.find(item.procurement_bom_id).qty * item.cost)
-                    end
-                    row.push(procurement_boms.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s)
                 end
 
                 #file_contents = StringIO.new
@@ -2907,10 +3015,18 @@ before_filter :authenticate_user!
         check.bom_team_ck_at = Time.new()
         check.bom_eng = current_user.full_name
         if check.save
+=begin
             q_order = PcbOrder.find_by_order_no(check.erp_no)
             if not q_order.blank?
                 q_order.state = "quote"
                 q_order.save
+            end
+=end
+            q_order_item = PcbOrderItem.find_by_bom_id(check.id)
+            if not q_order_item.blank?
+                q_order_item.bom_team_ck = "dome"
+                q_order_item.bom_team_ck_at = check.bom_team_ck_at
+                q_order_item.save
             end
         end
         redirect_to p_bomlist_path() 
@@ -4144,8 +4260,25 @@ before_filter :authenticate_user!
         end      
     end
 
+    def pipei_bom_list
+        if can? :work_d, :all
+            order_ctl = ",`created_at` DESC"
+        else
+            order_ctl = ",`bom_team_ck_at` DESC"
+        end  
+        @boms = PiBomQtyInfo.find_by_sql("SELECT * FROM `pi_bom_qty_infos`  ORDER BY `created_at` DESC ").paginate(:page => params[:page], :per_page => 25)
+    end
+
+    def pipei_view_bom
+        @boms = PiBomQtyInfo.find_by_id(params[:bom_id])
+        @bom_item = PiBomQtyInfoItem.where(pi_bom_qty_info_id: params[:bom_id])
+        if @boms.state == "checked"
+            render "pipei_view_bom_checked.html.erb" and return
+        end
+    end
+
     def moko_view_bom
-        @pdn = PDn.new
+        #@pdn = PDn.new
         @all_dn = "[&quot;"
         all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
         all_s_dn.each do |dn|
@@ -5485,7 +5618,7 @@ WHERE
                     @bom_item.manual = true
                     @bom_item.mpn_id = nil
                     #@bom_item.mpn = nil
-                    if @add_dns.cost == nil or @add_dns.cost == 0
+                    if @add_dns.cost == nil
                         @bom_item.color = ""
                     else
                         @bom_item.color = "b"
@@ -5564,7 +5697,7 @@ WHERE
             @bom_item.dn = @add_dns.dn
             @bom_item.dn_long = @add_dns.dn_long
             #@bom_item.product_id = 0
-            if @add_dns.cost == nil or @add_dns.cost == 0
+            if @add_dns.cost == nil
                 @bom_item.color = ""
             else
                 @bom_item.color = "b"
@@ -5636,6 +5769,7 @@ WHERE
                 else
                     p_dn = PDn.new()
                 end
+                p_dn.owner_email = current_user.email
                 p_dn.email = current_user.email
             end
             #Rails.logger.info("--------------------------")
@@ -5839,6 +5973,10 @@ WHERE
     end
 
     def p_edit_cost_dn 
+        dell_dns_color = PDn.where(p_item_id: params[:dn_itemid],state: "")
+        c_color = ""
+        dell_dns_color = PDn.where("p_item_id = ? AND color <> ?",params[:dn_itemid],"Y").update_all "color = '#{c_color}'"
+
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         Rails.logger.info(params["#{params[:dn_itemid]}p"].inspect)
         Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")

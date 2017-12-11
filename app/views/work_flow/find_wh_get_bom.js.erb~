@@ -1,1 +1,0 @@
-$("#w_part").html('<%= raw @bom_list_data %>');

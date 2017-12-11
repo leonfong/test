@@ -1,0 +1,134 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "pi_draft_list"} %>
+<% end %>
+<small><div class="container-fluid" >
+    <div class="row" >
+
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <li><a href="/pi_draft_list">PI订单</a></li>
+                <li><a href="/payment_notice_list?state=checking">收款通知单</a></li>      
+                <li class="active">发货通知单</li>         
+                <% if can? :work_e, :all %>            
+                <b style="margin-left: 30%;margin-right: 40%;"><a type="button" class="btn btn-info btn-sm"   href="/new_pcb_pi">新建PI</a></b>
+                <% end %>
+            </ol>
+
+    </div>
+
+
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            <%= render partial: "work_flow/menu", locals: {selected: "pi_draft_list"} %>
+        </div>
+        <div class="col-md-11" style="padding-top: 10px;"><small>
+
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6 " >
+
+
+            
+            <span  style="color:#999;">
+               <%= form_tag('/pi_fahuotongzhi_list', method:"get") do %>
+               
+                  
+               
+                  <div class="input-group input-group-sm">    
+                      
+
+
+                  <div class="input-group-btn">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        状态：未提交
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="/pi_fahuotongzhi_list?check_wait=true">待审核</a></li>
+                        <li><a href="/pi_fahuotongzhi_list?checked=true">已审核</a></li>
+                        <li><a href="/pi_fahuotongzhi_list?send_out=true">已发货</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/pi_draft_list?caogao=true">未提交</a></li>
+                    </ul>
+                    
+                 </div>
+
+
+                         
+                  <% if @key_order %>   
+                      <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                  <% else %> 
+                      <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"输入PI单号，客户名称进行查询"%>
+                  <% end %>               
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                  </div>
+                </div>
+            
+            <% end %>                       
+            </span>
+
+            </div>
+            <div class="col-md-6 col-sm-6 " >
+                <a type="button" class="btn btn-info btn-sm" href="/new_pi_fahuotongzhi">新增发货通知</a>
+            </div>
+        </div>
+<br>
+
+
+
+
+
+
+
+
+
+
+<%= will_paginate(@f_list) %>            
+<table class="table table-hover">
+  <thead>
+    <tr style="background-color: #eeeeee">
+      <th width="">状态</th>
+      <th width="">PI单号</th>
+      <th width="">单据编号</th>
+      <th width="">购货单位</th>
+      <th >产品名称</th>
+      <th width="">数量</th>
+      <th width="">提交时间</th>
+      <th width="">交货时间</th>
+      <th >跟踪备注</th>
+
+      <th width="">操作</th>
+
+    </tr>
+  </thead>
+  <tbody><small>
+    <% @f_list.each do |pcb| %>   
+      <tr >
+        <td><%= pcb.state %></td>
+        <td><%= pcb.pi_info_id %></td>
+        <td><%= pcb.bianhao %></td>
+        <td><%= pcb.gouhuo_danwei %></td>
+        <td><%= pcb.pi_info_id %></td>
+        <td><%= pcb.pi_info_id %></td>
+        <td><%= pcb.tijiao_at.blank?? "" : pcb.tijiao_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= pcb.pi_info_id %></td>
+        <td><%= pcb.pi_info_id %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </small>
+  </tbody>
+</table>
+
+
+       </small></div>
+    </div>
+
+
+</div></small>
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

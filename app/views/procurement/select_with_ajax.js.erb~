@@ -1,6 +1,0 @@
-//alert("ggggggggggg");
-document.getElementById('package2').innerHTML='<%= raw @options %>';
-$("#part_a").val("");
-$("#part_b").val("");
-$("#part_a").val("<%= @code_a %>");
-$("#part_b").val("<%= @code_b %>");

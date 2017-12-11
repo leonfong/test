@@ -1,6 +1,10 @@
 <% content_for :erp_header do %>
     <% if can? :work_d, :all %>
         <%= render partial: "work_flow/erp_header_bom", locals: {selected: "pcb_draft_list"} %>
+    <% elsif can? :work_e, :all %>
+        <%= render partial: "work_flow/erp_header", locals: {selected: "pcb_draft_list"} %>
+    <% elsif can? :work_g, :all %>
+        <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pcb_draft_list"} %>
     <% end %>
 <% end %>
 <div class="container-fluid" >
@@ -36,13 +40,32 @@
         <div class="col-md-12" >
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
-            
-            
             <span  style="color:#999;">
                <%= form_tag('/pcb_order_list', method:"get", class:"form-inline") do %>
+               <div class="input-group input-group-sm nav navbar-nav navbar-left">
+                     <div class="input-group-addon " >开始 : </div>
+                       <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                     <div class="input-group-addon " >结束 : </div>
+                       <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+               </div>
                <div class="form-group  nav navbar-nav navbar-left">
-                  
-                  <lable for="order" , class="sr-only">Qrder : </lable>
+                  <lable for="order" , class="">&nbsp;</lable>
                   <div class="input-group input-group-sm">    
                                         
                   <% if @key_order %>   
@@ -64,8 +87,6 @@
             </span>
             </div>
         </div>
-
-
 <br>
 
 
@@ -89,7 +110,7 @@
     <% @pcblist.each_with_index do |pcb,index| %> 
     <div class="row">
         <div class="col-md-12" >  
-            <div class="panel panel-default">
+            <div class="panel panel-default" style="padding: 0px;">
                 <div class="panel-heading">
                     <div class="row">
                     <% if not pcb.pcb_customer_id.blank? %>
@@ -114,17 +135,18 @@
                             <% end %>
                          </div>
 
-                         <% if PcbOrderItem.where(pcb_order_no: pcb.order_no).blank? or can? :work_admin, :all%>
+                         
                          <div class="col-md-1 " ><div class="pull-right">
-                             <a class="glyphicon glyphicon-remove" data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?"></a>
-                
-                         </div></div>
-        
-                         <% end %>   
+                         <% if PcbOrderItem.where(pcb_order_no: pcb.order_no).blank? or can? :work_admin, :all%>
+                             <a class="glyphicon glyphicon-remove" style="text-decoration:none"  data-method='get'  href="/del_pcb_order?order_id=<%= pcb.id.to_s %>" data-confirm="确定要删除?"></a>
+                         <% end %>
+                             <a class="glyphicon glyphicon-menu-up" style="text-decoration:none" data-toggle="collapse" href="#collapseExample<%= pcb.id.to_s %>" aria-expanded="false" aria-controls="collapseExample<%= pcb.id.to_s %>"></a>
+                         </div></div>     
                      </div>
                  </div>
+                 <div class="collapse"  id="collapseExample<%= pcb.id.to_s %>" style="padding: 0px;margin: 0px;">
                  <% if not PcbOrderItem.where(pcb_order_no: pcb.order_no).blank?%>
-                 <table class="table">
+                 <table class="table" style="padding: 0px;margin: 0px;">
                      <thead>
                          <tr>
                              <th width="150">子单号</th>
@@ -318,6 +340,7 @@
                      <% end %>
                  </table>
              <% end %>
+             </div>
          </div>
      </div>
 </div>

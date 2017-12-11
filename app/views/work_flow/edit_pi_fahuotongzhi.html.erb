@@ -1,0 +1,257 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "pi_draft_list"} %>
+<% end %>
+<small><div class="container-fluid" >
+    <div class="row" >
+            <ol class="breadcrumb" style="padding: 8px 30px;">    
+                <li class="active">发货通知单</li>         
+            </ol>
+
+    </div>
+
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-12" style="padding-top: 10px;">
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>PI信息</strong> 
+                <% if can? :work_e, :all and @f_data.state == "caogao"%>
+                
+                <button type="button" class="btn btn-info btn-xs  navbar-right" data-toggle="modal" data-target="#find_c" style="margin-right: 5px;" >选择PI</button>
+                 
+                <% end %>
+                </div>
+                    
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr style="background-color: #eeeeee">
+                                <th >PI NO.</th>                           
+                                <th >产品代码</th>
+                                <th >产品名称</th>
+                                <th width="">中文描述</th>
+                                <th width="">layer</th>
+                                <th >单位</th>
+                                <th width="">数量</th>
+                                <th width="">单价</th>
+                                <th width="">金额</th>
+                                <th width="">交货日期</th>
+                                <th width="">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="biaoge">
+                            <% if @pi_data %>
+
+                            <tr>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.des_cn %></td>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.qty %></td>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.pi_no %></td>
+                                <td><%= @pi_data.remark %></td>
+                            </tr>
+                            <% end %>
+                        </tbody>            
+                    </table>
+
+            </div>
+        </div>
+    </div>
+
+<%= form_tag('/update_pi_fahuotongzhi', method:"post", class:"form-inline") do %>
+    <div class="row form-inline">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>发货信息</strong> 
+                </div>
+                <div class="panel-body ">                     
+                    <div class="row ">
+                        <div class="col-md-3"><strong><code>销售方式：</code></strong>
+                            <select class="form-control input-sm" name="xiaoshou_fangshi" id="xiaoshou_fangshi">
+                                <option value="a" <% if @f_data.xiaoshou_fangshi == "a" %>selected<% end %>>受托代销</option>
+                                <option value="b" <% if @f_data.xiaoshou_fangshi == "b" %>selected<% end %>>现销</option>
+                                <option value="c" <% if @f_data.xiaoshou_fangshi == "c" %>selected<% end %>>赊销</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3"><strong>编号：</strong>
+                            <ins ><%= @f_data.bianhao %></ins>
+                        </div>
+                        <div class="col-md-3"><strong>日期：</strong>
+                            <ins ><%= Time.new.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></ins>
+                        </div>
+                        <div class="col-md-3"><strong><code>物流编号：</code></strong>
+                            <ins id="wuliu_danhao" name="wuliu_danhao"><%= @f_data.wuliu_danhao %></ins>
+                        </div>                    
+                    </div>
+                    <div class="row " style="padding-top: 10px;">
+                        <div class="col-md-3"><strong><code>购货单位：</code></strong>
+                            <input type="text" class="form-control input-sm" style="width:65%" id="gouhuo_danwei" name="gouhuo_danwei" value="<%= @f_data.gouhuo_danwei %>">
+                        </div>
+                        <div class="col-md-3"><strong><code>币种：</code></strong>
+                            <select class="form-control input-sm" name="bizhong" id="bizhong">
+                                <option value="" <% if @f_data.bizhong.blank? %>selected<% end %>>---</option>
+                                <option value="a" <% if @f_data.bizhong == "a" %>selected<% end %>>人民币</option>
+                                <option value="b" <% if @f_data.bizhong == "b" %>selected<% end %>>美元</option>
+                            </select>
+                         </div>
+                        <div class="col-md-3"><strong>汇率：</strong>
+                            <ins id="daima_show" name="daima_show"><%= @f_data.id %></ins>
+                        </div>
+                        <div class="col-md-3"><strong><code>结算方式：</code></strong>
+                            <select class="form-control input-sm" name="jiesuan_fangshi" id="jiesuan_fangshi">
+                                <option value="" <% if @f_data.jiesuan_fangshi.blank? %>selected<% end %>>---</option>
+                                <option value="a" <% if @f_data.jiesuan_fangshi == "a" %>selected<% end %>>月结</option>
+                                <option value="b" <% if @f_data.jiesuan_fangshi == "b" %>selected<% end %>>货到付款</option>
+                            </select>
+                        </div>                    
+                    </div>
+                    <div class="row " style="padding-top: 10px;">
+                        <div class="col-md-3"><strong><code>运输方式：</code></strong>
+                            <select class="form-control input-sm" name="yunshu_fangshi" id="yunshu_fangshi">
+                                <option value="" <% if @f_data.yunshu_fangshi.blank? %>selected<% end %>>---</option>
+                                <option value="a" <% if @f_data.yunshu_fangshi == "a" %>selected<% end %>>盈丰信达</option>
+                                <option value="b" <% if @f_data.yunshu_fangshi == "b" %>selected<% end %>>客户自提</option>
+                                <option value="c" <% if @f_data.yunshu_fangshi == "c" %>selected<% end %>>信丰</option>
+                                <option value="d" <% if @f_data.yunshu_fangshi == "d" %>selected<% end %>>递四方</option>
+                                <option value="e" <% if @f_data.yunshu_fangshi == "e" %>selected<% end %>>宏旭通</option>
+                                <option value="f" <% if @f_data.yunshu_fangshi == "f" %>selected<% end %>>外派司送货</option>
+                                <option value="g" <% if @f_data.yunshu_fangshi == "g" %>selected<% end %>>海运</option>
+                                <option value="h" <% if @f_data.yunshu_fangshi == "h" %>selected<% end %>>PCB板厂直接发</option>
+                                <option value="i" <% if @f_data.yunshu_fangshi == "i" %>selected<% end %>>深圳顺云峰国际快递</option>
+                                <option value="j" <% if @f_data.yunshu_fangshi == "j" %>selected<% end %>>空运</option>
+                                <option value="k" <% if @f_data.yunshu_fangshi == "k" %>selected<% end %>>鸿泰辉</option>
+                                <option value="l" <% if @f_data.yunshu_fangshi == "l" %>selected<% end %>>DHL</option>
+                                <option value="m" <% if @f_data.yunshu_fangshi == "m" %>selected<% end %>>盈迅达</option>
+                                <option value="n" <% if @f_data.yunshu_fangshi == "n" %>selected<% end %>>优速快递皇家物流</option>
+                                <option value="o" <% if @f_data.yunshu_fangshi == "o" %>selected<% end %>>湖北组装厂发货</option>
+                                <option value="p" <% if @f_data.yunshu_fangshi == "p" %>selected<% end %>>华鸿美国际物流</option>
+                                <option value="q" <% if @f_data.yunshu_fangshi == "q" %>selected<% end %>>宇涛物流</option>
+                                <option value="r" <% if @f_data.yunshu_fangshi == "r" %>selected<% end %>>美程国际</option>
+                                <option value="s" <% if @f_data.yunshu_fangshi == "s" %>selected<% end %>>邦达国际物流</option>
+                                <option value="t" <% if @f_data.yunshu_fangshi == "t" %>selected<% end %>>China post</option>
+                                <option value="u" <% if @f_data.yunshu_fangshi == "u" %>selected<% end %>>Bdx 邦达国际物流</option>
+                                <option value="v" <% if @f_data.yunshu_fangshi == "v" %>selected<% end %>>Ups</option>
+                                <option value="w" <% if @f_data.yunshu_fangshi == "w" %>selected<% end %>>圆通</option>
+                                <option value="x" <% if @f_data.yunshu_fangshi == "x" %>selected<% end %>>中通</option>
+                                <option value="y" <% if @f_data.yunshu_fangshi == "y" %>selected<% end %>>优速</option>
+                                <option value="z" <% if @f_data.yunshu_fangshi == "z" %>selected<% end %>>迅扬国际</option>
+                                <option value="aa" <% if @f_data.yunshu_fangshi == "aa" %>selected<% end %>>申通</option>
+                                <option value="bb" <% if @f_data.yunshu_fangshi == "bb" %>selected<% end %>>FEDEX</option>
+                                <option value="cc" <% if @f_data.yunshu_fangshi == "cc" %>selected<% end %>>TNT</option>
+                                <option value="dd" <% if @f_data.yunshu_fangshi == "dd" %>selected<% end %>>顺丰</option>
+                                <option value="ee" <% if @f_data.yunshu_fangshi == "ee" %>selected<% end %>>速尔</option>
+                                <option value="ff" <% if @f_data.yunshu_fangshi == "ff" %>selected<% end %>>德邦</option>
+                                <option value="gg" <% if @f_data.yunshu_fangshi == "gg" %>selected<% end %>>ARAMEX</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3"><strong><code>贸易方式：</code></strong>
+                            <select class="form-control input-sm" name="maoyi_fangshi" id="maoyi_fangshi">
+                                <option value="" <% if @f_data.maoyi_fangshi.blank? %>selected<% end %>>---</option>
+                                <option value="a" <% if @f_data.maoyi_fangshi == "a" %>selected<% end %>>报关</option>
+                                <option value="b" <% if @f_data.maoyi_fangshi == "b" %>selected<% end %>>不报关</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3"><strong><code>支付方式：</code></strong>
+                            <select class="form-control input-sm" name="zhifu_fangshi" id="zhifu_fangshi">
+                                <option value="" <% if @f_data.zhifu_fangshi.blank? %>selected<% end %>>---</option>
+                                <option value="a" <% if @f_data.zhifu_fangshi == "a" %>selected<% end %>>收件人</option>
+                                <option value="b" <% if @f_data.zhifu_fangshi == "b" %>selected<% end %>>发件人</option>
+                                <option value="c" <% if @f_data.zhifu_fangshi == "b" %>selected<% end %>>第三方付</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3"><strong><code>选单号：</code></strong>
+                            <input type="text" class="form-control input-sm " style="width:65%" id="xuandan_hao" name="xuandan_hao" value="<%= @f_data.xuandan_hao %>" >
+                        </div>                    
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row form-inline">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading"><strong>审核信息</strong> 
+                </div>
+                <div class="panel-body ">                     
+                    <div class="row ">
+                        <div class="col-md-2"><strong>审核：</strong>
+                            <ins ><%= @f_data.shenhe %></ins>
+                        </div>
+                        <div class="col-md-2"><strong>审核日期：</strong>
+                            <ins ><%= Time.new.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></ins>
+                        </div>
+                        <div class="col-md-2"><strong>信用备注：</strong>
+                            <input type="text" class="form-control input-sm " style="width:65%" id="xinyong_beizhu" name="xinyong_beizhu" value="<%= @f_data.xinyong_beizhu %>" >
+                        </div> 
+                        <div class="col-md-2"><strong>业务员：</strong>
+                            <ins ><%= @f_data.yewu_yuan %></ins>
+                        </div>
+                        <div class="col-md-2"><strong>部门：</strong>
+                            <ins ><%= @f_data.bumen %></ins>
+                        </div>  
+                        <div class="col-md-2"><strong>制单：</strong>
+                            <ins ><%= @f_data.zhidan %></ins>
+                        </div>                  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-inline">
+                    <div class="form-group sr-only">         
+                        <label for="fahuo_id" class="control-label">PI单号:</label>
+                        <input type="text" class="form-control" id="fahuo_id" name="fahuo_id" value="<%= @f_data.id %>">
+                    </div>
+        <div class="col-md-6">
+
+                <%= submit_tag "保存", class:"btn btn-success pull-right" %>
+
+
+        </div>
+        <div class="col-md-6">
+
+                <%= submit_tag "提交", class:"btn btn-primary pull-left" %>
+
+        </div>
+    </div>
+</div></small>
+<% end %>
+
+<div class="modal fade" id="find_c" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
+    <div class="modal-dialog modal-lg" role="document"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择PI</strong></h4>
+            </div>
+      
+            <div class="modal-body">        
+                <div class="form-inline">
+                <%= form_tag('/find_fahuotongzhi_pi', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group sr-only">         
+                        <label for="c_order_no" class="control-label">PI单号:</label>
+                        <input type="text" class="form-control" id="f_id" name="f_id" value="<%= @f_data.id %>">
+                    </div>
+                    <div class="form-group ">
+                        <lable for="order" , class="control-label"><strong>PI: </strong></lable>
+                        <div class="input-group input-group-sm">              
+                            <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"PI"%>               
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>             
+                </div> 
+                <div class="form-group" id="table_code">
+
+
+                </div>
+            </div>
+        </div></small>
+    </div>
+</div>

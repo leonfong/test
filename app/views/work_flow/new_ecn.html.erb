@@ -12,6 +12,26 @@
         <% end %>
         </ol>
     </div>
+
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-12" style="padding-top: 10px;"> 
+            <div class="form-inline">
+                <%= form_tag('/new_ecn', method:"get", class:"form-inline") do %>
+                    <div class="form-group ">
+                        <lable for="order" , class="control-label sr-only"><strong>客户: </strong></lable>
+                        <div class="input-group input-group-sm">              
+                            <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"60", placeholder:"PI"%>
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                            </div>
+                            
+                        </div>
+                    </div>
+                <% end %>             
+            </div> 
+        </div>
+    </div>
+
     <div class="row" style="padding: 0px;">
 
         <div class="col-md-12" style="padding-top: 10px;">

@@ -1,2 +1,0 @@
-document.getElementById('ramark_<%= q_order.id %>_h').innerHTML='<%= raw @follow_remark %>';
-$('#editOrder_follow').modal('hide')

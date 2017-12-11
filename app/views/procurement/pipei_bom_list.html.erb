@@ -10,9 +10,9 @@
      <div class="row" >
 
             <ol class="breadcrumb" style="padding: 8px 30px;">
-                <li class="active"><a href="/p_bomlist">询价BOM列表</a></li>
-                <li class="active">原始BOM列表</li>
-                <li><a href="/pipei_bom_list">BOM匹配列表</a></li>
+                <li><a href="/p_bomlist">询价BOM列表</a></li>
+                <li><a href="/moko_bom_list">原始BOM列表</a></li>
+                <li class="active">BOM匹配列表</li>
                 <li><a href="/part_list">PCBA报价列表</a></li>         
                 <li><a href="/pcb_list">PCB报价列表</a></li> 
                 <li><a href="/moko_part_data">MOKO物料价格维护</a></li>
@@ -92,23 +92,22 @@
 <table class="table ">
   <thead>
     <tr style="background-color: #eeeeee">
-      <th width="120">MOKO BOM No.</th>
+      <th width="120">匹配 BOM No.</th>
+      <th width="120">原始 BOM No.</th>
       <th width="120">成品编码</th>
       <th width="120">成品描述</th>
-      <th width="100">BOM工程师</th>
-      <th >工程师备注</th>
-      <th >业务备注</th>
-      <th width="170">BOM上传日期</th>
+      <th width="70">数量</th>
+      <th width="70">审核人</th>
+      <th width="170">BOM提交日期</th>
+      <th width="200">PI No.</th>
+      <th width="70">业务员</th>
+      <th width="170">客户交期</th>
+      <th width="170">BOM制单日期</th>
+      <th width="100">采购报价</th>
       <th width="70">状态</th>
-      <th width="70">操作</th>
+      <th width="100">操作</th>
 
 
-
-
-<!--
-      <th width="50">删除</th>
-      <th width="50">编码</th>
--->
 
     </tr>
   </thead>
@@ -119,75 +118,41 @@
 
       <tr >
         <td>
-            <%= link_to bom.bom_id,  moko_view_bom_path(bom_id: bom.id,bak: "bak") %>
+            <%= link_to "BOMP"+bom.bom_id.to_s,  pipei_view_bom_path(bom_id: bom.id,bak: "bak") %>
         </td>
         <td>
-            <%= link_to bom.bom_id,  moko_view_bom_path(bom_id: bom.id,bak: "bak") %>
+            <%= link_to "MOKO"+bom.moko_bom_info_id.to_s,  moko_view_bom_path(bom_id: bom.moko_bom_info_id,bak: "bak") %>
         </td>
         <td>
-            <%= link_to bom.bom_id,  moko_view_bom_path(bom_id: bom.id,bak: "bak") %>
+            <%= link_to "moko"+bom.moko_bom_info_id.to_s,  moko_view_bom_path(bom_id: bom.moko_bom_info_id,bak: "bak") %>
         </td>
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>">
-        <% if bom.bom_eng_up == nil %>
-            <%= User.find(bom.user_id).full_name %>
-        <% else %>
-            <%= bom.bom_eng_up %>
-        <% end %>
+        <td>
+            <%= link_to "moko"+bom.moko_bom_info_id.to_s,  moko_view_bom_path(bom_id: bom.moko_bom_info_id,bak: "bak") %>
         </td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck %></td>
+        <td><%= bom.bom_team_ck_at.blank?? "": bom.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
 
 
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name.to_s %></td>
 
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark %></td>
-
-       
-
-        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.sell_remark %></td>
+        <td><%= User.find_by_email(PiInfo.find_by_id(bom.pi_info_id).pi_sell).full_name %></td>
 
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+
+        <td ><%=  %></td>
+        <td ><%=  %></td>
+        <td ><%= bom.state %></td>
         <td>
-            <%= bom.state.to_s %>
+             <% if bom.state == "checked" %>
+                 <a type="button" class="  pull-right" style="margin-right: 50px;" href="/pipei_bom_check?bom_id=<%= params[:bom_id] %>" >反审核</a>
+             <% else %>
+                 <%= link_to "修改",  pipei_view_bom_path(bom_id: bom.id,bak: "bak") %>
+                 <a type="button" class="  pull-right" style="margin-left: 10px;" href="/pipei_bom_check?bom_id=<%= params[:bom_id] %>" >审核</a>
+             <% end %>
         </td>
-        <td>
-            <%= link_to "复制",  moko_bom_copy_path(bom_id: bom.id) %>
-        </td>
+
       </tr>
-<!--
-      <tr>
-          <td colSpan="11" style="padding: 0px;margin: 0px;">
-              <div class="collapse" id="bom_version_<%= bom.id.to_s %>">
-                  <div  style="padding: 0px;margin: 0px;">
-                      <table class="table " style="padding: 0px;margin: 0px;">  
-                          <% MokoBomInfo.where(bom_id: bom.bom_id).each do |bom_v| %>
-                              <tr class="bg-warning">
-                                  <td width="50"><%= link_to "查看", moko_view_bom_path(bom_id: bom_v.id) %></td>
-                                  <td width="300"><strong>关联Order NO: </strong><%= bom_v.erp_no_son %></td>
-                                  <td width="140"><strong>moko BOM版本: </strong>V<%= bom_v.bom_version %></td>
-                                  <td width="140"><strong>状态: </strong><%= bom_v.moko_state %></td>
-                                  <td width="200"><strong>创建日期: </strong><%= bom_v.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
-                                  <td width="100"><strong>上传: </strong>
-                                      <% if bom_v.bom_eng_up == nil %>
-                                          <%= User.find(bom_v.user_id).full_name %>
-                                      <% else %>
-                                          <%= bom_v.bom_eng_up %>
-                                      <% end %>
-                                  </td>
-                                  <td width="100"><strong>审核: </strong><%= bom.bom_eng %></td>
-                                  <td></td>
-                              </tr>
-                          <% end %>
-                      </table>
-                  </div>
-               </div>
-           </td>
-       </tr>
--->
-
-
-
-
-
-
-
 
 
     <% end %>

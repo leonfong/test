@@ -110,7 +110,9 @@ Rails.application.routes.draw do
   match '/find_dn', to: 'work_flow#find_dn', via: 'get'
   match '/find_dn_ch', to: 'work_flow#find_dn_ch', via: 'get'
   match '/find_pi_buy', to: 'work_flow#find_pi_buy', via: 'get'
+  match '/find_pi_buy_baojia', to: 'work_flow#find_pi_buy_baojia', via: 'get'
   match '/add_pi_buy_item', to: 'work_flow#add_pi_buy_item', via: 'get'
+  match '/add_pi_buy_baojia_item', to: 'work_flow#add_pi_buy_baojia_item', via: 'get'
   match '/pi_waitfor_buy', to: 'work_flow#pi_waitfor_buy', via: 'get'
   match '/send_pi_buy', to: 'work_flow#send_pi_buy', via: 'post'
   match '/pi_buy_history', to: 'work_flow#pi_buy_history', via: 'get'
@@ -201,7 +203,28 @@ Rails.application.routes.draw do
   match '/erp_index', to: 'work_flow#erp_index', via: 'get'
   match '/customer_list', to: 'work_flow#customer_list', via: 'get'
   match '/user_info_edit', to: 'work_flow#user_info_edit', via: 'get'
-
+  match '/view_pi_fengmian', to: 'work_flow#view_pi_fengmian', via: 'get'
+  match '/pi_print_fengmian', to: 'work_flow#view_pi_fengmian', via: 'get'
+  match '/edit_pi_fengmian', to: 'work_flow#edit_pi_fengmian', via: 'post'
+  match '/pi_fahuotongzhi_list', to: 'work_flow#pi_fahuotongzhi_list', via: 'get'
+  match '/new_pi_fahuotongzhi', to: 'work_flow#new_pi_fahuotongzhi', via: 'get'
+  match '/edit_pi_fahuotongzhi', to: 'work_flow#edit_pi_fahuotongzhi', via: 'get'
+  match '/find_fahuotongzhi_pi', to: 'work_flow#find_fahuotongzhi_pi', via: 'get'
+  match '/find_fahuotongzhi_pi_ch', to: 'work_flow#find_fahuotongzhi_pi_ch', via: 'get'
+  match '/update_pi_fahuotongzhi', to: 'work_flow#update_pi_fahuotongzhi', via: 'post'
+  match '/edit_user_info_erp', to: 'work_flow#edit_user_info_erp', via: 'post'
+  match '/edit_user_pw', to: 'work_flow#edit_user_pw', via: 'post'
+  match '/pi_admin_list', to: 'work_flow#pi_admin_list', via: 'get'
+  match '/get_moko_bom', to: 'work_flow#get_moko_bom', via: 'get'
+  match '/get_moko_pipei_bom', to: 'work_flow#get_moko_pipei_bom', via: 'get'
+  match '/pi_buy_baojia_list', to: 'work_flow#pi_buy_baojia_list', via: 'get'
+  match '/view_pi_buy_baojia', to: 'work_flow#view_pi_buy_baojia', via: 'get'
+  match '/del_pi_buy_item_baojia', to: 'work_flow#del_pi_buy_item_baojia', via: 'get'
+  match '/send_pi_buy_check_baojia', to: 'work_flow#send_pi_buy_check_baojia', via: 'post'
+  match '/send_pi_buy_check_baojia', to: 'work_flow#send_pi_buy_check_baojia', via: 'get'
+  match '/send_pi_buy_check_baojia_done', to: 'work_flow#send_pi_buy_check_baojia_done', via: 'post'
+  match '/send_pi_buy_check_baojia_done', to: 'work_flow#send_pi_buy_check_baojia_done', via: 'get'
+  match '/del_pi_buy_baojia', to: 'work_flow#del_pi_buy_baojia', via: 'get'
 
 
 
@@ -250,6 +273,7 @@ Rails.application.routes.draw do
   match '/add_ecn_item', to: 'work_flow#add_ecn_item', via: 'post'
   match '/up_ecn_item', to: 'work_flow#up_ecn_item', via: 'post'
   match '/edit_ecn_up', to: 'work_flow#edit_ecn_up', via: 'post'
+  match '/edit_ecn_up', to: 'work_flow#edit_ecn_up', via: 'get'
   match '/edit_j_h_r_q', to: 'work_flow#edit_j_h_r_q', via: 'post'
   match '/edit_fu_kuan_bank', to: 'work_flow#edit_fu_kuan_bank', via: 'post'
   match '/edit_fu_kuan_info_a', to: 'work_flow#edit_fu_kuan_info_a', via: 'post'
@@ -299,6 +323,16 @@ Rails.application.routes.draw do
   match '/edit_pi_buy_remark', to: 'work_flow#edit_pi_buy_remark', via: 'post'
   match '/edit_menu', to: 'work_flow#edit_menu', via: 'post'
   match '/edit_block', to: 'work_flow#edit_block', via: 'post'
+  match '/pipei_bom_check', to: 'work_flow#pipei_bom_check', via: 'get'
+  match '/moko_bom_copy', to: 'work_flow#moko_bom_copy', via: 'get'
+  match '/view_ecn_message', to: 'work_flow#view_ecn_message', via: 'get'
+  match '/p_edit_baojia', to: 'work_flow#p_edit_baojia',via: 'post'
+  match '/p_edit_baojia', to: 'work_flow#p_edit_baojia',via: 'get'
+  match '/p_updateii_baojia', to: 'work_flow#p_updateii_baojia',via: 'get'
+  match '/p_edit_dn_baojia', to: 'work_flow#p_edit_dn_baojia',via: 'post'
+  match '/del_dn_baojia', to: 'work_flow#del_dn_baojia',via: 'get'
+
+
 
 
 
@@ -311,6 +345,7 @@ Rails.application.routes.draw do
   match '/p_search_part', to: 'procurement#p_search_part',via: 'post'
   match '/p_viewbom', to: 'procurement#p_viewbom',via: 'get'
   match '/moko_view_bom', to: 'procurement#moko_view_bom',via: 'get'
+  match '/pipei_view_bom', to: 'procurement#pipei_view_bom',via: 'get'
   match '/moko_bom_upgrade', to: 'procurement#moko_bom_upgrade',via: 'post'
   match '/moko_bom_up_done', to: 'procurement#moko_bom_up_done',via: 'post'
   match '/p_viewbom', to: 'procurement#p_viewbom',via: 'post'
@@ -320,6 +355,7 @@ Rails.application.routes.draw do
   match '/p_add_bom', to: 'procurement#p_add_bom',via: 'post'
   match '/p_bomlist', to: 'procurement#p_bomlist',via: 'get'
   match '/moko_bom_list', to: 'procurement#moko_bom_list', via: 'get'
+  match '/pipei_bom_list', to: 'procurement#pipei_bom_list', via: 'get'
   match '/search_m', to: 'procurement#search_m',via: 'post'
   match '/search_m', to: 'procurement#search_m',via: 'get'
   match '/search_m_ecn', to: 'procurement#search_m_ecn',via: 'post'
@@ -398,6 +434,9 @@ Rails.application.routes.draw do
   match '/jia_ji', to: 'procurement#jia_ji', via: 'get'
   match '/fan_jia_ji', to: 'procurement#fan_jia_ji', via: 'get'
   match '/up_all_dn', to: 'procurement#up_all_dn', via: 'get'
+  match '/p_add_moko_bom', to: 'procurement#p_add_moko_bom',via: 'post'
+  match '/p_add_pipei_bom', to: 'procurement#p_add_pipei_bom',via: 'post'
+
 
 
 

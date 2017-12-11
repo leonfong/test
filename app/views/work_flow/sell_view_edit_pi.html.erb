@@ -1,8 +1,17 @@
 <% content_for :erp_header do %>
-    <%= render partial: "work_flow/erp_header", locals: {selected: "work_flow"} %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "pi_draft_list"} %>
 <% end %>
 <small><div class="container-fluid" >
-    
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active"><%= params[:pi_no] %></li>
+        <li><a href="/pi_draft_list">未提交的PI</a></li>
+        <li><a href="/pi_list">PI列表</a></li>         
+        <% if can? :work_e, :all %>            
+            <b style="margin-left: 30%;margin-right: 40%;"><button type="button" class="btn btn-info" data-backdrop="static" data-toggle="modal" data-target="#new_payment_notice">新建收款通知单</button></b>
+        <% end %>
+        </ol>
+    </div>
 <%= render 'layouts/flash_messages' %>
 
 
@@ -203,22 +212,20 @@
 
 
   
+<% if not @pi_item_bom.blank? %>
+    <% @pi_item_bom.each do |item_i| %>
+        <% @boms = ProcurementBom.find_by_id(item_i.bom_id) %>
+        <% @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{item_i.id}'") %>
+        <% @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(item_i.id) %>
+        <% if not @bom_item.blank? %>
+            <% @bom_item = @bom_item.select {|item| item.quantity != 0 } %>
+        <% end %>
+
+
+
     <div class="row" style="padding-top: 10px;">      
 
-<!--
-        <h1><strong>权限-业务部</strong></h1>
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <% if can? :pcb_review, :all %>
-            <%= link_to "Order Review", order_review_list_path ,class: "list-group-item"%>
-            <% end %>
-            <% if can? :pcb_dc, :all %>
-            <%= link_to "Order Review DC", order_dc_list_path ,class: "list-group-item"%>
-            <% end %>
-            <%= link_to "My Order", p_bomlist_path ,class: "list-group-item "%>
-            <%= link_to "New BOM", procurement_new_path, data: { no_turbolink: true } ,class: "list-group-item"%>
-            <%= link_to "My BOM", p_bomlist_path ,class: "list-group-item active"%>
-        </div>
--->
+
         <div class="col-md-12">           
             
             <div class="row">
@@ -231,24 +238,16 @@
                     </h4>
                 </div>
 
-<!--
-                <small><div class="col-md-9 col-sm-9 pull-right" style="color:#999;">
-                    PCB Engineering service: <strong>(86)-0755-23573370-835&nbsp;&nbsp;&nbsp;&nbsp;</strong> E-mail: <strong><a href="mailto:#" style="color:#666;">anne@mokotechnology.com&nbsp;&nbsp;&nbsp;</a></strong> SKYPE: <strong><a href="skype:annelan0071?chat" style="color:#666;">annelan0071</a></strong>
-                </div></small>
--->
+
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <table class="table table-striped table-bordered">
                        <tr>
-<!--
-                           <td><strong><%= "Project name" %>：</strong><%= @boms.p_name %></td>
--->
+
 <% if not params[:pi_info_id].blank? %>
                            <td>
-<!--
-                               <button  type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-backdrop="static" data-target="#add_ecn" >ECN</button>
--->
+
                                <%= form_tag({action: :add_ecn},method:"post") do %> 
 <!--
                                    <a type="button" class="btn btn-danger btn-xs"  href="/edit_ecn?pi_item_id=<%=params[:pi_item_id]%>">新建ECN草稿</a>
@@ -264,20 +263,7 @@
 
                            <td><strong><%= t(:bom_file) %>：</strong><%= @boms.excel_file_identifier %></td> 
 -->
-<!--
-                           <td>
-                               <% if can? :work_g_all, :all%>
-                               <%= form_tag({controller: :procurement,action: :p_profit},method:"post",class:"form-inline") do %>
-                                   <div class="form-group">
-                                       <label for="profit">利润：</label>
-                                       <input type="number" class="form-control" id="profit" name="profit" >
-                                   </div>
-                                   <%= text_field_tag :bom_id, @boms.id, class:"sr-only" %>
-                                  <button type="submit" class="btn btn-warning">提交</button>
-                               <% end %>
-                               <% end %> 
-                           </td> 
--->
+
                            <td><%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %></td>
                            <td><%= link_to "导出(单独采购)", p_excel_m_path(:bom_id =>@boms.id) %></td>
                            <td><%= link_to "导出源文件", @boms.excel_file_url %></td> 
@@ -286,7 +272,18 @@
                     </table>    
                 </div>
             </div>
-<% if not @baojia.blank? %> 
+            <div class="row">
+                <div class="col-md-12">
+            <table class="table table-striped table-bordered">
+                <tr>               
+                    <td><strong><%= "The total part" %>：</strong><a class="text-muted" id="matched"><%= @baojia.size %></a></td>
+                    <td><strong><%= "The total cost" %>：</strong><a class="text-muted" id="total_price">￥<%= @boms.t_p %></a></td>
+                    <td><strong><%= "The total price" %>：</strong><a class="text-muted" >￥<%= @boms.t_pp %></a></td>
+                </tr>
+            </table>
+                </div>
+            </div>
+<% if not @bom_item.blank? %> 
             <div class="row">
                 <div class="col-md-12">
             <small>
@@ -312,7 +309,7 @@
                 </tr>
                 </thead>
                
-                <% @baojia.each_with_index do |item,index| %> 
+                <% @bom_item.each_with_index do |item,index| %> 
                 <tr id="<%=item.id%>_tr" <% if item.color == "b" %>class="bg-info"<% elsif item.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>  >
 <!--
                     <td style="padding: 5px 0px 5px 0px;margin: 0px;"><small><%= item.mpn %></small></td>
@@ -477,10 +474,8 @@
 </div>
 
 
-<% get_dn_data = PDn.where("p_item_id=#{item.id} AND state='' AND color='b'") %>
-<% if get_dn_data.blank? %>
-    <% get_dn_data = PDn.where("p_item_id=#{item.id} AND state='' AND color='y' AND remark IS NOT NULL") %>
-<% end %>
+<% get_dn_data = PDn.where("p_item_id=#{item.id} AND state='' AND (color='b' OR (color='y' AND remark IS NOT NULL ))") %>
+
 <% if not get_dn_data.blank? %>
 <% if get_dn_data.first.remark != nil || get_dn_data.first.info != nil %>
 
@@ -527,28 +522,20 @@
             </table></small>
                </div>
             </div>
-<% if  params[:pi_info_id].blank? %>
-            <div class="row">
-                <div class="col-md-12">
-            <table class="table table-striped table-bordered">
-                <tr>               
-                    <td><strong><%= "The total part" %>：</strong><a class="text-muted" id="matched"><%= @baojia.size %></a></td>
-                    <td><strong><%= "The total cost" %>：</strong><a class="text-muted" id="total_price">￥<%= @boms.t_p %></a></td>
-                    <td><strong><%= "The total price" %>：</strong><a class="text-muted" >￥<%= @boms.t_pp %></a></td>
-                </tr>
-            </table>
-                </div>
-            </div>
-<% end %>
+
             <% end %>
 
-<% if  params[:pi_info_id].blank? %>
-            <div class="modal-footer">
-                <%= link_to_function "返回上一页", "history.go(-1)",class:"btn btn-danger "%>
-            </div>
-<% end %>
+
         </div>
     </div>
+
+
+    <% end %>
+<% end %>
+
+
+
+
 
 
 <div class="modal fade" id="remarkitem" tabindex="-1" role="dialog" aria-labelledby="remarkitemLabel">
@@ -1278,10 +1265,42 @@ $('#remarkitem').on('show.bs.modal', function (event) {
   var modal = $(this);
   modal.find($("#itemp_id_remark")).val(itempid);
 })
+pay_att
 function postform_check() {  	           
+      if ($("#pay_p").val() == "" )
+      {                    
+　　    alert("请填收款金额！");                    
+　　    return false;                
+　     }
       if ($("#pay_type").val() == "" )
       {                    
 　　    alert("请选填收款性质！");                    
+　　    return false;                
+　     }
+      if ($("#pay_account_name").val() == "" )
+      {                    
+　　    alert("请填account name！");                    
+　　    return false;                
+　     }
+      if ($("#pay_account_number").val() == "" )
+      {                    
+　　    alert("请填account number！");                    
+　　    return false;                
+　     }
+      if ($("#pay_swift_code").val() == "" )
+      {                    
+　　    alert("请填swift code！");                    
+　　    return false;                
+　     }
+      if ($("#pay_bank_name").val() == "" )
+      {                    
+　　    alert("请填bank name！");                    
+　　    return false;                
+　     }
+      html = my_feedback.html();
+      if (html == "" )
+      {                    
+　　    alert("请上传图片！");                    
 　　    return false;                
 　     }
 <% if not @shou_kuan_jin_e.blank?%>

@@ -1,5 +1,0 @@
-$("#daima_show").html('<%= @c_info.c_no %>');
-$("#kehu_show").html('<%= @c_info.customer %>');
-$("#guojia_show").html('<%= @c_info.customer_country %>');
-$("#fahuodizhi_show").html('<%= @c_info.shipping_address %>');
-$('#find_c').modal('hide')

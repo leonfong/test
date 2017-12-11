@@ -5,6 +5,1715 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def send_pi_buy_check_baojia
+        up_state = PiBuyBaojiaInfo.find_by_id(params[:pi_buy_baojia_info_id_chk])
+        if not up_state.blank?
+            up_state.state = "checking"
+            up_state.save
+            PiBuyBaojiaItem.where(pi_buy_baojia_info_id: up_state.id).each do |item|
+                #item.state = "checking"
+                #item.save
+                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                pmc_data.baojia_state = "checking" 
+                pmc_data.save
+            end
+        end
+        redirect_to pi_buy_baojia_list_path()
+    end
+
+    def send_pi_buy_check_baojia_done
+        up_state = PiBuyBaojiaInfo.find_by_id(params[:pi_buy_baojia_info_id_chk])
+        if not up_state.blank?
+            up_state.state = "done"
+            up_state.save
+            PiBuyBaojiaItem.where(pi_buy_baojia_info_id: up_state.id).each do |item|
+                #item.state = "checking"
+                #item.save
+                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                pmc_data.baojia_state = "done" 
+                pmc_data.save
+            end
+        end
+        redirect_to pi_buy_baojia_list_path()
+    end
+
+    def del_pi_buy_baojia
+        if params[:baojia_id]
+            get_info = PiBuyBaojiaInfo.find_by_id(params[:baojia_id]) 
+            if not get_info.blank?
+                get_item_all = PiBuyBaojiaItem.where(pi_buy_baojia_info_id: params[:baojia_id])
+                if not get_item_all.blank?
+                    get_item_all.each do |buy_item|
+                        pmc_data = PiPmcItem.find_by_id(buy_item.pi_pmc_item_id)
+                        if not pmc_data.blank?
+                            pmc_data.baojia_state = nil
+                            if pmc_data.save
+                                buy_data.destroy
+                            end
+                        end
+                    end
+                end
+                get_info.destroy
+            end
+        end
+        redirect_to :back
+    end
+
+    def del_pi_buy_item_baojia
+        buy_data = PiBuyBaojiaItem.find_by_id(params[:id])
+        if not buy_data.blank?
+            pmc_data = PiPmcItem.find_by_id(buy_data.pi_pmc_item_id)
+            if not pmc_data.blank?
+                pmc_data.baojia_state = nil
+                if pmc_data.save
+                    buy_data.destroy
+                    #pitem_data = PItem.find_by_id(pmc_data.p_item_id)
+                    #if not pitem_data.blank? 
+                        #pitem_data.buy = "pmc"
+                        #pitem_data.save
+                    #end
+                end
+            end
+        end
+        redirect_to :back
+    end
+
+    def del_dn_baojia
+        @item_id = params[:item_id]
+        @dn_id = params[:id]
+        #itemall = PItem.find(params[:item_id])
+        itemall = PiPmcItem.find_by_id(params[:pi_pmc_item_id])
+        @dn = PChkDn.find(params[:id])
+        if not @dn.blank?
+            itemall.dn_id = nil
+            itemall.dn = nil
+            itemall.dn_long = nil
+            itemall.save
+            #@dn.destroy
+            @dn.state = "del"
+            @dn.save
+        end
+    end
+
+    def p_edit_dn_baojia    
+        dn = PChkDn.find(params[:dn_id])
+        if not params[:dn_info].blank?
+            dn.update(editbn_params)
+        end
+        
+        if not params[:dn_dn].blank?
+            dn.dn = params[:dn_dn]
+        end
+        if not params[:dnlong].blank?
+            dn.dn_long = params[:dnlong]
+        end
+        if not params[:dn_qty].blank?
+            dn.qty = params[:dn_qty]
+        end
+        if not params[:dn_cost].blank?
+            dn.cost = params[:dn_cost]
+        end
+
+        if not params[:dn_remark].blank?
+            dn.remark = params[:dn_remark].gsub(/\r\n/, " ")
+            #@bom_item = PItem.find(dn.p_item_id)
+            
+            #@bom_item.sell_feed_back_tag = "sell"
+            #@bom_item.save
+        end
+        dn.email = current_user.email
+        dn.save
+        @itemid = params[:dn_item_id]
+        @dnid = params[:dn_id]
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(@itemid.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        @view_dns = ""
+        @view_dns += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:dn_item_id].to_s + '" ></small></a>'
+        if not dn.info.blank?                
+            @view_dns += ' <a href="'+dn.info.to_s+'">下载</a></small></td>'
+        else
+            @view_dns += ' </td>'
+        end 
+
+
+        @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'    
+
+        @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a id="'+params[:dn_item_id].to_s+'_'+dn.id.to_s+'_star" class="glyphicon glyphicon-star-empty" data-method="get" data-remote="true" href="/up_all_dn?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'" data-confirm="确定要上传价格?"></a></small></td>'
+
+        @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
+
+       
+            #@view_dns += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ params[:id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.remark.to_s + '</div></a></small></td>'                
+
+
+        @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii?id='+ @itemid.to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>'
+
+
+
+
+        if not dn.remark.blank?
+            @view_dns += dn.remark
+        else
+            @view_dns += ''
+        end
+        @view_dns += '</div></a></small></td>'  
+
+
+        @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn_baojia?id='+dn.id.to_s+'&item_id='+@itemid.to_s+'&pi_pmc_item_id='+params[:pi_pmc_item_id].to_s+'" data-confirm="确定要删除?"></a></small></td>'
+
+        #redirect_to :back
+        #return false    
+        
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #Rails.logger.info(@view_dns.inspect)
+        #Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        render "p_edit_dn_baojia.js.erb"
+    end
+
+
+    def p_updateii_baojia
+        dell_dns_color = PChkDn.where(p_item_id: params[:id],state: "")
+        c_color = ""
+        dell_dns_color = PChkDn.where("p_item_id = ? AND color <> ?",params[:id],"Y").update_all "color = '#{c_color}'"
+        if params[:product_name] != ""
+            @add_dns = PChkDn.find(params[:dn_id])
+            @add_dns.email = current_user.email
+            
+            if @add_dns.color == "y"
+                @add_dns.color = "y"
+            else
+                @add_dns.color = "b"
+            end
+            @add_dns.save
+            get_item_data = PiBuyBaojiaItem.find(params[:id])
+            @bom_item = PiPmcItem.find_by_id(get_item_data.pi_pmc_item_id)
+            #@bom_item = PItem.find(params[:id]) #取回p_items表bomitem记录，在解析bom是存入，可能没有匹配到product
+            #@bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+           
+            if @bom_item.update_attribute("product_id", Product.find_by(name: params[:product_name]).id)
+                if @bom_item.product_id
+	            #@bom_item.product = Product.find(@bom_item.product_id)
+                    @bom_item.warn = false
+                    @bom_item.cost = @add_dns.cost
+                    @bom_item.dn_chk_id = @add_dns.id
+                    @bom_item.dn_chk = @add_dns.dn
+                    get_item_data.dn_chk_long = @add_dns.dn_long
+                    get_item_data.dn_chk_id = @add_dns.id
+                    get_item_data.dn_chk = @add_dns.dn
+                    @bom_item.dn_chk_long = @add_dns.dn_long
+
+                    @bom_item.mark = false
+                    @bom_item.manual = true
+                    @bom_item.mpn_id = nil
+                    #@bom_item.mpn = nil
+                    if @add_dns.cost == nil
+                        @bom_item.color = ""
+                        get_item_data.color = ""
+                    else
+                        @bom_item.color = "b"
+                        get_item_data.color = "b"
+                    end
+=begin
+                    if @add_dns.remark != nil or @add_dns.remark != ""
+                        if @add_dns.color != "y"
+                            @bom_item.sell_feed_back_tag = "sell"
+                        else
+                            @bom_item.sell_feed_back_tag = ""
+                        end
+                    else
+                        @bom_item.sell_feed_back_tag = ""
+                    end
+=end
+                    @bom_item.user_do_change = nil
+	            #@bom_item.save!
+                    bom_state = ""
+                    @bom_item.save
+                    get_item_data.save
+                    #if @bom_item.save!
+                        
+                        #check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b' AND quantity>0")
+                        #if check_blue.blank?
+                            #bom_state = "done"
+                        #end
+                    #end
+=begin   
+                    #累加产品被选择的次数
+                    prefer = (Product.find(@bom_item.product_id)).prefer + 1
+                    Product.find(@bom_item.product_id).update(prefer: prefer) 
+                    if params[:bomsuse].blank?
+                        flash[:success] = t('success_a')
+                        redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+                    else
+                        @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+                        @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)            
+                        @total_price_nn = 0.00               
+	                unless @matched_items_nn.empty?
+                            @bom_api_all = []
+		            @matched_items_nn.each do |item|
+                                if not item.cost.blank?
+                                    if not item.pmc_qty.blank?
+                                        @total_price_nn += item.cost * item.pmc_qty 
+                                    else
+                                        @total_price_nn += item.cost * @bom.qty * item.quantity
+                                    end
+                                end   
+		            end
+                        end
+                        @bom.t_p = @total_price_nn.to_f.round(4)
+                        @bom.state = bom_state
+                        @bom.save
+                        render "p_updateii_baojia.js.erb"
+                    end
+=end
+                else
+	            flash[:error] = t('error_d')
+	  	    redirect_to bom_path(@bom_item.bom, :anchor => "Comment", :bomitem => @bom_item.id );
+	        end
+            end  
+            
+
+            
+            
+            #Rails.logger.info(@bom_item.id.to_s + '_dns')
+        else
+            @add_dns = PChkDn.find(params[:dn_id])
+            @add_dns.email = current_user.email
+            
+            if @add_dns.color == "y"
+                @add_dns.color = "y"
+            else
+                @add_dns.color = "b"
+            end
+            #@add_dns.color = "b"
+            @add_dns.save
+            get_item_data = PiBuyBaojiaItem.find(params[:id])
+            @bom_item = PiPmcItem.find_by_id(get_item_data.pi_pmc_item_id)
+            #@bom_item = PItem.find(params[:id]) 
+            
+            @bom_item.cost = @add_dns.cost
+            @bom_item.dn_id = @add_dns.id
+            @bom_item.dn = @add_dns.dn
+            @bom_item.dn_long = @add_dns.dn_long
+            get_item_data.dn_chk_long = @add_dns.dn_long
+            get_item_data.dn_chk_id = @add_dns.id
+            get_item_data.dn_chk = @add_dns.dn
+            #@bom_item.product_id = 0
+            if @add_dns.cost == nil
+                @bom_item.color = ""
+                get_item_data.color = ""
+            else
+                @bom_item.color = "b"
+                get_item_data.color = "b"
+            end
+            if @add_dns.remark != nil or @add_dns.remark != ""
+                @bom_item.sell_feed_back_tag = "sell"
+            else
+                @bom_item.sell_feed_back_tag = ""
+            end
+            @bom_item.user_do_change = nil
+            bom_state = ""
+            @bom_item.save
+            get_item_data.save
+            #if @bom_item.save
+                #check_blue = PItem.where("procurement_bom_id='#{@bom_item.procurement_bom_id}' AND color<>'b' AND quantity>0")
+                #if check_blue.blank?
+                    #bom_state = "done"
+                #end
+            #end
+=begin
+            @bom = ProcurementBom.find(@bom_item.procurement_bom_id)
+            @bom.state = bom_state
+            @match_str_nn = "#{@bom.p_items.count('product_id')+@bom.p_items.count('mpn_id')} / #{@bom.p_items.count}"
+            @matched_items_nn = PItem.where(procurement_bom_id: @bom.id)   
+            
+            @total_price_nn = 0.00               
+	    if not @matched_items_nn.blank?
+                @bom_api_all = []
+		@matched_items_nn.each do |item|
+                    if not item.cost.blank?
+                        if not item.pmc_qty.blank?
+                            @total_price_nn += item.cost * item.pmc_qty 
+                        else
+                            @total_price_nn += item.cost * @bom.qty * item.quantity
+                        end
+                    end                      
+		end
+            end
+            @bom.t_p = @total_price_nn.to_f.round(4)
+            @bom.save
+=end
+            render "p_updateii_baojia.js.erb"    
+        end
+    end
+
+    def view_pi_buy_baojia
+        @all_dn = "[&quot;"
+        all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn_long FROM all_dns GROUP BY all_dns.dn_long")
+        all_s_dn.each do |dn|
+            @all_dn += "&quot;,&quot;" + dn.dn_long.to_s
+        end
+        @all_dn += "&quot;]"
+        if params[:baojia_id]
+            @get_data = PiBuyBaojiaInfo.find_by_id(params[:baojia_id])
+            if @get_data.blank?
+                redirect_to :back and return 
+            else
+                #@get_data_item = PiBuyBaojiaItem.where(pi_buy_baojia_info_id: params[:baojia_id])
+                @get_data_item = PiBuyBaojiaItem.find_by_sql("SELECT pi_buy_baojia_items.id,pi_buy_baojia_items.color,pi_buy_baojia_items.pi_buy_baojia_info_id,pi_buy_baojia_items.pi_pmc_item_id,pi_buy_baojia_items.dn_chk_id,pi_buy_baojia_items.dn_chk,pi_buy_baojia_items.dn_chk_long,pi_buy_baojia_items.created_at,pi_buy_baojia_items.updated_at,pi_pmc_items.pi_info_id,pi_pmc_items.pi_item_id,pi_pmc_items.erp_no,pi_pmc_items.erp_no_son,pi_pmc_items.moko_part,pi_pmc_items.moko_des,pi_pmc_items.pmc_qty,pi_pmc_items.description,pi_pmc_items.pass_at,pi_pmc_items.cost,pi_pmc_items.dn_id,pi_pmc_items.dn,pi_pmc_items.dn_long FROM pi_pmc_items INNER JOIN pi_buy_baojia_items ON pi_buy_baojia_items.pi_pmc_item_id = pi_pmc_items.id WHERE pi_buy_baojia_items.pi_buy_baojia_info_id = #{params[:baojia_id]}")
+            end
+        end
+    end
+
+    def p_edit_baojia
+=begin
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(@pdn.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        respond_to do |format|
+            if @pdn.save
+                format.js
+            end
+        end
+=end
+        get_item_data = PiBuyBaojiaItem.find(params[:item_id])
+        @bom_item = PiPmcItem.find_by_id(get_item_data.pi_pmc_item_id)
+        if not @bom_item.blank?
+            if not params[:info].blank?
+                p_dn = PChkDn.new(bn_params)
+            else
+                p_dn = PChkDn.new()
+            end
+            p_dn.owner_email = current_user.email
+            p_dn.email = current_user.email
+            #Rails.logger.info("--------------------------")
+            #Rails.logger.info(p_dn.info.current_path.inspect)
+            #Rails.logger.info("--------------------------")
+            p_dn.p_item_id = params[:item_id]
+            p_dn.pi_pmc_item_id = @bom_item.id
+            p_dn.cost = params[:cost]
+            p_dn.part_code = @bom_item.moko_part
+=begin
+            if not params[:part_code].blank?
+                p_dn.part_code = params[:part_code]
+            else
+                if not @bom_item.moko_part.blank?
+                    p_dn.part_code = @bom_item.moko_part
+                else
+                    if @bom_item.product_id != 0
+                        find_moko_part = Product.find_by_id(@bom_item.product_id)
+                        if not find_moko_part.blank?
+                            p_dn.part_code = find_moko_part.name
+                        end
+                    end
+                end
+            end
+=end
+            p_dn.dn = params[:dn]
+            if params[:dn_long] == "" and params[:dn] != ""
+                p_dn.dn_long = AllDn.find_by(dn: params[:dn].strip).dn_long
+            else
+                p_dn.dn_long = params[:dn_long]
+            end
+            #p_dn.qty = params[:qty]
+            p_dn.qty = @bom_item.pmc_qty
+            p_dn.date = Time.new
+            p_dn.remark = params[:remark]
+            #if params[:remark] != ""
+                #@bom_item.sell_feed_back_tag = "sell"
+                #@bom_item.save
+           # end 
+            p_dn.tag = "a"
+            p_dn.save
+            #Rails.logger.info("--------------------------")
+            #Rails.logger.info(p_dn.info.current_path)
+            #Rails.logger.info("--------------------------")
+        end
+            @view_dns = ''
+            @view_dns += '<table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">'
+            @view_dns += '<tbody >'
+            PChkDn.where(p_item_id: params[:item_id],state: "").each do |dn|
+                @view_dns += '<tr id="' + params[:item_id].to_s + '_' + dn.id.to_s + '" '
+                if dn.color == "b"
+                    @view_dns += ' class="bg-info">'
+                elsif dn.color == "g" 
+                    @view_dns += ' class="bg-success">' 
+                else
+                    @view_dns += ' class="">'
+                end
+                #@view_dns += '<td width="25"><small><a class="glyphicon glyphicon-edit" data-method="get" data-remote="true" href=""></a></small></td>'
+                @view_dns += '<td style="padding: 0px;margin: 0px;" width="55"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="' + dn.id.to_s + '" data-dn="' + dn.dn.to_s + '" data-dnlong="' + dn.dn_long.to_s + '" data-qty="' + dn.qty.to_s + '" data-cost="' + dn.cost.to_s + '" data-remark="' + dn.remark.to_s + '" data-itemid="' + params[:item_id].to_s + '" ></small></a> '
+                if not dn.info.blank?                
+                    @view_dns += ' <a href="'+dn.info.to_s+'">下载</a></small></td>'
+                else
+                    @view_dns += ' </td>'
+                end 
+
+                @view_dns += '<td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii_baojia?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s + '&bomsuse=bomsuse" ><div>' + dn.date.localtime.strftime('%y-%m').to_s + '</div></a></small></td>'
+                    
+                @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a id="'+params[:item_id].to_s+'_'+dn.id.to_s+'_star" class="glyphicon glyphicon-star-empty" data-method="get" data-remote="true" href="/up_all_dn?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'" data-confirm="确定要上传价格?"></a></small></td>'
+
+                @view_dns += '<td style="padding: 0px;margin: 0px;" width="200" title="'+dn.dn_long.to_s+'"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii_baojia?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" ><div>' + dn.dn.to_s + ' ' + dn.qty.to_s + ' ￥'+dn.cost.to_s+'</div></a></small></td>'
+
+                
+                @view_dns += '<td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii_baojia?id='+ params[:item_id].to_s + '&product_name=' + dn.part_code.to_s + '&dn_id=' + dn.id.to_s +  '&bomsuse=bomsuse" data-toggle="popover" tabindex="0"  data-trigger="hover" data-placement="top" data-content="' + dn.remark.to_s + '"><div>' 
+
+                Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+                #@view_dns += dn.remark ? dn.remark[0]:''
+                if dn.remark
+                    @view_dns += dn.remark
+                else
+                    @view_dns += ''
+                end
+                @view_dns += '</div></a></small></td>' 
+                @view_dns += '<td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method="get" data-remote="true" href="/del_dn_baojia?id='+dn.id.to_s+'&item_id='+params[:item_id].to_s+'" data-confirm="确定要删除?"></a></small></td>'
+                @view_dns += '</tr>'
+            end
+            @view_dns += '</tbody>'
+            @view_dns += '</table>'
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        Rails.logger.info(@view_dns.inspect)
+        Rails.logger.info("qwqwqwqwqwqwqwqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        #redirect_to :back
+        #render :nothing => true
+
+    end
+
+    def moko_bom_copy
+        if not can? :work_d, :all or can? :work_admin, :all
+            render plain: "You don't have permission to view this page !" and return
+        end
+        get_bom_data = MokoBomInfo.find_by_id(params[:bom_id])
+        if not get_bom_data.blank?    
+            #新建数量申请
+            new_qty_info = MokoBomInfo.new
+            new_qty_info.state = "new"
+            new_qty_info.copy_id = get_bom_data.id
+            new_qty_info.p_name = get_bom_data.p_name
+            new_qty_info.pi_info_id = get_bom_data.pi_info_id
+            new_qty_info.pi_item_id = get_bom_data.pi_item_id
+            new_qty_info.bom_id = get_bom_data.bom_id
+            new_qty_info.moko_bom_info_id = get_bom_data.moko_bom_info_id
+            new_qty_info.qty = get_bom_data.qty
+            new_qty_info.t_qty =get_bom_data.t_qty
+            if new_qty_info.save
+                #新建数量申请item
+                get_bom_item_data = MokoBomItem.where(moko_bom_info_id: get_bom_data.id)
+                if not get_bom_item_data.blank?
+                    get_bom_item_data.each do |item|
+                        new_qty_info_item = MokoBomItem.new
+                        new_qty_info_item.pi_bom_qty_info_id = item.pi_bom_qty_info_id
+                        new_qty_info_item.pi_info_id = item.pi_info_id
+                        new_qty_info_item.pi_item_id = item.pi_item_id
+                        new_qty_info_item.order_item_id = item.order_item_id
+                        new_qty_info_item.bom_id = item.bom_id
+                        #new_qty_info_item.p_item_id = item.id
+                        new_qty_info_item.moko_bom_item_id = item.moko_bom_item_id
+                        new_qty_info_item.qty = item.qty
+                        new_qty_info_item.t_qty = item.t_qty
+                       #history_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{params[:pi_info_id]}' AND p_item_id = '#{item.id}'")
+                        new_qty_info_item.bom_ctl_qty = item.bom_ctl_qty
+
+                        new_qty_info_item.bom_version = item.bom_version
+                        new_qty_info_item.p_type = item.p_type
+                        #up_item.buy = item.buy
+                        new_qty_info_item.erp_id = item.erp_id
+                        new_qty_info_item.erp_no = item.erp_no
+                        new_qty_info_item.user_do = item.user_do
+                        new_qty_info_item.user_do_change = item.user_do_change
+                        new_qty_info_item.check = item.check
+
+                        new_qty_info_item.quantity = item.quantity
+ 
+                        new_qty_info_item.pmc_qty = item.pmc_qty
+
+ 
+                        new_qty_info_item.customer_qty = item.customer_qty
+                        new_qty_info_item.description = item.description
+                        new_qty_info_item.part_code = item.part_code
+                        new_qty_info_item.fengzhuang = item.fengzhuang
+                        new_qty_info_item.link = item.link
+                        new_qty_info_item.cost = item.cost
+                        new_qty_info_item.info = item.info
+                        new_qty_info_item.product_id = item.product_id
+                        new_qty_info_item.moko_part = item.moko_part
+                        new_qty_info_item.moko_des = item.moko_des
+                        new_qty_info_item.warn = item.warn
+                        new_qty_info_item.user_id = item.user_id
+                        new_qty_info_item.danger = item.danger
+                        new_qty_info_item.manual = item.manual
+                        new_qty_info_item.mark = item.mark
+                        new_qty_info_item.mpn = item.mpn
+                        new_qty_info_item.mpn_id = item.mpn_id
+                        new_qty_info_item.price = item.price
+                        new_qty_info_item.mf = item.mf
+                        new_qty_info_item.dn_id = item.dn_id
+                        new_qty_info_item.dn = item.dn
+                        new_qty_info_item.dn_long = item.dn_long
+                        new_qty_info_item.other = item.other
+                        new_qty_info_item.all_info = item.all_info
+                        new_qty_info_item.remark = item.remark
+                        new_qty_info_item.color = item.color
+                        new_qty_info_item.supplier_tag = item.supplier_tag
+                        new_qty_info_item.supplier_out_tag = item.supplier_out_tag
+                        new_qty_info_item.sell_feed_back_tag = item.sell_feed_back_tag
+                        new_qty_info_item.save
+                    end
+                end
+            end
+        end
+    end
+
+    def pipei_bom_check
+        if not can? :work_d, :all or can? :work_admin, :all
+            render plain: "You don't have permission to view this page !" and return
+        end
+        get_info = PiBomQtyInfo.find_by_id(params[:bom_id])
+        if not get_info.blank?
+            if get_info.state == "checked"
+                get_info.state = ""
+            else
+                get_info.state = "checked"
+            end
+            get_info.bom_team_ck = current_user.email
+            get_info.bom_team_ck_at = Time.new()
+            get_info.save
+        end
+        redirect_to :back and return
+    end
+
+    def get_moko_pipei_bom
+        if not can? :work_d, :all or can? :work_admin, :all
+            render plain: "You don't have permission to view this page !" and return
+        end
+        pi_item_data = PiItem.find_by_id(params[:pi_item_id])
+        get_xunjia_bom_data = ProcurementBom.find_by_id(params[:xunjia_bom_id])
+        get_bom_data = MokoBomInfo.find_by_id(params[:bom_id])
+        if not pi_item_data.pi_bom_qty_info_id.blank?
+            redirect_to pipei_view_bom_path(bom_id: pi_item_data.pi_bom_qty_info_id,bak: "bak") and return
+        end
+        if not get_bom_data.blank?
+            
+            #新建数量申请
+            new_qty_info = PiBomQtyInfo.new
+            new_qty_info.state = "new"
+            new_qty_info.p_name = pi_item_data.pi_no
+            new_qty_info.pi_info_id = params[:pi_info_id]
+            new_qty_info.pi_item_id = params[:pi_item_id]
+            new_qty_info.bom_id = get_xunjia_bom_data.id
+            new_qty_info.moko_bom_info_id = get_bom_data.id
+            new_qty_info.qty = get_xunjia_bom_data.qty
+            new_qty_info.t_qty =pi_item_data.qty
+            #new_qty_info.t_qty = PiItem.find_by_sql("SELECT SUM(pi_items.qty) AS qty FROM pi_items WHERE pi_items.pi_info_id = '#{pi_draft.id}'").first.qty
+            if new_qty_info.save
+=begin
+#暂时取消锁定
+            get_bom_data.pi_lock = "lock"
+            if get_bom_data.save
+                if not get_bom_data.erp_item_id.blank?
+                    get_otder_item = PcbOrderItem.find_by_id(get_bom_data.erp_item_id) 
+                    if not get_otder_item.blank?
+                        get_otder_item.pi_lock == "lock"
+                        get_otder_item.save
+                    end
+                end
+=end
+                #新建数量申请item
+                get_bom_item_data = MokoBomItem.where(moko_bom_info_id: get_bom_data.id)
+                if not get_bom_item_data.blank?
+                    get_bom_item_data.each do |item|
+                        new_qty_info_item = PiBomQtyInfoItem.new
+                        new_qty_info_item.pi_bom_qty_info_id = new_qty_info.id
+                        new_qty_info_item.pi_info_id = new_qty_info.pi_info_id
+                        new_qty_info_item.pi_item_id = pi_item_data.id
+                        new_qty_info_item.order_item_id = pi_item_data.order_item_id
+                        new_qty_info_item.bom_id = new_qty_info.bom_id
+                        #new_qty_info_item.p_item_id = item.id
+                        new_qty_info_item.moko_bom_item_id = item.id
+                        new_qty_info_item.qty = new_qty_info.qty
+                        new_qty_info_item.t_qty = new_qty_info.t_qty
+                       #history_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{params[:pi_info_id]}' AND p_item_id = '#{item.id}'")
+                        history_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{params[:pi_info_id]}' AND moko_bom_item_id = '#{item.id}'")
+                        h_qty = 0
+                        if not history_qty_info_item.blank?
+                            h_qty = history_qty_info_item.first.qty.to_i
+                        end
+                        history_c_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS c_qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{params[:pi_info_id]}' AND moko_bom_item_id = '#{item.id}'")
+                        c_qty = 0
+                        if not history_c_qty_info_item.blank?
+                            c_qty = history_c_qty_info_item.first.c_qty.to_i
+                        end
+                        if not history_qty_info_item.blank?
+                            use_qty = (new_qty_info.t_qty*item.quantity) - h_qty - c_qty
+                            if use_qty >= new_qty_info.qty*item.quantity
+                                new_qty_info_item.bom_ctl_qty = new_qty_info.qty*item.quantity
+                            elsif use_qty < new_qty_info.qty*item.quantity
+                                new_qty_info_item.bom_ctl_qty = use_qty
+                            end
+                        else
+                            new_qty_info_item.bom_ctl_qty = new_qty_info.qty*item.quantity
+                        end
+                        new_qty_info_item.bom_version = item.bom_version
+                        new_qty_info_item.p_type = item.p_type
+                        #up_item.buy = item.buy
+                        new_qty_info_item.erp_id = item.erp_id
+                        new_qty_info_item.erp_no = item.erp_no
+                        new_qty_info_item.user_do = item.user_do
+                        new_qty_info_item.user_do_change = item.user_do_change
+                        new_qty_info_item.check = item.check
+
+                        new_qty_info_item.quantity = item.quantity
+ 
+                        if pi_item_data.p_type == "COMPONENTS"
+                            new_qty_info_item.pmc_qty = item.quantity
+                        else
+                            new_qty_info_item.pmc_qty = new_qty_info.qty*item.quantity
+                        end
+ 
+                        new_qty_info_item.customer_qty = item.customer_qty
+                        new_qty_info_item.description = item.description
+                        new_qty_info_item.part_code = item.part_code
+                        new_qty_info_item.fengzhuang = item.fengzhuang
+                        new_qty_info_item.link = item.link
+                        new_qty_info_item.cost = item.cost
+                        new_qty_info_item.info = item.info
+                        new_qty_info_item.product_id = item.product_id
+                        new_qty_info_item.moko_part = item.moko_part
+                        new_qty_info_item.moko_des = item.moko_des
+                        new_qty_info_item.warn = item.warn
+                        new_qty_info_item.user_id = item.user_id
+                        new_qty_info_item.danger = item.danger
+                        new_qty_info_item.manual = item.manual
+                        new_qty_info_item.mark = item.mark
+                        new_qty_info_item.mpn = item.mpn
+                        new_qty_info_item.mpn_id = item.mpn_id
+                        new_qty_info_item.price = item.price
+                        new_qty_info_item.mf = item.mf
+                        new_qty_info_item.dn_id = item.dn_id
+                        new_qty_info_item.dn = item.dn
+                        new_qty_info_item.dn_long = item.dn_long
+                        new_qty_info_item.other = item.other
+                        new_qty_info_item.all_info = item.all_info
+                        new_qty_info_item.remark = item.remark
+                        new_qty_info_item.color = item.color
+                        new_qty_info_item.supplier_tag = item.supplier_tag
+                        new_qty_info_item.supplier_out_tag = item.supplier_out_tag
+                        new_qty_info_item.sell_feed_back_tag = item.sell_feed_back_tag
+
+                        if new_qty_info_item.save
+                            pi_item_data.pi_bom_qty_info_id = new_qty_info.id
+                        end
+                    end
+                end
+            end
+        end
+        redirect_to pipei_view_bom_path(bom_id: new_qty_info.id,bak: "bak") and return
+    end
+
+    def get_moko_bom
+        if not can? :work_d, :all or can? :work_admin, :all
+            render plain: "You don't have permission to view this page !" and return
+        end
+        if not params[:bom_id].blank?
+            find_bom = ProcurementBom.find_by_id(params[:bom_id])
+            pi_item_data = PiItem.find_by_id(params[:pi_item_id])
+            if not find_bom.blank?
+                if pi_item_data.moko_bom_info_id.blank?
+                    up_bom = MokoBomInfo.new
+                    up_bom.moko_state = "active"
+                            #up_bom.bom_id = find_bom.bom_id
+                            #up_bom.bom_version = bom_version
+                    up_bom.order_country = find_bom.order_country
+
+                    up_bom.erp_id = find_bom.erp_id
+                    up_bom.erp_item_id = find_bom.erp_item_id
+                    up_bom.erp_no = find_bom.erp_no
+                    up_bom.erp_no_son = find_bom.erp_no_son
+                    up_bom.erp_qty = find_bom.erp_qty
+                    up_bom.order_do = find_bom.order_do
+                    up_bom.star = find_bom.star
+                    up_bom.sell_remark = find_bom.sell_remark
+                    up_bom.sell_manager_remark = find_bom.sell_manager_remark
+                    up_bom.name = find_bom.name
+                    up_bom.p_name_mom = find_bom.p_name_mom
+                    up_bom.p_name = find_bom.p_name
+                    up_bom.bom_eng = find_bom.bom_eng
+                    up_bom.bom_eng_up = current_user.full_name
+                #up_bom.remark_to_sell = find_bom.remark_to_sell
+
+                    up_bom.check = find_bom.check
+   
+                    up_bom.remark = find_bom.remark
+                    up_bom.t_p = find_bom.t_p
+                    up_bom.profit = find_bom.profit
+                    up_bom.t_pp = find_bom.t_pp
+                    up_bom.d_day = find_bom.d_day
+                    up_bom.description = find_bom.description
+                    up_bom.excel_file = find_bom.excel_file
+                    up_bom.att = find_bom.att
+                    up_bom.pcb_p = find_bom.pcb_p
+                    up_bom.pcb_file = find_bom.pcb_file
+                    up_bom.pcb_layer = find_bom.pcb_layer
+                    up_bom.pcb_qty = find_bom.pcb_qty
+                    up_bom.pcb_size_c = find_bom.pcb_size_c
+                    up_bom.pcb_size_k = find_bom.pcb_size_k
+                    up_bom.pcb_sc = find_bom.pcb_sc
+                    up_bom.pcb_material = find_bom.pcb_material
+                    up_bom.pcb_cc = find_bom.pcb_cc
+                    up_bom.pcb_ct = find_bom.pcb_ct
+                    up_bom.pcb_sf = find_bom.pcb_sf
+                    up_bom.pcb_t = find_bom.pcb_t
+                    up_bom.t_c = find_bom.t_c
+                    up_bom.c_p = find_bom.c_p
+                    up_bom.user_id = find_bom.user_id
+                    up_bom.all_title = find_bom.all_title
+                    up_bom.row_use = find_bom.row_use
+                    up_bom.bom_eng_up = current_user.full_name
+
+                    up_bom.bom_team_ck = find_bom.bom_team_ck
+
+                    up_bom.sell_feed_back_tag = find_bom.sell_feed_back_tag
+                    if up_bom.save 
+                        up_bom.bom_id = "moko#{up_bom.id}"
+                        up_bom.save
+                        find_bom_item = PItem.where(procurement_bom_id: find_bom.id)
+                        if not find_bom_item.blank?
+                            find_bom_item.each do |item_p|
+                                up_item = up_bom.moko_bom_items.build()
+                                up_item.bom_version = up_bom.bom_version
+                                up_item.p_type = item_p.p_type
+                                #up_item.buy = item.buy
+                                up_item.erp_id = item_p.erp_id
+                                up_item.erp_no = item_p.erp_no
+                                up_item.user_do = item_p.user_do
+                                up_item.user_do_change = item_p.user_do_change
+                                up_item.check = item_p.check
+
+                                up_item.quantity = item_p.quantity
+ 
+                                if item.p_type == "COMPONENTS"
+                                    up_item.pmc_qty = item_p.quantity
+                                else
+                                    up_item.pmc_qty = find_bom.qty*item_p.quantity
+                                end
+ 
+                                up_item.customer_qty = item_p.customer_qty
+                                up_item.description = item_p.description
+                                up_item.part_code = item_p.part_code
+                                up_item.fengzhuang = item_p.fengzhuang
+                                up_item.link = item_p.link
+                                up_item.cost = item_p.cost
+                                up_item.info = item_p.info
+                                up_item.product_id = item_p.product_id
+                                up_item.moko_part = item_p.moko_part
+                                up_item.moko_des = item_p.moko_des
+                                up_item.warn = item_p.warn
+                                up_item.user_id = item_p.user_id
+                                up_item.danger = item_p.danger
+                                up_item.manual = item_p.manual
+                                up_item.mark = item_p.mark
+                                up_item.mpn = item_p.mpn
+                                up_item.mpn_id = item_p.mpn_id
+                                up_item.price = item_p.price
+                                up_item.mf = item_p.mf
+                                up_item.dn_id = item_p.dn_id
+                                up_item.dn = item_p.dn
+                                up_item.dn_long = item_p.dn_long
+                                up_item.other = item_p.other
+                                up_item.all_info = item_p.all_info
+                                up_item.remark = item_p.remark
+                                up_item.color = item_p.color
+                                up_item.supplier_tag = item_p.supplier_tag
+                                up_item.supplier_out_tag = item_p.supplier_out_tag
+                                up_item.sell_feed_back_tag = item_p.sell_feed_back_tag
+                                up_item.save
+                            end
+                        end
+                    end 
+
+                    find_bom.bom_lock = "lock"
+                    find_bom.bom_id = up_bom.bom_id
+                    find_bom.moko_bom_info_id = up_bom.id
+                    find_bom.save
+                    pi_item_data.moko_bom_info_id = up_bom.id
+                    pi_item_data.save
+                    redirect_to moko_view_bom_path(bom_id: find_bom.moko_bom_info_id,xunjia_bom_id: find_bom.id,bak: "bak") and return
+                else
+                    redirect_to moko_view_bom_path(bom_id: find_bom.moko_bom_info_id,xunjia_bom_id: find_bom.id,bak: "bak") and return
+                end
+            end
+        end
+    end
+
+    def edit_user_pw
+        user = User.find_by_id(current_user.id)
+        if not user.valid_password?(params[:oldpw]).blank?
+            if params[:newpw].size < 8
+                redirect_to :back, :flash => {:error => "密码长度必须大于7！！！"} and return false
+            end
+            if user.reset_password(params[:newpw],params[:newpwr]).blank?
+                redirect_to :back, :flash => {:error => "两次密码不一致！！！"} and return false
+            else
+                redirect_to :back and return
+            end
+        else
+            redirect_to :back, :flash => {:error => "原密码错误！！！"} and return false
+        end
+        redirect_to :back and return
+    end
+
+    def edit_user_info_erp
+        user_info = User.find_by_email(current_user.email)
+        if not user_info.blank?
+            user_info.full_name = params[:full_name]
+            user_info.phone = params[:phone]
+            user_info.save
+        end
+        redirect_to :back and return
+    end
+
+    def find_c_pi
+        if params[:c_code] != ""
+            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@c_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @c_info.blank?
+                
+                Rails.logger.info("add-------------------------------------12")
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th width="70">客户代码</th>'
+                @c_table += '<th>客户名</th>'
+                @c_table += '<th>客户公司名</th>'
+                @c_table += '<th width="70">所属</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.c_no + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '</tr>'
+                end
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@c_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
+    def find_c_pi_ch
+        @c_info = PcbCustomer.find(params[:id])
+        up_c = PiInfo.find_by(pi_no: params[:c_pi_no])
+        up_c.pcb_customer_id = @c_info.id
+        up_c.c_code = @c_info.c_no
+        up_c.c_des = @c_info.customer
+        up_c.c_country = @c_info.customer_country
+        up_c.c_shipping_address = @c_info.shipping_address
+        up_c.save
+        find_pi_item = PiItem.where(pi_no: params[:c_pi_no])
+        if not find_pi_item.blank?
+            #find_pi_item.destroy
+            find_pi_item.each do |del_item|
+                del_item.destroy
+            end
+        end
+        redirect_to edit_pcb_pi_path(pi_info_id: up_c.id,pi_no: params[:c_pi_no],c_id: params[:id])
+    end
+
+    def find_fahuotongzhi_pi_ch
+        f_info = PiInfo.find_by_id(params[:id])
+        up_f = PiFahuotongzhiItem.find_by_id(params[:f_id])
+        up_f.pi_info_id = params[:id]
+        up_f.pi_info_no = f_info.pi_no
+        up_f.pi_kehu = f_info.c_des
+        up_f.save
+        redirect_to :back and return
+    end
+
+    def find_fahuotongzhi_pi
+        if params[:c_code] != ""
+            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
+            @c_info = PiInfo.find_by_sql("SELECT * FROM `pi_infos`  WHERE `pi_infos`.`pi_no` LIKE '%#{params[:c_code]}%'  AND `pi_infos`.`pi_sell` = '#{current_user.email}'")
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@c_info.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if not @c_info.blank?
+                
+                Rails.logger.info("add-------------------------------------12")
+                @c_table = '<br>'
+                @c_table += '<small>'
+                @c_table += '<table class="table table-bordered">'
+                @c_table += '<thead>'
+                @c_table += '<tr class="active">'
+                @c_table += '<th width="150">PI NO.</th>'
+                @c_table += '<th>客户</th>'
+                @c_table += '<th width="100">所属</th>'
+                @c_table += '<tr>'
+                @c_table += '</thead>'
+                @c_table += '<tbody>'
+                @c_info.each do |cu|
+                    @c_table += '<tr>'
+                    #@c_table += '<td>' + cu.c_no + '</td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_fahuotongzhi_pi_ch?id='+ cu.id.to_s + '&f_id=' + params[:f_id] + '"><div>' + cu.pi_no.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_fahuotongzhi_pi_ch?id='+ cu.id.to_s + '&f_id=' + params[:f_id] + '"><div>' + cu.c_des.to_s + '</div></a></td>'
+                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_fahuotongzhi_pi_ch?id='+ cu.id.to_s + '&f_id=' + params[:f_id] + '"><div>' + User.find_by(email: cu.pi_sell).full_name.to_s + '</div></a></td>'
+                    @c_table += '</tr>'
+                end
+                @c_table += '</tbody>'
+                @c_table += '</table>'
+                @c_table += '</small>'
+                Rails.logger.info("add-------------------------------------12")
+                Rails.logger.info(@c_table.inspect)
+                Rails.logger.info("add-------------------------------------12")
+            end
+        end
+    end
+
+    def new_pi_fahuotongzhi
+        new_data = PiFahuotongzhiItem.new
+        new_data.state = "caogao"
+        new_data.pi_sell = current_user.email
+        new_data.save
+        redirect_to edit_pi_fahuotongzhi_path(pi_fahuotongzhi_id: new_data.id) and return
+    end
+
+    def edit_pi_fahuotongzhi
+        if not params[:pi_fahuotongzhi_id].blank?
+            @f_data = PiFahuotongzhiItem.find_by_id(params[:pi_fahuotongzhi_id])
+            if not @f_data.blank?
+                if @f_data.pi_sell != current_user.email
+                    render plain: "错误的发货通知单" and return
+                end
+                if not @f_data.pi_info_id.blank?
+                    @pi_data = PiInfo.find_by_id(@f_data.pi_info_id)
+                end
+            else
+                render plain: "错误的发货通知单" and return
+            end
+        end
+    end
+
+    def update_pi_fahuotongzhi
+        if not params[:fahuo_id].blank?
+            get_data = PiFahuotongzhiItem.find_by_id(params[:fahuo_id])
+            if not get_data.blank?
+                if get_data.pi_sell == current_user.email
+                    if params[:commit] == "提交"
+                        get_data.state = "check_wait"
+                    end
+                    get_data.xiaoshou_fangshi = params[:xiaoshou_fangshi]
+                    get_data.bianhao = params[:bianhao]
+                    get_data.wuliu_danhao = params[:wuliu_danhao]
+                    get_data.bizhong = params[:bizhong]
+                    get_data.huilv = params[:huilv]
+                    get_data.jiesuan_fangshi = params[:jiesuan_fangshi]
+                    get_data.yunshu_fangshi = params[:yunshu_fangshi]
+                    get_data.maoyi_fangshi = params[:maoyi_fangshi]
+                    get_data.zhifu_fangshi = params[:zhifu_fangshi]
+                    get_data.xuandan_hao = params[:xuandan_hao]
+                    get_data.shenhe = params[:shenhe]
+                    get_data.shenhe_date = Time.new
+                    get_data.xinyong_beizhu = params[:xinyong_beizhu]
+                    get_data.yewu_yuan = params[:yewu_yuan]
+                    get_data.bumen = params[:bumen]
+                    get_data.zhidan = params[:zhidan]
+                    get_data.tijiao_at = Time.new
+                    get_data.save
+                end
+            end
+        end
+        redirect_to :back and return
+    end
+
+    def pi_fahuotongzhi_list
+        if not params[:key_order].blank?
+            @f_list = PiFahuotongzhiItem.where("(pi_info_no LIKE '%#{params[:key_order]}%' OR pi_kehu LIKE '%#{params[:key_order]}%' ) AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        elsif not params[:check_wait].blank?
+            @f_list = PiFahuotongzhiItem.where("state = 'check_wait' AND pi_sell = '#{current_user.email}'").paginate(:page => params[:page], :per_page => 20)
+        elsif not params[:checked].blank?
+            @f_list = PiFahuotongzhiItem.where("state = 'checked' AND pi_sell = '#{current_user.email}'").paginate(:page => params[:page], :per_page => 20)
+        elsif not params[:send_out].blank?
+            @f_list = PiFahuotongzhiItem.where("state = 'send_out' AND pi_sell = '#{current_user.email}'").paginate(:page => params[:page], :per_page => 20)
+        elsif not params[:caogao].blank?
+            @f_list = PiFahuotongzhiItem.where("state = 'caogao' AND pi_sell = '#{current_user.email}'").paginate(:page => params[:page], :per_page => 20)
+        end
+    end
+
+    def view_pi_fengmian
+        if params[:pi_id].blank?
+            render plain: "无效地址！！！" and return
+        else
+            @get_pi_info = PiInfo.find_by_id(params[:pi_id])
+            if @get_pi_info.blank?
+                render plain: "无效地址！！！" and return
+            end
+
+            @get_pi_item = PiItem.where(pi_info_id: params[:pi_id])
+=begin
+            if @get_pi_item.blank?
+                render plain: "无效地址！！！" and return
+            end
+=end
+            @get_data = PiFengmianItem.find_by_pi_info_id(params[:pi_id])
+            if @get_data.blank?
+                @get_data = PiFengmianItem.new
+                @get_data.save
+            end
+            if not params[:print].blank?
+                render "pi_print_fengmian.html.erb" and return
+            end
+        end
+    end
+
+    def edit_pi_fengmian
+        if not params[:pi_info_id].blank?
+            get_data = PiFengmianItem.find_by_pi_info_id(params[:pi_info_id])
+            if get_data.blank?
+                get_data = PiFengmianItem.new
+                get_data.pi_info_id = params[:pi_info_id]
+            end
+            get_data.kehufenlei = params[:kehufenlei]
+            get_data.kehuleixing = params[:kehuleixing]
+            get_data.pi_no  = params[:pi_no]
+            get_data.qty = params[:qty]
+            get_data.pi_date = params[:pi_date]
+            get_data.pi_type = params[:pi_type]
+            get_data.pi_back_no = params[:pi_back_no]
+            get_data.moko_des = params[:moko_des]
+            get_data.moko_part = params[:moko_part]
+            get_data.pcb_gongyi = params[:pcb_gongyi]
+            get_data.kegongwuliao = params[:kegongwuliao]
+            get_data.get_date = params[:get_date]
+            get_data.yangpin = params[:yangpin]
+            get_data.yangpin_qty = params[:yangpin_qty]
+            get_data.zuzhuangfangshi = params[:zuzhuangfangshi]
+            get_data.zuichang_weihao = params[:zuichang_weihao]
+            get_data.zuichang_xinghao = params[:zuichang_xinghao]
+            get_data.zuichang_date = params[:zuichang_date]
+            get_data.shifou_a = params[:shifou_a]
+            get_data.shifou_b = params[:shifou_b]
+            get_data.shifou_c = params[:shifou_c]
+            get_data.shifou_d = params[:shifou_d]
+            get_data.shifou_e = params[:shifou_e]
+            get_data.shifou_f = params[:shifou_f]
+            get_data.shifou_g = params[:shifou_g]
+            get_data.shifou_h = params[:shifou_h]
+            get_data.shifou_i = params[:shifou_i]
+            get_data.shifou_j = params[:shifou_j]
+            get_data.ic_weihao_xinghao = params[:ic_weihao_xinghao]
+            get_data.shifou_l = params[:shifou_l]
+            get_data.shifou_m = params[:shifou_m]
+            get_data.shifou_n = params[:shifou_n]
+            get_data.shifou_o = params[:shifou_o]
+            get_data.shifou_p = params[:shifou_p]
+            get_data.shifou_q = params[:shifou_q]
+            get_data.shifou_r = params[:shifou_r]
+            get_data.shifou_s = params[:shifou_s]
+            get_data.pi_teshuxuqiu = params[:pi_teshuxuqiu]
+            get_data.kesu_issue = params[:kesu_issue]
+            get_data.eng_bom_baojia = params[:eng_bom_baojia]
+            get_data.eng_bom_youhua = params[:eng_bom_youhua]
+            get_data.eng_pnp_youhua = params[:eng_pnp_youhua]
+            get_data.eng_pcb_jianyan = params[:eng_pcb_jianyan]
+            get_data.eng_shoujianhedui = params[:eng_shoujianhedui]
+            get_data.eng_test_zhidao = params[:eng_test_zhidao]
+            get_data.eng_qc = params[:eng_qc]
+            get_data.save
+        end
+        redirect_to :back and return
+    end
+
+    def edit_pcb_pi
+        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
+        @pi_info = PiInfo.find_by_id(params[:pi_info_id])
+        if not @pi_info.bank_info_id.blank?
+            @bank_info = BankInfo.find_by_id(@pi_info.bank_info_id)
+        end
+        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
+        @pi_info_c_c_no = ""
+        @pi_info_c_customer = ""
+        @pi_info_c_customer_com = ""
+        @pi_info_c_customer_country = ""
+        @pi_info_c_tel = ""
+        @pi_info_c_fax = ""
+        @pi_info_c_email = ""
+        @pi_info_c_shipping_address = ""
+        if not @pi_info_c.blank?
+            @pi_info_c_c_no = @pi_info_c.c_no
+            @pi_info_c_customer = @pi_info_c.customer
+            @pi_info_c_customer_com = @pi_info_c.customer_com
+            @pi_info_c_customer_country = @pi_info_c.customer_country
+            @pi_info_c_tel = @pi_info_c.tel
+            @pi_info_c_fax = @pi_info_c.fax
+            @pi_info_c_email = @pi_info_c.email
+            @pi_info_c_shipping_address = @pi_info_c.shipping_address
+        end
+        @pi_item = PiItem.where(pi_info_id: params[:pi_info_id])
+        @pi_item_bom = PiItem.where(pi_info_id: params[:pi_info_id],state: "check")
+        @pi_other_item = PiOtherItem.where(pi_info_id: params[:pi_info_id])
+        @total_p = PiItem.where(pi_info_id: params[:pi_info_id]).sum("t_p") + PiOtherItem.where(pi_info_id: params[:pi_info_id]).sum("t_p")
+
+
+        if not params[:pi_item_id].blank?
+            pi_item = PiItem.find_by_id(params[:pi_item_id])
+            @pi_item_data = pi_item 
+            q_order_item = PcbOrderItem.find_by_id(pi_item.order_item_id)
+
+
+            
+            @q_order = PcbOrder.find_by_id(q_order_item.pcb_order_id)
+            @q_order_sell_item = PcbOrderSellItem.find_by_id(q_order_item.pcb_order_sell_item_id)
+
+
+            @state = pi_item.state
+            @to_pmc_state = pi_item.to_pmc_state
+            @boms = ProcurementBom.find_by_id(pi_item.bom_id)
+            #@bom_item = PItem.where(procurement_bom_id: @boms.id)
+            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
+            @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(params[:pi_item_id])
+            if not @bom_item.blank?
+                @bom_item = @bom_item.select {|item| item.quantity != 0 }
+            end
+            Rails.logger.info("add-------------------------------------12")
+            Rails.logger.info(@boms.inspect)
+            Rails.logger.info("add-------------------------------------12")
+            if can? :work_e, :all 
+
+                if not params[:pi_info_id].blank? 
+                    @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
+                    shou_kuan_jin_e_data = PaymentNoticeInfo.find_by_sql("SELECT SUM(pay_p) AS pay_all FROM payment_notice_infos WHERE pi_info_id = '#{params[:pi_info_id]}'")
+                    if not shou_kuan_jin_e_data.blank?
+                        @shou_kuan_jin_e = shou_kuan_jin_e_data.first.pay_all
+                        Rails.logger.info("@shou_kuan_jin_e-------------------------")
+                        Rails.logger.info(@shou_kuan_jin_e.to_i.inspect)  
+                        Rails.logger.info(@pi_info.t_p.to_i.inspect)
+                        Rails.logger.info("@shou_kuan_jin_e----------------------------------")
+                    else
+                        @shou_kuan_jin_e = 0
+                    end
+                    
+                end
+                @baojia = @bom_item
+                render "sell_view_edit_pi.html.erb" and return
+            end
+            if can? :work_d, :all
+                if not params[:pi_info_id].blank? 
+                    @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
+                    shou_kuan_jin_e_data = PaymentNoticeInfo.find_by_sql("SELECT SUM(pay_p) AS pay_all FROM payment_notice_infos WHERE pi_info_id = '#{params[:pi_info_id]}'")
+                    if not shou_kuan_jin_e_data.blank?
+                        @shou_kuan_jin_e = shou_kuan_jin_e_data.first.pay_all
+                        Rails.logger.info("@shou_kuan_jin_e-------------------------")
+                        Rails.logger.info(@shou_kuan_jin_e.to_i.inspect)  
+                        Rails.logger.info(@pi_info.t_p.to_i.inspect)
+                        Rails.logger.info("@shou_kuan_jin_e----------------------------------")
+                    else
+                        @shou_kuan_jin_e = 0
+                    end
+                    
+                end
+                @baojia = @bom_item
+                render "bom_view_edit_pi.html.erb" and return
+                #redirect_to p_viewbom_path(pi_info_id: params[:pi_info_id],pi_item_id: params[:pi_item_id],add_bom: "add_bom", bom_id: pi_item.bom_id, state_flow: "order_center") and return
+            end
+            if can? :work_finance, :all or can? :work_g, :all
+                @all_dn = "[&quot;"
+                all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
+                all_s_dn.each do |dn|
+                    @all_dn += "&quot;,&quot;" + dn.dn.to_s
+                end
+                @all_dn += "&quot;]"
+                render "procurement/p_viewbom.html.erb" and return
+            end
+
+        end
+    end
+
+    def pi_admin_list
+        if can? :work_e_admin, :all
+            @pilist = PiInfo.find_by_sql("SELECT pi_infos.pi_no,pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.state <> 'new' AND pi_infos.team = '#{current_user.team}' AND (pi_infos.c_des LIKE '%#{params[:key_order]}%' OR pi_infos.sell LIKE '%#{params[:key_order]}%' OR pi_infos.pi_no LIKE '%#{params[:key_order]}%') ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+
+        else
+            render plain: "You don't have permission to view this page !" and return
+        end
+    end
+
+    def pi_list
+        where_date = ""
+        if params[:start_date] != "" and  params[:start_date] != nil
+            where_date += " AND created_at > '#{params[:start_date]}'"
+        end
+        if params[:end_date] != "" and  params[:end_date] != nil
+            where_date += " AND created_at < '#{params[:end_date]}' "
+        end
+        if params[:key_order]
+            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'" + where_date).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+        else
+            if params[:sell_admin_check]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'sell_admin_check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'sell_admin_check' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    render "pi_list_eng.html.erb" and return
+                end
+            elsif params[:bom_chk]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    render "pi_list_eng.html.erb" and return
+                end
+            elsif params[:bom_chked]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    render "pi_list_eng.html.erb" and return
+                end
+                
+            elsif params[:buy_chk]
+                if can? :work_e, :all
+                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    render "pi_list_eng.html.erb" and return
+                end
+                
+            elsif params[:finance_chk]
+                @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+=begin
+                if can? :work_admin, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all 
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    
+                end
+=end 
+                if not can? :work_e, :all
+                    render "pi_list_eng.html.erb" and return   
+                end  
+            elsif params[:checked]
+=begin
+                if can? :work_e, :all
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+=end
+                if can? :work_e, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'checked' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'checked' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                    render "pi_list_paymanet_notice.html.erb" and return
+                end
+                
+            else
+                Rails.logger.info("add-------------------------------------12")
+=begin
+                if can? :work_e, :all
+                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' AND pi_sell = '#{current_user.email}' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
+                end
+=end
+                
+                
+                if can? :work_admin, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                elsif can? :work_e, :all
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                else
+                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
+                end
+            end
+        end        
+    end
+
+    def pi_draft  
+        pi_draft = PiInfo.find_by_id(params[:p_pi])
+        if params[:commit] == "提交" or params[:commit] =~ /审核/
+            #if can? :work_admin, :all 
+                #pi_draft.state = "checked"
+                #pi_draft.bom_state = "checked"
+                #pi_draft.finance_state = "checked"
+                #pi_draft.save
+                #redirect_to pi_list_path() and return
+            #end
+=begin
+            if can? :work_e, :all and pi_draft.state == "new"
+                pi_draft.state = "check"
+                pi_draft.save
+                redirect_to pi_list_path() and return                
+            end
+=end
+            if can? :work_e, :all  and pi_draft.pi_lock != "lock"
+                all_pi_item_data = PiItem.where(pi_info_id: params[:p_pi])
+                if all_pi_item_data.blank?
+                    flash[:error] = "不能提交空白PI!!!"
+                    redirect_to :back and return
+                else
+                    all_pi_item_data.each do |pi_item_data|
+                    #pi_item_data = PiItem.find_by_id(params[:p_item])
+                        if pi_item_data.qty.blank?
+                            flash[:error] = "请填写数量!!!"
+                            redirect_to :back and return
+                        end
+                        if pi_item_data.state.blank?
+                            if not pi_item_data.bom_id.blank?
+
+=begin
+                                get_bom_data = ProcurementBom.find_by_id(pi_item_data.bom_id)
+                                if not get_bom_data.blank?
+
+                                    #新建数量申请
+                                    new_qty_info = PiBomQtyInfo.new
+                                    new_qty_info.pi_info_id = pi_draft.id
+                                    new_qty_info.pi_item_id = pi_item_data.id
+                                    new_qty_info.bom_id = get_bom_data.id
+                                    new_qty_info.qty = pi_item_data.qty
+                                    new_qty_info.t_qty = PiItem.find_by_sql("SELECT SUM(pi_items.qty) AS qty FROM pi_items WHERE pi_items.pi_info_id = '#{pi_draft.id}'").first.qty
+                                    new_qty_info.save
+     
+
+
+                                    get_bom_data.pi_lock = "lock"
+                                    if get_bom_data.save
+                                        if not get_bom_data.erp_item_id.blank?
+                                            get_otder_item = PcbOrderItem.find_by_id(get_bom_data.erp_item_id) 
+                                            if not get_otder_item.blank?
+                                                get_otder_item.pi_lock == "lock"
+                                                get_otder_item.save
+                                            end
+                                        end
+                                        #新建数量申请item
+                                        get_bom_item_data = PItem.where(procurement_bom_id: get_bom_data.id)
+                                        if not get_bom_item_data.blank?
+                                            get_bom_item_data.each do |item|
+                                                new_qty_info_item = PiBomQtyInfoItem.new
+                                                new_qty_info_item.pi_bom_qty_info_id = new_qty_info.id
+                                                new_qty_info_item.pi_info_id = new_qty_info.pi_info_id
+                                                new_qty_info_item.pi_item_id = pi_item_data.id
+                                                new_qty_info_item.order_item_id = pi_item_data.order_item_id
+                                                new_qty_info_item.bom_id = new_qty_info.bom_id
+                                                new_qty_info_item.p_item_id = item.id
+                                                new_qty_info_item.qty = new_qty_info.qty
+                                                new_qty_info_item.t_qty = new_qty_info.t_qty
+                                                history_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{pi_draft.id}' AND p_item_id = '#{item.id}'")
+                                                h_qty = 0
+                                                if not history_qty_info_item.blank?
+                                                    h_qty = history_qty_info_item.first.qty.to_i
+                                                end
+                                                history_c_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS c_qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{pi_draft.id}' AND p_item_id = '#{item.id}'")
+                                                c_qty = 0
+                                                if not history_c_qty_info_item.blank?
+                                                    c_qty = history_c_qty_info_item.first.c_qty.to_i
+                                                end
+                                                if not history_qty_info_item.blank?
+                                                    use_qty = (new_qty_info.t_qty*item.quantity) - h_qty - c_qty
+                                                    if use_qty >= new_qty_info.qty*item.quantity
+                                                        new_qty_info_item.bom_ctl_qty = new_qty_info.qty*item.quantity
+                                                    elsif use_qty < new_qty_info.qty*item.quantity
+                                                        new_qty_info_item.bom_ctl_qty = use_qty
+                                                    end
+                                                else
+                                                    new_qty_info_item.bom_ctl_qty = new_qty_info.qty*item.quantity
+                                                end
+                                                new_qty_info_item.save
+                                        
+                                            end
+                                        end
+                                    end
+                                end
+=end
+
+                            end
+                        end
+                        #pi_item_data.state = "check"
+                        #pi_item_data.bom_state = "check"
+                        #pi_item_data.buy_state = "check"
+                        pi_item_data.save
+                    end
+                    pi_draft.pi_lock = "lock"
+
+                    #pi_draft.state = "check"
+                    pi_draft.state = "sell_admin_check"
+                    pi_draft.save
+                end
+                redirect_to pi_list_path(bom_chk: true) and return                
+            end
+
+            if can? :work_e_admin, :all 
+                all_pi_item_data = PiItem.where(pi_info_id: params[:p_pi])
+                if all_pi_item_data.blank?
+                    flash[:error] = "不能提交空白PI!!!"
+                    redirect_to :back and return
+                else
+                    all_pi_item_data.each do |pi_item_data|
+                        pi_item_data.state = "check"
+                        pi_item_data.bom_state = "check"
+                        pi_item_data.buy_state = "check"
+                        pi_item_data.save
+                    end
+                    pi_draft.pi_lock = "lock"
+                    pi_draft.state = "check"
+                    pi_draft.save
+                end
+                redirect_to pi_admin_list_path and return
+            end
+
+            if can? :work_d, :all 
+                Rails.logger.info("add-------------------------------------5652")
+                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+                if pi_item_data.finance_state == "checked" and pi_item_data.buy_state == "checked"
+                    pi_item_data.state = "checked"
+                else
+                    pi_item_data.state = "check"
+                end
+                pi_item_data.bom_state = "checked"
+                pi_item_data.bom_at = Time.new()
+                pi_item_data.save
+                #set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
+                set_lock = PiItem.where("pi_info_id = '#{params[:p_pi]}' AND p_type = 'PCBA'")
+                if not set_lock.blank?
+                    Rails.logger.info("add-------------------------------------565211111")
+                    set_lock.each do |item|
+                        find_bom = ProcurementBom.find_by_id(item.bom_id)
+                        if not find_bom.blank?
+                            if find_bom.moko_bom_info_id.blank?
+
+                                up_bom = MokoBomInfo.new
+                                up_bom.moko_state = "active"
+                            #up_bom.bom_id = find_bom.bom_id
+                            #up_bom.bom_version = bom_version
+                                up_bom.order_country = find_bom.order_country
+
+                                up_bom.erp_id = find_bom.erp_id
+                                up_bom.erp_item_id = find_bom.erp_item_id
+                                up_bom.erp_no = find_bom.erp_no
+                                up_bom.erp_no_son = find_bom.erp_no_son
+                                up_bom.erp_qty = find_bom.erp_qty
+                                up_bom.order_do = find_bom.order_do
+                                up_bom.star = find_bom.star
+                                up_bom.sell_remark = find_bom.sell_remark
+                                up_bom.sell_manager_remark = find_bom.sell_manager_remark
+                                up_bom.name = find_bom.name
+                                up_bom.p_name_mom = find_bom.p_name_mom
+                                up_bom.p_name = find_bom.p_name
+                                up_bom.bom_eng = find_bom.bom_eng
+                                up_bom.bom_eng_up = current_user.full_name
+                #up_bom.remark_to_sell = find_bom.remark_to_sell
+
+                                up_bom.check = find_bom.check
+   
+                                up_bom.remark = find_bom.remark
+                                up_bom.t_p = find_bom.t_p
+                                up_bom.profit = find_bom.profit
+                                up_bom.t_pp = find_bom.t_pp
+                                up_bom.d_day = find_bom.d_day
+                                up_bom.description = find_bom.description
+                                up_bom.excel_file = find_bom.excel_file
+                                up_bom.att = find_bom.att
+                                up_bom.pcb_p = find_bom.pcb_p
+                                up_bom.pcb_file = find_bom.pcb_file
+                                up_bom.pcb_layer = find_bom.pcb_layer
+                                up_bom.pcb_qty = find_bom.pcb_qty
+                                up_bom.pcb_size_c = find_bom.pcb_size_c
+                                up_bom.pcb_size_k = find_bom.pcb_size_k
+                                up_bom.pcb_sc = find_bom.pcb_sc
+                                up_bom.pcb_material = find_bom.pcb_material
+                                up_bom.pcb_cc = find_bom.pcb_cc
+                                up_bom.pcb_ct = find_bom.pcb_ct
+                                up_bom.pcb_sf = find_bom.pcb_sf
+                                up_bom.pcb_t = find_bom.pcb_t
+                                up_bom.t_c = find_bom.t_c
+                                up_bom.c_p = find_bom.c_p
+                                up_bom.user_id = find_bom.user_id
+                                up_bom.all_title = find_bom.all_title
+                                up_bom.row_use = find_bom.row_use
+                                up_bom.bom_eng_up = current_user.full_name
+
+                                up_bom.bom_team_ck = find_bom.bom_team_ck
+
+                                up_bom.sell_feed_back_tag = find_bom.sell_feed_back_tag
+                                if up_bom.save 
+                                    up_bom.bom_id = "moko#{up_bom.id}"
+                                    up_bom.save
+                                    find_bom_item = PItem.where(procurement_bom_id: find_bom.id)
+                                    if not find_bom_item.blank?
+                                        find_bom_item.each do |item_p|
+                                            up_item = up_bom.moko_bom_items.build()
+                                            up_item.bom_version = up_bom.bom_version
+                                            up_item.p_type = item_p.p_type
+                                            #up_item.buy = item.buy
+                                            up_item.erp_id = item_p.erp_id
+                                            up_item.erp_no = item_p.erp_no
+                                            up_item.user_do = item_p.user_do
+                                            up_item.user_do_change = item_p.user_do_change
+                                            up_item.check = item_p.check
+
+                                            up_item.quantity = item_p.quantity
+ 
+                                            if item.p_type == "COMPONENTS"
+                                                up_item.pmc_qty = item_p.quantity
+                                            else
+                                                up_item.pmc_qty = item.qty*item_p.quantity
+                                            end
+ 
+                                            up_item.customer_qty = item_p.customer_qty
+                                            up_item.description = item_p.description
+                                            up_item.part_code = item_p.part_code
+                                            up_item.fengzhuang = item_p.fengzhuang
+                                            up_item.link = item_p.link
+                                            up_item.cost = item_p.cost
+                                            up_item.info = item_p.info
+                                            up_item.product_id = item_p.product_id
+                                            up_item.moko_part = item_p.moko_part
+                                            up_item.moko_des = item_p.moko_des
+                                            up_item.warn = item_p.warn
+                                            up_item.user_id = item_p.user_id
+                                            up_item.danger = item_p.danger
+                                            up_item.manual = item_p.manual
+                                            up_item.mark = item_p.mark
+                                            up_item.mpn = item_p.mpn
+                                            up_item.mpn_id = item_p.mpn_id
+                                            up_item.price = item_p.price
+                                            up_item.mf = item_p.mf
+                                            up_item.dn_id = item_p.dn_id
+                                            up_item.dn = item_p.dn
+                                            up_item.dn_long = item_p.dn_long
+                                            up_item.other = item_p.other
+                                            up_item.all_info = item_p.all_info
+                                            up_item.remark = item_p.remark
+                                            up_item.color = item_p.color
+                                            up_item.supplier_tag = item_p.supplier_tag
+                                            up_item.supplier_out_tag = item_p.supplier_out_tag
+                                            up_item.sell_feed_back_tag = item_p.sell_feed_back_tag
+                                            up_item.save
+                                        end
+                                    end
+                                end 
+
+                                find_bom.bom_lock = "lock"
+                                find_bom.bom_id = up_bom.bom_id
+                                find_bom.moko_bom_info_id = up_bom.id
+                                find_bom.save
+                            end
+                        end
+                    end
+                end
+=begin
+                if pi_draft.finance_state == "checked"
+                    pi_draft.state = "checked"
+                else
+                    pi_draft.state = "check"
+                end
+                pi_draft.bom_state = "checked"
+                pi_draft.save
+=end
+                redirect_to pi_list_path() and return
+            end
+            if can? :work_g, :all 
+                Rails.logger.info("add-------------------------------------5652")
+                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+                if pi_item_data.finance_state == "checked" and pi_item_data.bom_state == "checked"
+                    pi_item_data.state = "checked"
+                else
+                    pi_item_data.state = "check"
+                end
+                pi_item_data.buy_state = "checked"
+                pi_item_data.caigou_at = Time.new()
+                pi_item_data.save
+                set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
+                if not set_lock.blank?
+                    set_lock.each do |item|
+                        find_bom = ProcurementBom.find_by_id(item.bom_id)
+                        if not find_bom.blank?
+                            find_bom.bom_lock = "lock"
+                            find_bom.save
+                        end
+                    end
+                end
+                if pi_draft.bom_state == "checked" and pi_draft.finance_state == "checked"
+                    pi_draft.state = "checked"
+                else
+                    pi_draft.state = "check"
+                end
+                pi_draft.buy_state = "checked"
+                pi_draft.save
+                redirect_to pi_list_path() and return
+            end
+            if can? :work_finance, :all 
+                if pi_draft.bom_state == "checked" and pi_draft.buy_state == "checked"
+                    pi_draft.state = "checked"
+                else
+                    pi_draft.state = "check"
+                end
+                pi_draft.finance_state = "checked"
+                pi_draft.save
+                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+
+                if pi_item_data.bom_state == "checked" and pi_item_data.buy_state == "checked"
+                    pi_item_data.state = "checked"
+                else
+                    pi_item_data.state = "check"
+                end
+                pi_item_data.finance_state = "checked"
+                pi_item_data.caiwu_at = Time.new()
+                pi_item_data.save
+
+
+                redirect_to pi_list_path() and return
+            end
+        elsif params[:commit] == "反审核"
+            pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
+            if can? :work_d, :all
+                pi_item_data.state = "check"
+                pi_item_data.bom_state = "uncheck"
+                pi_item_data.save
+                pi_draft.bom_state = "uncheck"
+                pi_draft.state = "check"
+                pi_draft.save
+            end
+            if can? :work_g, :all
+                pi_item_data.state = "check"
+                pi_item_data.buy_state = "uncheck"
+                pi_item_data.save
+                pi_draft.buy_state = "uncheck"
+                pi_draft.state = "check"
+                pi_draft.save
+            end
+            if can? :work_finance, :all
+                pi_item_data.state = "check"
+                pi_item_data.finance_state = "uncheck"
+                pi_item_data.save
+                pi_draft.finance_state = "uncheck"
+                pi_draft.state = "check"
+                pi_draft.save
+            end
+        end
+        redirect_to pi_list_path() and return
+    end
+
     def user_info_edit
     
     end
@@ -117,6 +1826,8 @@ before_filter :authenticate_user!
             @pcblist = PcbOrder.where(order_sell: current_user.email,del_flag: "active").order("updated_at DESC")
             @pilist = PiItem.find_by_sql("SELECT pi_infos.* FROM pi_infos WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC")
             render "erp_index.html.erb" and return
+        elsif can? :work_a, :all
+            render "erp_index_pmc.html.erb" and return
         elsif can? :work_g, :all
             render "erp_index_caigou.html.erb" and return
         elsif can? :work_d, :all
@@ -772,7 +2483,9 @@ before_filter :authenticate_user!
                 need_buy = "no"
                 need_chk = "no"
                 item_id = item_buy.p_item_id
-                item_data = PItem.find_by_id(item_id)
+               #up
+               #item_data = PItem.find_by_id(item_id)
+                item_data = item_buy
                 if not item_data.blank?
                     Rails.logger.info("pmc_new--------------------------------------3")
                     find_buy_data = PiPmcItem.find_by_p_item_id(item_id)
@@ -1154,7 +2867,7 @@ before_filter :authenticate_user!
             elsif params[:commit] == "发送给BOM工程师"
                 get_ecn_info.state = "checking"
                 get_ecn_info.send_at = Time.new()
-            elsif params[:commit] == "审批通过"
+            elsif params[:commit] == "提交"
                 get_ecn_info.state = "checked"
             end
             get_ecn_info.remark = params[:ecn_remark]
@@ -1390,11 +3103,16 @@ before_filter :authenticate_user!
                         item.save
                     end
                 end
-                get_ecn_info.state = "checked"
+                get_ecn_info.state = "done"
                 get_ecn_info.save
             end
         end
         redirect_to :back
+    end
+
+    def view_ecn_message
+        @get_ecn_info = BomEcnInfo.find_by_id(params[:id])
+        @get_ecn_item = BomEcnItem.where(bom_ecn_info_id: params[:id])
     end
 
     def edit_ecn
@@ -1491,7 +3209,11 @@ before_filter :authenticate_user!
     end
 
     def new_ecn
-        @ecn_draft_list = BomEcnInfo.where(state: "new",fa_qi_ren_id: current_user.id ).paginate(:page => params[:page], :per_page => 20)
+        wh_data = ""
+        if not params[:c_code].blank?
+            wh_data = "AND pi_no LIKE '%#{params[:c_code]}%'"
+        end
+        @ecn_draft_list = BomEcnInfo.where("state = 'new' AND fa_qi_ren_id = #{current_user.id} " + wh_data ).paginate(:page => params[:page], :per_page => 20)
         if can? :work_admin, :all
             @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
         elsif can? :work_e, :all
@@ -1503,12 +3225,35 @@ before_filter :authenticate_user!
     end
 
     def ecn_list
-        if can? :work_admin, :all or can? :work_d, :all
-            @ecn_draft_list = BomEcnInfo.where("state <> 'new'" ).paginate(:page => params[:page], :per_page => 20)
-        else
-            @ecn_draft_list = BomEcnInfo.where("state <> 'new' AND fa_qi_ren_id = #{current_user.id}" ).paginate(:page => params[:page], :per_page => 20)
+        where_date = ""
+        if params[:start_date] != "" and  params[:start_date] != nil
+            where_date += " AND created_at > '#{params[:start_date]}'"
         end
-        
+        if params[:end_date] != "" and  params[:end_date] != nil
+            where_date += " AND created_at < '#{params[:end_date]}' "
+        end
+        wh_data = ""
+        if not params[:c_code].blank?
+            wh_data = "AND pi_no LIKE '%#{params[:c_code]}%'"
+        end 
+        if can? :work_admin, :all or can? :work_d, :all
+            if not params[:ecn_checked].blank?
+                @ecn_draft_list = BomEcnInfo.where("state = 'checked'" + wh_data + where_date).paginate(:page => params[:page], :per_page => 20)
+            elsif not params[:ecn_checking].blank?
+                @ecn_draft_list = BomEcnInfo.where("state = 'checking'" + wh_data + where_date).paginate(:page => params[:page], :per_page => 20)
+            else 
+                @ecn_draft_list = BomEcnInfo.where("state <> 'new'" + wh_data + where_date).paginate(:page => params[:page], :per_page => 20)
+            end
+        else
+            if not params[:ecn_checked].blank?
+                @ecn_draft_list = BomEcnInfo.where("state = 'checked' AND fa_qi_ren_id = #{current_user.id}" + wh_data + where_date ).paginate(:page => params[:page], :per_page => 20)
+            elsif not params[:ecn_checking].blank?
+                @ecn_draft_list = BomEcnInfo.where("state = 'checking' AND fa_qi_ren_id = #{current_user.id}" + wh_data + where_date ).paginate(:page => params[:page], :per_page => 20)
+            else 
+                @ecn_draft_list = BomEcnInfo.where("state <> 'new' AND fa_qi_ren_id = #{current_user.id}" + wh_data + where_date ).paginate(:page => params[:page], :per_page => 20)
+            end
+        end
+  
     end
 
     def sell_back_item
@@ -2868,162 +4613,6 @@ before_filter :authenticate_user!
             new_payment_notice.save
         end
         redirect_to :back
-    end
-
-
-    def pi_list
-        if params[:key_order]
-            @pilist = PiInfo.where("(c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR pi_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND state <> 'new' AND pi_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-        else
-            if params[:bom_chk]
-                if can? :work_e, :all
-                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.bom_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-                render "pi_list_eng.html.erb" and return
-            elsif params[:buy_chk]
-                if can? :work_e, :all
-                    #@pilist = PiItem.where(state: "check",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    #@pilist = PiInfo.where(state: "check",bom_state: nil).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.buy_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-                render "pi_list_eng.html.erb" and return
-            elsif params[:finance_chk]
-                @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-=begin
-                if can? :work_admin, :all
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                elsif can? :work_e, :all 
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'check' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                    
-                end
-=end
-                render "pi_list_eng.html.erb" and return     
-            elsif params[:checked]
-                if can? :work_e, :all
-                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked",pi_sell: current_user.email).order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiInfo.where(state: "checked",bom_state: "checked",finance_state: "checked").order("updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-                if can? :work_e, :all
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_infos.pi_sell = '#{current_user.email}' AND pi_items.finance_state = 'checked' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_items.state = 'check' AND pi_items.finance_state = 'checked' AND pi_items.bom_state = 'checked' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-                render "pi_list_paymanet_notice.html.erb" and return
-            else
-                Rails.logger.info("add-------------------------------------12")
-=begin
-                if can? :work_e, :all
-                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' AND pi_sell = '#{current_user.email}' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiInfo.find_by_sql("SELECT pi_infos.*, pi_infos.id AS pi_info_id FROM pi_infos WHERE state <> 'new' ORDER BY 'updated_at DESC'").paginate(:page => params[:page], :per_page => 20)
-                end
-=end
-                
-                
-                if can? :work_admin, :all
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                elsif can? :work_e, :all
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id WHERE pi_infos.pi_sell = '#{current_user.email}' ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                else
-                    @pilist = PiItem.find_by_sql("SELECT pi_infos.follow_remark,pi_infos.pi_sell,pi_infos.pcb_customer_id,pi_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.id = pi_items.pi_info_id ORDER BY updated_at DESC").paginate(:page => params[:page], :per_page => 20)
-                end
-            end
-        end        
-    end
-
-    def edit_pcb_pi
-        @dollar_rate = SetupFinanceInfo.find_by_id(1).dollar_rate
-        @pi_info = PiInfo.find_by_id(params[:pi_info_id])
-        if not @pi_info.bank_info_id.blank?
-            @bank_info = BankInfo.find_by_id(@pi_info.bank_info_id)
-        end
-        @pi_info_c = PcbCustomer.find_by_id(@pi_info.pcb_customer_id)
-        @pi_info_c_c_no = ""
-        @pi_info_c_customer = ""
-        @pi_info_c_customer_com = ""
-        @pi_info_c_customer_country = ""
-        @pi_info_c_tel = ""
-        @pi_info_c_fax = ""
-        @pi_info_c_email = ""
-        @pi_info_c_shipping_address = ""
-        if not @pi_info_c.blank?
-            @pi_info_c_c_no = @pi_info_c.c_no
-            @pi_info_c_customer = @pi_info_c.customer
-            @pi_info_c_customer_com = @pi_info_c.customer_com
-            @pi_info_c_customer_country = @pi_info_c.customer_country
-            @pi_info_c_tel = @pi_info_c.tel
-            @pi_info_c_fax = @pi_info_c.fax
-            @pi_info_c_email = @pi_info_c.email
-            @pi_info_c_shipping_address = @pi_info_c.shipping_address
-        end
-        @pi_item = PiItem.where(pi_info_id: params[:pi_info_id])
-        @pi_item_bom = PiItem.where(pi_info_id: params[:pi_info_id],state: "check")
-        @pi_other_item = PiOtherItem.where(pi_info_id: params[:pi_info_id])
-        @total_p = PiItem.where(pi_info_id: params[:pi_info_id]).sum("t_p") + PiOtherItem.where(pi_info_id: params[:pi_info_id]).sum("t_p")
-
-
-        if not params[:pi_item_id].blank?
-            pi_item = PiItem.find_by_id(params[:pi_item_id])
-            @pi_item_data = pi_item 
-            q_order_item = PcbOrderItem.find_by_id(pi_item.order_item_id)
-
-
-            
-            @q_order = PcbOrder.find_by_id(q_order_item.pcb_order_id)
-            @q_order_sell_item = PcbOrderSellItem.find_by_id(q_order_item.pcb_order_sell_item_id)
-
-
-            @state = pi_item.state
-            @to_pmc_state = pi_item.to_pmc_state
-            @boms = ProcurementBom.find_by_id(pi_item.bom_id)
-            #@bom_item = PItem.where(procurement_bom_id: @boms.id)
-            @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{params[:pi_item_id]}'")
-            @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(params[:pi_item_id])
-            if not @bom_item.blank?
-                @bom_item = @bom_item.select {|item| item.quantity != 0 }
-            end
-            Rails.logger.info("add-------------------------------------12")
-            Rails.logger.info(@boms.inspect)
-            Rails.logger.info("add-------------------------------------12")
-            if can? :work_e, :all 
-                if not params[:pi_info_id].blank? 
-                    @shou_kuan_tong_zhi_dan_list = PaymentNoticeInfo.where(pi_info_id: params[:pi_info_id])
-                    shou_kuan_jin_e_data = PaymentNoticeInfo.find_by_sql("SELECT SUM(pay_p) AS pay_all FROM payment_notice_infos WHERE pi_info_id = '#{params[:pi_info_id]}'")
-                    if not shou_kuan_jin_e_data.blank?
-                        @shou_kuan_jin_e = shou_kuan_jin_e_data.first.pay_all
-                        Rails.logger.info("@shou_kuan_jin_e-------------------------")
-                        Rails.logger.info(@shou_kuan_jin_e.to_i.inspect)  
-                        Rails.logger.info(@pi_info.t_p.to_i.inspect)
-                        Rails.logger.info("@shou_kuan_jin_e----------------------------------")
-                    else
-                        @shou_kuan_jin_e = 0
-                    end
-                end
-                @baojia = @bom_item
-                render "sell_view_baojia.html.erb" and return
-            end
-            if can? :work_d, :all
-                #render "procurement/p_viewbom.html.erb" and return
-                redirect_to p_viewbom_path(pi_info_id: params[:pi_info_id],pi_item_id: params[:pi_item_id],add_bom: "add_bom", bom_id: pi_item.bom_id, state_flow: "order_center") and return
-            end
-            if can? :work_finance, :all or can? :work_g, :all
-                @all_dn = "[&quot;"
-                all_s_dn = AllDn.find_by_sql("SELECT DISTINCT all_dns.dn FROM all_dns GROUP BY all_dns.dn")
-                all_s_dn.each do |dn|
-                    @all_dn += "&quot;,&quot;" + dn.dn.to_s
-                end
-                @all_dn += "&quot;]"
-                render "procurement/p_viewbom.html.erb" and return
-            end
-
-        end
     end
 
     def edit_moko_supplier
@@ -7552,7 +9141,115 @@ before_filter :authenticate_user!
         @pi_buy = PiBuyItem.where(pi_buy_info_id: params[:pi_buy_info_id])
     end
 
-
+    def find_pi_buy_baojia
+        @table_buy = ''
+        @table_buy += '<table class="table table-hover">'
+        @table_buy += '<thead>'
+        @table_buy += '<tr style="background-color: #eeeeee">'
+        @table_buy += '<th width="20"></th>'
+        @table_buy += '<th >MOKO DES</th>'
+        @table_buy += '<th width="80">申请数量</th>'
+        @table_buy += '<th width="80">单价￥</th>'
+        @table_buy += '<th width="80">附件</th>'
+        @table_buy += '<th >供应商</th>'
+        @table_buy += '<th >备注</th>'
+        @table_buy += '</tr>'
+        @table_buy += '</thead>'
+        @table_buy += '<tbody><small>'
+        if params[:key_order]
+            if not params[:key_order].blank?
+                des = params[:key_order].strip.split(" ")
+                where_des = ""
+                des.each_with_index do |de,index|
+                    #where_des += "p_items.moko_des LIKE '%#{de}%'"
+                    where_des += "`pi_pmc_items`.`moko_des` LIKE '%#{de}%'"
+                    if des.size > (index + 1)
+                        where_des += " AND "
+                    end
+                end 
+                #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' AND `pi_pmc_items`.`buy_user` <> 'MOKO' ORDER BY 'moko_part'")
+                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR #{where_des}) AND `pi_pmc_items`.`pmc_qty` > `pi_pmc_items`.`buyer_qty` AND `pi_pmc_items`.`buy_user` <> 'MOKO' AND `pi_pmc_items`.`baojia_state` IS NULL ORDER BY 'moko_part'")
+            else
+                #@pi_buy = PiPmcItem.where("state = 'pass' AND `buy_user` <> 'MOKO'").order("moko_part")
+                @pi_buy = PiPmcItem.where("`pi_pmc_items`.`pmc_qty` > `pi_pmc_items`.`buyer_qty` AND `buy_user` <> 'MOKO' AND `pi_pmc_items`.`baojia_state` IS NULL").order("moko_part")
+            end
+            #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE (p_items.moko_part LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND pi_infos.state = 'checked' AND p_items.buy IS NULL")    
+            #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' ") 
+            if not @pi_buy.blank?
+                @pi_buy.each do |buy|
+                    @table_buy += '<tr>'
+                    @table_buy += '<td><input class="chk_all" type="checkbox" value="'+buy.id.to_s+'" name="roles[]" id="roles_" checked></td>'
+                    @table_buy += '<td>'+buy.moko_des.to_s+'</td>'
+                    @table_buy += '<td>'+buy.pmc_qty.to_s+'</td>'
+                    @table_buy += '<td>'+buy.cost.to_s+'</td>'
+                    if not PDn.find_by_id(buy.dn_id).blank?
+                        if not PDn.find_by_id(buy.dn_id).info.blank?
+                            @table_buy += '<td><small><a href="'
+                            @table_buy += PDn.find_by_id(buy.dn_id).info.to_s
+                            @table_buy += '">下载</a></small></td>'
+                        else
+                            @table_buy += '<td></td>'
+                        end
+                    else
+                        @table_buy += '<td></td>'
+                    end
+                    @table_buy += '<td>'+buy.dn_long.to_s+'</td>'
+                    @table_buy += '<td>'
+                    @table_buy += '<div class="row" style="margin: 0px;" >'
+                    @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >'
+                    PItemRemark.where(p_item_id: buy.p_item_id).each do |remark_item|
+                        @table_buy += '<div class="row" style="margin: 0px;" >'
+                        @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                        @table_buy += '<table style="margin: 0px;" >'
+                        @table_buy += '<tr>'
+                        @table_buy += '<td style="padding: 0px;margin: 0px;" >'
+                        @table_buy += '<p style="padding: 0px;margin: 0px;" >'
+                        @table_buy += '<small >'
+                        @table_buy += '<strong>'+remark_item.user_name+': </strong>'
+                        @table_buy += remark_item.remark
+                        @table_buy += '</small>'
+                        @table_buy += '</p>'
+                        @table_buy += '</td>'
+                        @table_buy += '</tr>'
+                        @table_buy += '</table>'
+                        @table_buy += '</div>'
+                        @table_buy += '</div>'
+                    end
+                    @table_buy += '</div>'
+                    if not buy.dn_id.blank?
+                        if not PDn.find_by_id(buy.dn_id).blank?
+                            if not PDn.find(buy.dn_id).remark.blank? 
+                                @table_buy += '<div class="row" style="margin: 0px;" >'
+                                @table_buy += '<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">'
+                                @table_buy += '<table style="margin: 0px;" >'
+                                @table_buy += '<tr>'
+                                @table_buy += '<td style="padding: 0px;margin: 0px;" >'
+                                @table_buy += '<p style="padding: 0px;margin: 0px;" >'
+                                @table_buy += '<small >'
+                                if not PDn.find(buy.dn_id).info.blank?                
+                                    @table_buy += '<a class="btn btn-info btn-xs" href="'+PDn.find(buy.dn_id).info.to_s+'" target="_blank">下载</a>'
+                                end
+                                @table_buy += '<strong>采购工程师: </strong>'+PDn.find(buy.dn_id).remark.to_s
+                                @table_buy += '</small>'
+                                @table_buy += '</p>'
+                                @table_buy += '</td>'
+                                @table_buy += '</tr>'
+                                @table_buy += '</table>'
+                                @table_buy += '</div>'
+                                @table_buy += '</div>'
+                            end
+                        end
+                    end
+                    @table_buy += '</div>'
+                    @table_buy += '</td>'
+                    @table_buy += '</tr>'
+                end
+            end
+        end
+        @table_buy += '</small></tbody>'
+        @table_buy += '</table>'
+        #Rails.logger.info(@table_buy.inspect)
+    end
 
     def find_pi_buy
         @table_buy = ''
@@ -7733,347 +9430,86 @@ before_filter :authenticate_user!
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
     end
 
+    def pi_buy_baojia_list
+
+
+        wh_data = ""
+        if not params[:c_code].blank?
+            wh_data = "WHERE (pi_pmc_items.erp_no LIKE '%#{params[:c_code]}%' OR pi_pmc_items.moko_part LIKE '%#{params[:c_code]}%' OR pi_pmc_items.moko_des LIKE '%#{params[:c_code]}%' OR pi_pmc_items.description LIKE '%#{params[:c_code]}%' OR pi_pmc_items.dn LIKE '%#{params[:c_code]}%' OR pi_pmc_items.dn_long LIKE '%#{params[:c_code]}%' )"
+        end
+        where_date = ""
+        
+        if params[:start_date] != "" and  params[:start_date] != nil
+            if wh_data == ""
+                where_date += "WHERE pi_buy_baojia_infos.ti_jiao_at > '#{params[:start_date]}'"
+            else
+                where_date += "AND pi_buy_baojia_infos.ti_jiao_at > '#{params[:start_date]}'"
+            end
+        end
+        if params[:end_date] != "" and  params[:end_date] != nil
+            if wh_data == "" and where_date == ""
+                where_date += " WHERE pi_buy_baojia_infos.ti_jiao_at < '#{params[:end_date]}' "
+            else
+                where_date += " AND pi_buy_baojia_infos.ti_jiao_at < '#{params[:end_date]}' "
+            end
+        end
+        if not params[:baojia_state].blank?
+            if params[:baojia_state] == "all"
+                @pi_buy_list = PiBuyBaojiaInfo.all.paginate(:page => params[:page], :per_page => 10)
+            else
+                @pi_buy_list = PiBuyBaojiaInfo.where(state: params[:baojia_state]).paginate(:page => params[:page], :per_page => 10)
+            end
+        else
+            @pi_buy_list = PiBuyBaojiaInfo.find_by_sql("SELECT pi_buy_baojia_items.pi_buy_baojia_info_id, pi_buy_baojia_items.pi_pmc_item_id, pi_pmc_items.*,pi_buy_baojia_infos.* FROM pi_buy_baojia_infos INNER JOIN pi_buy_baojia_items ON pi_buy_baojia_infos.id = pi_buy_baojia_items.pi_buy_baojia_info_id INNER JOIN pi_pmc_items ON pi_buy_baojia_items.pi_pmc_item_id = pi_pmc_items.id " + wh_data + where_date + " GROUP BY pi_buy_baojia_infos.id").paginate(:page => params[:page], :per_page => 10)
+        end
+    end
+
+    def add_pi_buy_baojia_item
+        if params[:roles]
+            if params[:pi_buy_baojia_info_id]
+                new_data = PiBuyBaojiaInfo.find_by_id(params[:pi_buy_baojia_info_id])
+            else
+                new_data = PiBuyBaojiaInfo.new
+                new_data.state = "new"
+                new_data.zhi_dan_ren = current_user.email
+                new_data.save
+            end
+            params[:roles].each do |item_id|
+                #item_data = PItem.find_by_id(item_id)
+                
+                item_data = PiPmcItem.find_by_id(item_id)
+                if not item_data.blank?
+                    if item_data.baojia_state.blank?
+                        item_new = PiBuyBaojiaItem.new
+                        item_new.pi_buy_baojia_info_id = new_data.id
+                        item_new.pi_pmc_item_id = item_data.id
+                        if item_new.save
+                            item_data.baojia_state = "new"
+                            item_data.save
+                        end
+                    end
+                end
+            end
+        end
+        redirect_to view_pi_buy_baojia_path(baojia_id: new_data.id) and return
+    end
+
     def pi_waitfor_buy
-        @pi_buy = PiPmcItem.where("state = 'pass' AND buy_user<> 'MOKO'").paginate(:page => params[:page], :per_page => 20)
+        where_date = ""
+        if params[:start_date] != "" and  params[:start_date] != nil
+            where_date += " AND created_at > '#{params[:start_date]}'"
+        end
+        if params[:end_date] != "" and  params[:end_date] != nil
+            where_date += " AND created_at < '#{params[:end_date]}' "
+        end
+        wh_data = ""
+        if not params[:c_code].blank?
+            wh_data = "AND pi_no LIKE '%#{params[:c_code]}%'"
+        end
+        @pi_buy = PiPmcItem.where("state = 'pass' AND buy_user<> 'MOKO'" + wh_data + where_date).paginate(:page => params[:page], :per_page => 20)
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL").paginate(:page => params[:page], :per_page => 20)
         
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
-    end
-
-    def pi_draft  
-        pi_draft = PiInfo.find_by_id(params[:p_pi])
-        if params[:commit] == "提交"
-            #if can? :work_admin, :all 
-                #pi_draft.state = "checked"
-                #pi_draft.bom_state = "checked"
-                #pi_draft.finance_state = "checked"
-                #pi_draft.save
-                #redirect_to pi_list_path() and return
-            #end
-=begin
-            if can? :work_e, :all and pi_draft.state == "new"
-                pi_draft.state = "check"
-                pi_draft.save
-                redirect_to pi_list_path() and return                
-            end
-=end
-            if can? :work_e, :all  and pi_draft.pi_lock != "lock"
-                pi_item_data = PiItem.find_by_id(params[:p_item])
-                if pi_item_data.qty.blank?
-                    flash[:error] = "请填写数量!!!"
-                    redirect_to :back and return
-                end
-                if pi_item_data.state.blank?
-                    if not pi_item_data.bom_id.blank?
-                        get_bom_data = ProcurementBom.find_by_id(pi_item_data.bom_id)
-                        if not get_bom_data.blank?
-
-                            #新建数量申请
-                            new_qty_info = PiBomQtyInfo.new
-                            new_qty_info.pi_info_id = pi_draft.id
-                            new_qty_info.pi_item_id = pi_item_data.id
-                            new_qty_info.bom_id = get_bom_data.id
-                            new_qty_info.qty = pi_item_data.qty
-                            new_qty_info.t_qty = PiItem.find_by_sql("SELECT SUM(pi_items.qty) AS qty FROM pi_items WHERE pi_items.pi_info_id = '#{pi_draft.id}'").first.qty
-                            new_qty_info.save
-
-
-
-                            get_bom_data.pi_lock = "lock"
-                            if get_bom_data.save
-                                if not get_bom_data.erp_item_id.blank?
-                                    get_otder_item = PcbOrderItem.find_by_id(get_bom_data.erp_item_id) 
-                                    if not get_otder_item.blank?
-                                        get_otder_item.pi_lock == "lock"
-                                        get_otder_item.save
-                                    end
-                                end
-                                #新建数量申请item
-                                get_bom_item_data = PItem.where(procurement_bom_id: get_bom_data.id)
-                                if not get_bom_item_data.blank?
-                                    get_bom_item_data.each do |item|
-                                        new_qty_info_item = PiBomQtyInfoItem.new
-                                        new_qty_info_item.pi_bom_qty_info_id = new_qty_info.id
-                                        new_qty_info_item.pi_info_id = new_qty_info.pi_info_id
-                                        new_qty_info_item.pi_item_id = pi_item_data.id
-                                        new_qty_info_item.order_item_id = pi_item_data.order_item_id
-                                        new_qty_info_item.bom_id = new_qty_info.bom_id
-                                        new_qty_info_item.p_item_id = item.id
-                                        new_qty_info_item.qty = new_qty_info.qty
-                                        new_qty_info_item.t_qty = new_qty_info.t_qty
-                                        history_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{pi_draft.id}' AND p_item_id = '#{item.id}'")
-                                        h_qty = 0
-                                        if not history_qty_info_item.blank?
-                                            h_qty = history_qty_info_item.first.qty.to_i
-                                        end
-                                        history_c_qty_info_item = PiBomQtyInfoItem.find_by_sql("SELECT SUM(qty) AS c_qty FROM pi_bom_qty_info_items WHERE pi_info_id = '#{pi_draft.id}' AND p_item_id = '#{item.id}'")
-                                        c_qty = 0
-                                        if not history_c_qty_info_item.blank?
-                                            c_qty = history_c_qty_info_item.first.c_qty.to_i
-                                        end
-                                        if not history_qty_info_item.blank?
-                                            use_qty = (new_qty_info.t_qty*item.quantity) - h_qty - c_qty
-                                            if use_qty >= new_qty_info.qty*item.quantity
-                                                new_qty_info_item.bom_ctl_qty = new_qty_info.qty*item.quantity
-                                            elsif use_qty < new_qty_info.qty*item.quantity
-                                                new_qty_info_item.bom_ctl_qty = use_qty
-                                            end
-                                        else
-                                            new_qty_info_item.bom_ctl_qty = new_qty_info.qty*item.quantity
-                                        end
-                                        new_qty_info_item.save
-                                        
-                                    end
-                                end
-                            end
-
-
-
-
-                        end
-                    end
-                    pi_draft.pi_lock = "lock"
-                    pi_item_data.state = "check"
-                    pi_item_data.bom_state = "check"
-                    pi_item_data.buy_state = "check"
-                    pi_item_data.save
-                    pi_draft.state = "check"
-                    pi_draft.save
-                end
-                redirect_to pi_list_path(bom_chk: true) and return                
-            end
-
-            if can? :work_d, :all 
-                Rails.logger.info("add-------------------------------------5652")
-                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
-                if pi_item_data.finance_state == "checked" and pi_item_data.buy_state == "checked"
-                    pi_item_data.state = "checked"
-                else
-                    pi_item_data.state = "check"
-                end
-                pi_item_data.bom_state = "checked"
-                pi_item_data.bom_at = Time.new()
-                pi_item_data.save
-                #set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
-                set_lock = PiItem.where("pi_info_id = '#{params[:p_pi]}' AND p_type = 'PCBA'")
-                if not set_lock.blank?
-                    Rails.logger.info("add-------------------------------------565211111")
-                    set_lock.each do |item|
-                        find_bom = ProcurementBom.find_by_id(item.bom_id)
-                        if not find_bom.blank?
-                            if find_bom.moko_bom_info_id.blank?
-
-                                up_bom = MokoBomInfo.new
-                                up_bom.moko_state = "active"
-                            #up_bom.bom_id = find_bom.bom_id
-                            #up_bom.bom_version = bom_version
-                                up_bom.order_country = find_bom.order_country
-
-                                up_bom.erp_id = find_bom.erp_id
-                                up_bom.erp_item_id = find_bom.erp_item_id
-                                up_bom.erp_no = find_bom.erp_no
-                                up_bom.erp_no_son = find_bom.erp_no_son
-                                up_bom.erp_qty = find_bom.erp_qty
-                                up_bom.order_do = find_bom.order_do
-                                up_bom.star = find_bom.star
-                                up_bom.sell_remark = find_bom.sell_remark
-                                up_bom.sell_manager_remark = find_bom.sell_manager_remark
-                                up_bom.name = find_bom.name
-                                up_bom.p_name_mom = find_bom.p_name_mom
-                                up_bom.p_name = find_bom.p_name
-                                up_bom.bom_eng = find_bom.bom_eng
-                                up_bom.bom_eng_up = current_user.full_name
-                #up_bom.remark_to_sell = find_bom.remark_to_sell
-
-                                up_bom.check = find_bom.check
-   
-                                up_bom.remark = find_bom.remark
-                                up_bom.t_p = find_bom.t_p
-                                up_bom.profit = find_bom.profit
-                                up_bom.t_pp = find_bom.t_pp
-                                up_bom.d_day = find_bom.d_day
-                                up_bom.description = find_bom.description
-                                up_bom.excel_file = find_bom.excel_file
-                                up_bom.att = find_bom.att
-                                up_bom.pcb_p = find_bom.pcb_p
-                                up_bom.pcb_file = find_bom.pcb_file
-                                up_bom.pcb_layer = find_bom.pcb_layer
-                                up_bom.pcb_qty = find_bom.pcb_qty
-                                up_bom.pcb_size_c = find_bom.pcb_size_c
-                                up_bom.pcb_size_k = find_bom.pcb_size_k
-                                up_bom.pcb_sc = find_bom.pcb_sc
-                                up_bom.pcb_material = find_bom.pcb_material
-                                up_bom.pcb_cc = find_bom.pcb_cc
-                                up_bom.pcb_ct = find_bom.pcb_ct
-                                up_bom.pcb_sf = find_bom.pcb_sf
-                                up_bom.pcb_t = find_bom.pcb_t
-                                up_bom.t_c = find_bom.t_c
-                                up_bom.c_p = find_bom.c_p
-                                up_bom.user_id = find_bom.user_id
-                                up_bom.all_title = find_bom.all_title
-                                up_bom.row_use = find_bom.row_use
-                                up_bom.bom_eng_up = current_user.full_name
-
-                                up_bom.bom_team_ck = find_bom.bom_team_ck
-
-                                up_bom.sell_feed_back_tag = find_bom.sell_feed_back_tag
-                                if up_bom.save 
-                                    up_bom.bom_id = "moko#{up_bom.id}"
-                                    up_bom.save
-                                    find_bom_item = PItem.where(procurement_bom_id: find_bom.id)
-                                    if not find_bom_item.blank?
-                                        find_bom_item.each do |item_p|
-                                            up_item = up_bom.moko_bom_items.build()
-                                            up_item.bom_version = up_bom.bom_version
-                                            up_item.p_type = item_p.p_type
-                                            #up_item.buy = item.buy
-                                            up_item.erp_id = item_p.erp_id
-                                            up_item.erp_no = item_p.erp_no
-                                            up_item.user_do = item_p.user_do
-                                            up_item.user_do_change = item_p.user_do_change
-                                            up_item.check = item_p.check
-
-                                            up_item.quantity = item_p.quantity
- 
-                                            if item.p_type == "COMPONENTS"
-                                                up_item.pmc_qty = item_p.quantity
-                                            else
-                                                up_item.pmc_qty = item.qty*item_p.quantity
-                                            end
- 
-                                            up_item.customer_qty = item_p.customer_qty
-                                            up_item.description = item_p.description
-                                            up_item.part_code = item_p.part_code
-                                            up_item.fengzhuang = item_p.fengzhuang
-                                            up_item.link = item_p.link
-                                            up_item.cost = item_p.cost
-                                            up_item.info = item_p.info
-                                            up_item.product_id = item_p.product_id
-                                            up_item.moko_part = item_p.moko_part
-                                            up_item.moko_des = item_p.moko_des
-                                            up_item.warn = item_p.warn
-                                            up_item.user_id = item_p.user_id
-                                            up_item.danger = item_p.danger
-                                            up_item.manual = item_p.manual
-                                            up_item.mark = item_p.mark
-                                            up_item.mpn = item_p.mpn
-                                            up_item.mpn_id = item_p.mpn_id
-                                            up_item.price = item_p.price
-                                            up_item.mf = item_p.mf
-                                            up_item.dn_id = item_p.dn_id
-                                            up_item.dn = item_p.dn
-                                            up_item.dn_long = item_p.dn_long
-                                            up_item.other = item_p.other
-                                            up_item.all_info = item_p.all_info
-                                            up_item.remark = item_p.remark
-                                            up_item.color = item_p.color
-                                            up_item.supplier_tag = item_p.supplier_tag
-                                            up_item.supplier_out_tag = item_p.supplier_out_tag
-                                            up_item.sell_feed_back_tag = item_p.sell_feed_back_tag
-                                            up_item.save
-                                        end
-                                    end
-                                end 
-
-                                find_bom.bom_lock = "lock"
-                                find_bom.bom_id = up_bom.bom_id
-                                find_bom.moko_bom_info_id = up_bom.id
-                                find_bom.save
-                            end
-                        end
-                    end
-                end
-=begin
-                if pi_draft.finance_state == "checked"
-                    pi_draft.state = "checked"
-                else
-                    pi_draft.state = "check"
-                end
-                pi_draft.bom_state = "checked"
-                pi_draft.save
-=end
-                redirect_to pi_list_path() and return
-            end
-            if can? :work_g, :all 
-                Rails.logger.info("add-------------------------------------5652")
-                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
-                if pi_item_data.finance_state == "checked" and pi_item_data.bom_state == "checked"
-                    pi_item_data.state = "checked"
-                else
-                    pi_item_data.state = "check"
-                end
-                pi_item_data.buy_state = "checked"
-                pi_item_data.caigou_at = Time.new()
-                pi_item_data.save
-                set_lock = PiItem.where("pi_no = '#{params[:p_pi]}' AND p_type = 'PCBA'")
-                if not set_lock.blank?
-                    set_lock.each do |item|
-                        find_bom = ProcurementBom.find_by_id(item.bom_id)
-                        if not find_bom.blank?
-                            find_bom.bom_lock = "lock"
-                            find_bom.save
-                        end
-                    end
-                end
-                if pi_draft.bom_state == "checked" and pi_draft.finance_state == "checked"
-                    pi_draft.state = "checked"
-                else
-                    pi_draft.state = "check"
-                end
-                pi_draft.buy_state = "checked"
-                pi_draft.save
-                redirect_to pi_list_path() and return
-            end
-            if can? :work_finance, :all 
-                if pi_draft.bom_state == "checked" and pi_draft.buy_state == "checked"
-                    pi_draft.state = "checked"
-                else
-                    pi_draft.state = "check"
-                end
-                pi_draft.finance_state = "checked"
-                pi_draft.save
-                pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
-
-                if pi_item_data.bom_state == "checked" and pi_item_data.buy_state == "checked"
-                    pi_item_data.state = "checked"
-                else
-                    pi_item_data.state = "check"
-                end
-                pi_item_data.finance_state = "checked"
-                pi_item_data.caiwu_at = Time.new()
-                pi_item_data.save
-
-
-                redirect_to pi_list_path() and return
-            end
-        elsif params[:commit] == "反审核"
-            pi_item_data = PiItem.find_by_id(params[:p_pi_item_id])
-            if can? :work_d, :all
-                pi_item_data.state = "check"
-                pi_item_data.bom_state = "uncheck"
-                pi_item_data.save
-                pi_draft.bom_state = "uncheck"
-                pi_draft.state = "check"
-                pi_draft.save
-            end
-            if can? :work_g, :all
-                pi_item_data.state = "check"
-                pi_item_data.buy_state = "uncheck"
-                pi_item_data.save
-                pi_draft.buy_state = "uncheck"
-                pi_draft.state = "check"
-                pi_draft.save
-            end
-            if can? :work_finance, :all
-                pi_item_data.state = "check"
-                pi_item_data.finance_state = "uncheck"
-                pi_item_data.save
-                pi_draft.finance_state = "uncheck"
-                pi_draft.state = "check"
-                pi_draft.save
-            end
-        end
-        redirect_to pi_list_path() and return
     end
 
     def bom_edit_order_item
@@ -8517,6 +9953,7 @@ before_filter :authenticate_user!
             @pi_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PI"+ pi_n.to_s
             pi_info = PiInfo.new()
             pi_info.pi_no = @pi_no
+            pi_info.sell = current_user.full_name
             pi_info.pi_sell = current_user.email
             pi_info.team = current_user.team
             pi_info.phone = current_user.phone
@@ -8563,25 +10000,6 @@ before_filter :authenticate_user!
             #up_item_c
         #end
         redirect_to edit_pcb_order_path(order_no: params[:c_order_no],c_id: params[:id])
-    end
-
-    def find_c_pi_ch
-        @c_info = PcbCustomer.find(params[:id])
-        up_c = PiInfo.find_by(pi_no: params[:c_pi_no])
-        up_c.pcb_customer_id = @c_info.id
-        up_c.c_code = @c_info.c_no
-        up_c.c_des = @c_info.customer
-        up_c.c_country = @c_info.customer_country
-        up_c.c_shipping_address = @c_info.shipping_address
-        up_c.save
-        find_pi_item = PiItem.where(pi_no: params[:c_pi_no])
-        if not find_pi_item.blank?
-            #find_pi_item.destroy
-            find_pi_item.each do |del_item|
-                del_item.destroy
-            end
-        end
-        redirect_to edit_pcb_pi_path(pi_info_id: up_c.id,pi_no: params[:c_pi_no],c_id: params[:id])
     end
 
     def find_linkbom_moko
@@ -8667,48 +10085,6 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
-    def find_c_pi
-        if params[:c_code] != ""
-            #@c_info = PcbCustomer.find_by(c_no: params[:c_code])
-            @c_info = PcbCustomer.find_by_sql("SELECT * FROM `pcb_customers`  WHERE (`pcb_customers`.`c_no` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`customer_com` LIKE '%#{params[:c_code]}%' OR `pcb_customers`.`email` LIKE '%#{params[:c_code]}%') AND `pcb_customers`.`follow` = '#{current_user.email}'")
-            Rails.logger.info("add-------------------------------------12")
-            Rails.logger.info(@c_info.inspect)
-            Rails.logger.info("add-------------------------------------12")
-            if not @c_info.blank?
-                
-                Rails.logger.info("add-------------------------------------12")
-                @c_table = '<br>'
-                @c_table += '<small>'
-                @c_table += '<table class="table table-bordered">'
-                @c_table += '<thead>'
-                @c_table += '<tr class="active">'
-                @c_table += '<th width="70">客户代码</th>'
-                @c_table += '<th>客户名</th>'
-                @c_table += '<th>客户公司名</th>'
-                @c_table += '<th width="70">所属</th>'
-                @c_table += '<tr>'
-                @c_table += '</thead>'
-                @c_table += '<tbody>'
-                @c_info.each do |cu|
-                    @c_table += '<tr>'
-                    #@c_table += '<td>' + cu.c_no + '</td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.c_no + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.customer.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + cu.customer_com.to_s + '</div></a></td>'
-                    @c_table += '<td><a rel="nofollow" data-method="get"  href="/find_c_pi_ch?id='+ cu.id.to_s + '&c_pi_no=' + params[:c_pi_no] + '"><div>' + User.find_by(email: cu.sell).full_name.to_s + '</div></a></td>'
-                    @c_table += '</tr>'
-                end
-                @c_table += '</tbody>'
-                @c_table += '</table>'
-                @c_table += '</small>'
-                Rails.logger.info("add-------------------------------------12")
-                Rails.logger.info(@c_table.inspect)
-                Rails.logger.info("add-------------------------------------12")
-            end
-        end
-    end
-
-
     def follow
         select_customer = PcbCustomer.find(params[:id])
         if select_customer
@@ -8785,7 +10161,7 @@ before_filter :authenticate_user!
             q_order.follow_remark = params[:teshu_remark]
             q_order.save
             redirect_to :back and return
-        elsif params[:commit] == "提交"
+        elsif params[:commit] == "提交" or params[:commit] == "完成检查"
             q_order = PcbOrder.find_by(order_no: params[:p_no])
             q_order.p_name = params[:p_name]
             q_order.follow_remark = params[:teshu_remark]
@@ -8807,7 +10183,8 @@ before_filter :authenticate_user!
                     end
                 end
             end
-            redirect_to pcb_order_list_path(quote: true) and return
+            #redirect_to pcb_order_list_path(quote: true) and return
+            redirect_to pcb_order_list_path(bom_chk: true) and return
         end
     end
 
@@ -8885,14 +10262,31 @@ before_filter :authenticate_user!
     end
 
     def pcb_order_list
-
+        where_date = ""
+        if params[:start_date] != "" and  params[:start_date] != nil
+            where_date += "created_at > '#{params[:start_date]}'"
+        end
+        if params[:end_date] != "" and  params[:end_date] != nil
+            where_date += " AND created_at < '#{params[:end_date]}' AND "
+        end
         if params[:key_order]
+            state_wh = ""
+            if params[:new]
+                state_wh = "state = 'new' AND "
+            elsif params[:quote]
+                state_wh = "state = 'quote' AND "
+            elsif params[:bom_chk]
+                state_wh = "state = 'bom_chk' AND "
+            end
             if can? :work_a, :all
-                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+                @pcblist = PcbOrder.where(where_date + state_wh + "del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             elsif can? :work_e, :all
-                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+                @pcblist = PcbOrder.where(where_date + state_wh + "del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%') AND order_sell = '#{current_user.email}'").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
             else
-                @pcblist = PcbOrder.where("del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+                @pcblist = PcbOrder.where(where_date + state_wh + "del_flag = 'active' AND (c_code LIKE '%#{params[:key_order]}%' OR c_des LIKE '%#{params[:key_order]}%' OR p_name LIKE '%#{params[:key_order]}%' OR des_cn LIKE '%#{params[:key_order]}%' OR des_en LIKE '%#{params[:key_order]}%' OR order_no LIKE '%#{params[:key_order]}%' OR remark LIKE '%#{params[:key_order]}%' OR follow_remark LIKE '%#{params[:key_order]}%')").order("updated_at DESC").paginate(:page => params[:page], :per_page => 10)
+            end
+            if params[:new]
+                render "new_pcb_order_list.html.erb" and return
             end
         else
             if params[:new] 
@@ -9312,7 +10706,11 @@ before_filter :authenticate_user!
     def add_pi_sb
         get_rate_data = SetupFinanceInfo.find_by_id(1).dollar_rate
 
-        all_item_t_p = PiItem.find_by_sql("SELECT SUM(t_p) AS t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id").first.t_p
+        all_item_t_p = 0
+        get_data = PiItem.where(pi_info_id: params[:add_pi_sb_id])
+        if not get_data.blank?
+            all_item_t_p = PiItem.find_by_sql("SELECT SUM(t_p) AS t_p FROM pi_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id").first.t_p
+        end
         all_other_t_p_data = PiOtherItem.find_by_sql("SELECT SUM(t_p) AS t_p FROM pi_other_items WHERE pi_info_id = #{params[:add_pi_sb_id]} GROUP BY pi_info_id")
         if not all_other_t_p_data.blank?
            all_other_t_p = all_other_t_p_data.first.t_p
@@ -11339,6 +12737,10 @@ before_filter :authenticate_user!
     end
 
     private
+        def bn_params
+  	    params.require(:info).permit(:name, :info)
+  	end
+
         def pcb_params
   	    params.require(:att).permit(:att)
   	end

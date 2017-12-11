@@ -1,0 +1,151 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_pmc", locals: {selected: "my_work"} %>
+<% end %>
+<div class="container-fluid" >
+    <div class="row" >
+    
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <span class="glyphicon glyphicon-user" style="font-size: 20px;"></span>
+                <li class="active"><%= current_user.full_name %></li>
+                <li class="active">首页</li>       
+                <li class="<% if current_user.menu_c.blank? %>sr-only<% end %>"><a href="#">我的消息</a></li>
+                <li><a href="/user_info_edit">帐号设置</a></li>
+                
+            </ol>
+
+    </div>
+
+    <div class="row" style="padding: 10px 20px 10px;">
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="edit_menu" tabindex="-1" role="dialog" aria-labelledby="edit_menuLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_menuLabel">定制我的个工作平台</h4>
+      </div>
+      
+      <%= form_tag({action: :edit_menu},method:"post",multipart:"true",id: "menu_form") do %>
+      <div class="modal-body">   
+          <h4 >勾选的模块将显示在“我的工作台”里面，您可一键到达。</h4> 
+          <div class="row">   
+          <div class="col-md-4">
+              <label>
+                  <input type="checkbox" value="a" name="menu_up[]" id="menu_a" <% if not current_user.menu_a.blank? %>checked<% end %>> 
+                  <strong><%= '代办事项' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="b" name="menu_up[]" id="menu_b" <% if not current_user.menu_b.blank? %>checked<% end %>> 
+                  <strong><%= '我的消息' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="c" name="menu_up[]" id="menu_c" <% if not current_user.menu_c.blank? %>checked<% end %>> 
+                  <strong><%= '我的询价' %></strong>
+              </label>
+          </div>
+          </div>
+          <div class="row">
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="d" name="menu_up[]" id="menu_d" <% if not current_user.menu_d.blank? %>checked<% end %>> 
+                  <strong><%= '我的PI' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="e" name="menu_up[]" id="menu_e" <% if not current_user.menu_e.blank? %>checked<% end %>> 
+                  <strong><%= '我的变更' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="f" name="menu_up[]" id="menu_f" <% if not current_user.menu_f.blank? %>checked<% end %>> 
+                  <strong><%= '我的客户' %></strong>
+              </label>
+          </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="edit_block" tabindex="-1" role="dialog" aria-labelledby="edit_blockLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="edit_blockLabel">添加首页显示的区块</h4>
+      </div>
+      
+      <%= form_tag({action: :edit_block},method:"post",multipart:"true",id: "block_form") do %>
+      <div class="modal-body">   
+          <h4 >勾选的模块将显示在“我的工作台-首页”里面，取消勾选的将不显示。</h4>    
+          <div class="row">
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="a" name="block_up[]" id="block_a" <% if not current_user.block_a.blank? %>checked<% end %>> 
+                  <strong><%= '代办事项' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="b" name="block_up[]" id="block_b" <% if not current_user.block_b.blank? %>checked<% end %>> 
+                  <strong><%= '最新消息' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="c" name="block_up[]" id="block_c" <% if not current_user.block_c.blank? %>checked<% end %>> 
+                  <strong><%= '我的客户' %></strong>
+              </label>
+          </div>
+          </div>
+          <div class="row">
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="d" name="block_up[]" id="block_d" <% if not current_user.block_d.blank? %>checked<% end %>> 
+                  <strong><%= '我的询价单' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="e" name="block_up[]" id="block_e" <% if not current_user.block_e.blank? %>checked<% end %>> 
+                  <strong><%= '我的PI' %></strong>
+              </label>
+          </div>
+          <div class="col-md-4 ">
+              <label>
+                  <input type="checkbox" value="f" name="block_up[]" id="block_f" <% if not current_user.block_f.blank? %>checked<% end %>> 
+                  <strong><%= '我的变更' %></strong>
+              </label>
+          </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

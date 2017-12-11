@@ -35,38 +35,6 @@
                 <a href="/work_flow" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">Work Flow</a>
             </li>
         <% end %>
-        <% if selected == "pcb_draft_list" %>
-            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/pcb_order_list?bom_chk=true" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">询价管理</a>
-            </li>
-        <% else %>
-            <li role="presentation" style="margin-bottom: 0px;">
-                <a href="/pcb_order_list?bom_chk=true" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">询价管理</a>
-            </li>
-        <% end %>
-        <% if selected == "pi_list" %>
-            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/pi_list?bom_chk=true" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">PI管理</a>
-            </li>
-        <% else %>
-            <li role="presentation" style="margin-bottom: 0px;"><a href="/pi_list?bom_chk=true" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">PI管理</a></li>
-        <% end %>
-        <% if selected == "p_bomlist" %>
-            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/p_bomlist" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">BOM管理</a>
-            </li>
-        <% else %>
-            <li role="presentation" style="margin-bottom: 0px;"><a href="/p_bomlist" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">BOM管理</a></li>
-        <% end %>
-        <% if selected == "ecn" %>
-            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
-                <a href="/ecn_list" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">变更管理</a>
-            </li>
-        <% else %>
-            <li role="presentation" style="margin-bottom: 0px;">
-                <a href="/ecn_list" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">变更管理</a>
-            </li>
-        <% end %>
         <% if selected == "part_mag" %>
             <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
                 <a href="#" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">物料管理</a>
@@ -74,6 +42,29 @@
         <% else %>
             <li role="presentation" style="margin-bottom: 0px;">
                 <a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">物料管理</a>
+            </li>
+        <% end %>
+        <% if selected == "caigou_shenqing" %>
+            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
+                <a href="/pmc_new" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">采购申请</a>
+            </li>
+        <% else %>
+            <li role="presentation" style="margin-bottom: 0px;"><a href="/pmc_new" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">采购申请</a></li>
+        <% end %>
+        <% if selected == "pi_waitfor_buy" %>
+            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
+                <a href="/pi_waitfor_buy" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">采购订单</a>
+            </li>
+        <% else %>
+            <li role="presentation" style="margin-bottom: 0px;"><a href="/pi_waitfor_buy" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">采购订单</a></li>
+        <% end %>
+        <% if selected == "wh_query" %>
+            <li role="presentation" class="selectActive" style="margin-bottom: 0px;">
+                <a href="/wh_query" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">库存管理</a>
+            </li>
+        <% else %>
+            <li role="presentation" style="margin-bottom: 0px;">
+                <a href="/wh_query" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">库存管理</a>
             </li>
         <% end %>
         <li role="presentation" style="margin-bottom: 0px;"><a href="#" style="padding: 10px;margin-bottom: 0px;color: #FFFFFF;font-size: 16px;border: 0px;border-radius: 0px 0px 0 0;">消息池</a></li>

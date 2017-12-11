@@ -1,4 +1,8 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "work_flow"} %>
+<% end %>
 <small>
+<div class="container-fluid" >
 <div class="row" style="margin: 0px;padding: 0px;" >
 <br>
   <ul class="nav nav-tabs">
@@ -16,7 +20,7 @@
 
 
 
-<div class="row"style="padding: 5px;">
+<div class="row" style="padding: 5px;">
     <%= form_tag('/sell_baojia_erp', method:"get", class:"form-inline") do %>
        <div class="col-md-9 form-group  nav navbar-nav navbar-left">
           <lable for="order" , class="sr-only">Qrder : </lable>
@@ -212,7 +216,7 @@
 
 
 
-
+</div>
 </small>
 <script>
 $('#editOrder').on('show.bs.modal', function (event) {

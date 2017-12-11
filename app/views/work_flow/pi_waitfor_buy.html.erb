@@ -1,28 +1,95 @@
 <% content_for :erp_header do %>
-    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_waitfor_buy"} %>
+    <% if can? :work_g, :all %>
+        <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_waitfor_buy"} %>
+    <% elsif can? :work_a, :all %>
+        <%= render partial: "work_flow/erp_header_pmc", locals: {selected: "pi_waitfor_buy"} %>
+    <% end %>
 <% end %>
 <small><div class="container-fluid" >
     <div class="row" >
         <ol class="breadcrumb" style="padding: 8px 30px;">
             <li class="active">待采购物料</li>
+            <li><a href="/pi_buy_baojia_list">采购询价</a></li> 
             <li><a href="/pi_buy_list">采购订单</a></li>         
-            <li><a href="/pi_buy_list">付款申请</a></li>
+            <li><a href="/fu_kuan_shen_qing_list">付款申请</a></li>
             <li><a href="/pi_buy_list">付款水单</a></li>
-            <li><a href="/pi_buy_list">采购发票</a></li>
+            <li><a href="/cai_gou_fa_piao_list">采购发票</a></li>
         </ol>
     </div> 
-    <div class="row" style="padding: 0px;">
-        <div class="col-md-1 list-group" style="padding: 0px;">
-            <%= render partial: "work_flow/menu", locals: {selected: "waitfor_buy"} %>
-        </div>
-        <div class="col-md-11" style="padding-top: 10px;">
 
+
+
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-6" style="padding-top: 1px;"> 
+            <div class="form-inline">
+                <%= form_tag('/pi_waitfor_buy', method:"get", class:"form-inline") do %>
+                <div class="row">
+                  
+
+                 <div class="col-md-4 col-sm-4 " >
+                 <div class="input-group input-group-sm"> 
+                     <span class="input-group-addon " >开始 : </span>
+                       <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                     <span class="input-group-addon " >结束 : </span>
+                       <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                 </div>
+                 </div>
+
+                 <div class="col-md-5 col-sm-5 " >
+
+                 <div class="input-group input-group-sm">  
+                      <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"100", placeholder:"PI"%>
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm", onclick:"return postformchk()" %>
+                  </div>
+                </div>
+                </div>
+                </div>
+
+
+                <% end %>             
+            </div> 
+        </div>
+    </div>
+
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6 " style="padding-top: 10px;" >
+            <input style="margin-right: 5px;margin-top: 10px;" type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+            <input style="margin-right: 5px;margin-top: 10px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+            <input style="margin-top: 10px;"type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
+            <a id="tijiao" type="button" class="btn btn-info btn-sm pull-right" href="#">新建询价单</a>
+           </div>
+       </div>
+
+    <div class="row" style="padding: 0px;">
+
+        <div class="col-md-12" style="padding-top: 5px;">
+<%= form_tag('/add_pi_buy_baojia_item', method:"get") do %>
         <div class="row">
             <div class="col-md-12 col-sm-12 form-inline" >
         
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
+      <th width="20"></th>
+      <th width="60">状态</th>
       <th width="130">PI No.</th>
       <th width="130">Created Date</th>
       <th width="220">MPN</th>
@@ -41,6 +108,16 @@
   <%= will_paginate(@pi_buy) %> 
   <% @pi_buy.each do |buy| %>
   <tr>
+      <% if buy.baojia_state.blank? %>
+          <td><input class="chk_all" type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" ></td>
+          <td>未报价</td>
+      <% elsif buy.baojia_state == "done" %>
+          <td><input class="chk_all" type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" ></td>
+          <td>已报价</td>
+      <% else %>
+          <td></td>
+          <td>报价中</td>
+      <% end %>
       <td><%= buy.erp_no_son %></td>
       <td><%= buy.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td><%= buy.mpn %></td>
@@ -114,6 +191,9 @@
 </table>
 
         </div></div>
+                <%= submit_tag "tijiao", class:"btn btn-primary btn-sm sr-only",id:"tijiao_true" %>
+                <% end %>
+
         </div>
     </div>
 
@@ -122,10 +202,33 @@
 </div></small>
 
 
+<script>
+$(document).ready(function(){
+  $("#tijiao").click(function(){
+    $("#tijiao_true").click();
+  });
+
+});
+
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    });
 
 
-
-
+</script>
 <%
 meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
      description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",

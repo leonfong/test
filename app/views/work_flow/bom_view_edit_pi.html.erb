@@ -1,0 +1,297 @@
+<% content_for :erp_header do %>
+    <% if can? :work_g, :all %>
+        <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_list"} %>
+    <% elsif can? :work_d, :all %>
+        <%= render partial: "work_flow/erp_header_bom", locals: {selected: "pi_list"} %>
+    <% end %>
+<% end %>
+<small><div class="container-fluid" >
+    <div class="row" >
+        <ol class="breadcrumb" style="padding: 8px 30px;">
+        <li class="active">PI NO. :<%= params[:pi_no] %></li>        
+        
+        </ol>
+    </div>
+
+
+
+            <div class="row" style="padding-top: 10px;"><div class="col-md-12">   
+                
+                <% if @state == "checked" %>
+                <div class="pull-right">
+                    
+                    <%= form_tag('/pi_to_pmc', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
+                        <input type="text" class="form-control sr-only" id="p_pi_item_id" name="p_pi_item_id" value="<%= params[:pi_item_id] %>">
+                    <% if can? :work_e, :all %>
+                        <% if @to_pmc_state.blank? %>
+                            <%= submit_tag "提交采购下单", class:"btn btn-danger" ,data:{confirm: "确定要提交PI?"} %>
+                        <% end %>
+                    <% end %>
+
+                    <% end %>
+                </div>
+                <% end %>
+            </div></div>
+
+
+
+
+<div class="row "><div class="col-md-12">
+            <div class="panel panel-info">                
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th>询价单号</th>
+                            <th>Customer Part No.</th>
+                            <th>PCB Size(mm)</th>
+                            <th width="100">Quantity(PCS)</th>
+                            <th width="50">Layer</th>
+                            <th>Description</th>
+                            <th>PCB Price</th>
+                            <th>Components Cost</th>
+                            <th>PCBA</th>
+                            <th>Unit Price</th>
+                            <th>Total Price(USD)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <% if @pi_item %>
+                        <% @pi_item.each do |pi_item| %>
+                        <tr>
+                            <td>
+                                <% if pi_item.bom_id.blank? %>
+                                    <%= PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son %>
+                                <% else %>
+                                    <%= link_to PcbOrderItem.find_by_id(pi_item.order_item_id).pcb_order_no_son, p_viewbom_path(bak: "bak",bom_id: pi_item.bom_id,pi_item_id: pi_item.id) %>
+                                <% end %>
+                            </td>
+                            <td><%= pi_item.c_p_no %></td>
+                            <td><%= pi_item.pcb_size %></td>
+                            <td><%= pi_item.qty %></td>
+                            <td><%= pi_item.layer %></td>
+                            <td><%= pi_item.des %></td>
+                            <td><%= pi_item.pcb_price %></td>
+                            <td><%= pi_item.com_cost %></td>
+                            <td><%= pi_item.pcba %></td>
+                            <td><%= pi_item.unit_price %></td>
+                            <td><%= pi_item.t_p %></td>
+                        </tr>
+                        <% end %>
+                        <% end %> 
+
+
+
+
+
+
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th>费用种类</th>
+                            <th>金额（美金）</th>
+                            <th>金额（RMB）</th>
+                            <th>备注</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="biaoge">
+                        <tr>
+                            <td >Shipping Cost</td>
+                            <td ><%= @pi_info.pi_shipping_cost %></td>
+                            <td ><%= @pi_info.pi_shipping_cost %></td>
+                            <td ></td>
+                        </tr>
+                        <tr>
+                            <td >Bank Fee</td>
+                            <td ><%= @pi_info.pi_bank_fee %></td>
+                            <td ><%= @pi_info.pi_bank_fee %></td>
+                            <td ></td>
+                        </tr>
+                        <% if @pi_other_item %>
+                        <% @pi_other_item.each do |pi_item| %>
+                        <tr>
+
+                            <td > <%= pi_item.p_type %></td>
+
+                            <td><%= pi_item.t_p %></td>
+                            <td><%= pi_item.t_p %></td>
+                            <td>备注: <%= pi_item.remark %></td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+
+                        <tr>
+                            <td >
+                                <label for="t_p_edit" class=" control-label " id="t_p_label">Total(Total Price+Shipping Cost+Bank Fee+其他费用):</label>
+                            </td>
+                            <td >
+                                <%= @pi_info.t_p %>    
+                            </td>
+                            <td ><strong>Total RMB: <%= @pi_info.t_p_rmb %></strong></td>
+                            <td ></td>
+                        </tr>
+
+
+                    </tbody>
+                </table> 
+
+
+
+
+
+          
+                    </tbody>
+                </table>             
+            </div>
+            </div></div>
+
+
+            
+
+
+
+
+
+
+  
+<% if not @pi_item_bom.blank? %>
+    <% @pi_item_bom.each do |item_i| %>
+        <% @boms = ProcurementBom.find_by_id(item_i.bom_id) %>
+        <% @bom_item = PItem.find_by_sql("SELECT p_items.*, pi_bom_qty_info_items.id AS pi_item_qty, pi_bom_qty_info_items.bom_ctl_qty, pi_bom_qty_info_items.customer_qty, pi_bom_qty_info_items.lock_state FROM p_items INNER JOIN pi_bom_qty_info_items ON p_items.id = pi_bom_qty_info_items.p_item_id WHERE p_items.procurement_bom_id = '#{@boms.id}' AND pi_bom_qty_info_items.pi_item_id = '#{item_i.id}'") %>
+        <% @pi_bom_qty_info = PiBomQtyInfo.find_by_pi_item_id(item_i.id) %>
+        <% if not @bom_item.blank? %>
+            <% @bom_item = @bom_item.select {|item| item.quantity != 0 } %>
+        <% end %>
+
+
+
+    <div class="row" style="padding-top: 10px;">      
+
+
+        <div class="col-md-12">           
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr style="background-color: #eeeeee">
+                            <th width="150">BOM NO.</th>
+                            <th width="50">版本</th>
+                            <th width="150">QTY</th>
+                            <th width="250">状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <tr>
+                           <td>
+<!--
+                           <%= link_to @boms.no, p_viewbom_path(bak: "bak",bom_id: @boms.id) %>
+-->
+                               <%= link_to @boms.no, get_moko_bom_path(bom_id: @boms.id) %>
+                           </td>
+                           <td><strong>V<%= @boms.bom_version %></strong></td>
+                           <td><%= @boms.qty %></td>
+                           <td><%= @boms.bom_team_ck.blank?? "未文成检查" :"已完成检查"%></td>
+                           <td>
+                               <div class="row">
+                                   <div class="col-md-1">
+                                       
+                                   </div>
+                                   <div class="col-md-2">
+                                       <%= link_to "导出EXCEL", p_excel_path(:bom_id =>@boms.id) %>
+                                   </div>
+                                   <div class="col-md-2">
+                                       <%= link_to "导出(单独采购)", p_excel_m_path(:bom_id =>@boms.id) %>
+                                   </div>
+                                   <div class="col-md-2">
+                                       <%= link_to "导出源文件", @boms.excel_file_url %>
+                                   </div>
+                                   <div class="col-md-2">
+                                       <%= link_to "制作原始BOM", get_moko_bom_path(bom_id: @boms.id,pi_item_id: item_i.id) %>
+                                   </div>    
+                                   <div class="col-md-2">
+<% if not @boms.moko_bom_info_id.blank? %>
+                                       <%= link_to "生成匹配清单", get_moko_pipei_bom_path(bom_id: @boms.moko_bom_info_id,xunjia_bom_id: @boms.id,pi_item_id: item_i.id,pi_info_id: @pi_info.id) %>
+<% end %>
+                                   </div>
+                                   <div class="col-md-1">
+                                       
+                                   </div>
+                               </div>
+                           </td>  
+                       </tr>
+                      </tbody>
+                    </table>    
+                </div>
+            </div>
+            
+
+            <div class="row ">
+                <div class="col-md-6">
+<% if can? :work_e, :all or can? :work_d, :all %>            
+            <a type="button" class="btn btn-info btn-sm" target="_blank" href="/view_pi_fengmian?pi_id=<%=params[:pi_info_id]%>">修改华创封面</a>
+        <% end %>
+
+                </div>
+                <div class="col-md-6">   
+                <div class="modal-footer">
+
+
+                    <%= form_tag('/pi_draft', method:"post") do %>
+                        <input type="text" class="form-control sr-only" id="p_pi" name="p_pi" value="<%= @pi_info.id %>">
+                        
+                    <% if can? :work_e, :all and @pi_info.state == "new"%>
+                        <%= submit_tag "提交", class:"btn btn-success" ,data:{confirm: "确定要提交PI?"} %>
+                    <% elsif can? :work_e_admin, :all and @pi_info.state == "sell_admin_check" %>
+                        <%= submit_tag "业务主管审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% elsif can? :work_d, :all and @pi_info.bom_state == nil %>
+                        <%= submit_tag "BOM审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% elsif can? :work_finance, :all and @pi_info.finance_state == nil %>
+                        <%= submit_tag "财务审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% if can? :work_admin, :all %>
+                        <%= submit_tag "admin审核", class: "btn btn-success",data:{confirm: "确定审核通过?"} %>
+                    <% end %>
+                    <% end %>
+
+
+
+                    
+                </div>
+            </div></div>
+            
+
+        </div>
+    </div>
+
+
+    <% end %>
+<% end %>
+
+
+
+
+
+
+
+
+</div>
+</small>
+
+
+
+
+<script>
+
+</script>
+
+
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

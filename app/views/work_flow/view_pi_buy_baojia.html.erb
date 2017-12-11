@@ -1,0 +1,524 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header_caigou", locals: {selected: "pi_waitfor_buy"} %>
+<% end %>
+<small><div class="container-fluid" >
+    <div class="row" style="z-index:400;position: fixed;right: 0;left: 0;margin: 0px;background-color: #f5f5f5;border-radius: 4px;">
+        <div class="col-md-6">
+            <h4>采购询价<span class="glyphicon glyphicon-chevron-right"></span>采购询价单</h4>     
+         
+        </div>
+        <div class="col-md-6 ">
+<!--
+            <a type="button" class="btn btn-info pull-right" style="margin-left: 10px;margin-top: 5px;" href="#" >test</a>
+
+-->
+        <%= form_tag('/send_pi_buy_check_baojia', method:"post",id:"upatt") do %>
+            
+                    <input type="text" class="form-control sr-only" id="pi_buy_baojia_info_id_chk" name="pi_buy_baojia_info_id_chk" value="<%= @get_data.id %>">
+                    
+                    <% if can? :work_g, :all %>
+                        <%= submit_tag "提交", class: "btn btn-sm btn-primary pull-right",style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%>  
+                    <% end %>
+
+                    <% if can? :work_admin, :all %>
+                        <%= submit_tag "审批", class: "btn btn-sm btn-primary pull-right",style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%> 
+                    <% end %>    
+
+
+        <% end %>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 60px;">
+        <div class="col-md-12" style="padding-top: 10px;">
+            <div class="row ">
+                <div class="col-md-12">                
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><strong>基本信息:</strong></div>
+                        <div class="panel-body ">                     
+                            <div class="col-md-2"><p><strong>采购询价单号: </strong><ins id="p_pi_show" name="p_pi_show">CGXJ<%= @get_data.id.to_s %></ins></p>                                
+                            </div>
+                            <div class="col-md-2"><p><strong>制单人: </strong><ins><%= User.find_by_email(@get_data.zhi_dan_ren).full_name %></ins></p>
+                            </div> 
+                            <div class="col-md-2"><p><strong>审核人: </strong><ins><%= @get_data.shen_he_ren.blank?? "": User.find_by_email(@get_data.shen_he_ren).full_name %></ins></p>
+                            </div> 
+                            <div class="col-md-2"><p><strong>提交日期 : </strong><ins id="p_riqi_show" name="p_riqi_show"><%= @get_data.ti_jiao_at.blank?? "": @get_data.ti_jiao_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></ins></p>
+                            </div> 
+                            <div class="col-md-2"><p><strong>审核日期: </strong><ins><%= @get_data.shen_he_at.blank?? "": @get_data.shen_he_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></ins></p>
+                            </div> 
+                        </div>   
+                    </div>
+                </div>  
+            </div>
+
+
+            <div class="row "><div class="col-md-12">
+                <% #if not @pi_buy_info.dn.blank? %>
+                    <button  type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addbuy" >添加询价物料</button>
+                <% #end %>
+            </div></div>
+
+
+
+
+
+
+
+            <div class="row ">
+                <div class="col-md-7 col-sm-7" style="padding-right: 0px;">
+                    <table class="table table-hover" style="margin: 0px;">
+                        <thead>
+                            <tr style="background-color: #eeeeee">
+                                <th width="50">删除</th>
+                                <th width="130">PI No.</th>
+                                <th width="130">客户交期</th>
+                                <th width="150">MOKO编码</th>
+                                <th >MOKO描述</th>
+                                <th >中文描述</th>
+                                <th width="80">需求数量</th>
+                                <th width="80">单价￥</th>
+                                <th >备注</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="col-md-5 col-sm-5" style="padding-left: 0px;">
+                    <table class="table table-hover" style="margin: 0px;">
+                        <thead>
+                            <tr style="background-color: #eeeeee">
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+<% if not @get_data_item.blank? %>
+  <% @get_data_item.each do |buy| %>
+            <div class="row ">
+                <div class="col-md-7 col-sm-7" style="padding-right: 0px;">
+                    <table class="table table-hover" style="margin: 0px;">
+                        <tbody><small>
+                            <tr id="<%=buy.id%>_tr" <% if buy.color == "b" %>class="bg-info"<% elsif buy.color == "g" %>class="bg-success"<% else %>class="bg-danger"<% end %>>
+                                <td width="50"><a class="btn btn-danger btn-xs" data-method='get'  href="/del_pi_buy_item_baojia?id=<%= buy.id.to_s %>" data-confirm="确定要删除?">删除</a></td>
+                                <td width="130"><%= buy.erp_no_son %></td>
+                                <td width="130"><%= buy.erp_no_son %></td>
+                                <td>
+                                    <a class="text-info bg-warning" data-method='get' data-remote='true' href="/cost_history_buy?part_code=<%= buy.moko_part.to_s%>&item_id=<%= buy.id.to_s %>"><%= buy.moko_part %></a>
+                                </td>
+                                <td><%= buy.moko_des %></td>
+                                <td><%= buy.description %></td>
+                                <td width="80"><%= buy.pmc_qty %></td>
+                                <td width="80"><a class="text-muted" name="<%= buy.id.to_s + 'p' %>" id="<%= buy.id.to_s + 'p' %>"><%= "￥" + buy.cost.to_s %></a></td>
+                                <td> </td>
+                            </tr>
+                        </small></tbody>
+                    </table>
+                </div>
+
+
+                <div  class="col-md-5" style="padding-left: 0px;">
+                    <table style="margin: 0px;">
+                        <tr>
+                            <td style="padding: 0px;margin: 0px;">
+                                <table class="table table-hover table-bordered " style="padding: 0px;margin: 0px;">  
+                                    <tbody >             
+                                    <%= form_tag({action: :p_edit_baojia},method:"post",multipart:"ture",remote:"ture",class:"form-inline") do %>  
+                                        <tr style="padding: 0px;margin: 0px;" >
+                                            <td width="100" style="padding: 0px;margin: 0px;">
+                                                <label for="item_id" class="control-label sr-only">id:</label>
+                                                <input type="text" class="form-control sr-only" id="item_id" name="item_id" value="<%= buy.id.to_s %>">
+
+                                                <input type="text" class="form-control sr-only" id="pi_pmc_item_id_new" name="pi_pmc_item_id" value="<%= buy.pi_pmc_item_id.to_s %>">
+                                                <label for="cost" class="control-label sr-only">价格:</label>
+                                                <input type="text" class="form-control input-sm" id="cost" name="cost" placeholder="成本价" style="padding: 0px;margin: 0px;">
+                                            </td>
+                                            <td width="100" style="padding: 0px;margin: 0px;">
+                                                <label for="dn" class="control-label sr-only">供应商简称:</label>
+                                                <input id="dn" autocomplete="off" name="dn" type="text" class="form-control input-sm" data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>" placeholder="供应商简称" style="padding: 0px;margin: 0px;">
+                                            </td>
+                                            <td width="100" style="padding: 0px;margin: 0px;">
+                                                <label for="dn_long" class="control-label sr-only">供应商全称:</label>
+                                                <input type="text" class="form-control input-sm" id="dn_long" name="dn_long" placeholder="供应商全称" style="padding: 0px;margin: 0px;">
+                                            </td>
+                                            <td  style="padding: 0px;margin: 0px;">
+                                                <label for="remark" class="control-label sr-only">采购备注:</label>
+                                                <input class="form-control input-sm" autocomplete="off" id="remark"  name="remark" placeholder="采购备注" data-provide="typeahead" data-items="8" data-source="[&quot;原装订货 交期12-15天&quot;,&quot;定做 交期15-20天&quot;,&quot;0.01 样品价&quot;,&quot;0.02 样品价&quot;,&quot;0.1 样品价&quot;,&quot;0.15 样品价&quot;,&quot;确认是否可以&quot;,&quot;原装 国内现货&quot;,&quot;原装 国产现货&quot;,&quot;样品批量价格一样&quot;]" style="padding: 0px;margin: 0px;">
+                                            </td>
+<!--          
+                                            <td width="165" style="padding: 0px;margin: 0px;">
+                                                <label for="info" class="control-label sr-only">技术资料:</label>
+                                                <input class="form-control input-sm" name="info[info]" id="info" type="file" accept=".xls,.zip,.rar,.gz,.bz2,.7z,.pdf" >  
+                                            </td>
+-->
+                                            <td width="30" style="padding: 0px;margin: 0px;" id="<%= buy.id.to_s + 'up' %>"><button type="submit" class="btn btn-link btn-sm glyphicon glyphicon-ok " ></button></td>
+          
+                                        </tr>    
+                                    <% end %> 
+                                    </tbody>
+                                </table>
+                                <div class="col-md-12" style="padding: 0px;margin: 0px;" id="<%= buy.id.to_s + "_dns" %>">
+                                    <table class="table table-hover table-bordered" style="padding: 0px;margin: 0px;">
+                                        <tbody id="dn_<%= buy.id %>_dn">
+                                        <% PChkDn.where(p_item_id: buy.id,state: "").order('date DESC').each do |dn| %>
+                                            <tr id="<%= buy.id %>_<%= dn.id %>" <% if dn.color == "b" %>class="bg-info"<% elsif dn.color == "g" %>class="bg-success"<% elsif dn.color == "y" %>class="bg-warning"<% end %> >                       
+                                                <td style="padding: 0px;margin: 0px;" width="55" id="<%= buy.id.to_s + 'edit' %>"><small><a type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#editModal" data-whatever="<%= dn.id %>" data-dn="<%= dn.dn %>" data-dnlong="<%= dn.dn_long %>" data-qty="<%= dn.qty %>" data-cost="<%= dn.cost %>" data-remark="<%= dn.remark %>" data-itemid="<%= buy.id %>" > </a>
+                                                <% if not dn.info.blank? %>                 
+                                                    <a href="<%= dn.info %>">下载</a></small></td>
+                                                <% else %>
+                                                    </small></td>
+                                                <% end %>
+
+                                                <td style="padding: 0px;margin: 0px;" width="70"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii_baojia?id=<%= buy.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.date.localtime.strftime('%Y-%m-%d') %></div></a></small></td>
+                                                <td style="padding: 0px;margin: 0px;" width="15"><small><a id="<%= buy.id %>_<%= dn.id %>_star" class="glyphicon glyphicon-star-empty" data-method='get' data-remote='true' href="/up_all_dn?id=<%=dn.id.to_s%>&item_id=<%= buy.id %>" data-confirm="确定要上传价格?"></a></small></td>
+                                                <td style="padding: 0px;margin: 0px;" width="200" title="<%= dn.dn_long %>"><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii_baojia?id=<%= buy.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.dn %> 
+<% if dn.qty.blank?%>
+<%= buy.pmc_qty %>
+<% else %>
+<%= dn.qty %>
+<% end %>
+ ￥<%= dn.cost %></div></a></small></td> 
+                              
+                                
+                                                <td style="padding: 0px;margin: 0px;" ><small><a rel="nofollow" data-method="get" data-remote="true" href="/p_updateii_baojia?id=<%= buy.id %>&product_name=<%=dn.part_code%>&dn_id=<%=dn.id.to_s%>&bomsuse=bomsuse" ><div><%= dn.remark %></div></a></small></td>
+                                                <td style="padding: 0px;margin: 0px;" width="15"><small><a class="glyphicon glyphicon-trash" data-method='get' data-remote='true' href="/del_dn_baojia?id=<%=dn.id.to_s%>&item_id=<%= buy.id %>&pi_pmc_item_id=<%= buy.pi_pmc_item_id %>" data-confirm="确定要删除?"></a></small></td>
+                                            </tr>
+                                        <% end %>
+                                        </tbody>
+                                    </table> 
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+
+  <% end %>
+<% end %> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+</div></small>
+
+
+<div class="modal fade" id="cost_history_buy" tabindex="-1" role="dialog" aria-labelledby="cost_history_buyLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="cost_history_buyLabel">History Cost</h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-group" id="cost_history_buy_list">
+
+          </div>       
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">New message</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({action: :p_edit_dn_baojia},method:"post",remote: true,multipart:"ture") do %>
+          <div class="form-group sr-only">
+            <label for="dn_id" class="control-label">id:</label>
+            <input type="text" class="form-control" id="dn_id" name="dn_id">
+          </div>
+          <div class="form-group sr-only">
+            <label for="dn_item_id" class="control-label">itemid:</label>
+            <input type="text" class="form-control" id="dn_item_id" name="dn_item_id">
+          </div>
+          <div class="form-group">
+            <label for="dn" class="control-label">供应商简称:</label>
+            <input id="dn_dn" autocomplete="off" name="dn_dn" type="text" class="form-control " data-provide="typeahead" data-items="8" data-source="<%= raw @all_dn %>">
+          </div>
+          <div class="form-group">
+            <label for="dn_long" class="control-label">供应商全称:</label>
+            <input type="text" class="form-control" id="dnlong" name="dnlong">
+          </div>
+          <div class="form-group">
+            <label for="qty" class="control-label">数量:</label>
+            <input type="number" class="form-control" id="dn_qty" name="dn_qty">
+          </div>
+          <div class="form-group">
+            <label for="cost" class="control-label">价格:</label>
+            <input type="text" class="form-control" id="dn_cost" name="dn_cost">
+          </div> 
+     
+          <div class="form-group">
+            <label for="info" class="control-label">技术资料:</label>
+            <input class="form-control" name="dn_info[info]" id="dn_info" type="file" accept=".xls,.zip,.rar,.gz,.bz2,.7z,.pdf,.doc,.docx"  >
+          </div>
+
+          <div class="form-group">
+            <label for="remark" class="control-label">备注:</label>
+            <textarea class="form-control" id="dn_remark"  name="dn_remark"></textarea>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+      </div>
+     <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="addbuy" tabindex="-1" role="dialog" aria-labelledby="find_cLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width: 1200px"><small>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="find_cLabel"><strong>选择询价物料</strong></h4>
+            </div>
+      
+            <div class="modal-body">        
+                <div class="form-inline">
+                <%= form_tag('/find_pi_buy_baojia', method:"get", class:"form-inline",remote: true) do %>
+                    <div class="form-group sr-only">         
+                        <label for="c_order_no" class="control-label">单号:</label>
+                        <%= text_field_tag :pi_buy_no, params[:pi_buy_no], class:"sr-only", value:params[:pi_buy_no] %>
+                    </div>
+                    <div class="form-group ">
+                        <lable for="dn_code" , class="control-label"><strong></strong></lable>
+                        <div class="input-group input-group-sm">  
+                            <% if @key_order %>   
+                                <%= text_field_tag :key_order, @key_order, class:"form-control  input-lg", size:"30"%>     
+                            <% else %> 
+                                <%= text_field_tag :key_order, params[:key_order], class:"form-control input-lg", size:"100", placeholder:"MOKO描述/MOKO编号"%>
+                            <% end %>                     
+                                      
+                            <div class="input-group-btn">
+                                <%= submit_tag "搜索", class:"btn btn-primary btn-sm" %>                             
+                            </div>
+                        </div>
+                        
+                        <a id="tijiao" type="button" class="btn btn-info btn-sm" href="#">提交</a>
+
+                    </div>
+                    <div>
+                        <input style="margin-right: 5px;" type="button" value="全选" class="btn btn-xs btn-success pull-left" id="selectAll">     
+                        <input style="margin-right: 5px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
+                        <input type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
+                    </div>
+                <% end %>             
+                </div> 
+                <%= form_tag('/add_pi_buy_baojia_item', method:"get") do %>
+                <%= text_field_tag :pi_buy_baojia_info_id, params[:baojia_id], class:"sr-only", value:@get_data.id %>
+                <div class="form-group" id="table_buy">
+
+                    <table class="table table-hover">
+                    <thead>
+                    <tr style="background-color: #eeeeee">
+                    <th width="20"></th>
+                    <th >MOKO 描述</th>
+                    <th >客户描述</th>
+                    <th width="80">数量</th>
+                    <th width="80">单价￥</th>
+                    <th width="80">附件</th>
+                    <th >供应商</th>
+                    <th >备注</th>
+                    </tr>
+                    </thead>
+                    <tbody><small>
+                    <% if not @pi_buy_find.blank? %>
+                        <% @pi_buy_find.each do |buy| %>
+                                <tr>
+                                <td><input class="chk_all" type="checkbox" value="<%= buy.id.to_s %>" name="roles[]" id="roles_" checked></td>
+                                <td><%= buy.moko_des.to_s %></td>
+                                <td><%= buy.description.to_s %></td>
+                                <td><%= buy.quantity.to_s %></td>
+                                <td><%= buy.cost.to_s %></td>
+                                <% if not PChkDn.find_by_id(buy.dn_id).blank? %>  
+                                    <% if not PDn.find_by_id(buy.dn_id).info.blank? %>
+                                        <td><small><a href="<%= PChkDn.find_by_id(buy.dn_id).info %>">下载</a></small></td>
+                                    <% else %>
+                                        <td></td>
+                                    <% end %>
+                                <% else %>
+                                    <td></td>
+                                <% end %>
+                                <td><%= buy.dn_long.to_s %></td>
+                                <td>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;" >
+<% PItemRemark.where(p_item_id: buy.id).each do |remark_item| %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+
+<strong><%= remark_item.user_name %>: </strong>
+<%= remark_item.remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+</div>
+
+<% if not buy.dn_id.blank? %>
+<% if not PChkDn.find_by_id(buy.dn_id).blank? %>
+<% if not PChkDn.find(buy.dn_id).remark.blank? %>
+<div class="row" style="margin: 0px;" >
+<div class="col-md-12 " style="margin: 0px;padding: 0px;background-color: #fcf8e3;">
+<table style="margin: 0px;" >
+<tr>
+<td style="padding: 0px;margin: 0px;" >
+<p style="padding: 0px;margin: 0px;" >
+<small >
+<% if not PChkDn.find(buy.dn_id).info.blank? %>                 
+<a class="btn btn-info btn-xs" href="<%= PChkDn.find(buy.dn_id).info %>" target="_blank">下载</a>
+<% end %>
+<strong>采购工程师: </strong>
+<%= PChkDn.find(buy.dn_id).remark %>
+</small>
+</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<% end %>
+<% end %>
+<% end %>
+</div>
+                                </td>
+                                </tr>
+                        <% end %>
+                    <% end %>
+                    </small></tbody>
+                    </table>
+
+
+
+
+                </div>
+                <%= submit_tag "tijiao", class:"btn btn-primary btn-sm sr-only",id:"tijiao_true" %>
+                <% end %>
+            </div>
+        </div></small>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+ 
+$('#editModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal;
+  var recipient = button.data('whatever'); // Extract info from data-* attributes
+  var cost = button.data('cost'); 
+  var dn = button.data('dn');
+  var dnlong = button.data('dnlong');
+  var qty = button.data('qty');
+  var remark = button.data('remark');
+  var itemid = button.data('itemid');
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  modal.find('.modal-title').text('Edit ' + recipient);
+  modal.find($("#dn_id")).val(recipient);
+  modal.find($("#dn_cost")).val(cost);
+  modal.find($("#dn_dn")).val(dn);
+  modal.find($("#dnlong")).val(dnlong);
+  modal.find($("#dn_qty")).val(qty);
+  modal.find($("#dn_remark")).val(remark);
+  modal.find($("#dn_item_id")).val(itemid);
+})
+
+
+
+
+
+
+$(document).ready(function(){
+  $("#tijiao").click(function(){
+    $("#tijiao_true").click();
+  });
+  $("#j_h_r_q_label").dblclick(function(){
+    $("#j_h_r_q_show").hide();
+    $("#j_h_r_q_edit").show();
+  });
+});
+
+
+$("#selectAll").click(function () {   
+        $(".chk_all").each(function () {     
+            $(this).prop('checked', true);//  
+  
+        });   
+    });   
+      
+    $("#unSelect").click(function () {     
+           $(".chk_all").removeAttr("checked");    
+        });   
+      
+    $("#reverse").click(function () {    
+        $(".chk_all").each(function () {     
+            this.checked = !this.checked;    
+        });   
+    });
+
+</script>
+<%
+meta title: "Quick Turn PCB Prototype and Electronic PCB Assembly Service| Fastbom.com.",
+     description: "Fastbom offers Quick Turn PCB Prototype and Electronic PCB Assembly Service in low to mid volumes including PCB fabrication, parts procurement and final assembly. upload your Bill of Materials (BOM), Assembly Drawing, Fabrication Drawing (used to do incoming inspection of your PCB),  to get a fast quote.",
+     keywords: "pcb assembly service, pcb assembly services, pcb assemblies, electronic assemblies, electronic assembly services, pcb prototype services, pcb prototype  service"
+%>

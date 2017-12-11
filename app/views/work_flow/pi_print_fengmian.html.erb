@@ -1,0 +1,332 @@
+<div class="container-fluid form-inline" id="pp">
+    <div class="row form-group form-group-sm" >
+        <div class="col-md-12" style="padding-top: 0px;">
+<table class="table table-bordered table-condensed">
+  <tr>
+    <th><%= image_tag "logo.bmp",size: "35x35", class: " img-rounded" %></th>
+    <th colspan="2"><h5>华创封面V1.0版本</h5></th>
+    <th colspan="2">
+    <% @get_pi_item.each do |item_bom| %>
+        <%= ProcurementBom.find_by_id(item_bom.bom_id).p_name.to_s %></br>
+    <% end %>
+    </th>
+  </tr>
+  <tr>
+      <td colspan="5">客户分类: 
+          <label class="radio-inline">
+              <input type="radio" name="kehufenlei" id="kehufenlei" value="non" <% if @get_data.kehufenlei == "non" %>checked<% end %> > 普通客户
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="kehufenlei" id="kehufenlei" value="vip" <% if @get_data.kehufenlei == "vip" %>checked<% end %> > 重点客户
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="5">客户类型:
+          <label class="radio-inline">
+              <input type="radio" name="kehuleixing" id="kehuleixing" value="n" <% if @get_data.kehuleixing == "n" %>checked<% end %> > 新客户
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="kehuleixing" id="kehuleixing" value="o" <% if @get_data.kehuleixing == "o" %>checked<% end %> > 老客户
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="2">订单号:<%= @get_pi_info.pi_no.to_s %></td>
+    <td>数量:<%= @get_data.qty.to_s %>PCS</td>
+    <td colspan="2">日期:<%= Time.new.localtime.strftime('%Y-%m-%d').to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="3">订单类型:
+          <label class="radio-inline">
+              <input type="radio" name="pi_type" id="pi_type" value="a" <% if @get_data.pi_type == "a" %>checked<% end %> > 新单
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="pi_type" id="pi_type" value="b" <% if @get_data.pi_type == "b" %>checked<% end %> > MOKO设计单
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="pi_type" id="pi_type" value="c" <% if @get_data.pi_type == "c" %>checked<% end %> > 抄板单
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="pi_type" id="pi_type" value="d" <% if @get_data.pi_type == "d" %>checked<% end %> > 返单
+          </label>
+      </td>
+    <td colspan="2">返单号:<%= @get_data.pi_back_no.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="3">产品名称:<%= @get_data.moko_des.to_s %></td>
+    <td colspan="2">产品代码:<%= @get_data.moko_part.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="5">pcb工艺:<%= @get_data.pcb_gongyi.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="3">是否有客供物料:
+          <label class="radio-inline">
+              <input type="radio" name="kegongwuliao" id="kegongwuliao" value="y" <% if @get_data.kegongwuliao == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="kegongwuliao" id="kegongwuliao" value="n" <% if @get_data.kegongwuliao == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">预计收到时间:
+          <%= @get_data.get_date.blank? ? "": @get_data.get_date.localtime.strftime('%Y-%m-%d').to_s %>
+                       
+      </td>
+  </tr>
+  <tr>
+    <td colspan="3">是否需要先安排样品:
+          <label class="radio-inline">
+              <input type="radio" name="yangpin" id="yangpin" value="y" <% if @get_data.yangpin == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="yangpin" id="yangpin" value="n" <% if @get_data.yangpin == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">所需样品数量:<%= @get_data.yangpin_qty.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="5">组装方式:
+          <label class="radio-inline">
+              <input type="radio" name="zuzhuangfangshi" id="zuzhuangfangshi" value="a" <% if @get_data.zuzhuangfangshi == "y" %>checked<% end %> > PCBA
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="zuzhuangfangshi" id="zuzhuangfangshi" value="b" <% if @get_data.zuzhuangfangshi == "n" %>checked<% end %> > PCBA+外壳
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td>最长交期的物料:<%=  @get_data.zuichang_weihao.to_s %></td>
+    <td>位号:<%=  @get_data.zuichang_weihao.to_s %></td>
+    <td>型号:<%=  @get_data.zuichang_xinghao.to_s %></td>
+    <td colspan="2">交期:
+          <%= @get_data.zuichang_date.blank? ? "": @get_data.zuichang_date.localtime.strftime('%Y-%m-%d').to_s %>
+                       
+      </td>
+  </tr>
+  <tr>
+    <td rowspan="2">订单状态</td>
+    <td colspan="2">1.是否有成熟项目:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_a" id="shifou_a" value="y" <% if @get_data.shifou_a == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_a" id="shifou_a" value="n" <% if @get_data.shifou_a == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">2.是否有样板:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_b" id="shifou_b" value="y" <% if @get_data.shifou_b == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_b" id="shifou_b" value="n" <% if @get_data.shifou_b == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="2">3.PCB文件是否有更新:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_c" id="shifou_c" value="y" <% if @get_data.shifou_c == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_c" id="shifou_c" value="n" <% if @get_data.shifou_c == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">4.BOM文件是否有更新:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_d" id="shifou_d" value="y" <% if @get_data.shifou_d == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_d" id="shifou_d" value="n" <% if @get_data.shifou_d == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td rowspan="2">生产文件</td>
+    <td colspan="2">5.客户等否提供PNP文件:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_e" id="shifou_e" value="y" <% if @get_data.shifou_e == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_e" id="shifou_e" value="n" <% if @get_data.shifou_e == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">6.客户能否提供摆位图:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_f" id="shifou_f" value="y" <% if @get_data.shifou_f == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_f" id="shifou_f" value="n" <% if @get_data.shifou_f == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="2">7.客户能否提供PCB文件:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_g" id="shifou_g" value="y" <% if @get_data.shifou_g == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_g" id="shifou_g" value="n" <% if @get_data.shifou_g == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">8.客户能否提供原理图:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_h" id="shifou_h" value="y" <% if @get_data.shifou_h == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_h" id="shifou_h" value="n" <% if @get_data.shifou_h == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td rowspan="2">烧录</td>
+    <td colspan="2">9.IC是否需要提前烧录:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_i" id="shifou_i" value="y" <% if @get_data.shifou_i == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_i" id="shifou_i" value="n" <% if @get_data.shifou_i == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">10.IC是否需要在办烧录:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_j" id="shifou_j" value="y" <% if @get_data.shifou_j == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_j" id="shifou_j" value="n" <% if @get_data.shifou_j == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="4">11.所需烧录IC的位号和型号:<%= @get_data.ic_weihao_xinghao.to_s %></td>
+  </tr>
+  <tr>
+    <td rowspan="2">测试</td>
+    <td colspan="2">12.是否要求功能测试:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_l" id="shifou_l" value="y" <% if @get_data.shifou_l == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_l" id="shifou_l" value="n" <% if @get_data.shifou_l == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">13.客户能否提供测试程序:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_m" id="shifou_m" value="y" <% if @get_data.shifou_m == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_m" id="shifou_m" value="n" <% if @get_data.shifou_m == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="2">14.客户能够提供测试方法:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_n" id="shifou_n" value="y" <% if @get_data.shifou_n == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_n" id="shifou_n" value="n" <% if @get_data.shifou_n == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">15.是否需求加强目测:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_o" id="shifou_o" value="y" <% if @get_data.shifou_o == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_o" id="shifou_o" value="n" <% if @get_data.shifou_o == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td rowspan="2">包装</td>
+    <td colspan="2">16.是否需要刷三防漆:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_p" id="shifou_p" value="y" <% if @get_data.shifou_p == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_p" id="shifou_p" value="n" <% if @get_data.shifou_p == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">17.是否需要贴标签:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_q" id="shifou_q" value="y" <% if @get_data.shifou_q == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_q" id="shifou_q" value="n" <% if @get_data.shifou_q == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="2">18.是否需要气泡袋包装:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_r" id="shifou_r" value="y" <% if @get_data.shifou_r == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_r" id="shifou_r" value="n" <% if @get_data.shifou_r == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+    <td colspan="2">19.是否需要防静电袋包装:
+          <label class="radio-inline">
+              <input type="radio" name="shifou_s" id="shifou_s" value="y" <% if @get_data.shifou_s == "y" %>checked<% end %> > 是
+          </label>
+          <label class="radio-inline">
+              <input type="radio" name="shifou_s" id="shifou_s" value="n" <% if @get_data.shifou_s == "n" %>checked<% end %> > 否
+          </label>
+      </td>
+  </tr>
+  <tr>
+    <td colspan="5">订单特殊需求:<%= @get_data.pi_teshuxuqiu.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="5">客诉问题:<%= @get_data.kesu_issue.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2">订单项目</td>
+    <td colspan="3">责任工程师</td>
+  </tr>
+  <tr>
+    <td colspan="2">BOM审核</td>
+    <td colspan="3"><%= @get_data.eng_bom_baojia.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2">生产订单BOM/单独采购BOM优化</td>
+    <td colspan="3"><%= @get_data.eng_bom_youhua.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2">PNP/摆位图优化</td>
+    <td colspan="3"><%= @get_data.eng_pnp_youhua.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2">PCB来料检验/PCB/PCBA生产工艺改善</td>
+    <td colspan="3"><%= @get_data.eng_pcb_jianyan.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2">首件核对</td>
+    <td colspan="3"><%= @get_data.eng_shoujianhedui.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2">测试指导</td>
+    <td colspan="3"><%= @get_data.eng_test_zhidao.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2">OQC出货检验</td>
+    <td colspan="3"><%= @get_data.eng_qc.to_s %></td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>测试员</strong></td>
+    <td colspan="3"><strong>日期</strong></td>
+  </tr>
+</table>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+
+ //document.body.innerHTML=document.getElementById('pp').innerHTML
+ window.print();
+
+});
+</script>
+
+

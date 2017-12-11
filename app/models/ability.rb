@@ -10,7 +10,7 @@ class Ability
     alias_action :update, :to => :work_a          #吴莎4
     alias_action :update, :to => :work_b          #交期5
     alias_action :update, :to => :work_c          #生产6
-    alias_action :update, :to => :work_f_m          #厂长41
+    alias_action :update, :to => :work_f_m        #厂长41
 
     alias_action :update, :to => :work_d          #工程7
     alias_action :update, :to => :work_d_all      #工程all
@@ -20,6 +20,7 @@ class Ability
     alias_action :update, :to => :work_d_test     #工程39
     
     alias_action :update, :to => :work_e          #业务8  
+    alias_action :update, :to => :work_e_admin    #业务8主管
     alias_action :update, :to => :work_f          #跟单9
     alias_action :update, :to => :work_g          #采购10
     alias_action :update, :to => :work_baojia     #报价
@@ -70,6 +71,7 @@ class Ability
       can :work_g_all, :all
       can :work_g, :all
       can :work_e, :all
+      can :work_e_admin, :all
       #can :work_d, :all
       can :external_access, :all
       can :work_pcb_business, :all
@@ -152,6 +154,11 @@ class Ability
       #can :manage, :all
       can :work_up, :all
       can :work_e, :all
+    elsif user.has_role?(:work_five_admin)
+      #can :manage, :all
+      can :work_up, :all
+      can :work_e, :all
+      can :work_e_admin, :all
     elsif user.has_role?(:work_six)
       #can :manage, :all
       can :work_up, :all

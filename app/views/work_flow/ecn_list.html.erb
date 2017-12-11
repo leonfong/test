@@ -15,6 +15,75 @@
         
         </ol>
     </div>
+
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-6" style="padding-top: 10px;"> 
+            <div class="form-inline">
+                <%= form_tag('/ecn_list', method:"get", class:"form-inline") do %>
+                <div class="row">
+                  <div class="col-md-2 col-sm-2 " >
+                  <div class="input-group input-group-sm">    
+                      
+
+
+                  <div class="input-group-btn">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        状态：<% if params[:ecn_checking]%>未提交<% elsif params[:ecn_checked]%>已提交<% else %>全部<% end %>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="/ecn_list?ecn_checking=true">未提交</a></li>
+                        <li><a href="/ecn_list?ecn_checked=true">已提交</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/ecn_list">全部</a></li>
+                    </ul>
+                 </div>
+                 </div>
+                 </div>
+
+                 <div class="col-md-4 col-sm-4 " >
+                 <div class="input-group input-group-sm"> 
+                     <span class="input-group-addon " >开始 : </span>
+                       <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                     <span class="input-group-addon " >结束 : </span>
+                       <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                       </script>
+                 </div>
+                 </div>
+
+                 <div class="col-md-5 col-sm-5 " >
+
+                 <div class="input-group input-group-sm">  
+                      <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"100", placeholder:"PI"%>
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm", onclick:"return postformchk()" %>
+                  </div>
+                </div>
+                </div>
+                </div>
+
+
+                <% end %>             
+            </div> 
+        </div>
+    </div>
+
+
     <div class="row" style="padding: 0px;">
         
         <div class="col-md-12" style="padding-top: 10px;">
@@ -28,30 +97,32 @@
 
   <thead >
     <tr style="background-color: #eeeeee;">
-      <th width="200">提交时间</th>
       <th width="200">BOM编号</th>
-      <th width="200">PI编号</th>
       <th >状态</th>
-      <th >d</th>
-      <th >e</th>
-      <th >f</th>
-      <th >g</th>
-      <th >h</th>
+      <th width="200">PI编号</th>
+      <th width="200">创建时间</th>
+      <th width="200">提交时间</th>
+      <th width="200">提交人</th>
+      <th width="200">操作</th>
     </tr>
   </thead>
 
   <tbody ><small>
     <% @ecn_draft_list.each do |ecn| %>   
       <tr>
-        <td><%= ecn.send_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= link_to ecn.bom_no, edit_ecn_path(bom_ecn_info_id: ecn.id) %></td>
-        <td><%= ecn.pi_no %></td>
         <td><%= ecn.state %></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><%= ecn.pi_no %></td>
+        <td><%= ecn.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+        <td><%= ecn.send_at.blank?? "": ecn.send_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+        <td><%= ecn.fa_qi_ren_name %></td>
+        <td>
+            <% if ecn.state == "checking" %>
+                <%= link_to '提交', edit_ecn_up_path(bom_ecn_info_id: ecn.id,commit: "提交") %>
+            <% elsif ecn.state == "checked" %>
+                <a type="button" class="" target="_blank" href="/view_ecn_message?id=<%= ecn.id %>&print=print">打印通知单</a>
+            <% end %>
+        </td>
       </tr>
     <% end %>
   </small>

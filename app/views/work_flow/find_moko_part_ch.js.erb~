@@ -1,2 +1,0 @@
-$("#moko_code").val('<%= @moko_part.part_code %>');
-$("#moko_des").val('<%= @moko_part.des %>');

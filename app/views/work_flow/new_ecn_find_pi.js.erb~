@@ -1,1 +1,0 @@
-document.getElementById('buy_item').innerHTML='<%= raw @all_item %>';

@@ -1,5 +1,19 @@
+<% content_for :erp_header do %>
+    <%= render partial: "work_flow/erp_header", locals: {selected: "pi_draft_list"} %>
+<% end %>
 <small><div class="container-fluid" >
- 
+    <div class="row" >
+
+            <ol class="breadcrumb" style="padding: 8px 30px;">
+                <li><a href="/pi_draft_list">PI订单</a></li>
+                <li class="active">收款通知单</li>      
+                <li><a href="/pi_fahuotongzhi_list?caogao=true">发货通知单</a></li>         
+                <% if can? :work_e, :all %>            
+                <b style="margin-left: 30%;margin-right: 40%;"><a type="button" class="btn btn-info btn-sm"   href="/new_pcb_pi">新建PI</a></b>
+                <% end %>
+            </ol>
+
+    </div>
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "paymanet_notice_finance"} %>

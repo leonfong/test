@@ -1,3 +1,0 @@
-
-document.getElementById('pcb_item_infos_id_<%= @pcb_info.pcb_order_item_id.to_s %>').value="<%= @pcb_info_id.to_s %>";
-

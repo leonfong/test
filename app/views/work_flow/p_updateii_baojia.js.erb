@@ -1,0 +1,33 @@
+<% if @bom_item.cost.blank? %>
+    document.getElementById('<%= params[:id].to_s + "p" %>').innerHTML='';
+    document.getElementById('<%= params[:id].to_s + "_tr" %>').className="bg-danger";
+
+<% else %>
+    document.getElementById('<%= params[:id].to_s + "p" %>').innerHTML='￥<%= @bom_item.cost.to_s %>';
+    document.getElementById('<%= params[:id].to_s + "_tr" %>').className="bg-info";   
+<% end %>
+
+
+
+
+
+<% PChkDn.where(p_item_id: params[:id]).each do |ppp| %>
+    <% if ppp.color == "g" %>
+        document.getElementById('<%= params[:id].to_s + "_" + ppp.id.to_s %>').className="bg-success";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","bg-success");
+    <% elsif ppp.color == "b"  %>
+        document.getElementById('<%= params[:id].to_s + "_" + ppp.id.to_s %>').className="bg-info";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","bg-info");
+    <% elsif ppp.color == "y"  %>
+        document.getElementById('<%= params[:id].to_s + "_" + ppp.id.to_s %>').className="bg-warning";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","bg-warning");
+    <% else %>
+        document.getElementById('<%= params[:id].to_s + "_" + ppp.id.to_s %>').className="";
+        //$("#<%= @bom_item.id.to_s + "_" + ppp.id.to_s %>").attr("class","");
+    <% end %> 
+<% end %>
+
+
+
+
+

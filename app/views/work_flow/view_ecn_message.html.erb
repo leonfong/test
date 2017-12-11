@@ -1,0 +1,111 @@
+<div class="container-fluid" id="pp">
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-12" style="padding-top: 0px;">
+<small>          
+<table class="table table-bordered table-condensed">
+  <tr>
+    <td colspan="3" rowspan="2">BOM编号:<%= @get_ecn_info.bom_no %></td>
+    <td colspan="3">签署:<%= current_user.full_name %></td>
+    <td colspan="4">日期</td>
+  </tr>
+  <tr>
+    <td colspan="3">发起人</td>
+    <td colspan="4">变更性质</td>
+  </tr>
+  <tr>
+    <td colspan="3" rowspan="2">产品型号</td>
+    <td colspan="3">审核</td>
+    <td colspan="4">执行时间</td>
+  </tr>
+  <tr>
+    <td colspan="3">批准</td>
+    <td colspan="4">BOM修改时间</td>
+  </tr>
+  <tr>
+    <td colspan="10">生效:
+        <input type="checkbox">立即
+        <input type="checkbox">批量
+        <input type="checkbox">自然淘汰
+        <input type="checkbox">消耗库存
+        <input type="checkbox">其他
+    </td>
+  </tr>
+  <tr>
+    <td colspan="10">变更原因:<%= @get_ecn_info.remark %></td>
+  </tr>
+  <tr>
+    <td colspan="10">变更内容</td>
+  </tr>
+  <tr>
+    <td rowspan="2" width="30">序号</td>
+    <td colspan="4">变更前</td>
+    <td colspan="4">变更后</td>
+    <td rowspan="2">备注</td>
+  </tr>
+  <tr>
+    <td>位号</td>
+    <td>华创编码</td>
+    <td>华创描述</td>
+    <td>用量</td>
+    <td>位号</td>
+    <td>华创编码</td>
+    <td>华创描述</td>
+    <td>用量</td>
+  </tr>
+<% if not@get_ecn_item.blank?%>
+<% @get_ecn_item.each_with_index do |item,index| %>
+  <tr>
+                                        <td><%= index+1 %></td>
+                                        <td style="word-break : break-all; "><%= item.old_part_code %></td>
+                                        <td style="word-break : break-all; "><%= item.old_moko_part %></td>
+                                        <td style="word-break : break-all; "><%= item.old_moko_des %></td>
+                                        <td><%= item.old_quantity %></td>
+                                        <td style="word-break : break-all; "><%= item.new_part_code %></td>
+                                        <td style="word-break : break-all; "><%= item.new_moko_part %></td>
+                                        <td style="word-break : break-all; "><%= item.new_sell_des %></td>
+                                        <td><%= item.new_quantity %></td>
+                                        <td style="word-break : break-all; "><%= item.remark %></td>
+  </tr>
+<% end %>
+<% end %>
+  <tr>
+    <td colspan="10" >备注</td>
+  </tr>
+  <tr>
+    <td colspan="10">收发单位：        
+        <input type="checkbox">生产
+        <input type="checkbox">订单部
+        <input type="checkbox">采购部
+        <input type="checkbox">仓库
+    </td>
+  </tr>
+</table>
+</small> 
+
+
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+
+ //document.body.innerHTML=document.getElementById('pp').innerHTML
+ window.print();
+
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,2 +1,0 @@
-alert('<%= raw @c_table %>');
-$("#table_code").html('<%= raw @c_table %>');

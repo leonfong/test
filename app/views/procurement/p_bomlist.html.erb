@@ -11,6 +11,8 @@
 
             <ol class="breadcrumb" style="padding: 8px 30px;">
                 <li class="active">询价BOM列表</li>
+                <li><a href="/moko_bom_list">原始BOM列表</a></li>
+                <li><a href="/pipei_bom_list">BOM匹配列表</a></li>
                 <li><a href="/part_list">PCBA报价列表</a></li>         
                 <li><a href="/pcb_list">PCB报价列表</a></li> 
                 <li><a href="/moko_part_data">MOKO物料价格维护</a></li>
@@ -106,8 +108,10 @@
 
       <% if can? :work_d, :all %>
       <th width="170">BOM上传日期</th>
+      <th width="170">采购标记日期</th>
       <% else %>
       <th width="170">BOM审核日期</th>
+      <th width="170">采购标记日期</th>
       <% end %>
       <th width="200">文件名</th>
       <th width="70">数量</th>
@@ -144,6 +148,9 @@
     <% else %>
         <td>
     <% end %>
+        <% if bom.jia_ji == "do" %>
+            <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+        <% end %>
             <%= link_to bom.no,  p_viewbom_path(bom_id: bom.id,bak: "bak") %>
         </td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.p_name.to_s %></td>
@@ -151,9 +158,12 @@
         <% if can? :work_d, :all %>
 
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark_to_sell_at.blank?? "":bom.remark_to_sell_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% else %>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.bom_team_ck_at.blank?? "":bom.bom_team_ck_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark_to_sell_at.blank?? "":bom.remark_to_sell_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
         <% end %>
+
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>" style="word-break : break-all; "><%= bom.excel_file_identifier %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.qty %></td>
         <td data-toggle="collapse" href="#bom_version_<%= bom.id.to_s %>" aria-expanded="false" aria-controls="bom_version_<%= bom.id.to_s %>"><%= bom.remark %></td>

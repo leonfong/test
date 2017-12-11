@@ -185,6 +185,7 @@
                     <thead>
                         <tr style="background-color: #eeeeee">
                             <th width="60">操作</th>
+                            <th width="60">状态</th>
                             <th width="130">单号</th>
                             <th width="150">物料编码</th>
                             <th >物料名称</th>
@@ -215,6 +216,7 @@
                             <td><%= q_item.moko_code %></td>
                             <td><%= q_item.moko_des %></td>
 -->
+                            <td><%= q_item.bom_team_ck %></td>
                             <td><%= q_item.pcb_order_no_son %></td>
                         <%= form_tag({action: :bom_edit_order_item},method:"post",multipart:"ture") do %>  
                             <td><input class="sr-only" id="bom_edit_id" name="bom_edit_id" value="<%= q_item.id %>"><input id="bom_edit_moko_code" name="bom_edit_moko_code" value="<%= q_item.moko_code %>"></td>
@@ -312,10 +314,10 @@
 
                     <% if can? :work_e, :all and @q_order.state == "new"%>
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到BOM工程师?"} %>
-                    <% elsif can? :work_d, :all %>
-<!--
-                        <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定要提交到采购工程师?"} %>
--->
+                    <% elsif can? :work_d, :all and @q_order.state == "bom_chk" %>
+
+                        <%= submit_tag "完成检查", class: "btn btn-info",data:{confirm: "确定完成检查?"} %>
+
                     <% elsif can? :work_g, :all %>
 
                         <%= submit_tag "提交", class: "btn btn-info",data:{confirm: "确定已经完成报价?"} %>
@@ -618,7 +620,7 @@
               <input type="text" class="form-control" id="des_cn_sell" name="des_cn_sell">
             </div> 
             <div class="form-group">
-              <label for="qty" class="control-label">数量:</label>
+              <label for="qty" class="control-label">数量:<code>必填</code></label>
               <input autocomplete="off" type="number" class="form-control" id="qty_sell" name="qty_sell">
             </div> 
             <div class="form-group">
@@ -895,15 +897,15 @@
             <input type="text" class="form-control" id="c_order_no" name="c_order_no" value="<%= @q_order.order_no %>">
           </div> 
           <div class="form-group">
-            <label for="customer" class="control-label">客户名:</label>
+            <label for="customer" class="control-label">客户名:<code>必填</code></label>
             <input type="text" class="form-control" id="customer" name="customer">
           </div>   
           <div class="form-group">
-            <label for="customer_com" class="control-label">客户公司名:</label>
+            <label for="customer_com" class="control-label">客户公司名:<code>必填</code></label>
             <input type="text" class="form-control" id="customer_com" name="customer_com">
           </div>       
           <div class="form-group">
-            <label for="customer_country" class="control-label">国家:</label>
+            <label for="customer_country" class="control-label">国家:<code>必填</code></label>
             <input type="text" class="form-control" id="customer_country" name="customer_country">
           </div> 
 <!--      
@@ -939,7 +941,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <input type="submit" class="btn btn-primary" value="Submit" onclick="return postform_new()">
       </div>
      <% end %>
     </div>
@@ -1046,6 +1048,24 @@ function postform_edit() {
 　　    return false;                
 　     }  
 }  
+
+function postform_new() {  	         
+      if ($("#customer").val() == "")
+      {                    
+　　    alert("请填写客户名称！");                    
+　　    return false;                
+　     }
+      if ($("#customer_com").val() == "")
+      {                    
+　　    alert("请填写客户公司名！");                    
+　　    return false;
+      }     
+      if ($("#customer_country").val() == "")
+      {                    
+　　    alert("请填写客户国家！");                    
+　　    return false;           
+　     }  
+} 
 
 function postform_edit_sell() {  	         
       if ($("#edit_qty_sell").val() == "")

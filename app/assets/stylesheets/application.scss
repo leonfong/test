@@ -13,7 +13,17 @@
  
 
  *= require bootstrap-table
- *= require_tree .
+ *= require boms
+ *= require bom_item
+ *= require bootstrap-editable
+ *= require custom
+ *= require introjs
+ *= require jquery.raty
+ *= require spinner
+ *= require static_pages
+ *= require steps
  *= require_self
  */
+
+@import 'page/**/*';
 

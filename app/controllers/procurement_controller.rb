@@ -4317,7 +4317,7 @@ before_filter :authenticate_user!
                         @type_b += "&quot;,&quot;" + type_b.part_name_type_b_name.to_s
                     end
         @type_b += "&quot;]"
-                    @pi_info = PiInfo.find_by_id(params[:pi_info_id])
+                    @pi_infos = PiInfo.find_by_id(params[:pi_info_id])
                     render "bom_viewbom_order_center.html.erb" and return
                 else
                     render "bom_viewbom.html.erb" and return

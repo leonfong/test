@@ -1,4 +1,5 @@
 module ApplicationHelper
+	include ApplicationHelpers::Url
 
 	def full_title(page_title)
 		base_title = 'www.fastbom.com'

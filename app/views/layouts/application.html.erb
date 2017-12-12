@@ -1,372 +1,394 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <%= metamagic %>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <meta name="author" content="">
-    
-    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-    <%= stylesheet_link_tag "application", media: "all","data-turbolinks-track" => true %>
-    
-    
-    <%= csrf_meta_tags %>
+<head>
+  <%= metamagic %>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="author" content="">
+
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
+
+
+  <%= csrf_meta_tags %>
 
 
 
-    <%= render 'layouts/shim' %>
+  <%= render 'layouts/shim' %>
 
-   <style type="text/css">
-body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei, Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
-div.upul ul  
-{  
-    list-style:none; /* 去掉ul前面的符号 */  
-    margin: 0px; /* 与外界元素的距离为0 */  
-    padding: 0px; /* 与内部元素的距离为0 */  
-    width: auto; /* 宽度根据元素内容调整 */  
-}  
-/* 所有class为menu的div中的ul中的li样式 */  
-div.upul ul li  
-{  
-    float:left; /* 向左漂移，将竖排变为横排 */
-     
-    
-    width: 50%; /* 宽度根据元素内容调整 */    
-}  
-/* 所有class为menu的div中的ul中的a样式(包括尚未点击的和点击过的样式) */  
-div.upul ul li a, div.upul ul li a:visited  
-{  
-    
-   
-    display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */  
-    line-height: 1.35em; /* 行高 */  
-    padding: 4px 20px; /* 内部填充的距离 */  
-    text-decoration: none; /* 不显示超链接下划线 */  
-    white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */  
-}  
-/* 所有class为menu的div中的ul中的a样式(鼠标移动到元素中的样式) */  
-div.upul ul li a:hover  
-{  
-    background-color: #bfcbd6; /* 背景色 */  
-    color: #465c71; /* 文字颜色 */  
-    text-decoration: none; /* 不显示超链接下划线 */  
-}  
-/* 所有class为menu的div中的ul中的a样式(鼠标点击元素时的样式) */  
-div.upul ul li a:active  
-{  
-    background-color: #465c71; /* 背景色 */  
-    color: #cfdbe6; /* 文字颜色 */  
-    text-decoration: none; /* 不显示超链接下划线 */  
-}  
+  <style type="text/css">
+    body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
+      font-family: Microsoft YaHei, Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    }
 
+    div.upul ul {
+      list-style: none; /* 去掉ul前面的符号 */
+      margin: 0px; /* 与外界元素的距离为0 */
+      padding: 0px; /* 与内部元素的距离为0 */
+      width: auto; /* 宽度根据元素内容调整 */
+    }
 
-div.mpnul ul  
-{  
-    list-style:none; /* 去掉ul前面的符号 */  
-    margin: 0px; /* 与外界元素的距离为0 */  
-    padding: 0px; /* 与内部元素的距离为0 */  
-    width: auto; /* 宽度根据元素内容调整 */  
-}  
-/* 所有class为menu的div中的ul中的li样式 */  
-div.mpnul ul li  
-{  
-    float:left; /* 向左漂移，将竖排变为横排 */
-     
-    
-    width: 25%; /* 宽度根据元素内容调整 */    
-}  
-/* 所有class为menu的div中的ul中的a样式(包括尚未点击的和点击过的样式) */  
-div.mpnul ul li a, div.upul ul li a:visited  
-{  
-    
-   
-    display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */  
-    line-height: 1.35em; /* 行高 */  
-    padding: 4px 20px; /* 内部填充的距离 */  
-    text-decoration: none; /* 不显示超链接下划线 */  
-    white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */  
-}  
-/* 所有class为menu的div中的ul中的a样式(鼠标移动到元素中的样式) */  
-div.mpnul ul li a:hover  
-{  
-    background-color: #bfcbd6; /* 背景色 */  
-    color: #465c71; /* 文字颜色 */  
-    text-decoration: none; /* 不显示超链接下划线 */  
-}  
-/* 所有class为menu的div中的ul中的a样式(鼠标点击元素时的样式) */  
-div.mpnul ul li a:active  
-{  
-    background-color: #465c71; /* 背景色 */  
-    color: #cfdbe6; /* 文字颜色 */  
-    text-decoration: none; /* 不显示超链接下划线 */  
-} 
-.popover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1060;
-  display: none;
-  max-width: 100%;
-  padding: 1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.42857143;
-  text-align: left;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  white-space: normal;
-  word-wrap:break-word;
-} 
-.smfs {
-  font-size: 10px;
-}
-.pagination {
-  display: inline-block;
-  
-  padding-top: 6px;
-  padding-left: 0;
-  margin: 0px 0;
-  border-radius: 4px;
-}
+    /* 所有class为menu的div中的ul中的li样式 */
+    div.upul ul li {
+      float: left; /* 向左漂移，将竖排变为横排 */
 
-table{
+      width: 50%; /* 宽度根据元素内容调整 */
+    }
 
-table-layout:fixed;/* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */
-}
+    /* 所有class为menu的div中的ul中的a样式(包括尚未点击的和点击过的样式) */
+    div.upul ul li a, div.upul ul li a:visited {
 
+      display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
+      line-height: 1.35em; /* 行高 */
+      padding: 4px 20px; /* 内部填充的距离 */
+      text-decoration: none; /* 不显示超链接下划线 */
+      white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
+    }
 
-html {
-    height: 100%;
-}
-body {
-    position: relative;
-    min-height: 100%;
-    box-sizing: border-box;
-    padding-bottom: 80px; /* .footer 的高度，为 footer 占位 */
-}
+    /* 所有class为menu的div中的ul中的a样式(鼠标移动到元素中的样式) */
+    div.upul ul li a:hover {
+      background-color: #bfcbd6; /* 背景色 */
+      color: #465c71; /* 文字颜色 */
+      text-decoration: none; /* 不显示超链接下划线 */
+    }
 
-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 30px;
-}
-.bbg-success {
-  background-color: #99cc33;
-}
-.bg-address {
-    background-color: #fff0e8;
-}
-.chk-address {
-    background-color: #fff0e8;
-    border: 1px solid #f50;
-    font-weight:bold; 
-    font-size: 15px;
-}
-.address-info {
-    padding-left: 10px;
-    padding-right: 5px;
-    display: inline;
-    word-wrap: break-word;
-    word-break: break-all;
-}
-.user-address {
-    word-wrap: break-word;
-    word-break: break-all;
-}
-.marker-tip {
-    top: 0;
-    left: 30px;
-    color: #F50;
-    font-weight: 700;
-    visibility: hidden;
-}   
-.marker {
-    top: 1px;
-    left: 6px;
-    width: 15px;
-    height: 25px;
-    visibility: hidden;
-    color: #f50;
-    font-size: 22px;
-}
-.hid-all {
-    color: #F50;
-    font-size: 15px;
-}
+    /* 所有class为menu的div中的ul中的a样式(鼠标点击元素时的样式) */
+    div.upul ul li a:active {
+      background-color: #465c71; /* 背景色 */
+      color: #cfdbe6; /* 文字颜色 */
+      text-decoration: none; /* 不显示超链接下划线 */
+    }
 
-/*
-    	body {
-			color: #000;
-			font-size: 12px;
-			font-family: "Helvetica Neue",Helvetica,STheiti,微软雅黑,宋体,Arial,Tahoma,sans-serif,serif;
-		}
-*/
-		/*左侧菜单*/
-.sidebar-menu{
-    border-right: 1px solid #c4c8cb;
-}
-		/*一级菜单*/
-.menu-first{
-    height:45px;
-    line-height:45px;
-    background-color: #eeeeee;
-    border-top: 1px solid #efefef;
-    border-bottom: 1px solid #e1e1e1;
-    padding: 0;
-    font-size: 14px;
-    font-weight: normal;
-    text-align: center;
-}
-		/*一级菜单鼠标划过状态*/
-.menu-first:hover{
-			text-decoration: none;
-			background-color: #eeeeee;
-			border-top: 1px solid #b7b7b7;
-			border-bottom: 1px solid #eeeeee;
-}
+    div.mpnul ul {
+      list-style: none; /* 去掉ul前面的符号 */
+      margin: 0px; /* 与外界元素的距离为0 */
+      padding: 0px; /* 与内部元素的距离为0 */
+      width: auto; /* 宽度根据元素内容调整 */
+    }
 
-		/*二级菜单*/
-.menu-second li a{
-			background-color: #f6f6f6;
-			height:31px;
-			line-height:31px;
-			border-top: 1px solid #efefef;
-			border-bottom: 1px solid #efefef;
-			font-size: 12px;
-			text-align:center;
-}
-		/*二级菜单鼠标划过样式*/
-.menu-second li a:hover {
-			text-decoration: none;
-			background-color: #d9edf7;
-			border-top: 1px solid #83ceed;
-			border-bottom: 1px solid #83ceed;
-			border-right: 3px solid #66c3ec;
-			border-left: 3px solid #66c3ec;
-}
-		/*二级菜单选中状态*/
-.menu-second-selected {
-			background-color: #66c3ec;
-			height:31px;
-			line-height:31px;
-			border-top: 1px solid #83ceed;
-			border-bottom: 1px solid #83ceed;
-			border-right: 3px solid #f8881c;
-			border-left: 3px solid #66c3ec;
-			text-align:center;
-}
+    /* 所有class为menu的div中的ul中的li样式 */
+    div.mpnul ul li {
+      float: left; /* 向左漂移，将竖排变为横排 */
 
-.menu_second_active{
-			text-decoration: none;
-			background-color: #66c3ec;
-			border-top: 1px solid #83ceed;
-			border-bottom: 1px solid #83ceed;
-			border-right: 3px solid #f8881c;
-			border-left: 3px solid #66c3ec;
-}
+      width: 25%; /* 宽度根据元素内容调整 */
+    }
 
-		/*覆盖bootstrap的样式*/
-.nav-list,.nav-list li a{
-			padding: 0px;
-			margin: 0px;
-}
-.highlight {
-    padding: 9px 14px;
-    margin-bottom: 14px;
-    background-color: #f7f7f9;
-    border: 1px solid #e1e1e8;
-    border-radius: 4px;
-}
-.payment-img img{
-    max-width:100%;
-    max-height:100%;
-}
-/*ERP header样式*/
-.erpheader div{
+    /* 所有class为menu的div中的ul中的a样式(包括尚未点击的和点击过的样式) */
+    div.mpnul ul li a, div.upul ul li a:visited {
 
-}
-.erpheader .erpbtn{
-    margin: 0px;
-    padding: 0px;
-}
-.erpheader .erpbtn li{
-    float: left;
-    list-style: none;
-    height: 40px;
-    line-height: 40px;
-    background-color: #114F8E;
-    width:120px;
-    text-align: center;
-    cursor: pointer;
-    color: #FFFFFF;
-    font-size: 16px;
-    
-}
-.erpheader .erpbtn li:not(:first-child){
-    margin-left: 5px;
-    
-}
+      display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
+      line-height: 1.35em; /* 行高 */
+      padding: 4px 20px; /* 内部填充的距离 */
+      text-decoration: none; /* 不显示超链接下划线 */
+      white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
+    }
 
-.erpheader .erpbtn li.selectActive{
-    border-bottom: solid 0px #114F8E;
-    background-color: #E5E5E5;
-    color: #000000;
-}
-.erpheader a{
-    color: #FFFFFF;
-    font-size: 16px;
-}
-</style>
-  </head>
+    /* 所有class为menu的div中的ul中的a样式(鼠标移动到元素中的样式) */
+    div.mpnul ul li a:hover {
+      background-color: #bfcbd6; /* 背景色 */
+      color: #465c71; /* 文字颜色 */
+      text-decoration: none; /* 不显示超链接下划线 */
+    }
+
+    /* 所有class为menu的div中的ul中的a样式(鼠标点击元素时的样式) */
+    div.mpnul ul li a:active {
+      background-color: #465c71; /* 背景色 */
+      color: #cfdbe6; /* 文字颜色 */
+      text-decoration: none; /* 不显示超链接下划线 */
+    }
+
+    .popover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1060;
+      display: none;
+      max-width: 100%;
+      padding: 1px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 1.42857143;
+      text-align: left;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ccc;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      white-space: normal;
+      word-wrap: break-word;
+    }
+
+    .smfs {
+      font-size: 10px;
+    }
+
+    .pagination {
+      display: inline-block;
+
+      padding-top: 6px;
+      padding-left: 0;
+      margin: 0px 0;
+      border-radius: 4px;
+    }
+
+    table {
+
+      table-layout: fixed; /* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      position: relative;
+      min-height: 100%;
+      box-sizing: border-box;
+      padding-bottom: 80px; /* .footer 的高度，为 footer 占位 */
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+    }
+
+    .bbg-success {
+      background-color: #99cc33;
+    }
+
+    .bg-address {
+      background-color: #fff0e8;
+    }
+
+    .chk-address {
+      background-color: #fff0e8;
+      border: 1px solid #f50;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .address-info {
+      padding-left: 10px;
+      padding-right: 5px;
+      display: inline;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+
+    .user-address {
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+
+    .marker-tip {
+      top: 0;
+      left: 30px;
+      color: #F50;
+      font-weight: 700;
+      visibility: hidden;
+    }
+
+    .marker {
+      top: 1px;
+      left: 6px;
+      width: 15px;
+      height: 25px;
+      visibility: hidden;
+      color: #f50;
+      font-size: 22px;
+    }
+
+    .hid-all {
+      color: #F50;
+      font-size: 15px;
+    }
+
+    /*
+          body {
+          color: #000;
+          font-size: 12px;
+          font-family: "Helvetica Neue",Helvetica,STheiti,微软雅黑,宋体,Arial,Tahoma,sans-serif,serif;
+        }
+    */
+    /*左侧菜单*/
+    .sidebar-menu {
+      border-right: 1px solid #c4c8cb;
+    }
+
+    /*一级菜单*/
+    .menu-first {
+      height: 45px;
+      line-height: 45px;
+      background-color: #eeeeee;
+      border-top: 1px solid #efefef;
+      border-bottom: 1px solid #e1e1e1;
+      padding: 0;
+      font-size: 14px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    /*一级菜单鼠标划过状态*/
+    .menu-first:hover {
+      text-decoration: none;
+      background-color: #eeeeee;
+      border-top: 1px solid #b7b7b7;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    /*二级菜单*/
+    .menu-second li a {
+      background-color: #f6f6f6;
+      height: 31px;
+      line-height: 31px;
+      border-top: 1px solid #efefef;
+      border-bottom: 1px solid #efefef;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /*二级菜单鼠标划过样式*/
+    .menu-second li a:hover {
+      text-decoration: none;
+      background-color: #d9edf7;
+      border-top: 1px solid #83ceed;
+      border-bottom: 1px solid #83ceed;
+      border-right: 3px solid #66c3ec;
+      border-left: 3px solid #66c3ec;
+    }
+
+    /*二级菜单选中状态*/
+    .menu-second-selected {
+      background-color: #66c3ec;
+      height: 31px;
+      line-height: 31px;
+      border-top: 1px solid #83ceed;
+      border-bottom: 1px solid #83ceed;
+      border-right: 3px solid #f8881c;
+      border-left: 3px solid #66c3ec;
+      text-align: center;
+    }
+
+    .menu_second_active {
+      text-decoration: none;
+      background-color: #66c3ec;
+      border-top: 1px solid #83ceed;
+      border-bottom: 1px solid #83ceed;
+      border-right: 3px solid #f8881c;
+      border-left: 3px solid #66c3ec;
+    }
+
+    /*覆盖bootstrap的样式*/
+    .nav-list, .nav-list li a {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .highlight {
+      padding: 9px 14px;
+      margin-bottom: 14px;
+      background-color: #f7f7f9;
+      border: 1px solid #e1e1e8;
+      border-radius: 4px;
+    }
+
+    .payment-img img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /*ERP header样式*/
+    .erpheader div {
+
+    }
+
+    .erpheader .erpbtn {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .erpheader .erpbtn li {
+      float: left;
+      list-style: none;
+      height: 40px;
+      line-height: 40px;
+      background-color: #114F8E;
+      width: 120px;
+      text-align: center;
+      cursor: pointer;
+      color: #FFFFFF;
+      font-size: 16px;
+
+    }
+
+    .erpheader .erpbtn li:not(:first-child) {
+      margin-left: 5px;
+
+    }
+
+    .erpheader .erpbtn li.selectActive {
+      border-bottom: solid 0px #114F8E;
+      background-color: #E5E5E5;
+      color: #000000;
+    }
+
+    .erpheader a {
+      color: #FFFFFF;
+      font-size: 16px;
+    }
+  </style>
+</head>
 <% if request.original_fullpath =~ /pi_print/i %>
-  <body style="padding: 0px;" >
-<% elsif  request.original_fullpath =~ /feedback/i or request.original_fullpath =~ /moko_part_manage/i or request.original_fullpath =~ /sell_pcb_baojia/i %>
-  <body style="padding-bottom: 70px;padding-top: 50px;margin-left: 15px;margin-right: 15px;" data-no-turbolink>
-<% elsif request.original_fullpath =~ /new_bom/i or request.original_fullpath =~ /viewbom/i or request.original_fullpath =~ /bomlist/i or request.original_fullpath =~ /up_pcb_info/i or request.original_fullpath =~ /procurement/i or request.original_fullpath =~ /sell_view_baojia/i or request.original_fullpath =~ /p_history/i or request.original_fullpath =~ /pcb_order_list/i or request.original_fullpath =~ /supplier_offer/i or request.original_fullpath =~ /part_list/i or request.original_fullpath =~ /other_baojia/i or request.original_fullpath =~ /moko_part_data/i or request.original_fullpath =~ /new_pcb_pi/i or request.original_fullpath =~ /pi_/i or request.original_fullpath =~ /new_pcb_order/i or request.original_fullpath =~ /edit_pcb_order/i or request.original_fullpath =~ /wh_query/i or request.original_fullpath =~ /wh_in/i or request.original_fullpath =~ /wh_out/i or request.original_fullpath =~ /wh_draft_list/i or request.original_fullpath =~ /wh_/i or request.original_fullpath =~ /pcb_list/i or request.original_fullpath =~ /sell_feeback_list/i or request.original_fullpath =~ /new_moko_part/i or request.original_fullpath =~ /pmc/i or request.original_fullpath =~ /factory/i  or request.original_fullpath =~ /moko_supplier/i or request.original_fullpath =~ /payment_notice_list/i or request.original_fullpath =~ /payment_voucher_list/i or request.original_fullpath =~ /setup_finance/i or request.original_fullpath =~ /fu_kuan_shen_qing_list/i or request.original_fullpath =~ /edit_fu_kuan_shen_qing_dan/i or request.original_fullpath =~ /fu_kuan_dan_list/i or request.original_fullpath =~ /fu_kuan_shen_qing_list/i or request.original_fullpath =~ /edit_fu_kuan_shen_qing_dan/i or request.original_fullpath =~ /edit_fu_kuan_dan/i or request.original_fullpath =~ /cai_gou_fa_piao_list/ or request.original_fullpath =~ /show_cai_gou_fa_piao/ or request.original_fullpath =~ /edit_ling_liao_dan/ or request.original_fullpath =~ /new_ecn/  or request.original_fullpath =~ /edit_ecn/ or request.original_fullpath =~ /ecn_list/ or request.original_fullpath =~ /moko_bom_list/ or request.original_fullpath =~ /moko_view_bom/ or request.original_fullpath =~ /shou_kuan_ping_zheng/ or request.original_fullpath =~ /fu_kuan_ping_zheng/ or request.original_fullpath =~ /zong_zhang/ or request.original_fullpath =~ /edit_ping_zheng/ or request.original_fullpath =~ /customer_list/ or request.original_fullpath =~ /user_info_edit/ or request.original_fullpath =~ /erp_index/ or request.original_fullpath =~ /work_flow/ or request.original_fullpath =~ /p_select_column/i or request.original_fullpath =~ /sell_baojia_erp/i  or request.original_fullpath =~ /pipei_view_bom/i or request.original_fullpath =~ /pipei_bom_list/i or request.original_fullpath =~ /view_ecn_message/i %>
-  <body style="padding-bottom: 70px;padding-top: 82px;" data-no-turbolink>
+    <body style="padding: 0px;">
+<% elsif request.original_fullpath =~ /feedback/i or request.original_fullpath =~ /moko_part_manage/i or request.original_fullpath =~ /sell_pcb_baojia/i %>
+    <body style="padding-bottom: 70px;padding-top: 50px;margin-left: 15px;margin-right: 15px;" data-no-turbolink>
+<% elsif request.original_fullpath =~ /new_bom/i or request.original_fullpath =~ /viewbom/i or request.original_fullpath =~ /bomlist/i or request.original_fullpath =~ /up_pcb_info/i or request.original_fullpath =~ /procurement/i or request.original_fullpath =~ /sell_view_baojia/i or request.original_fullpath =~ /p_history/i or request.original_fullpath =~ /pcb_order_list/i or request.original_fullpath =~ /supplier_offer/i or request.original_fullpath =~ /part_list/i or request.original_fullpath =~ /other_baojia/i or request.original_fullpath =~ /moko_part_data/i or request.original_fullpath =~ /new_pcb_pi/i or request.original_fullpath =~ /pi_/i or request.original_fullpath =~ /new_pcb_order/i or request.original_fullpath =~ /edit_pcb_order/i or request.original_fullpath =~ /wh_query/i or request.original_fullpath =~ /wh_in/i or request.original_fullpath =~ /wh_out/i or request.original_fullpath =~ /wh_draft_list/i or request.original_fullpath =~ /wh_/i or request.original_fullpath =~ /pcb_list/i or request.original_fullpath =~ /sell_feeback_list/i or request.original_fullpath =~ /new_moko_part/i or request.original_fullpath =~ /pmc/i or request.original_fullpath =~ /factory/i or request.original_fullpath =~ /moko_supplier/i or request.original_fullpath =~ /payment_notice_list/i or request.original_fullpath =~ /payment_voucher_list/i or request.original_fullpath =~ /setup_finance/i or request.original_fullpath =~ /fu_kuan_shen_qing_list/i or request.original_fullpath =~ /edit_fu_kuan_shen_qing_dan/i or request.original_fullpath =~ /fu_kuan_dan_list/i or request.original_fullpath =~ /fu_kuan_shen_qing_list/i or request.original_fullpath =~ /edit_fu_kuan_shen_qing_dan/i or request.original_fullpath =~ /edit_fu_kuan_dan/i or request.original_fullpath =~ /cai_gou_fa_piao_list/ or request.original_fullpath =~ /show_cai_gou_fa_piao/ or request.original_fullpath =~ /edit_ling_liao_dan/ or request.original_fullpath =~ /new_ecn/ or request.original_fullpath =~ /edit_ecn/ or request.original_fullpath =~ /ecn_list/ or request.original_fullpath =~ /moko_bom_list/ or request.original_fullpath =~ /moko_view_bom/ or request.original_fullpath =~ /shou_kuan_ping_zheng/ or request.original_fullpath =~ /fu_kuan_ping_zheng/ or request.original_fullpath =~ /zong_zhang/ or request.original_fullpath =~ /edit_ping_zheng/ or request.original_fullpath =~ /customer_list/ or request.original_fullpath =~ /user_info_edit/ or request.original_fullpath =~ /erp_index/ or request.original_fullpath =~ /work_flow/ or request.original_fullpath =~ /p_select_column/i or request.original_fullpath =~ /sell_baojia_erp/i or request.original_fullpath =~ /pipei_view_bom/i or request.original_fullpath =~ /pipei_bom_list/i or request.original_fullpath =~ /view_ecn_message/i %>
+    <body style="padding-bottom: 70px;padding-top: 82px;" data-no-turbolink>
 <% elsif request.original_fullpath == "/" or request.original_fullpath == "/?multipage=true" %>
-  <body style="padding-bottom: 70px;padding-top: 50px;" >
+    <body style="padding-bottom: 70px;padding-top: 50px;">
 <% else %>
-  <body style="padding: 70px;" >
+    <body style="padding: 70px;">
 <% end %>
 
-<% #if not request.original_fullpath =~ /pi_print/i  %>    
-<% unless params[:controller] == "work_flow"  %> 
+<% #if not request.original_fullpath =~ /pi_print/i  %>
+<% unless params[:controller] == "work_flow" %>
     <% unless request.original_fullpath =~ /p_bomlist/i or request.original_fullpath =~ /part_list/i or request.original_fullpath =~ /other_baojia/i or request.original_fullpath =~ /pcb_list/i or request.original_fullpath =~ /procurement_new/i or request.original_fullpath =~ /p_select_column/i or request.original_fullpath =~ /moko_view_bom/i or request.original_fullpath =~ /pipei_view_bom/i or request.original_fullpath =~ /moko_bom_list/i or request.original_fullpath =~ /pipei_bom_list/i %>
-        <%= render 'layouts/header' %>
+        <% if current_user.has_role?(:work_eleven) %>
+            <!--单独做的一个财务的头，之后可以和别的角色一起共用整合-->
+            <%= render 'common/new_erp_header' %>
+        <% else %>
+            <%= render 'layouts/header' %>
+        <% end %>
     <% end %>
-<% end %>  
-    <div class="container-fluid" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;margin: 0px;">
-<!--
+<% end %>
+<div class="container-fluid" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;margin: 0px;">
+  <!--
       <%= render 'layouts/flash_messages' %>
 -->
-    <%= yield :erp_header %>
-    <%= yield %>
+  <%= yield :erp_header %>
+  <%= yield %>
 
-<% if user_signed_in? %>
-    <% if can? :read, :all%>
-        <%= render 'layouts/footer' %>
-    <% end %>
-<% else %>
-    <%= render 'layouts/footer' %>
-<% end %>       
-      
-    </div>
-   
-    <%= render 'layouts/google_analytics' %>
+  <% if user_signed_in? %>
+      <% if can? :read, :all %>
+          <%= render 'layouts/footer' %>
+      <% end %>
+  <% else %>
+      <%= render 'layouts/footer' %>
+  <% end %>
 
-  </body>
+</div>
 
+<%= render 'layouts/google_analytics' %>
+
+</body>
 
 
 </html>

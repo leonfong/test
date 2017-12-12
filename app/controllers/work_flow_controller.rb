@@ -6337,7 +6337,7 @@ before_filter :authenticate_user!
         #if not @find_pcb.blank?
             #@pi_pcb = PcbItemInfo.find_by_pcb_order_item_id(find_pcb.first.find_pcb.order_item_id)
         #end
-        #@pi_other_item = PiOtherItem.where(pi_no: @pi_info.pi_no)
+        #@pi_other_item = PiOtherItem.where(pi_no: @pi_infos.pi_no)
         @pi_other_item = PiOtherItem.where(pi_info_id: @pi_info.id)
         @total_p = PiItem.where(pi_info_id: params[:id]).sum("t_p") + PiOtherItem.where(pi_no: @pi_info.pi_no).sum("t_p")
         if params[:type] == '1'
@@ -8059,7 +8059,7 @@ before_filter :authenticate_user!
                         all_ii << "Shipping Cost"
                         all_ii << ""
                         all_ii << ""
-                        all_ii << @pi_info.pi_shipping_cost.to_s
+                        all_ii << @pi_infos.pi_shipping_cost.to_s
                         sheet.add_row all_ii, :style => e_text
                         sheet.merge_cells("g#{row_set}:i#{row_set}")
             
@@ -8075,7 +8075,7 @@ before_filter :authenticate_user!
                         all_ii << "Bank Fee"
                         all_ii << ""
                         all_ii << ""
-                        all_ii << @pi_info.pi_bank_fee.to_s
+                        all_ii << @pi_infos.pi_bank_fee.to_s
                         sheet.add_row all_ii, :style => e_text
                         sheet.merge_cells("g#{row_set}:i#{row_set}")
 =end            

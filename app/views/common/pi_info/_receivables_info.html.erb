@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+  <div class="panel-heading con-in-head">
+    <h3 class="panel-title">收款信息</h3>
+  </div>
+  <div class="panel-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+      <tr>
+        <th>收款通知单</th>
+        <th>提交时间</th>
+        <th>收款单</th>
+        <th>实收时间</th>
+        <th>本次收款金额</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% pi.payment_notice_infos.each do |pay| %>
+      <tr>
+        <td><%= pay.id %></td>
+        <td><%= pay.send_at.strftime '%Y-%m-%d %H:%M:%S' %></td>
+        <td><%= pay.finance_voucher_info&.id %></td>
+        <td><%= pay.finance_voucher_info&.finance_at&.strftime '%Y-%m-%d %H:%M:%S' %></td>
+        <td></td>
+      </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

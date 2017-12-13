@@ -1,10 +1,13 @@
 ---
 zh:
   dictionary:
-      finance_state_enum: &finance_state_enum
-        check: 审核中
-        uncheck: 驳回
-        checked: 已审核
+    finance_state_enum: &finance_state_enum
+      check: 审核中
+      uncheck: 驳回
+      checked: 已审核
+    money_type_enum: &money_type_enum
+      USD: 美国
+      CNY: 人民币
   activerecord:
       attributes:
         pi_info:

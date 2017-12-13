@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :pi_infos
+  has_many :setup_finance_infos
   rolify
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

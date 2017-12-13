@@ -16,7 +16,9 @@
       <li role="presentation">
         <a href="/erp_index">我的工作台</a>
       </li>
-      <li role="presentation" class="<%= current_url_active 'erp/pi_infos', 'index', 'selectActive' %>">
+      <li role="presentation" class="<%= current_url_active 'erp/pi_infos',
+                                                            ['index', 'show'],
+                                                            'selectActive' %>">
         <a href="<%= erp_pi_infos_path %>">PI管理</a>
       </li>
     </ul>

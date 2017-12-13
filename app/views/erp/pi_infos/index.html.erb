@@ -4,13 +4,14 @@
     <li><a>PI金额跟踪</a></li>
   </ul>
   <div class="list-body">
-    <%= form_for erp_pi_infos_path, method: :get, html: {class: 'search_div'} do |f| %>
-        <select name="search_type">
+    <%= form_for erp_pi_infos_path, method: :get, enforce_utf8: false,
+                 html: {class: 'search_div', id: 'search_pi_info'} do |f| %>
+        <select name="search_type" v-model="search_type">
           <option value="pi">按PI号查询</option>
           <option value="yw">按业务员姓名查询</option>
           <option value="cos">按客户名称查询</option>
         </select>
-        <input name="search_name" type="text">
+        <input name="search_name" type="text" v-model="search_name">
         <button class="search_button">搜索</button>
     <% end %>
     <table class="table table-hover table-striped table-bordered">
@@ -25,30 +26,46 @@
         <th>交货日期</th>
         <th>客户代码</th>
         <th>数量</th>
-        <th>金额</th>
+        <th>金额(元)</th>
         <th>备注</th>
         <th>操作区</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <% @pi_lists.each_with_index do |pi, index| %>
-            <td><%= index %></td>
+      <% @pi_lists.each_with_index do |pi, index| %>
+          <tr>
+            <td><%= index*params[:page].to_i+1 %></td>
             <td><%= pi.t_enum :finance_state %></td>
-            <td><%= pi.pi_no %></td>
-            <td><%= pi.sell %></td>
-            <td><%= pi.team %></td>
-            <td><%= pi.created_at %></td>
-            <td><%= pi.jiao_huo_at %></td>
-            <td><%= pi.c_code %></td>
+            <td><a href="<%= erp_pi_info_path pi %>"><%= pi.pi_no %></a></td>
+            <td><%= pi.user.full_name %></td>
+            <td><%= pi.user.team %></td>
+            <td><%= pi.created_at.strftime '%Y-%m-%d %H:%M:%S' %></td>
+            <td><%= pi.jiao_huo_at&.strftime '%Y-%m-%d %H:%M:%S' %></td>
+            <td><%= pi.pcb_customer.c_no %></td>
             <td><%= pi.qty %></td>
+            <td><%= pi.t_p_rmb %></td>
             <td><%= pi.remark %></td>
             <td>
-
+              <% if pi.check? %>
+                  <a href="<%= erp_pi_info_path pi %>">审核</a>
+                  <a style="margin-left: 15px;">进度跟踪</a>
+              <% else %>
+                  <a>进度跟踪</a>
+              <% end %>
             </td>
-        <% end %>
-      </tr>
+          </tr>
+      <% end %>
       </tbody>
     </table>
+    <%= will_paginate @pi_lists %>
   </div>
 </div>
+<script>
+  new Vue({
+    el: '#search_pi_info',
+    data: {
+      search_type: '<%= @search_type %>',
+      search_name: '<%= @search_name %>',
+    }
+  })
+</script>

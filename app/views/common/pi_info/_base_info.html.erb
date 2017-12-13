@@ -1,0 +1,23 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">基本信息</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-4"><span>PI NO.：</span><%= pi.pi_no %></div>
+      <div class="col-md-4">
+        <span>提交人：</span><%= pi.user.full_name %>（<%= pi.user.team %>）</div>
+      <div class="col-md-4"><span>提交时间：</span><%= pi.created_at.strftime '%Y-%m-%d %H:%M:%S' %></div>
+    </div>
+    <div class="row">
+      <div class="col-md-4"><span>国家：</span><%= pi.pcb_customer.customer_country %></div>
+      <div class="col-md-4"><span>客户名称：</span><%= pi.pcb_customer.customer %></div>
+      <div class="col-md-4"><span>客户交期：</span><%= pi.jiao_huo_at&.strftime '%Y-%m-%d %H:%M:%S' %></div>
+    </div>
+    <div class="row">
+      <div class="col-md-4"><span>数量：</span><%= pi.qty %></div>
+      <div class="col-md-4"><span>备品：</span><%= pi.bei_pin_qty %></div>
+      <div class="col-md-4"><span>备注：</span><%= pi.remark %></div>
+    </div>
+  </div>
+</div>

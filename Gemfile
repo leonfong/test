@@ -96,6 +96,8 @@ gem 'zip-zip'
 
 gem 'axlsx'
 
+gem 'vuejs-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :development, :test do

@@ -1,0 +1,18 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">结算信息</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-3"><span>订单金额：</span><%= pi.t_p %><% pi.money_type %></div>
+      <div class="col-md-3"><span>银行手续费：</span><%= pi.pi_bank_fee %><% pi.money_type %></div>
+      <div class="col-md-3"><span>运费：</span><%= pi.pi_shipping_cost %><% pi.money_type %></div>
+      <div class="col-md-3"><span>其它费用：</span><%= pi.other_price %><% pi.money_type %></div>
+    </div>
+    <div class="row">
+      <div class="col-md-3"><span>总金额：</span><%= pi.t_p %><% pi.money_type %></div>
+      <div class="col-md-3"><span>汇率：</span><%= pi.rate %></div>
+      <div class="col-md-3"><span>总金额（RMB）：</span><%= pi.t_p*pi.rate if pi.t_p && pi.rate %></div>
+    </div>
+  </div>
+</div>

@@ -64,6 +64,30 @@ body {
       }
     }
   }
+  .erp-box{
+    .breadcrumb{
+      background: $bg_color_1;
+    }
+    .panel-heading{
+      .panel-title{
+        font-weight: bolder;
+      }
+      &.con-in-head{
+        border-bottom: 0;
+        .panel-title{
+          display: inline-block;
+        }
+      }
+    }
+    .panel-body{
+      .row{
+        margin-bottom: 15px;
+      }
+    }
+    .erp-body{
+      margin: 40px 20px;
+    }
+  }
 }
 
 ul, li {

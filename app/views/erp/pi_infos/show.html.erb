@@ -1,0 +1,18 @@
+<div class="erp-box pi_infos_list">
+  <ol class="breadcrumb">
+    <li><a href="<%= erp_pi_infos_path %>">PI单列表</a></li>
+    <li>审核订单</li>
+  </ol>
+  <div class="erp-body">
+    <!--基本信息-->
+    <%= render 'common/pi_info/base_info', pi: @pi %>
+    <!--结算信息-->
+    <%= render 'common/pi_info/settlement_info', pi: @pi %>
+    <!--收款信息-->
+    <%= render 'common/pi_info/receivables_info', pi: @pi %>
+    <!--bom信息-->
+    <%= render 'common/pi_info/bom_info', pi: @pi %>
+    <!--其它信息-->
+    <%= render 'common/pi_info/other_info', pi: @pi %>
+  </div>
+</div>

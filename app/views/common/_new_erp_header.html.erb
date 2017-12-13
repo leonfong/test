@@ -1,28 +1,23 @@
 <div class="container-fluid">
-  <div class="row erpheader" style="z-index:500;top: 0;position: fixed;right: 0;left: 0;padding: 10px 20px 0px;margin: 0px;background-color: #003366;">
+  <div class="row erpheader">
 
-    <p style="color: #FFFFFF;font-size: 16px;">华创恒达ERP系统</p>
-    <p class="pull-right" style="top: 15px;position: fixed;right: 5px;color: #FFFFFF;font-size: 20px;">
+    <p class="title">华创恒达ERP系统</p>
+    <p class="pull-right login-info">
       <span class="glyphicon glyphicon-user"></span>
-      <% if user_signed_in? %>
-          <% if not current_user.full_name.blank? %>
-              <%= link_to(current_user.full_name, user_info_edit_path, :class => "erpheader") %>
-          <% else %>
-              <%= link_to(current_user.email, user_info_edit_path, :class => "erpheader") %>
-          <% end %>
-          <%= link_to("[退出]", destroy_user_session_path, :method => :delete, :class => "erpheader") %>
+      <% if not current_user.full_name.blank? %>
+          <%= link_to(current_user.full_name, user_info_edit_path) %>
       <% else %>
-          <%= link_to(t('login'), new_session_path(:user), :class => "erpheader") %>
-          <%= link_to(t('sign_up'), new_registration_path(:user), :class => "erpheader") %>
+          <%= link_to(current_user.email, user_info_edit_path) %>
       <% end %>
+      <%= link_to("[退出]", destroy_user_session_path, :method => :delete) %>
     </p>
 
-    <ul class="erpbtn nav nav-tabs" style="border-bottom: solid 0px #114F8E;">
-      <li role="presentation" style="margin-bottom: 0px;">
-        <a href="/erp_index" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">我的工作台</a>
+    <ul class="erpbtn nav nav-tabs">
+      <li role="presentation">
+        <a href="/erp_index">我的工作台</a>
       </li>
-      <li role="presentation" class="<%= current_url_active 'pi_infos', 'index', 'selectActive' %>" style="margin-bottom: 0px;">
-        <a href="<%= pi_infos_path %>" style="color: #000000;font-size: 16px;border: 0px;padding: 10px;margin-bottom: 0px;">PI管理</a>
+      <li role="presentation" class="<%= current_url_active 'erp/pi_infos', 'index', 'selectActive' %>">
+        <a href="<%= erp_pi_infos_path %>">PI管理</a>
       </li>
     </ul>
   </div>

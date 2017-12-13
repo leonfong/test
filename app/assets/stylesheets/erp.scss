@@ -1,0 +1,31 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+
+
+ *= require bootstrap-table
+ *= require boms
+ *= require bom_item
+ *= require bootstrap-editable
+ *= require custom
+ *= require introjs
+ *= require jquery.raty
+ *= require spinner
+ *= require static_pages
+ *= require steps
+ *= require_self
+ */
+
+
+@import "erp/public";
+@import 'erp/page/**/*';
+

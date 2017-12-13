@@ -1,4 +1,4 @@
-class PiInfo < ActiveRecord::Base
+class PiInfo < ApplicationModel
 	has_many :pi_items, dependent: :destroy
 	has_many :pi_other_items, dependent: :destroy
 	has_many :pi_sell_items, dependent: :destroy
@@ -10,8 +10,4 @@ class PiInfo < ActiveRecord::Base
 		checked: 3 #已审核
 	}
 
-	# 财务是否已审核
-	def is_finance_checked?
-		finance_state == 'checked'
-	end
 end

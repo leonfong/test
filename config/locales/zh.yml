@@ -1,5 +1,14 @@
 ---
 zh:
+  dictionary:
+      finance_state_enum: &finance_state_enum
+        check: 审核中
+        uncheck: 驳回
+        checked: 已审核
+  activerecord:
+      attributes:
+        pi_info:
+          finance_state_enum: *finance_state_enum
   upload: 上传
   menu:
     new_article: "Добавить статью"

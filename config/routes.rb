@@ -543,8 +543,9 @@ Rails.application.routes.draw do
   #
   match '/bom_item/select_with_ajax', to: 'bom_item#select_with_ajax', via: 'post'
 
-
-  resources :pi_infos
+	namespace :erp do
+    resources :pi_infos
+	end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

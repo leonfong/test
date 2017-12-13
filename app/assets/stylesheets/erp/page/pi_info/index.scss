@@ -1,0 +1,46 @@
+.pi_infos_list{
+  height: 100%;
+  ul.sec_nav{
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 0;
+    background: $bg_color_1;
+    li{
+      display: inline-block;
+      width: 150px;
+      a{
+        color: $fontColor1;
+        &:hover{
+          text-decoration:none;
+          color: $fontColor2;
+        }
+        &.active{
+          color: $fontColor2;
+        }
+      }
+    }
+  }
+  .list-body{
+    margin: 40px 20px;
+    .search_div{
+      margin-bottom: 20px;
+      select{
+        margin-right: 30px;
+      }
+      input{
+        width: 200px;
+        margin-right: 30px;
+      }
+      button{
+        color: #fff;
+        background: $fontColor2;
+        border: 0;
+      }
+    }
+    table{
+      th,td{
+        text-align: center;
+      }
+    }
+  }
+}

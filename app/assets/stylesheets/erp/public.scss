@@ -1,0 +1,71 @@
+$bg_color_1: #E5E5E5;
+$fontColor1: #000;
+$fontColor2: #006dcc;
+$fontColor3: #fff;
+$font_title_size: 16px;
+body {
+  padding-top: 82px;
+  font-family: Microsoft YaHei, Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+  /*ERP header样式*/
+  .erpheader {
+    z-index:500;
+    top: 0;
+    position: fixed;
+    padding: 10px 20px 0px;
+    background-color: #003366;
+    width: 100%;
+    p{
+      color: $fontColor3;
+      font-size: $font_title_size;
+      &.login-info{
+        top: 15px;
+        position: fixed;
+        right: 5px;
+        color: #FFFFFF;
+        font-size: 20px;
+      }
+      a{
+        color: $fontColor3;
+      }
+    }
+    .erpbtn {
+      height: 40px;
+      border: 0;
+      li {
+        float: left;
+        list-style: none;
+        height: 40px;
+        line-height: 40px;
+        background-color: #114F8E;
+        width: 120px;
+        text-align: center;
+        cursor: pointer;
+        color: #FFFFFF;
+        font-size: 16px;
+        &:not(:first-child) {
+          margin-left: 5px;
+        }
+        a {
+          color: $fontColor3;
+          font-size: 16px;
+          border: 0px;
+          padding: 10px;
+          margin-bottom: 0px;
+          &:hover {
+            color: $fontColor1;
+          }
+        }
+        &.selectActive {
+          background-color: $bg_color_1;
+          a {
+            color: $fontColor1;
+          }
+        }
+      }
+    }
+  }
+}
+
+ul, li {
+  margin-bottom: 0;
+}

@@ -1,5 +1,5 @@
 class PItem < ActiveRecord::Base
-    belongs_to :procurement_bom
+    belongs_to :procurement_bom, counter_cache: true
 
 	# has_one :product, as: :match_product
 	#has_one :product, as: :product_able

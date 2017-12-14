@@ -1,0 +1,15 @@
+<div class="panel panel-default">
+  <div class="panel-heading con-in-head">
+    <h3 class="panel-title">BOM信息</h3>
+    <p><a href="<%= bom[:url] %>"><%= bom[:no] %></a></p>
+    <p><span>物料总类：</span><%= bom[:num] %></p>
+    <!--匹配清单,如果有就显示-->
+    <% unless pi.pi_bom_qty_info.nil? %>
+        <p><a href="pipei_view_bom?bom_id=<%= pi.pi_bom_qty_info.id %>">匹配清单_<%= pi.pi_bom_qty_info.id %></a></p>
+    <% end %>
+    <p><a href="<%= %>">导出BOM</a></p>
+    <% unless pi.pi_bom_qty_info.nil? %>
+        <p><a href="<%= %>">导出匹配清单</a></p>
+    <% end %>
+  </div>
+</div>

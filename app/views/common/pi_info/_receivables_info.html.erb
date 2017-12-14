@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-  <div class="panel-heading con-in-head">
+  <div class="panel-heading">
     <h3 class="panel-title">收款信息</h3>
   </div>
   <div class="panel-body">
@@ -20,10 +20,20 @@
         <td><%= pay.send_at.strftime '%Y-%m-%d %H:%M:%S' %></td>
         <td><%= pay.finance_voucher_info&.id %></td>
         <td><%= pay.finance_voucher_info&.finance_at&.strftime '%Y-%m-%d %H:%M:%S' %></td>
-        <td></td>
+        <td><%= pay.pay_p %><% pi.money_type %></td>
       </tr>
       <% end %>
+      <% if pi.payment_notice_infos.empty? %>
+      <tr><td colspan="5" class="text-center">暂无收款信息</td></tr>
+      <% end %>
       </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5">
+          <p class="text-right"><span>当前欠费：</span><%= pi.current_arrears %></p>
+        </td>
+      </tr>
+      </tfoot>
     </table>
   </div>
 </div>

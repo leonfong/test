@@ -74,8 +74,11 @@ body {
       }
       &.con-in-head{
         border-bottom: 0;
-        .panel-title{
+        .panel-title, p{
           display: inline-block;
+        }
+        p{
+          margin-left: 50px;
         }
       }
     }

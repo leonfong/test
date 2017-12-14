@@ -547,6 +547,7 @@ Rails.application.routes.draw do
     resources :pi_infos do
 			member do
 				put :finance_check
+        put :finance_uncheck
 			end
 		end
 	end

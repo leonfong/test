@@ -52,6 +52,4 @@ class PiInfo < ApplicationModel
 		t_p - pay_all_money
 	end
 
-
-
 end

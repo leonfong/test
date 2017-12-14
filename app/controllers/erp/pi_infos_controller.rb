@@ -34,11 +34,27 @@ module Erp
 			if pi.bom_state == 'checked'
 				update_info.merge! state: 'checked'
 			end
-			if !pi.update update_info
+			if pi.update update_info
+				flash[:success] = '审核成功'
+				pi.erp_add_new_record_to_obj({user: current_user.full_name, time: Time.now.to_s, con: '通过PI审核'})
+			else
 				flash[:error] = '审核失败，请联系管理员'
 				logger.info pi.errors.full_message.inspect
 			end
 			redirect_to erp_pi_info_path pi
+		end
+
+		# 财务驳回操作
+		def finance_uncheck
+			pi = PiInfo.find params[:id]
+			if pi.update finance_state:nil, state: 'uncheck'
+				flash[:success] = '已驳回'
+				pi.erp_add_new_record_to_obj({user: current_user.full_name, time: Time.now.to_s, con: '驳回PI审核'})
+				redirect_to erp_pi_infos_path, notice: '已驳回'
+			else
+				flash[:error] = '驳回失败，请联系管理员'
+				redirect_to erp_pi_info_path pi
+			end
 		end
 	end
 end

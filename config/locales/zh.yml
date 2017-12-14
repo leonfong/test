@@ -2,7 +2,7 @@
 zh:
   dictionary:
     finance_state_enum: &finance_state_enum
-      check: 审核中
+      check: 待审核
       uncheck: 驳回
       checked: 已审核
     money_type_enum: &money_type_enum

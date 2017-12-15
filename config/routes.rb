@@ -548,8 +548,13 @@ Rails.application.routes.draw do
 			member do
 				put :finance_check
         put :finance_uncheck
+				put :finance_hide
 			end
 		end
+		resources :finance_setting, only: [:index]
+    resources :setup_finance_infos, only: [:create]
+		resources :bank_infos
+		resources :pay_types
 	end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

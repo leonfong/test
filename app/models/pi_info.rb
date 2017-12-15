@@ -10,6 +10,7 @@ class PiInfo < ApplicationModel
 	has_one :procurement_bom, through: :pi_item
 	has_one :moko_bom_info, through: :pi_item
 	has_one :pi_bom_qty_info, through: :pi_item
+	belongs_to :bank_info, counter_cache: true
 
 	enum finance_state: {
 		not_check: 0, #未到审核这一步，当前为空

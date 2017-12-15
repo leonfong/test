@@ -3,11 +3,18 @@ $fontColor1: #000;
 $fontColor2: #006dcc;
 $fontColor3: #fff;
 $font_title_size: 16px;
+
 body {
   padding-top: 122px;
   font-family: Microsoft YaHei, Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
   ul, li{
     margin-bottom: 0;
+  }
+  .margin-l-20{
+    margin-left: 20px;
+  }
+  .success_color{
+    color: #3c763d;
   }
   .alert{
     position: fixed;
@@ -90,6 +97,11 @@ body {
         float: right;
         margin-right: 20px;
         margin-top: 5px;
+      }
+      .current_status{
+        height: 40px;
+        line-height: 40px;
+        margin-right: 20px;
       }
     }
     .panel-heading{

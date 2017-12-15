@@ -11,6 +11,8 @@
         <%= link_to '审核', finance_check_erp_pi_info_path(@pi), method: :put,
                     type: 'button', class: 'btn btn-info btn-sm active-button',
                     data: {confirm: "确定通过审核?"} %>
+    <% elsif @pi.checked? %>
+    <span class="pull-right current_status success_color"><%= @pi.t_enum :finance_state %></span>
     <% end %>
   </div>
   <div class="erp-body ">

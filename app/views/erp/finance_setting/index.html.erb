@@ -1,0 +1,122 @@
+<div class="erp-box" id="finance_setting">
+  <div class="sec_nav">
+    <p class="current_status margin-l-20">各参数管理设置</p>
+  </div>
+  <div class="erp-body ">
+    <!--汇率设置-->
+    <div class="setting-box">
+      <span class="label label-default title">美金汇率</span>
+      <div class="setting-body">
+        <div v-if="int_show_edit_rate || show_edit_rate">
+          <%= form_for [:erp, SetupFinanceInfo.new], html: {class: 'form-inline'} do |f| %>
+              <div class="form-group">
+                <%= f.number_field :dollar_rate, class: 'form-control' %>
+              </div>
+              <button type="button" class="btn btn-default" v-if="usa_rate" @click="show_edit_rate = false">取消</button>
+              <%= f.submit '设置', class: 'btn btn-primary' %>
+          <% end %>
+        </div>
+        <div class="dollar-rate-box" v-else>
+          <span>{{ usa_rate }}</span>
+          <i class="glyphicon glyphicon-edit" @click="show_edit_rate = true"></i>
+        </div>
+
+      </div>
+    </div>
+    <!--公司银行设置-->
+    <div class="setting-box">
+      <span class="label label-default title">公司银行设置</span>
+      <i class="glyphicon glyphicon-plus add-bank-button" @click="open_add_bank_modal(0)"></i>
+      <div class="setting-body">
+        <table class="table table-condensed table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>账户名称</th>
+            <th>银行名称</th>
+            <th>银行账号</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody v-if="banks.length">
+          <tr v-for="(bank, index) in banks" @click="open_add_bank_modal(index+1)">
+            <td>{{ index+1 }}</td>
+            <td>{{ bank.user_name }}</td>
+            <td>{{ bank.bank_name }}</td>
+            <td>{{ bank.bank_account }}</td>
+            <td>
+              <a data-confirm="确定删除此银行信息?" rel="nofollow" data-method="delete" class="delete"
+                 :href="'<%= erp_bank_infos_path %>/'+bank.id" v-if="!bank.pi_info_count">
+                <i class="glyphicon glyphicon-trash"></i>
+              </a>
+              <i class="glyphicon glyphicon-edit" @click="open_add_bank_modal(index+1)"></i>
+            </td>
+          </tr>
+          </tbody>
+          <tbody v-else>
+          <tr>
+            <td colspan="5" class="text-center">暂无银行信息</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!--付款方式-->
+    <div class="setting-box">
+      <span class="label label-default title">付款方式</span>
+      <i class="glyphicon glyphicon-plus add-bank-button" v-if="pay_types.length && !show_add_pay_type" @click="show_add_pay_type=true"></i>
+      <div v-if="!pay_types.length || show_add_pay_type" style="display: inline-block">
+        <%= form_for [:erp, PayType.new], html: {class: 'form-inline'} do |f| %>
+            <div class="form-group">
+              <%= f.text_field :type_name, class: 'form-control' %>
+            </div>
+            <button type="button" class="btn btn-default" v-if="pay_types.length" @click="show_add_pay_type = false">取消</button>
+            <%= f.submit '添加', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+      <div class="setting-body">
+        <div class="row">
+          <div class="col-md-2" v-for="(pay_type, index) in pay_types">
+            <p>{{pay_type.type_name}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= render 'common/modal/add_bank' %>
+</div>
+<script>
+  var setting = new Vue({
+    el: '#finance_setting',
+    data: {
+      usa_rate: '<%= @usa_rate %>',
+      show_edit_rate: false,
+      banks: <%== @banks %>,
+      is_add_bank: true,
+      current_bank: '',
+      pay_types: <%== @pay_types %>,
+      show_add_pay_type: false,
+    },
+    computed: {
+      int_show_edit_rate: function () {
+        if (this.usa_rate) {
+          return false
+        } else {
+          return true
+        }
+      }
+    },
+    methods: {
+      open_add_bank_modal: function (num) {
+        if (num) {
+          this.is_add_bank = false
+          this.current_bank = this.banks[num - 1]
+        } else {
+          this.is_add_bank = true
+          this.current_bank = {id: '', user_name: '', bank_name: '', bank_account: ''}
+        }
+        $('#add_bank_info').modal('show');
+      }
+    }
+  })
+</script>

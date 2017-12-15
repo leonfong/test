@@ -1,0 +1,48 @@
+.setting-box {
+  border-bottom: 1px $bg_color_1 solid;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  i {
+    cursor: pointer;
+    font-size: 18px;
+    &:hover {
+      color: $fontColor2;
+    }
+  }
+  .title {
+    font-size: 16px;
+    padding: 7px 15px;
+    border-radius: 0;
+    margin-bottom: 20px;
+    display: inline-block;
+    margin-right: 50px;
+  }
+  .add-bank-button {
+    top: 3px;
+  }
+  .setting-body {
+    .dollar-rate-box {
+      height: 35px;
+      line-height: 35px;
+      span {
+        display: inline-block;
+        width: 150px;
+        padding-left: 20px;
+      }
+    }
+    th,td{
+      text-align: center;
+    }
+    tr{
+      cursor: pointer;
+    }
+    a.delete {
+      color: $fontColor1;
+      margin-right: 20px;
+      &:hover {
+        color: $fontColor2;
+      }
+
+    }
+  }
+}

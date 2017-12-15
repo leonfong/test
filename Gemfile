@@ -96,8 +96,10 @@ gem 'zip-zip'
 
 gem 'axlsx'
 
+# vue
 gem 'vuejs-rails'
-
+# 种子文件
+gem 'seed-fu'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :development, :test do

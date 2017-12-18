@@ -158,6 +158,7 @@ Rails.application.routes.draw do
   match '/pmc_check_pass', to: 'work_flow#pmc_check_pass', via: 'get'
   match '/del_pmc_wh_check_pass', to: 'work_flow#del_pmc_wh_check_pass', via: 'get'
   match '/cost_history_buy', to: 'work_flow#cost_history_buy', via: 'get'
+  match '/cost_history_buy_caigou', to: 'work_flow#cost_history_buy_caigou', via: 'get'
   match '/del_pi_buy_item', to: 'work_flow#del_pi_buy_item', via: 'get'
   match '/edit_pi_buy_qty_cost', to: 'work_flow#edit_pi_buy_qty_cost', via: 'post'
   match '/pi_buy_check_list', to: 'work_flow#pi_buy_check_list', via: 'get'
@@ -224,7 +225,10 @@ Rails.application.routes.draw do
   match '/send_pi_buy_check_baojia', to: 'work_flow#send_pi_buy_check_baojia', via: 'get'
   match '/send_pi_buy_check_baojia_done', to: 'work_flow#send_pi_buy_check_baojia_done', via: 'post'
   match '/send_pi_buy_check_baojia_done', to: 'work_flow#send_pi_buy_check_baojia_done', via: 'get'
+  match '/send_pi_buy_check_baojia_back', to: 'work_flow#send_pi_buy_check_baojia_back', via: 'post'
+  match '/send_pi_buy_check_baojia_back', to: 'work_flow#send_pi_buy_check_baojia_back', via: 'get'
   match '/del_pi_buy_baojia', to: 'work_flow#del_pi_buy_baojia', via: 'get'
+  match '/cai_gou_he_tong_pdf', to: 'work_flow#cai_gou_he_tong_pdf', via: 'get'
 
 
 

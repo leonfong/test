@@ -4,7 +4,7 @@
 <small><div class="container-fluid" >
     <div class="row" >
         <ol class="breadcrumb" style="padding: 8px 30px;">
-            <li ><a href="/pi_waitfor_buy">待采购物料</a></li>
+            <li><a href="/pi_waitfor_buy">待采购物料</a></li>
             <li><a href="/pi_buy_baojia_list">采购询价</a></li> 
             <li class="active">采购订单</a></li>         
             <li><a href="/fu_kuan_shen_qing_list">付款申请</a></li>
@@ -12,6 +12,59 @@
             <li><a href="/cai_gou_fa_piao_list">采购发票</a></li>
         </ol>
     </div> 
+
+    <div class="row" style="padding: 0px;">
+        <div class="col-md-1 list-group" style="padding: 0px;">
+            
+        </div>
+        <div class="col-md-6" style="padding-top: 1px;"> 
+            <div class="form-inline">
+                <%= form_tag('/pi_buy_list', method:"get", class:"form-inline") do %>
+                <div class="row">
+                  
+
+                 <div class="col-md-4 col-sm-4 " >
+                 <div class="input-group input-group-sm"> 
+                     <span class="input-group-addon " >开始 : </span>
+                       <%= text_field_tag :start_date, params[:start_date], id: "start_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#start_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                     </script>
+                     <span class="input-group-addon " >结束 : </span>
+                       <%= text_field_tag :end_date, params[:end_date], id: "end_date",class:"form-control input-sm", size:"10" %>
+                       <script type="text/javascript">
+                          $(function () {
+                            $('#end_date').datetimepicker({
+                              useCurrent: false,
+                              format: 'YYYY-MM-DD'
+                            });    
+                          });
+                      </script>
+                 </div>
+                 </div>
+
+                 <div class="col-md-5 col-sm-5 " >
+
+                 <div class="input-group input-group-sm">  
+                      <%= text_field_tag :c_code, params[:c_code], class:"form-control input-lg", size:"100", placeholder:"输入采购单编号、供应商"%>
+                  <div class="input-group-btn">
+                      <%= submit_tag "搜索", class:"btn btn-primary btn-sm", onclick:"return postformchk()" %>
+                  </div>
+                </div>
+                </div>
+                </div>
+
+
+                <% end %>             
+            </div> 
+        </div>
+    </div>
+
     <div class="row" style="padding: 0px;">
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "buy_list"} %>
@@ -30,14 +83,33 @@
 <table class="table table-hover">
   <thead>
     <tr style="background-color: #eeeeee">
+      <th width="100">
+
+                  <div class="btn-group btn-group-xs ">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        状态：<% if params[:state]=="new" %>未提交<% elsif params[:state]=="check" %>待审核<% elsif params[:state]=="checked" %>已审核<% elsif params[:state]=="buy" %>已采购<% elsif params[:state]=="uncheck" %>被驳回<% else %>全部<% end %>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="/pi_buy_list?state=new">未提交</a></li>
+                        <li><a href="/pi_buy_list?state=check">待审核</a></li>
+                        <li><a href="/pi_buy_list?state=checked">已审核</a></li>
+                        <li><a href="/pi_buy_list?state=buy">已采购</a></li>
+                        <li><a href="/pi_buy_list?state=uncheck">被驳回</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/pi_buy_list?state=all">全部</a></li>
+                    </ul>
+                 </div>
+
+
+      </th>
       <th width="150">采购单号</th>
       <th  >供应商</th>
       <th width="230">总价</th>
       <th width="230">Created Date</th>
       <th width="100">采购工程师</th>
-      <th width="65">状态</th>
       <% if can? :work_g, :all or can? :work_admin, :all%>
-      <th width="50">操作</th>
+      <th width="200">操作</th>
       <% end %>
     </tr>
   </thead>
@@ -46,15 +118,41 @@
   <%= will_paginate(@pi_buy_list) %> 
   <% @pi_buy_list.each do |buy_list| %>
   <tr>
-      <td ><%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %></td>
+      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.state %></td>
+      <td>
+          <%= link_to buy_list.pi_buy_no, edit_pi_buy_path(pi_buy_no: buy_list.pi_buy_no) %>
+      </td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.dn_long %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.t_p_sum %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
       <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= User.find_by_email(buy_list.user).full_name %></td>
-      <td data-toggle="collapse" href="#buy_<%= buy_list.id.to_s %>" aria-expanded="false" aria-controls="buy_<%= buy_list.id %>"><%= buy_list.state %></td>
+
       <% if can? :work_g, :all or can? :work_admin, :all%>
       <td>    
-          <%= link_to "提交", send_pi_buy_check_path(pi_buy_no: buy_list.pi_buy_no), class: "btn btn-info btn-xs",data: {confirm: "确定要提交？"}%> 
+      <% if buy_list.state == "new" or buy_list.state == "uncheck" %>
+              <%= link_to "提交", send_pi_buy_check_path(pi_buy_no: buy_list.pi_buy_no), class: "btn btn-info btn-xs",data: {confirm: "确定要提交？"}%> 
+
+      <% elsif buy_list.state == "checked" %>
+         <%= form_tag('/send_pi_buy', method:"post",id:"upatt") do %>
+             <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= buy_list.dn.to_s %>">                   
+             <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= buy_list.pi_buy_no.to_s %>">
+             <% if can? :work_g, :all %>
+                 <%= submit_tag "确认购买", class: "btn btn-info btn-xs pull-right" ,style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%>              
+              <% end %>
+          <% end %>
+      <% elsif buy_list.state == "check" %>
+          <%= form_tag('/send_pi_buy_checked', method:"post",id:"upatt") do %> 
+              <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= buy_list.dn.to_s %>">                   
+              <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= buy_list.pi_buy_no.to_s %>">
+              <% if can? :work_g, :all %>
+                  <%= submit_tag "审核", class: "btn btn-info btn-xs pull-right" ,style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%>  
+                  <%= submit_tag "反审核", class: "btn btn-danger btn-xs pull-right" ,style: "margin-left: 10px;margin-top: 5px;",onclick:"return unpostform()"%> 
+              <% end %>
+          <% end %>
+      <% elsif buy_list.state == "buy" %>
+          <%= link_to "查看合同", cai_gou_he_tong_pdf_path(cai_gou_id: buy_list.id), class: "btn btn-info btn-xs pull-right",  style: "margin-left: 10px;margin-top: 5px;" %> 
+          <%= link_to "下载合同", cai_gou_he_tong_pdf_path(cai_gou_id: buy_list.id,v_f: "pdf"), class: "btn btn-info btn-xs pull-right",  style: "margin-left: 10px;margin-top: 5px;" %>  
+      <% end %>
       </td>           
       <% end %>
   </tr>

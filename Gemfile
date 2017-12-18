@@ -96,6 +96,9 @@ gem 'zip-zip'
 
 gem 'axlsx'
 
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 group :development, :test do

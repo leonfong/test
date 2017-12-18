@@ -19,6 +19,14 @@
                     <% if can? :work_g, :all %>
                         <%= submit_tag "提交", class: "btn btn-sm btn-primary pull-right",style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%>  
                     <% end %>
+   
+
+
+        <% end %>
+        <%= form_tag('/send_pi_buy_check_baojia_done', method:"post",id:"upatt_done") do %>
+            
+                    <input type="text" class="form-control sr-only" id="pi_buy_baojia_info_id_chk" name="pi_buy_baojia_info_id_chk" value="<%= @get_data.id %>">
+                    
 
                     <% if can? :work_admin, :all %>
                         <%= submit_tag "审批", class: "btn btn-sm btn-primary pull-right",style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%> 
@@ -26,9 +34,26 @@
 
 
         <% end %>
+        <%= form_tag('/send_pi_buy_check_baojia_back', method:"post",id:"upatt_back") do %>
+            
+                    <input type="text" class="form-control sr-only" id="pi_buy_baojia_info_id_chk" name="pi_buy_baojia_info_id_chk" value="<%= @get_data.id %>">
+                    
+
+                    <% if can? :work_admin, :all %>
+                        <%= submit_tag "驳回", class: "btn btn-sm btn-primary pull-right",style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%> 
+                    <% end %>    
+
+
+        <% end %>
         </div>
     </div>
+
+
+    
     <div class="row" style="padding-top: 60px;">
+        <div class="col-md-12" >
+        <%= render 'layouts/flash_messages' %>
+        </div>
         <div class="col-md-12" style="padding-top: 10px;">
             <div class="row ">
                 <div class="col-md-12">                
@@ -223,12 +248,14 @@
 <div class="modal fade" id="cost_history_buy" tabindex="-1" role="dialog" aria-labelledby="cost_history_buyLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
+<!--
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="cost_history_buyLabel">History Cost</h4>
       </div>
-      <div class="modal-body">
-          <div class="form-group" id="cost_history_buy_list">
+-->
+      <div class="modal-body" style="padding-top: 0px;">
+          <div class="form-group" id="cost_history_buy_list" >
 
           </div>       
       </div>

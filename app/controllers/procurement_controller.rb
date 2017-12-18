@@ -2601,22 +2601,14 @@ before_filter :authenticate_user!
 
     def p_item_remark
         @item_id = params[:itemp_id]
-        if not params[:bom_version].blank?
-            remark = PVersionItemRemark.new()
-        else
-            remark = PItemRemark.new()
-        end
+        remark = PItemRemark.new()
         remark.p_item_id = params[:itemp_id]
         remark.user_id = current_user.id
         remark.user_name = current_user.full_name
         if not params[:dn_info].blank?
             remark.update(editbn_params)
         end
-        if not params[:bom_version].blank?
-            p_c = PVersionItem.find(params[:itemp_id])    
-        else
-            p_c = PItem.find(params[:itemp_id]) 
-        end   
+        p_c = PItem.find(params[:itemp_id])   
         if can? :work_e, :all
             remark.user_team = "sell"
             

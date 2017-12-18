@@ -5,6 +5,17 @@ require 'axlsx'
 class WorkFlowController < ApplicationController
 before_filter :authenticate_user!
 
+    def cai_gou_he_tong_pdf
+        if params[:cai_gou_id]
+        #PDF test
+        
+        #render pdf: "file_name",layout: 'pi_pdf_fengmian.html.erb', encoding: 'UTF-8', dpi: 72, disposition: 'attachment'
+            if params[:v_f] == "pdf"
+                render pdf: "file_name",layout: 'cai_gou_he_tong_pdf.html.erb', encoding: 'UTF-8', dpi: 72, disposition: 'attachment'
+            end
+        end
+    end
+
     def send_pi_buy_check_baojia
         up_state = PiBuyBaojiaInfo.find_by_id(params[:pi_buy_baojia_info_id_chk])
         if not up_state.blank?
@@ -31,6 +42,22 @@ before_filter :authenticate_user!
                 #item.save
                 pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
                 pmc_data.baojia_state = "done" 
+                pmc_data.save
+            end
+        end
+        redirect_to pi_buy_baojia_list_path()
+    end
+
+    def send_pi_buy_check_baojia_back
+        up_state = PiBuyBaojiaInfo.find_by_id(params[:pi_buy_baojia_info_id_chk])
+        if not up_state.blank?
+            up_state.state = "back"
+            up_state.save
+            PiBuyBaojiaItem.where(pi_buy_baojia_info_id: up_state.id).each do |item|
+                #item.state = "checking"
+                #item.save
+                pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+                pmc_data.baojia_state = "back" 
                 pmc_data.save
             end
         end
@@ -1073,7 +1100,9 @@ before_filter :authenticate_user!
                 @get_data.save
             end
             if not params[:print].blank?
-                render "pi_print_fengmian.html.erb" and return
+                #PDF test
+                render pdf: "file_name",layout: 'pi_pdf_fengmian.html.erb', encoding: 'UTF-8', dpi: 72, disposition: 'attachment'
+                #render "pi_print_fengmian.html.erb" and return
             end
         end
     end
@@ -1457,6 +1486,7 @@ before_filter :authenticate_user!
 
                     #pi_draft.state = "check"
                     pi_draft.state = "sell_admin_check"
+                    pi_draft.sell_tijiao_at = Time.new()
                     pi_draft.save
                 end
                 redirect_to pi_list_path(bom_chk: true) and return                
@@ -1472,6 +1502,7 @@ before_filter :authenticate_user!
                         pi_item_data.state = "check"
                         pi_item_data.bom_state = "check"
                         pi_item_data.buy_state = "check"
+                        pi_item_data.finance_state = 1
                         pi_item_data.save
                     end
                     pi_draft.pi_lock = "lock"
@@ -5246,6 +5277,8 @@ before_filter :authenticate_user!
             render "edit_pi_buy_check.html.erb" and return
         elsif @pi_buy_info.state == "checked"
             render "edit_pi_buy_checked.html.erb" and return
+        elsif @pi_buy_info.state == "buy"
+            render "edit_pi_buy_buy.html.erb" and return
         end
     end
 
@@ -5273,6 +5306,7 @@ before_filter :authenticate_user!
                 item.state = "checking"
                 item.save
                 pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+#提交后待审批的采购申请，此时buyer_qty 购物车累加
                 pmc_data.buyer_qty = pmc_data.buyer_qty + item.buy_qty
                 pmc_data.state = "checking" 
                 pmc_data.save
@@ -5314,6 +5348,7 @@ before_filter :authenticate_user!
                 end
                 item.save
                 pmc_data = PiPmcItem.find_by_id(item.pi_pmc_item_id)
+#反审核buyer_qty购物车减去数量
                 pmc_data.buyer_qty = pmc_data.buyer_qty - item.buy_qty
                 if params[:commit] == "反审核"
                     pmc_data.state = "checking"
@@ -5380,7 +5415,9 @@ before_filter :authenticate_user!
                                 end
                                 get_wh.save
                             end
-                            get_pmc_data.buy_qty = item.buy_qty
+#确认购买后buyer_qty购物车清空，并且累加已经购买的数量
+                            get_pmc_data.buy_qty = get_pmc_data.buy_qty + item.buy_qty
+                            get_pmc_data.buyer_qty = 0
                             get_pmc_data.cost = item.cost
                             get_pmc_data.dn = item.dn
                             get_pmc_data.dn_long = item.dn_long
@@ -5434,30 +5471,54 @@ before_filter :authenticate_user!
         redirect_to :back
     end
 
-    def cost_history_buy
-        order_set = "created_at DESC, date DESC"
+    def cost_history_buy_caigou
+        order_set = "created_at DESC"
         if params[:order_by] == "time"
-            order_set = "created_at DESC, date DESC"
+            order_set = "created_at DESC"
         elsif params[:order_by] == "dn"
-            order_set = "dn DESC, created_at DESC, date DESC"
+            order_set = "dn DESC, created_at DESC"
         elsif params[:order_by] == "qty"
-            order_set = "qty DESC, created_at DESC, date DESC"
+            order_set = "qty DESC, created_at DESC"
         elsif params[:order_by] == "cost"
-            order_set = "cost DESC, created_at DESC, date DESC"
+            order_set = "cost DESC, created_at DESC"
         end
-        @history_list = PDn.where(part_code: params[:part_code],state: "").order(order_set)
+        if params[:q_key]
+            @history_list = PiBuyItem.find_by_sql("SELECT * FROM pi_buy_items WHERE (pi_buy_items.dn LIKE '%#{params[:q_key]}%' OR pi_buy_items.dn_long LIKE '%#{params[:q_key]}%' OR pi_buy_items.moko_part LIKE '%#{params[:q_key]}%') AND p_dns.state = 'done' ")
+        else
+            @history_list = PiBuyItem.where(moko_part: params[:part_code],state: "done").order(order_set)
+        end
+        @c_table = '<br>'
+        @c_table += '<small>'
+        @c_table += '<div>'
+        @c_table += '<ul class="nav nav-tabs" >'
+        @c_table += '<li role="presentation"><a data-method="get" data-remote="true" href="/cost_history_buy?part_code='+params[:part_code].to_s+'">询价记录</a></li>'
+        @c_table += '<li role="presentation" class="active"><a data-method="get" data-remote="true" href="/cost_history_buy_caigou?part_code='+params[:part_code].to_s+'">采购记录</a></li>'
+        @c_table += '</ui>'
+        @c_table += '</div>'
+
+        @c_table += '<form class="form-inline" enctype="multipart/form-data" action="/cost_history_buy_caigou" accept-charset="UTF-8" data-remote="true" method="get">'
+        @c_table += '<div class="row">'
+        @c_table += '<div class="col-md-5 col-sm-5 " style="padding-top: 10px;padding-bottom: 10px;">'
+        @c_table += '<div class="input-group input-group-sm">'
+        @c_table += '<input type="text" name="q_key" id="q_key" class="form-control input-lg" size="100" placeholder="输入MOKOPart、供应商">'
+        @c_table += '<div class="input-group-btn">'
+        @c_table += '<input type="submit" name="commit" value="搜索" class="btn btn-primary btn-sm" >'
+        @c_table += '</div>'
+        @c_table += '</div>'
+        @c_table += '</div>'
+        @c_table += '</div>'
+        @c_table += '</form>'
         if not @history_list.blank?
-            @c_table = '<br>'
-            @c_table += '<small>'
+            @c_table += '<div>'
             @c_table += '<table class="table table-bordered">'
             @c_table += '<thead>'
             @c_table += '<tr class="active">'
-            @c_table += '<th width="100"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history_buy?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=time">询价时间</a><span class="caret"></span></th>'
+            @c_table += '<th width="100">询价时间</th>'
             @c_table += '<th>MOKO代码</th>' 
-            @c_table += '<th width="120"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history_buy?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=dn">供应商代码</a><span class="caret"></span></th>'
+            @c_table += '<th width="120">供应商代码</th>'
             @c_table += '<th>供应商全称</th>'    
-            @c_table += '<th width="100"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history_buy?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=qty">数量</a><span class="caret"></span></th>'        
-            @c_table += '<th width="100"><a class="text-primary" data-method="get" data-remote="true" href="/cost_history_buy?part_code='+params[:part_code].to_s+'&item_id='+params[:item_id].to_s+'&order_by=cost">价格</a><span class="caret"></span></th>' 
+            @c_table += '<th width="100">数量</th>'        
+            @c_table += '<th width="100">价格</th>' 
             @c_table += '<tr>'
             @c_table += '</thead>'
             @c_table += '<tbody>'
@@ -5489,8 +5550,91 @@ before_filter :authenticate_user!
             end
             @c_table += '</tbody>'
             @c_table += '</table>'
-            @c_table += '</small>'
+            @c_table += '</div>'
         end
+        @c_table += '</small>'
+    end
+
+    def cost_history_buy
+        order_set = "created_at DESC, date DESC"
+        if params[:order_by] == "time"
+            order_set = "created_at DESC, date DESC"
+        elsif params[:order_by] == "dn"
+            order_set = "dn DESC, created_at DESC, date DESC"
+        elsif params[:order_by] == "qty"
+            order_set = "qty DESC, created_at DESC, date DESC"
+        elsif params[:order_by] == "cost"
+            order_set = "cost DESC, created_at DESC, date DESC"
+        end
+        if params[:q_key]
+            @history_list = PDn.find_by_sql("SELECT * FROM p_dns WHERE (p_dns.dn LIKE '%#{params[:q_key]}%' OR p_dns.dn_long LIKE '%#{params[:q_key]}%' OR p_dns.part_code LIKE '%#{params[:q_key]}%') AND p_dns.state = '' ")
+        else
+            @history_list = PDn.where(part_code: params[:part_code],state: "").order(order_set)
+        end
+        @c_table = '<br>'
+        @c_table += '<small>'
+        @c_table += '<div>'
+        @c_table += '<ul class="nav nav-tabs" >'
+        @c_table += '<li role="presentation" class="active"><a data-method="get" data-remote="true" href="/cost_history_buy?part_code='+params[:part_code].to_s+'">询价记录</a></li>'
+        @c_table += '<li role="presentation"><a data-method="get" data-remote="true" href="/cost_history_buy_caigou?part_code='+params[:part_code].to_s+'">采购记录</a></li>'
+        @c_table += '</ui>'
+        @c_table += '</div>'
+
+        @c_table += '<form class="form-inline" enctype="multipart/form-data" action="/cost_history_buy" accept-charset="UTF-8" data-remote="true" method="get">'
+        @c_table += '<div class="row">'
+        @c_table += '<div class="col-md-5 col-sm-5 " style="padding-top: 10px;padding-bottom: 10px;">'
+        @c_table += '<div class="input-group input-group-sm">'
+        @c_table += '<input type="text" name="q_key" id="q_key" class="form-control input-lg" size="100" placeholder="输入MOKOPart、供应商">'
+        @c_table += '<div class="input-group-btn">'
+        @c_table += '<input type="submit" name="commit" value="搜索" class="btn btn-primary btn-sm" >'
+        @c_table += '</div>'
+        @c_table += '</div>'
+        @c_table += '</div>'
+        @c_table += '</div>'
+        @c_table += '</form>'
+        if not @history_list.blank?
+            @c_table += '<table class="table table-bordered">'
+            @c_table += '<thead>'
+            @c_table += '<tr class="active">'
+            @c_table += '<th width="100">询价时间</th>'
+            @c_table += '<th>MOKO代码</th>' 
+            @c_table += '<th width="120">供应商代码</th>'
+            @c_table += '<th>供应商全称</th>'    
+            @c_table += '<th width="100">数量</th>'        
+            @c_table += '<th width="100">价格</th>' 
+            @c_table += '<tr>'
+            @c_table += '</thead>'
+            @c_table += '<tbody>'
+            @history_list.each do |item|
+                if item.dn_type == "B"
+                    @c_table += '<tr class="danger">'
+                else
+                    @c_table += '<tr>'
+                end
+                if not item.created_at.blank?
+                    @c_table += '<td>' + item.created_at.localtime.strftime('%Y-%m-%d').to_s + '</td>'
+                else
+                    @c_table += '<td>' + item.date.strftime('%Y-%m-%d').to_s + '</td>'
+                end
+         
+=begin
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/pi_buy_item_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.part_code.to_s + '</div></a></small></td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/pi_buy_item_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.dn.to_s + '</div></a></small></td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/pi_buy_item_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.dn_long.to_s + '</div></a></small></td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/pi_buy_item_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.qty.to_s + '</div></a></small></td>'
+                @c_table += '<td><small><a rel="nofollow" data-method="get" data-remote="true" href="/pi_buy_item_edit?item_id=' + params[:item_id].to_s + '&cost=' + item.cost.to_s + '&dn= ' + item.dn.to_s + '&dn_long= ' + item.dn_long.to_s + '&part_code=' + item.part_code.to_s + '" ><div>' + item.cost.to_s + '</div></a></small></td>'
+=end
+                @c_table += '<td><small><div>' + item.part_code.to_s + '</div></small></td>'
+                @c_table += '<td><small><div>' + item.dn.to_s + '</div></small></td>'
+                @c_table += '<td><small><div>' + item.dn_long.to_s + '</div></small></td>'
+                @c_table += '<td><small><div>' + item.qty.to_s + '</div></small></td>'
+                @c_table += '<td><small><div>' + item.cost.to_s + '</div></small></td>'
+                @c_table += '</tr>'
+            end
+            @c_table += '</tbody>'
+            @c_table += '</table>'
+        end
+        @c_table += '</small>'
     end
 
     def find_dn_ch
@@ -9278,10 +9422,10 @@ before_filter :authenticate_user!
                     end
                 end 
                 #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' AND `pi_pmc_items`.`buy_user` <> 'MOKO' ORDER BY 'moko_part'")
-                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`pmc_qty` > `pi_pmc_items`.`buyer_qty` AND `pi_pmc_items`.`buy_user` <> 'MOKO' ORDER BY 'moko_part'")
+                @pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND (`pi_pmc_items`.`pmc_qty` > (`pi_pmc_items`.`buyer_qty` + `pi_pmc_items`.`buy_qty`)) AND `pi_pmc_items`.`buy_user` <> 'MOKO' AND (`pi_pmc_items`.`baojia_state` IS null OR `pi_pmc_items`.`baojia_state` = 'done') ORDER BY 'moko_part'")
             else
                 #@pi_buy = PiPmcItem.where("state = 'pass' AND `buy_user` <> 'MOKO'").order("moko_part")
-                @pi_buy = PiPmcItem.where("`pi_pmc_items`.`pmc_qty` > `pi_pmc_items`.`buyer_qty` AND `buy_user` <> 'MOKO'").order("moko_part")
+                @pi_buy = PiPmcItem.where("(`pi_pmc_items`.`pmc_qty` > (`pi_pmc_items`.`buyer_qty` + `pi_pmc_items`.`buy_qty`)) AND `buy_user` <> 'MOKO' AND (`pi_pmc_items`.`baojia_state` IS null OR `pi_pmc_items`.`baojia_state` = 'done') ").order("moko_part")
             end
             #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE (p_items.moko_part LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND pi_infos.state = 'checked' AND p_items.buy IS NULL")    
             #@pi_buy = PiPmcItem.find_by_sql("SELECT * FROM `pi_pmc_items` WHERE (`pi_pmc_items`.`moko_part` LIKE '%#{params[:key_order]}%' OR (#{where_des})) AND `pi_pmc_items`.`state` = 'pass' ") 
@@ -9425,14 +9569,39 @@ before_filter :authenticate_user!
     end
 
     def pi_buy_list
-        #@pi_buy_list = PiBuyInfo.where(state: "new").paginate(:page => params[:page], :per_page => 20)
-        @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = 'new' OR pi_buy_infos.state = 'uncheck' GROUP BY pi_buy_infos.id ORDER BY pi_buy_infos.created_at DESC").paginate(:page => params[:page], :per_page => 20)
-        #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
+        where_data = " WHERE "
+        #wh_data = ""
+        if not params[:c_code].blank?
+            #wh_data = "WHERE (pi_buy_infos.pi_buy_no LIKE '%#{params[:c_code]}%' OR pi_buy_infos.dn LIKE '%#{params[:c_code]}%' OR pi_buy_infos.dn_long LIKE '%#{params[:c_code]}%' )"
+            where_data += "(pi_buy_infos.pi_buy_no LIKE '%#{params[:c_code]}%' OR pi_buy_infos.dn LIKE '%#{params[:c_code]}%' OR pi_buy_infos.dn_long LIKE '%#{params[:c_code]}%')"
+        end
+
+        if not params[:start_date].blank?
+            where_date += "AND pi_buy_infos.ti_jiao_at > '#{params[:start_date]}'"
+        end
+        if not params[:end_date].blank?
+            where_date += " AND pi_buy_infos.ti_jiao_at < '#{params[:end_date]}' "
+        end
+
+        if not params[:state].blank?
+            if params[:state] == "all"
+                #@pi_buy_list = PiBuyInfo.all.paginate(:page => params[:page], :per_page => 10)
+                @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id GROUP BY pi_buy_infos.id ORDER BY pi_buy_infos.created_at DESC").paginate(:page => params[:page], :per_page => 20)
+            else
+                #@pi_buy_list = PiBuyInfo.where(state: params[:state]).paginate(:page => params[:page], :per_page => 10)
+                @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id WHERE pi_buy_infos.state = '#{params[:state]}' GROUP BY pi_buy_infos.id ORDER BY pi_buy_infos.created_at DESC").paginate(:page => params[:page], :per_page => 20)
+            end
+        else
+            #@pi_buy_list = PiBuyInfo.where(where_data).paginate(:page => params[:page], :per_page => 10)
+            #@pi_buy_list = PiBuyInfo.find_by_sql("SELECT * FROM pi_buy_infos " + wh_data + where_date + " GROUP BY pi_buy_baojia_infos.id").paginate(:page => params[:page], :per_page => 10)
+            if where_data == " WHERE "
+                where_data = ""
+            end
+            @pi_buy_list = PiBuyInfo.find_by_sql("SELECT pi_buy_infos.*,SUM(pi_buy_items.buy_qty*pi_buy_items.cost) AS t_p_sum FROM pi_buy_infos LEFT JOIN pi_buy_items ON pi_buy_infos.id = pi_buy_items.pi_buy_info_id  " + where_data + " GROUP BY pi_buy_infos.id ORDER BY pi_buy_infos.created_at DESC").paginate(:page => params[:page], :per_page => 20)
+        end
     end
 
     def pi_buy_baojia_list
-
-
         wh_data = ""
         if not params[:c_code].blank?
             wh_data = "WHERE (pi_pmc_items.erp_no LIKE '%#{params[:c_code]}%' OR pi_pmc_items.moko_part LIKE '%#{params[:c_code]}%' OR pi_pmc_items.moko_des LIKE '%#{params[:c_code]}%' OR pi_pmc_items.description LIKE '%#{params[:c_code]}%' OR pi_pmc_items.dn LIKE '%#{params[:c_code]}%' OR pi_pmc_items.dn_long LIKE '%#{params[:c_code]}%' )"
@@ -9465,33 +9634,156 @@ before_filter :authenticate_user!
     end
 
     def add_pi_buy_baojia_item
-        if params[:roles]
-            if params[:pi_buy_baojia_info_id]
-                new_data = PiBuyBaojiaInfo.find_by_id(params[:pi_buy_baojia_info_id])
-            else
-                new_data = PiBuyBaojiaInfo.new
-                new_data.state = "new"
-                new_data.zhi_dan_ren = current_user.email
-                new_data.save
-            end
-            params[:roles].each do |item_id|
-                #item_data = PItem.find_by_id(item_id)
+        if params[:commit] == "tijiao_caigou"
+            issue_item = ""
+            if params[:roles]
+
+                if PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').blank?
+                    pi_n =1
+                else
+                    pi_n = PiBuyInfo.find_by_sql('SELECT pi_buy_no FROM pi_buy_infos WHERE to_days(pi_buy_infos.created_at) = to_days(NOW())').last.pi_buy_no.split("BUY")[-1].to_i + 1
+                end
+                @pi_buy_no = "MO"+ Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "BUY"+ pi_n.to_s
+                pi_buy_info = PiBuyInfo.new()
+                pi_buy_info.pi_buy_no = @pi_buy_no
+                pi_buy_info.user = current_user.email
+                pi_buy_info.state = "new"
+                pi_buy_info.save
+                pi_buy_no = pi_buy_info.pi_buy_no
+
+                params[:roles].each do |item_id|
+                    #item_data = PItem.find_by_id(item_id)
                 
-                item_data = PiPmcItem.find_by_id(item_id)
-                if not item_data.blank?
-                    if item_data.baojia_state.blank?
-                        item_new = PiBuyBaojiaItem.new
-                        item_new.pi_buy_baojia_info_id = new_data.id
-                        item_new.pi_pmc_item_id = item_data.id
-                        if item_new.save
-                            item_data.baojia_state = "new"
-                            item_data.save
+                    item_data = PiPmcItem.find_by_id(item_id)
+                    if not item_data.blank?
+                        if item_data.state == "pass" or item_data.state == "new_new"
+                        #if item_data.state == "new" or item_data.state == "new_new"
+                            find_buy_data = PiBuyItem.find_by_pi_pmc_item_id(item_id)
+                            if find_buy_data.blank?
+                                add_buy_data = PiBuyItem.new
+                                add_buy_data.pi_bom_qty_info_item_id = item_data.pi_bom_qty_info_item_id
+                                add_buy_data.pi_info_id = item_data.pi_info_id
+                                add_buy_data.pi_item_id = item_data.pi_item_id
+                                add_buy_data.pmc_flag = item_data.pmc_flag
+                                add_buy_data.buy_user = item_data.buy_user
+                                add_buy_data.state = "new"
+                                add_buy_data.pi_pmc_item_id = item_data.id 
+                                add_buy_data.p_item_id = item_data.p_item_id
+                                add_buy_data.erp_id = item_data.erp_id
+                                add_buy_data.erp_no = item_data.erp_no
+                                add_buy_data.erp_no_son = item_data.erp_no_son
+                                add_buy_data.user_do = item_data.user_do
+                                add_buy_data.user_do_change = item_data.user_do_change
+                                add_buy_data.check = item_data.check
+                                add_buy_data.pi_buy_info_id =pi_buy_info.id
+                                add_buy_data.supplier_list_id = pi_buy_info.supplier_list_id
+                                add_buy_data.procurement_bom_id = item_data.procurement_bom_id
+                                add_buy_data.quantity = item_data.quantity
+                                add_buy_data.qty = item_data.qty
+                                add_buy_data.pmc_qty = item_data.pmc_qty
+                                add_buy_data.buy_qty = item_data.buy_qty
+                                add_buy_data.description = item_data.description
+                                add_buy_data.part_code = item_data.part_code
+                                add_buy_data.fengzhuang = item_data.fengzhuang
+                                add_buy_data.link = item_data.link
+                                add_buy_data.cost = item_data.cost
+
+                                add_buy_data.tax_cost = item_data.cost
+                                add_buy_data.tax = item_data.cost
+                                add_buy_data.tax_t_p = item_data.cost
+                                #add_buy_data.delivery_date = item_data.created_at
+
+                                add_buy_data.info = item_data.info
+                                add_buy_data.product_id = item_data.product_id
+                                add_buy_data.moko_part = item_data.moko_part
+                                add_buy_data.moko_des = item_data.moko_des
+                                add_buy_data.warn = item_data.warn
+                                add_buy_data.user_id = item_data.user_id
+                                add_buy_data.danger = item_data.danger
+                                add_buy_data.manual = item_data.manual
+                                add_buy_data.mark = item_data.mark
+                                add_buy_data.mpn = item_data.mpn
+                                add_buy_data.mpn_id = item_data.mpn_id
+                                add_buy_data.price = item_data.price
+                                add_buy_data.mf = item_data.mf
+                                add_buy_data.dn = item_data.dn
+                                add_buy_data.dn_id = item_data.dn_id
+                                add_buy_data.dn_long = item_data.dn_long
+                                add_buy_data.other = item_data.other
+                                add_buy_data.all_info = item_data.all_info
+                                add_buy_data.remark = item_data.remark
+                                add_buy_data.color = item_data.color
+                                add_buy_data.supplier_tag = item_data.supplier_tag
+                                add_buy_data.supplier_out_tag = item_data.supplier_out_tag
+                                add_buy_data.sell_feed_back_tag = item_data.sell_feed_back_tag
+                                if add_buy_data.save
+                                    item_data.state = "buy_adding"
+                                    item_data.save
+                                    pitem_data = PItem.find_by_id(add_buy_data.p_item_id)
+                                    if not pitem_data.blank? 
+                                        pitem_data.buy = "buy_adding"
+                                        pitem_data.save
+                                    end
+                                    get_piitem_data = PiBomQtyInfoItem.find_by_id(add_buy_data.pi_bom_qty_info_item_id)
+                                    get_piitem_data.pmc_back_state = "lock"
+                                    get_piitem_data.save
+                                end
+                            else
+                                issue_item += " "
+                                issue_item += item_data.moko_des.to_s
+                                issue_item += " "
+                            end
+                        end
+                    end
+
+                end
+            end
+            if issue_item == ""
+                redirect_to edit_pi_buy_path(pi_buy_no: pi_buy_no) and return
+            else
+                redirect_to edit_pi_buy_path(pi_buy_no: pi_buy_no), :flash => {:error => issue_item+"--------你选中的物料已经采购或者正在采购中！"}
+                return false
+            end
+        elsif params[:commit] == "tijiao"
+            issue_item = ""
+            if params[:roles]
+                if params[:pi_buy_baojia_info_id]
+                    new_data = PiBuyBaojiaInfo.find_by_id(params[:pi_buy_baojia_info_id])
+                else
+                    new_data = PiBuyBaojiaInfo.new
+                    new_data.state = "new"
+                    new_data.zhi_dan_ren = current_user.email
+                    new_data.save
+                end
+            
+                params[:roles].each do |item_id|
+                    #item_data = PItem.find_by_id(item_id)
+                
+                    item_data = PiPmcItem.find_by_id(item_id)
+                    if not item_data.blank?
+                        if item_data.baojia_state.blank?
+                            item_new = PiBuyBaojiaItem.new
+                            item_new.pi_buy_baojia_info_id = new_data.id
+                            item_new.pi_pmc_item_id = item_data.id
+                            if item_new.save
+                                item_data.baojia_state = "new"
+                                item_data.save
+                            end
+                        else
+                            issue_item += " "
+                            issue_item += item_data.moko_des.to_s
+                            issue_item += " "
                         end
                     end
                 end
             end
+            if issue_item == ""
+                redirect_to view_pi_buy_baojia_path(baojia_id: new_data.id) and return
+            else
+                redirect_to view_pi_buy_baojia_path(baojia_id: new_data.id), :flash => {:error => issue_item+"--------你选中的物料已经报价或者正在报价中！"}
+                return false
+            end
         end
-        redirect_to view_pi_buy_baojia_path(baojia_id: new_data.id) and return
     end
 
     def pi_waitfor_buy
@@ -9506,7 +9798,9 @@ before_filter :authenticate_user!
         if not params[:c_code].blank?
             wh_data = "AND pi_no LIKE '%#{params[:c_code]}%'"
         end
-        @pi_buy = PiPmcItem.where("state = 'pass' AND buy_user<> 'MOKO'" + wh_data + where_date).paginate(:page => params[:page], :per_page => 20)
+        #@pi_buy = PiPmcItem.where("state = 'pass' AND buy_user<> 'MOKO'" + wh_data + where_date).paginate(:page => params[:page], :per_page => 20)
+
+        @pi_buy = PiPmcItem.where("(`pi_pmc_items`.`pmc_qty` > (`pi_pmc_items`.`buyer_qty` + `pi_pmc_items`.`buy_qty`)) AND buy_user<> 'MOKO'" + wh_data + where_date).paginate(:page => params[:page], :per_page => 20)
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked' AND p_items.buy IS NULL").paginate(:page => params[:page], :per_page => 20)
         
         #@pi_buy = PiInfo.find_by_sql("SELECT pi_infos.pi_no, pi_items.pi_no, p_items.* FROM pi_infos INNER JOIN pi_items ON pi_infos.pi_no = pi_items.pi_no INNER JOIN p_items ON pi_items.bom_id = p_items.procurement_bom_id WHERE pi_infos.state = 'checked'").paginate(:page => params[:page], :per_page => 20)
@@ -9953,6 +10247,7 @@ before_filter :authenticate_user!
             @pi_no = "MO"+current_user.s_name_self.to_s.upcase  + Time.new.strftime('%y').to_s + Time.new.strftime('%m%d').to_s + "PI"+ pi_n.to_s
             pi_info = PiInfo.new()
             pi_info.pi_no = @pi_no
+            pi_info.user_id = current_user.id
             pi_info.sell = current_user.full_name
             pi_info.pi_sell = current_user.email
             pi_info.team = current_user.team

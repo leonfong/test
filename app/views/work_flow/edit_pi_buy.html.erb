@@ -8,10 +8,20 @@
          
         </div>
         <div class="col-md-6 ">
-            <a type="button" class="btn btn-info pull-right" style="margin-left: 10px;margin-top: 5px;" href="#" >test</a>
+           
+         <%= form_tag('/send_pi_buy_check', method:"post",id:"upatt") do %>
+                    <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= @pi_buy_info.dn.to_s %>">
+                    <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= @pi_buy_info.pi_buy_no.to_s %>">
+                    <% if can? :work_g, :all %>
+                        <%= submit_tag "提交", class: "btn btn-info btn-sm pull-right" ,style: "margin-left: 10px;margin-top: 5px;",onclick:"return postform()"%>                
+                    <% end %>
+       <% end %>
         </div>
     </div>
     <div class="row" style="padding-top: 60px;">
+        <div class="col-md-12" >
+            <%= render 'layouts/flash_messages' %>
+        </div>
         <div class="col-md-1 list-group" style="padding: 0px;">
             <%= render partial: "work_flow/menu", locals: {selected: "buy_list"} %>
         </div>
@@ -223,17 +233,7 @@
 
 
 
-         <%= form_tag('/send_pi_buy_check', method:"post",id:"upatt") do %>
-            <div class="row "><div class="col-md-12">   
-                <div class="modal-footer"> 
-                    <input type="text" class="form-control sr-only" id="pi_buy_dn" name="pi_buy_dn" value="<%= @pi_buy_info.dn.to_s %>">
-                    <input type="text" class="form-control sr-only" id="pi_buy_no" name="pi_buy_no" value="<%= @pi_buy_info.pi_buy_no.to_s %>">
-                    <% if can? :work_g, :all %>
-                        <%= submit_tag "提交", class: "btn btn-info" ,onclick:"return postform()"%>                
-                    <% end %>
-                </div>
-            </div></div>
-       <% end %>
+
 
 
 
@@ -477,11 +477,11 @@
             <input type="text" class="form-control" id="buy_remark_id" name="buy_remark_id">
           </div>
           <div class="form-group">
-            <label for="buy_moko_part" class="control-label">供应商简称:</label>
+            <label for="buy_moko_part" class="control-label">MOKO PART:</label>
             <div class="form-control"  id="buy_moko_part"  ></div>
           </div>
           <div class="form-group">
-            <label for="buy_moko_des" class="control-label">供应商全称:</label>
+            <label for="buy_moko_des" class="control-label">MOKO DES:</label>
             <div class="form-control"  id="buy_moko_des"  ></div>
           </div>
 

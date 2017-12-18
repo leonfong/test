@@ -75,6 +75,7 @@
             <input style="margin-right: 5px;margin-top: 10px;" type="button" value="取消全选" class="btn btn-xs btn-warning pull-left" id="unSelect">     
             <input style="margin-top: 10px;"type="button" value="反选" class="btn btn-xs btn-info pull-left" id="reverse">
             <a id="tijiao" type="button" class="btn btn-info btn-sm pull-right" href="#">新建询价单</a>
+            <a id="tijiao_caigou" type="button" class="btn btn-info btn-sm pull-right" style="margin-right: 35px;" href="#">新建采购单</a>
            </div>
        </div>
 
@@ -97,6 +98,8 @@
       <th >MOKO PART</th> 
       <th >MOKO DES</th>  
       <th width="80">申请数量</th>
+      <th width="80">已买数量</th>
+      <th width="80">购物车占用</th>  
       <th width="80">单价￥</th>
       <th width="80">总价￥</th>
       <th >供应商</th>
@@ -125,6 +128,8 @@
       <td><%= buy.moko_part %></td>
       <td><%= buy.moko_des %></td> 
       <td><%= buy.pmc_qty %></td>
+      <td><%= buy.buy_qty %></td>
+      <td><%= buy.buyer_qty %></td>
       <td><%= buy.cost %></td>
       <% if not buy.cost.blank? and not buy.buy_qty.blank? %>
           <td><%= buy.buy_qty*buy.cost %></td>
@@ -192,6 +197,7 @@
 
         </div></div>
                 <%= submit_tag "tijiao", class:"btn btn-primary btn-sm sr-only",id:"tijiao_true" %>
+                <%= submit_tag "tijiao_caigou", class:"btn btn-primary btn-sm sr-only",id:"tijiao_caigou_true" %>
                 <% end %>
 
         </div>
@@ -207,7 +213,9 @@ $(document).ready(function(){
   $("#tijiao").click(function(){
     $("#tijiao_true").click();
   });
-
+  $("#tijiao_caigou").click(function(){
+    $("#tijiao_caigou_true").click();
+  });
 });
 
 $("#selectAll").click(function () {   

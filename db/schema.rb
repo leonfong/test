@@ -1698,6 +1698,9 @@ ActiveRecord::Schema.define(version: 20171215111833) do
     t.decimal  "rate",                                 precision: 20, scale: 6
     t.text     "logger_info",            limit: 65535
     t.boolean  "finance_hide",           limit: 1,                              default: false
+    t.datetime "settled_at"
+    t.datetime "sell_tijiao_at"
+    t.boolean  "settlement_hide",        limit: 1,                              default: false
   end
 
   add_index "pi_infos", ["pi_no"], name: "pi_no", using: :btree

@@ -548,7 +548,12 @@ Rails.application.routes.draw do
 			member do
 				put :finance_check
         put :finance_uncheck
-				put :finance_hide
+				put :finance_set_hide
+				put :set_settled
+			end
+			collection do
+        get :amount_tracking_list
+				put :set_settlement_hide
 			end
 		end
 		resources :finance_setting, only: [:index]

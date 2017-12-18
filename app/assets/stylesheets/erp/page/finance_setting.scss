@@ -44,5 +44,33 @@
       }
 
     }
+    .pay_type_list{
+      .show_pay_type{
+        line-height: 33px;
+        p{
+          display: inline-block;
+          cursor: pointer;
+          width: 150px;
+          margin-bottom: 0;
+        }
+        i{
+          display: none;
+        }
+        &.show_edit_pay_type{
+          background: $fontColor2;
+          padding: 0 15px;
+          color: $fontColor3;
+          a{
+            color: $fontColor3;
+          }
+          i{
+            display: inline-block;
+            &:hover{
+              color: $fontColor1;
+            }
+          }
+        }
+      }
+    }
   }
 }

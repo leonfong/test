@@ -26,7 +26,8 @@
     <!--公司银行设置-->
     <div class="setting-box">
       <span class="label label-default title">公司银行设置</span>
-      <i class="glyphicon glyphicon-plus add-bank-button" @click="open_add_bank_modal(0)"></i>
+      <i class="glyphicon glyphicon-plus add-bank-button" @click="open_add_bank_modal(0)"
+         data-toggle="tooltip" data-placement="right" title="添加"></i>
       <div class="setting-body">
         <table class="table table-condensed table-hover">
           <thead>
@@ -64,7 +65,8 @@
     <!--付款方式-->
     <div class="setting-box">
       <span class="label label-default title">付款方式</span>
-      <i class="glyphicon glyphicon-plus add-bank-button" v-if="pay_types.length && !show_add_pay_type" @click="show_add_pay_type=true"></i>
+      <i class="glyphicon glyphicon-plus add-bank-button" v-if="pay_types.length && !show_add_pay_type"
+         @click="show_add_pay_type=true"data-toggle="tooltip" data-placement="right" title="添加"></i>
       <div v-if="!pay_types.length || show_add_pay_type" style="display: inline-block">
         <%= form_for [:erp, PayType.new], html: {class: 'form-inline'} do |f| %>
             <div class="form-group">
@@ -75,10 +77,37 @@
         <% end %>
       </div>
       <div class="setting-body">
-        <div class="row">
-          <div class="col-md-2" v-for="(pay_type, index) in pay_types">
-            <p>{{pay_type.type_name}}</p>
+        <div class="row pay_type_list">
+          <div class="col-md-3" v-for="(pay_type, index) in pay_types">
+            <div :class="[(current_pay_type.id==pay_type.id) ? 'show_edit_pay_type' : '', 'show_pay_type']"
+                 v-show="(!show_edit_pay_type) || current_pay_type.id!=pay_type.id">
+              <p @click="edit_current_pay_type(index)">{{pay_type.type_name}}</p>
+              <a :data-confirm="'确定删除'+pay_type.type_name+'支付方式？'" rel="nofollow" data-method="delete"
+                 :href="'<%= erp_pay_types_path %>/'+pay_type.id" v-if="!pay_type.supplier_list_count">
+                <i class="glyphicon glyphicon-trash add-bank-button"></i>
+              </a>
+              <a href="javascript:void(0)" @click="show_edit_pay_type=true">
+                <i class="glyphicon glyphicon-edit add-bank-button margin-l-20"></i>
+              </a>
+            </div>
+            <div class="row" v-show="show_edit_pay_type && current_pay_type.id==pay_type.id">
+              <div class="col-md-9">
+                <input type="text" class="form-control" v-model="current_pay_type.type_name">
+              </div>
+              <div class="col-md-3 add-bank-button">
+                <i class="glyphicon glyphicon-arrow-left" @click="show_edit_pay_type=false"
+                   data-toggle="tooltip" data-placement="bottom" title="返回"></i>
+                <i class="glyphicon glyphicon-ok pull-right" @click="submit_update_pay_type"
+                   data-toggle="tooltip" data-placement="bottom" title="提交"></i>
+              </div>
+            </div>
           </div>
+          <form :action="'/erp/pay_types/'+current_pay_type.id" id="edit_pay_type"
+                accept-charset="UTF-8" method="post" v-show="false">
+            <input name="utf8" type="hidden" value="✓">
+            <input name="_method" type="hidden" value="put">
+            <input type="text" name="pay_type[type_name]" v-model="current_pay_type.type_name">
+          </form>
         </div>
       </div>
     </div>
@@ -86,16 +115,18 @@
   <%= render 'common/modal/add_bank' %>
 </div>
 <script>
-  var setting = new Vue({
+  new Vue({
     el: '#finance_setting',
     data: {
       usa_rate: '<%= @usa_rate %>',
       show_edit_rate: false,
       banks: <%== @banks %>,
       is_add_bank: true,
-      current_bank: '',
+      current_bank: {},
       pay_types: <%== @pay_types %>,
       show_add_pay_type: false,
+      show_edit_pay_type: false,
+      current_pay_type: {}
     },
     computed: {
       int_show_edit_rate: function () {
@@ -110,13 +141,36 @@
       open_add_bank_modal: function (num) {
         if (num) {
           this.is_add_bank = false
-          this.current_bank = this.banks[num - 1]
+          var current_bank = this.banks[num - 1]
+          this.current_bank = {
+            id: current_bank.id,
+            user_name: current_bank.user_name,
+            bank_name: current_bank.bank_name,
+            bank_account: current_bank.bank_account
+          }
         } else {
           this.is_add_bank = true
-          this.current_bank = {id: '', user_name: '', bank_name: '', bank_account: ''}
+          this.current_bank = {}
         }
         $('#add_bank_info').modal('show');
+      },
+      edit_current_pay_type: function (index) {
+        var current_pay_type = this.pay_types[index]
+        if (this.current_pay_type.id == current_pay_type.id) {
+          this.current_pay_type = {}
+        } else {
+          this.current_pay_type = {
+            id: current_pay_type.id,
+            type_name: current_pay_type.type_name
+          }
+        }
+      },
+      submit_update_pay_type: function () {
+        $('#edit_pay_type').submit()
       }
     }
+  })
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
   })
 </script>

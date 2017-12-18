@@ -1,0 +1,136 @@
+<div class="pi_infos_list erp-box" id="amount_tranking">
+  <%= render 'common/pi_info/finance_sec_nav' %>
+  <div class="list-body">
+    <%= form_for erp_pi_infos_path, method: :get, enforce_utf8: false,
+                 html: {class: 'search_div'} do |f| %>
+        <div style="position: relative; display: inline-block">
+          <input name="search_time" type="text" id="search_time" v-model="search_time" placeholder="按结算时间筛选">
+        </div>
+        <select name="search_type" v-model="search_type">
+          <option value="pi">按PI号查询</option>
+          <option value="yw">按业务员姓名查询</option>
+        </select>
+        <input name="search_name" type="text" v-model="search_name">
+        <button class="search_button">搜索</button>
+    <% end %>
+    <table class="table table-hover table-striped table-bordered table-condensed">
+      <thead>
+      <tr>
+        <th colspan="18" class="batch_option">
+          <%= form_for PiInfo.new, url: set_settlement_hide_erp_pi_infos_url, method: 'put' do |f| %>
+            <input type="hidden" name="ids" v-model="choosed_ids">
+            <input type="submit" class="btn btn-default" value="关闭">
+          <% end %>
+        </th>
+      </tr>
+      <tr>
+        <th><input type="checkbox" :checked="is_all_choosed" @click="choose_all()"></th>
+        <th>PI NO.</th>
+        <th>状态</th>
+        <th>结算时间</th>
+        <th>业务</th>
+        <th>部门</th>
+        <th>国家</th>
+        <th>提交时间</th>
+        <th>订单金额</th>
+        <th>收款金额</th>
+        <th>欠费</th>
+        <th>运费</th>
+        <th>物料费</th>
+        <th>PCB费</th>
+        <th>组装费</th>
+        <th>补料费</th>
+        <th style="width: 118px;">其他(编带、物料加工、洗脚费)</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @pi_lists.each_with_index do |pi, index| %>
+          <tr>
+            <td><input type="checkbox" :checked="is_checked(<%= pi.id %>)" @click="choose_pi(<%= pi.id %>)"></td>
+            <td><a href="<%= erp_pi_info_path pi %>"><%= pi.pi_no %></a></td>
+            <td><%= pi.already_settled? ? '已结算' : '未结算' %></td>
+            <td><%= pi.settled_at&.strftime '%Y-%m-%d %H:%M:%S' %></td>
+            <td><%= pi.user.full_name %></td>
+            <td><%= pi.user.team %></td>
+            <td><%= pi.pcb_customer.customer_country %></td>
+            <td><%= pi.sell_tijiao_at&.strftime '%Y-%m-%d %H:%M:%S' %></td>
+            <td><%= pi.t_p %><% pi.money_type %></td>
+            <td><%= pi.pay_all_money %><% pi.money_type %></td>
+            <td><%= pi.current_arrears %><% pi.money_type %></td>
+            <td><%=  %></td>
+            <td><%=  %></td>
+            <td><%=  %></td>
+            <td><%=  %></td>
+            <td><%=  %></td>
+            <td><%=  %></td>
+            <td>
+              <% if pi.already_settled? %>
+                  <%= link_to '关闭', set_settlement_hide_erp_pi_infos_path(ids: pi.id),
+                              method: 'put', data: {confirm: "确定关闭此PI信息?"} %>
+              <% else %>
+                  <%= link_to '结算', set_settled_erp_pi_info_path(pi),
+                              method: 'put', data: {confirm: "确定此PI已结算?"} %>
+              <% end %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <%= will_paginate @pi_lists %>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#amount_tranking',
+    data: {
+      search_type: '<%= @search_type %>',
+      search_name: '<%= @search_name %>',
+      search_time: '<%= params[:search_time] %>',
+      choose_pi_arr: [],
+      ids: <%= @ids %>
+    },
+    computed :{
+      is_all_choosed: function(){
+        if(this.choose_pi_arr.length == <%= @pi_lists.size %> && this.choose_pi_arr.length ){
+          return true
+        }else{
+          return false
+        }
+      },
+      choosed_ids: function(){
+        return this.choose_pi_arr.join(',')
+      }
+    },
+    methods: {
+      choose_pi: function(id){
+        var index = this.choose_pi_arr.indexOf(id)
+        if(index == -1){
+          this.choose_pi_arr.push(id)
+        }else{
+          this.choose_pi_arr.splice(index, 1)
+        }
+      },
+      is_checked: function(id){
+        if(this.choose_pi_arr.indexOf(id)==-1){
+          return false
+        }else{
+          return true
+        }
+      },
+      choose_all: function(){
+        if(JSON.stringify(this.choose_pi_arr.sort()) == JSON.stringify(this.ids.sort())){
+          this.choose_pi_arr = []
+        }else{
+          this.choose_pi_arr = JSON.parse(JSON.stringify(this.ids))
+        }
+      }
+    }
+  })
+  $(function () {
+    $('#search_time').datetimepicker({
+      useCurrent: false,
+      format: 'YYYY-MM-DD'
+    });
+  });
+</script>

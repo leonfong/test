@@ -1,14 +1,24 @@
 <div class="panel panel-default">
   <div class="panel-heading con-in-head">
     <h3 class="panel-title">BOM信息</h3>
-    <p><a href="<%= bom[:url] %>"><%= bom[:no] %></a></p>
-    <p><span>物料总类：</span><%= bom[:num] %></p>
+    <!--询价BOM-->
+    <% unless pi.procurement_bom.nil? %>
+        <p><a href="<%= '/p_viewbom?bom_id='+pi.procurement_bom.id.to_s %>" target="_blank">
+          <%= '询价BOM_'+pi.procurement_bom.id.to_s %>
+        </a></p>
+        <p><a href="<%= %>">导出</a></p>
+    <% end %>
+    <!--原始BOM-->
+    <% unless pi.moko_bom_info.nil? %>
+        <p><a href="<%= '/moko_view_bom?bom_id='+pi.moko_bom_info.id.to_s %>" target="_blank">
+          <%= '原始BOM_'+pi.moko_bom_info.id.to_s %>
+        </a></p>
+        <p><a href="<%= %>">导出</a></p>
+        <p><span>物料总类：</span><%= pi.moko_bom_info.moko_bom_items_count %></p>
+    <% end %>
     <!--匹配清单,如果有就显示-->
     <% unless pi.pi_bom_qty_info.nil? %>
-        <p><a href="pipei_view_bom?bom_id=<%= pi.pi_bom_qty_info.id %>">匹配清单_<%= pi.pi_bom_qty_info.id %></a></p>
-    <% end %>
-    <p><a href="<%= %>">导出BOM</a></p>
-    <% unless pi.pi_bom_qty_info.nil? %>
+        <p><a href="pipei_view_bom?bom_id=<%= pi.pi_bom_qty_info.id %>" target="_blank">匹配清单_<%= pi.pi_bom_qty_info.id %></a></p>
         <p><a href="<%= %>">导出匹配清单</a></p>
     <% end %>
   </div>

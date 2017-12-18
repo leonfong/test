@@ -40,6 +40,15 @@
     table{
       th,td{
         text-align: center;
+        vertical-align: middle;
+        &.batch_option{
+          text-align: left;
+          .btn{
+            padding: 3px 8px;
+            font-size: 12px;
+            margin-right: 10px;
+          }
+        }
       }
     }
   }

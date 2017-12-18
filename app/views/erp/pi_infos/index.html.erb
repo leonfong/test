@@ -1,8 +1,5 @@
 <div class="pi_infos_list erp-box">
-  <ul class="sec_nav">
-    <li><a href="<%= erp_pi_infos_path %>" class="<%= current_url_active 'erp/pi_infos' %>">PI单列表</a></li>
-    <li><a>PI金额跟踪</a></li>
-  </ul>
+  <%= render 'common/pi_info/finance_sec_nav' %>
   <div class="list-body">
     <%= form_for erp_pi_infos_path, method: :get, enforce_utf8: false,
                  html: {class: 'search_div', id: 'search_pi_info'} do |f| %>
@@ -35,11 +32,11 @@
       <% @pi_lists.each_with_index do |pi, index| %>
           <tr>
             <td><%= index*params[:page].to_i+1 %></td>
-            <td><%= pi.t_enum :finance_state %></td>
+            <td><%= pi.check?? '待审核' : '已审核' %></td>
             <td><a href="<%= erp_pi_info_path pi %>"><%= pi.pi_no %></a></td>
             <td><%= pi.user.full_name %></td>
             <td><%= pi.user.team %></td>
-            <td><%= pi.created_at.strftime '%Y-%m-%d %H:%M:%S' %></td>
+            <td><%= pi.sell_tijiao_at&.strftime '%Y-%m-%d %H:%M:%S' %></td>
             <td><%= pi.jiao_huo_at&.strftime '%Y-%m-%d %H:%M:%S' %></td>
             <td><%= pi.pcb_customer.c_no %></td>
             <td><%= pi.qty %></td>
@@ -50,7 +47,8 @@
                   <a href="<%= erp_pi_info_path pi %>">审核</a>
                   <a style="margin-left: 15px;">进度跟踪</a>
               <% else %>
-                  <a>关闭</a>
+                  <%= link_to '关闭', finance_set_hide_erp_pi_info_path(pi),
+                              method: 'put', data: {confirm: "确定关闭此PI信息?"} %>
                   <a style="margin-left: 15px;">进度跟踪</a>
               <% end %>
             </td>

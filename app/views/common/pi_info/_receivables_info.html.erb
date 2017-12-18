@@ -14,7 +14,7 @@
       </tr>
       </thead>
       <tbody>
-      <% pi.payment_notice_infos.each do |pay| %>
+      <% pi.payment_notice_infos.send_payment_notices.each do |pay| %>
       <tr>
         <td><%= pay.id %></td>
         <td><%= pay.send_at.strftime '%Y-%m-%d %H:%M:%S' %></td>

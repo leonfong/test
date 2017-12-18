@@ -11,21 +11,21 @@ module Erp
 		end
 
 		def update
-			bank = BankInfo.find params[:id]
-			if bank.update(bank_params)
-				flash[:success] = "修改银行成功！"
+			pay_type = PayType.find params[:id]
+			if pay_type.update(type_params)
+				flash[:success] = "修改支付方式成功！"
 			else
-				flash[:error] = "修改银行失败，请联系管理员"
+				flash[:error] = "修改支付方式失败，请联系管理员"
 			end
 			redirect_to erp_finance_setting_index_path
 		end
 
 		def destroy
-			bank = BankInfo.find params[:id]
-			if bank.delete
-				flash[:success] = "删除银行成功！"
+			pay_type = PayType.find params[:id]
+			if pay_type.delete
+				flash[:success] = "删除支付方式成功！"
 			else
-				flash[:error] = "删除银行失败，请联系管理员"
+				flash[:error] = "删除支付方式失败，请联系管理员"
 			end
 			redirect_to erp_finance_setting_index_path
 		end

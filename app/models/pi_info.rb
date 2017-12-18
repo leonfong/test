@@ -10,13 +10,13 @@ class PiInfo < ApplicationModel
 	has_one :procurement_bom, through: :pi_item
 	has_one :moko_bom_info, through: :pi_item
 	has_one :pi_bom_qty_info, through: :pi_item
-	belongs_to :bank_info, counter_cache: true
+	belongs_to :bank_info, counter_cache: :pi_info_count
 
 	enum finance_state: {
 		not_check: 0, #未到审核这一步，当前为空
 		check: 1, #审核中
-		uncheck: 2, #驳回
-		checked: 3 #已审核
+		checked: 2, #已审核
+		already_settled: 3 #已结算
 	}
 
 	enum money_type: {
@@ -39,7 +39,7 @@ class PiInfo < ApplicationModel
 		pi_item.pcb_price + pi_item.pcba + pi_item.com_cost + pi_item.unit_price
 	end
 
-	# 当前已支付金额
+	# 当前已收款金额
 	def pay_all_money
 		all_money = payment_notice_infos.joins(:finance_voucher_info)
 			.where("finance_voucher_infos.send_at <> ''").sum(:pay_p)
@@ -49,7 +49,6 @@ class PiInfo < ApplicationModel
 
 	# 当前欠费金额
 	def current_arrears
-		t_p ||= 0
 		t_p - pay_all_money
 	end
 
